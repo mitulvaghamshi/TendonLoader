@@ -15,7 +15,7 @@ class TendonLoaderApp extends StatelessWidget {
     return MaterialApp(
       title: 'Tendon Loader',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: StreamBuilder<BluetoothState>(

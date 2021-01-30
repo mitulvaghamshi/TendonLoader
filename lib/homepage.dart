@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:tendon_loader/components/Components.dart';
 
 import 'screens/extras/logo.dart';
 
@@ -18,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   final _CONTROL_POINT_UUID = "7e4e1703-1ea6-40c9-9dcc-13d34ffead57"; // send commands
 
   BluetoothCharacteristic _mDataCharacteristic;
-  BluetoothCharacteristic _mNotifyCharacteristic;
+  BluetoothCharacteristic _mControlCharacteristic;
 
   @override
   void dispose() {
@@ -53,7 +56,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         label: Text('Connect Device'),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.black,
         icon: Icon(Icons.bluetooth_rounded),
         onPressed: () => _findDevice(context),
       ),
@@ -71,7 +74,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _startScan() async {
     await FlutterBlue.instance.startScan(
-      timeout: Duration(seconds: 10),
+      timeout: Duration(seconds: 5),
       withDevices: [Guid('7e4e1701-1ea6-40c9-9dcc-13d34ffead57')],
       withServices: [Guid('7e4e1701-1ea6-40c9-9dcc-13d34ffead57')],
     );
@@ -88,60 +91,96 @@ class _HomePageState extends State<HomePage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              // StreamBuilder<List<BluetoothDevice>>(
+              //   stream: Stream.fromFuture(FlutterBlue.instance.connectedDevices),
+              //   builder: (_, snapshot) {
+              //       return Column(
+              //         children: snapshot.data.map((device) {
+              //           return Column(
+              //             mainAxisSize: MainAxisSize.min,
+              //             children: [
+              //               ListTile(
+              //                 title: Text(device.name),
+              //                 subtitle: Text('Click to Tare'),
+              //                 onTap: () async => await _mControlCharacteristic.write([100]),
+              //               ),
+              //               ListTile(
+              //                 title: Text('Start Measuring'),
+              //                 onTap: () async => await _mControlCharacteristic.write([101]),
+              //               ),
+              //               ListTile(
+              //                 title: Text('Stop Measuring'),
+              //                 onTap: () async => await _mControlCharacteristic.write([102]),
+              //               ),
+              //               ListTile(
+              //                 title: Text('Start Notification'),
+              //                 onTap: () async =>
+              //                     await _mDataCharacteristic.setNotifyValue(!_mDataCharacteristic.isNotifying),
+              //               ),
+              //               ListTile(
+              //                 title: Text('Disconnect'),
+              //                 onTap: () async => await device.disconnect(),
+              //               ),
+              //               ListTile(
+              //                 title: Text('Sleep'),
+              //                 onTap: () async => await _mControlCharacteristic.write([110]),
+              //               ),
+              //             ],
+              //           );
+              //         }).toList(),
+              //       );
+              //   },
+              // ),
+              StreamBuilder<List<ScanResult>>(
+                stream: FlutterBlue.instance.scanResults,
+                builder: (_, snapshot) {
+                  if (snapshot.data.length > 0) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: snapshot.data.map((r) {
+                        return FlatButton.icon(
+                          onPressed: () => _connect(r.device),
+                          icon: Icon(Icons.bluetooth_rounded, color: Colors.white),
+                          label: Text(r.device.name, style: TextStyle(color: Colors.white)),
+                          color: Colors.green,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+                        );
+                      }).toList(),
+                    );
+                  } else {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset('assets/images/enable_device.webp', width: 180),
+                        Text(
+                          'Activate your device by pressing the button, then press scan to find the device',
+                          textAlign: TextAlign.center,
+                          softWrap: true,
+                        ),
+                      ],
+                    );
+                  }
+                },
+              ),
               StreamBuilder<bool>(
                 stream: FlutterBlue.instance.isScanning,
                 initialData: false,
                 builder: (c, snapshot) {
                   if (snapshot.data) {
-                    return ListTile(
-                      title: Text('Stop Scanning...'),
-                      leading: Icon(Icons.search_off_rounded),
-                      tileColor: Colors.blue,
-                      onTap: () => FlutterBlue.instance.stopScan(),
+                    return FlatButtonIcon(
+                      'Stop',
+                      icon: Icons.close_rounded,
+                      color: Colors.deepOrangeAccent,
+                      callBack: () async => await FlutterBlue.instance.stopScan(),
                     );
                   } else {
-                    return ListTile(
-                      title: Text('Start Scanning'),
-                      leading: Icon(Icons.search_rounded),
-                      tileColor: Colors.blue,
-                      onTap: () async => await _startScan(),
+                    return FlatButtonIcon(
+                      'Scan',
+                      icon: Icons.search_rounded,
+                      color: Colors.black,
+                      callBack: () async => await _startScan(),
                     );
                   }
-                },
-              ),
-              StreamBuilder<List<BluetoothDevice>>(
-                stream: Stream.fromFuture(FlutterBlue.instance.connectedDevices),
-                initialData: [],
-                builder: (_, snapshot) {
-                  return Column(
-                    children: snapshot.data.map((device) {
-                      return ListTile(
-                        title: Text(device.name),
-                        subtitle: Text('Click to Tare'),
-                        tileColor: Colors.green,
-                        leading: Icon(Icons.bluetooth_connected_rounded),
-                        onTap: () async => await device.disconnect(),
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
-              StreamBuilder<List<ScanResult>>(
-                stream: FlutterBlue.instance.scanResults,
-                initialData: [],
-                builder: (_, snapshot) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: snapshot.data.map((r) {
-                      return ListTile(
-                        title: Text(r.device.name),
-                        subtitle: Text('Click to Connect'),
-                        leading: Icon(Icons.bluetooth_rounded),
-                        tileColor: Colors.orangeAccent,
-                        onTap: () async => await r.device.connect(),
-                      );
-                    }).toList(),
-                  );
                 },
               ),
             ],
@@ -149,6 +188,26 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  void _connect(BluetoothDevice device) async {
+    await device.connect();
+    await device
+        .discoverServices()
+        .then((services) {
+          return services.singleWhere((service) => service.uuid.toString() == _SERVICE_UUID);
+        })
+        .then((service) => service.characteristics)
+        .then((characteristics) {
+          return characteristics.forEach((characteristic) {
+            if (characteristic.uuid.toString() == _DATA_CHARACTERISTIC_UUID) {
+              _mDataCharacteristic = characteristic;
+              _mDataCharacteristic.value.listen(print);
+            } else if (characteristic.uuid.toString() == _CONTROL_POINT_UUID) {
+              _mControlCharacteristic = characteristic;
+            }
+          });
+        });
   }
 }
 /*StreamBuilder<List<ScanResult>>(
