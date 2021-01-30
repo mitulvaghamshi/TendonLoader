@@ -29,3 +29,17 @@ RES_RFD_PEAK_SERIES = 3
 RES_LOW_PWR_WARNING = 4
 
 */
+
+/* [Power on device]
+Activate your device by pressing the button, then press scan to find your device
+*/
+
+/* [turn on bluetooth]
+This app needs bluetooth to comunicate with your Progresssor. Please enable bluetooth on your device.
+*/
+
+/* [Enable location: GPS]
+[big bold font] This app uses bluetoothto communicate with your progressor.
+[regular font] Scanning for bluetooth devices can be used to locate you. That's why we ask you to permit location services. We're only using this permission to scan for your Progressor.
+[new line] We'll never collect your physical location.
+*/
