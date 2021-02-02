@@ -32,18 +32,10 @@ class _BarGraphState extends State<BarGraph> {
 
   List<ColumnSeries<ChartData, String>> _getSeries() {
     return <ColumnSeries<ChartData, String>>[
-      _columnSeries(
-        ChartData(x: '', y: 80.5),
-        <Color>[
-          Colors.green[600],
-        ],
-      ),
+      _columnSeries(ChartData(x: '', y: 80.5), <Color>[Colors.green[600]]),
       _columnSeries(
         ChartData(x: '', y: 60.1),
-        <Color>[
-          Colors.blue,
-          Colors.blue[200],
-        ],
+        <Color>[Colors.blue, Colors.blue[200]],
         isPrimary: true,
       ),
     ];
@@ -63,15 +55,12 @@ class _BarGraphState extends State<BarGraph> {
       color: isPrimary ? null : colors.first,
       borderRadius: isPrimary ? null : BorderRadius.circular(10.0),
       dataSource: [data],
-      xValueMapper: (ChartData sales, _) => sales.x,
-      yValueMapper: (ChartData sales, _) => sales.y,
+      xValueMapper: (ChartData value, _) => value.x,
+      yValueMapper: (ChartData value, _) => value.y,
       dataLabelSettings: DataLabelSettings(
         isVisible: true,
         labelAlignment: ChartDataLabelAlignment.top,
-        textStyle: TextStyle(
-          fontSize: 30.0,
-          fontWeight: FontWeight.bold,
-        ),
+        textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
       ),
     );
   }

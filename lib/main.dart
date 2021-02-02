@@ -28,10 +28,9 @@ class TendonLoaderApp extends StatelessWidget {
         },
       ),
       routes: {
-        'Live Data': (_) => LiveData(title: 'Live Data'),
-        'Exercise Mode': (_) => ExerciseMode(title: 'Exercise Mode'),
-        'MVIC Testing': (_) => MVICTesting(title: 'MVIC Testing'),
-        'BluetoothOff': (_) => BluetoothOff(),
+        LiveData.name: (_) => LiveData(),
+        ExerciseMode.name: (_) => ExerciseMode(),
+        MVICTesting.name: (_) => MVICTesting(),
       },
     );
   }

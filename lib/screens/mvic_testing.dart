@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../bluetooth/bluetooth.dart';
+import '../bluetooth/bluetooth_args.dart';
 
 class MVICTesting extends StatefulWidget {
-  MVICTesting({Key key, this.title}) : super(key: key);
-  final String title;
+  static const name = 'MVIC Testing';
+  static const routeName = '/mvicTesting';
+
+  MVICTesting({Key key}) : super(key: key);
 
   @override
   _MVICTestingState createState() => _MVICTestingState();
@@ -13,18 +16,14 @@ class MVICTesting extends StatefulWidget {
 class _MVICTestingState extends State<MVICTesting> {
   @override
   Widget build(BuildContext context) {
+    final BluetoothArgs args = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: const Text(MVICTesting.name)),
       body: SingleChildScrollView(
         child: Card(
           elevation: 16.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(16.0),
-            ),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
           margin: EdgeInsets.all(16.0),
           child: Padding(
             padding: EdgeInsets.all(10.0),
@@ -35,10 +34,7 @@ class _MVICTestingState extends State<MVICTesting> {
                     padding: EdgeInsets.all(5.0),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        width: 2.0,
-                        color: Colors.indigo,
-                      ),
+                      border: Border.all(width: 2.0, color: Colors.indigo),
                     ),
                     child: GestureDetector(
                       child: Hero(
@@ -46,11 +42,7 @@ class _MVICTestingState extends State<MVICTesting> {
                         child: CircleAvatar(
                           radius: 60.0,
                           backgroundColor: Colors.blueAccent,
-                          child: Icon(
-                            Icons.person,
-                            size: 80.0,
-                            color: Colors.white,
-                          ),
+                          child: Icon(Icons.person, size: 80.0, color: Colors.white),
                         ),
                       ),
                       onTap: () => Navigator.push(
@@ -83,18 +75,6 @@ class _MVICTestingState extends State<MVICTesting> {
             ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => Bluetooth(
-              title: 'Bluetooth',
-            ),
-          ),
-        ),
-        tooltip: 'Connect to Bluetooth',
-        label: const Text('Connect'),
-        icon: Icon(Icons.bluetooth),
       ),
     );
   }

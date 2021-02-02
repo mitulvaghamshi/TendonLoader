@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../bluetooth/bluetooth.dart';
+import '../bluetooth/bluetooth_args.dart';
 import '../screens/bar_graph.dart';
 
 class LiveData extends StatefulWidget {
-  LiveData({Key key, this.title}) : super(key: key);
-  final String title;
+  static const name = 'Live Data';
+  static const routeName = '/liveData';
+
+  LiveData({Key key}) : super(key: key);
 
   @override
   _LiveDataState createState() => _LiveDataState();
@@ -14,18 +17,14 @@ class LiveData extends StatefulWidget {
 class _LiveDataState extends State<LiveData> {
   @override
   Widget build(BuildContext context) {
+    final BluetoothArgs args = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: const Text(LiveData.name)),
       body: SingleChildScrollView(
         child: Card(
           elevation: 16.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(16.0),
-            ),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
           margin: EdgeInsets.all(16.0),
           child: Padding(
             padding: EdgeInsets.all(10.0),
@@ -51,10 +50,7 @@ class _LiveDataState extends State<LiveData> {
                   ],
                 ),
                 SizedBox(height: 30.0),
-                Container(
-                  height: 400.0,
-                  child: BarGraph(),
-                ),
+                Container(height: 400.0, child: BarGraph()),
                 SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -81,18 +77,6 @@ class _LiveDataState extends State<LiveData> {
             ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => Bluetooth(
-              title: 'Bluetooth',
-            ),
-          ),
-        ),
-        tooltip: 'Connect to Bluetooth',
-        label: const Text('Connect'),
-        icon: Icon(Icons.bluetooth),
       ),
     );
   }

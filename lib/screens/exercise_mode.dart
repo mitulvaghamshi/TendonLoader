@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../bluetooth/bluetooth.dart';
+import '../bluetooth/bluetooth_args.dart';
 
 class ExerciseMode extends StatefulWidget {
-  ExerciseMode({Key key, this.title}) : super(key: key);
-  final String title;
+  static const name = 'Exercise Mode';
+  static const routeName = '/exerciseMode';
+
+  ExerciseMode({Key key}) : super(key: key);
 
   @override
   _ExerciseState createState() => _ExerciseState();
@@ -19,10 +21,10 @@ class _ExerciseState extends State<ExerciseMode> {
 
   @override
   Widget build(BuildContext context) {
+    final BluetoothArgs args = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: const Text(ExerciseMode.name)),
       body: SingleChildScrollView(
         child: Card(
           elevation: 16.0,
@@ -120,18 +122,6 @@ class _ExerciseState extends State<ExerciseMode> {
             ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => Bluetooth(
-              title: 'Bluetooth',
-            ),
-          ),
-        ),
-        tooltip: 'Connect to Bluetooth',
-        label: const Text('Connect'),
-        icon: Icon(Icons.bluetooth),
       ),
     );
   }

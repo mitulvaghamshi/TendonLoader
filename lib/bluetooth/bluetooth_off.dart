@@ -3,6 +3,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 
 class BluetoothOff extends StatelessWidget {
   final BluetoothState state;
+  static const routeName = '/bluetoothOff';
 
   const BluetoothOff({Key key, this.state}) : super(key: key);
 
