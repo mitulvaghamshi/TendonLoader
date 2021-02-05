@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../bluetooth/bluetooth.dart';
-import '../bluetooth/bluetooth_args.dart';
-import '../screens/bar_graph.dart';
+import '../utils//bluetooth_args.dart';
+import '../utils/bar_graph.dart';
 
 class LiveData extends StatefulWidget {
   static const name = 'Live Data';
@@ -15,10 +14,11 @@ class LiveData extends StatefulWidget {
 }
 
 class _LiveDataState extends State<LiveData> {
+  BluetoothArgs args;
+
   @override
   Widget build(BuildContext context) {
-    final BluetoothArgs args = ModalRoute.of(context).settings.arguments;
-
+    args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(title: const Text(LiveData.name)),
       body: SingleChildScrollView(
@@ -35,44 +35,15 @@ class _LiveDataState extends State<LiveData> {
                   children: [
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Current Load (Units)'),
-                        Text('100.8'),
-                      ],
+                      children: [Text('Current Load (Units)'), Text('100.8')],
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Time'),
-                        Text('05:10'),
-                      ],
+                      children: [Text('Time'), Text('05:10')],
                     ),
                   ],
                 ),
-                SizedBox(height: 30.0),
-                Container(height: 400.0, child: BarGraph()),
-                SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    FloatingActionButton(
-                      onPressed: null,
-                      heroTag: 'tag-stop-btn',
-                      child: Icon(Icons.play_arrow_rounded),
-                    ),
-                    FloatingActionButton(
-                      onPressed: null,
-                      heroTag: 'tag-play-btn',
-                      child: Icon(Icons.stop_rounded),
-                    ),
-                    FloatingActionButton(
-                      onPressed: null,
-                      heroTag: 'tag-reset-btn',
-                      child: Icon(Icons.refresh_rounded),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10.0),
+                BarGraph(),
               ],
             ),
           ),

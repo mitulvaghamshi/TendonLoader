@@ -1,9 +1,9 @@
-var progressor_uuids = {
+/*
+var progressorUuids = {
   "7e4e1701-1ea6-40c9-9dcc-13d34ffead57": "Progressor Service",
   "7e4e1702-1ea6-40c9-9dcc-13d34ffead57": "Data",
   "7e4e1703-1ea6-40c9-9dcc-13d34ffead57": "Control point",
 };
-/*
 
 TARGET_NAME = "Progressor"
 
@@ -28,18 +28,18 @@ RES_RFD_PEAK = 2
 RES_RFD_PEAK_SERIES = 3
 RES_LOW_PWR_WARNING = 4
 
-*/
-
-/* [Power on device]
+[Power on device]
 Activate your device by pressing the button, then press scan to find your device
-*/
 
-/* [turn on bluetooth]
-This app needs bluetooth to comunicate with your Progresssor. Please enable bluetooth on your device.
-*/
+[turn on bluetooth]
+This app needs Bluetooth to communicate with your Progressor. Please enable Bluetooth on your device.
 
-/* [Enable location: GPS]
-[big bold font] This app uses bluetoothto communicate with your progressor.
+[Enable location: GPS]
+[big bold font] This app uses bluetooth to communicate with your progressor.
 [regular font] Scanning for bluetooth devices can be used to locate you. That's why we ask you to permit location services. We're only using this permission to scan for your Progressor.
 [new line] We'll never collect your physical location.
+
+[Location service]
+Location service is not enabled.import.
+[regular font] We don't need your location, but Android require us to enable location services to use Bluetooth scanning.
 */

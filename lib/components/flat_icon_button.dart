@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class FlatButtonIcon extends StatelessWidget {
+class FlatIconButton extends StatelessWidget {
   final String text;
   final IconData icon;
   final Color color;
   final VoidCallback callBack;
 
-  FlatButtonIcon(this.text, {this.icon, this.color, this.callBack});
+  FlatIconButton(this.text, {this.icon, this.color, this.callBack});
 
   @override
   Widget build(BuildContext context) {

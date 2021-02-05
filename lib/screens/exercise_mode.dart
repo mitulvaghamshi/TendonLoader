@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../bluetooth/bluetooth_args.dart';
+import '../utils//bluetooth_args.dart';
 
 class ExerciseMode extends StatefulWidget {
   static const name = 'Exercise Mode';
@@ -28,11 +28,7 @@ class _ExerciseState extends State<ExerciseMode> {
       body: SingleChildScrollView(
         child: Card(
           elevation: 16.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(16.0),
-            ),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
           margin: EdgeInsets.all(16.0),
           child: Padding(
             padding: EdgeInsets.all(16.0),
