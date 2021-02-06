@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/utils/bluetooth_args.dart';
@@ -12,6 +15,22 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
+  List<ChartData> chartData;
+  ChartSeriesController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    chartData = [ChartData(y1: 0, y2: 0, time: 0)];
+    widget.args.mDataCharacteristic.setNotifyValue(true);
+  }
+
+  @override
+  void dispose() {
+    widget.args.mDataCharacteristic.setNotifyValue(false);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,17 +55,25 @@ class _BarGraphState extends State<BarGraph> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: () async {
+                await widget.args.mControlCharacteristic.write([102]);
+              },
               heroTag: 'tag-stop-btn',
-              child: Icon(Icons.play_arrow_rounded),
-            ),
-            FloatingActionButton(
-              onPressed: () {},
-              heroTag: 'tag-play-btn',
               child: Icon(Icons.stop_rounded),
             ),
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: () async {
+                await widget.args.mControlCharacteristic.write([101]);
+                widget.args.mDataCharacteristic.value.listen(_getData);
+              },
+              heroTag: 'tag-play-btn',
+              child: Icon(Icons.play_arrow_rounded),
+            ),
+            FloatingActionButton(
+              onPressed: () async {
+                // reset graph
+                await widget.args.mControlCharacteristic.write([102]);
+              },
               heroTag: 'tag-reset-btn',
               child: Icon(Icons.refresh_rounded),
             ),
@@ -57,44 +84,63 @@ class _BarGraphState extends State<BarGraph> {
     );
   }
 
-  List<StackedColumnSeries<ChartData, String>> _getStackedColumnSeries() {
-    final List<ChartData> chartData = <ChartData>[ChartData(y1: 2, y2: 1)];
-
-    return <StackedColumnSeries<ChartData, String>>[
-      StackedColumnSeries<ChartData, String>(
+  List<StackedColumnSeries<ChartData, int>> _getStackedColumnSeries() {
+    return <StackedColumnSeries<ChartData, int>>[
+      StackedColumnSeries<ChartData, int>(
         width: 0.9,
         color: Colors.blue,
         dataSource: chartData,
-        xValueMapper: (data, _) => '',
+        animationDuration: 0,
+        xValueMapper: (data, _) => 0,
         yValueMapper: (data, _) => data.y1,
         dataLabelSettings: DataLabelSettings(
           isVisible: true,
           labelAlignment: ChartDataLabelAlignment.top,
           textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
-      ),
-      StackedColumnSeries<ChartData, String>(
-        width: 0.9,
-        color: Colors.green,
-        dataSource: chartData,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-        xValueMapper: (data, _) => '',
-        yValueMapper: (data, _) => data.y2,
-        dataLabelSettings: DataLabelSettings(
-          isVisible: true,
-          labelAlignment: ChartDataLabelAlignment.top,
-          textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-        ),
+        onRendererCreated: (ChartSeriesController controller) => _controller = controller,
       ),
     ];
+  }
+
+  Future<void> _getData(List<int> dataList) async {
+    final _resultWeightMeasurement = 1;
+    double _avgWeightOf5Rec = 0;
+    int _avgTimeof5Rec = 0;
+    int _countOf8Rec = 0;
+    if (dataList.isNotEmpty && dataList[0] == _resultWeightMeasurement) {
+      for (int x = 2; x < dataList.length; x += 8) {
+        _countOf8Rec++;
+        _avgWeightOf5Rec +=
+            Uint8List.fromList(dataList.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
+        _avgTimeof5Rec += Uint8List.fromList(dataList.getRange(x + 4, x + 4 + 4).toList())
+            .buffer
+            .asByteData()
+            .getUint32(0, Endian.little);
+        if (_countOf8Rec == 8) {
+          chartData.insert(
+            0,
+            ChartData(
+              y1: double.parse((_avgWeightOf5Rec.abs() / 8.0).toStringAsFixed(2)),
+              time: double.parse(((_avgTimeof5Rec / 8) / 1000000.0).toStringAsFixed(2)),
+            ),
+          );
+          _controller.updateDataSource(updatedDataIndex: 0);
+          _countOf8Rec = 0;
+          _avgWeightOf5Rec = 0;
+          _avgTimeof5Rec = 0;
+        }
+      }
+    }
   }
 }
 
 class ChartData {
-  ChartData({this.y1, this.y2});
+  ChartData({this.y1, this.y2, this.time});
 
   final double y1;
   final double y2;
+  final double time;
 }
 
 /*
@@ -126,4 +172,36 @@ class ChartData {
       ),
     );
   }
+
+
+    List<StackedColumnSeries<ChartData, String>> _getStackedColumnSeriesTemp() {
+    return <StackedColumnSeries<ChartData, String>>[
+      StackedColumnSeries<ChartData, String>(
+        width: 0.9,
+        color: Colors.blue,
+        dataSource: [chartData],
+        xValueMapper: (data, _) => '',
+        yValueMapper: (data, _) => data.y1,
+        dataLabelSettings: DataLabelSettings(
+          isVisible: true,
+          labelAlignment: ChartDataLabelAlignment.top,
+          textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+        ),
+      ),
+      /*StackedColumnSeries<ChartData, String>(
+        width: 0.9,
+        color: Colors.green,
+        dataSource: [chartData],
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        xValueMapper: (data, _) => '',
+        yValueMapper: (data, _) => data.y2,
+        dataLabelSettings: DataLabelSettings(
+          isVisible: true,
+          labelAlignment: ChartDataLabelAlignment.top,
+          textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+        ),
+      ),*/
+    ];
+  }
+
 * */

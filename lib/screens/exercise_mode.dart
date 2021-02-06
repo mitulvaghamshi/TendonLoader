@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../utils//bluetooth_args.dart';
+import 'package:tendon_loader/utils/bluetooth_args.dart';
 
 class ExerciseMode extends StatefulWidget {
   static const name = 'Exercise Mode';

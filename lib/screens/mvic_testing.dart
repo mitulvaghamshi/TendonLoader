@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../utils//bluetooth_args.dart';
+import 'package:tendon_loader/utils/bluetooth_args.dart';
 
 class MVICTesting extends StatefulWidget {
   static const name = 'MVIC Testing';

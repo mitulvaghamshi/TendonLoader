@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
-import 'screens/homepage.dart';
-import 'screens/exercise_mode.dart';
-import 'screens/live_data.dart';
-import 'screens/mvic_testing.dart';
+import 'package:tendon_loader/screens/exercise_mode.dart';
+import 'package:tendon_loader/screens/homepage.dart';
+import 'package:tendon_loader/screens/live_data.dart';
+import 'package:tendon_loader/screens/mvic_testing.dart';
 
 void main() => runApp(TendonLoader());
 

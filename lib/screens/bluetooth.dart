@@ -158,28 +158,46 @@ class Bluetooth extends StatelessWidget {
   Column _scanResultTile(AsyncSnapshot<List<ScanResult>> snapshot) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: snapshot.data.map((r) {
-        return StreamBuilder<BluetoothDeviceState>(
-          stream: r.device.state,
+      children: <Widget>[
+        StreamBuilder<List<BluetoothDevice>>(
+          stream: Stream.fromFuture(FlutterBlue.instance.connectedDevices),
+          initialData: [],
           builder: (_, snapshot) {
-          if (snapshot.data == BluetoothDeviceState.connected) {
-              return FlatIconButton(
-                r.device.name,
-                icon: Icons.bluetooth_connected_rounded,
-                color: Colors.green[400],
-                callBack: () async => await r.device.disconnect(),
-              );
-            } else {
-              return FlatIconButton(
-                r.device.name,
-                icon: Icons.bluetooth_rounded,
-                color: Colors.deepOrange[400],
-                callBack: () async => await onConnect(r.device),
-              );
-            }
+            return Column(
+              children: snapshot.data.map((device) {
+                return FlatIconButton(
+                  device.name,
+                  icon: Icons.bluetooth_connected_rounded,
+                  color: Colors.green[400],
+                  callBack: () async => await device.disconnect(),
+                );
+              }).toList(),
+            );
           },
-        );
-      }).toList(),
+        ),
+        ...snapshot.data.map((r) {
+          return StreamBuilder<BluetoothDeviceState>(
+            stream: r.device.state,
+            builder: (_, snapshot) {
+              if (snapshot.data == BluetoothDeviceState.connected) {
+                return FlatIconButton(
+                  r.device.name,
+                  icon: Icons.bluetooth_connected_rounded,
+                  color: Colors.green[400],
+                  callBack: () async => await r.device.disconnect(),
+                );
+              } else {
+                return FlatIconButton(
+                  r.device.name,
+                  icon: Icons.bluetooth_rounded,
+                  color: Colors.deepOrange[400],
+                  callBack: () async => await onConnect(r.device),
+                );
+              }
+            },
+          );
+        })
+      ],
     );
   }
 

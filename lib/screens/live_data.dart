@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../utils//bluetooth_args.dart';
-import '../utils/bar_graph.dart';
+import 'package:tendon_loader/utils/bar_graph.dart';
+import 'package:tendon_loader/utils/bluetooth_args.dart';
 
 class LiveData extends StatefulWidget {
   static const name = 'Live Data';
@@ -43,7 +42,7 @@ class _LiveDataState extends State<LiveData> {
                     ),
                   ],
                 ),
-                BarGraph(),
+                BarGraph(args: args),
               ],
             ),
           ),

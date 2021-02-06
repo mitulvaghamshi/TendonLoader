@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:tendon_loader/components/app_logo.dart';
 import 'package:tendon_loader/screens/bluetooth.dart';
-
-import '../components/app_logo.dart';
-import '../utils//bluetooth_args.dart';
-import 'exercise_mode.dart';
-import 'live_data.dart';
-import 'mvic_testing.dart';
+import 'package:tendon_loader/screens/exercise_mode.dart';
+import 'package:tendon_loader/screens/live_data.dart';
+import 'package:tendon_loader/screens/mvic_testing.dart';
+import 'package:tendon_loader/utils/bluetooth_args.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/';
@@ -31,7 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    FlutterBlue.instance.connectedDevices.then((devices) => devices.forEach((d) => d.disconnect()));
+    _mControlCharacteristic.write([110]);
     super.dispose();
   }
 
@@ -81,7 +80,11 @@ class _HomePageState extends State<HomePage> {
           mDataCharacteristic: _mDataCharacteristic,
           mControlCharacteristic: _mControlCharacteristic,
         );
-        Navigator.of(context).pushNamed(route, arguments: _btArgs);
+        if (_device != null) {
+          Navigator.of(context).pushNamed(route, arguments: _btArgs);
+        } else {
+          _findDevice(context);
+        }
       },
       title: Text(name, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
     );
