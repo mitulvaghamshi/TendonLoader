@@ -13,6 +13,33 @@ class Bluetooth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<BluetoothState>(
+      stream: FlutterBlue.instance.state,
+      initialData: BluetoothState.unknown,
+      builder: (_, snapshot) {
+        if (snapshot.data == BluetoothState.on) {
+          StreamController<bool> _locationStateController = StreamController<bool>();
+          Geolocation.isLocationOperational().then((value) => _locationStateController.add(value.isSuccessful));
+          return StreamBuilder<bool>(
+            stream: _locationStateController.stream,
+            initialData: false,
+            builder: (_, snapshot) {
+              if (!snapshot.data) {
+                return  _enableLocationTileActual(_locationStateController);
+              } else {
+                if (!_locationStateController.isClosed) _locationStateController.close();
+                return _selectDeviceTile();
+              }
+            },
+          );
+        } else {
+          return _enableBluetoothTile();
+        }
+      },
+    );
+  }
+
+  Column _enableEither() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -52,52 +79,56 @@ class Bluetooth extends StatelessWidget {
   }
 
   StreamBuilder<bool> _enableLocationTile() {
-    StreamController<bool> _controller = StreamController<bool>();
-    Geolocation.isLocationOperational().then((value) => _controller.add(value.isSuccessful));
+    StreamController<bool> _locationStateController = StreamController<bool>();
+    Geolocation.isLocationOperational().then((value) => _locationStateController.add(value.isSuccessful));
     return StreamBuilder<bool>(
-      stream: _controller.stream,
+      stream: _locationStateController.stream,
       initialData: false,
       builder: (_, snapshot) {
         if (!snapshot.data) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset('assets/images/enable_location.webp', width: 180),
-              Text(
-                'This app uses bluetooth to communicate with your Progressor.',
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Scanning for bluetooth devices can be used to locate you. That\'s why we ask you to permit location services. We\'re only using this permission to scan for your Progressor.',
-                style: TextStyle(fontSize: 14),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 15),
-              Text(
-                'We\'ll never collect your physical location.',
-                style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 30),
-              FlatIconButton(
-                'Enable',
-                icon: Icons.location_on_rounded,
-                color: Colors.black,
-                callBack: () async {
-                  await Geolocation.enableLocationServices().then((value) {
-                    if (value.isSuccessful) _controller.add(true);
-                  });
-                },
-              ),
-            ],
-          );
+          return  _enableLocationTileActual(_locationStateController);
         } else {
-          if (!_controller.isClosed) _controller.close();
+          if (!_locationStateController.isClosed) _locationStateController.close();
           return _selectDeviceTile();
         }
       },
+    );
+  }
+
+  Column _enableLocationTileActual(StreamController<bool> _locationStateController) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Image.asset('assets/images/enable_location.webp', width: 180),
+        Text(
+          'This app uses bluetooth to communicate with your Progressor.',
+          style: TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 20),
+        Text(
+          'Scanning for bluetooth devices can be used to locate you. That\'s why we ask you to permit location services. We\'re only using this permission to scan for your Progressor.',
+          style: TextStyle(fontSize: 14),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 15),
+        Text(
+          'We\'ll never collect your physical location.',
+          style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 30),
+        FlatIconButton(
+          'Enable',
+          icon: Icons.location_on_rounded,
+          color: Colors.black,
+          callBack: () async {
+            await Geolocation.enableLocationServices().then((value) {
+              _locationStateController.add(value.isSuccessful);
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -159,22 +190,6 @@ class Bluetooth extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        StreamBuilder<List<BluetoothDevice>>(
-          stream: Stream.fromFuture(FlutterBlue.instance.connectedDevices),
-          initialData: [],
-          builder: (_, snapshot) {
-            return Column(
-              children: snapshot.data.map((device) {
-                return FlatIconButton(
-                  device.name,
-                  icon: Icons.bluetooth_connected_rounded,
-                  color: Colors.green[400],
-                  callBack: () async => await device.disconnect(),
-                );
-              }).toList(),
-            );
-          },
-        ),
         ...snapshot.data.map((r) {
           return StreamBuilder<BluetoothDeviceState>(
             stream: r.device.state,
@@ -183,14 +198,14 @@ class Bluetooth extends StatelessWidget {
                 return FlatIconButton(
                   r.device.name,
                   icon: Icons.bluetooth_connected_rounded,
-                  color: Colors.green[400],
+                  color: Colors.green[700],
                   callBack: () async => await r.device.disconnect(),
                 );
               } else {
                 return FlatIconButton(
                   r.device.name,
                   icon: Icons.bluetooth_rounded,
-                  color: Colors.deepOrange[400],
+                  color: Colors.deepOrange[700],
                   callBack: () async => await onConnect(r.device),
                 );
               }
@@ -209,3 +224,20 @@ class Bluetooth extends StatelessWidget {
     );
   }
 }
+/*
+if(bluetooth.on) {
+	if(location.on) {
+		if(scanning.on) {
+			[				device list
+				stop button			]
+		} else {
+			[				image of enabling device
+				start button		]
+		}
+	} else {
+		location.enable;
+	}
+} else {
+	bluetooth.enable;
+}
+*/

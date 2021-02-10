@@ -16,7 +16,7 @@ class BarGraph extends StatefulWidget {
 
 class _BarGraphState extends State<BarGraph> {
   List<ChartData> chartData;
-  ChartSeriesController _controller;
+  ChartSeriesController _graphDataController;
 
   @override
   void initState() {
@@ -98,22 +98,22 @@ class _BarGraphState extends State<BarGraph> {
           labelAlignment: ChartDataLabelAlignment.top,
           textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
-        onRendererCreated: (ChartSeriesController controller) => _controller = controller,
+        onRendererCreated: (ChartSeriesController controller) => _graphDataController = controller,
       ),
     ];
   }
 
   Future<void> _getData(List<int> dataList) async {
     final _resultWeightMeasurement = 1;
-    double _avgWeightOf5Rec = 0;
-    int _avgTimeof5Rec = 0;
+    double _avgWeightOf8Rec = 0;
+    int _avgTimeof8Rec = 0;
     int _countOf8Rec = 0;
     if (dataList.isNotEmpty && dataList[0] == _resultWeightMeasurement) {
       for (int x = 2; x < dataList.length; x += 8) {
         _countOf8Rec++;
-        _avgWeightOf5Rec +=
+        _avgWeightOf8Rec +=
             Uint8List.fromList(dataList.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _avgTimeof5Rec += Uint8List.fromList(dataList.getRange(x + 4, x + 4 + 4).toList())
+        _avgTimeof8Rec += Uint8List.fromList(dataList.getRange(x + 4, x + 4 + 4).toList())
             .buffer
             .asByteData()
             .getUint32(0, Endian.little);
@@ -121,14 +121,14 @@ class _BarGraphState extends State<BarGraph> {
           chartData.insert(
             0,
             ChartData(
-              y1: double.parse((_avgWeightOf5Rec.abs() / 8.0).toStringAsFixed(2)),
-              time: double.parse(((_avgTimeof5Rec / 8) / 1000000.0).toStringAsFixed(2)),
+              y1: double.parse((_avgWeightOf8Rec.abs() / 8.0).toStringAsFixed(2)),
+              time: double.parse(((_avgTimeof8Rec / 8) / 1000000.0).toStringAsFixed(2)),
             ),
           );
-          _controller.updateDataSource(updatedDataIndex: 0);
+          _graphDataController.updateDataSource(updatedDataIndex: 0);
           _countOf8Rec = 0;
-          _avgWeightOf5Rec = 0;
-          _avgTimeof5Rec = 0;
+          _avgWeightOf8Rec = 0;
+          _avgTimeof8Rec = 0;
         }
       }
     }
