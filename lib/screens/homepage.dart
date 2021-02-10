@@ -1,13 +1,11 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/components/app_logo.dart';
-import 'package:tendon_loader/screens/bluetooth.dart';
+import 'package:tendon_loader/components/bluetooth.dart';
+import 'package:tendon_loader/screens/device_scanner.dart';
 import 'package:tendon_loader/screens/exercise_mode.dart';
 import 'package:tendon_loader/screens/live_data.dart';
 import 'package:tendon_loader/screens/mvic_testing.dart';
-import 'package:tendon_loader/utils/bluetooth_args.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/';
@@ -20,17 +18,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _serviceUuid = "7e4e1701-1ea6-40c9-9dcc-13d34ffead57"; // main service
-  final _dataCharacteristicUuid = "7e4e1702-1ea6-40c9-9dcc-13d34ffead57"; // receive data
-  final _controlPointUuid = "7e4e1703-1ea6-40c9-9dcc-13d34ffead57"; // send commands
-
-  BluetoothDevice _device;
-  BluetoothCharacteristic _mDataCharacteristic;
-  BluetoothCharacteristic _mControlCharacteristic;
-
   @override
   void dispose() {
-    _mControlCharacteristic.write([110]);
+    Bluetooth.instance.sleep;
     super.dispose();
   }
 
@@ -75,13 +65,8 @@ class _HomePageState extends State<HomePage> {
       trailing: Icon(Icons.keyboard_arrow_right_rounded),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       onTap: () {
-        BluetoothArgs _btArgs = BluetoothArgs(
-          device: _device,
-          mDataCharacteristic: _mDataCharacteristic,
-          mControlCharacteristic: _mControlCharacteristic,
-        );
-        if (_device != null) {
-          Navigator.of(context).pushNamed(route, arguments: _btArgs);
+        if (Bluetooth.device != null) {
+          Navigator.of(context).pushNamed(route);
         } else {
           _findDevice(context);
         }
@@ -97,31 +82,11 @@ class _HomePageState extends State<HomePage> {
       barrierDismissible: false,
       builder: (_) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          content: DeviceScanner(),
           title: Text('Select Bluetooth Device', textAlign: TextAlign.center),
-          content: Bluetooth(onConnect: _connectTo),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
         );
       },
     );
-  }
-
-  Future<void> _connectTo(BluetoothDevice device) async {
-    _device = device;
-    await device.connect();
-    await device.discoverServices().then((services) {
-      return services.singleWhere((service) {
-        return service.uuid.toString() == _serviceUuid;
-      });
-    }).then((service) {
-      return service.characteristics;
-    }).then((characteristics) {
-      return characteristics.forEach((characteristic) {
-        if (characteristic.uuid.toString() == _dataCharacteristicUuid) {
-          _mDataCharacteristic = characteristic;
-        } else if (characteristic.uuid.toString() == _controlPointUuid) {
-          _mControlCharacteristic = characteristic;
-        }
-      });
-    });
   }
 }

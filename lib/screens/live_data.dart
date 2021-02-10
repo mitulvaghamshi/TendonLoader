@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/utils/bar_graph.dart';
-import 'package:tendon_loader/utils/bluetooth_args.dart';
 
 class LiveData extends StatefulWidget {
   static const name = 'Live Data';
@@ -13,11 +12,8 @@ class LiveData extends StatefulWidget {
 }
 
 class _LiveDataState extends State<LiveData> {
-  BluetoothArgs args;
-
   @override
   Widget build(BuildContext context) {
-    args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(title: const Text(LiveData.name)),
       body: SingleChildScrollView(
@@ -42,7 +38,7 @@ class _LiveDataState extends State<LiveData> {
                     ),
                   ],
                 ),
-                BarGraph(args: args),
+                BarGraph(),
               ],
             ),
           ),

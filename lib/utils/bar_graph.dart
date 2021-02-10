@@ -1,33 +1,31 @@
-import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/utils/bluetooth_args.dart';
+import 'package:tendon_loader/components/bluetooth.dart';
 
 class BarGraph extends StatefulWidget {
-  final BluetoothArgs args;
-
-  const BarGraph({Key key, this.args}) : super(key: key);
+  const BarGraph({Key key}) : super(key: key);
 
   @override
   _BarGraphState createState() => _BarGraphState();
 }
 
 class _BarGraphState extends State<BarGraph> {
-  List<ChartData> chartData;
+  Color _color = Colors.blue;
+  List<ChartData> _chartData;
   ChartSeriesController _graphDataController;
 
   @override
   void initState() {
     super.initState();
-    chartData = [ChartData(y1: 0, y2: 0, time: 0)];
-    widget.args.mDataCharacteristic.setNotifyValue(true);
+    _chartData = [ChartData(y1: 0)];
+    Bluetooth.instance.startNotify;
   }
 
   @override
   void dispose() {
-    widget.args.mDataCharacteristic.setNotifyValue(false);
+    Bluetooth.instance.stopNotify;
     super.dispose();
   }
 
@@ -42,7 +40,7 @@ class _BarGraphState extends State<BarGraph> {
             plotAreaBorderWidth: 0,
             primaryXAxis: CategoryAxis(isVisible: false),
             primaryYAxis: NumericAxis(
-              maximum: 10,
+              interval: 1,
               labelFormat: '{value} kg',
               axisLine: AxisLine(width: 0),
               labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
@@ -55,24 +53,23 @@ class _BarGraphState extends State<BarGraph> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             FloatingActionButton(
-              onPressed: () async {
-                await widget.args.mControlCharacteristic.write([102]);
-              },
+              onPressed: () async => await Bluetooth.instance.stopWeightMeasurement,
               heroTag: 'tag-stop-btn',
               child: Icon(Icons.stop_rounded),
             ),
             FloatingActionButton(
               onPressed: () async {
-                await widget.args.mControlCharacteristic.write([101]);
-                widget.args.mDataCharacteristic.value.listen(_getData);
+                await Bluetooth.instance.startWeightMeasurement;
+                Bluetooth.instance.listen(_getData);
               },
               heroTag: 'tag-play-btn',
               child: Icon(Icons.play_arrow_rounded),
             ),
             FloatingActionButton(
               onPressed: () async {
-                // reset graph
-                await widget.args.mControlCharacteristic.write([102]);
+                await Bluetooth.instance.stopWeightMeasurement;
+                _chartData = [ChartData(y1: 0)];
+                _graphDataController.updateDataSource(updatedDataIndex: 0);
               },
               heroTag: 'tag-reset-btn',
               child: Icon(Icons.refresh_rounded),
@@ -88,27 +85,27 @@ class _BarGraphState extends State<BarGraph> {
     return <StackedColumnSeries<ChartData, int>>[
       StackedColumnSeries<ChartData, int>(
         width: 0.9,
-        color: Colors.blue,
-        dataSource: chartData,
+        color: _color,
+        dataSource: _chartData,
         animationDuration: 0,
         xValueMapper: (data, _) => 0,
         yValueMapper: (data, _) => data.y1,
         dataLabelSettings: DataLabelSettings(
           isVisible: true,
-          labelAlignment: ChartDataLabelAlignment.top,
-          textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+          labelAlignment: ChartDataLabelAlignment.bottom,
+          textStyle: TextStyle(fontSize: 56.0, fontWeight: FontWeight.bold),
         ),
         onRendererCreated: (ChartSeriesController controller) => _graphDataController = controller,
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
     ];
   }
 
-  Future<void> _getData(List<int> dataList) async {
-    final _resultWeightMeasurement = 1;
+  void _getData(List<int> dataList) {
     double _avgWeightOf8Rec = 0;
     int _avgTimeof8Rec = 0;
     int _countOf8Rec = 0;
-    if (dataList.isNotEmpty && dataList[0] == _resultWeightMeasurement) {
+    if (dataList.isNotEmpty && dataList[0] == Bluetooth.RES_WEIGHT_MEAS) {
       for (int x = 2; x < dataList.length; x += 8) {
         _countOf8Rec++;
         _avgWeightOf8Rec +=
@@ -118,7 +115,7 @@ class _BarGraphState extends State<BarGraph> {
             .asByteData()
             .getUint32(0, Endian.little);
         if (_countOf8Rec == 8) {
-          chartData.insert(
+          _chartData.insert(
             0,
             ChartData(
               y1: double.parse((_avgWeightOf8Rec.abs() / 8.0).toStringAsFixed(2)),
@@ -173,7 +170,6 @@ class ChartData {
     );
   }
 
-
     List<StackedColumnSeries<ChartData, String>> _getStackedColumnSeriesTemp() {
     return <StackedColumnSeries<ChartData, String>>[
       StackedColumnSeries<ChartData, String>(
@@ -188,7 +184,7 @@ class ChartData {
           textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
       ),
-      /*StackedColumnSeries<ChartData, String>(
+      StackedColumnSeries<ChartData, String>(
         width: 0.9,
         color: Colors.green,
         dataSource: [chartData],
@@ -200,8 +196,7 @@ class ChartData {
           labelAlignment: ChartDataLabelAlignment.top,
           textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
-      ),*/
+      ),
     ];
   }
-
-* */
+ */

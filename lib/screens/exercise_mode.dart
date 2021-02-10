@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/bluetooth_args.dart';
 
 class ExerciseMode extends StatefulWidget {
   static const name = 'Exercise Mode';
@@ -20,8 +19,6 @@ class _ExerciseState extends State<ExerciseMode> {
 
   @override
   Widget build(BuildContext context) {
-    final BluetoothArgs args = ModalRoute.of(context).settings.arguments;
-
     return Scaffold(
       appBar: AppBar(title: const Text(ExerciseMode.name)),
       body: SingleChildScrollView(

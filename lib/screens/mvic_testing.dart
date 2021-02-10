@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/bluetooth_args.dart';
 
 class MVICTesting extends StatefulWidget {
   static const name = 'MVIC Testing';
@@ -14,8 +13,6 @@ class MVICTesting extends StatefulWidget {
 class _MVICTestingState extends State<MVICTesting> {
   @override
   Widget build(BuildContext context) {
-    final BluetoothArgs args = ModalRoute.of(context).settings.arguments;
-
     return Scaffold(
       appBar: AppBar(title: const Text(MVICTesting.name)),
       body: SingleChildScrollView(
