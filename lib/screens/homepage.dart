@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/app_logo.dart';
 import 'package:tendon_loader/components/bluetooth.dart';
@@ -65,7 +64,7 @@ class _HomePageState extends State<HomePage> {
       trailing: Icon(Icons.keyboard_arrow_right_rounded),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       onTap: () {
-        if (Bluetooth.device != null) {
+        if (/*Bluetooth.device != null*/true) {
           Navigator.of(context).pushNamed(route);
         } else {
           _findDevice(context);

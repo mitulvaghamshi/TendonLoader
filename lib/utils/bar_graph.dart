@@ -12,14 +12,15 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
-  Color _color = Colors.blue;
-  List<ChartData> _chartData;
+  List<ChartData> _measurement;
+  List<ChartData> _threshold;
   ChartSeriesController _graphDataController;
 
   @override
   void initState() {
     super.initState();
-    _chartData = [ChartData(y1: 0)];
+    _measurement = [ChartData(y: 3)];
+    _threshold = [ChartData(x: 0, y: 3), ChartData(x: 2, y: 3)];
     Bluetooth.instance.startNotify;
   }
 
@@ -38,14 +39,16 @@ class _BarGraphState extends State<BarGraph> {
           height: 500,
           child: SfCartesianChart(
             plotAreaBorderWidth: 0,
-            primaryXAxis: CategoryAxis(isVisible: false),
             primaryYAxis: NumericAxis(
               interval: 1,
+              maximum: 15,
               labelFormat: '{value} kg',
               axisLine: AxisLine(width: 0),
               labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
             ),
-            series: _getStackedColumnSeries(),
+            series: _getSeries(),
+            enableSideBySideSeriesPlacement: false,
+            primaryXAxis: NumericAxis(minimum: 0, isVisible: false),
           ),
         ),
         SizedBox(height: 30.0),
@@ -68,7 +71,7 @@ class _BarGraphState extends State<BarGraph> {
             FloatingActionButton(
               onPressed: () async {
                 await Bluetooth.instance.stopWeightMeasurement;
-                _chartData = [ChartData(y1: 0)];
+                _measurement = [ChartData(y: 0)];
                 _graphDataController.updateDataSource(updatedDataIndex: 0);
               },
               heroTag: 'tag-reset-btn',
@@ -81,15 +84,15 @@ class _BarGraphState extends State<BarGraph> {
     );
   }
 
-  List<StackedColumnSeries<ChartData, int>> _getStackedColumnSeries() {
-    return <StackedColumnSeries<ChartData, int>>[
-      StackedColumnSeries<ChartData, int>(
+  List<ChartSeries<ChartData, int>> _getSeries() {
+    return <ChartSeries<ChartData, int>>[
+      ColumnSeries<ChartData, int>(
         width: 0.9,
-        color: _color,
-        dataSource: _chartData,
+        color: Colors.blue,
         animationDuration: 0,
-        xValueMapper: (data, _) => 0,
-        yValueMapper: (data, _) => data.y1,
+        dataSource: _measurement,
+        xValueMapper: (data, _) => 1,
+        yValueMapper: (data, _) => data.y,
         dataLabelSettings: DataLabelSettings(
           isVisible: true,
           labelAlignment: ChartDataLabelAlignment.bottom,
@@ -97,6 +100,13 @@ class _BarGraphState extends State<BarGraph> {
         ),
         onRendererCreated: (ChartSeriesController controller) => _graphDataController = controller,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      LineSeries<ChartData, int>(
+        width: 5,
+        color: Colors.red,
+        dataSource: _threshold,
+        xValueMapper: (data, _) => data.x,
+        yValueMapper: (data, _) => data.y,
       ),
     ];
   }
@@ -115,10 +125,10 @@ class _BarGraphState extends State<BarGraph> {
             .asByteData()
             .getUint32(0, Endian.little);
         if (_countOf8Rec == 8) {
-          _chartData.insert(
+          _measurement.insert(
             0,
             ChartData(
-              y1: double.parse((_avgWeightOf8Rec.abs() / 8.0).toStringAsFixed(2)),
+              y: double.parse((_avgWeightOf8Rec.abs() / 8.0).toStringAsFixed(2)),
               time: double.parse(((_avgTimeof8Rec / 8) / 1000000.0).toStringAsFixed(2)),
             ),
           );
@@ -133,70 +143,9 @@ class _BarGraphState extends State<BarGraph> {
 }
 
 class ChartData {
-  ChartData({this.y1, this.y2, this.time});
+  ChartData({this.x, this.y, this.time});
 
-  final double y1;
-  final double y2;
+  final int x;
+  final double y;
   final double time;
 }
-
-/*
-class ChartData {
-  ChartData({this.x, this.y});
-
-  final String x;
-  final double y;
-}
-
- List<ColumnSeries<ChartData, String>> _getSeries() {
-    return <ColumnSeries<ChartData, String>>[
-      _columnSeries(ChartData(x: '', y: 7.5), Colors.green[600]),
-    ];
-  }
-
-  ColumnSeries<ChartData, String> _columnSeries(ChartData data, Color color) {
-    return ColumnSeries<ChartData, String>(
-      width: 0.9,
-      color: color,
-      dataSource: [data],
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-      xValueMapper: (ChartData value, _) => value.x,
-      yValueMapper: (ChartData value, _) => value.y,
-      dataLabelSettings: DataLabelSettings(
-        isVisible: true,
-        labelAlignment: ChartDataLabelAlignment.top,
-        textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-    List<StackedColumnSeries<ChartData, String>> _getStackedColumnSeriesTemp() {
-    return <StackedColumnSeries<ChartData, String>>[
-      StackedColumnSeries<ChartData, String>(
-        width: 0.9,
-        color: Colors.blue,
-        dataSource: [chartData],
-        xValueMapper: (data, _) => '',
-        yValueMapper: (data, _) => data.y1,
-        dataLabelSettings: DataLabelSettings(
-          isVisible: true,
-          labelAlignment: ChartDataLabelAlignment.top,
-          textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-        ),
-      ),
-      StackedColumnSeries<ChartData, String>(
-        width: 0.9,
-        color: Colors.green,
-        dataSource: [chartData],
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-        xValueMapper: (data, _) => '',
-        yValueMapper: (data, _) => data.y2,
-        dataLabelSettings: DataLabelSettings(
-          isVisible: true,
-          labelAlignment: ChartDataLabelAlignment.top,
-          textStyle: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-        ),
-      ),
-    ];
-  }
- */

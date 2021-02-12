@@ -33,9 +33,9 @@ class Bluetooth {
 
   static Bluetooth get instance => _mInstance;
 
-  get startNotify async => _mDataCharacteristic.setNotifyValue(true);
+  get startNotify async => _mDataCharacteristic?.setNotifyValue(true);
 
-  get stopNotify async => _mDataCharacteristic.setNotifyValue(false);
+  get stopNotify async => _mDataCharacteristic?.setNotifyValue(false);
 
   get startWeightMeasurement async => write(CMD_START_WEIGHT_MEAS);
 
@@ -43,19 +43,23 @@ class Bluetooth {
 
   get sleep async => write(CMD_ENTER_SLEEP);
 
-  Bluetooth._();
+  Bluetooth._() {
+   /* assert(_mDevice != null);
+    assert(_mDataCharacteristic != null);
+    assert(_mControlCharacteristic != null);*/
+  }
 
   static Bluetooth _mInstance = Bluetooth._();
 
   void setDevice(BluetoothDevice device) => _mDevice = device;
 
-  void listen(Function listener) => _mDataCharacteristic.value.listen(listener);
+  void listen(Function listener) => _mDataCharacteristic?.value?.listen(listener);
 
-  Future<void> write(int command) async => await _mControlCharacteristic.write([command]);
+  Future<void> write(int command) async => await _mControlCharacteristic?.write([command]);
 
   Future<void> enable() async => await BluetoothEnable.enableBluetooth;
 
-  Future<void> disconnect() async => await Bluetooth.device.disconnect();
+  Future<void> disconnect() async => await Bluetooth.device?.disconnect();
 
   Future<void> stopScan() async => await FlutterBlue.instance.stopScan();
 
@@ -68,20 +72,21 @@ class Bluetooth {
   }
 
   Future<void> connect() async {
-    await _mDevice.connect(autoConnect: false);
-    await _mDevice.discoverServices().then((services) {
-      return services.singleWhere((service) {
-        return service.uuid.toString() == _serviceUuid;
-      });
-    }).then((service) {
-      return service.characteristics;
-    }).then((characteristics) {
-      return characteristics.forEach((characteristic) {
-        if (characteristic.uuid.toString() == _dataCharacteristicUuid) {
-          _mDataCharacteristic = characteristic;
-        } else if (characteristic.uuid.toString() == _controlPointUuid) {
-          _mControlCharacteristic = characteristic;
-        }
+    await _mDevice?.connect(autoConnect: false)?.then((_) async {
+      await _mDevice.discoverServices().then((services) {
+        return services.singleWhere((service) {
+          return service.uuid.toString() == _serviceUuid;
+        });
+      }).then((service) {
+        return service.characteristics;
+      }).then((characteristics) {
+        return characteristics.forEach((characteristic) {
+          if (characteristic.uuid.toString() == _dataCharacteristicUuid) {
+            _mDataCharacteristic = characteristic;
+          } else if (characteristic.uuid.toString() == _controlPointUuid) {
+            _mControlCharacteristic = characteristic;
+          }
+        });
       });
     });
   }

@@ -25,19 +25,7 @@ class _LiveDataState extends State<LiveData> {
             padding: EdgeInsets.all(10.0),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Text('Current Load (Units)'), Text('100.8')],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Text('Time'), Text('05:10')],
-                    ),
-                  ],
-                ),
+                Text('05:10'),
                 BarGraph(),
               ],
             ),
