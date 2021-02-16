@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
+  Timer _timer;
+  String time = '--:--';
   List<ChartData> _measurement;
   List<ChartData> _threshold;
   ChartSeriesController _graphDataController;
@@ -19,7 +22,7 @@ class _BarGraphState extends State<BarGraph> {
   @override
   void initState() {
     super.initState();
-    _measurement = [ChartData(y: 3)];
+    _measurement = [ChartData(y: 0)];
     _threshold = [ChartData(x: 0, y: 3), ChartData(x: 2, y: 3)];
     Bluetooth.instance.startNotify;
   }
@@ -34,6 +37,10 @@ class _BarGraphState extends State<BarGraph> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Text(
+          'Time elapsed: $time',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.green),
+        ),
         SizedBox(height: 20),
         SizedBox(
           height: 500,
@@ -56,7 +63,11 @@ class _BarGraphState extends State<BarGraph> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             FloatingActionButton(
-              onPressed: () async => await Bluetooth.instance.stopWeightMeasurement,
+              onPressed: () async {
+                if (_timer != null && _timer.isActive) _timer.cancel();
+                setState(() => time = "--:--");
+                await Bluetooth.instance.stopWeightMeasurement;
+              },
               heroTag: 'tag-stop-btn',
               child: Icon(Icons.stop_rounded),
             ),
@@ -64,6 +75,12 @@ class _BarGraphState extends State<BarGraph> {
               onPressed: () async {
                 await Bluetooth.instance.startWeightMeasurement;
                 Bluetooth.instance.listen(_getData);
+                if (_timer == null || !_timer.isActive) {
+                  _timer = Timer.periodic(
+                    Duration(seconds: 1),
+                    (timer) => setState(() => time = '${(timer.tick ~/ 60)} min: ${timer.tick % 60} sec'),
+                  );
+                }
               },
               heroTag: 'tag-play-btn',
               child: Icon(Icons.play_arrow_rounded),

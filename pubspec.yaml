@@ -30,7 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   flutter_blue: 0.7.3
   bluetooth_enable: 0.1.1
-  geolocation: 1.1.2
+  location: 3.2.4
   syncfusion_flutter_charts: 18.4.34
 
 dev_dependencies:

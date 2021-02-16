@@ -2,16 +2,19 @@ import 'package:bluetooth_enable/bluetooth_enable.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
 class Bluetooth {
+  // UUIDs
   static final _serviceUuid = "7e4e1701-1ea6-40c9-9dcc-13d34ffead57"; // main service
   static final _dataCharacteristicUuid = "7e4e1702-1ea6-40c9-9dcc-13d34ffead57"; // receive data
   static final _controlPointUuid = "7e4e1703-1ea6-40c9-9dcc-13d34ffead57"; // send commands
 
+  // Responses
   static const RES_CMD_RESPONSE = 0;
   static const RES_WEIGHT_MEAS = 1;
   static const RES_RFD_PEAK = 2;
   static const RES_RFD_PEAK_SERIES = 3;
   static const RES_LOW_PWR_WARNING = 4;
 
+  // Commands
   static const CMD_TARE_SCALE = 100;
   static const CMD_START_WEIGHT_MEAS = 101;
   static const CMD_STOP_WEIGHT_MEAS = 102;
@@ -25,8 +28,13 @@ class Bluetooth {
   static const CMD_ENTER_SLEEP = 110;
   static const CMD_GET_BATTERY_VOLTAGE = 111;
 
+  // Connected device
   static BluetoothDevice _mDevice;
+
+  // Receive data from
   static BluetoothCharacteristic _mDataCharacteristic;
+
+  // Send commands to
   static BluetoothCharacteristic _mControlCharacteristic;
 
   static BluetoothDevice get device => _mDevice;

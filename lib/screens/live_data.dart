@@ -25,7 +25,7 @@ class _LiveDataState extends State<LiveData> {
             padding: EdgeInsets.all(10.0),
             child: Column(
               children: [
-                Text('05:10'),
+
                 BarGraph(),
               ],
             ),

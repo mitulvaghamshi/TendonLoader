@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
       trailing: Icon(Icons.keyboard_arrow_right_rounded),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       onTap: () {
-        if (/*Bluetooth.device != null*/true) {
+        if (Bluetooth.device != null) {
           Navigator.of(context).pushNamed(route);
         } else {
           _findDevice(context);
