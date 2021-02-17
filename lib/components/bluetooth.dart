@@ -28,18 +28,15 @@ class Bluetooth {
   static const CMD_ENTER_SLEEP = 110;
   static const CMD_GET_BATTERY_VOLTAGE = 111;
 
-  // Connected device
   static BluetoothDevice _mDevice;
 
-  // Receive data from
   static BluetoothCharacteristic _mDataCharacteristic;
 
-  // Send commands to
   static BluetoothCharacteristic _mControlCharacteristic;
 
   static BluetoothDevice get device => _mDevice;
 
-  static Bluetooth get instance => _mInstance;
+  factory Bluetooth() => instance;
 
   get startNotify async => _mDataCharacteristic?.setNotifyValue(true);
 
@@ -51,13 +48,9 @@ class Bluetooth {
 
   get sleep async => write(CMD_ENTER_SLEEP);
 
-  Bluetooth._() {
-   /* assert(_mDevice != null);
-    assert(_mDataCharacteristic != null);
-    assert(_mControlCharacteristic != null);*/
-  }
+  Bluetooth._();
 
-  static Bluetooth _mInstance = Bluetooth._();
+  static Bluetooth instance = Bluetooth._();
 
   void setDevice(BluetoothDevice device) => _mDevice = device;
 
@@ -80,15 +73,15 @@ class Bluetooth {
   }
 
   Future<void> connect() async {
-    await _mDevice?.connect(autoConnect: false)?.then((_) async {
+    await _mDevice?.connect()?.then((_) async {
       await _mDevice.discoverServices().then((services) {
-        return services.singleWhere((service) {
+        return services?.singleWhere((service) {
           return service.uuid.toString() == _serviceUuid;
         });
       }).then((service) {
-        return service.characteristics;
+        return service?.characteristics;
       }).then((characteristics) {
-        return characteristics.forEach((characteristic) {
+        characteristics?.forEach((characteristic) {
           if (characteristic.uuid.toString() == _dataCharacteristicUuid) {
             _mDataCharacteristic = characteristic;
           } else if (characteristic.uuid.toString() == _controlPointUuid) {

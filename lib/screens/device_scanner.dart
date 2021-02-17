@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:location/location.dart';
 import 'package:tendon_loader/components/bluetooth.dart';
-import 'package:tendon_loader/components/flat_icon_button.dart';
+import 'package:tendon_loader/components/custom_button.dart';
 
 class DeviceScanner extends StatelessWidget {
   @override
@@ -30,18 +30,18 @@ class DeviceScanner extends StatelessWidget {
                         stream: r.device.state,
                         builder: (_, snapshot) {
                           if (snapshot.data == BluetoothDeviceState.connected) {
-                            return FlatIconButton(
-                              r.device.name,
-                              icon: Icons.bluetooth_connected_rounded,
+                            return CustomButton(
+                              text: r.device.name,
                               color: Colors.green[700],
-                              callBack: () async => await Bluetooth.instance.disconnect(),
+                              icon: Icons.bluetooth_connected_rounded,
+                              onPressed: () async => await Bluetooth.instance.disconnect(),
                             );
                           } else {
-                            return FlatIconButton(
-                              r.device.name,
+                            return CustomButton(
+                              text: r.device.name,
                               icon: Icons.bluetooth_rounded,
                               color: Colors.deepOrange[700],
-                              callBack: () async => await Bluetooth.instance.connect(),
+                              onPressed: () async => await Bluetooth.instance.connect(),
                             );
                           }
                         },
@@ -62,15 +62,15 @@ class DeviceScanner extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               CircularProgressIndicator(),
-                              Text('Please wait...', style: TextStyle(fontSize: 20.0)),
+                              Text('Please wait...', style: TextStyle(fontSize: 20)),
                             ],
                           ),
                           SizedBox(height: 30),
-                          FlatIconButton(
-                            'Stop',
+                          CustomButton(
+                            text: 'Stop',
                             icon: Icons.close_rounded,
                             color: Colors.deepOrangeAccent,
-                            callBack: () async => Bluetooth.instance.stopScan(),
+                            onPressed: () async => Bluetooth.instance.stopScan(),
                           ),
                         ],
                       );
@@ -91,11 +91,11 @@ class DeviceScanner extends StatelessWidget {
                                   softWrap: true,
                                 ),
                                 SizedBox(height: 30),
-                                FlatIconButton(
-                                  'Scan',
+                                CustomButton(
+                                  text: 'Scan',
                                   icon: Icons.search_rounded,
                                   color: Colors.black,
-                                  callBack: () async {
+                                  onPressed: () async {
                                     await Location.instance.serviceEnabled().then((value) async {
                                       if (value) {
                                         await Bluetooth.instance.startScan();
@@ -131,11 +131,11 @@ class DeviceScanner extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                 ),
                                 SizedBox(height: 30),
-                                FlatIconButton(
-                                  'Enable',
+                                CustomButton(
+                                  text: 'Enable',
                                   icon: Icons.location_on_rounded,
                                   color: Colors.black,
-                                  callBack: () async => await Location.instance.requestService().then((value) {
+                                  onPressed: () async => await Location.instance.requestService().then((value) {
                                     _locationStateController.add(value);
                                   }),
                                 ),
@@ -160,11 +160,11 @@ class DeviceScanner extends StatelessWidget {
                 textAlign: TextAlign.center,
                 softWrap: true,
               ),
-              FlatIconButton(
-                'Enable',
+              CustomButton(
+                text: 'Enable',
                 icon: Icons.bluetooth_rounded,
                 color: Colors.black,
-                callBack: () async => await Bluetooth.instance.enable(),
+                onPressed: () async => await Bluetooth.instance.enable(),
               ),
             ],
           );
