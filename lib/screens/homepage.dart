@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
   static const routeName = '/';
   static const name = 'Tendon Loader';
 
-  HomePage({Key key}) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -27,12 +27,20 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(HomePage.name), centerTitle: true),
+      appBar: AppBar(
+        title: const Text(HomePage.name),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info_outline_rounded),
+            onPressed: () => aboutDialog(context),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Card(
           elevation: 16,
           margin: const EdgeInsets.all(16),
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
@@ -83,6 +91,20 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
+    );
+  }
+
+  void aboutDialog(BuildContext context) {
+    showAboutDialog(
+      context: context,
+      applicationIcon: Icon(Icons.account_circle_rounded),
+      applicationLegalese: 'Application Legalese',
+      applicationName: HomePage.name,
+      applicationVersion: '1.0.0',
+      children: [
+        Text('Mitul Vaghamshi'),
+        Text('mitulvaghmashi@gmail.com'),
+      ],
     );
   }
 }

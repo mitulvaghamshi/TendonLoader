@@ -44,7 +44,7 @@ class _BarGraphState extends State<BarGraph> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 16,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(const Radius.circular(16))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       margin: const EdgeInsets.all(20),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
@@ -76,7 +76,7 @@ class _BarGraphState extends State<BarGraph> {
               builder: (_, snapshot) => Container(
                 height: 60,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(const Radius.circular(20)),
+                  borderRadius: BorderRadius.circular(20),
                   color: snapshot.data ? Colors.green : Colors.yellow,
                 ),
               ),
@@ -103,7 +103,6 @@ class _BarGraphState extends State<BarGraph> {
               children: [
                 CustomButton(
                   isFab: true,
-                  color: Colors.green,
                   icon: Icons.play_arrow_rounded,
                   onPressed: () async {
                     if (_timer == null || !_timer.isActive) {
@@ -114,13 +113,11 @@ class _BarGraphState extends State<BarGraph> {
                 ),
                 CustomButton(
                   isFab: true,
-                  color: Colors.red,
                   icon: Icons.stop_rounded,
                   onPressed: _resetTask,
                 ),
                 CustomButton(
                   isFab: true,
-                  color: Colors.yellow,
                   icon: Icons.refresh_rounded,
                   onPressed: () async {
                     await _resetTask();
@@ -171,26 +168,26 @@ class _BarGraphState extends State<BarGraph> {
 
   void _getData(List<int> dataList) {
     double _avgWeightOf8Rec = 0;
-    int _avgTimeof8Rec = 0;
+    int _avgTimeOf8Rec = 0;
     int _countOf8Rec = 0;
     if (dataList.isNotEmpty && dataList[0] == Bluetooth.RES_WEIGHT_MEAS) {
       for (int x = 2; x < dataList.length; x += 8) {
         _countOf8Rec++;
         _avgWeightOf8Rec +=
             Uint8List.fromList(dataList.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _avgTimeof8Rec += Uint8List.fromList(dataList.getRange(x + 4, x + 4 + 4).toList())
+        _avgTimeOf8Rec += Uint8List.fromList(dataList.getRange(x + 4, x + 4 + 4).toList())
             .buffer
             .asByteData()
             .getUint32(0, Endian.little);
         if (_countOf8Rec == 8) {
-          double _time = double.parse(((_avgTimeof8Rec / 8) / 1000000.0).toStringAsFixed(2));
+          double _time = double.parse(((_avgTimeOf8Rec / 8) / 1000000.0).toStringAsFixed(2));
           double _weight = double.parse((_avgWeightOf8Rec.abs() / 8.0).toStringAsFixed(2));
           _measurement.insert(0, ChartData(weight: _weight));
           _graphDataController.updateDataSource(updatedDataIndex: 0);
           _colorController.add(_weight >= _targetWeight);
           _countOf8Rec = 0;
           _avgWeightOf8Rec = 0;
-          _avgTimeof8Rec = 0;
+          _avgTimeOf8Rec = 0;
         }
       }
     }

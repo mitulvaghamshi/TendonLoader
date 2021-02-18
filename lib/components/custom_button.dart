@@ -16,7 +16,7 @@ class CustomButton extends StatelessWidget {
         child: Icon(icon),
         onPressed: onPressed,
         heroTag: ValueKey(icon),
-        backgroundColor: color ?? Colors.black,
+        backgroundColor: color ?? Colors.blue,
       );
     } else {
       return FlatButton.icon(
@@ -24,7 +24,7 @@ class CustomButton extends StatelessWidget {
         color: color ?? Colors.black,
         icon: Icon(icon, color: Colors.white),
         label: Text(text, style: const TextStyle(color: Colors.white)),
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(const Radius.circular(30))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       );
     }
   }
