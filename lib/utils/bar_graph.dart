@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/components/bluetooth.dart';
 import 'package:tendon_loader/components/custom_button.dart';
+import 'package:tendon_loader/utils/chart_data.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key key}) : super(key: key);
@@ -14,17 +15,17 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
-  Timer _timer;
-  double _targetWeight = 4;
+  Stopwatch _stopwatch;
+  double _targetWeight = 5.5;
   List<ChartData> _threshold;
   List<ChartData> _measurement;
   ChartSeriesController _graphDataController;
-  StreamController<int> _timeController = StreamController<int>();
   StreamController<bool> _colorController = StreamController<bool>();
 
   @override
   void initState() {
     super.initState();
+    _stopwatch = Stopwatch();
     _measurement = [ChartData(weight: 0)];
     _colorController.add(false);
     _threshold = [ChartData(x: 0, weight: _targetWeight), ChartData(x: 2, weight: _targetWeight)];
@@ -34,7 +35,6 @@ class _BarGraphState extends State<BarGraph> {
 
   @override
   void dispose() {
-    if (_timeController.isClosed) _timeController.close();
     if (_colorController.isClosed) _colorController.close();
     Bluetooth.instance.stopNotify;
     super.dispose();
@@ -44,8 +44,8 @@ class _BarGraphState extends State<BarGraph> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 16,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       margin: const EdgeInsets.all(20),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
         child: Column(
@@ -55,11 +55,11 @@ class _BarGraphState extends State<BarGraph> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 StreamBuilder<int>(
-                  stream: _timeController.stream,
+                  stream: Stream.periodic(Duration(seconds: 1), (value) => (_stopwatch.elapsedMilliseconds ~/ 1000)),
                   builder: (_, snapshot) {
                     String _elapsedTime = '--:--';
                     if (snapshot.hasData && snapshot.data > 0) {
-                      _elapsedTime = '${(snapshot.data ~/ 60)} min: ${snapshot.data % 60} sec';
+                      _elapsedTime = '${(snapshot.data ~/ 60).toString().padLeft(2, '0')}:${(snapshot.data % 60).toString().padLeft(2, '0')}';
                     }
                     return Text(
                       'Time elapsed: $_elapsedTime',
@@ -71,13 +71,13 @@ class _BarGraphState extends State<BarGraph> {
             ),
             const SizedBox(height: 20),
             StreamBuilder<bool>(
-              stream: _colorController.stream,
               initialData: false,
+              stream: _colorController.stream,
               builder: (_, snapshot) => Container(
                 height: 60,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: snapshot.data ? Colors.green : Colors.yellow,
+                  color: snapshot.data ? Colors.green : Colors.white,
                 ),
               ),
             ),
@@ -105,25 +105,26 @@ class _BarGraphState extends State<BarGraph> {
                   isFab: true,
                   icon: Icons.play_arrow_rounded,
                   onPressed: () async {
-                    if (_timer == null || !_timer.isActive) {
-                      _timer = Timer.periodic(Duration(seconds: 1), (timer) => _timeController.add(timer.tick));
-                    }
+                    _stopwatch.start();
                     await Bluetooth.instance.startWeightMeasurement;
                   },
                 ),
                 CustomButton(
                   isFab: true,
                   icon: Icons.stop_rounded,
-                  onPressed: _resetTask,
+                  onPressed: () async {
+                    _stopwatch.stop();
+                    await Bluetooth.instance.stopWeightMeasurement;
+                  },
                 ),
                 CustomButton(
                   isFab: true,
-                  icon: Icons.refresh_rounded,
+                  icon: Icons.replay_rounded,
                   onPressed: () async {
-                    await _resetTask();
-                    _timeController.add(0);
+                    _stopwatch.reset();
                     _measurement.insert(0, ChartData(weight: 0));
                     _graphDataController.updateDataSource(updatedDataIndex: 0);
+                    await Bluetooth.instance.stopWeightMeasurement;
                   },
                 ),
               ],
@@ -132,11 +133,6 @@ class _BarGraphState extends State<BarGraph> {
         ),
       ),
     );
-  }
-
-  Future<void> _resetTask() async {
-    if (_timer != null && _timer.isActive) _timer.cancel();
-    await Bluetooth.instance.stopWeightMeasurement;
   }
 
   List<ChartSeries<ChartData, int>> _getSeries() {
@@ -159,6 +155,7 @@ class _BarGraphState extends State<BarGraph> {
       LineSeries<ChartData, int>(
         width: 5,
         color: Colors.red,
+        animationDuration: 0,
         dataSource: _threshold,
         xValueMapper: (data, _) => data.x,
         yValueMapper: (data, _) => data.weight,
@@ -167,37 +164,28 @@ class _BarGraphState extends State<BarGraph> {
   }
 
   void _getData(List<int> dataList) {
-    double _avgWeightOf8Rec = 0;
-    int _avgTimeOf8Rec = 0;
-    int _countOf8Rec = 0;
+    int _counter = 0;
+    int _averageTime = 0;
+    double _averageWeight = 0;
     if (dataList.isNotEmpty && dataList[0] == Bluetooth.RES_WEIGHT_MEAS) {
       for (int x = 2; x < dataList.length; x += 8) {
-        _countOf8Rec++;
-        _avgWeightOf8Rec +=
+        _averageWeight +=
             Uint8List.fromList(dataList.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _avgTimeOf8Rec += Uint8List.fromList(dataList.getRange(x + 4, x + 4 + 4).toList())
+        _averageTime += Uint8List.fromList(dataList.getRange(x + 4, x + 8).toList())
             .buffer
             .asByteData()
             .getUint32(0, Endian.little);
-        if (_countOf8Rec == 8) {
-          double _time = double.parse(((_avgTimeOf8Rec / 8) / 1000000.0).toStringAsFixed(2));
-          double _weight = double.parse((_avgWeightOf8Rec.abs() / 8.0).toStringAsFixed(2));
+        if (_counter++ == 8) {
+          double _weight = double.parse((_averageWeight.abs() / 8.0).toStringAsFixed(2));
+          double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
           _measurement.insert(0, ChartData(weight: _weight));
           _graphDataController.updateDataSource(updatedDataIndex: 0);
           _colorController.add(_weight >= _targetWeight);
-          _countOf8Rec = 0;
-          _avgWeightOf8Rec = 0;
-          _avgTimeOf8Rec = 0;
+          _counter = 0;
+          _averageTime = 0;
+          _averageWeight = 0;
         }
       }
     }
   }
-}
-
-class ChartData {
-  ChartData({this.x, this.time, this.weight});
-
-  final int x;
-  final double time;
-  final double weight;
 }

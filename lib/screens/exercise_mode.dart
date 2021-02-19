@@ -81,7 +81,7 @@ class _ExerciseState extends State<ExerciseMode> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CustomTextField(hint: 'Target Load (units)', controller: ctrl1),
+              CustomTextField(hint: 'Target Load (Kg)', controller: ctrl1),
               CustomTextField(hint: 'Hold time (sec)', controller: ctrl2),
               CustomTextField(hint: 'Sets', controller: ctrl3),
               CustomTextField(hint: 'Reps', controller: ctrl4),
