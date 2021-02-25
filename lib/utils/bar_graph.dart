@@ -28,7 +28,9 @@ class BarGraph extends StatefulWidget {
 class _BarGraphState extends State<BarGraph> {
   Stopwatch _stopwatch;
   double _targetWeight;
+  List<ChartData> _targetLine;
   List<ChartData> _measurement;
+  ChartSeriesController _lineDataController;
   ChartSeriesController _graphDataController;
   StreamController<double> _weightController;
 
@@ -40,6 +42,7 @@ class _BarGraphState extends State<BarGraph> {
     }
     if (!widget.isLiveData) {
       _targetWeight = widget.isExerciseMode ? 5.5 : 0;
+      _targetLine = [ChartData(x: 0, weight: _targetWeight), ChartData(x: 2, weight: _targetWeight)];
       _weightController = StreamController<double>()..add(0);
     }
     _measurement = [ChartData(weight: 0)];
@@ -74,7 +77,7 @@ class _BarGraphState extends State<BarGraph> {
                         stream: _weightController.stream,
                         builder: (_, snapshot) {
                           return Text(
-                            'MVIC: ${snapshot.data.toStringAsPrecision(2).padLeft(2, '0')} Kg',
+                            'MVIC: ${snapshot.data.toStringAsFixed(2).padLeft(2, '0')} Kg',
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.green),
                           );
                         },
@@ -115,16 +118,16 @@ class _BarGraphState extends State<BarGraph> {
               child: SfCartesianChart(
                 plotAreaBorderWidth: 0,
                 primaryYAxis: NumericAxis(
-                  interval: 1,
-                  maximum: 15,
+                  interval: 0.5,
+                  desiredIntervals: 1,
                   labelFormat: '{value} kg',
                   axisLine: AxisLine(width: 0),
                   labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                 ),
                 series: _getSeries(),
-                primaryXAxis: widget.isExerciseMode
-                    ? NumericAxis(minimum: 0, isVisible: false)
-                    : CategoryAxis(minimum: 0, isVisible: false),
+                primaryXAxis: widget.isLiveData
+                    ? CategoryAxis(minimum: 0, isVisible: false)
+                    : NumericAxis(minimum: 0, isVisible: false),
               ),
             ),
             const SizedBox(height: 30),
@@ -181,20 +184,22 @@ class _BarGraphState extends State<BarGraph> {
       yValueMapper: (data, _) => data.weight,
       dataLabelSettings: DataLabelSettings(
         isVisible: true,
+        showZeroValue: false,
         labelAlignment: ChartDataLabelAlignment.bottom,
         textStyle: TextStyle(fontSize: 56.0, fontWeight: FontWeight.bold),
       ),
       onRendererCreated: (controller) => _graphDataController = controller,
       borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
     ));
-    if (widget.isExerciseMode) {
+    if (!widget.isLiveData) {
       components.add(LineSeries<ChartData, int>(
         width: 5,
         color: Colors.red,
         animationDuration: 0,
-        dataSource: [ChartData(x: 0, weight: _targetWeight), ChartData(x: 2, weight: _targetWeight)],
+        dataSource: _targetLine,
         xValueMapper: (data, _) => data.x,
         yValueMapper: (data, _) => data.weight,
+        onRendererCreated: (controller) => _lineDataController = controller,
       ));
     }
     return components;
@@ -202,28 +207,28 @@ class _BarGraphState extends State<BarGraph> {
 
   void _getData(List<int> dataList) {
     int _counter = 0;
-    int _averageTime = 0;
+    // int _averageTime = 0;
     double _averageWeight = 0;
     if (dataList.isNotEmpty && dataList[0] == Bluetooth.RES_WEIGHT_MEAS) {
       for (int x = 2; x < dataList.length; x += 8) {
         _averageWeight +=
             Uint8List.fromList(dataList.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _averageTime += Uint8List.fromList(dataList.getRange(x + 4, x + 8).toList())
-            .buffer
-            .asByteData()
-            .getUint32(0, Endian.little);
+        // _averageTime += Uint8List.fromList(dataList.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
         if (_counter++ == 8) {
           double _weight = double.parse((_averageWeight.abs() / 8.0).toStringAsFixed(2));
-          double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
+          // double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
           _measurement.insert(0, ChartData(weight: _weight));
-          if (!_weightController.isClosed) {
-            if (widget.isMVICTesting && _weight > _targetWeight)
+          if (!widget.isLiveData && !_weightController.isClosed) {
+            if (widget.isMVICTesting && _weight > _targetWeight) {
               _weightController.add(_targetWeight = _weight);
-            else if (widget.isExerciseMode) _weightController.add(_weight);
+              _targetLine
+                  .insertAll(0, {ChartData(x: 0, weight: _targetWeight), ChartData(x: 2, weight: _targetWeight)});
+              _lineDataController.updateDataSource(updatedDataIndexes: [0, 1]);
+            } else if (widget.isExerciseMode) _weightController.add(_weight);
           }
           _graphDataController.updateDataSource(updatedDataIndex: 0);
           _counter = 0;
-          _averageTime = 0;
+          // _averageTime = 0;
           _averageWeight = 0;
         }
       }
