@@ -34,14 +34,18 @@ class DeviceScanner extends StatelessWidget {
                               text: r.device.name,
                               color: Colors.green[700],
                               icon: Icons.bluetooth_connected_rounded,
-                              onPressed: () async => await Bluetooth.instance.disconnect(),
+                              onPressed: () async {
+                                await Bluetooth.instance.disconnect();
+                              },
                             );
                           } else {
                             return CustomButton(
                               text: r.device.name,
                               icon: Icons.bluetooth_rounded,
                               color: Colors.deepOrange[700],
-                              onPressed: () async => await Bluetooth.instance.connect(),
+                              onPressed: () async {
+                                await Bluetooth.instance.connect();
+                              },
                             );
                           }
                         },

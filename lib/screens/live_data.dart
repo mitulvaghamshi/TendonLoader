@@ -6,5 +6,7 @@ class LiveData extends StatelessWidget {
   static const routeName = '/liveData';
 
   @override
-  Widget build(BuildContext context) => Scaffold(appBar: AppBar(title: const Text(LiveData.name)), body: BarGraph());
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text(LiveData.name)), body: const BarGraph(isLiveData: true));
+  }
 }

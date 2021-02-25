@@ -43,7 +43,7 @@ class _ExerciseState extends State<ExerciseMode> {
           ),
         ],
       ),
-      body: BarGraph(),
+      body: const BarGraph(isExerciseMode: true),
     );
   }
 

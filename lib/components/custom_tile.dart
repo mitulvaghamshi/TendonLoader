@@ -17,7 +17,7 @@ class CustomTile extends StatelessWidget {
       trailing: const Icon(Icons.keyboard_arrow_right_rounded),
       title: Text(name, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
       onTap: () {
-        if (Bluetooth.device != null)
+        if (/*true ||*/ Bluetooth.device != null)
           Navigator.of(context).pushNamed(route);
         else {
           Scaffold.of(context).showSnackBar(SnackBar(content: const Text('Progressor not connected!')));

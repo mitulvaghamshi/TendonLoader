@@ -38,15 +38,15 @@ class Bluetooth {
 
   factory Bluetooth() => instance;
 
-  get startNotify async => _mDataCharacteristic?.setNotifyValue(true);
+  get startNotify async => await _mDataCharacteristic?.setNotifyValue(true);
 
-  get stopNotify async => _mDataCharacteristic?.setNotifyValue(false);
+  get stopNotify async => await _mDataCharacteristic?.setNotifyValue(false);
 
-  get startWeightMeasurement async => write(CMD_START_WEIGHT_MEAS);
+  get startWeightMeasurement async => await write(CMD_START_WEIGHT_MEAS);
 
-  get stopWeightMeasurement async => write(CMD_STOP_WEIGHT_MEAS);
+  get stopWeightMeasurement async => await write(CMD_STOP_WEIGHT_MEAS);
 
-  get sleep async => write(CMD_ENTER_SLEEP);
+  get sleep async => await write(CMD_ENTER_SLEEP);
 
   Bluetooth._();
 
