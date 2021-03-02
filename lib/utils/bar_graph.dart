@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/components/bluetooth.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 import 'package:tendon_loader/utils/chart_data.dart';
+import 'package:tendon_loader/utils/exercise_data.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({
@@ -15,19 +14,25 @@ class BarGraph extends StatefulWidget {
     this.isLiveData = false,
     this.isExerciseMode = false,
     this.isMVICTesting = false,
+    this.exerciseData,
   }) : super(key: key);
 
   final bool isLiveData;
   final bool isExerciseMode;
   final bool isMVICTesting;
+  final ExerciseData exerciseData;
 
   @override
-  _BarGraphState createState() => _BarGraphState();
+  _BarGraphState createState() => _BarGraphState(exerciseData: exerciseData);
 }
 
 class _BarGraphState extends State<BarGraph> {
+  _BarGraphState({this.exerciseData});
+
+  final ExerciseData exerciseData;
+
   Stopwatch _stopwatch;
-  double _targetWeight;
+  double targetLoad;
   List<ChartData> _targetLine;
   List<ChartData> _measurement;
   ChartSeriesController _lineDataController;
@@ -41,9 +46,11 @@ class _BarGraphState extends State<BarGraph> {
       _stopwatch = Stopwatch();
     }
     if (!widget.isLiveData) {
-      _targetWeight = widget.isExerciseMode ? 5.5 : 0;
-      _targetLine = [ChartData(x: 0, weight: _targetWeight), ChartData(x: 2, weight: _targetWeight)];
+      _targetLine = [ChartData(x: 0, weight: targetLoad), ChartData(x: 2, weight: targetLoad)];
       _weightController = StreamController<double>()..add(0);
+    }
+    if (widget.isExerciseMode) {
+      targetLoad = exerciseData.targetLoad;
     }
     _measurement = [ChartData(weight: 0)];
     Bluetooth.instance.startNotify;
@@ -108,7 +115,7 @@ class _BarGraphState extends State<BarGraph> {
                       height: 60,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: snapshot.data >= _targetWeight ? Colors.green : Colors.yellow,
+                        color: snapshot.data >= targetLoad ? Colors.green : Colors.yellow,
                       ),
                     ),
                   )
@@ -219,10 +226,9 @@ class _BarGraphState extends State<BarGraph> {
           // double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
           _measurement.insert(0, ChartData(weight: _weight));
           if (!widget.isLiveData && !_weightController.isClosed) {
-            if (widget.isMVICTesting && _weight > _targetWeight) {
-              _weightController.add(_targetWeight = _weight);
-              _targetLine
-                  .insertAll(0, {ChartData(x: 0, weight: _targetWeight), ChartData(x: 2, weight: _targetWeight)});
+            if (widget.isMVICTesting && _weight > targetLoad) {
+              _weightController.add(targetLoad = _weight);
+              _targetLine.insertAll(0, {ChartData(x: 0, weight: targetLoad), ChartData(x: 2, weight: targetLoad)});
               _lineDataController.updateDataSource(updatedDataIndexes: [0, 1]);
             } else if (widget.isExerciseMode) _weightController.add(_weight);
           }

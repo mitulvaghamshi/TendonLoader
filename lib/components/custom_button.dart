@@ -21,6 +21,7 @@ class CustomButton extends StatelessWidget {
     } else {
       return FlatButton.icon(
         onPressed: onPressed,
+        disabledColor: Colors.grey,
         color: color ?? Colors.black,
         icon: Icon(icon, color: Colors.white),
         label: Text(text, style: const TextStyle(color: Colors.white)),

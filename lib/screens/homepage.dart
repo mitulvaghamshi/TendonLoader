@@ -3,9 +3,9 @@ import 'package:tendon_loader/components/app_logo.dart';
 import 'package:tendon_loader/components/bluetooth.dart';
 import 'package:tendon_loader/components/custom_tile.dart';
 import 'package:tendon_loader/screens/device_scanner.dart';
-import 'package:tendon_loader/screens/exercise_mode.dart';
 import 'package:tendon_loader/screens/live_data.dart';
 import 'package:tendon_loader/screens/mvic_testing.dart';
+import 'package:tendon_loader/screens/new_exercise.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/';
@@ -29,12 +29,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(HomePage.name),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.info_outline_rounded),
-            onPressed: () => aboutDialog(context),
-          ),
-        ],
+        actions: [IconButton(icon: Icon(Icons.info_outline_rounded), onPressed: () => aboutDialog(context))],
       ),
       body: SafeArea(
         child: Card(
@@ -57,8 +52,8 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 10),
                 CustomTile(
                   context: context,
-                  name: ExerciseMode.name,
-                  route: ExerciseMode.routeName,
+                  name: NewExercise.name,
+                  route: NewExercise.routeName,
                   icon: Icons.directions_run_rounded,
                 ),
                 const SizedBox(height: 10),
@@ -84,7 +79,7 @@ class _HomePageState extends State<HomePage> {
             builder: (_) {
               return AlertDialog(
                 content: DeviceScanner(),
-                title: Text('Select Bluetooth Device', textAlign: TextAlign.center),
+                title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               );
             },

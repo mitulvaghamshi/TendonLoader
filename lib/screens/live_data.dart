@@ -7,6 +7,9 @@ class LiveData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text(LiveData.name)), body: const BarGraph(isLiveData: true));
+    return Scaffold(
+      appBar: AppBar(title: const Text(LiveData.name)),
+      body: const BarGraph(isLiveData: true),
+    );
   }
 }

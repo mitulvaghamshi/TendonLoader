@@ -8,9 +8,7 @@ import 'package:tendon_loader/components/custom_button.dart';
 
 class DeviceScanner extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => _buildDeviceScanner();
-
-  StreamBuilder<BluetoothState> _buildDeviceScanner() {
+  Widget build(BuildContext context) {
     return StreamBuilder<BluetoothState>(
       stream: FlutterBlue.instance.state,
       initialData: BluetoothState.unknown,
@@ -30,22 +28,49 @@ class DeviceScanner extends StatelessWidget {
                         stream: r.device.state,
                         builder: (_, snapshot) {
                           if (snapshot.data == BluetoothDeviceState.connected) {
-                            return CustomButton(
-                              text: r.device.name,
-                              color: Colors.green[700],
-                              icon: Icons.bluetooth_connected_rounded,
-                              onPressed: () async {
-                                await Bluetooth.instance.disconnect();
-                              },
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  'Device is connected successfully and ready to use!\nClick on the device name to disconnect.',
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 20),
+                                CustomButton(
+                                  text: r.device.name,
+                                  color: Colors.green[700],
+                                  icon: Icons.bluetooth_connected_rounded,
+                                  onPressed: () async {
+                                    await Bluetooth.instance.disconnect();
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                CustomButton(
+                                  text: 'Close',
+                                  color: Colors.black,
+                                  icon: Icons.cancel,
+                                  onPressed: () => Navigator.pop(context),
+                                )
+                              ],
                             );
                           } else {
-                            return CustomButton(
-                              text: r.device.name,
-                              icon: Icons.bluetooth_rounded,
-                              color: Colors.deepOrange[700],
-                              onPressed: () async {
-                                await Bluetooth.instance.connect();
-                              },
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  'Click on the device name to connect\n Note: this might take a moment to connect.',
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 20),
+                                CustomButton(
+                                  text: r.device.name,
+                                  icon: Icons.bluetooth_rounded,
+                                  color: Colors.deepOrange[700],
+                                  onPressed: () async {
+                                    await Bluetooth.instance.connect();
+                                  },
+                                ),
+                              ],
                             );
                           }
                         },
@@ -65,11 +90,11 @@ class DeviceScanner extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              CircularProgressIndicator(),
-                              Text('Please wait...', style: TextStyle(fontSize: 20)),
+                              const CircularProgressIndicator(),
+                              const Text('Please wait...', style: TextStyle(fontSize: 20)),
                             ],
                           ),
-                          SizedBox(height: 30),
+                          const SizedBox(height: 30),
                           CustomButton(
                             text: 'Stop',
                             icon: Icons.close_rounded,
@@ -89,12 +114,11 @@ class DeviceScanner extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Image.asset('assets/images/enable_device.webp', width: 180),
-                                Text(
+                                const Text(
                                   'Activate your device by pressing the button, then press scan to find the device',
                                   textAlign: TextAlign.center,
-                                  softWrap: true,
                                 ),
-                                SizedBox(height: 30),
+                                const SizedBox(height: 30),
                                 CustomButton(
                                   text: 'Scan',
                                   icon: Icons.search_rounded,
@@ -117,24 +141,24 @@ class DeviceScanner extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Image.asset('assets/images/enable_location.webp', width: 180),
-                                Text(
+                                const Text(
                                   'This app uses bluetooth to communicate with your Progressor.',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                   textAlign: TextAlign.center,
                                 ),
-                                SizedBox(height: 20),
-                                Text(
+                                const SizedBox(height: 20),
+                                const Text(
                                   'Scanning for bluetooth devices can be used to locate you. That\'s why we ask you to permit location services. We\'re only using this permission to scan for your Progressor.',
                                   style: TextStyle(fontSize: 14),
                                   textAlign: TextAlign.center,
                                 ),
-                                SizedBox(height: 15),
-                                Text(
+                                const SizedBox(height: 15),
+                                const Text(
                                   'We\'ll never collect your physical location.',
                                   style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
                                   textAlign: TextAlign.center,
                                 ),
-                                SizedBox(height: 30),
+                                const SizedBox(height: 30),
                                 CustomButton(
                                   text: 'Enable',
                                   icon: Icons.location_on_rounded,
@@ -159,7 +183,7 @@ class DeviceScanner extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset('assets/images/enable_bluetooth.webp', width: 180),
-              Text(
+              const Text(
                 'This app needs Bluetooth to communicate with your Progressor. Please enable Bluetooth on your device.',
                 textAlign: TextAlign.center,
                 softWrap: true,
