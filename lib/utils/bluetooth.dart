@@ -30,37 +30,33 @@ class Bluetooth {
 
   static BluetoothDevice _mDevice;
 
-  static BluetoothCharacteristic _mDataCharacteristic;
-
-  static BluetoothCharacteristic _mControlCharacteristic;
-
   static BluetoothDevice get device => _mDevice;
-
-  factory Bluetooth() => instance;
-
-  get startNotify async => await _mDataCharacteristic?.setNotifyValue(true);
-
-  get stopNotify async => await _mDataCharacteristic?.setNotifyValue(false);
-
-  get startWeightMeasurement async => await write(CMD_START_WEIGHT_MEAS);
-
-  get stopWeightMeasurement async => await write(CMD_STOP_WEIGHT_MEAS);
-
-  get sleep async => await write(CMD_ENTER_SLEEP);
+  static BluetoothCharacteristic _mDataChar;
+  static BluetoothCharacteristic _mControlChar;
 
   Bluetooth._();
 
+  factory Bluetooth() => instance;
+
   static Bluetooth instance = Bluetooth._();
+
+  void sleep() async => await write(CMD_ENTER_SLEEP);
 
   void setDevice(BluetoothDevice device) => _mDevice = device;
 
-  void listen(Function listener) => _mDataCharacteristic?.value?.listen(listener);
+  void listen(Function listener) => _mDataChar?.value?.listen(listener);
 
-  Future<void> write(int command) async => await _mControlCharacteristic?.write([command]);
+  Future<void> startNotify() async => await _mDataChar?.setNotifyValue(true);
+
+  Future<void> stopNotify() async => await _mDataChar?.setNotifyValue(false);
+
+  Future<void> startWeightMeas() async => await write(CMD_START_WEIGHT_MEAS);
+
+  Future<void> stopWeightMeas() async => await write(CMD_STOP_WEIGHT_MEAS);
+
+  Future<void> write(int command) async => await _mControlChar?.write([command]);
 
   Future<void> enable() async => await BluetoothEnable.enableBluetooth;
-
-  Future<void> disconnect() async => await Bluetooth.device?.disconnect();
 
   Future<void> stopScan() async => await FlutterBlue.instance.stopScan();
 
@@ -70,6 +66,11 @@ class Bluetooth {
       withDevices: [Guid('7e4e1701-1ea6-40c9-9dcc-13d34ffead57')],
       withServices: [Guid('7e4e1701-1ea6-40c9-9dcc-13d34ffead57')],
     );
+  }
+
+  Future<void> disconnect() async {
+    await device?.disconnect();
+    _mDevice = null;
   }
 
   Future<void> connect() async {
@@ -83,9 +84,9 @@ class Bluetooth {
       }).then((characteristics) {
         characteristics?.forEach((characteristic) {
           if (characteristic.uuid.toString() == _dataCharacteristicUuid) {
-            _mDataCharacteristic = characteristic;
+            _mDataChar = characteristic;
           } else if (characteristic.uuid.toString() == _controlPointUuid) {
-            _mControlCharacteristic = characteristic;
+            _mControlChar = characteristic;
           }
         });
       });

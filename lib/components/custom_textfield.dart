@@ -14,7 +14,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       readOnly: isPicker,
       controller: controller,
-      style: TextStyle(fontSize: 20),
+      style: const TextStyle(fontSize: 20),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (value) => value.isEmpty ? '* Required field' : null,
       keyboardType: TextInputType.numberWithOptions(decimal: hint.contains('kg')),
@@ -27,14 +27,9 @@ class CustomTextField extends StatelessWidget {
         isDense: true,
         hintText: hint,
         helperText: helper,
-        suffix: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            isPicker
-                ? IconButton(icon: Icon(Icons.timer), onPressed: () async => await _selectTime(context))
-                : SizedBox(),
-            IconButton(icon: Icon(Icons.clear_rounded), onPressed: () => controller.clear()),
-          ],
+        suffix: IconButton(
+          icon: Icon(isPicker ? Icons.timer : Icons.clear_rounded),
+          onPressed: () async => isPicker ? await _selectTime(context) : controller.clear(),
         ),
       ),
     );

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/screens/exercise_mode.dart';
+import 'package:tendon_loader/screens/exercise_mode/exercise_mode.dart';
+import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/homepage.dart';
-import 'package:tendon_loader/screens/live_data.dart';
-import 'package:tendon_loader/screens/mvic_testing.dart';
-import 'package:tendon_loader/screens/new_exercise.dart';
+import 'package:tendon_loader/screens/live_data/live_data.dart';
+import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 
 void main() => runApp(TendonLoader());
 
@@ -14,7 +14,10 @@ class TendonLoader extends StatelessWidget {
       title: 'Tendon Loader',
       theme: ThemeData(
         primaryColor: Colors.blue,
-        visualDensity: VisualDensity(horizontal: VisualDensity.maximumDensity, vertical: VisualDensity.maximumDensity),
+        visualDensity: VisualDensity(
+          horizontal: VisualDensity.maximumDensity,
+          vertical: VisualDensity.maximumDensity,
+        ),
       ),
       initialRoute: HomePage.routeName,
       routes: {
@@ -22,7 +25,7 @@ class TendonLoader extends StatelessWidget {
         LiveData.routeName: (_) => LiveData(),
         NewExercise.routeName: (_) => NewExercise(),
         ExerciseMode.routeName: (_) => ExerciseMode(),
-        MVICTesting.routeName: (_) => MVICTesting(),
+        MVCTesting.routeName: (_) => MVCTesting(),
       },
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/bar_graph.dart';
+import 'package:tendon_loader/screens/live_data/bar_graph.dart';
 
 class LiveData extends StatelessWidget {
   static const name = 'Live Data';
@@ -9,7 +9,7 @@ class LiveData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text(LiveData.name)),
-      body: const BarGraph(isLiveData: true),
+      body: const BarGraph(),
     );
   }
 }
