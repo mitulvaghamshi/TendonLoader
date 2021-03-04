@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tendon_loader/components/countdown.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/chart_data.dart';
 
@@ -16,10 +17,10 @@ class BarGraph extends StatefulWidget {
 class _BarGraphState extends State<BarGraph> {
   double targetLoad = 0;
   Bluetooth _bt = Bluetooth();
-  Stopwatch _stopwatch = Stopwatch();
   ChartSeriesController _lineDataCtrl;
   ChartSeriesController _graphDataCtrl;
   List<ChartData> _measurement = [const ChartData(weight: 0)];
+  StreamController<int> _timeCtrl = StreamController<int>()..add(5);
   StreamController<double> _weightCtrl = StreamController<double>()..add(0);
   List<ChartData> _targetLine = [const ChartData(x: 0, weight: 0), const ChartData(x: 2, weight: 0)];
 
@@ -33,6 +34,7 @@ class _BarGraphState extends State<BarGraph> {
   @override
   void dispose() {
     if (!_weightCtrl.isClosed) _weightCtrl.close();
+    if (!_timeCtrl.isClosed) _timeCtrl.close();
     _bt.stopNotify();
     super.dispose();
   }
@@ -44,38 +46,35 @@ class _BarGraphState extends State<BarGraph> {
       margin: const EdgeInsets.all(20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                StreamBuilder<double>(
-                  initialData: 0,
-                  stream: _weightCtrl.stream,
-                  builder: (_, snapshot) {
-                    return Text(
-                      'MVIC: ${snapshot.data.toStringAsFixed(2).padLeft(2, '0')} Kg',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.green),
-                    );
-                  },
+            StreamBuilder<double>(
+              initialData: 0,
+              stream: _weightCtrl.stream,
+              builder: (_, snapshot) => Text(
+                'MVC: ${snapshot.data.toStringAsFixed(2).padLeft(2, '0')} Kg',
+                style: const TextStyle(
+                  fontSize: 26,
+                  color: Colors.green,
+                  fontFamily: 'Georgia',
+                  fontWeight: FontWeight.bold,
                 ),
-                StreamBuilder<int>(
-                  stream: Stream.periodic(Duration(seconds: 1), (value) => (_stopwatch.elapsedMilliseconds ~/ 1000)),
-                  builder: (_, snapshot) {
-                    String _elapsedTime;
-                    if (snapshot.hasData) {
-                      _elapsedTime =
-                          '${(snapshot.data ~/ 60).toString().padLeft(2, '0')}:${(snapshot.data % 60).toString().padLeft(2, '0')}';
-                    }
-                    return Text(
-                      'Time elapsed: $_elapsedTime',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.green),
-                    );
-                  },
+              ),
+            ),
+            const SizedBox(height: 20),
+            StreamBuilder<int>(
+              stream: _timeCtrl.stream,
+              builder: (_, snapshot) => Text(
+                'Remaining time: ${snapshot.hasData ? snapshot.data : 5} s',
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontFamily: 'Serif',
+                  color: Colors.deepOrange,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
+              ),
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -99,8 +98,13 @@ class _BarGraphState extends State<BarGraph> {
                   heroTag: 'mvc-testing-start-btn',
                   child: Icon(Icons.play_arrow_rounded),
                   onPressed: () async {
-                    _stopwatch.start();
-                    await _bt.startWeightMeas();
+                    await CountDown.start(context).then((_) async {
+                      await _bt.startWeightMeas();
+                      Timer.periodic(const Duration(seconds: 1), (timer) {
+                        if (timer.tick == 5) timer.cancel();
+                        _timeCtrl.add(5 - timer.tick);
+                      });
+                    });
                   },
                 ),
                 FloatingActionButton(
@@ -108,13 +112,9 @@ class _BarGraphState extends State<BarGraph> {
                   child: Icon(Icons.replay_rounded),
                   onPressed: () async {
                     await _bt.stopWeightMeas();
-                    _stopwatch.stop();
-                    _stopwatch.reset();
+                    _timeCtrl.add(5);
                     _weightCtrl.add(0);
-                    _targetLine.insertAll(0, [
-                      const ChartData(x: 0, weight: 0),
-                      const ChartData(x: 2, weight: 0),
-                    ]);
+                    _targetLine.insertAll(0, [const ChartData(x: 0, weight: 0), const ChartData(x: 2, weight: 0)]);
                     _measurement.insert(0, const ChartData(weight: 0));
                     _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
                     _lineDataCtrl.updateDataSource(updatedDataIndexes: [0, 1]);

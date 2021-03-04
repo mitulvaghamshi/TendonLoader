@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tendon_loader/components/countdown.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/chart_data.dart';
 
@@ -14,9 +15,11 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
+  Timer _timer;
   Bluetooth _bt = Bluetooth();
   Stopwatch _stopwatch = Stopwatch();
   ChartSeriesController _graphDataCtrl;
+  StreamController<int> _timeCtrl = StreamController<int>()..add(0);
   List<ChartData> _measurement = [const ChartData(weight: 0)];
 
   @override
@@ -28,6 +31,8 @@ class _BarGraphState extends State<BarGraph> {
 
   @override
   void dispose() {
+    if (_timer?.isActive ?? false) _timer.cancel();
+    if (!_timeCtrl.isClosed) _timeCtrl.close();
     _bt.stopNotify();
     super.dispose();
   }
@@ -39,28 +44,21 @@ class _BarGraphState extends State<BarGraph> {
       margin: const EdgeInsets.all(20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                StreamBuilder<int>(
-                  stream: Stream.periodic(Duration(seconds: 1), (value) => (_stopwatch.elapsedMilliseconds ~/ 1000)),
-                  builder: (_, snapshot) {
-                    String _elapsedTime;
-                    if (snapshot.hasData) {
-                      _elapsedTime =
-                          '${(snapshot.data ~/ 60).toString().padLeft(2, '0')}:${(snapshot.data % 60).toString().padLeft(2, '0')}';
-                    }
-                    return Text(
-                      'Time elapsed: $_elapsedTime',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.green),
-                    );
-                  },
+            StreamBuilder<int>(
+              stream: _timeCtrl.stream,
+              builder: (_, snapshot) => Text(
+                'Time elapsed: ${snapshot.hasData ? '${(snapshot.data ~/ 60)}:${(snapshot.data % 60).toString().padLeft(2, '0')}' : '0:00'} s',
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontFamily: 'Serif',
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
+              ),
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -84,8 +82,15 @@ class _BarGraphState extends State<BarGraph> {
                   heroTag: 'live-data-start-btn',
                   child: const Icon(Icons.play_arrow_rounded),
                   onPressed: () async {
-                    _stopwatch.start();
-                    await _bt.startWeightMeas();
+                    await CountDown.start(context).then((value) async {
+                      if (value != null && value) {
+                        await _bt.startWeightMeas();
+                        _stopwatch.start();
+                        _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+                          _timeCtrl.add(_stopwatch.elapsedMilliseconds ~/ 1000);
+                        });
+                      }
+                    });
                   },
                 ),
                 FloatingActionButton(
@@ -93,8 +98,10 @@ class _BarGraphState extends State<BarGraph> {
                   child: const Icon(Icons.replay_rounded),
                   onPressed: () async {
                     await _bt.stopWeightMeas();
+                    _timer.cancel();
                     _stopwatch.stop();
                     _stopwatch.reset();
+                    _timeCtrl.add(0);
                     _measurement.insert(0, const ChartData(weight: 0));
                     _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
                   },

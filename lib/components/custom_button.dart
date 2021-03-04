@@ -10,13 +10,19 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton.icon(
+    return TextButton.icon(
       onPressed: onPressed,
-      disabledColor: Colors.grey,
-      color: color ?? Colors.black,
       icon: Icon(icon, color: Colors.white),
       label: Text(text, style: const TextStyle(color: Colors.white)),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          const EdgeInsets.symmetric(vertical: 16, horizontal: 22),
+        ),
+        backgroundColor: MaterialStateProperty.all<Color>(color),
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+        ),
+      ),
     );
   }
 }

@@ -14,10 +14,7 @@ class TendonLoader extends StatelessWidget {
       title: 'Tendon Loader',
       theme: ThemeData(
         primaryColor: Colors.blue,
-        visualDensity: VisualDensity(
-          horizontal: VisualDensity.maximumDensity,
-          vertical: VisualDensity.maximumDensity,
-        ),
+        visualDensity: VisualDensity.standard
       ),
       initialRoute: HomePage.routeName,
       routes: {
