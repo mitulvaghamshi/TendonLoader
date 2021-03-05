@@ -3,20 +3,20 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class CountDown extends StatefulWidget {
-  const CountDown({this.duration, this.title});
+  const CountDown({this.title, this.duration});
 
-  final Duration duration;
   final String title;
+  final Duration duration;
 
   static Future<bool> start(
-    BuildContext context, [
-    Duration duration = const Duration(seconds: 5),
+    BuildContext context, {
     String title = 'Starts in',
-  ]) {
-    return showDialog<bool>(
+    Duration duration = const Duration(seconds: 5),
+  }) async {
+    return await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      builder: (_) => CountDown(duration: duration + Duration(seconds: 1), title: title),
+      builder: (_) => CountDown(title: title, duration: duration + Duration(seconds: 1)),
     );
   }
 
@@ -28,7 +28,7 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
   AnimationController _controller;
 
   String get _timerString {
-    if(_controller.value == 0) return 'GO!';
+    if (_controller.value == 0) return 'GO!';
     Duration duration = _controller.duration * _controller.value;
     return '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }

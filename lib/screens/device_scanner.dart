@@ -29,7 +29,6 @@ class DeviceScanner extends StatelessWidget {
                       _bt.setDevice(r.device);
                       return StreamBuilder<BluetoothDeviceState>(
                         stream: r.device.state,
-                        initialData: BluetoothDeviceState.disconnected,
                         builder: (_, snapshot) {
                           if (snapshot.data == BluetoothDeviceState.connecting) {
                             return LinearProgressIndicator(minHeight: 10);

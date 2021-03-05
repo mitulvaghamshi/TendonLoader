@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -15,13 +16,16 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
+  Timer _timer;
   double targetLoad = 0;
   Bluetooth _bt = Bluetooth();
   ChartSeriesController _lineDataCtrl;
   ChartSeriesController _graphDataCtrl;
   List<ChartData> _measurement = [const ChartData(weight: 0)];
-  StreamController<int> _timeCtrl = StreamController<int>()..add(5);
-  StreamController<double> _weightCtrl = StreamController<double>()..add(0);
+  StreamController<int> _timeCtrl = StreamController<int>()
+    ..add(5);
+  StreamController<double> _weightCtrl = StreamController<double>()
+    ..add(0);
   List<ChartData> _targetLine = [const ChartData(x: 0, weight: 0), const ChartData(x: 2, weight: 0)];
 
   @override
@@ -33,8 +37,9 @@ class _BarGraphState extends State<BarGraph> {
 
   @override
   void dispose() {
-    if (!_weightCtrl.isClosed) _weightCtrl.close();
     if (!_timeCtrl.isClosed) _timeCtrl.close();
+    if (!_weightCtrl.isClosed) _weightCtrl.close();
+    if (_timer?.isActive ?? false) _timer.cancel();
     _bt.stopNotify();
     super.dispose();
   }
@@ -53,28 +58,31 @@ class _BarGraphState extends State<BarGraph> {
             StreamBuilder<double>(
               initialData: 0,
               stream: _weightCtrl.stream,
-              builder: (_, snapshot) => Text(
-                'MVC: ${snapshot.data.toStringAsFixed(2).padLeft(2, '0')} Kg',
-                style: const TextStyle(
-                  fontSize: 26,
-                  color: Colors.green,
-                  fontFamily: 'Georgia',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              builder: (_, snapshot) {
+                return Text(
+                  'MVC: ${snapshot.data.toStringAsFixed(2).padLeft(2, '0')} Kg',
+                  style: const TextStyle(
+                    fontSize: 26,
+                    color: Colors.green,
+                    fontFamily: 'Georgia',
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 20),
             StreamBuilder<int>(
               stream: _timeCtrl.stream,
-              builder: (_, snapshot) => Text(
-                'Remaining time: ${snapshot.hasData ? snapshot.data : 5} s',
-                style: const TextStyle(
-                  fontSize: 26,
-                  fontFamily: 'Serif',
-                  color: Colors.deepOrange,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              builder: (_, snapshot) =>
+                  Text(
+                    'Remaining time: ${snapshot.hasData ? snapshot.data : 5} s',
+                    style: const TextStyle(
+                      fontSize: 26,
+                      fontFamily: 'Serif',
+                      color: Colors.deepOrange,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -100,8 +108,11 @@ class _BarGraphState extends State<BarGraph> {
                   onPressed: () async {
                     await CountDown.start(context).then((_) async {
                       await _bt.startWeightMeas();
-                      Timer.periodic(const Duration(seconds: 1), (timer) {
-                        if (timer.tick == 5) timer.cancel();
+                      _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+                        if (timer.tick == 5) {
+                          timer.cancel();
+                          await _bt.stopWeightMeas();
+                        }
                         _timeCtrl.add(5 - timer.tick);
                       });
                     });
@@ -112,6 +123,7 @@ class _BarGraphState extends State<BarGraph> {
                   child: Icon(Icons.replay_rounded),
                   onPressed: () async {
                     await _bt.stopWeightMeas();
+                    _timer.cancel();
                     _timeCtrl.add(5);
                     _weightCtrl.add(0);
                     _targetLine.insertAll(0, [const ChartData(x: 0, weight: 0), const ChartData(x: 2, weight: 0)]);
@@ -160,16 +172,24 @@ class _BarGraphState extends State<BarGraph> {
 
   void _getData(List<int> dataList) {
     int _counter = 0;
-    // int _averageTime = 0;
+    int _averageTime = 0;
     double _averageWeight = 0;
     if (dataList.isNotEmpty && dataList[0] == Bluetooth.RES_WEIGHT_MEAS) {
       for (int x = 2; x < dataList.length; x += 8) {
         _averageWeight +=
-            Uint8List.fromList(dataList.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        // _averageTime += Uint8List.fromList(dataList.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
+            Uint8List
+                .fromList(dataList.getRange(x, x + 4).toList())
+                .buffer
+                .asByteData()
+                .getFloat32(0, Endian.little);
+        _averageTime += Uint8List
+            .fromList(dataList.getRange(x + 4, x + 8).toList())
+            .buffer
+            .asByteData()
+            .getUint32(0, Endian.little);
         if (_counter++ == 8) {
           double _weight = double.parse((_averageWeight.abs() / 8.0).toStringAsFixed(2));
-          // double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
+          double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
           _measurement.insert(0, ChartData(weight: _weight));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
           if (!_weightCtrl.isClosed && _weight > targetLoad) {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class Logo extends StatelessWidget {
@@ -14,6 +16,7 @@ class Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('called');
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Image.asset(path, height: MediaQuery.of(context).size.width * scale),

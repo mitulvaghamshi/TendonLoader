@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
@@ -22,18 +23,23 @@ class BarGraph extends StatefulWidget {
 
 class _BarGraphState extends State<BarGraph> {
   Timer _timer;
+  Timer _repTimer;
+  double _targetLoad;
+  int _holdTime = 0;
   int _currentSet = 1;
   int _currentRep = 1;
-  double _targetLoad;
+  bool _isSessionRunning = false;
+  bool _isHitTargetLoad = false;
+  bool _isRepRunning = false;
   ExerciseData _exerciseData;
   List<ChartData> _targetLine;
   Bluetooth _bt = Bluetooth();
   Stopwatch _stopwatch = Stopwatch();
-  ChartSeriesController _lineDataCtrl;
+
   ChartSeriesController _graphDataCtrl;
-  StreamController<int> _timeCtrl = StreamController<int>()..add(0);
-  StreamController<int> _repTimeCtrl = StreamController<int>()..add(0);
-  List<ChartData> _measurement = [ChartData(weight: 0)];
+  List<ChartData> _measurement = [const ChartData(weight: 0)];
+  StreamController<int> _timeCtrl = StreamController<int>();
+  StreamController<int> _repTimeCtrl = StreamController<int>();
   StreamController<double> _weightCtrl = StreamController<double>()..add(0);
 
   @override
@@ -41,6 +47,7 @@ class _BarGraphState extends State<BarGraph> {
     super.initState();
     _exerciseData = widget.exerciseData;
     _targetLoad = _exerciseData.targetLoad;
+    _holdTime = _exerciseData.holdTime;
     _targetLine = [ChartData(x: 0, weight: _targetLoad), ChartData(x: 2, weight: _targetLoad)];
     _bt.startNotify();
     _bt.listen(_getData);
@@ -49,6 +56,7 @@ class _BarGraphState extends State<BarGraph> {
   @override
   void dispose() {
     if (_timer?.isActive ?? false) _timer.cancel();
+    if (_repTimer?.isActive ?? false) _repTimer.cancel();
     if (!_repTimeCtrl.isClosed) _repTimeCtrl.close();
     if (!_weightCtrl.isClosed) _weightCtrl.close();
     _bt.stopNotify();
@@ -71,25 +79,21 @@ class _BarGraphState extends State<BarGraph> {
               children: [
                 StreamBuilder<int>(
                   stream: _timeCtrl.stream,
-                  builder: (_, snapshot) => Text(
-                    '🕒 ${snapshot.hasData ? '${(snapshot.data ~/ 60)}:${(snapshot.data % 60).toString().padLeft(2, '0')}' : '0:00'} s',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  builder: (_, snapshot) {
+                    return Text(
+                      '🕒 ${snapshot.hasData ? '${(snapshot.data ~/ 60)}:${(snapshot.data % 60).toString().padLeft(2, '0')}' : '0:00'} s',
+                      style: const TextStyle(fontSize: 20, color: Colors.green, fontWeight: FontWeight.bold),
+                    );
+                  },
                 ),
                 StreamBuilder<int>(
                   stream: _repTimeCtrl.stream,
-                  builder: (_, snapshot) => Text(
-                    'Hold for: ${snapshot.data} s',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.deepOrange,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  builder: (_, snapshot) {
+                    return Text(
+                      'Hold for: ${snapshot.data ?? 0} s',
+                      style: const TextStyle(fontSize: 20, color: Colors.deepOrange, fontWeight: FontWeight.bold),
+                    );
+                  },
                 ),
               ],
             ),
@@ -98,25 +102,21 @@ class _BarGraphState extends State<BarGraph> {
               initialData: 0,
               stream: _weightCtrl.stream,
               builder: (_, snapshot) {
-                if(snapshot.data >= _targetLoad) {
-
-                }
                 return Container(
                   height: 60,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: snapshot.data >= _targetLoad ? Colors.green[400] : Colors.yellow[400],
+                    color: snapshot.data >= _targetLoad ? Colors.green[400] : Colors.yellow[300],
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      // TODO: make dynamic sets and reps value
                       Text(
-                        'Set: $_currentSet of ${widget.exerciseData.sets}',
+                        'Set: $_currentSet of ${_exerciseData.sets}',
                         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Rep: $_currentRep of ${widget.exerciseData.reps}',
+                        'Rep: $_currentRep of ${_exerciseData.reps}',
                         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -143,42 +143,19 @@ class _BarGraphState extends State<BarGraph> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 FloatingActionButton(
+                  onPressed: _start,
                   heroTag: 'exercise-mode-start-btn',
                   child: const Icon(Icons.play_arrow_rounded),
-                  onPressed: () async {
-                    await CountDown.start(context).then((value) async {
-                      if (value) {
-                        await _bt.startWeightMeas();
-                        _stopwatch.start();
-                        _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-                          _timeCtrl.add(_stopwatch.elapsedMilliseconds ~/ 1000);
-                        });
-                      }
-                    });
-                  },
                 ),
                 FloatingActionButton(
+                  onPressed: _stop,
                   heroTag: 'exercise-mode-stop-btn',
                   child: const Icon(Icons.stop_rounded),
-                  onPressed: () async {
-                    _timer.cancel();
-                    _stopwatch.stop();
-                    await _bt.stopWeightMeas();
-                  },
                 ),
                 FloatingActionButton(
+                  onPressed: _reset,
                   heroTag: 'exercise-mode-reset-btn',
                   child: const Icon(Icons.replay_rounded),
-                  onPressed: () async {
-                    await _bt.stopWeightMeas();
-                    _timer.cancel();
-                    _stopwatch.reset();
-                    _timeCtrl.add(0);
-                    _weightCtrl.add(0);
-                    _measurement.insert(0, const ChartData(weight: 0));
-                    _lineDataCtrl.updateDataSource(updatedDataIndexes: [0, 1]);
-                    _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
-                  },
                 ),
               ],
             ),
@@ -186,6 +163,64 @@ class _BarGraphState extends State<BarGraph> {
         ),
       ),
     );
+  }
+
+  void _reset() async {
+    _timer?.cancel();
+    _stopwatch?.reset();
+    _holdTime = 0;
+    _currentRep = 1;
+    _currentSet = 1;
+    _isSessionRunning = false;
+    _isRepRunning = false;
+    await _bt.stopWeightMeas().then((value) {
+      _timeCtrl.add(0);
+      _weightCtrl.add(0);
+      _measurement.insert(0, const ChartData(weight: 0));
+      _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
+    });
+  }
+
+  Future _stop() async {
+    _timer?.cancel();
+    _stopwatch?.stop();
+    await _bt.stopWeightMeas();
+  }
+
+  Future _stopRep() async {
+    await _stop();
+    _holdTime = _exerciseData.holdTime;
+    _weightCtrl.add(0);
+    _measurement.insert(0, const ChartData(weight: 0));
+    _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
+    await CountDown.start(
+      context,
+      duration: Duration(seconds: _exerciseData.restTime),
+      title: 'Rep# $_currentRep\nstart in',
+    ).then((value) {
+      if (value ?? false) _start();
+    });
+  }
+
+  void _start() async {
+    if (_isSessionRunning) {
+      await _resume();
+    } else {
+      await CountDown.start(context).then((value) async {
+        if (value ?? false) {
+          _isSessionRunning = true;
+          await _bt.startWeightMeas();
+          await _resume();
+        }
+      });
+    }
+  }
+
+  Future _resume() async {
+    _stopwatch.start();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      _timeCtrl.add(_stopwatch.elapsedMilliseconds ~/ 1000);
+    });
   }
 
   List<ChartSeries<ChartData, int>> _getSeries() {
@@ -213,28 +248,30 @@ class _BarGraphState extends State<BarGraph> {
         dataSource: _targetLine,
         xValueMapper: (data, _) => data.x,
         yValueMapper: (data, _) => data.weight,
-        onRendererCreated: (controller) => _lineDataCtrl = controller,
       ),
     ];
   }
 
   void _getData(List<int> dataList) {
     int _counter = 0;
-    // int _averageTime = 0;
+    int _averageTime = 0;
     double _averageWeight = 0;
     if (dataList.isNotEmpty && dataList[0] == Bluetooth.RES_WEIGHT_MEAS) {
       for (int x = 2; x < dataList.length; x += 8) {
         _averageWeight +=
             Uint8List.fromList(dataList.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        // _averageTime += Uint8List.fromList(dataList.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
+        _averageTime += Uint8List.fromList(dataList.getRange(x + 4, x + 8).toList())
+            .buffer
+            .asByteData()
+            .getUint32(0, Endian.little);
         if (_counter++ == 8) {
           double _weight = double.parse((_averageWeight.abs() / 8.0).toStringAsFixed(2));
-          // double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
+          double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
           if (!_weightCtrl.isClosed) _weightCtrl.add(_weight);
           _measurement.insert(0, ChartData(weight: _weight));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
           _counter = 0;
-          // _averageTime = 0;
+          _averageTime = 0;
           _averageWeight = 0;
         }
       }

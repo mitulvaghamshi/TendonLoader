@@ -54,7 +54,7 @@ class _NewExerciseState extends State<NewExercise> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create new exercise', textAlign: TextAlign.center)),
+      appBar: AppBar(title: const Text('Create New Exercise', textAlign: TextAlign.center)),
       body: SafeArea(
         child: Card(
           elevation: 16,
@@ -101,17 +101,21 @@ class _NewExerciseState extends State<NewExercise> {
                       icon: Icons.done,
                       color: Colors.blue,
                       onPressed: () {
-                        if (_validate()) {
+                        if (true || _validate()) {
                           Navigator.pushReplacementNamed(
                             context,
                             ExerciseMode.routeName,
-                            arguments: ExerciseData(
+                            //TODO: test exercise data (replace with commented one below)
+                            arguments: ExerciseData(targetLoad: 3, holdTime: 5, restTime: 10, sets: 2, reps: 3),
+                            /*
+                            ExerciseData(
                               sets: int.tryParse(_ctrlSets.text) ?? 0,
                               reps: int.tryParse(_ctrlReps.text) ?? 0,
                               holdTime: int.tryParse(_ctrlHoldTime.text) ?? 0,
                               restTime: int.tryParse(_ctrlRestTime.text) ?? 0,
                               targetLoad: double.tryParse(_ctrlTargetLoad.text) ?? 0,
                             ),
+                            */
                           );
                         }
                       },
