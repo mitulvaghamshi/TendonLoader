@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -54,7 +55,7 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
       backgroundColor: Colors.transparent,
       body: AnimatedBuilder(
         animation: _controller,
-        child: Text(widget.title, style: TextStyle(fontSize: 36, color: Colors.white)),
+        child: Text(widget.title, style: TextStyle(fontSize: 20, color: Colors.white), textAlign: TextAlign.center),
         builder: (context, child) {
           return Padding(
             padding: const EdgeInsets.all(50),

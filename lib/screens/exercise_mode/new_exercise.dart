@@ -94,11 +94,11 @@ class _NewExerciseState extends State<NewExercise> {
                 ),
                 const SizedBox(height: 30),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomButton(
-                      text: 'OK',
-                      icon: Icons.done,
+                      text: 'Submit',
+                      icon: Icons.done_rounded,
                       color: Colors.blue,
                       onPressed: () {
                         if (true || _validate()) {
@@ -106,7 +106,7 @@ class _NewExerciseState extends State<NewExercise> {
                             context,
                             ExerciseMode.routeName,
                             //TODO: test exercise data (replace with commented one below)
-                            arguments: ExerciseData(targetLoad: 3, holdTime: 5, restTime: 10, sets: 2, reps: 3),
+                            arguments: ExerciseData(targetLoad: 5, holdTime: 5, restTime: 10, sets: 2, reps: 3),
                             /*
                             ExerciseData(
                               sets: int.tryParse(_ctrlSets.text) ?? 0,
@@ -120,7 +120,7 @@ class _NewExerciseState extends State<NewExercise> {
                         }
                       },
                     ),
-                    SimpleDialogOption(child: const Text('Clear all'), onPressed: () => _clear()),
+                    CustomButton(text: 'Clear all', icon: Icons.clear_rounded, color: Colors.grey, onPressed: _clear),
                   ],
                 ),
               ],

@@ -6,6 +6,7 @@ import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
+import 'package:tendon_loader/utils/create_xlsx.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/';
@@ -29,7 +30,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(HomePage.name),
-        actions: [IconButton(icon: Icon(Icons.info_outline_rounded), onPressed: () => aboutDialog(context))],
+        actions: [
+          IconButton(icon: Icon(Icons.info_outline_rounded), onPressed: () => aboutDialog(context))
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

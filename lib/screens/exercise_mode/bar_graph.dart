@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/components/countdown.dart';
@@ -19,11 +18,12 @@ class BarGraph extends StatefulWidget {
 
 class _BarGraphState extends State<BarGraph> {
   int _holdTime = 0;
+  int _restTime = 0;
   int _currentSet = 1;
   int _currentRep = 1;
-  bool _isHold = false;
+  double _targetLoad = 0;
+  bool _isHold = true;
   bool _isRunning = false;
-  double _targetLoad;
   DataHandler _handler;
   ExerciseData _exerciseData;
 
@@ -33,6 +33,7 @@ class _BarGraphState extends State<BarGraph> {
     _exerciseData = widget.exerciseData;
     _targetLoad = _exerciseData.targetLoad;
     _holdTime = _exerciseData.holdTime;
+    _restTime = _exerciseData.restTime;
     _handler = DataHandler(lineData: [ChartData(x: 0, weight: _targetLoad), ChartData(x: 2, weight: _targetLoad)]);
   }
 
@@ -58,20 +59,25 @@ class _BarGraphState extends State<BarGraph> {
               stream: _handler.timeStream,
               builder: (_, snapshot) {
                 if (_isRunning) {
-                  if (_currentRep == _exerciseData.reps) {
-                    if (_currentSet == _exerciseData.sets) {
-                      _isRunning = false;
-                      _stop();
+                  if (_holdTime == 0) {
+                    _isHold = false;
+                    _holdTime = _exerciseData.holdTime;
+                    //
+                  }
+                  if (_restTime == 0) {
+                    _isHold = true;
+                    _restTime = _exerciseData.restTime;
+                    if (_currentRep == _exerciseData.reps) {
+                      if (_currentSet == _exerciseData.sets) {
+                        _reset();
+                      } else {
+                        _setBreak();
+                        _currentSet++;
+                        _currentRep = 1;
+                      }
                     } else {
-                      _currentRep = 1;
-                      _currentSet++;
-                    }
-                  } else {
-                    if (_isHold && _holdTime == 0) {
-                      _isHold = false;
-                      _holdTime = _exerciseData.holdTime;
-                    } else {
-                      _startRep();
+
+                      _currentRep++;
                     }
                   }
                 }
@@ -83,7 +89,11 @@ class _BarGraphState extends State<BarGraph> {
                       style: const TextStyle(fontSize: 20, color: Colors.green, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Hold for: ${_isHold ? _holdTime-- : 0} s',
+                      _isRunning
+                          ? _isHold
+                              ? 'Hold for: ${_holdTime--} s'
+                              : 'New Rep starts in: ${_restTime--} s'
+                          : '---',
                       style: const TextStyle(fontSize: 20, color: Colors.deepOrange, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -95,7 +105,6 @@ class _BarGraphState extends State<BarGraph> {
               initialData: 0,
               stream: _handler.weightStream,
               builder: (_, snapshot) {
-                if (snapshot.data >= _targetLoad && _isRunning) _isHold = true;
                 return Container(
                   height: 60,
                   decoration: BoxDecoration(
@@ -160,28 +169,39 @@ class _BarGraphState extends State<BarGraph> {
   }
 
   Future _reset() async {
-    await _handler.reset();
     _isRunning = false;
+    _holdTime = 0;
+    _restTime = 0;
     _currentRep = 1;
     _currentSet = 1;
+    await _handler.reset();
   }
 
-  void _stop() {
+  Future _stop() async {
     _handler.stop();
   }
 
-  Future _startRep() async {
-    _stop();
+  Future _setBreak() async {
+    await _stop();
     await CountDown.start(
       context,
-      duration: Duration(seconds: _exerciseData.restTime),
-      title: 'Rep# $_currentRep\nstart in',
+      duration: Duration(seconds: 5),
+      title: 'SET OVER!\nREST!',
     ).then((value) async {
-      if (value ?? false) await _start();
+      if (value ?? false) {
+        await CountDown.start(
+          context,
+          duration: Duration(seconds: 5),
+          title: 'New Set will\nstarts in',
+        ).then((value) async {
+          if (value ?? false) _start();
+        });
+      }
     });
   }
 
   Future _start() async {
+    //TODO: enable/disable button
     if (_isRunning) {
       await _handler.start();
     } else {

@@ -7,6 +7,7 @@ import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 
 void main() => runApp(TendonLoader());
 
+// /\*(.|\n)*?\*/
 class TendonLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class TendonLoader extends StatelessWidget {
       theme: ThemeData(
         accentColor: Colors.black,
         primaryColor: Colors.white,
-        visualDensity: VisualDensity.standard
+        visualDensity: VisualDensity.adaptivePlatformDensity
       ),
       initialRoute: HomePage.routeName,
       routes: {
