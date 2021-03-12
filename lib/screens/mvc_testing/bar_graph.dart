@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -22,10 +21,8 @@ class _BarGraphState extends State<BarGraph> {
   ChartSeriesController _lineDataCtrl;
   ChartSeriesController _graphDataCtrl;
   List<ChartData> _measurement = [const ChartData(weight: 0)];
-  StreamController<int> _timeCtrl = StreamController<int>()
-    ..add(5);
-  StreamController<double> _weightCtrl = StreamController<double>()
-    ..add(0);
+  StreamController<int> _timeCtrl = StreamController<int>()..add(5);
+  StreamController<double> _weightCtrl = StreamController<double>()..add(0);
   List<ChartData> _targetLine = [const ChartData(x: 0, weight: 0), const ChartData(x: 2, weight: 0)];
 
   @override
@@ -73,16 +70,15 @@ class _BarGraphState extends State<BarGraph> {
             const SizedBox(height: 20),
             StreamBuilder<int>(
               stream: _timeCtrl.stream,
-              builder: (_, snapshot) =>
-                  Text(
-                    'Remaining time: ${snapshot.hasData ? snapshot.data : 5} s',
-                    style: const TextStyle(
-                      fontSize: 26,
-                      fontFamily: 'Serif',
-                      color: Colors.deepOrange,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              builder: (_, snapshot) => Text(
+                'Remaining time: ${snapshot.hasData ? snapshot.data : 5} s',
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontFamily: 'Serif',
+                  color: Colors.deepOrange,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -177,13 +173,8 @@ class _BarGraphState extends State<BarGraph> {
     if (dataList.isNotEmpty && dataList[0] == Bluetooth.RES_WEIGHT_MEAS) {
       for (int x = 2; x < dataList.length; x += 8) {
         _averageWeight +=
-            Uint8List
-                .fromList(dataList.getRange(x, x + 4).toList())
-                .buffer
-                .asByteData()
-                .getFloat32(0, Endian.little);
-        _averageTime += Uint8List
-            .fromList(dataList.getRange(x + 4, x + 8).toList())
+            Uint8List.fromList(dataList.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
+        _averageTime += Uint8List.fromList(dataList.getRange(x + 4, x + 8).toList())
             .buffer
             .asByteData()
             .getUint32(0, Endian.little);

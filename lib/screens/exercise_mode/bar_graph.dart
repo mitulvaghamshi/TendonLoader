@@ -34,7 +34,10 @@ class _BarGraphState extends State<BarGraph> {
     _targetLoad = _exerciseData.targetLoad;
     _holdTime = _exerciseData.holdTime;
     _restTime = _exerciseData.restTime;
-    _handler = DataHandler(lineData: [ChartData(x: 0, weight: _targetLoad), ChartData(x: 2, weight: _targetLoad)]);
+    _handler = DataHandler(lineData: [
+      ChartData(x: 0, weight: _targetLoad),
+      ChartData(x: 2, weight: _targetLoad),
+    ], exerciseData: widget.exerciseData);
   }
 
   @override
@@ -62,7 +65,6 @@ class _BarGraphState extends State<BarGraph> {
                   if (_holdTime == 0) {
                     _isHold = false;
                     _holdTime = _exerciseData.holdTime;
-                    //
                   }
                   if (_restTime == 0) {
                     _isHold = true;
@@ -76,7 +78,6 @@ class _BarGraphState extends State<BarGraph> {
                         _currentRep = 1;
                       }
                     } else {
-
                       _currentRep++;
                     }
                   }
@@ -168,6 +169,8 @@ class _BarGraphState extends State<BarGraph> {
     );
   }
 
+  Future _stop() async => _handler.stop();
+
   Future _reset() async {
     _isRunning = false;
     _holdTime = 0;
@@ -175,10 +178,6 @@ class _BarGraphState extends State<BarGraph> {
     _currentRep = 1;
     _currentSet = 1;
     await _handler.reset();
-  }
-
-  Future _stop() async {
-    _handler.stop();
   }
 
   Future _setBreak() async {
@@ -194,14 +193,13 @@ class _BarGraphState extends State<BarGraph> {
           duration: Duration(seconds: 5),
           title: 'New Set will\nstarts in',
         ).then((value) async {
-          if (value ?? false) _start();
+          if (value ?? false) await _start();
         });
       }
     });
   }
 
   Future _start() async {
-    //TODO: enable/disable button
     if (_isRunning) {
       await _handler.start();
     } else {

@@ -6,7 +6,6 @@ import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
-import 'package:tendon_loader/utils/create_xlsx.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/';

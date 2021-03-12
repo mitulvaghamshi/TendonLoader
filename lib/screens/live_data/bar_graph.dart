@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -138,23 +137,20 @@ class _BarGraphState extends State<BarGraph> {
 
   void _getData(List<int> dataList) {
     int _counter = 0;
-    int _averageTime = 0;
+    // int _averageTime = 0;
     double _averageWeight = 0;
     if (dataList.isNotEmpty && dataList[0] == Bluetooth.RES_WEIGHT_MEAS) {
       for (int x = 2; x < dataList.length; x += 8) {
         _averageWeight +=
             Uint8List.fromList(dataList.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _averageTime += Uint8List.fromList(dataList.getRange(x + 4, x + 8).toList())
-            .buffer
-            .asByteData()
-            .getUint32(0, Endian.little);
+        // _averageTime += Uint8List.fromList(dataList.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
         if (_counter++ == 8) {
           double _weight = double.parse((_averageWeight.abs() / 8.0).toStringAsFixed(2));
-          double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
+          // double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
           _measurement.insert(0, ChartData(weight: _weight));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
           _counter = 0;
-          _averageTime = 0;
+          // _averageTime = 0;
           _averageWeight = 0;
         }
       }

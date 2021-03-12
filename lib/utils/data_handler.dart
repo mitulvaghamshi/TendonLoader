@@ -6,15 +6,16 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/chart_data.dart';
 import 'package:tendon_loader/utils/create_xlsx.dart';
+import 'package:tendon_loader/utils/exercise_data.dart';
 
 class DataHandler {
   final StreamController<int> _timeCtrl = StreamController<int>();
   final StreamController<double> _weightCtrl = StreamController<double>();
   final List<ChartData> _graphData = [const ChartData(weight: 0)];
-  final List<ChartData> measurements = [];
   final List<ChartData> lineData;
   final Stopwatch _stopwatch = Stopwatch();
   ChartSeriesController _graphDataCtrl;
+  CreateXLSX _xlsx;
   Timer _timer;
 
   Stream<int> get timeStream => _timeCtrl.stream;
@@ -25,12 +26,17 @@ class DataHandler {
 
   StreamSink<double> get weightSink => _weightCtrl.sink;
 
-  DataHandler({this.lineData}) {
+  DataHandler({this.lineData, ExerciseData exerciseData}) {
     Bluetooth.instance.startNotify();
     Bluetooth.instance.listen(valueListener);
+    _xlsx = CreateXLSX(isExercise: lineData != null, exerciseData: exerciseData);
   }
 
   Future init() async => await Bluetooth.instance.startWeightMeas();
+
+  void stop() async {
+    if (_timer?.isActive ?? false) _timer.cancel();
+  }
 
   Future start() async {
     _stopwatch.start();
@@ -42,15 +48,6 @@ class DataHandler {
     }
   }
 
-  void addSeparator(String msg) {
-    measurements.add();
-  }
-
-  void stop() async {
-    // _stopwatch.stop();
-    if (_timer?.isActive ?? false) _timer.cancel();
-  }
-
   Future reset() async {
     stop();
     _stopwatch.reset();
@@ -59,12 +56,11 @@ class DataHandler {
     await Bluetooth.instance.stopWeightMeas();
     _graphData.insert(0, const ChartData(weight: 0));
     _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
-
-    CreateXLSX _create = CreateXLSX(measurements: measurements);
-    await _create.generateExcel();
   }
 
   Future dispose() async {
+    _xlsx.populate();
+    await _xlsx.save();
     await reset();
     await Bluetooth.instance.stopNotify();
     if (_timeCtrl.isClosed) _timeCtrl.close();
@@ -86,7 +82,7 @@ class DataHandler {
         if (_counter++ == 8) {
           double _weight = double.parse((_averageWeight.abs() / 8.0).toStringAsFixed(2));
           double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
-          measurements.add(ChartData(weight: _weight, time: _time));
+          _xlsx.add(ChartData(weight: _weight, time: _time));
           if (!_weightCtrl.isClosed) _weightCtrl.add(_weight);
           _graphData.insert(0, ChartData(weight: _weight));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);

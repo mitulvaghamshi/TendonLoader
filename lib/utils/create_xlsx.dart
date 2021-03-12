@@ -1,53 +1,113 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart' as pp;
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Alignment;
+import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/chart_data.dart';
+import 'package:tendon_loader/utils/exercise_data.dart';
 
 class CreateXLSX {
-  const CreateXLSX({@required this.measurements}) : assert(measurements != null);
+  CreateXLSX({this.isExercise = true, this.exerciseData}) {
+    this._sheet = _workbook.worksheets[0];
+    fillInfo();
+  }
 
-  final List<ChartData> measurements;
+  final ExerciseData exerciseData;
+  final List<ChartData> _measurements = [];
+  final DateTime _dtNow = DateTime.now();
+  final Workbook _workbook = Workbook();
+  final bool isExercise;
+  Worksheet _sheet;
+  String _iA = 'A';
+  String _iD = 'D';
+  int _iR = 0;
 
-  Future generateExcel() async {
-    final Workbook workbook = Workbook();
-    final Worksheet sheet = workbook.worksheets[0];
+  void add(ChartData chartData) => _measurements.add(chartData);
 
-    int _index = 15;
+  void fillInfo() {
+    // date
+    _iR++; // 1
+    _sheet.getRangeByName('$_iA$_iR').text = 'Date:';
+    _sheet.getRangeByName('$_iD$_iR').dateTime = _dtNow;
+    _sheet.getRangeByName('$_iD$_iR').numberFormat = 'yyyy-mmm-dd, dddd';
 
-    sheet.getRangeByName('A$_index').setText('TIME [s]');
-    sheet.getRangeByName('B$_index').setText('LOAD [Kg]');
+    // time
+    _iR++; // 2
+    _sheet.getRangeByName('$_iA$_iR').text = 'Time:';
+    _sheet.getRangeByName('$_iD$_iR').dateTime = _dtNow;
+    _sheet.getRangeByName('$_iD$_iR').numberFormat = 'hh:mm:ss AM/PM';
 
-    measurements.forEach((chartData) {
-      _index++;
-      sheet.getRangeByName('A$_index').setNumber(chartData.time);
-      sheet.getRangeByName('B$_index').setNumber(chartData.weight);
-    });
+    // user id
+    _iR++; // 3
+    _sheet.getRangeByName('$_iA$_iR').text = 'UserID:';
+    _sheet.getRangeByName('$_iD$_iR').text = 'User_XXXX';
 
-/*
-    Range range1 = sheet.getRangeByName('A2');
-    range1.dateTime = DateTime(2020, 08, 31);
-    range1.columnWidth = 150;
-    range1.autoFit();
-    sheet.getRangeByName('A2').numberFormat = '[\$-x-sysdate]dddd, mmmm dd, yyyy';
-*/
+    // progressor id
+    _iR += 2; // 5
+    _sheet.getRangeByName('$_iA$_iR').text = 'Tindeq Progressor #:';
+    _sheet.getRangeByName('$_iD$_iR').text = Bluetooth.device?.name??'Device not connected';
 
-    final List<int> bytes = workbook.saveAsStream();
-    workbook.dispose();
+    if (isExercise) {
+      // Exercise info
+      _iR += 2; // 7
+      _sheet.getRangeByName('$_iA$_iR').text = 'Exercise Info';
 
-    try {
-      // final Directory directory = await pp.getApplicationSupportDirectory();
-      final Directory directory = await pp.getExternalStorageDirectory();
-      final String path = directory.path;
-      String name = '${DateTime.now().toString().replaceAll(RegExp(r'[\.:]'), '_')}_UserID_ExerciseMode.xlsx';
-      final File file = File('$path/$name');
-      await file.exists().then((value) async {
-        if (value) await file.delete();
-      });
-      await file.writeAsBytes(bytes);
-    } on pp.MissingPlatformDirectoryException catch (e) {
-      print(e);
+      // Last MVC test recorded
+      _iR++; // 8
+      _sheet.getRangeByName('$_iA$_iR').text = 'Last MVC Test Recorded [Kg]';
+      // TODO: adjust last recorded MVC
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad * 1.3;
+
+      // Target Load
+      _iR++; // 9
+      _sheet.getRangeByName('$_iA$_iR').text = 'Target Load [Kg]';
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad;
+
+      // Hold Time
+      _iR++; // 10
+      _sheet.getRangeByName('$_iA$_iR').text = 'Hold Time [sec]';
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.holdTime.toDouble();
+
+      // Rest Time
+      _iR++; // 11
+      _sheet.getRangeByName('$_iA$_iR').text = 'Rest Time [sec]';
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.restTime.toDouble();
+
+      // Sets
+      _iR++; // 12
+      _sheet.getRangeByName('$_iA$_iR').text = 'Sets [#]';
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.sets.toDouble();
+
+      // Reps
+      _iR++; // 13
+      _sheet.getRangeByName('$_iA$_iR').text = 'Reps [#]';
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.reps.toDouble();
     }
+
+    // data headers
+    _iR += 2; // 15
+    _sheet.getRangeByName('$_iA$_iR').setText('TIME [s]');
+    _sheet.getRangeByName('B$_iR').setText('LOAD [Kg]');
+  }
+
+  void populate() {
+    _measurements
+      ..forEach((chartData) {
+        _iR++; // 16..N
+        _sheet.getRangeByName('$_iA$_iR').number = chartData.time;
+        _sheet.getRangeByName('B$_iR').number = chartData.weight;
+      })
+      ..clear();
+  }
+
+  Future save() async {
+    // final Directory directory = await pp.getApplicationSupportDirectory();
+    final String _path = (await pp.getExternalStorageDirectory()).path;
+    //TODO: provide user id
+    final String _name = '${_dtNow.toString().replaceAll(RegExp(r'[\.:]'), '_')}'
+        '_UserID_${isExercise ? 'ExerciseMode' : 'MVCTesting'}.xlsx';
+    final File _file = File('$_path/$_name');
+    await _file.writeAsBytes(_workbook.saveAsStream());
+    _workbook.dispose();
   }
 }
