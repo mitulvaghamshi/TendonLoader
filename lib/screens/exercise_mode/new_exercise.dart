@@ -66,30 +66,30 @@ class _NewExerciseState extends State<NewExercise> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CustomTextField(
-                  hint: 'Target Load (Kg)',
-                  helper: 'helpe text',
+                  hint: 'Target Load (kg)',
+                  helper: 'What this field mean?',
                   controller: _ctrlTargetLoad,
                 ),
                 CustomTextField(
-                  hint: 'Hold time (sec)',
-                  helper: 'helpe text',
                   isPicker: true,
+                  hint: 'Hold time (sec)',
+                  helper: 'What this field mean?',
                   controller: _ctrlHoldTime,
                 ),
                 CustomTextField(
-                  hint: 'Sets',
-                  helper: 'helpe text',
+                  hint: 'Sets (#)',
+                  helper: 'What this field mean?',
                   controller: _ctrlSets,
                 ),
                 CustomTextField(
-                  hint: 'Reps',
-                  helper: 'helpe text',
+                  hint: 'Reps (#)',
+                  helper: 'What this field mean?',
                   controller: _ctrlReps,
                 ),
                 CustomTextField(
-                  hint: 'Rest time (sec)',
-                  helper: 'helpe text',
                   isPicker: true,
+                  hint: 'Rest time (sec)',
+                  helper: 'What this field mean?',
                   controller: _ctrlRestTime,
                 ),
                 const SizedBox(height: 30),
@@ -98,8 +98,8 @@ class _NewExerciseState extends State<NewExercise> {
                   children: [
                     CustomButton(
                       text: 'Submit',
-                      icon: Icons.done_rounded,
                       color: Colors.blue,
+                      icon: Icons.done_rounded,
                       onPressed: () {
                         if (true || _validate()) {
                           Navigator.pushReplacementNamed(

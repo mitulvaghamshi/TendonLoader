@@ -45,7 +45,7 @@ class CreateXLSX {
     // progressor id
     _iR += 2; // 5
     _sheet.getRangeByName('$_iA$_iR').text = 'Tindeq Progressor #:';
-    _sheet.getRangeByName('$_iD$_iR').text = Bluetooth.device?.name??'Device not connected';
+    _sheet.getRangeByName('$_iD$_iR').text = Bluetooth.device?.name ?? 'Device not connected';
 
     if (isExercise) {
       // Exercise info
@@ -91,11 +91,22 @@ class CreateXLSX {
   }
 
   void populate() {
+    double avgWeight = 0;
+    double avgTime = 0;
+    int count = 0;
+
     _measurements
       ..forEach((chartData) {
-        _iR++; // 16..N
-        _sheet.getRangeByName('$_iA$_iR').number = chartData.time;
-        _sheet.getRangeByName('B$_iR').number = chartData.weight;
+        avgTime += chartData.time;
+        avgWeight += chartData.weight;
+        if (count++ == 8) {
+          _iR++; // 16..N
+          _sheet.getRangeByName('$_iA$_iR').number = (avgTime/8);
+          _sheet.getRangeByName('B$_iR').number = (avgWeight/8);
+          avgWeight = 0;
+          avgTime = 0;
+          count = 0;
+        }
       })
       ..clear();
   }

@@ -50,7 +50,6 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: AnimatedBuilder(
@@ -58,30 +57,22 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
         child: Text(widget.title, style: TextStyle(fontSize: 20, color: Colors.white), textAlign: TextAlign.center),
         builder: (context, child) {
           return Padding(
-            padding: const EdgeInsets.all(50),
+            padding: const EdgeInsets.all(30),
             child: Align(
               alignment: FractionalOffset.center,
               child: AspectRatio(
                 aspectRatio: 1,
                 child: Stack(
                   children: <Widget>[
-                    Positioned.fill(
-                      child: CustomPaint(
-                        painter: CustomTimerPainter(
-                          animation: _controller,
-                          backgroundColor: Colors.white,
-                          color: themeData.indicatorColor,
-                        ),
-                      ),
-                    ),
+                    Positioned.fill(child: CustomPaint(painter: _CustomTimePainter(animation: _controller))),
                     Align(
                       alignment: FractionalOffset.center,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
                           child,
-                          Text(_timerString, style: TextStyle(fontSize: 96, color: Colors.white)),
+                          Text(_timerString, style: const TextStyle(fontSize: 96, color: Colors.white)),
                         ],
                       ),
                     ),
@@ -96,28 +87,28 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
   }
 }
 
-class CustomTimerPainter extends CustomPainter {
-  CustomTimerPainter({this.animation, this.backgroundColor, this.color}) : super(repaint: animation);
+class _CustomTimePainter extends CustomPainter {
+  const _CustomTimePainter({this.animation}) : super(repaint: animation);
 
   final Animation<double> animation;
-  final Color backgroundColor, color;
+
+  @override
+  bool shouldRepaint(_) => false;
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = backgroundColor
-      ..strokeWidth = 15
+      ..strokeWidth = 10
+      ..color = Colors.white
       ..strokeCap = StrokeCap.butt
       ..style = PaintingStyle.stroke;
-
     canvas.drawCircle(size.center(Offset.zero), size.width / 2, paint);
-    paint.color = color;
-    double progress = (animation.value) * 2 * math.pi;
-    canvas.drawArc(Offset.zero & size, math.pi * 1.5, -progress, false, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomTimerPainter old) {
-    return animation.value != old.animation.value || color != old.color || backgroundColor != old.backgroundColor;
+    canvas.drawArc(
+      Offset.zero & size,
+      math.pi * 1.5,
+      -(animation.value * 2 * math.pi),
+      false,
+      paint..color = Colors.black,
+    );
   }
 }

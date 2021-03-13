@@ -67,28 +67,26 @@ class DataHandler {
     if (_weightCtrl.isClosed) _weightCtrl.close();
   }
 
-  void valueListener(List<int> dataList) {
+  void valueListener(List<int> _data) {
     int _counter = 0;
-    int _averageTime = 0;
-    double _averageWeight = 0;
-    if (dataList.isNotEmpty && dataList[0] == Bluetooth.RES_WEIGHT_MEAS) {
-      for (int x = 2; x < dataList.length; x += 8) {
-        _averageWeight +=
-            Uint8List.fromList(dataList.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _averageTime += Uint8List.fromList(dataList.getRange(x + 4, x + 8).toList())
-            .buffer
-            .asByteData()
-            .getUint32(0, Endian.little);
+    int _time = 0;
+    double _weight = 0;
+    if (_data.isNotEmpty && _data[0] == Bluetooth.RES_WEIGHT_MEAS) {
+      for (int x = 2; x < _data.length; x += 8) {
+        _weight =
+            Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
+        _time =
+            Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
+        _xlsx.add(ChartData(weight: _weight, time: _time));
         if (_counter++ == 8) {
-          double _weight = double.parse((_averageWeight.abs() / 8.0).toStringAsFixed(2));
-          double _time = double.parse(((_averageTime / 8) / 1000000.0).toStringAsFixed(2));
-          _xlsx.add(ChartData(weight: _weight, time: _time));
-          if (!_weightCtrl.isClosed) _weightCtrl.add(_weight);
-          _graphData.insert(0, ChartData(weight: _weight));
+          double _avgWeight = double.parse((_weight.abs() / 8.0).toStringAsFixed(2));
+          // double _avgTime = double.parse(((_time / 8) / 1000000.0).toStringAsFixed(2));
+          if (!_weightCtrl.isClosed) _weightCtrl.add(_avgWeight);
+          _graphData.insert(0, ChartData(weight: _avgWeight));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
+          _time = 0;
+          _weight = 0;
           _counter = 0;
-          _averageTime = 0;
-          _averageWeight = 0;
         }
       }
     }

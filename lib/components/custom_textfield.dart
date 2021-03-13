@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tendon_loader/components/time_picker.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({this.hint = 'Enter value', this.helper = '', this.isPicker = false, this.controller});
@@ -14,7 +15,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       readOnly: isPicker,
       controller: controller,
-      style: const TextStyle(fontSize: 20),
+      style: const TextStyle(fontSize: 20, fontFamily: 'Georgia'),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (value) => value.isEmpty ? '* Required field' : null,
       keyboardType: TextInputType.numberWithOptions(decimal: hint.contains('kg')),
@@ -27,16 +28,12 @@ class CustomTextField extends StatelessWidget {
         isDense: true,
         hintText: hint,
         helperText: helper,
+        helperStyle: TextStyle(color: Colors.blue),
         suffix: IconButton(
           icon: Icon(isPicker ? Icons.timer : Icons.clear_rounded),
-          onPressed: () async => isPicker ? await _selectTime(context) : controller.clear(),
+          onPressed: () async => isPicker ? controller.text = await TimePicker.selectTime(context) : controller.clear(),
         ),
       ),
     );
-  }
-
-  Future<Null> _selectTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(context: context, initialTime: TimeOfDay(hour: 00, minute: 00));
-    if (picked != null) controller.text = '${picked.hour * 60 + picked.minute}';
   }
 }

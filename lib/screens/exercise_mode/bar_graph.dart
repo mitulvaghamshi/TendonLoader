@@ -73,7 +73,7 @@ class _BarGraphState extends State<BarGraph> {
                       if (_currentSet == _exerciseData.sets) {
                         _reset();
                       } else {
-                        _setBreak();
+                        _rest();
                         _currentSet++;
                         _currentRep = 1;
                       }
@@ -172,30 +172,22 @@ class _BarGraphState extends State<BarGraph> {
   Future _stop() async => _handler.stop();
 
   Future _reset() async {
-    _isRunning = false;
     _holdTime = 0;
     _restTime = 0;
     _currentRep = 1;
     _currentSet = 1;
+    _isRunning = false;
     await _handler.reset();
   }
 
-  Future _setBreak() async {
+  Future _rest() async {
     await _stop();
     await CountDown.start(
       context,
-      duration: Duration(seconds: 5),
-      title: 'SET OVER!\nREST!',
+      duration: Duration(seconds: 15),
+      title: 'SET OVER! REST!\nNew Set will\nstarts in',
     ).then((value) async {
-      if (value ?? false) {
-        await CountDown.start(
-          context,
-          duration: Duration(seconds: 5),
-          title: 'New Set will\nstarts in',
-        ).then((value) async {
-          if (value ?? false) await _start();
-        });
-      }
+      if (value ?? false) await _start();
     });
   }
 
