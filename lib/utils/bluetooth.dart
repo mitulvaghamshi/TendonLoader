@@ -3,42 +3,42 @@ import 'package:flutter_blue/flutter_blue.dart';
 
 class Bluetooth {
   // UUIDs
-  static final _serviceUuid = "7e4e1701-1ea6-40c9-9dcc-13d34ffead57"; // main service
-  static final _dataCharacteristicUuid = "7e4e1702-1ea6-40c9-9dcc-13d34ffead57"; // receive data
-  static final _controlPointUuid = "7e4e1703-1ea6-40c9-9dcc-13d34ffead57"; // send commands
+  static final String _serviceUuid = "7e4e1701-1ea6-40c9-9dcc-13d34ffead57"; // main service
+  static final String _controlPointUuid = "7e4e1703-1ea6-40c9-9dcc-13d34ffead57"; // send commands
+  static final String _dataCharacteristicUuid = "7e4e1702-1ea6-40c9-9dcc-13d34ffead57"; // receive data
 
   // Responses
-  static const RES_CMD_RESPONSE = 0;
-  static const RES_WEIGHT_MEAS = 1;
-  static const RES_RFD_PEAK = 2;
-  static const RES_RFD_PEAK_SERIES = 3;
-  static const RES_LOW_PWR_WARNING = 4;
+  static const int RES_CMD_RESPONSE = 0;
+  static const int RES_WEIGHT_MEAS = 1;
+  static const int RES_RFD_PEAK = 2;
+  static const int RES_RFD_PEAK_SERIES = 3;
+  static const int RES_LOW_PWR_WARNING = 4;
 
   // Commands
-  static const CMD_TARE_SCALE = 100;
-  static const CMD_START_WEIGHT_MEAS = 101;
-  static const CMD_STOP_WEIGHT_MEAS = 102;
-  static const CMD_START_PEAK_RFD_MEAS = 103;
-  static const CMD_START_PEAK_RFD_MEAS_SERIES = 104;
-  static const CMD_ADD_CALIBRATION_POINT = 105;
-  static const CMD_SAVE_CALIBRATION = 106;
-  static const CMD_GET_APP_VERSION = 107;
-  static const CMD_GET_ERROR_INFORMATION = 108;
-  static const CMD_CLR_ERROR_INFORMATION = 109;
-  static const CMD_ENTER_SLEEP = 110;
-  static const CMD_GET_BATTERY_VOLTAGE = 111;
+  static const int CMD_TARE_SCALE = 100;
+  static const int CMD_START_WEIGHT_MEAS = 101;
+  static const int CMD_STOP_WEIGHT_MEAS = 102;
+  static const int CMD_START_PEAK_RFD_MEAS = 103;
+  static const int CMD_START_PEAK_RFD_MEAS_SERIES = 104;
+  static const int CMD_ADD_CALIBRATION_POINT = 105;
+  static const int CMD_SAVE_CALIBRATION = 106;
+  static const int CMD_GET_APP_VERSION = 107;
+  static const int CMD_GET_ERROR_INFORMATION = 108;
+  static const int CMD_CLR_ERROR_INFORMATION = 109;
+  static const int CMD_ENTER_SLEEP = 110;
+  static const int CMD_GET_BATTERY_VOLTAGE = 111;
 
-  static BluetoothDevice _mDevice;
+  static BluetoothDevice _mDevice; // Connected device
+  static BluetoothCharacteristic _mDataChar; // data receiver
+  static BluetoothCharacteristic _mControlChar; // data controller
 
-  static BluetoothDevice get device => _mDevice;
-  static BluetoothCharacteristic _mDataChar;
-  static BluetoothCharacteristic _mControlChar;
-
-  Bluetooth._();
+  const Bluetooth._();
 
   factory Bluetooth() => instance;
 
   static Bluetooth instance = Bluetooth._();
+
+  static BluetoothDevice get device => _mDevice;
 
   void sleep() async => await write(CMD_ENTER_SLEEP);
 
@@ -70,26 +70,15 @@ class Bluetooth {
 
   Future<void> disconnect() async {
     await device?.disconnect();
-    _mDevice = null;
+    // _mDevice = null;
   }
 
   Future<void> connect() async {
-    await _mDevice?.connect()?.then((_) async {
-      await _mDevice.discoverServices().then((services) {
-        return services?.singleWhere((service) {
-          return service.uuid.toString() == _serviceUuid;
-        });
-      }).then((service) {
-        return service?.characteristics;
-      }).then((characteristics) {
-        characteristics?.forEach((characteristic) {
-          if (characteristic.uuid.toString() == _dataCharacteristicUuid) {
-            _mDataChar = characteristic;
-          } else if (characteristic.uuid.toString() == _controlPointUuid) {
-            _mControlChar = characteristic;
-          }
-        });
-      });
-    });
+    await _mDevice?.connect(autoConnect: false);
+    List<BluetoothService> services = await _mDevice?.discoverServices();
+    BluetoothService service = services?.singleWhere((s) => s.uuid.toString() == _serviceUuid);
+    List<BluetoothCharacteristic> chars = service?.characteristics;
+    _mControlChar = chars?.singleWhere((c) => c.uuid.toString() == _controlPointUuid);
+    _mDataChar = chars?.singleWhere((c) => c.uuid.toString() == _dataCharacteristicUuid);
   }
 }

@@ -1,15 +1,15 @@
 
 import 'package:flutter/material.dart';
 
-class Logo extends StatelessWidget {
-  const Logo({
+class CustomImage extends StatelessWidget {
+  const CustomImage({
     this.dir = 'assets/images/',
-    this.image = 'ic_launcher.webp',
+    this.name = 'ic_launcher.webp',
     this.scale = 0.6,
-  }) : this.path = dir + image;
+  }) : this.path = dir + name;
 
   final String dir;
-  final String image;
+  final String name;
   final String path;
   final double scale;
 

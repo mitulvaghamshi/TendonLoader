@@ -7,7 +7,7 @@ import 'package:tendon_loader/utils/exercise_data.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key key, @required this.exerciseData})
-      : assert(exerciseData != null, 'Exercise data required'),
+      : assert(exerciseData != null, 'Exercise data required!'),
         super(key: key);
 
   final ExerciseData exerciseData;
@@ -131,8 +131,8 @@ class _BarGraphState extends State<BarGraph> {
             const SizedBox(height: 20),
             Expanded(
               child: SfCartesianChart(
-                series: _handler.getSeries(),
                 plotAreaBorderWidth: 0,
+                series: _handler.getSeries(),
                 primaryXAxis: NumericAxis(minimum: 0, isVisible: false),
                 primaryYAxis: NumericAxis(
                   maximum: 30,
@@ -185,7 +185,7 @@ class _BarGraphState extends State<BarGraph> {
     await CountDown.start(
       context,
       duration: Duration(seconds: 15),
-      title: 'SET OVER! REST!\nNew Set will\nstarts in',
+      title: 'SET OVER! REST!\nNew Set will\nstart in',
     ).then((value) async {
       if (value ?? false) await _start();
     });

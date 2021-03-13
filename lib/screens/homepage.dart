@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/custom_tile.dart';
-import 'package:tendon_loader/components/logo.dart';
-import 'package:tendon_loader/screens/device_scanner.dart';
+import 'package:tendon_loader/components/custom_image.dart';
+import 'file:///C:/Users/mitul/AndroidStudioProjects/tendon_loader/lib/screens/bluetooth/device_scanner.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                const Logo(image: 'ic_launcher-playstore.webp', scale: 0.7),
+                const CustomImage(name: 'ic_launcher-playstore.webp', scale: 0.7),
                 CustomTile(
                   context: context,
                   name: LiveData.name,
