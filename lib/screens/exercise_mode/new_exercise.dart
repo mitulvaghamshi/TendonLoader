@@ -65,6 +65,11 @@ class _NewExerciseState extends State<NewExercise> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                const Text(
+                  'Please enter your exercise prescriptions',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                ),
+                const SizedBox(height: 20),
                 CustomTextField(
                   hint: 'Target Load (kg)',
                   helper: 'What this field mean?',

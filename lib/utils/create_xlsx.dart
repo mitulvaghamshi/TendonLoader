@@ -91,20 +91,18 @@ class CreateXLSX {
   }
 
   void populate() {
-    double avgWeight = 0;
-    double avgTime = 0;
     int count = 0;
-
+    double avgTime = 0;
+    double avgWeight = 0;
     _measurements
       ..forEach((chartData) {
         avgTime += chartData.time;
         avgWeight += chartData.weight;
         if (count++ == 8) {
           _iR++; // 16..N
-          _sheet.getRangeByName('$_iA$_iR').number = (avgTime/8);
-          _sheet.getRangeByName('B$_iR').number = (avgWeight/8);
-          avgWeight = 0;
-          avgTime = 0;
+          _sheet.getRangeByName('B$_iR').number = (avgWeight / 8).toStringAsFixed(2) as double;
+          _sheet.getRangeByName('$_iA$_iR').number = (avgTime / 8).toStringAsFixed(2) as double;
+          avgWeight = avgTime = 0;
           count = 0;
         }
       })

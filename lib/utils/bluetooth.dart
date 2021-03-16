@@ -40,11 +40,11 @@ class Bluetooth {
 
   static BluetoothDevice get device => _mDevice;
 
-  void sleep() async => await write(CMD_ENTER_SLEEP);
-
   void setDevice(BluetoothDevice device) => _mDevice = device;
 
   void listen(Function listener) => _mDataChar?.value?.listen(listener);
+
+  Future sleep() async => await write(CMD_ENTER_SLEEP);
 
   Future<void> startNotify() async => await _mDataChar?.setNotifyValue(true);
 
@@ -60,17 +60,14 @@ class Bluetooth {
 
   Future<void> stopScan() async => await FlutterBlue.instance.stopScan();
 
+  Future<void> disconnect() async => await device?.disconnect();
+
   Future<void> startScan() async {
     await FlutterBlue.instance.startScan(
       timeout: Duration(seconds: 3),
       withDevices: [Guid('7e4e1701-1ea6-40c9-9dcc-13d34ffead57')],
       withServices: [Guid('7e4e1701-1ea6-40c9-9dcc-13d34ffead57')],
     );
-  }
-
-  Future<void> disconnect() async {
-    await device?.disconnect();
-    // _mDevice = null;
   }
 
   Future<void> connect() async {

@@ -68,25 +68,24 @@ class DataHandler {
   }
 
   void valueListener(List<int> _data) {
-    int _counter = 0;
-    int _time = 0;
-    double _weight = 0;
+    int _counter = 0, _time = 0, _timeSum = 0;
+    double _avgTime = 0, _weight = 0, _avgWeight = 0, _weightSum = 0;
     if (_data.isNotEmpty && _data[0] == Bluetooth.RES_WEIGHT_MEAS) {
       for (int x = 2; x < _data.length; x += 8) {
-        _weight =
+        _weightSum += _weight =
             Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _time =
+        _timeSum += _time =
             Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
         _xlsx.add(ChartData(weight: _weight, time: _time));
         if (_counter++ == 8) {
-          double _avgWeight = double.parse((_weight.abs() / 8.0).toStringAsFixed(2));
-          // double _avgTime = double.parse(((_time / 8) / 1000000.0).toStringAsFixed(2));
-          if (!_weightCtrl.isClosed) _weightCtrl.add(_avgWeight);
+          _avgTime = double.parse(((_timeSum / 8) / 1000000.0).toStringAsFixed(2));
+          _avgWeight = double.parse((_weightSum.abs() / 8.0).toStringAsFixed(2));
           _graphData.insert(0, ChartData(weight: _avgWeight));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
-          _time = 0;
-          _weight = 0;
+          if (!_weightCtrl.isClosed) _weightCtrl.add(_avgWeight);
           _counter = 0;
+          _timeSum = 0;
+          _weightSum = 0;
         }
       }
     }

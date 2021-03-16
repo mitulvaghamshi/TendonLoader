@@ -98,7 +98,7 @@ class _CustomTimePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..strokeWidth = 10
+      ..strokeWidth = 20
       ..color = Colors.white
       ..strokeCap = StrokeCap.butt
       ..style = PaintingStyle.stroke;

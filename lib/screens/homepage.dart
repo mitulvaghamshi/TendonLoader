@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/components/custom_tile.dart';
 import 'package:tendon_loader/components/custom_image.dart';
-import 'file:///C:/Users/mitul/AndroidStudioProjects/tendon_loader/lib/screens/bluetooth/device_scanner.dart';
+import 'package:tendon_loader/components/custom_tile.dart';
+import 'package:tendon_loader/screens/bluetooth/device_scanner.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     Bluetooth.instance.sleep();
+    Bluetooth.instance.setDevice(null);
     super.dispose();
   }
 
@@ -29,9 +30,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(HomePage.name),
-        actions: [
-          IconButton(icon: Icon(Icons.info_outline_rounded), onPressed: () => aboutDialog(context))
-        ],
+        actions: [IconButton(icon: Icon(Icons.info_outline_rounded), onPressed: () => aboutDialog(context))],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

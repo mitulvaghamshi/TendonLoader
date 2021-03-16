@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/screens/bluetooth/Result.dart';
+import 'package:tendon_loader/screens/bluetooth/result.dart';
 import 'package:tendon_loader/screens/bluetooth/enable_bluetooth.dart';
 
 class DeviceScanner extends StatelessWidget {
