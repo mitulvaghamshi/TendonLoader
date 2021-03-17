@@ -7,20 +7,26 @@ import 'package:tendon_loader/utils/chart_data.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
 
 class CreateXLSX {
-  CreateXLSX({this.isExercise = true, this.exerciseData}) {
-    this._sheet = _workbook.worksheets[0];
-    fillInfo();
-  }
+  CreateXLSX({this.isExercise = true, this.exerciseData})
+      : assert(!isExercise || (isExercise && exerciseData != null), 'Exercise data can not be null');
 
+  final String _iA = 'A';
+  final String _iD = 'D';
+  final bool isExercise;
   final ExerciseData exerciseData;
   final List<ChartData> _measurements = [];
-  final DateTime _dtNow = DateTime.now();
-  final Workbook _workbook = Workbook();
-  final bool isExercise;
+
+  int _iR;
+  DateTime _dtNow;
   Worksheet _sheet;
-  String _iA = 'A';
-  String _iD = 'D';
-  int _iR = 0;
+  Workbook _workbook;
+
+  void init() {
+    _iR = 0;
+    _workbook = Workbook();
+    _dtNow = DateTime.now();
+    _sheet = _workbook.worksheets[0];
+  }
 
   void add(ChartData chartData) => _measurements.add(chartData);
 
@@ -90,19 +96,19 @@ class CreateXLSX {
     _sheet.getRangeByName('B$_iR').setText('LOAD [Kg]');
   }
 
-  void populate() {
+  void _populate() {
     int count = 0;
-    double avgTime = 0;
-    double avgWeight = 0;
+    double _avgTime = 0;
+    double _avgWeight = 0;
     _measurements
       ..forEach((chartData) {
-        avgTime += chartData.time;
-        avgWeight += chartData.weight;
+        _avgTime += chartData.time;
+        _avgWeight += chartData.weight;
         if (count++ == 8) {
           _iR++; // 16..N
-          _sheet.getRangeByName('B$_iR').number = (avgWeight / 8).toStringAsFixed(2) as double;
-          _sheet.getRangeByName('$_iA$_iR').number = (avgTime / 8).toStringAsFixed(2) as double;
-          avgWeight = avgTime = 0;
+          _sheet.getRangeByName('$_iA$_iR').number = double.parse(((_avgTime / 8.0) / 1000000.0).toStringAsFixed(2));
+          _sheet.getRangeByName('B$_iR').number = double.parse((_avgWeight.abs() / 8.0).toStringAsFixed(2));
+          _avgWeight = _avgTime = 0;
           count = 0;
         }
       })
@@ -110,13 +116,16 @@ class CreateXLSX {
   }
 
   Future save() async {
-    // final Directory directory = await pp.getApplicationSupportDirectory();
-    final String _path = (await pp.getExternalStorageDirectory()).path;
-    //TODO: provide user id
-    final String _name = '${_dtNow.toString().replaceAll(RegExp(r'[\.:]'), '_')}'
-        '_UserID_${isExercise ? 'ExerciseMode' : 'MVCTesting'}.xlsx';
-    final File _file = File('$_path/$_name');
-    await _file.writeAsBytes(_workbook.saveAsStream());
-    _workbook.dispose();
+    if (_measurements.isNotEmpty) {
+      _populate();
+      // final Directory directory = await pp.getApplicationSupportDirectory();
+      final String _path = (await pp.getExternalStorageDirectory()).path;
+      //TODO: provide user id
+      final String _name = '${_dtNow.toString().replaceAll(RegExp(r'[\.:]'), '_')}'
+          '_UserID_${isExercise ? 'ExerciseMode' : 'MVCTesting'}.xlsx';
+      final File _file = File('$_path/$_name');
+      await _file.writeAsBytes(_workbook.saveAsStream());
+      _workbook.dispose();
+    }
   }
 }

@@ -54,7 +54,7 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
       backgroundColor: Colors.transparent,
       body: AnimatedBuilder(
         animation: _controller,
-        child: Text(widget.title, style: TextStyle(fontSize: 20, color: Colors.white), textAlign: TextAlign.center),
+        child: Text(widget.title, style: TextStyle(fontSize: 22, color: Colors.white), textAlign: TextAlign.center),
         builder: (context, child) {
           return Padding(
             padding: const EdgeInsets.all(30),
@@ -98,7 +98,7 @@ class _CustomTimePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..strokeWidth = 20
+      ..strokeWidth = 15
       ..color = Colors.white
       ..strokeCap = StrokeCap.butt
       ..style = PaintingStyle.stroke;

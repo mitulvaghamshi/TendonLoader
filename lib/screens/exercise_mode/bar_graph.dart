@@ -61,27 +61,7 @@ class _BarGraphState extends State<BarGraph> {
               initialData: 0,
               stream: _handler.timeStream,
               builder: (_, snapshot) {
-                if (_isRunning) {
-                  if (_holdTime == 0) {
-                    _isHold = false;
-                    _holdTime = _exerciseData.holdTime;
-                  }
-                  if (_restTime == 0) {
-                    _isHold = true;
-                    _restTime = _exerciseData.restTime;
-                    if (_currentRep == _exerciseData.reps) {
-                      if (_currentSet == _exerciseData.sets) {
-                        _reset();
-                      } else {
-                        _rest();
-                        _currentSet++;
-                        _currentRep = 1;
-                      }
-                    } else {
-                      _currentRep++;
-                    }
-                  }
-                }
+                _update();
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -169,7 +149,31 @@ class _BarGraphState extends State<BarGraph> {
     );
   }
 
-  Future _stop() async => _handler.stop();
+  void _update() {
+    if (_isRunning) {
+      if (_holdTime == 0) {
+        _isHold = false;
+        _holdTime = _exerciseData.holdTime;
+      }
+      if (_restTime == 0) {
+        _isHold = true;
+        _restTime = _exerciseData.restTime;
+        if (_currentRep == _exerciseData.reps) {
+          if (_currentSet == _exerciseData.sets) {
+            _reset();
+          } else {
+            _rest();
+            _currentSet++;
+            _currentRep = 1;
+          }
+        } else {
+          _currentRep++;
+        }
+      }
+    }
+  }
+
+  void _stop() => _handler.stop();
 
   Future _reset() async {
     _holdTime = 0;
@@ -181,7 +185,7 @@ class _BarGraphState extends State<BarGraph> {
   }
 
   Future _rest() async {
-    await _stop();
+    _stop();
     await CountDown.start(
       context,
       duration: Duration(seconds: 15),
@@ -198,7 +202,7 @@ class _BarGraphState extends State<BarGraph> {
       await CountDown.start(context).then((value) async {
         if (value ?? false) {
           _isRunning = true;
-          await _handler.init();
+          _handler.init();
           await _handler.start();
         }
       });

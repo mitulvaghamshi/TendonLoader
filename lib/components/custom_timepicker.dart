@@ -5,8 +5,8 @@ import 'package:tendon_loader/components/custom_button.dart';
 class TimePicker extends StatefulWidget {
   const TimePicker({this.name = 'Pick', this.onChange});
 
-  final Function(int) onChange;
   final String name;
+  final Function(int) onChange;
 
   @override
   TimePickerState createState() => TimePickerState();
@@ -24,8 +24,8 @@ class TimePicker extends StatefulWidget {
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              TimePicker(name: 'Minutes', onChange: (value) => _min = value),
-              TimePicker(name: 'Seconds', onChange: (value) => _sec = value),
+              TimePicker(name: 'MIN', onChange: (value) => _min = value),
+              TimePicker(name: 'SEC', onChange: (value) => _sec = value),
             ],
           ),
           actions: [
@@ -58,25 +58,15 @@ class TimePickerState extends State<TimePicker> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(widget.name),
+        Text(widget.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
         NumberPicker(
           value: _value,
           minValue: 0,
           maxValue: 60,
           haptics: true,
-          onChanged: (value) {
-            setState(() => _value = value);
-            widget.onChange(value);
-          },
-          selectedTextStyle: const TextStyle(
-            fontSize: 36,
-            color: Colors.blue,
-            fontWeight: FontWeight.bold,
-          ),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(100),
-          ),
+          onChanged: (value) => setState(() => widget.onChange(_value = value)),
+          selectedTextStyle: const TextStyle(fontSize: 36, color: Colors.blue, fontWeight: FontWeight.bold),
+          decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(100)),
         ),
       ],
     );

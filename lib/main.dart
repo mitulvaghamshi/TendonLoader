@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/screens/bluetooth/debug.dart';
 import 'package:tendon_loader/screens/exercise_mode/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/homepage.dart';
@@ -16,7 +17,7 @@ class TendonLoader extends StatelessWidget {
       theme: ThemeData(
         accentColor: Colors.black,
         primaryColor: Colors.white,
-        visualDensity: VisualDensity.adaptivePlatformDensity
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: HomePage.routeName,
       routes: {
@@ -25,6 +26,7 @@ class TendonLoader extends StatelessWidget {
         NewExercise.routeName: (_) => NewExercise(),
         ExerciseMode.routeName: (_) => ExerciseMode(),
         MVCTesting.routeName: (_) => MVCTesting(),
+        Debug.routeName: (_) => Debug(),
       },
     );
   }

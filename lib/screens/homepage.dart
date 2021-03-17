@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/components/custom_image.dart';
-import 'package:tendon_loader/components/custom_tile.dart';
+import 'package:tendon_loader/components/custom_listtile.dart';
+import 'package:tendon_loader/screens/bluetooth/debug.dart';
 import 'package:tendon_loader/screens/bluetooth/device_scanner.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
@@ -21,8 +23,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     Bluetooth.instance.sleep();
-    Bluetooth.instance.setDevice(null);
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    FlutterBlue.instance.connectedDevices?.then((value) => value?.forEach(Bluetooth.instance.init));
   }
 
   @override
@@ -30,7 +37,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(HomePage.name),
-        actions: [IconButton(icon: Icon(Icons.info_outline_rounded), onPressed: () => aboutDialog(context))],
+        actions: [
+          IconButton(icon: Icon(Icons.info_outline_rounded), onPressed: () => aboutDialog(context)),
+          IconButton(
+            icon: Icon(Icons.settings_rounded),
+            onPressed: () => Navigator.pushNamed(context, Debug.routeName),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

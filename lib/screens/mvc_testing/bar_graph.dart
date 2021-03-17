@@ -102,7 +102,7 @@ class _BarGraphState extends State<BarGraph> {
                   heroTag: 'mvc-testing-start-btn',
                   child: Icon(Icons.play_arrow_rounded),
                   onPressed: () async {
-                    await CountDown.start(context).then((_) async {
+                    await CountDown.start(context, duration: Duration(seconds: 1)).then((_) async {
                       await _bt.startWeightMeas();
                       _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
                         if (timer.tick == 5) {
@@ -140,7 +140,6 @@ class _BarGraphState extends State<BarGraph> {
     return <ChartSeries<ChartData, int>>[
       ColumnSeries<ChartData, int>(
         width: 0.9,
-        color: Colors.blue,
         animationDuration: 0,
         dataSource: _measurement,
         xValueMapper: (data, _) => 1,
@@ -152,6 +151,12 @@ class _BarGraphState extends State<BarGraph> {
           textStyle: const TextStyle(fontSize: 56.0, fontWeight: FontWeight.bold),
         ),
         onRendererCreated: (controller) => _graphDataCtrl = controller,
+        gradient: const LinearGradient(
+          colors: [Colors.blue, Colors.lightGreenAccent],
+          stops: [0.4, 1],
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+        ),
         borderRadius: const BorderRadius.only(topLeft: const Radius.circular(20), topRight: const Radius.circular(20)),
       ),
       LineSeries<ChartData, int>(

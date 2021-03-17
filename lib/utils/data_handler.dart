@@ -9,12 +9,12 @@ import 'package:tendon_loader/utils/create_xlsx.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
 
 class DataHandler {
-  final StreamController<int> _timeCtrl = StreamController<int>();
   final StreamController<double> _weightCtrl = StreamController<double>();
+  final StreamController<int> _timeCtrl = StreamController<int>();
   final List<ChartData> _graphData = [const ChartData(weight: 0)];
-  final List<ChartData> lineData;
   final Stopwatch _stopwatch = Stopwatch();
   ChartSeriesController _graphDataCtrl;
+  final List<ChartData> lineData;
   CreateXLSX _xlsx;
   Timer _timer;
 
@@ -32,19 +32,22 @@ class DataHandler {
     _xlsx = CreateXLSX(isExercise: lineData != null, exerciseData: exerciseData);
   }
 
-  Future init() async => await Bluetooth.instance.startWeightMeas();
+  void init() {
+    _xlsx.init();
+    _xlsx.fillInfo();
+  }
 
-  void stop() async {
+  void stop() {
     if (_timer?.isActive ?? false) _timer.cancel();
   }
 
   Future start() async {
     _stopwatch.start();
     if (!(_timer?.isActive ?? false)) {
-      _timer = Timer.periodic(
-        const Duration(seconds: 1),
-        (_) => timeSink.add(_stopwatch.elapsedMilliseconds ~/ 1000),
-      );
+      await Bluetooth.instance.startWeightMeas();
+      _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+        timeSink.add(_stopwatch.elapsedMilliseconds ~/ 1000);
+      });
     }
   }
 
@@ -56,11 +59,10 @@ class DataHandler {
     await Bluetooth.instance.stopWeightMeas();
     _graphData.insert(0, const ChartData(weight: 0));
     _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
+    await _xlsx.save();
   }
 
   Future dispose() async {
-    _xlsx.populate();
-    await _xlsx.save();
     await reset();
     await Bluetooth.instance.stopNotify();
     if (_timeCtrl.isClosed) _timeCtrl.close();
@@ -95,9 +97,8 @@ class DataHandler {
     List<ChartSeries<ChartData, int>> components = [
       ColumnSeries<ChartData, int>(
         width: 0.9,
-        color: Colors.blue,
-        dataSource: _graphData,
         animationDuration: 0,
+        dataSource: _graphData,
         xValueMapper: (data, _) => 1,
         yValueMapper: (data, _) => data.weight,
         dataLabelSettings: DataLabelSettings(
@@ -105,6 +106,12 @@ class DataHandler {
           showZeroValue: false,
           labelAlignment: ChartDataLabelAlignment.bottom,
           textStyle: const TextStyle(fontSize: 56.0, fontWeight: FontWeight.bold),
+        ),
+        gradient: const LinearGradient(
+          stops: const [0.4, 1],
+          end: Alignment.topCenter,
+          begin: Alignment.bottomCenter,
+          colors: const [Colors.blue, Colors.lightGreenAccent],
         ),
         onRendererCreated: (controller) => _graphDataCtrl = controller,
         borderRadius: const BorderRadius.only(topLeft: const Radius.circular(20), topRight: const Radius.circular(20)),

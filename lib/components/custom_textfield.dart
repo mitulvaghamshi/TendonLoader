@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tendon_loader/components/time_picker.dart';
+import 'package:tendon_loader/components/custom_timepicker.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({this.hint = 'Enter value', this.helper = '', this.isPicker = false, this.controller});

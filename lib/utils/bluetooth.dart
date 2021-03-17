@@ -40,27 +40,27 @@ class Bluetooth {
 
   static BluetoothDevice get device => _mDevice;
 
-  void setDevice(BluetoothDevice device) => _mDevice = device;
+  void reset() => _mDevice = _mDataChar = _mControlChar = null;
 
   void listen(Function listener) => _mDataChar?.value?.listen(listener);
-
-  Future sleep() async => await write(CMD_ENTER_SLEEP);
-
-  Future<void> startNotify() async => await _mDataChar?.setNotifyValue(true);
-
-  Future<void> stopNotify() async => await _mDataChar?.setNotifyValue(false);
-
-  Future<void> startWeightMeas() async => await write(CMD_START_WEIGHT_MEAS);
-
-  Future<void> stopWeightMeas() async => await write(CMD_STOP_WEIGHT_MEAS);
-
-  Future<void> write(int command) async => await _mControlChar?.write([command]);
 
   Future<void> enable() async => await BluetoothEnable.enableBluetooth;
 
   Future<void> stopScan() async => await FlutterBlue.instance.stopScan();
 
-  Future<void> disconnect() async => await device?.disconnect();
+  Future<void> stopWeightMeas() async => await write(CMD_STOP_WEIGHT_MEAS);
+
+  Future<void> startWeightMeas() async => await write(CMD_START_WEIGHT_MEAS);
+
+  Future<void> stopNotify() async => await _mDataChar?.setNotifyValue(false);
+
+  Future<void> startNotify() async => await _mDataChar?.setNotifyValue(true);
+
+  Future<void> write(int command) async => await _mControlChar?.write([command]);
+
+  Future<void> sleep() async => await write(CMD_ENTER_SLEEP).then((_) => reset());
+
+  Future<void> disconnect() async => await _mDevice?.disconnect()?.then((_) => reset());
 
   Future<void> startScan() async {
     await FlutterBlue.instance.startScan(
@@ -70,9 +70,13 @@ class Bluetooth {
     );
   }
 
-  Future<void> connect() async {
-    await _mDevice?.connect(autoConnect: false);
-    List<BluetoothService> services = await _mDevice?.discoverServices();
+  Future<void> connect(BluetoothDevice device) async {
+    await device?.connect(autoConnect: false)?.then((_) async => await init(device));
+  }
+
+  Future<void> init(BluetoothDevice device) async {
+    _mDevice = device;
+    List<BluetoothService> services = await device?.discoverServices();
     BluetoothService service = services?.singleWhere((s) => s.uuid.toString() == _serviceUuid);
     List<BluetoothCharacteristic> chars = service?.characteristics;
     _mControlChar = chars?.singleWhere((c) => c.uuid.toString() == _controlPointUuid);

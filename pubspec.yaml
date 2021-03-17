@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-
+  rxdart: ^0.24.0
   location: ^4.1.1
   flutter_blue: ^0.7.3
   bluetooth_enable: ^0.1.1

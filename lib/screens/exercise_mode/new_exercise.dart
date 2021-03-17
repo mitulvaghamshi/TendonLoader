@@ -61,42 +61,49 @@ class _NewExerciseState extends State<NewExercise> {
           margin: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+            padding: const EdgeInsets.fromLTRB(30, 16, 30, 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const Text(
-                  'Please enter your exercise prescriptions',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                  'Please enter your\nexercise prescriptions',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 26,
+                    fontFamily: 'Georgia',
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(height: 20),
+                // const Text('* All fields are required.', style: const TextStyle(color: Colors.red), textAlign: TextAlign.right),
                 CustomTextField(
                   hint: 'Target Load (kg)',
-                  helper: 'What this field mean?',
+                  helper: '~70% of last recorded MVC test',
                   controller: _ctrlTargetLoad,
                 ),
                 CustomTextField(
                   isPicker: true,
                   hint: 'Hold time (sec)',
-                  helper: 'What this field mean?',
+                  helper: 'Amount of time you can keep holding at target load',
                   controller: _ctrlHoldTime,
-                ),
-                CustomTextField(
-                  hint: 'Sets (#)',
-                  helper: 'What this field mean?',
-                  controller: _ctrlSets,
-                ),
-                CustomTextField(
-                  hint: 'Reps (#)',
-                  helper: 'What this field mean?',
-                  controller: _ctrlReps,
                 ),
                 CustomTextField(
                   isPicker: true,
                   hint: 'Rest time (sec)',
-                  helper: 'What this field mean?',
+                  helper: 'Amount of time you can rest after every rep',
                   controller: _ctrlRestTime,
                 ),
+                CustomTextField(
+                  hint: 'Sets (#)',
+                  helper: 'Number of total sets',
+                  controller: _ctrlSets,
+                ),
+                CustomTextField(
+                  hint: 'Reps (#)',
+                  helper: 'Number of reps to perform in each set',
+                  controller: _ctrlReps,
+                ),
+                // Text('* All fields are required.', style: const TextStyle(color: Colors.red), textAlign: TextAlign.left),
                 const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
