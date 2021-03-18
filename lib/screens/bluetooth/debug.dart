@@ -3,6 +3,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
 
 class Debug extends StatelessWidget {
+  const Debug({Key key}) : super(key: key);
   static const routeName = '/debug';
 
   @override

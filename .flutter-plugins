@@ -1,6 +1,14 @@
 # This is a generated file; do not edit or check into version control.
 bluetooth_enable=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\bluetooth_enable-0.1.1\\
+firebase_auth=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_auth-1.0.1\\
+firebase_auth_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_auth_web-1.0.2\\
+firebase_core=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core-1.0.1\\
+firebase_core_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core_web-1.0.1\\
 flutter_blue=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\flutter_blue-0.7.3\\
+flutter_plugin_android_lifecycle=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\flutter_plugin_android_lifecycle-2.0.0\\
+google_sign_in=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\google_sign_in-5.0.0\\
+google_sign_in_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\google_sign_in_web-0.10.0\\
+local_auth=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\local_auth-1.1.0\\
 location=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\location-4.1.1\\
 location_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\location_web-3.0.0\\
 path_provider=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider-2.0.1\\
