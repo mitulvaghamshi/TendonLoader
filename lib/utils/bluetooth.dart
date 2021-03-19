@@ -64,9 +64,9 @@ class Bluetooth {
 
   Future<void> startScan() async {
     await FlutterBlue.instance.startScan(
-      timeout: Duration(seconds: 3),
-      withDevices: [Guid('7e4e1701-1ea6-40c9-9dcc-13d34ffead57')],
-      withServices: [Guid('7e4e1701-1ea6-40c9-9dcc-13d34ffead57')],
+      timeout: Duration(seconds: 1),
+      withDevices: [Guid(_serviceUuid)],
+      withServices: [Guid(_serviceUuid)],
     );
   }
 

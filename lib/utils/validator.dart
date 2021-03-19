@@ -16,4 +16,10 @@ class Validator {
     else if (password.length < 6) return 'Enter a password with length at least 6';
     return null;
   }
+
+  static String validateTargetLoad(String value) {}
+  static String validateHoldTime(String value) {}
+  static String validateRestTime(String value) {}
+  static String validateSets(String value) {}
+  static String validateReps(String value) {}
 }

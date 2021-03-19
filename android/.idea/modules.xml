@@ -9,10 +9,10 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/1074438765/android.firebase_core.iml" filepath="$PROJECT_DIR$/.idea/modules/1074438765/android.firebase_core.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1799530687/android.flutter_blue.iml" filepath="$PROJECT_DIR$/.idea/modules/-1799530687/android.flutter_blue.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-191537875/android.flutter_plugin_android_lifecycle.iml" filepath="$PROJECT_DIR$/.idea/modules/-191537875/android.flutter_plugin_android_lifecycle.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-84959232/android.google_sign_in.iml" filepath="$PROJECT_DIR$/.idea/modules/-84959232/android.google_sign_in.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/1055462936/android.local_auth.iml" filepath="$PROJECT_DIR$/.idea/modules/1055462936/android.local_auth.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/1929287509/android.location.iml" filepath="$PROJECT_DIR$/.idea/modules/1929287509/android.location.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/376911842/android.path_provider.iml" filepath="$PROJECT_DIR$/.idea/modules/376911842/android.path_provider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1892413695/io.flutter.plugins.googlesignin.android.google_sign_in.iml" filepath="$PROJECT_DIR$/.idea/modules/-1892413695/io.flutter.plugins.googlesignin.android.google_sign_in.iml" />
     </modules>
   </component>
 </project>

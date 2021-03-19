@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1085962274300",
+    "project_id": "tendonloader",
+    "storage_bucket": "tendonloader.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085962274300:android:bcb60fa3367e24be891e79",
+        "android_client_info": {
+          "package_name": "ca.ubc.tendon_loader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1085962274300-5t6aio41coencjpe5qs2ejler1242nrj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.ubc.tendon_loader",
+            "certificate_hash": "2fe9b7d0cb4a57b8f26650694c1bced4e0c14b27"
+          }
+        },
+        {
+          "client_id": "1085962274300-s4k901qf6dcocpr8o3krd3r2ioojeogn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6yCoWOnAJZ78qou_MU9DlKuE8ldxhUsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1085962274300-s4k901qf6dcocpr8o3krd3r2ioojeogn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

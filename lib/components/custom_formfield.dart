@@ -1,61 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/components/custom_timepicker.dart';
 
 class CustomFormField extends StatelessWidget {
   const CustomFormField({
     Key key,
-    @required TextEditingController controller,
-    @required FocusNode focusNode,
-    @required TextInputType keyboardType,
-    @required TextInputAction inputAction,
-    @required String label,
-    @required String hint,
-    @required Function(String value) validator,
+    this.desc = '',
+    @required this.hint,
+    @required this.label,
+    this.isPicker = false,
     this.isObscure = false,
-    this.isCapitalized = false,
-  })  : _emailController = controller,
-        _emailFocusNode = focusNode,
-        _keyboardType = keyboardType,
-        _inputAction = inputAction,
-        _label = label,
-        _hint = hint,
-        _validator = validator,
-        super(key: key);
+    @required this.validator,
+    @required this.controller,
+    @required this.keyboardType,
+  }) : super(key: key);
 
-  final TextEditingController _emailController;
-  final FocusNode _emailFocusNode;
-  final TextInputType _keyboardType;
-  final TextInputAction _inputAction;
-  final String _label;
-  final String _hint;
+  final String hint;
+  final String desc;
+  final String label;
+  final bool isPicker;
   final bool isObscure;
-  final bool isCapitalized;
-  final Function(String) _validator;
+  final TextInputType keyboardType;
+  final Function(String) validator;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: _emailController,
-      focusNode: _emailFocusNode,
-      keyboardType: _keyboardType,
+      readOnly: isPicker,
+      validator: validator,
+      controller: controller,
       obscureText: isObscure,
-      textCapitalization: isCapitalized ? TextCapitalization.words : TextCapitalization.none,
-      textInputAction: _inputAction,
-      validator: (value) => _validator(value),
+      keyboardType: keyboardType,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      style: const TextStyle(fontSize: 20, fontFamily: 'Georgia'),
       decoration: InputDecoration(
-        labelText: _label,
-        hintText: _hint,
-        errorStyle: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 2)),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(color: Colors.redAccent, width: 2),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(color: Colors.redAccent, width: 2),
+        isDense: true,
+        hintText: hint,
+        labelText: label,
+        helperText: desc,
+        focusedBorder: _customBorder(color: Colors.blue),
+        enabledBorder: _customBorder(color: Colors.black),
+        errorBorder: _customBorder(color: Colors.redAccent),
+        focusedErrorBorder: _customBorder(color: Colors.red),
+        helperStyle: const TextStyle(color: Colors.lightBlue),
+        errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+        suffix: IconButton(
+          icon: Icon(isPicker ? Icons.access_time_rounded : Icons.clear_rounded),
+          onPressed: () async => isPicker ? controller.text = await TimePicker.selectTime(context) : controller.clear(),
         ),
       ),
     );
   }
+}
+
+OutlineInputBorder _customBorder({double radius = 30, double width = 2, @required Color color}) {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(radius),
+    borderSide: BorderSide(width: width, color: color),
+  );
 }

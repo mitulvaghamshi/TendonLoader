@@ -29,13 +29,14 @@ dependencies:
   flutter_blue: ^0.7.3
   bluetooth_enable: ^0.1.1
   cupertino_icons: ^1.0.0
-  numberpicker: ^2.0.0
+  numberpicker: ^2.0.1
   path_provider: ^2.0.1
   syncfusion_flutter_charts: ^18.4.47
   syncfusion_flutter_xlsio: ^18.4.47-beta
   firebase_auth: ^1.0.1
   google_sign_in: ^5.0.0
   local_auth: ^1.1.0
+  firebase_analytics: ^7.1.1
 
 dev_dependencies:
   flutter_test:

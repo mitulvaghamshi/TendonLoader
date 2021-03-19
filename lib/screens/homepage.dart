@@ -6,8 +6,11 @@ import 'package:tendon_loader/screens/bluetooth/debug.dart';
 import 'package:tendon_loader/screens/bluetooth/device_scanner.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
+import 'package:tendon_loader/screens/login/signin.dart';
+import 'package:tendon_loader/screens/login/signup.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
+import 'package:tendon_loader/utils/location.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/';
@@ -23,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     Bluetooth.instance.sleep();
+    Locator.dispose();
     super.dispose();
   }
 
@@ -42,6 +46,14 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.settings_rounded),
             onPressed: () => Navigator.pushNamed(context, Debug.routeName),
+          ),
+          IconButton(
+            icon: Icon(Icons.login_rounded),
+            onPressed: () => Navigator.pushNamed(context, SignIn.routeName),
+          ),
+          IconButton(
+            icon: Icon(Icons.app_registration),
+            onPressed: () => Navigator.pushNamed(context, SignUp.routeName),
           ),
         ],
       ),

@@ -4,6 +4,8 @@ import 'package:tendon_loader/screens/exercise_mode/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
+import 'package:tendon_loader/screens/login/signin.dart';
+import 'package:tendon_loader/screens/login/signup.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 
 void main() => runApp(TendonLoader());
@@ -21,12 +23,14 @@ class TendonLoader extends StatelessWidget {
       ),
       initialRoute: HomePage.routeName,
       routes: {
+        Debug.routeName: (_) => Debug(),
         HomePage.routeName: (_) => HomePage(),
         LiveData.routeName: (_) => LiveData(),
+        MVCTesting.routeName: (_) => MVCTesting(),
         NewExercise.routeName: (_) => NewExercise(),
         ExerciseMode.routeName: (_) => ExerciseMode(),
-        MVCTesting.routeName: (_) => MVCTesting(),
-        Debug.routeName: (_) => Debug(),
+        SignIn.routeName: (_) => SignIn(),
+        SignUp.routeName: (_) => SignUp(),
       },
     );
   }

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/custom_button.dart';
-import 'package:tendon_loader/components/custom_textfield.dart';
+import 'package:tendon_loader/components/custom_formfield.dart';
 import 'package:tendon_loader/screens/exercise_mode/exercise_mode.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
+import 'package:tendon_loader/utils/validator.dart';
 
 class NewExercise extends StatefulWidget {
+  const NewExercise({Key key});
+
   static const name = ExerciseMode.name;
   static const routeName = '/newExercise';
-
-  const NewExercise({Key key});
 
   @override
   _NewExerciseState createState() => _NewExerciseState();
@@ -76,32 +77,47 @@ class _NewExerciseState extends State<NewExercise> {
                   ),
                 ),
                 // const Text('* All fields are required.', style: const TextStyle(color: Colors.red), textAlign: TextAlign.right),
-                CustomTextField(
-                  hint: 'Target Load (kg)',
-                  helper: '~70% of last recorded MVC test',
+                CustomFormField(
+                  label: 'Target Load',
                   controller: _ctrlTargetLoad,
+                  hint: 'Target Load (kg) e.g. 6.5',
+                  keyboardType: TextInputType.number,
+                  desc: '~70% of last recorded MVC test',
+                  validator: Validator.validateTargetLoad,
                 ),
-                CustomTextField(
+                CustomFormField(
                   isPicker: true,
+                  label: 'Hold time',
                   hint: 'Hold time (sec)',
-                  helper: 'Amount of time you can keep holding at target load',
                   controller: _ctrlHoldTime,
+                  keyboardType: TextInputType.number,
+                  validator: Validator.validateHoldTime,
+                  desc: 'Amount of time you can keep holding at target load',
                 ),
-                CustomTextField(
+                CustomFormField(
                   isPicker: true,
+                  label: 'Rest time',
                   hint: 'Rest time (sec)',
-                  helper: 'Amount of time you can rest after every rep',
                   controller: _ctrlRestTime,
+                  keyboardType: TextInputType.number,
+                  validator: Validator.validateRestTime,
+                  desc: 'Amount of time you can rest after every rep',
                 ),
-                CustomTextField(
-                  hint: 'Sets (#)',
-                  helper: 'Number of total sets',
+                CustomFormField(
+                  label: 'Sets',
                   controller: _ctrlSets,
+                  hint: 'Sets (#) e.g. 5',
+                  desc: 'Number of total sets',
+                  validator: Validator.validateSets,
+                  keyboardType: TextInputType.number,
                 ),
-                CustomTextField(
+                CustomFormField(
+                  label: 'Reps',
                   hint: 'Reps (#)',
-                  helper: 'Number of reps to perform in each set',
                   controller: _ctrlReps,
+                  validator: Validator.validateReps,
+                  keyboardType: TextInputType.number,
+                  desc: 'Number of reps to perform in each set',
                 ),
                 // Text('* All fields are required.', style: const TextStyle(color: Colors.red), textAlign: TextAlign.left),
                 const SizedBox(height: 30),

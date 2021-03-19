@@ -7,58 +7,76 @@ import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/location.dart';
 
 class DeviceScanner extends StatelessWidget {
-  DeviceScanner() {
+  const DeviceScanner({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     Location.instance.serviceEnabled().then(Locator.sink.add);
+    return ConnectedDeviceTile();
   }
+}
+
+class ConnectedDeviceTile extends StatelessWidget {
+  const ConnectedDeviceTile({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<BluetoothDevice>>(
       initialData: [],
       stream: Stream.fromFuture(FlutterBlue.instance.connectedDevices),
-      builder: (_, snapshot) {
-        if (snapshot.data.isNotEmpty) return DisconnectTile();
-        return StreamBuilder<BluetoothState>(
-          stream: FlutterBlue.instance.state,
-          initialData: BluetoothState.unknown,
-          builder: (_, snapshot) {
-            if (snapshot.data == BluetoothState.on) {
-              return StreamBuilder<bool>(
-                initialData: false,
-                stream: Locator.stream,
-                builder: (_, snapshot) {
-                  if (snapshot.data) {
-                    return StreamBuilder<bool>(
-                      initialData: false,
-                      stream: FlutterBlue.instance.isScanning,
-                      builder: (_, snapshot) {
-                        if (!snapshot.data) {
-                          return StreamBuilder<List<ScanResult>>(
-                            initialData: [],
-                            stream: FlutterBlue.instance.scanResults,
-                            builder: (_, snapshot) {
-                              if (snapshot.data.isNotEmpty) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: snapshot.data.map((r) => DeviceTile(result: r)).toList(),
-                                );
-                              }
-                              return StartScanTile();
-                            },
-                          );
-                        }
-                        return StopScanTile();
-                      },
-                    );
-                  }
-                  return EnableLocationTile();
-                },
-              );
-            }
-            return EnableBluetoothTile();
-          },
-        );
-      },
+      builder: (_, snapshot) => snapshot.data.isNotEmpty ? DisconnectTile() : BluetoothTile(),
+    );
+  }
+}
+
+class BluetoothTile extends StatelessWidget {
+  const BluetoothTile({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<BluetoothState>(
+      initialData: BluetoothState.unknown,
+      stream: FlutterBlue.instance.state,
+      builder: (_, snapshot) => snapshot.data == BluetoothState.off ? EnableBluetoothTile() : LocationTile(),
+    );
+  }
+}
+
+class LocationTile extends StatelessWidget {
+  const LocationTile({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<bool>(
+      initialData: false,
+      stream: Locator.stream,
+      builder: (_, snapshot) => snapshot.data ? ScanResultTile() : EnableLocationTile(),
+    );
+  }
+}
+
+class ScanResultTile extends StatelessWidget {
+  const ScanResultTile({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<ScanResult>>(
+      initialData: [],
+      stream: FlutterBlue.instance.scanResults,
+      builder: (_, snapshot) => snapshot.data.isNotEmpty ? DeviceTile(result: snapshot.data.first) : ScannerTile(),
+    );
+  }
+}
+
+class ScannerTile extends StatelessWidget {
+  const ScannerTile({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<bool>(
+      initialData: false,
+      stream: FlutterBlue.instance.isScanning,
+      builder: (_, snapshot) => snapshot.data ? StopScanTile() : StartScanTile(),
     );
   }
 }

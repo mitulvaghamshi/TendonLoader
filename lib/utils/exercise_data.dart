@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+@immutable
 class ExerciseData {
   const ExerciseData({this.sets, this.reps, this.holdTime, this.restTime, this.targetLoad});
 

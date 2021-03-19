@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+@immutable
 class ChartData {
   const ChartData({this.x, this.time, this.weight});
 
