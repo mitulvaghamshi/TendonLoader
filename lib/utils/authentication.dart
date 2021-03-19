@@ -13,10 +13,15 @@ class Authentication {
   }
 
   static Future<FirebaseApp> initializeFirebase(BuildContext context) async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
-    User user = FirebaseAuth.instance.currentUser;
-    if (user != null) {} // goto main screen (user info screen)
-    return firebaseApp;
+    return Future.delayed(Duration(seconds: 1), () async {
+      // FirebaseApp firebaseApp = await Firebase.initializeApp();
+      // User user = FirebaseAuth.instance.currentUser;
+      // if (user != null) {
+      //   print(user.displayName);
+      // } // goto main screen (user info screen)
+      // return firebaseApp;
+      return null;
+    });
   }
 
   static Future<User> signInWithGoogle(BuildContext context) async {

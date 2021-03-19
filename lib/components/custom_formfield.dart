@@ -1,18 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tendon_loader/components/custom_timepicker.dart';
 
-class CustomFormField extends StatelessWidget {
-  const CustomFormField({
-    Key key,
+class CustomTextField extends StatefulWidget {
+  const CustomTextField({
     this.desc = '',
-    @required this.hint,
     @required this.label,
     this.isPicker = false,
     this.isObscure = false,
     @required this.validator,
     @required this.controller,
+    this.hint = 'Enter value',
     @required this.keyboardType,
-  }) : super(key: key);
+  });
 
   final String hint;
   final String desc;
@@ -24,38 +25,55 @@ class CustomFormField extends StatelessWidget {
   final TextEditingController controller;
 
   @override
+  _CustomTextFieldState createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      readOnly: isPicker,
-      validator: validator,
-      controller: controller,
-      obscureText: isObscure,
-      keyboardType: keyboardType,
+      readOnly: widget.isPicker,
+      validator: widget.validator,
+      controller: widget.controller,
+      keyboardType: widget.keyboardType,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       style: const TextStyle(fontSize: 20, fontFamily: 'Georgia'),
       decoration: InputDecoration(
-        isDense: true,
-        hintText: hint,
-        labelText: label,
-        helperText: desc,
-        focusedBorder: _customBorder(color: Colors.blue),
-        enabledBorder: _customBorder(color: Colors.black),
-        errorBorder: _customBorder(color: Colors.redAccent),
-        focusedErrorBorder: _customBorder(color: Colors.red),
-        helperStyle: const TextStyle(color: Colors.lightBlue),
+        hintText: widget.hint,
+        labelText: widget.label,
+        helperText: widget.desc,
+        contentPadding: EdgeInsets.zero,
+        hintStyle: const TextStyle(color: Colors.black54),
+        labelStyle: const TextStyle(color: Colors.black87),
+        helperStyle: const TextStyle(color: Colors.black54),
         errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
-        suffix: IconButton(
-          icon: Icon(isPicker ? Icons.access_time_rounded : Icons.clear_rounded),
-          onPressed: () async => isPicker ? controller.text = await TimePicker.selectTime(context) : controller.clear(),
-        ),
+        border: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.black)),
+        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.blue)),
+        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.black)),
+        errorBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 3, color: Colors.redAccent)),
+        focusedErrorBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.red)),
+        // suffixIcon: pPrefIcon == Icons.person
+        //     ? IconButton(
+        //   onPressed: () => setState(() => _mUserCtlr.clear()),
+        //   icon: Icon(Icons.clear, color: Theme.of(context).accentColor),
+        // )
+        //     : IconButton(
+        //   color: Theme.of(context).accentColor,
+        //   onPressed: () => setState(() => _mObscure = !_mObscure),
+        //   icon: Icon(_mObscure ? Icons.visibility_off : Icons.visibility),
+        // )
       ),
     );
   }
 }
 
-OutlineInputBorder _customBorder({double radius = 30, double width = 2, @required Color color}) {
-  return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(radius),
-    borderSide: BorderSide(width: width, color: color),
-  );
-}
+/* suffixIcon: pPrefIcon == Icons.person
+      ? IconButton(
+    onPressed: () => setState(() => _mUserCtlr.clear()),
+    icon: Icon(Icons.clear, color: Theme.of(context).accentColor),
+  )
+      : IconButton(
+    color: Theme.of(context).accentColor,
+    onPressed: () => setState(() => _mObscure = !_mObscure),
+    icon: Icon(_mObscure ? Icons.visibility_off : Icons.visibility),
+  ),*/

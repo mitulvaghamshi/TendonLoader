@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/components/custom_formfield.dart';
+import 'package:tendon_loader/components/custom_textfield.dart';
+import 'package:tendon_loader/screens/login/signin.dart';
+import 'package:tendon_loader/utils/authentication.dart';
 import 'package:tendon_loader/utils/validator.dart';
 
 class SignUp extends StatefulWidget {
@@ -29,7 +32,7 @@ class _SignUpState extends State<SignUp> {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                CustomFormField(
+                CustomTextField(
                   label: 'Name',
                   hint: 'Enter your name',
                   controller: _nameController,
@@ -37,7 +40,7 @@ class _SignUpState extends State<SignUp> {
                   validator: Validator.validateName,
                 ),
                 const SizedBox(height: 20),
-                CustomFormField(
+                CustomTextField(
                   label: 'Email',
                   hint: 'Enter your email',
                   controller: _emailController,
@@ -45,7 +48,7 @@ class _SignUpState extends State<SignUp> {
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 20),
-                CustomFormField(
+                CustomTextField(
                   isObscure: true,
                   label: 'Password',
                   hint: 'Enter your password',
@@ -70,13 +73,13 @@ class _SignUpState extends State<SignUp> {
                     onPressed: () async {
                       setState(() => _isBusy = true);
                       if (_signUpFormKey.currentState.validate()) {
-                        // User user = await Authentication.registerUsingEmailPassword(
-                        //   context: context,
-                        //   name: _nameController.text,
-                        //   email: _emailController.text,
-                        //   password: _passwordController.text,
-                        // );
-                        // if (user != null) {} // push
+                        User user = await Authentication.registerUsingEmailPassword(
+                          context: context,
+                          name: _nameController.text,
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                        );
+                        if (user != null) {} // push
                       }
                       setState(() => _isBusy = false);
                     },
@@ -91,11 +94,24 @@ class _SignUpState extends State<SignUp> {
                 ),
           const SizedBox(height: 16.0),
           InkWell(
-            onTap: () {},
+            onTap: () => Navigator.push(context, _routeToSignInScreen()),
             child: const Text('Already have an account? Sign in', style: const TextStyle(letterSpacing: 0.5)),
           ),
         ],
       ),
+    );
+  }
+
+  Route _routeToSignInScreen() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => SignIn(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(-1.0, 0.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return SlideTransition(position: animation.drive(tween), child: child);
+      },
     );
   }
 }

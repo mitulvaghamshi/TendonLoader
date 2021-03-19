@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/custom_button.dart';
-import 'package:tendon_loader/components/custom_formfield.dart';
+import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/screens/exercise_mode/exercise_mode.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
 import 'package:tendon_loader/utils/validator.dart';
@@ -71,13 +71,13 @@ class _NewExerciseState extends State<NewExercise> {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 26,
+                    color: Colors.blue,
                     fontFamily: 'Georgia',
-                    color: Colors.black54,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 // const Text('* All fields are required.', style: const TextStyle(color: Colors.red), textAlign: TextAlign.right),
-                CustomFormField(
+                CustomTextField(
                   label: 'Target Load',
                   controller: _ctrlTargetLoad,
                   hint: 'Target Load (kg) e.g. 6.5',
@@ -85,7 +85,7 @@ class _NewExerciseState extends State<NewExercise> {
                   desc: '~70% of last recorded MVC test',
                   validator: Validator.validateTargetLoad,
                 ),
-                CustomFormField(
+                CustomTextField(
                   isPicker: true,
                   label: 'Hold time',
                   hint: 'Hold time (sec)',
@@ -94,7 +94,7 @@ class _NewExerciseState extends State<NewExercise> {
                   validator: Validator.validateHoldTime,
                   desc: 'Amount of time you can keep holding at target load',
                 ),
-                CustomFormField(
+                CustomTextField(
                   isPicker: true,
                   label: 'Rest time',
                   hint: 'Rest time (sec)',
@@ -103,7 +103,7 @@ class _NewExerciseState extends State<NewExercise> {
                   validator: Validator.validateRestTime,
                   desc: 'Amount of time you can rest after every rep',
                 ),
-                CustomFormField(
+                CustomTextField(
                   label: 'Sets',
                   controller: _ctrlSets,
                   hint: 'Sets (#) e.g. 5',
@@ -111,7 +111,7 @@ class _NewExerciseState extends State<NewExercise> {
                   validator: Validator.validateSets,
                   keyboardType: TextInputType.number,
                 ),
-                CustomFormField(
+                CustomTextField(
                   label: 'Reps',
                   hint: 'Reps (#)',
                   controller: _ctrlReps,

@@ -6,6 +6,7 @@ import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/login/signin.dart';
 import 'package:tendon_loader/screens/login/signup.dart';
+import 'package:tendon_loader/screens/login2.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 
 void main() => runApp(TendonLoader());
@@ -21,8 +22,9 @@ class TendonLoader extends StatelessWidget {
         primaryColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: HomePage.routeName,
+      initialRoute: SignIn.routeName,
       routes: {
+        '/home' : (_) => LoginScreen(),
         Debug.routeName: (_) => Debug(),
         HomePage.routeName: (_) => HomePage(),
         LiveData.routeName: (_) => LiveData(),

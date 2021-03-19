@@ -17,7 +17,7 @@ class Validator {
     return null;
   }
 
-  static String validateTargetLoad(String value) {}
+  static String validateTargetLoad(String value) {return 'always error';}
   static String validateHoldTime(String value) {}
   static String validateRestTime(String value) {}
   static String validateSets(String value) {}
