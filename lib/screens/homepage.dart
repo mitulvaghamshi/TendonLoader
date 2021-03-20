@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_listtile.dart';
-import 'package:tendon_loader/screens/bluetooth/debug.dart';
 import 'package:tendon_loader/screens/bluetooth/device_scanner.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
-import 'package:tendon_loader/screens/login/signin.dart';
-import 'package:tendon_loader/screens/login/signup.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/location.dart';
@@ -41,21 +38,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(HomePage.name),
-        actions: [
-          IconButton(icon: Icon(Icons.info_outline_rounded), onPressed: () => aboutDialog(context)),
-          IconButton(
-            icon: Icon(Icons.settings_rounded),
-            onPressed: () => Navigator.pushNamed(context, Debug.routeName),
-          ),
-          IconButton(
-            icon: Icon(Icons.login_rounded),
-            onPressed: () => Navigator.pushNamed(context, SignIn.routeName),
-          ),
-          IconButton(
-            icon: Icon(Icons.app_registration),
-            onPressed: () => Navigator.pushNamed(context, SignUp.routeName),
-          ),
-        ],
+        actions: [IconButton(icon: Icon(Icons.info_outline_rounded), onPressed: () => aboutDialog(context))],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -67,7 +50,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                const CustomImage(name: 'ic_launcher-playstore.webp', scale: 0.7),
+                const CustomImage(name: 'ic_launcher-playstore.png', scale: 0.7),
                 CustomTile(
                   context: context,
                   name: LiveData.name,

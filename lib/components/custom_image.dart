@@ -5,7 +5,7 @@ class CustomImage extends StatelessWidget {
     this.scale = 0.6,
     this.zeroPad = false,
     this.dir = 'assets/images/',
-    this.name = 'ic_launcher.webp',
+    this.name = 'ic_launcher-playstore.png',
   }) : this.path = dir + name;
 
   final String dir;

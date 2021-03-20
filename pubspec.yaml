@@ -55,21 +55,14 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/images/ic_launcher.webp
-    - assets/images/ic_launcher-playstore.webp
-    - assets/images/enable_bluetooth.webp
-    - assets/images/enable_device.webp
-    - assets/images/enable_location.webp
-    - assets/images/login_bg.jpg
-    - assets/images/avater_01.png
-    - assets/images/loading_01.gif
-    - assets/images/loading_02.gif
     - assets/database/ifriends.s3db
-    - assets/images/img_avatar3.jpg
-    - assets/images/screen_bg2.png
-    - assets/images/home_bg.jpg
-    - assets/images/loading_01.gif
-    - assets/images/loading_02.gif
+
+    - assets/images/ic_launcher.png
+    - assets/images/ic_launcher-playstore.png
+    - assets/images/enable_bluetooth.png
+    - assets/images/enable_device.png
+    - assets/images/enable_location.png
+    - assets/images/male_avatar.webp
 
   # To add assets to your application, add an assets section, like this:
   # assets:

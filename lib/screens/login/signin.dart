@@ -17,11 +17,11 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> with TickerProviderStateMixin {
-  final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
+  final TextEditingController _emailCtrl = TextEditingController();
   final _signInFormKey = GlobalKey<FormState>();
   AnimationController _rotateCtrl;
-  bool _isBusy = false;
+  bool _busy = false;
   User _user;
 
   @override
@@ -30,11 +30,11 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
     _rotateCtrl = AnimationController(vsync: this, duration: Duration(milliseconds: 1000))
       ..addStatusListener((status) async {
         if (_rotateCtrl.status == AnimationStatus.completed) {
-          if (_user != null) {
+          if (true/*_user != null*/) {
             Navigator.pushReplacementNamed(context, HomePage.routeName);
           } else {
             _rotateCtrl.reverse();
-            _isBusy = false;
+            _busy = false;
           }
         }
       });
@@ -46,34 +46,21 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Route _routeToSignInScreen() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => SignUp(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(-1.0, 0.0);
-        var end = Offset.zero;
-        var curve = Curves.ease;
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        return SlideTransition(position: animation.drive(tween), child: child);
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tendon Loader'), centerTitle: true),
+      appBar: AppBar(title: const Text('Tendon Loader - Login'), centerTitle: true),
       body: FutureBuilder(
-        future: Authentication.initializeFirebase(context),
+        future: Authentication.init(),
         builder: (_, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) return _buildLoginBody();
-          return const Center(child: const CircularProgressIndicator());
+          if (snapshot.connectionState == ConnectionState.done) return _buildSignInBody();
+          return const Center(child: const CustomImage(zeroPad: true));
         },
       ),
     );
   }
 
-  SingleChildScrollView _buildLoginBody() {
+  SingleChildScrollView _buildSignInBody() {
     return SingleChildScrollView(
       child: Card(
         elevation: 16,
@@ -89,7 +76,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                 child: const CircleAvatar(
                   radius: 80,
                   backgroundColor: Colors.blueAccent,
-                  child: const ClipOval(child: const CustomImage(name: 'img_avatar3.jpg', zeroPad: true)),
+                  child: const ClipOval(child: const CustomImage(name: 'male_avatar.webp', zeroPad: true)),
                 ),
               ),
               const SizedBox(height: 30),
@@ -98,9 +85,9 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                 child: Column(
                   children: [
                     CustomTextField(
-                      label: 'Email',
+                      label: 'Username',
                       controller: _emailCtrl,
-                      hint: 'Enter your email',
+                      hint: 'Enter your username',
                       validator: Validator.validateEmail,
                       keyboardType: TextInputType.emailAddress,
                     ),
@@ -112,54 +99,52 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin {
                       keyboardType: TextInputType.text,
                       validator: Validator.validatePassword,
                     ),
-                    Row(
-                      children: <Widget>[
-                        Checkbox(value: true, onChanged: (newValue) {}),
-                        const Text('Keep me logged in.'),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    GestureDetector(
-                      onTap: () => Navigator.push(context, _routeToSignInScreen()),
-                      child: const Text(
-                        'Don\'t have an account? Sign up',
-                        style: const TextStyle(letterSpacing: 0.5, color: Colors.blue),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    GestureDetector(
-                      onTap: () async {
-                        User user = await Authentication.signInWithGoogle(context);
-                        if (user != null) print(user.email);
-                      },
-                      child: const Text(
-                        'Sign in with Google',
-                        style: const TextStyle(letterSpacing: 1.5, color: Colors.red, fontSize: 16),
-                      ),
-                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              Row(
+                children: <Widget>[
+                  Checkbox(value: true, onChanged: (newValue) {}),
+                  const Text('Keep me logged in.'),
+                ],
+              ),
+              GestureDetector(
+                onTap: () => Navigator.pushReplacementNamed(context, SignUp.routeName),
+                child: const Text(
+                  'Don\'t have an account? Sign up',
+                  style: const TextStyle(letterSpacing: 0.5, color: Colors.blue, height: 5),
+                ),
+              ),
+              // const SizedBox(height: 30),
+              // GestureDetector(
+              //   onTap: () async {
+              //     User user = await Authentication.signInWithGoogle(context);
+              //     if (user != null) print(user.email);
+              //   },
+              //   child: const Text(
+              //     'Sign in with Google',
+              //     style: const TextStyle(letterSpacing: 1.5, color: Colors.red, fontSize: 16),
+              //   ),
+              // ),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   RotationTransition(
                     turns: Tween(begin: 0.0, end: 1.0).animate(_rotateCtrl),
                     child: FloatingActionButton(
-                      heroTag: 'login_tag',
+                      heroTag: 'sign-in-tag',
                       child: Icon(Icons.send),
-                      backgroundColor: Colors.blue,
                       onPressed: () async {
-                        if (_signInFormKey.currentState.validate() && !_isBusy) {
-                          _user = await Authentication.signInUsingEmailPassword(
-                            context: context,
-                            email: _emailCtrl.text,
-                            password: _passwordCtrl.text,
-                          );
+                        // if (_signInFormKey.currentState.validate() && !_busy) {
+                          _busy = true;
                           _rotateCtrl.forward();
-                          _isBusy = true;
-                        }
+                          // _user = await Authentication.signIn(
+                          //   context: context,
+                          //   email: _emailCtrl.text,
+                          //   password: _passwordCtrl.text,
+                          // );
+                        // }
                       },
                     ),
                   ),

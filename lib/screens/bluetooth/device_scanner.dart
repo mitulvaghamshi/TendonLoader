@@ -190,7 +190,7 @@ class StartScanTile extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const CustomImage(name: 'enable_device.webp'),
+        const CustomImage(name: 'enable_device.png'),
         const Text(
           'Activate your device by pressing the button, then press scan to find the device',
           textAlign: TextAlign.center,
@@ -215,7 +215,7 @@ class EnableLocationTile extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const CustomImage(name: 'enable_location.webp'),
+        const CustomImage(name: 'enable_location.png'),
         const Text(
           'This app uses bluetooth to communicate with your Progressor.',
           textAlign: TextAlign.center,
@@ -253,7 +253,7 @@ class EnableBluetoothTile extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const CustomImage(name: 'enable_bluetooth.webp'),
+        const CustomImage(name: 'enable_bluetooth.png'),
         const Text(
           'This app needs Bluetooth to communicate with your Progressor. Please enable Bluetooth on your device.',
           textAlign: TextAlign.center,

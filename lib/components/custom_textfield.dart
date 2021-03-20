@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tendon_loader/components/custom_timepicker.dart';
+import 'package:tendon_loader/components/custom_picker.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   const CustomTextField({
     this.desc = '',
     @required this.label,
@@ -25,44 +24,61 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
 
   @override
+  _CustomTextFieldState createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  bool _isObscure = true;
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      readOnly: isPicker,
-      validator: validator,
-      controller: controller,
-      keyboardType: keyboardType,
+      readOnly: widget.isPicker,
+      validator: widget.validator,
+      controller: widget.controller,
+      keyboardType: widget.keyboardType,
+      obscureText: widget.isObscure ? _isObscure : false,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       style: const TextStyle(fontSize: 20, fontFamily: 'Georgia'),
       decoration: InputDecoration(
-        hintText: hint,
-        labelText: label,
-        helperText: desc,
-        contentPadding: EdgeInsets.zero,
+        hintText: widget.hint,
+        border: _buildBorder(),
+        labelText: widget.label,
+        helperText: widget.desc,
+        suffix: _buildSuffix(context),
+        enabledBorder: _buildBorder(),
+        focusedBorder: _buildBorder(color: Colors.blue),
+        contentPadding: const EdgeInsets.only(left: 10),
         hintStyle: const TextStyle(color: Colors.black54),
         labelStyle: const TextStyle(color: Colors.black87),
         helperStyle: const TextStyle(color: Colors.black54),
+        focusedErrorBorder: _buildBorder(color: Colors.red),
+        errorBorder: _buildBorder(width: 3, color: Colors.redAccent),
         errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
-        border: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.black)),
-        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.blue)),
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.black)),
-        errorBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 3, color: Colors.redAccent)),
-        focusedErrorBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.red)),
-        suffix: IconButton(
-          icon: Icon(isPicker ? Icons.timer : Icons.clear_rounded),
-          onPressed: () async => isPicker ? controller.text = await TimePicker.selectTime(context) : controller.clear(),
-        ),
       ),
     );
   }
-}
 
-/* suffixIcon: pPrefIcon == Icons.person
-      ? IconButton(
-    onPressed: () => setState(() => _mUserCtlr.clear()),
-    icon: Icon(Icons.clear, color: Theme.of(context).accentColor),
-  )
-      : IconButton(
-    color: Theme.of(context).accentColor,
-    onPressed: () => setState(() => _mObscure = !_mObscure),
-    icon: Icon(_mObscure ? Icons.visibility_off : Icons.visibility),
-  ),*/
+  Row _buildSuffix(BuildContext context) {
+    final List<IconButton> buttons = [];
+    if (widget.isPicker) {
+      buttons.add(IconButton(
+        icon: Icon(Icons.timer_rounded),
+        onPressed: () async => widget.controller.text = await TimePicker.selectTime(context),
+      ));
+    } else if (widget.isObscure) {
+      buttons.add(IconButton(
+        onPressed: () => setState(() => _isObscure = !_isObscure),
+        icon: Icon(_isObscure ? Icons.visibility_rounded : Icons.visibility_off_rounded),
+      ));
+    }
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: buttons..add(IconButton(icon: Icon(Icons.clear_rounded), onPressed: () => widget.controller.clear())),
+    );
+  }
+
+  UnderlineInputBorder _buildBorder({double width = 2, Color color = Colors.black}) {
+    return UnderlineInputBorder(borderSide: BorderSide(width: width, color: color));
+  }
+}
