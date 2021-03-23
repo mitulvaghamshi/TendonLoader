@@ -15,13 +15,9 @@ class CustomImage extends StatelessWidget {
   final bool zeroPad;
 
   @override
-  Widget build(BuildContext context) {
-    if (zeroPad)
-      return Image.asset(path);
-    else
-      return Padding(
-        padding: const EdgeInsets.all(16),
-        child: Image.asset(path, height: MediaQuery.of(context).size.width * scale),
-      );
-  }
+  Widget build(BuildContext context) => zeroPad
+      ? Image.asset(path)
+      : Padding(
+          padding: const EdgeInsets.all(16),
+          child: Image.asset(path, height: MediaQuery.of(context).size.width * scale));
 }

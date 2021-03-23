@@ -5,7 +5,7 @@ import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/login/signin.dart';
 import 'package:tendon_loader/utils/authentication.dart';
-import 'package:tendon_loader/utils/validator.dart';
+import 'package:tendon_loader/utils/validator.dart' show ValidateCredentialMixin;
 
 class SignUp extends StatefulWidget {
   const SignUp({Key key}) : super(key: key);
@@ -16,11 +16,11 @@ class SignUp extends StatefulWidget {
   _SignUpState createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
+class _SignUpState extends State<SignUp> with TickerProviderStateMixin, ValidateCredentialMixin {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final _signUpFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _signUpFormKey = GlobalKey<FormState>();
   AnimationController _rotateCtrl;
   bool _busy = false;
   User _user;
@@ -63,6 +63,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
 
   SingleChildScrollView _buildSignUpBody() {
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       child: Card(
         elevation: 16,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -90,13 +91,13 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                       hint: 'Enter your name',
                       controller: _nameController,
                       keyboardType: TextInputType.name,
-                      validator: Validator.validateName,
+                      validator: validateName,
                     ),
                     CustomTextField(
                       label: 'Username',
                       hint: 'Enter your username',
                       controller: _emailController,
-                      validator: Validator.validateEmail,
+                      validator: validateEmail,
                       keyboardType: TextInputType.emailAddress,
                     ),
                     CustomTextField(
@@ -105,7 +106,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
                       hint: 'Enter your password',
                       controller: _passwordController,
                       keyboardType: TextInputType.text,
-                      validator: Validator.validatePassword,
+                      validator: validatePassword,
                     ),
                   ],
                 ),

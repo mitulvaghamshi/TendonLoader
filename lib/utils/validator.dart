@@ -1,7 +1,7 @@
-class Validator {
-  static String validateName(String name) => name.isEmpty ? 'Name can\'t be empty' : null;
+mixin ValidateCredentialMixin {
+  String validateName(String name) => name.isEmpty ? 'Name can\'t be empty' : null;
 
-  static String validateEmail(String email) {
+  String validateEmail(String email) {
     RegExp emailRegExp = RegExp(
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
     if (email.isEmpty)
@@ -10,16 +10,24 @@ class Validator {
     return null;
   }
 
-  static String validatePassword(String password) {
+  String validatePassword(String password) {
     if (password.isEmpty)
       return 'Password can\'t be empty';
     else if (password.length < 6) return 'Enter a password with length at least 6';
     return null;
   }
+}
 
-  static String validateTargetLoad(String value) {return 'always error';}
-  static String validateHoldTime(String value) {}
-  static String validateRestTime(String value) {}
-  static String validateSets(String value) {}
-  static String validateReps(String value) {}
+mixin ValidateExerciseDataMixin {
+  String validateTargetLoad(String value) {
+    return 'always error';
+  }
+
+  String validateHoldTime(String value) {}
+
+  String validateRestTime(String value) {}
+
+  String validateSets(String value) {}
+
+  String validateReps(String value) {}
 }

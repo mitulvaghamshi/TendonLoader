@@ -10,10 +10,10 @@ import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/location.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key key}) : super(key: key);
+
   static const routeName = '/homepage';
   static const name = 'Tendon Loader';
-
-  const HomePage({Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -21,16 +21,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  void dispose() {
-    Bluetooth.instance.sleep();
-    Locator.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    FlutterBlue.instance?.connectedDevices?.then((value) => value?.forEach(Bluetooth.instance?.init));
   }
 
   @override
-  void initState() {
-    super.initState();
-    FlutterBlue.instance.connectedDevices?.then((value) => value?.forEach(Bluetooth.instance.init));
+  void dispose() {
+    Bluetooth.instance?.sleep();
+    Locator.dispose();
+    super.dispose();
   }
 
   @override
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(HomePage.name),
-        actions: [IconButton(icon: Icon(Icons.info_outline_rounded), onPressed: () => aboutDialog(context))],
+        actions: [IconButton(icon: Icon(Icons.info_outline_rounded), onPressed: aboutDialog)],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -96,13 +96,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void aboutDialog(BuildContext context) {
+  void aboutDialog() {
     showAboutDialog(
       context: context,
-      applicationIcon: Icon(Icons.account_circle_rounded),
-      applicationLegalese: 'Application Legalese',
-      applicationName: HomePage.name,
       applicationVersion: '1.0.0',
+      applicationName: HomePage.name,
+      applicationLegalese: 'Application Legalese',
+      applicationIcon: Icon(Icons.account_circle_rounded),
       children: [
         Text('Mitul Vaghamshi'),
         Text('mitulvaghmashi@gmail.com'),

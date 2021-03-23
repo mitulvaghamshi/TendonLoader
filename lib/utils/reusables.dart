@@ -22,12 +22,3 @@ BorderRadius mBorderRadiusTlTr = BorderRadius.only(
     topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0));
 
 // Colors.primaries[_counter % Colors.primaries.length];
-
-/* AppBar _buildAppBar() => AppBar(
-      backgroundColor: Colors.white,
-      title: Text('Krishna Ent. Pvt. Ltd.'),
-      actions: <Widget>[
-        IconButton(icon: Icon(Icons.clear), onPressed: () => exit(0))
-      ],
-      leading: IconButton(icon: Icon(Icons.apps), onPressed: () {})); */
-

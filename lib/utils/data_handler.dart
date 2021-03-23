@@ -6,16 +6,25 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/chart_data.dart';
 import 'package:tendon_loader/utils/create_xlsx.dart';
-import 'package:tendon_loader/utils/exercise_data.dart';
 
-class DataHandler {
+class DataHandler with CreateXLSX {
+  DataHandler({this.targetLoad, this.isMVC = false}) {
+    if (targetLoad != null) {
+      this._lineData = [ChartData(x: 0, weight: targetLoad), ChartData(x: 2, weight: targetLoad)];
+    }
+    Bluetooth.instance?.startNotify();
+    Bluetooth.instance?.listen(dataListener);
+  }
+
   final StreamController<double> _weightCtrl = StreamController<double>();
   final StreamController<int> _timeCtrl = StreamController<int>();
   final List<ChartData> _graphData = [const ChartData(weight: 0)];
   final Stopwatch _stopwatch = Stopwatch();
+  final bool isMVC;
   ChartSeriesController _graphDataCtrl;
-  final List<ChartData> lineData;
-  CreateXLSX _xlsx;
+  ChartSeriesController _lineDataCtrl;
+  List<ChartData> _lineData;
+  double targetLoad;
   Timer _timer;
 
   Stream<int> get timeStream => _timeCtrl.stream;
@@ -26,50 +35,43 @@ class DataHandler {
 
   StreamSink<double> get weightSink => _weightCtrl.sink;
 
-  DataHandler({this.lineData, ExerciseData exerciseData}) {
-    Bluetooth.instance.startNotify();
-    Bluetooth.instance.listen(valueListener);
-    _xlsx = CreateXLSX(isExercise: lineData != null, exerciseData: exerciseData);
-  }
-
-  void init() {
-    _xlsx.init();
-    _xlsx.fillInfo();
-  }
-
-  void stop() {
+  Future<void> stop() async {
     if (_timer?.isActive ?? false) _timer.cancel();
+    if (isMVC) await Bluetooth.instance.stopWeightMeas();
   }
 
-  Future start() async {
+  Future<void> start() async {
     _stopwatch.start();
     if (!(_timer?.isActive ?? false)) {
-      await Bluetooth.instance.startWeightMeas();
+      await Bluetooth.instance?.startWeightMeas();
       _timer = Timer.periodic(const Duration(seconds: 1), (_) {
         timeSink.add(_stopwatch.elapsedMilliseconds ~/ 1000);
       });
     }
   }
 
-  Future reset() async {
-    stop();
+  Future<void> reset() async {
+    if (_timer?.isActive ?? false) _timer.cancel();
     _stopwatch.reset();
     timeSink.add(0);
     weightSink.add(0);
-    await Bluetooth.instance.stopWeightMeas();
+    await Bluetooth.instance?.stopWeightMeas();
     _graphData.insert(0, const ChartData(weight: 0));
     _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
-    await _xlsx.save();
+    if (isMVC) {
+      _lineData.insertAll(0, [const ChartData(x: 0, weight: 0), const ChartData(x: 2, weight: 0)]);
+      _lineDataCtrl.updateDataSource(updatedDataIndexes: [0, 1]);
+    }
   }
 
-  Future dispose() async {
+  Future<void> dispose() async {
     await reset();
-    await Bluetooth.instance.stopNotify();
+    await Bluetooth.instance?.stopNotify();
     if (_timeCtrl.isClosed) _timeCtrl.close();
     if (_weightCtrl.isClosed) _weightCtrl.close();
   }
 
-  void valueListener(List<int> _data) {
+  void dataListener(List<int> _data) {
     int _counter = 0, _time = 0, _timeSum = 0;
     double _avgTime = 0, _weight = 0, _avgWeight = 0, _weightSum = 0;
     if (_data.isNotEmpty && _data[0] == Bluetooth.RES_WEIGHT_MEAS) {
@@ -78,12 +80,17 @@ class DataHandler {
             Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
         _timeSum += _time =
             Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
-        _xlsx.add(ChartData(weight: _weight, time: _time));
+        addToList(ChartData(weight: _weight, time: _time));
         if (_counter++ == 8) {
           _avgTime = double.parse(((_timeSum / 8) / 1000000.0).toStringAsFixed(2));
           _avgWeight = double.parse((_weightSum.abs() / 8.0).toStringAsFixed(2));
           _graphData.insert(0, ChartData(weight: _avgWeight));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
+          if (isMVC && _avgWeight >= targetLoad) {
+            targetLoad = _avgWeight;
+            _lineData.insertAll(0, [ChartData(x: 0, weight: targetLoad), ChartData(x: 2, weight: targetLoad)]);
+            _lineDataCtrl.updateDataSource(updatedDataIndexes: [0, 1]);
+          }
           if (!_weightCtrl.isClosed) _weightCtrl.add(_avgWeight);
           _counter = 0;
           _timeSum = 0;
@@ -97,8 +104,11 @@ class DataHandler {
     List<ChartSeries<ChartData, int>> components = [
       ColumnSeries<ChartData, int>(
         width: 0.9,
+        borderWidth: 1,
+        color: Colors.blue,
         animationDuration: 0,
         dataSource: _graphData,
+        borderColor: Colors.black,
         xValueMapper: (data, _) => 1,
         yValueMapper: (data, _) => data.weight,
         dataLabelSettings: DataLabelSettings(
@@ -107,24 +117,19 @@ class DataHandler {
           labelAlignment: ChartDataLabelAlignment.bottom,
           textStyle: const TextStyle(fontSize: 56.0, fontWeight: FontWeight.bold),
         ),
-        gradient: const LinearGradient(
-          stops: const [0.4, 1],
-          end: Alignment.topCenter,
-          begin: Alignment.bottomCenter,
-          colors: const [Colors.blue, Colors.lightGreenAccent],
-        ),
         onRendererCreated: (controller) => _graphDataCtrl = controller,
         borderRadius: const BorderRadius.only(topLeft: const Radius.circular(20), topRight: const Radius.circular(20)),
       ),
     ];
-    if (lineData != null)
+    if (_lineData != null)
       components.add(LineSeries<ChartData, int>(
         width: 5,
         color: Colors.red,
         animationDuration: 0,
-        dataSource: lineData,
+        dataSource: _lineData,
         xValueMapper: (data, _) => data.x,
         yValueMapper: (data, _) => data.weight,
+        onRendererCreated: (controller) => _lineDataCtrl = controller,
       ));
     return components;
   }

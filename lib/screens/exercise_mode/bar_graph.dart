@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/components/countdown.dart';
-import 'package:tendon_loader/utils/chart_data.dart';
+import 'package:tendon_loader/utils/create_xlsx.dart';
 import 'package:tendon_loader/utils/data_handler.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
 
 class BarGraph extends StatefulWidget {
-  const BarGraph({Key key, @required this.exerciseData})
-      : assert(exerciseData != null, 'Exercise data required!'),
-        super(key: key);
+  const BarGraph({Key key, @required this.exerciseData}) : super(key: key);
 
   final ExerciseData exerciseData;
 
@@ -16,7 +14,7 @@ class BarGraph extends StatefulWidget {
   _BarGraphState createState() => _BarGraphState();
 }
 
-class _BarGraphState extends State<BarGraph> {
+class _BarGraphState extends State<BarGraph> with CreateXLSX {
   int _holdTime = 0;
   int _restTime = 0;
   int _currentSet = 1;
@@ -27,6 +25,53 @@ class _BarGraphState extends State<BarGraph> {
   DataHandler _handler;
   ExerciseData _exerciseData;
 
+  void _update() {
+    if (_holdTime == 0) {
+      _isHold = false;
+      _holdTime = _exerciseData.holdTime;
+    }
+    if (_restTime == 0) {
+      _isHold = true;
+      _restTime = _exerciseData.restTime;
+      if (_currentRep == _exerciseData.reps) {
+        if (_currentSet == _exerciseData.sets) {
+          _reset();
+        } else {
+          _rest();
+          _currentSet++;
+          _currentRep = 1;
+        }
+      } else {
+        _currentRep++;
+      }
+    }
+  }
+
+  Future<void> _reset() async {
+    _isRunning = false;
+    _holdTime = _restTime = 0;
+    _currentRep = _currentSet = 1;
+    await _handler.reset();
+  }
+
+  Future<void> _rest() async {
+    _handler.stop();
+    if (await CountDown.start(context,
+            duration: Duration(seconds: 15), title: 'SET OVER! REST!\nNew Set will\nstart in') ??
+        false) await _start();
+  }
+
+  Future<void> _start() async {
+    if (_isRunning) {
+      await _handler.start();
+    } else {
+      if (await CountDown.start(context) ?? false) {
+        _isRunning = true;
+        await _handler.start();
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -34,10 +79,7 @@ class _BarGraphState extends State<BarGraph> {
     _targetLoad = _exerciseData.targetLoad;
     _holdTime = _exerciseData.holdTime;
     _restTime = _exerciseData.restTime;
-    _handler = DataHandler(lineData: [
-      ChartData(x: 0, weight: _targetLoad),
-      ChartData(x: 2, weight: _targetLoad),
-    ], exerciseData: widget.exerciseData);
+    _handler = DataHandler(targetLoad: _targetLoad);
   }
 
   @override
@@ -61,7 +103,7 @@ class _BarGraphState extends State<BarGraph> {
               initialData: 0,
               stream: _handler.timeStream,
               builder: (_, snapshot) {
-                _update();
+                if (_isRunning) _update();
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -73,7 +115,7 @@ class _BarGraphState extends State<BarGraph> {
                       _isRunning
                           ? _isHold
                               ? 'Hold for: ${_holdTime--} s'
-                              : 'New Rep starts in: ${_restTime--} s'
+                              : 'Rest for: ${_restTime--} s'
                           : '---',
                       style: const TextStyle(fontSize: 20, color: Colors.deepOrange, fontWeight: FontWeight.bold),
                     ),
@@ -81,34 +123,25 @@ class _BarGraphState extends State<BarGraph> {
                 );
               },
             ),
-            const SizedBox(height: 10),
             StreamBuilder<double>(
               initialData: 0,
               stream: _handler.weightStream,
               builder: (_, snapshot) {
                 return Container(
-                  height: 60,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(20),
+                  margin: const EdgeInsets.symmetric(vertical: 20),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: snapshot.data >= _targetLoad ? Colors.green[400] : Colors.yellow[300],
+                    borderRadius: BorderRadius.circular(16),
+                    color: Color.lerp(Colors.yellow[300], Colors.green, snapshot.data / _targetLoad),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        'Set: $_currentSet of ${_exerciseData.sets}',
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Rep: $_currentRep of ${_exerciseData.reps}',
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                  child: Text(
+                    'Set: $_currentSet of ${_exerciseData.sets}   |   Rep: $_currentRep of ${_exerciseData.reps}',
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                 );
               },
             ),
-            const SizedBox(height: 20),
             Expanded(
               child: SfCartesianChart(
                 plotAreaBorderWidth: 0,
@@ -128,17 +161,17 @@ class _BarGraphState extends State<BarGraph> {
               children: [
                 FloatingActionButton(
                   onPressed: _start,
-                  heroTag: 'exercise-mode-start-btn',
+                  heroTag: 'start-btn',
                   child: const Icon(Icons.play_arrow_rounded),
                 ),
                 FloatingActionButton(
-                  onPressed: _stop,
-                  heroTag: 'exercise-mode-stop-btn',
+                  onPressed: _handler.stop,
+                  heroTag: 'stop-btn',
                   child: const Icon(Icons.stop_rounded),
                 ),
                 FloatingActionButton(
                   onPressed: _reset,
-                  heroTag: 'exercise-mode-reset-btn',
+                  heroTag: 'reset-btn',
                   child: const Icon(Icons.replay_rounded),
                 ),
               ],
@@ -147,65 +180,5 @@ class _BarGraphState extends State<BarGraph> {
         ),
       ),
     );
-  }
-
-  void _update() {
-    if (_isRunning) {
-      if (_holdTime == 0) {
-        _isHold = false;
-        _holdTime = _exerciseData.holdTime;
-      }
-      if (_restTime == 0) {
-        _isHold = true;
-        _restTime = _exerciseData.restTime;
-        if (_currentRep == _exerciseData.reps) {
-          if (_currentSet == _exerciseData.sets) {
-            _reset();
-          } else {
-            _rest();
-            _currentSet++;
-            _currentRep = 1;
-          }
-        } else {
-          _currentRep++;
-        }
-      }
-    }
-  }
-
-  void _stop() => _handler.stop();
-
-  Future _reset() async {
-    _holdTime = 0;
-    _restTime = 0;
-    _currentRep = 1;
-    _currentSet = 1;
-    _isRunning = false;
-    await _handler.reset();
-  }
-
-  Future _rest() async {
-    _stop();
-    await CountDown.start(
-      context,
-      duration: Duration(seconds: 15),
-      title: 'SET OVER! REST!\nNew Set will\nstart in',
-    ).then((value) async {
-      if (value ?? false) await _start();
-    });
-  }
-
-  Future _start() async {
-    if (_isRunning) {
-      await _handler.start();
-    } else {
-      await CountDown.start(context).then((value) async {
-        if (value ?? false) {
-          _isRunning = true;
-          _handler.init();
-          await _handler.start();
-        }
-      });
-    }
   }
 }

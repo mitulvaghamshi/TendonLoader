@@ -28,9 +28,12 @@ class Bluetooth {
   static const int CMD_ENTER_SLEEP = 110;
   static const int CMD_GET_BATTERY_VOLTAGE = 111;
 
-  static BluetoothDevice _mDevice; // Connected device
-  static BluetoothCharacteristic _mDataChar; // data receiver
-  static BluetoothCharacteristic _mControlChar; // data controller
+  static BluetoothDevice _device; // Connected device
+  static BluetoothCharacteristic _dataChar; // data receiver
+  static BluetoothCharacteristic _controlChar; // data controller
+
+  static bool _isBusy = false;
+  static bool _isWorking = false;
 
   const Bluetooth._();
 
@@ -38,48 +41,95 @@ class Bluetooth {
 
   static Bluetooth instance = Bluetooth._();
 
-  static BluetoothDevice get device => _mDevice;
+  static BluetoothDevice get device => _device;
 
-  void reset() => _mDevice = _mDataChar = _mControlChar = null;
+  void reset() {
+    _device = _dataChar = _controlChar = null;
+    _isBusy = false;
+  }
 
-  void listen(Function listener) => _mDataChar?.value?.listen(listener);
+  bool get waiting => _isBusy || _isWorking;
 
-  Future<void> enable() async => await BluetoothEnable.enableBluetooth;
+  void listen(Function listener) => _dataChar?.value?.listen(listener);
 
-  Future<void> stopScan() async => await FlutterBlue.instance.stopScan();
+  Future<void> enable() async {
+    if (!_isBusy) {
+      _isBusy = true;
+      await BluetoothEnable.enableBluetooth.then((_) => _isBusy = false);
+    }
+  }
 
-  Future<void> stopWeightMeas() async => await write(CMD_STOP_WEIGHT_MEAS);
+  Future<void> stopScan() async {
+    if (!_isBusy) {
+      _isBusy = true;
+      await FlutterBlue.instance.stopScan().then((_) => _isBusy = false);
+    }
+  }
 
-  Future<void> startWeightMeas() async => await write(CMD_START_WEIGHT_MEAS);
+  Future<void> stopNotify() async {
+    if (!_isBusy) {
+      _isBusy = true;
+      await _dataChar?.setNotifyValue(false)?.then((_) => _isBusy = false);
+    }
+  }
 
-  Future<void> stopNotify() async => await _mDataChar?.setNotifyValue(false);
+  Future<void> startNotify() async {
+    if (!_isBusy) {
+      _isBusy = true;
+      await _dataChar?.setNotifyValue(true)?.then((_) => _isBusy = false);
+    }
+  }
 
-  Future<void> startNotify() async => await _mDataChar?.setNotifyValue(true);
+  Future<void> stopWeightMeas() async {
+    if (_isWorking) {
+      _isWorking = false;
+      await write(CMD_STOP_WEIGHT_MEAS);
+    }
+  }
 
-  Future<void> write(int command) async => await _mControlChar?.write([command]);
+  Future<void> startWeightMeas() async {
+    if (!_isWorking) {
+      _isWorking = true;
+      await write(CMD_START_WEIGHT_MEAS);
+    }
+  }
 
-  Future<void> sleep() async => await write(CMD_ENTER_SLEEP).then((_) => reset());
+  Future<void> sleep() async {
+    await write(CMD_ENTER_SLEEP).then((_) => reset());
+  }
 
-  Future<void> disconnect() async => await _mDevice?.disconnect()?.then((_) => reset());
+  Future<void> write(int command) async {
+    if (!_isBusy) {
+      _isBusy = true;
+      await _controlChar?.write([command])?.then((_) => _isBusy = false);
+    }
+  }
+
+  Future<void> disconnect() async {
+    if (!_isBusy) {
+      _isBusy = true;
+      await _device?.disconnect()?.then((_) => reset());
+    }
+  }
 
   Future<void> startScan() async {
     await FlutterBlue.instance.startScan(
       timeout: Duration(seconds: 1),
       withDevices: [Guid(_serviceUuid)],
       withServices: [Guid(_serviceUuid)],
-    );
+    ).then((_) => _isBusy = false);
   }
 
   Future<void> connect(BluetoothDevice device) async {
-    await device?.connect(autoConnect: false)?.then((_) async => await init(device));
+    await device?.connect(autoConnect: false)?.then((_) async => await init(device))?.then((_) => _isBusy = false);
   }
 
   Future<void> init(BluetoothDevice device) async {
-    _mDevice = device;
+    _device = device;
     List<BluetoothService> services = await device?.discoverServices();
     BluetoothService service = services?.singleWhere((s) => s.uuid.toString() == _serviceUuid);
     List<BluetoothCharacteristic> chars = service?.characteristics;
-    _mControlChar = chars?.singleWhere((c) => c.uuid.toString() == _controlPointUuid);
-    _mDataChar = chars?.singleWhere((c) => c.uuid.toString() == _dataCharacteristicUuid);
+    _controlChar = chars?.singleWhere((c) => c.uuid.toString() == _controlPointUuid);
+    _dataChar = chars?.singleWhere((c) => c.uuid.toString() == _dataCharacteristicUuid);
   }
 }

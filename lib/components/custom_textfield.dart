@@ -38,7 +38,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
       controller: widget.controller,
       keyboardType: widget.keyboardType,
       obscureText: widget.isObscure ? _isObscure : false,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
       style: const TextStyle(fontSize: 20, fontFamily: 'Georgia'),
       decoration: InputDecoration(
         hintText: widget.hint,

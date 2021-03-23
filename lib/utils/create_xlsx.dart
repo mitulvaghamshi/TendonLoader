@@ -6,31 +6,21 @@ import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/chart_data.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
 
-class CreateXLSX {
-  CreateXLSX({this.isExercise = true, this.exerciseData})
-      : assert(!isExercise || (isExercise && exerciseData != null), 'Exercise data can not be null');
+mixin CreateXLSX {
+  static final List<ChartData> _measurements = [];
 
-  final String _iA = 'A';
-  final String _iD = 'D';
-  final bool isExercise;
-  final ExerciseData exerciseData;
-  final List<ChartData> _measurements = [];
+  void addToList(ChartData chartData) => _measurements.add(chartData);
 
-  int _iR;
-  DateTime _dtNow;
-  Worksheet _sheet;
-  Workbook _workbook;
+  Future<void> export({ExerciseData exerciseData}) async {
+    if (_measurements.isEmpty) return;
+    int _iR = 0;
+    final String _iA = 'A';
+    final String _iD = 'D';
+    final Workbook _workbook = Workbook();
+    final DateTime _dtNow = DateTime.now();
+    final bool isExercise = exerciseData != null;
+    final Worksheet _sheet = _workbook.worksheets[0];
 
-  void init() {
-    _iR = 0;
-    _workbook = Workbook();
-    _dtNow = DateTime.now();
-    _sheet = _workbook.worksheets[0];
-  }
-
-  void add(ChartData chartData) => _measurements.add(chartData);
-
-  void fillInfo() {
     // date
     _iR++; // 1
     _sheet.getRangeByName('$_iA$_iR').text = 'Date:';
@@ -94,9 +84,7 @@ class CreateXLSX {
     _iR += 2; // 15
     _sheet.getRangeByName('$_iA$_iR').setText('TIME [s]');
     _sheet.getRangeByName('B$_iR').setText('LOAD [Kg]');
-  }
 
-  void _populate() {
     int count = 0;
     double _avgTime = 0;
     double _avgWeight = 0;
@@ -113,19 +101,14 @@ class CreateXLSX {
         }
       })
       ..clear();
-  }
 
-  Future save() async {
-    if (_measurements.isNotEmpty) {
-      _populate();
-      // final Directory directory = await pp.getApplicationSupportDirectory();
-      final String _path = (await pp.getExternalStorageDirectory()).path;
-      //TODO: provide user id
-      final String _name = '${_dtNow.toString().replaceAll(RegExp(r'[\.:]'), '_')}'
-          '_UserID_${isExercise ? 'ExerciseMode' : 'MVCTesting'}.xlsx';
-      final File _file = File('$_path/$_name');
-      await _file.writeAsBytes(_workbook.saveAsStream());
-      _workbook.dispose();
-    }
+    // final Directory directory = await pp.getApplicationSupportDirectory();
+    final String _path = (await pp.getExternalStorageDirectory()).path;
+    //TODO: provide user id
+    final String _name = '${_dtNow.toString().replaceAll(RegExp(r'[\.:]'), '_')}'
+        '_UserID_${isExercise ? 'ExerciseMode' : 'MVCTesting'}.xlsx';
+    final File _file = File('$_path/$_name');
+    await _file.writeAsBytes(_workbook.saveAsStream());
+    _workbook.dispose();
   }
 }
