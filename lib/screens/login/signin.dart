@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
@@ -27,14 +28,14 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
   @override
   void initState() {
     super.initState();
-    _rotateCtrl = AnimationController(vsync: this, duration: Duration(milliseconds: 1000))
-      ..addStatusListener((status) async {
+    _rotateCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000))
+      ..addStatusListener((AnimationStatus status) async {
         if (_rotateCtrl.status == AnimationStatus.completed) {
-          if (true /*_user != null*/) {
-            Navigator.pushReplacementNamed(context, HomePage.routeName);
-          } else {
-            _rotateCtrl.reverse();
+          if (_user != null)
+            await Navigator.pushReplacementNamed(context, HomePage.routeName);
+          else {
             _busy = false;
+            await _rotateCtrl.reverse();
           }
         }
       });
@@ -50,11 +51,11 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Tendon Loader - Login'), centerTitle: true),
-      body: FutureBuilder(
+      body: FutureBuilder<FirebaseApp>(
         future: Authentication.init(),
-        builder: (_, snapshot) {
+        builder: (_, AsyncSnapshot<FirebaseApp> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) return _buildSignInBody();
-          return const Center(child: const CustomImage(zeroPad: true));
+          return const Center(child: CustomImage(zeroPad: true));
         },
       ),
     );
@@ -77,18 +78,18 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
                 child: const CircleAvatar(
                   radius: 80,
                   backgroundColor: Colors.blueAccent,
-                  child: const ClipOval(child: const CustomImage(name: 'male_avatar.webp', zeroPad: true)),
+                  child: ClipOval(child: CustomImage(name: 'male_avatar.webp', zeroPad: true)),
                 ),
               ),
               const SizedBox(height: 30),
               Form(
                 key: _signInFormKey,
                 child: Column(
-                  children: [
+                  children: <CustomTextField>[
                     CustomTextField(
                       label: 'Username',
-                      controller: _emailCtrl,
                       hint: 'Enter your username',
+                      controller: _emailCtrl,
                       validator: validateEmail,
                       keyboardType: TextInputType.emailAddress,
                     ),
@@ -97,24 +98,16 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
                       label: 'Password',
                       hint: 'Enter your password',
                       controller: _passwordCtrl,
-                      keyboardType: TextInputType.text,
                       validator: validatePassword,
+                      keyboardType: TextInputType.text,
                     ),
                   ],
                 ),
               ),
-              Row(
-                children: <Widget>[
-                  Checkbox(value: true, onChanged: (value) {}),
-                  const Text('Keep me logged in.'),
-                ],
-              ),
+              Row(children: <Widget>[Checkbox(value: true, onChanged: (bool value) {}), const Text('Keep me logged in.')]),
               GestureDetector(
                 onTap: () => Navigator.pushReplacementNamed(context, SignUp.routeName),
-                child: const Text(
-                  'Don\'t have an account? Sign up',
-                  style: const TextStyle(letterSpacing: 0.5, color: Colors.blue, height: 5),
-                ),
+                child: const Text('Don\'t have an account? Sign up', style: TextStyle(letterSpacing: 0.5, color: Colors.blue, height: 5)),
               ),
               // const SizedBox(height: 30),
               // GestureDetector(
@@ -132,20 +125,16 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   RotationTransition(
-                    turns: Tween(begin: 0.0, end: 1.0).animate(_rotateCtrl),
+                    turns: Tween<double>(begin: 0.0, end: 1.0).animate(_rotateCtrl),
                     child: FloatingActionButton(
                       heroTag: 'sign-in-tag',
                       child: const Icon(Icons.send),
                       onPressed: () async {
-                        // if (_signInFormKey.currentState.validate() && !_busy) {
-                        _busy = true;
-                        _rotateCtrl.forward();
-                        // _user = await Authentication.signIn(
-                        //   context: context,
-                        //   email: _emailCtrl.text,
-                        //   password: _passwordCtrl.text,
-                        // );
-                        // }
+                        if (_signInFormKey.currentState.validate() && !_busy) {
+                          _busy = true;
+                          await _rotateCtrl.forward();
+                          _user = await Authentication.signIn(context: context, email: _emailCtrl.text, password: _passwordCtrl.text);
+                        }
                       },
                     ),
                   ),

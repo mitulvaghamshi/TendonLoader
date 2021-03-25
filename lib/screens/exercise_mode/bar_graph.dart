@@ -55,20 +55,17 @@ class _BarGraphState extends State<BarGraph> with CreateXLSX {
   }
 
   Future<void> _rest() async {
-    _handler.stop();
-    if (await CountDown.start(context,
-            duration: Duration(seconds: 15), title: 'SET OVER! REST!\nNew Set will\nstart in') ??
-        false) await _start();
+    await _handler.stop();
+    final bool result = await CountDown.start(context, duration: const Duration(seconds: 15), title: 'SET OVER! REST!\nNew Set will\nstart in');
+    if (result ?? false) await _start();
   }
 
   Future<void> _start() async {
     if (_isRunning) {
       await _handler.start();
-    } else {
-      if (await CountDown.start(context) ?? false) {
-        _isRunning = true;
-        await _handler.start();
-      }
+    } else if (await CountDown.start(context) ?? false) {
+      _isRunning = true;
+      await _handler.start();
     }
   }
 
@@ -88,6 +85,8 @@ class _BarGraphState extends State<BarGraph> with CreateXLSX {
     super.dispose();
   }
 
+  String get _lapTime => _isHold ? 'Hold for: ${_holdTime--} s' : 'Rest for: ${_restTime--} s';
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -98,27 +97,20 @@ class _BarGraphState extends State<BarGraph> with CreateXLSX {
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 30),
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          children: [
+          children: <Widget>[
             StreamBuilder<int>(
               initialData: 0,
               stream: _handler.timeStream,
-              builder: (_, snapshot) {
+              builder: (_, AsyncSnapshot<int> snapshot) {
                 if (_isRunning) _update();
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
+                  children: <Text>[
                     Text(
-                      '🕒 ${(snapshot.data ~/ 60)}:${(snapshot.data % 60).toString().padLeft(2, '0')} s',
-                      style: const TextStyle(fontSize: 20, color: Colors.green, fontWeight: FontWeight.bold),
+                      '🕒 ${snapshot.data ~/ 60}:${(snapshot.data % 60).toString().padLeft(2, '0')} s',
+                      style: const TextStyle(fontSize: 26, color: Colors.green, fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      _isRunning
-                          ? _isHold
-                              ? 'Hold for: ${_holdTime--} s'
-                              : 'Rest for: ${_restTime--} s'
-                          : '---',
-                      style: const TextStyle(fontSize: 20, color: Colors.deepOrange, fontWeight: FontWeight.bold),
-                    ),
+                    Text(_isRunning ? _lapTime : '---', style: const TextStyle(fontSize: 26, color: Colors.deepOrange, fontWeight: FontWeight.bold)),
                   ],
                 );
               },
@@ -126,7 +118,7 @@ class _BarGraphState extends State<BarGraph> with CreateXLSX {
             StreamBuilder<double>(
               initialData: 0,
               stream: _handler.weightStream,
-              builder: (_, snapshot) {
+              builder: (_, AsyncSnapshot<double> snapshot) {
                 return Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(20),
@@ -151,14 +143,14 @@ class _BarGraphState extends State<BarGraph> with CreateXLSX {
                   maximum: 30,
                   labelFormat: '{value} kg',
                   axisLine: AxisLine(width: 0),
-                  labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+                  labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
             ),
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
+              children: <FloatingActionButton>[
                 FloatingActionButton(
                   onPressed: _start,
                   heroTag: 'start-btn',

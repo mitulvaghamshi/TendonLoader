@@ -13,7 +13,7 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
-  DataHandler _handler = DataHandler(targetLoad: 0, isMVC: true);
+  final DataHandler _handler = DataHandler(targetLoad: 0, isMVC: true);
   bool _isRunning = false;
 
   Future<void> _reset() async {
@@ -43,11 +43,11 @@ class _BarGraphState extends State<BarGraph> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 30),
         child: Column(
-          children: [
+          children: <Widget>[
             StreamBuilder<double>(
               initialData: 0,
               stream: _handler.weightStream,
-              builder: (_, snapshot) {
+              builder: (_, AsyncSnapshot<double> snapshot) {
                 return Text(
                   'MVC: ${snapshot.data.toStringAsFixed(2).padLeft(2, '0')} Kg',
                   style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
@@ -58,7 +58,7 @@ class _BarGraphState extends State<BarGraph> {
             StreamBuilder<int>(
               initialData: 0,
               stream: _handler.timeStream,
-              builder: (_, snapshot) {
+              builder: (_, AsyncSnapshot<int> snapshot) {
                 if (5 - snapshot.data == 0) _handler.stop();
                 return Text(
                   'Remaining time: ${5 - snapshot.data} s',
@@ -76,24 +76,16 @@ class _BarGraphState extends State<BarGraph> {
                   maximum: 30,
                   labelFormat: '{value} kg',
                   axisLine: AxisLine(width: 0),
-                  labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+                  labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
             ),
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                FloatingActionButton(
-                  onPressed: _start,
-                  heroTag: 'start-btn',
-                  child: const Icon(Icons.play_arrow_rounded),
-                ),
-                FloatingActionButton(
-                  onPressed: _reset,
-                  heroTag: 'reset-btn',
-                  child: const Icon(Icons.replay_rounded),
-                ),
+              children: <FloatingActionButton>[
+                FloatingActionButton(onPressed: _start, heroTag: 'start-btn', child: const Icon(Icons.play_arrow_rounded)),
+                FloatingActionButton(onPressed: _reset, heroTag: 'reset-btn', child: const Icon(Icons.replay_rounded)),
               ],
             ),
           ],

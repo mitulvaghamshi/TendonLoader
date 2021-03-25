@@ -4,15 +4,16 @@ import 'package:tendon_loader/components/custom_picker.dart';
 
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
-    this.desc = '',
     @required this.label,
+    @required this.controller,
+    @required this.validator,
+    @required this.keyboardType,
+    this.desc = '',
     this.isPicker = false,
     this.isObscure = false,
-    @required this.validator,
-    @required this.controller,
     this.hint = 'Enter value',
-    @required this.keyboardType,
-  });
+    Key key,
+  }) : super(key: key);
 
   final String hint;
   final String desc;
@@ -20,7 +21,7 @@ class CustomTextField extends StatefulWidget {
   final bool isPicker;
   final bool isObscure;
   final TextInputType keyboardType;
-  final Function(String) validator;
+  final String Function(String) validator;
   final TextEditingController controller;
 
   @override
@@ -59,10 +60,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   Row _buildSuffix(BuildContext context) {
-    final List<IconButton> buttons = [];
+    final List<IconButton> buttons = <IconButton>[];
     if (widget.isPicker) {
       buttons.add(IconButton(
-        icon: Icon(Icons.timer_rounded),
+        icon: const Icon(Icons.timer_rounded),
         onPressed: () async => widget.controller.text = await TimePicker.selectTime(context),
       ));
     } else if (widget.isObscure) {
@@ -73,7 +74,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     }
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: buttons..add(IconButton(icon: Icon(Icons.clear_rounded), onPressed: () => widget.controller.clear())),
+      children: buttons..add(IconButton(icon: const Icon(Icons.clear_rounded), onPressed: () => widget.controller.clear())),
     );
   }
 

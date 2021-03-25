@@ -5,25 +5,19 @@ import 'package:tendon_loader/utils/create_xlsx.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
 
 class ExerciseMode extends StatelessWidget with CreateXLSX {
-  static const name = 'Exercise Mode';
-  static const routeName = '/exerciseMode';
+const   ExerciseMode({Key key}) : super(key: key);
 
-  ExerciseMode({Key key}) : super(key: key);
+  static const String name = 'Exercise Mode';
+  static const String routeName = '/exerciseMode';
 
   @override
   Widget build(BuildContext context) {
-    ExerciseData _data = ModalRoute.of(context).settings.arguments;
+    final ExerciseData _data = ModalRoute.of(context).settings.arguments as ExerciseData;
     return Scaffold(
       body: BarGraph(exerciseData: _data),
       appBar: AppBar(
         title: const Text(ExerciseMode.name),
-        actions: [
-          CustomButton(
-            text: 'Export Data',
-            icon: Icons.backup_rounded,
-            onPressed: () => export(exerciseData: _data),
-          ),
-        ],
+        actions: <CustomButton>[CustomButton(text: 'Export Data', icon: Icons.backup_rounded, onPressed: () => export(exerciseData: _data))],
       ),
     );
   }

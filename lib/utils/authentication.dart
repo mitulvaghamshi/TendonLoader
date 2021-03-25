@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:local_auth/local_auth.dart';
@@ -7,21 +8,20 @@ import 'package:local_auth/local_auth.dart';
 class Authentication {
   static void customSnackBar(BuildContext context, String content) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: Colors.black,
-      content: Text(content, style: const TextStyle(color: Colors.redAccent, letterSpacing: 0.5)),
+      content: Text(content, style: const TextStyle(letterSpacing: 0.5)),
     ));
   }
 
   static Future<FirebaseApp> init() async {
-    return null;
-    // return Future.delayed(const Duration(seconds: 1), () async => await Firebase.initializeApp());
+    final FirebaseApp app = await Firebase.initializeApp();
+    return Future<FirebaseApp>.delayed(const Duration(seconds: 2), () => app);
   }
 
   static Future<User> signIn({String email, String password, BuildContext context}) async {
     User user;
-    FirebaseAuth auth = FirebaseAuth.instance;
+    final FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
+      final UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -33,10 +33,11 @@ class Authentication {
     return user;
   }
 
+//
   static Future<void> signOut(BuildContext context) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
-      await googleSignIn.signOut();
+      if (!kIsWeb) await googleSignIn.signOut();
       await FirebaseAuth.instance.signOut();
     } catch (e) {
       customSnackBar(context, 'Error signing out. Try again.');
@@ -45,12 +46,11 @@ class Authentication {
 
   static Future<bool> biometrics() async {
     final LocalAuthentication localAuthentication = LocalAuthentication();
-    bool isBiometricSupported = await localAuthentication.isDeviceSupported();
-    bool canCheckBiometrics = await localAuthentication.canCheckBiometrics;
+    final bool isBiometricSupported = await localAuthentication.isDeviceSupported();
+    final bool canCheckBiometrics = await localAuthentication.canCheckBiometrics;
     bool isAuthenticated = false;
     if (isBiometricSupported && canCheckBiometrics) {
-      List<BiometricType> biometricTypes = await localAuthentication.getAvailableBiometrics();
-      print(biometricTypes);
+      // final List<BiometricType> biometricTypes = await localAuthentication.getAvailableBiometrics();
       isAuthenticated = await localAuthentication.authenticate(
         localizedReason: 'Please complete the biometrics to proceed.',
         biometricOnly: true,
@@ -64,28 +64,17 @@ class Authentication {
     return isAuthenticated;
   }
 
-// {
-//     FirebaseApp firebaseApp = await Firebase.initializeApp();
-//     User user = FirebaseAuth.instance.currentUser;
-//     return firebaseApp;
-// }
+  static Future<User> refreshUser(User user) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    await user.reload();
+    return auth.currentUser;
+  }
 
-// static Future<User> refreshUser(User user) async {
-//   FirebaseAuth auth = FirebaseAuth.instance;
-//   await user.reload();
-//   return auth.currentUser;
-// }
-
-  static Future<User> signUp({
-    @required String name,
-    @required String email,
-    @required String password,
-    @required BuildContext context,
-  }) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
+  static Future<User> signUp({@required String name, @required String email, @required String password, @required BuildContext context}) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
     User user;
     try {
-      UserCredential userCredential = await auth.createUserWithEmailAndPassword(email: email, password: password);
+      final UserCredential userCredential = await auth.createUserWithEmailAndPassword(email: email, password: password);
       user = userCredential.user;
       await user.updateProfile(displayName: name);
       await user.reload();
@@ -100,38 +89,42 @@ class Authentication {
     return user;
   }
 
-// static Future<User> signInWithGoogle(BuildContext context) async {
-//   User user;
-//   FirebaseAuth auth = FirebaseAuth.instance;
+  static Future<User> signInWithGoogle(BuildContext context) async {
+    User user;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    if (kIsWeb) {
+      final GoogleAuthProvider authProvider = GoogleAuthProvider();
+      try {
+        final UserCredential userCredential = await auth.signInWithPopup(authProvider);
+        user = userCredential.user;
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
+    } else {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
+        try {
+          final UserCredential userCredential = await auth.signInWithCredential(credential);
+          user = userCredential.user;
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'account-exists-with-different-credential') {
+            customSnackBar(context, 'The account already exists with a different credential');
+          } else if (e.code == 'invalid-credential') {
+            customSnackBar(context, 'Error occurred while accessing credentials. Try again.');
+          }
+        } catch (e) {
+          customSnackBar(context, 'Error occurred using Google Sign In. Try again.');
+        }
+      }
+    }
+    return user;
+  }
 //
-//   final GoogleSignIn googleSignIn = GoogleSignIn();
-//   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-//
-//   if (googleSignInAccount != null) {
-//     final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
-//     final AuthCredential credential = GoogleAuthProvider.credential(
-//       accessToken: googleSignInAuthentication.accessToken,
-//       idToken: googleSignInAuthentication.idToken,
-//     );
-//     try {
-//       final UserCredential userCredential = await auth.signInWithCredential(credential);
-//       user = userCredential.user;
-//     } on FirebaseAuthException catch (e) {
-//       if (e.code == 'account-exists-with-different-credential') {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           customSnackBar('The account already exists with a different credential'),
-//         );
-//       } else if (e.code == 'invalid-credential') {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           customSnackBar('Error occurred while accessing credentials. Try again.'),
-//         );
-//       }
-//     } catch (e) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         customSnackBar('Error occurred using Google Sign In. Try again.'),
-//       );
-//     }
-//   }
-//   return user;
-// }
 }

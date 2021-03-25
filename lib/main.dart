@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/utils/app_routes.dart';
 
-void main() => runApp(TendonLoader()); // /\*(.|\n)*?\*/
+void main() => runApp(const TendonLoader()); // /\*(.|\n)*?\*/
 
 class TendonLoader extends StatelessWidget {
+  const TendonLoader({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

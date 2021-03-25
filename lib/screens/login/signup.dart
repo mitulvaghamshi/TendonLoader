@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
@@ -28,13 +29,13 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
   @override
   void initState() {
     super.initState();
-    _rotateCtrl = AnimationController(vsync: this, duration: Duration(milliseconds: 1000))
-      ..addStatusListener((status) async {
+    _rotateCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000))
+      ..addStatusListener((AnimationStatus status) async {
         if (_rotateCtrl.status == AnimationStatus.completed) {
           if (_user != null) {
-            Navigator.pushReplacementNamed(context, HomePage.routeName);
+            await Navigator.pushReplacementNamed(context, HomePage.routeName);
           } else {
-            _rotateCtrl.reverse();
+            await _rotateCtrl.reverse();
             _busy = false;
           }
         }
@@ -51,11 +52,13 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Tendon Loader - Register'), centerTitle: true),
-      body: FutureBuilder(
+      body: FutureBuilder<FirebaseApp>(
         future: Authentication.init(),
-        builder: (_, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) return _buildSignUpBody();
-          return const Center(child: const CircularProgressIndicator());
+        builder: (_, AsyncSnapshot<FirebaseApp> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return _buildSignUpBody();
+          }
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -78,14 +81,14 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
                 child: const CircleAvatar(
                   radius: 80,
                   backgroundColor: Colors.greenAccent,
-                  child: const ClipOval(child: const CustomImage(name: 'male_avatar.webp', zeroPad: true)),
+                  child: ClipOval(child: CustomImage(name: 'male_avatar.webp', zeroPad: true)),
                 ),
               ),
               const SizedBox(height: 30),
               Form(
                 key: _signUpFormKey,
                 child: Column(
-                  children: [
+                  children: <CustomTextField>[
                     CustomTextField(
                       label: 'Name',
                       hint: 'Enter your name',
@@ -115,7 +118,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
                 onTap: () => Navigator.pushReplacementNamed(context, SignIn.routeName),
                 child: const Text(
                   'Already have an account? Sign in.',
-                  style: const TextStyle(letterSpacing: 0.5, color: Colors.blue, height: 5),
+                  style: TextStyle(letterSpacing: 0.5, color: Colors.blue, height: 5),
                 ),
               ),
               const SizedBox(height: 10),
@@ -123,22 +126,21 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   RotationTransition(
-                    turns: Tween(begin: 0.0, end: 1.0).animate(_rotateCtrl),
+                    turns: Tween<double>(begin: 0.0, end: 1.0).animate(_rotateCtrl),
                     child: FloatingActionButton(
                       heroTag: 'sign-up-tag',
-                      child: Icon(Icons.send),
                       onPressed: () async {
                         if (_signUpFormKey.currentState.validate() && !_busy) {
                           _busy = true;
-                          _rotateCtrl.forward();
-                          _user = await Authentication.signUp(
+                          await _rotateCtrl.forward();
+                          _user = await Authentication.signIn(
                             context: context,
-                            name: _nameController.text,
                             email: _emailController.text,
                             password: _passwordController.text,
                           );
                         }
                       },
+                      child: const Icon(Icons.send),
                     ),
                   ),
                 ],

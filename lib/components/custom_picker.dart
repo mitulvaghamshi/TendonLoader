@@ -3,7 +3,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 
 class TimePicker extends StatefulWidget {
-  const TimePicker({this.name = 'Pick', this.onChange});
+  const TimePicker({Key key, this.name = 'Pick', this.onChange}) : super(key: key);
 
   final String name;
   final Function(int) onChange;
@@ -11,37 +11,35 @@ class TimePicker extends StatefulWidget {
   @override
   TimePickerState createState() => TimePickerState();
 
-  static Future<String> selectTime(BuildContext context) async {
+  static Future<String> selectTime(BuildContext context) {
     int _min = 0;
     int _sec = 0;
-    return await showDialog<String>(
+    return showDialog<String>(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
+      builder: (BuildContext context) {
         return AlertDialog(
           actionsPadding: const EdgeInsets.symmetric(horizontal: 30),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TimePicker(name: 'MIN', onChange: (value) => _min = value),
-              TimePicker(name: 'SEC', onChange: (value) => _sec = value),
+            children: <TimePicker>[
+              TimePicker(name: 'MIN', onChange: (int value) => _min = value),
+              TimePicker(name: 'SEC', onChange: (int value) => _sec = value),
             ],
           ),
-          actions: [
+          actions: <CustomButton>[
             CustomButton(
               text: 'Submit',
               color: Colors.blue,
               icon: Icons.done_rounded,
-              onPressed: () {
-                Navigator.pop<String>(context, Duration(minutes: _min, seconds: _sec).inSeconds.toString());
-              },
+              onPressed: () => Navigator.pop<String>(context, Duration(minutes: _min, seconds: _sec).inSeconds.toString()),
             ),
             CustomButton(
               text: 'Cancel',
               color: Colors.grey,
               icon: Icons.cancel,
-              onPressed: () => Navigator.pop<Null>(context),
+              onPressed: () => Navigator.pop<void>(context),
             ),
           ],
         );
@@ -57,14 +55,14 @@ class TimePickerState extends State<TimePicker> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(widget.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+      children: <Widget>[
+        Text(widget.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
         NumberPicker(
           value: _value,
           minValue: 0,
           maxValue: 60,
           haptics: true,
-          onChanged: (value) => setState(() => widget.onChange(_value = value)),
+          onChanged: (int value) => setState(() => widget.onChange(_value = value)),
           selectedTextStyle: const TextStyle(fontSize: 36, color: Colors.blue, fontWeight: FontWeight.bold),
           decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(100)),
         ),

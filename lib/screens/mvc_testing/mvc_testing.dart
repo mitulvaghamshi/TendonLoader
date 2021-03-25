@@ -4,8 +4,10 @@ import 'package:tendon_loader/screens/mvc_testing/bar_graph.dart';
 import 'package:tendon_loader/utils/create_xlsx.dart';
 
 class MVCTesting extends StatelessWidget with CreateXLSX {
-  static const name = 'MVC Testing';
-  static const routeName = '/mvcTesting';
+  const MVCTesting({Key key}) : super(key: key);
+
+  static const String name = 'MVC Testing';
+  static const String routeName = '/mvcTesting';
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class MVCTesting extends StatelessWidget with CreateXLSX {
       body: const BarGraph(),
       appBar: AppBar(
         title: const Text(MVCTesting.name),
-        actions: [CustomButton(text: 'Export Data', icon: Icons.backup_rounded, onPressed: export)],
+        actions: <CustomButton>[CustomButton(text: 'Export Data', icon: Icons.backup_rounded, onPressed: export)],
       ),
     );
   }

@@ -5,6 +5,6 @@ class ChartData {
   const ChartData({this.x, this.time, this.weight});
 
   final int x;
-  final int time;
+  final double time;
   final double weight;
 }

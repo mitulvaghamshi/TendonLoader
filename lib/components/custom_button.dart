@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({this.text = 'Click', this.icon, this.color, this.onPressed});
+  const CustomButton({Key key, this.text = 'Click', this.icon, this.color, this.onPressed}) : super(key: key);
 
   final String text;
   final Color color;
@@ -15,11 +15,9 @@ class CustomButton extends StatelessWidget {
       icon: Icon(icon, color: Colors.white),
       label: Text(text, style: const TextStyle(color: Colors.white)),
       style: ButtonStyle(
-        visualDensity: VisualDensity(vertical: 1.5, horizontal: 2),
-        backgroundColor: MaterialStateProperty.all<Color>(color??Colors.black),
-        shape: MaterialStateProperty.all<OutlinedBorder>(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        ),
+        visualDensity: const VisualDensity(vertical: 1.5, horizontal: 2),
+        backgroundColor: MaterialStateProperty.all<Color>(color ?? Colors.black),
+        shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
       ),
     );
   }

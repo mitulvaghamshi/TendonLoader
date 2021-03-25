@@ -13,7 +13,7 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
-  DataHandler _handler = DataHandler();
+  final DataHandler _handler = DataHandler();
   bool _isRunning = false;
 
   Future<void> _reset() async {
@@ -44,12 +44,12 @@ class _BarGraphState extends State<BarGraph> {
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 30),
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          children: [
+          children: <Widget>[
             StreamBuilder<int>(
               initialData: 0,
               stream: _handler.timeStream,
-              builder: (_, snapshot) => Text(
-                'Time elapsed: ${(snapshot.data ~/ 60)}:${(snapshot.data % 60).toString().padLeft(2, '0')} s',
+              builder: (_, AsyncSnapshot<int> snapshot) => Text(
+                'Time elapsed: ${snapshot.data ~/ 60}:${(snapshot.data % 60).toString().padLeft(2, '0')} s',
                 style: const TextStyle(fontSize: 26, color: Colors.green, fontWeight: FontWeight.bold),
               ),
             ),
@@ -70,7 +70,7 @@ class _BarGraphState extends State<BarGraph> {
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
+              children: <FloatingActionButton>[
                 FloatingActionButton(
                   onPressed: _start,
                   heroTag: 'start-btn',
