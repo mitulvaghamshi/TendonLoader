@@ -118,12 +118,7 @@ class UploadTaskListTile extends StatelessWidget {
         Widget subtitle = const Text('---');
         final TaskSnapshot snapshot = asyncSnapshot.data;
         final TaskState state = snapshot?.state;
-        if (asyncSnapshot.hasError) {
-          // ignore: avoid_print
-          print(asyncSnapshot.error);
-        } else if (snapshot != null) {
-          subtitle = Text('$state: ${_bytesTransferred(snapshot)} bytes sent');
-        }
+        if (snapshot != null) subtitle = Text('$state: ${_bytesTransferred(snapshot)} bytes sent');
         return Dismissible(
           key: Key(task.hashCode.toString()),
           onDismissed: (DismissDirection direction) => onDismissed(),
@@ -136,8 +131,8 @@ class UploadTaskListTile extends StatelessWidget {
                 if (state == TaskState.paused) IconButton(icon: const Icon(Icons.file_upload), onPressed: task.resume),
                 if (state == TaskState.running) IconButton(icon: const Icon(Icons.pause), onPressed: task.pause),
                 if (state == TaskState.running) IconButton(icon: const Icon(Icons.cancel), onPressed: task.cancel),
-                if (state == TaskState.success) IconButton(icon: const Icon(Icons.file_download), onPressed: onDownload),
                 if (state == TaskState.success) IconButton(icon: const Icon(Icons.link), onPressed: onDownloadLink),
+                if (state == TaskState.success) IconButton(icon: const Icon(Icons.file_download), onPressed: onDownload),
               ],
             ),
           ),

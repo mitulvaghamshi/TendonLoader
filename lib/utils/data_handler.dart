@@ -79,17 +79,9 @@ class DataHandler with CreateXLSX {
     double _weightSum = 0;
     if (_data.isNotEmpty && _data[0] == Bluetooth.RES_WEIGHT_MEAS) {
       for (int x = 2; x < _data.length; x += 8) {
-        _weightSum += _weight = Uint8List
-            .fromList(_data.getRange(x, x + 4).toList())
-            .buffer
-            .asByteData()
-            .getFloat32(0, Endian.little);
+        _weightSum += _weight = Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
         /*_timeSum += */
-        _time = Uint8List
-            .fromList(_data.getRange(x + 4, x + 8).toList())
-            .buffer
-            .asByteData()
-            .getFloat32(0, Endian.little);
+        _time = Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getFloat32(0, Endian.little);
         addToList(ChartData(weight: _weight, time: _time));
         if (_counter++ == 8) {
           _avgWeight = double.parse((_weightSum.abs() / 8.0).toStringAsFixed(2));
@@ -111,7 +103,7 @@ class DataHandler with CreateXLSX {
   }
 
   List<ChartSeries<ChartData, int>> getSeries() {
-    final List<ChartSeries<ChartData, int>> components = <ColumnSeries<ChartData, int>>[
+    final List<ChartSeries<ChartData, int>> components = <ChartSeries<ChartData, int>>[
       ColumnSeries<ChartData, int>(
         width: 0.9,
         borderWidth: 1,

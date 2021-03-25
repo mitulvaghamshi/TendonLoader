@@ -1,10 +1,12 @@
 import 'dart:io' show File;
 
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart' as pp;
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Alignment;
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/chart_data.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
+import 'package:tendon_loader/utils/uploader.dart';
 
 mixin CreateXLSX {
   static final List<ChartData> _measurements = <ChartData>[];
@@ -12,25 +14,27 @@ mixin CreateXLSX {
   void addToList(ChartData chartData) => _measurements.add(chartData);
 
   Future<void> export({ExerciseData exerciseData}) async {
-    if (_measurements.isEmpty) return;
+    // if (_measurements.isEmpty) return;
     int _iR = 0;
     const String _iA = 'A';
     const String _iD = 'D';
     final Workbook _workbook = Workbook();
     final DateTime _dtNow = DateTime.now();
+    final String _date = DateFormat('y-MM-d').format(_dtNow);
+    final String _time = DateFormat('hh:mm a').format(_dtNow);
     final bool isExercise = exerciseData != null;
     final Worksheet _sheet = _workbook.worksheets[0];
 
     // date
     _iR++; // 1
     _sheet.getRangeByName('$_iA$_iR').text = 'Date:';
-    _sheet.getRangeByName('$_iD$_iR').dateTime = _dtNow;
+    _sheet.getRangeByName('$_iD$_iR').text = _date;
     _sheet.getRangeByName('$_iD$_iR').numberFormat = 'yyyy-mmm-dd, dddd';
 
     // time
     _iR++; // 2
     _sheet.getRangeByName('$_iA$_iR').text = 'Time:';
-    _sheet.getRangeByName('$_iD$_iR').dateTime = _dtNow;
+    _sheet.getRangeByName('$_iD$_iR').text = _time;
     _sheet.getRangeByName('$_iD$_iR').numberFormat = 'hh:mm:ss AM/PM';
 
     // user id
@@ -99,14 +103,21 @@ mixin CreateXLSX {
         count = 0;
       }
     }
+    _measurements.clear();
 
+    // TODO(mitul): provide user id, change local path, user id
     // final Directory directory = await pp.getApplicationSupportDirectory();
     final String _path = (await pp.getExternalStorageDirectory()).path;
-    // TODO(mitul): provide user id
-    final String _name = '${_dtNow.toString().replaceAll(RegExp(r'[\.:]'), '_')}'
-        '_UserID_${isExercise ? 'ExerciseMode' : 'MVCTesting'}.xlsx';
+    // shared pref user id
+    const String _userID = 'user001';
+    final String _mode = isExercise ? 'Exercise' : 'MVC';
+    final String _name = '${_date}_${_time.replaceAll(RegExp(r'[\s:]'), '_')}_${_userID}_$_mode.xlsx';
     final File _file = File('$_path/$_name');
     await _file.writeAsBytes(_workbook.saveAsStream());
     _workbook.dispose();
+    // ignore: avoid_print
+    print(_file.uri.toString());
+    final Uploader _uploader = Uploader();
+    await _uploader.createTask(_file, _userID, _name);
   }
 }

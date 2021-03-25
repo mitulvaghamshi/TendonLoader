@@ -121,7 +121,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
                       text: 'Clear all',
                       color: Colors.grey,
                       icon: Icons.clear_rounded,
-                      onPressed: _exerciseFormKey.currentState.reset,
+                      onPressed: () => _exerciseFormKey.currentState.reset(),
                     ),
                   ],
                 ),

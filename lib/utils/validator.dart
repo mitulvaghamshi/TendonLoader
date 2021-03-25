@@ -4,14 +4,10 @@ mixin ValidateCredentialMixin {
   String validateName(String name) => name.isEmpty ? 'Name can\'t be empty' : null;
 
   String validateEmail(String email) {
-    final RegExp emailRegExp = RegExp(r'''
-      ^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@
-      [a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.
-      [a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$
-      ''');
+    final RegExp _emailEx = RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
     if (email.isEmpty)
       return 'Email can\'t be empty';
-    else if (!emailRegExp.hasMatch(email)) return 'Enter a correct email';
+    else if (!_emailEx.hasMatch(email)) return 'Enter a correct email';
 
     return null;
   }
