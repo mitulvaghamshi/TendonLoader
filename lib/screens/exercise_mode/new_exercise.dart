@@ -72,7 +72,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
                 ),
                 CustomTextField(
                   label: 'Target Load',
-                  hint: 'Target Load (kg) e.g. 6.5',
+                  hint: 'Target load (kg) e.g. 6.5',
                   desc: '~70% of last recorded MVC test',
                   controller: _ctrlTargetLoad,
                   validator: validateTargetLoad,
@@ -80,7 +80,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
                 ),
                 CustomTextField(
                   label: 'Hold time',
-                  hint: 'Hold time (sec)',
+                  hint: 'Select hold time (sec)',
                   desc: 'Amount of time you can keep holding at target load',
                   isPicker: true,
                   controller: _ctrlHoldTime,
@@ -89,7 +89,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
                 ),
                 CustomTextField(
                   label: 'Rest time',
-                  hint: 'Rest time (sec)',
+                  hint: 'Select rest time (sec)',
                   desc: 'Amount of time you can rest after every rep',
                   isPicker: true,
                   controller: _ctrlRestTime,
@@ -98,15 +98,15 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
                 ),
                 CustomTextField(
                   label: 'Sets',
-                  hint: 'Sets (#) e.g. 5',
                   desc: 'Number of total sets',
+                  hint: 'Enter # of sets e.g. 3',
                   controller: _ctrlSets,
                   validator: validateSets,
                   keyboardType: TextInputType.number,
                 ),
                 CustomTextField(
                   label: 'Reps',
-                  hint: 'Reps (#)',
+                  hint: 'Enter # of reps (#) e.g. 5',
                   desc: 'Number of reps to perform in each set',
                   controller: _ctrlReps,
                   validator: validateReps,
@@ -116,10 +116,9 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <CustomButton>[
-                    CustomButton(text: 'Submit', color: Colors.blue, icon: Icons.done_rounded, onPressed: _submit),
+                    CustomButton(text: 'Submit', background: Colors.blue, color: Colors.white, icon: Icons.done_rounded, onPressed: _submit),
                     CustomButton(
                       text: 'Clear all',
-                      color: Colors.grey,
                       icon: Icons.clear_rounded,
                       onPressed: () => _exerciseFormKey.currentState.reset(),
                     ),

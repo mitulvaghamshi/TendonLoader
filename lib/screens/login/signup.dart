@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/login/signin.dart';
 import 'package:tendon_loader/utils/authentication.dart';
+import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/validator.dart' show ValidateCredentialMixin;
 
 class SignUp extends StatefulWidget {
@@ -17,10 +18,10 @@ class SignUp extends StatefulWidget {
   _SignUpState createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUp> with TickerProviderStateMixin, ValidateCredentialMixin {
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
+class _SignUpState extends State<SignUp> with TickerProviderStateMixin, ValidateCredentialMixin, Keys {
+  final TextEditingController _nameCtrl = TextEditingController();
+  final TextEditingController _passwordCtrl = TextEditingController();
+  final TextEditingController _usernameCtrl = TextEditingController();
   final GlobalKey<FormState> _signUpFormKey = GlobalKey<FormState>();
   AnimationController _rotateCtrl;
   bool _busy = false;
@@ -33,6 +34,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
       ..addStatusListener((AnimationStatus status) async {
         if (_rotateCtrl.status == AnimationStatus.completed) {
           if (_user != null) {
+            await _setLoginInfo();
             await Navigator.pushReplacementNamed(context, HomePage.routeName);
           } else {
             await _rotateCtrl.reverse();
@@ -42,9 +44,19 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
       });
   }
 
+  Future<void> _setLoginInfo() async {
+    final SharedPreferences _preferences = await SharedPreferences.getInstance();
+    await _preferences.setBool(Keys.keyStaySignIn, true);
+    await _preferences.setString(Keys.keyUsername, _usernameCtrl.text);
+    await _preferences.setString(Keys.keyPassword, _passwordCtrl.text);
+  }
+
   @override
   void dispose() {
     _rotateCtrl.dispose();
+    _nameCtrl.dispose();
+    _usernameCtrl.dispose();
+    _passwordCtrl.dispose();
     super.dispose();
   }
 
@@ -52,15 +64,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Tendon Loader - Register'), centerTitle: true),
-      body: FutureBuilder<FirebaseApp>(
-        future: Authentication.init(),
-        builder: (_, AsyncSnapshot<FirebaseApp> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return _buildSignUpBody();
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
-      ),
+      body: _buildSignUpBody(),
     );
   }
 
@@ -78,11 +82,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
               Container(
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 3, color: Colors.green)),
-                child: const CircleAvatar(
-                  radius: 80,
-                  backgroundColor: Colors.greenAccent,
-                  child: ClipOval(child: CustomImage(name: 'male_avatar.webp', zeroPad: true)),
-                ),
+                child: const CircleAvatar(radius: 80, child: ClipOval(child: CustomImage(name: 'male_avatar.webp', zeroPad: true))),
               ),
               const SizedBox(height: 30),
               Form(
@@ -92,14 +92,14 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
                     CustomTextField(
                       label: 'Name',
                       hint: 'Enter your name',
-                      controller: _nameController,
+                      controller: _nameCtrl,
                       keyboardType: TextInputType.name,
                       validator: validateName,
                     ),
                     CustomTextField(
                       label: 'Username',
                       hint: 'Enter your username',
-                      controller: _emailController,
+                      controller: _usernameCtrl,
                       validator: validateEmail,
                       keyboardType: TextInputType.emailAddress,
                     ),
@@ -107,7 +107,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
                       isObscure: true,
                       label: 'Password',
                       hint: 'Enter your password',
-                      controller: _passwordController,
+                      controller: _passwordCtrl,
                       keyboardType: TextInputType.text,
                       validator: validatePassword,
                     ),
@@ -133,10 +133,11 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
                         if (_signUpFormKey.currentState.validate() && !_busy) {
                           _busy = true;
                           await _rotateCtrl.forward();
-                          _user = await Authentication.signIn(
+                          _user = await Authentication.signUp(
                             context: context,
-                            email: _emailController.text,
-                            password: _passwordController.text,
+                            name: _nameCtrl.text,
+                            email: _usernameCtrl.text,
+                            password: _passwordCtrl.text,
                           );
                         }
                       },

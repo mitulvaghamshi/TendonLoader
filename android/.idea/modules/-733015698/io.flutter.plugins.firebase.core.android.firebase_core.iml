@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":firebase_core" external.linked.project.path="C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.1/android" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="io.flutter.plugins.firebase.core" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":firebase_core" external.linked.project.path="C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.2/android" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="io.flutter.plugins.firebase.core" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
@@ -19,8 +19,8 @@
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
-        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.1/android/src/main/res;file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.1/android/src/debug/res;file://$MODULE_DIR$/../../../../build/firebase_core/generated/res/rs/debug;file://$MODULE_DIR$/../../../../build/firebase_core/generated/res/resValues/debug" />
-        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.1/android/src/androidTest/res;file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.1/android/src/androidTestDebug/res;file://$MODULE_DIR$/../../../../build/firebase_core/generated/res/rs/androidTest/debug;file://$MODULE_DIR$/../../../../build/firebase_core/generated/res/resValues/androidTest/debug" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.2/android/src/main/res;file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.2/android/src/debug/res;file://$MODULE_DIR$/../../../../build/firebase_core/generated/res/rs/debug;file://$MODULE_DIR$/../../../../build/firebase_core/generated/res/resValues/debug" />
+        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.2/android/src/androidTest/res;file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.2/android/src/androidTestDebug/res;file://$MODULE_DIR$/../../../../build/firebase_core/generated/res/rs/androidTest/debug;file://$MODULE_DIR$/../../../../build/firebase_core/generated/res/resValues/androidTest/debug" />
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
         <option name="PROJECT_TYPE" value="1" />
       </configuration>
@@ -49,13 +49,13 @@
     <content url="file://$MODULE_DIR$/../../../../build/firebase_core/generated/source/buildConfig/debug">
       <sourceFolder url="file://$MODULE_DIR$/../../../../build/firebase_core/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
     </content>
-    <content url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.1/android">
-      <sourceFolder url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.1/android/src/main/java" isTestSource="false" />
-      <excludeFolder url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.1/android/.gradle" />
+    <content url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.2/android">
+      <sourceFolder url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.2/android/src/main/java" isTestSource="false" />
+      <excludeFolder url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.0.2/android/.gradle" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 29 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-40441def692f444660a11e20fac37af9050245ab" level="project" />
+    <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-3459eb24361807fb186953a864cf890fa8e9d26a" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common-java8:2.2.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common:2.2.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.arch.core:core-common:2.1.0" level="project" />

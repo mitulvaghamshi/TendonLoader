@@ -18,13 +18,13 @@ class CustomTile extends StatelessWidget {
         trailing: const Icon(Icons.keyboard_arrow_right_rounded),
         title: Text(name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         onTap: () {
-          if (Bluetooth.instance.waiting)
+          if (false /* Bluetooth.device == null*/) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Progressor not connected!')));
+          } else if (false /*Bluetooth.instance.waiting*/) {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Too fast! device busy, try again!!!')));
-          /*else if (false */ /* Bluetooth.device == null*/ /*) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text('Progressor not connected!')));
           } else {
-          }*/
-          Navigator.of(context).pushNamed(route);
+            Navigator.of(context).pushNamed(route);
+          }
         },
       ),
     );

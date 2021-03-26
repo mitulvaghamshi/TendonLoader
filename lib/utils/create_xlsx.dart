@@ -2,9 +2,11 @@ import 'dart:io' show File;
 
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart' as pp;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Alignment;
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/chart_data.dart';
+import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
 import 'package:tendon_loader/utils/uploader.dart';
 
@@ -104,20 +106,13 @@ mixin CreateXLSX {
       }
     }
     _measurements.clear();
-
-    // TODO(mitul): provide user id, change local path, user id
-    // final Directory directory = await pp.getApplicationSupportDirectory();
-    final String _path = (await pp.getExternalStorageDirectory()).path;
-    // shared pref user id
-    const String _userID = 'user001';
-    final String _mode = isExercise ? 'Exercise' : 'MVC';
-    final String _name = '${_date}_${_time.replaceAll(RegExp(r'[\s:]'), '_')}_${_userID}_$_mode.xlsx';
+    final String _userId = (await SharedPreferences.getInstance()).getString(Keys.keyUsername).split('@')[0];
+    final String _mode = isExercise ? 'Exercise' : 'MVCTest';
+    final String _path = (await pp.getApplicationSupportDirectory()).path;
+    final String _name = '${_date}_${_time.replaceAll(RegExp(r'[\s:]'), '_')}_${_userId}_$_mode.xlsx';
     final File _file = File('$_path/$_name');
     await _file.writeAsBytes(_workbook.saveAsStream());
     _workbook.dispose();
-    // ignore: avoid_print
-    print(_file.uri.toString());
-    final Uploader _uploader = Uploader();
-    await _uploader.createTask(_file, _userID, _name);
+    await Uploader.uploadFile(_file, _userId, _name);
   }
 }

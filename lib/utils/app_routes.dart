@@ -4,13 +4,14 @@ import 'package:tendon_loader/screens/exercise_mode/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
+import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/screens/login/signin.dart';
 import 'package:tendon_loader/screens/login/signup.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
-import 'package:tendon_loader/utils/networking.dart';
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   Debug.routeName: (_) => const Debug(),
+  Login.routeName: (_) => const Login(),
   SignIn.routeName: (_) => const SignIn(),
   SignUp.routeName: (_) => const SignUp(),
   HomePage.routeName: (_) => const HomePage(),
@@ -20,9 +21,9 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   ExerciseMode.routeName: (_) => const ExerciseMode(),
 };
 
-Route<void> getRouteByName({String name}) {
+/*Route<void> getRouteByName({String name}) {
   return PageRouteBuilder<void>(
-    pageBuilder: (_, Animation<double> animation, Animation<double> secondaryAnimation) => const TaskManager(),
+    pageBuilder: (_, Animation<double> animation, Animation<double> secondaryAnimation) => ,
     transitionsBuilder: (_, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
       return SlideTransition(
         child: child,
@@ -30,4 +31,4 @@ Route<void> getRouteByName({String name}) {
       );
     },
   );
-}
+}*/

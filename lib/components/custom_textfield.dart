@@ -42,18 +42,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
       style: const TextStyle(fontSize: 20, fontFamily: 'Georgia'),
       decoration: InputDecoration(
         hintText: widget.hint,
-        border: _buildBorder(),
         labelText: widget.label,
         helperText: widget.desc,
         suffix: _buildSuffix(context),
-        enabledBorder: _buildBorder(),
         focusedBorder: _buildBorder(color: Colors.blue),
         contentPadding: const EdgeInsets.only(left: 10),
-        hintStyle: const TextStyle(color: Colors.black54),
-        labelStyle: const TextStyle(color: Colors.black87),
-        helperStyle: const TextStyle(color: Colors.black54),
         focusedErrorBorder: _buildBorder(color: Colors.red),
+        border: _buildBorder(color: Theme.of(context).accentColor),
+        hintStyle: TextStyle(color: Theme.of(context).accentColor),
+        labelStyle: TextStyle(color: Theme.of(context).accentColor),
         errorBorder: _buildBorder(width: 3, color: Colors.redAccent),
+        helperStyle: TextStyle(color: Theme.of(context).accentColor),
+        enabledBorder: _buildBorder(color: Theme.of(context).accentColor),
         errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
       ),
     );
@@ -78,7 +78,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 
-  UnderlineInputBorder _buildBorder({double width = 2, Color color = Colors.black}) {
+  UnderlineInputBorder _buildBorder({double width = 2, Color color}) {
     return UnderlineInputBorder(borderSide: BorderSide(width: width, color: color));
   }
 }

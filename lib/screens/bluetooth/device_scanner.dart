@@ -112,8 +112,8 @@ class ConnectTile extends StatelessWidget {
         const SizedBox(height: 20),
         CustomButton(
           text: device.name,
+          background: Colors.blue[700],
           icon: Icons.bluetooth_rounded,
-          color: Colors.deepOrange[600],
           onPressed: () => Bluetooth.instance.connect(device),
         ),
       ],
@@ -132,8 +132,8 @@ class DisconnectTile extends StatelessWidget {
         const Text('Device is connected successfully and ready to use!\nClick on the device name to disconnect.', textAlign: TextAlign.center),
         const SizedBox(height: 20),
         CustomButton(
-          color: Colors.green[700],
           text: Bluetooth.device.name,
+          background: Colors.green[700],
           icon: Icons.bluetooth_connected_rounded,
           onPressed: Bluetooth.instance.disconnect,
         ),
@@ -141,7 +141,6 @@ class DisconnectTile extends StatelessWidget {
         CustomButton(
           text: 'Close',
           icon: Icons.cancel,
-          color: Colors.black,
           onPressed: () => Navigator.pop<void>(context),
         ),
       ],
@@ -165,7 +164,6 @@ class StopScanTile extends StatelessWidget {
         CustomButton(
           text: 'Stop',
           icon: Icons.close_rounded,
-          color: Colors.deepOrangeAccent,
           onPressed: Bluetooth.instance.stopScan,
         ),
       ],
@@ -186,7 +184,6 @@ class StartScanTile extends StatelessWidget {
         const SizedBox(height: 30),
         CustomButton(
           text: 'Scan',
-          color: Colors.black,
           icon: Icons.search_rounded,
           onPressed: Bluetooth.instance.startScan,
         ),
@@ -224,7 +221,6 @@ class EnableLocationTile extends StatelessWidget {
         const SizedBox(height: 30),
         CustomButton(
           text: 'Enable',
-          color: Colors.black,
           icon: Icons.location_on_rounded,
           onPressed: () async => Locator.sink.add(await Location.instance.requestService()),
         ),
@@ -249,7 +245,6 @@ class EnableBluetoothTile extends StatelessWidget {
         const SizedBox(height: 30),
         CustomButton(
           text: 'Enable',
-          color: Colors.black,
           icon: Icons.bluetooth_rounded,
           onPressed: Bluetooth.instance.enable,
         ),

@@ -125,7 +125,7 @@ class _BarGraphState extends State<BarGraph> with CreateXLSX {
                   margin: const EdgeInsets.symmetric(vertical: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: Color.lerp(Colors.yellow[300], Colors.green, snapshot.data / _targetLoad),
+                    color: Color.lerp(Colors.yellow[100], Colors.green, snapshot.data / _targetLoad),
                   ),
                   child: Text(
                     'Set: $_currentSet of ${_exerciseData.sets}   |   Rep: $_currentRep of ${_exerciseData.reps}',

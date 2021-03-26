@@ -6,7 +6,6 @@ import 'package:tendon_loader/screens/bluetooth/device_scanner.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
-import 'package:tendon_loader/utils/app_routes.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/location.dart';
 
@@ -21,6 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 enum ActionType {
+  settings,
   export,
   about,
   close,
@@ -46,14 +46,26 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text(HomePage.name),
         actions: <Widget>[
-          IconButton(icon: const Icon(Icons.info_outline_rounded), onPressed: aboutDialog),
           PopupMenuButton<ActionType>(
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.more_vert_rounded),
             onSelected: (ActionType type) {
-              if (type == ActionType.export) Navigator.push<void>(context, getRouteByName());
+              switch (type) {
+                case ActionType.about:
+                  return _aboutDialog();
+                case ActionType.export:
+                  // TODO(mitul): Handle this case.
+                  break;
+                case ActionType.close:
+                  // TODO(mitul): Handle this case.
+                  break;
+                case ActionType.settings:
+                  // TODO(mitul): Handle this case.
+                  break;
+              }
             },
             itemBuilder: (BuildContext context) => <PopupMenuItem<ActionType>>[
-              const PopupMenuItem<ActionType>(value: ActionType.export, child: Text('Export All')),
+              const PopupMenuItem<ActionType>(value: ActionType.settings, child: Text('Settings')),
+              const PopupMenuItem<ActionType>(value: ActionType.export, child: Text('Export')),
               const PopupMenuItem<ActionType>(value: ActionType.about, child: Text('About')),
               if (true) const PopupMenuItem<ActionType>(value: ActionType.close, child: Text('Exit')),
             ],
@@ -70,25 +82,10 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                const CustomImage(name: 'ic_launcher-playstore.png', scale: 0.7),
-                CustomTile(
-                  context: context,
-                  name: LiveData.name,
-                  route: LiveData.routeName,
-                  icon: Icons.show_chart_rounded,
-                ),
-                CustomTile(
-                  context: context,
-                  name: NewExercise.name,
-                  route: NewExercise.routeName,
-                  icon: Icons.directions_run_rounded,
-                ),
-                CustomTile(
-                  context: context,
-                  name: MVCTesting.name,
-                  route: MVCTesting.routeName,
-                  icon: Icons.airline_seat_legroom_extra,
-                ),
+                const CustomImage(scale: 0.7),
+                CustomTile(context: context, name: LiveData.name, route: LiveData.routeName, icon: Icons.show_chart_rounded),
+                CustomTile(context: context, name: NewExercise.name, route: NewExercise.routeName, icon: Icons.directions_run_rounded),
+                CustomTile(context: context, name: MVCTesting.name, route: MVCTesting.routeName, icon: Icons.airline_seat_legroom_extra),
               ],
             ),
           ),
@@ -97,33 +94,40 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton.extended(
         label: const Text('Connect Device'),
         icon: const Icon(Icons.bluetooth_rounded),
-        onPressed: () async {
-          await showDialog<void>(
-            context: context,
-            useSafeArea: true,
-            barrierDismissible: false,
-            builder: (_) {
-              return AlertDialog(
-                scrollable: true,
-                content: const DeviceScanner(),
-                title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              );
-            },
-          );
-        },
+        onPressed: () => showDialog<void>(
+          context: context,
+          useSafeArea: true,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            scrollable: true,
+            content: const DeviceScanner(),
+            title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          ),
+        ),
       ),
     );
   }
 
-  void aboutDialog() {
+  void _aboutDialog() {
     showAboutDialog(
       context: context,
-      applicationVersion: '1.0.0',
+      applicationVersion: 'v1.0',
       applicationName: HomePage.name,
       applicationLegalese: 'Application Legalese',
-      applicationIcon: const Icon(Icons.account_circle_rounded),
-      children: <Text>[const Text('Mitul Vaghamshi'), const Text('mitulvaghmashi@gmail.com')],
+      applicationIcon: const CustomImage(
+        scale: 0.25,
+      ),
+      children: <Widget>[
+        const SizedBox(height: 20),
+        const Text(
+          '♥ Mitul Vaghamshi',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.blue, fontSize: 20, fontFamily: 'Georgia', letterSpacing: 1.5),
+        ),
+        const SizedBox(height: 20),
+        const Text('✉ mitulvaghmashi@gmail.com', textAlign: TextAlign.center),
+      ],
     );
   }
 }

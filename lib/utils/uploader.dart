@@ -1,42 +1,42 @@
 import 'dart:async';
 import 'dart:io' show File;
 
-import 'package:firebase_storage/firebase_storage.dart' show /*UploadTask,*/ Reference, FirebaseStorage, SettableMetadata /*, TaskSnapshot, TaskState*/;
+import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage, Reference, SettableMetadata;
 import 'package:flutter/foundation.dart';
 // import 'package:flutter/services.dart';
 
 class Uploader {
   // final List<UploadTask> _uploadTasks = <UploadTask>[];
 
-  Future<void> _uploadFile(final File file, final String userID, final String name) async {
-    final Reference reference = FirebaseStorage.instance.ref().child('all-users').child(userID).child('/$name');
-    final SettableMetadata metadata = SettableMetadata(
-      contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      customMetadata: <String, String>{'Source Location': file.uri.toString()},
-    );
-    kIsWeb ? await reference.putData(await file.readAsBytes(), metadata) : await reference.putFile(file, metadata);
+  static Future<void> uploadFile(final File file, final String userID, final String name) async {
+    if (file.existsSync()) {
+      final Reference reference = FirebaseStorage.instance.ref().child('all-users').child(userID).child('/$name');
+      final SettableMetadata metadata = SettableMetadata(
+        contentLanguage: 'en-US',
+        contentEncoding: 'utf-8',
+        customMetadata: <String, String>{'Location': file.uri.toString()},
+        contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      );
+      kIsWeb ? await reference.putData(await file.readAsBytes(), metadata) : await reference.putFile(File(file.path), metadata);
+    }
   }
 
-  // // _downloadBytes(_uploadTasks[index].snapshot.ref) // kIsWeb
-  // Future<void> _downloadBytes(Reference ref) async {
-  //   // final bytes = await ref.getData();
-  //   // await saveAsBytes(bytes, 'some-image.jpg');
-  // }
-  //
-  // // _downloadFile(_uploadTasks[index].snapshot.ref) // !kIsWeb
-  // Future<void> _downloadFile(Reference ref) async {
-  //   final Directory sysTmpDir = Directory.systemTemp;
-  //   final File tempFile = File('${sysTmpDir.path}/temp-${ref.name}');
-  //   if (tempFile.existsSync()) await tempFile.delete();
-  //   await ref.writeToFile(tempFile);
-  // }
-  //
-  // // _downloadLink(_uploadTasks[index].snapshot.ref)
-  // Future<void> _downloadLink(Reference ref) async => Clipboard.setData(ClipboardData(text: await ref.getDownloadURL()));
-
-  Future<void> createTask(File file, String userID, String name) async {
-    if (file.existsSync()) await _uploadFile(file, userID, name);
-  }
+// // _downloadBytes(_uploadTasks[index].snapshot.ref) // kIsWeb
+// Future<void> _downloadBytes(Reference ref) async {
+//   // final bytes = await ref.getData();
+//   // await saveAsBytes(bytes, 'some-image.jpg');
+// }
+//
+// // _downloadFile(_uploadTasks[index].snapshot.ref) // !kIsWeb
+// Future<void> _downloadFile(Reference ref) async {
+//   final Directory sysTmpDir = Directory.systemTemp;
+//   final File tempFile = File('${sysTmpDir.path}/temp-${ref.name}');
+//   if (tempFile.existsSync()) await tempFile.delete();
+//   await ref.writeToFile(tempFile);
+// }
+//
+// // _downloadLink(_uploadTasks[index].snapshot.ref)
+// Future<void> _downloadLink(Reference ref) async => Clipboard.setData(ClipboardData(text: await ref.getDownloadURL()));
 }
 
 // class UploadTaskListTile extends StatelessWidget {
