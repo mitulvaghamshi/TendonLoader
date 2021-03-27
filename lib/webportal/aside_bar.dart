@@ -3,7 +3,7 @@ import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/utils/validator.dart';
 
 class AsideBar extends StatefulWidget {
-  const AsideBar({Key key}) : super(key: key);
+  const AsideBar({Key/*?*/ key}) : super(key: key);
 
   @override
   _AsideBarState createState() => _AsideBarState();

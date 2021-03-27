@@ -32,9 +32,9 @@ class Bluetooth {
   static const int CMD_ENTER_SLEEP = 110;
   static const int CMD_GET_BATTERY_VOLTAGE = 111;
 
-  static BluetoothDevice _device; // Connected device
-  static BluetoothCharacteristic _dataChar; // data receiver
-  static BluetoothCharacteristic _controlChar; // data controller
+  static BluetoothDevice/*?*/ _device; // Connected device
+  static BluetoothCharacteristic/*?*/ _dataChar; // data receiver
+  static BluetoothCharacteristic/*?*/ _controlChar; // data controller
 
   static bool _isBusy = false;
   static bool _isWorking = false;
@@ -43,7 +43,7 @@ class Bluetooth {
 
   static Bluetooth instance = const Bluetooth._();
 
-  static BluetoothDevice get device => _device;
+  static BluetoothDevice/*?*/ get device => _device;
 
   void reset() {
     _device = _dataChar = _controlChar = null;

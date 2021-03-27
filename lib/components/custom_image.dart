@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomImage extends StatelessWidget {
   const CustomImage({
-    Key key,
+    Key/*?*/ key,
     this.color,
     this.scale = 0.6,
     this.zeroPad = false,
@@ -16,7 +16,7 @@ class CustomImage extends StatelessWidget {
   final String path;
   final double scale;
   final bool zeroPad;
-  final Color color;
+  final Color/*?*/ color;
 
   @override
   Widget build(BuildContext context) {

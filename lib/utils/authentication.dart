@@ -15,17 +15,17 @@ class Authentication {
     return Future<FirebaseApp>.delayed(const Duration(seconds: 1), () => null);
   }
 
-  static Future<User> signIn({String email, String password, BuildContext context}) async {
-    User user;
+  static Future<User/*?*/> signIn({/*required*/ String email, /*required*/ String password, BuildContext/*?*/ context}) async {
+    User/*?*/ user;
     final FirebaseAuth auth = FirebaseAuth.instance;
     try {
       final UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        customSnackBar(context, 'No user found for that email. Make sure you enter right credentials.');
+        customSnackBar(context/*!*/, 'No user found for that email. Make sure you enter right credentials.');
       } else if (e.code == 'wrong-password') {
-        customSnackBar(context, 'Invalid password.');
+        customSnackBar(context/*!*/, 'Invalid password.');
       }
     }
     return user;
@@ -67,13 +67,13 @@ class Authentication {
   //   return auth.currentUser;
   // }
 
-  static Future<User> signUp({@required String name, @required String email, @required String password, @required BuildContext context}) async {
+  static Future<User/*?*/> signUp({/*required*/ @required String name, /*required*/ @required String email, /*required*/ @required String password, /*required*/ @required BuildContext context}) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
-    User user;
+    User/*?*/ user;
     try {
       final UserCredential userCredential = await auth.createUserWithEmailAndPassword(email: email, password: password);
       user = userCredential.user;
-      await user.updateProfile(displayName: name);
+      await user/*!*/.updateProfile(displayName: name);
       await user.reload();
       user = auth.currentUser;
     } on FirebaseAuthException catch (e) {

@@ -5,7 +5,7 @@ import 'package:tendon_loader/webportal/content.dart';
 import 'package:tendon_loader/webportal/aside_bar.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key/*?*/ key}) : super(key: key);
 
   static const String routeName = '/homePage';
 

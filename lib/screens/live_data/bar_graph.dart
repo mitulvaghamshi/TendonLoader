@@ -6,7 +6,7 @@ import 'package:tendon_loader/components/countdown.dart';
 import 'package:tendon_loader/utils/data_handler.dart';
 
 class BarGraph extends StatefulWidget {
-  const BarGraph({Key key}) : super(key: key);
+  const BarGraph({Key/*?*/ key}) : super(key: key);
 
   @override
   _BarGraphState createState() => _BarGraphState();
@@ -49,7 +49,7 @@ class _BarGraphState extends State<BarGraph> {
               initialData: 0,
               stream: _handler.timeStream,
               builder: (_, AsyncSnapshot<int> snapshot) => Text(
-                'Time elapsed: ${snapshot.data ~/ 60}:${(snapshot.data % 60).toString().padLeft(2, '0')} s',
+                'Time elapsed: ${snapshot.data/*!*/ ~/ 60}:${(snapshot.data/*!*/ % 60).toString().padLeft(2, '0')} s',
                 style: const TextStyle(fontSize: 26, color: Colors.green, fontWeight: FontWeight.bold),
               ),
             ),

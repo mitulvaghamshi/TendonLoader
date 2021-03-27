@@ -4,7 +4,7 @@ import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/validator.dart';
 
 class Content extends StatefulWidget {
-  const Content({Key key}) : super(key: key);
+  const Content({Key/*?*/ key}) : super(key: key);
 
   @override
   _ContentState createState() => _ContentState();
@@ -48,11 +48,11 @@ class _ContentState extends State<Content> with ValidateSearchMixin {
 }
 
 class ColumnX extends StatefulWidget {
-  const ColumnX({Key key, this.controller, this.validator, this.keya}) : super(key: key);
+  const ColumnX({Key/*?*/ key, this.controller, this.validator, this.keya}) : super(key: key);
 
-  final TextEditingController controller;
-  final String Function(String) validator;
-  final String keya;
+  final TextEditingController/*?*/ controller;
+  final String Function(String)/*?*/ validator;
+  final String/*?*/ keya;
 
   @override
   _ColumnXState createState() => _ColumnXState();

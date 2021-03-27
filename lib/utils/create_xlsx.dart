@@ -15,7 +15,7 @@ mixin CreateXLSX {
 
   void addToList(ChartData chartData) => _measurements.add(chartData);
 
-  Future<void> export({ExerciseData exerciseData}) async {
+  Future<void> export({ExerciseData/*?*/ exerciseData}) async {
     // if (_measurements.isEmpty) return;
     int _iR = 0;
     const String _iA = 'A';
@@ -58,32 +58,32 @@ mixin CreateXLSX {
       _iR++; // 8
       _sheet.getRangeByName('$_iA$_iR').text = 'Last MVC Test Recorded [Kg]';
       // TODO(mitul): adjust last recorded MVC
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad * 1.3;
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad/*!*/ * 1.3;
 
       // Target Load
       _iR++; // 9
       _sheet.getRangeByName('$_iA$_iR').text = 'Target Load [Kg]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad;
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad/*!*/;
 
       // Hold Time
       _iR++; // 10
       _sheet.getRangeByName('$_iA$_iR').text = 'Hold Time [sec]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.holdTime.toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.holdTime/*!*/.toDouble();
 
       // Rest Time
       _iR++; // 11
       _sheet.getRangeByName('$_iA$_iR').text = 'Rest Time [sec]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.restTime.toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.restTime/*!*/.toDouble();
 
       // Sets
       _iR++; // 12
       _sheet.getRangeByName('$_iA$_iR').text = 'Sets [#]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.sets.toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.sets/*!*/.toDouble();
 
       // Reps
       _iR++; // 13
       _sheet.getRangeByName('$_iA$_iR').text = 'Reps [#]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.reps.toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.reps/*!*/.toDouble();
     }
 
     // data headers
@@ -95,8 +95,8 @@ mixin CreateXLSX {
     double _avgTime = 0;
     double _avgWeight = 0;
     for (final ChartData chartData in _measurements) {
-      _avgTime += chartData.time;
-      _avgWeight += chartData.weight;
+      _avgTime += chartData.time/*!*/;
+      _avgWeight += chartData.weight/*!*/;
       if (count++ == 8) {
         _iR++; // 16..N
         _sheet.getRangeByName('$_iA$_iR').number = double.parse(((_avgTime / 8.0) / 1000000.0).toStringAsFixed(2));
@@ -106,7 +106,7 @@ mixin CreateXLSX {
       }
     }
     _measurements.clear();
-    final String _userId = (await SharedPreferences.getInstance()).getString(Keys.keyUsername).split('@')[0];
+    final String _userId = (await SharedPreferences.getInstance()).getString(Keys.keyUsername)/*!*/.split('@')[0];
     final String _mode = isExercise ? 'Exercise' : 'MVCTest';
     final String _path = (await pp.getApplicationSupportDirectory()).path;
     final String _name = '${_date}_${_time.replaceAll(RegExp(r'[\s:]'), '_')}_${_userId}_$_mode.xlsx';

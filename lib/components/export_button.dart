@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 
 class ExportButton extends StatelessWidget {
-  const ExportButton({Key key, @required this.callback}) : super(key: key);
+  const ExportButton({Key/*?*/ key, /*required*/ @required this.callback}) : super(key: key);
 
   final VoidCallback callback;
 

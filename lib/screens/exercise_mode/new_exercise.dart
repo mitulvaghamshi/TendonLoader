@@ -6,7 +6,7 @@ import 'package:tendon_loader/utils/exercise_data.dart';
 import 'package:tendon_loader/utils/validator.dart' show ValidateExerciseDataMixin;
 
 class NewExercise extends StatefulWidget {
-  const NewExercise({Key key}) : super(key: key);
+  const NewExercise({Key/*?*/ key}) : super(key: key);
 
   static const String name = ExerciseMode.name;
   static const String routeName = '/newExercise';
@@ -34,7 +34,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
   }
 
   void _submit() {
-    if (_exerciseFormKey.currentState.validate() || true) {
+    if (_exerciseFormKey.currentState/*!*/.validate() || true) {
       Navigator.of(context).pushReplacementNamed(
         ExerciseMode.routeName,
         arguments: const ExerciseData(targetLoad: 5, holdTime: 5, restTime: 10, sets: 2, reps: 3),
@@ -120,7 +120,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
                     CustomButton(
                       text: 'Clear all',
                       icon: Icons.clear_rounded,
-                      onPressed: () => _exerciseFormKey.currentState.reset(),
+                      onPressed: () => _exerciseFormKey.currentState/*!*/.reset(),
                     ),
                   ],
                 ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/screens/live_data/bar_graph.dart';
 
 class LiveData extends StatelessWidget {
-  const LiveData({Key key}) : super(key: key);
+  const LiveData({Key/*?*/ key}) : super(key: key);
 
   static const String name = 'Live Data';
   static const String routeName = '/liveData';

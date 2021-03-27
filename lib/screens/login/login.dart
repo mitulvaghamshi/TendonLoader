@@ -4,7 +4,7 @@ import 'package:tendon_loader/screens/login/signin.dart';
 import 'package:tendon_loader/utils/authentication.dart';
 
 class Login extends StatelessWidget {
-  const Login({Key key}) : super(key: key);
+  const Login({Key/*?*/ key}) : super(key: key);
 
   static const String routeName = '/';
 

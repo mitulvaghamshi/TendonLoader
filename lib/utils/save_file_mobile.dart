@@ -13,7 +13,7 @@ class FileSaveHelper {
     await file.writeAsBytes(bytes, flush: true);
     final Map<String, String> argument = <String, String>{'file_path': '$path/$fileName'};
     try {
-      final Future<Map<String, String>> result = _platformCall.invokeMethod('viewExcel', argument);
+      final Future<Map<String, String>/*?*/> result = _platformCall.invokeMethod('viewExcel', argument);
       // ignore: avoid_print
       print(result);
     } catch (e) {

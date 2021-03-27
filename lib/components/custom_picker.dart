@@ -3,15 +3,15 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 
 class TimePicker extends StatefulWidget {
-  const TimePicker({Key key, this.name = 'Pick', this.onChange}) : super(key: key);
+  const TimePicker({Key/*?*/ key, this.name = 'Pick', this.onChange}) : super(key: key);
 
   final String name;
-  final Function(int) onChange;
+  final Function(int)/*?*/ onChange;
 
   @override
   TimePickerState createState() => TimePickerState();
 
-  static Future<String> selectTime(BuildContext context) {
+  static Future<String/*?*/> selectTime(BuildContext context) {
     int _min = 0;
     int _sec = 0;
     return showDialog<String>(
@@ -63,7 +63,7 @@ class TimePickerState extends State<TimePicker> {
           maxValue: 60,
           itemWidth: 80,
           haptics: true,
-          onChanged: (int value) => setState(() => widget.onChange(_value = value)),
+          onChanged: (int value) => setState(() => widget.onChange/*!*/(_value = value)),
           selectedTextStyle: const TextStyle(fontSize: 36, fontFamily: 'Georgia', fontWeight: FontWeight.bold),
           decoration: BoxDecoration(border: Border.all(color: Theme.of(context).accentColor), borderRadius: BorderRadius.circular(16)),
         ),

@@ -10,7 +10,7 @@ import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/location.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key}) : super(key: key);
+  const Home({Key/*?*/ key}) : super(key: key);
 
   static const String routeName = '/home';
   static const String name = 'Tendon Loader';

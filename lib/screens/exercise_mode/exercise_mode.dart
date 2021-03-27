@@ -5,14 +5,14 @@ import 'package:tendon_loader/utils/create_xlsx.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
 
 class ExerciseMode extends StatelessWidget with CreateXLSX {
-  const ExerciseMode({Key key}) : super(key: key);
+  const ExerciseMode({Key/*?*/ key}) : super(key: key);
 
   static const String name = 'Exercise Mode';
   static const String routeName = '/exerciseMode';
 
   @override
   Widget build(BuildContext context) {
-    final ExerciseData _data = ModalRoute.of(context).settings.arguments as ExerciseData;
+    final ExerciseData/*?*/ _data = ModalRoute.of(context)/*!*/.settings.arguments as ExerciseData/*?*/;
     return Scaffold(
       body: BarGraph(exerciseData: _data),
       appBar: AppBar(

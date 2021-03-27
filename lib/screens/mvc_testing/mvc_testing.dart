@@ -4,7 +4,7 @@ import 'package:tendon_loader/screens/mvc_testing/bar_graph.dart';
 import 'package:tendon_loader/utils/create_xlsx.dart';
 
 class MVCTesting extends StatelessWidget with CreateXLSX {
-  const MVCTesting({Key key}) : super(key: key);
+  const MVCTesting({Key/*?*/ key}) : super(key: key);
 
   static const String name = 'MVC Testing';
   static const String routeName = '/mvcTesting';

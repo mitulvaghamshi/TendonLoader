@@ -10,7 +10,7 @@ import 'package:tendon_loader/utils/validator.dart' show ValidateCredentialMixin
 import 'package:tendon_loader/webportal/homepage.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key key}) : super(key: key);
+  const SignIn({Key/*?*/ key}) : super(key: key);
 
   static const String routeName = '/sigIn';
 
@@ -24,16 +24,16 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
   final GlobalKey<FormState> _signInFormKey = GlobalKey<FormState>();
   AnimationController _rotateCtrl;
   bool _busy = false;
-  User _user;
+  User/*?*/ _user;
 
   SharedPreferences _preferences;
-  bool _staySignedIn = true;
+  bool/*?*/ _staySignedIn = true;
 
   Future<void> _getLoginInfo() async {
     _preferences = await SharedPreferences.getInstance();
     setState(() {
       _staySignedIn = _preferences.getBool(Keys.keyStaySignIn) ?? true;
-      if (_staySignedIn) {
+      if (_staySignedIn/*!*/) {
         _usernameCtrl.text = _preferences.getString(Keys.keyUsername) ?? '';
         _passwordCtrl.text = _preferences.getString(Keys.keyPassword) ?? '';
       }
@@ -41,8 +41,8 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
   }
 
   Future<void> _setLoginInfo() async {
-    await _preferences.setBool(Keys.keyStaySignIn, _staySignedIn);
-    if (_staySignedIn) {
+    await _preferences.setBool(Keys.keyStaySignIn, _staySignedIn/*!*/);
+    if (_staySignedIn/*!*/) {
       await _preferences.setString(Keys.keyUsername, _usernameCtrl.text);
       await _preferences.setString(Keys.keyPassword, _passwordCtrl.text);
     }
@@ -127,7 +127,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Checkbox(value: _staySignedIn, onChanged: (bool value) => setState(() => _staySignedIn = value)),
+                Checkbox(value: _staySignedIn, onChanged: (bool/*?*/ value) => setState(() => _staySignedIn = value)),
                 const Text('Stay signed in.', style: TextStyle(letterSpacing: 3)),
               ],
             ),
@@ -162,7 +162,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
                     heroTag: 'sign-in-tag',
                     child: const Icon(Icons.send),
                     onPressed: () async {
-                      if (_signInFormKey.currentState.validate() && !_busy) {
+                      if (_signInFormKey.currentState/*!*/.validate() && !_busy) {
                         // _user = await Authentication.signIn(context: context, email: _usernameCtrl.text, password: _passwordCtrl.text);
                         await _rotateCtrl.forward();
                         _busy = true;

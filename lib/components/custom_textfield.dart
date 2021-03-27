@@ -5,15 +5,15 @@ import 'package:tendon_loader/components/custom_picker.dart';
 
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
-    @required this.label,
-    @required this.validator,
-    @required this.controller,
+    /*required*/ @required this.label,
+    /*required*/ @required this.validator,
+    /*required*/ @required this.controller,
     this.desc = '',
     this.isPicker = false,
     this.isObscure = false,
     this.hint = 'Enter value',
     this.keyboardType = TextInputType.text,
-    Key key,
+    Key/*?*/ key,
   }) : super(key: key);
 
   final String hint;
@@ -22,8 +22,8 @@ class CustomTextField extends StatefulWidget {
   final bool isPicker;
   final bool isObscure;
   final TextInputType keyboardType;
-  final String Function(String) validator;
-  final TextEditingController controller;
+  final String/*?*/ Function(String/*?*/)/*?*/ validator;
+  final TextEditingController/*?*//*!*/ controller;
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -65,7 +65,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     if (widget.isPicker) {
       buttons.add(IconButton(
         icon: const Icon(Icons.timer_rounded),
-        onPressed: () async => widget.controller.text = await TimePicker.selectTime(context),
+        onPressed: () async => widget.controller/*!*/.text = await TimePicker.selectTime(context),
       ));
     } else if (widget.isObscure) {
       buttons.add(IconButton(
@@ -75,11 +75,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
     }
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: buttons..add(IconButton(icon: const Icon(Icons.clear_rounded), onPressed: () => widget.controller.clear())),
+      children: buttons..add(IconButton(icon: const Icon(Icons.clear_rounded), onPressed: () => widget.controller/*!*/.clear())),
     );
   }
 
-  UnderlineInputBorder _buildBorder({double width = 2, Color color}) {
+  UnderlineInputBorder _buildBorder({double width = 2, /*required*/ Color color}) {
     return UnderlineInputBorder(borderSide: BorderSide(width: width, color: color));
   }
 }
