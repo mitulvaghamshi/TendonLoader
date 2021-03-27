@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/screens/bluetooth/debug.dart';
 import 'package:tendon_loader/screens/exercise_mode/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
-import 'package:tendon_loader/screens/homepage.dart';
+import 'package:tendon_loader/screens/home.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/screens/login/signin.dart';
 import 'package:tendon_loader/screens/login/signup.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
+import 'package:tendon_loader/webportal/homepage.dart';
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
-  Debug.routeName: (_) => const Debug(),
+  Home.routeName: (_) => const Home(),
   Login.routeName: (_) => const Login(),
-  SignIn.routeName: (_) => const SignIn(),
   SignUp.routeName: (_) => const SignUp(),
-  HomePage.routeName: (_) => const HomePage(),
+  SignIn.routeName: (_) => const SignIn(),
   LiveData.routeName: (_) => const LiveData(),
   MVCTesting.routeName: (_) => const MVCTesting(),
   NewExercise.routeName: (_) => const NewExercise(),
   ExerciseMode.routeName: (_) => const ExerciseMode(),
+  /* Web portal */
+  HomePage.routeName: (_) => const HomePage(),
 };
 
 /*Route<void> getRouteByName({String name}) {

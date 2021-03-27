@@ -34,6 +34,10 @@ mixin ValidateExerciseDataMixin {
   String validateReps(String value) => null;
 }
 
+mixin ValidateSearchMixin {
+  String validateSearchQuery(String value) => null;
+}
+
 /*
 *  uploadTask.addOnProgressListener { (bytesTransferred, totalByteCount) ->
             val progress = (100.0 * bytesTransferred) / totalByteCount

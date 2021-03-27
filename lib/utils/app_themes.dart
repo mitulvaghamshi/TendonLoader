@@ -6,12 +6,12 @@ final ThemeData lightTheme = ThemeData(
   accentColor: Colors.black,
   primaryColor: Colors.white,
   brightness: Brightness.light,
+  visualDensity: VisualDensity.adaptivePlatformDensity,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     splashColor: Colors.black,
     backgroundColor: Colors.white,
     foregroundColor: Colors.black,
   ),
-  visualDensity: VisualDensity.adaptivePlatformDensity,
 );
 
 final ThemeData darkTheme = ThemeData(

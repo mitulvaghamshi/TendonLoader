@@ -9,14 +9,14 @@ import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/location.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key key}) : super(key: key);
 
-  static const String routeName = '/homepage';
+  static const String routeName = '/home';
   static const String name = 'Tendon Loader';
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomeState createState() => _HomeState();
 }
 
 enum ActionType {
@@ -26,7 +26,7 @@ enum ActionType {
   close,
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(HomePage.name),
+        title: const Text(Home.name),
         actions: <Widget>[
           PopupMenuButton<ActionType>(
             icon: const Icon(Icons.more_vert_rounded),
@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
     showAboutDialog(
       context: context,
       applicationVersion: 'v1.0',
-      applicationName: HomePage.name,
+      applicationName: Home.name,
       applicationLegalese: 'Application Legalese',
       applicationIcon: const CustomImage(
         scale: 0.25,

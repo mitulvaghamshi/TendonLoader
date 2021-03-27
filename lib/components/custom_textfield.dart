@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tendon_loader/components/custom_picker.dart';
@@ -5,13 +6,13 @@ import 'package:tendon_loader/components/custom_picker.dart';
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
     @required this.label,
-    @required this.controller,
     @required this.validator,
-    @required this.keyboardType,
+    @required this.controller,
     this.desc = '',
     this.isPicker = false,
     this.isObscure = false,
     this.hint = 'Enter value',
+    this.keyboardType = TextInputType.text,
     Key key,
   }) : super(key: key);
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
-import 'package:tendon_loader/screens/homepage.dart';
+import 'package:tendon_loader/screens/home.dart';
 import 'package:tendon_loader/screens/login/signin.dart';
 import 'package:tendon_loader/utils/authentication.dart';
 import 'package:tendon_loader/utils/constants.dart';
@@ -35,7 +35,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
         if (_rotateCtrl.status == AnimationStatus.completed) {
           if (_user != null) {
             await _setLoginInfo();
-            await Navigator.pushReplacementNamed(context, HomePage.routeName);
+            await Navigator.pushReplacementNamed(context, Home.routeName);
           } else {
             await _rotateCtrl.reverse();
             _busy = false;
