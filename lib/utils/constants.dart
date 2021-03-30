@@ -4,9 +4,8 @@ class Keys {
   static const String keyPassword = '_KEY_PASSWORD';
 }
 
-class SizeFactor {
-  static const double sizeWeb = 768;
-  static const double sizeMobile = 350;
-  static const double sizeAside = 450;
-
+class Sizes {
+  static const double webSize = 768;
+  static const double mobileSize = 350;
+  static const double listPanelSize = 400;
 }

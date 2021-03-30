@@ -1,13 +1,9 @@
-import 'dart:async';
 import 'dart:io' show File;
 
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage, Reference, SettableMetadata;
 import 'package:flutter/foundation.dart';
-// import 'package:flutter/services.dart';
 
 class Uploader {
-  // final List<UploadTask> _uploadTasks = <UploadTask>[];
-
   static Future<void> uploadFile(final File file, final String userID, final String name) async {
     if (file.existsSync()) {
       final Reference reference = FirebaseStorage.instance.ref().child('all-users').child(userID).child('/$name');
@@ -20,6 +16,10 @@ class Uploader {
       kIsWeb ? await reference.putData(await file.readAsBytes(), metadata) : await reference.putFile(File(file.path), metadata);
     }
   }
+
+  static Future<List<Reference>> getUserList({String path = 'all-users'}) async => (await FirebaseStorage.instance.ref(path).listAll()).prefixes;
+
+  static Future<List<Reference>> getUserData(String path) async => (await FirebaseStorage.instance.ref(path).listAll()).items;
 
 // // _downloadBytes(_uploadTasks[index].snapshot.ref) // kIsWeb
 // Future<void> _downloadBytes(Reference ref) async {

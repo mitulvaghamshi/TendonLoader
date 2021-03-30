@@ -2,14 +2,9 @@
 <html>
 <head>
     <!--
-      If you are serving your web app in a path other than the root, change the
-      href value below to reflect the base path you are serving from.
-
-      The path provided below has to start and end with a slash "/" in order for
-      it to work correctly.
-
-      Fore more details:
-      * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+      If you are serving your web app in a path other than the root, change the href value below to reflect the base path you are serving from.
+      The path provided below has to start and end with a slash "/" in order for it to work correctly.
+      Fore more details: * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
     -->
     <base href="/">
 
@@ -30,15 +25,31 @@
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
-<!-- This script installs service_worker.js to provide PWA functionality to
-     application. For more information, see:
-     https://developers.google.com/web/fundamentals/primers/service-workers -->
 <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('flutter-first-frame', function () {
         navigator.serviceWorker.register('flutter_service_worker.js');
       });
     }
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-storage.js"></script>
+
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyCnmMiiuYaLeA-FFrgCouoUdnkSwY4DMA4",
+    authDomain: "tendonloader.firebaseapp.com",
+    projectId: "tendonloader",
+    storageBucket: "tendonloader.appspot.com",
+    messagingSenderId: "1085962274300",
+    appId: "1:1085962274300:web:befb1e6004a4756e891e79",
+    measurementId: "G-RXG5PYZZWX"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  // firebase.analytics();
 </script>
 
 <!-- Initialize App -->

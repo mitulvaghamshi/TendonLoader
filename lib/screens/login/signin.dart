@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/screens/home.dart';
+import 'package:tendon_loader/utils/authentication.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/validator.dart' show ValidateCredentialMixin;
 import 'package:tendon_loader/webportal/homepage.dart';
@@ -55,7 +56,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
     _rotateCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000))
       ..addStatusListener((AnimationStatus status) async {
         if (_rotateCtrl.status == AnimationStatus.completed) {
-          if (/*_user != null*/ true) {
+          if (_user != null) {
             await _setLoginInfo();
             await Navigator.pushReplacementNamed(context, kIsWeb ? HomePage.routeName : Home.routeName);
           } else {
@@ -163,7 +164,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
                     child: const Icon(Icons.send),
                     onPressed: () async {
                       if (_signInFormKey.currentState.validate() && !_busy) {
-                        // _user = await Authentication.signIn(context: context, email: _usernameCtrl.text, password: _passwordCtrl.text);
+                        _user = await Authentication.signIn(context: context, email: _usernameCtrl.text, password: _passwordCtrl.text);
                         await _rotateCtrl.forward();
                         _busy = true;
                       }

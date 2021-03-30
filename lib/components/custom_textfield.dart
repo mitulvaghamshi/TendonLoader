@@ -5,15 +5,15 @@ import 'package:tendon_loader/components/custom_picker.dart';
 
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
-    @required this.label,
-    @required this.validator,
-    @required this.controller,
+    Key key,
     this.desc = '',
+    this.validator,
+    @required this.label,
     this.isPicker = false,
     this.isObscure = false,
+    @required this.controller,
     this.hint = 'Enter value',
     this.keyboardType = TextInputType.text,
-    Key key,
   }) : super(key: key);
 
   final String hint;

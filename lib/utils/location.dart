@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:location/location.dart';
 import 'package:rxdart/rxdart.dart';
 
-extension Locator on Location {
+mixin Locator {
   static final BehaviorSubject<bool> _controller = BehaviorSubject<bool>.seeded(false);
 
   static Stream<bool> get stream => _controller.stream;

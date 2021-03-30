@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/screens/home.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/webportal/content.dart';
-import 'package:tendon_loader/webportal/aside_bar.dart';
+import 'package:tendon_loader/webportal/left_panel.dart';
+import 'package:tendon_loader/webportal/right_panel.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
@@ -11,35 +10,19 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double _mWidth = MediaQuery.of(context).size.width;
-    final bool _mIsWeb = _mWidth < SizeFactor.sizeWeb;
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Tendon Loader - Admin',),
-        actions: [
-          PopupMenuButton<ActionType>(
-            icon: const Icon(Icons.more_vert_rounded),
-            onSelected: (ActionType type) {},
-            itemBuilder: (BuildContext context) => <PopupMenuItem<ActionType>>[
-              const PopupMenuItem<ActionType>(value: ActionType.settings, child: Text('Settings')),
-              const PopupMenuItem<ActionType>(value: ActionType.export, child: Text('Export')),
-              const PopupMenuItem<ActionType>(value: ActionType.about, child: Text('About')),
-              if (true) const PopupMenuItem<ActionType>(value: ActionType.close, child: Text('Exit')),
-            ],
-          ),
-        ],
-      ),
-      drawer: _mIsWeb ? const Drawer(child: AsideBar()) : null,
-      body: SafeArea(
-        child: _mIsWeb
-            ? const Content()
-            : Row(
-                children: <SizedBox>[
-                  const SizedBox(width: SizeFactor.sizeAside, child: AsideBar()),
-                  SizedBox(width: _mWidth - SizeFactor.sizeAside, child: const Content()),
-                ],
-              ),
+      appBar: AppBar(centerTitle: true, title: const Text('Tendon Loader - Admin')),
+      drawer: size.width > size.height ? null : const Drawer(child: LeftPanel()),
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final Size size = constraints.biggest;
+          if (size.height > size.width - 56) {
+            return const RightPanel();
+          } else {
+            return Row(children: const <Widget>[LimitedBox(maxWidth: Sizes.mobileSize, child: LeftPanel()), Expanded(child: RightPanel())]);
+          }
+        },
       ),
     );
   }
