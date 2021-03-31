@@ -39,10 +39,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/database/ifriends.s3db
-    - assets/images/ic_launcher.png
-    - assets/images/ic_launcher-playstore.png
-    - assets/images/enable_bluetooth.png
+    - assets/images/app_logo.png
     - assets/images/enable_device.png
     - assets/images/enable_location.png
-    - assets/images/male_avatar.webp
+    - assets/images/enable_bluetooth.png

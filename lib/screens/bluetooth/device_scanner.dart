@@ -179,7 +179,7 @@ class StartScanTile extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const CustomImage(name: 'enable_device.png'),
+        const CustomImage(name: 'enable_device.svg'),
         const Text('Activate your device by pressing the button, then press scan to find the device', textAlign: TextAlign.center),
         const SizedBox(height: 30),
         CustomButton(
@@ -237,7 +237,7 @@ class EnableBluetoothTile extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const CustomImage(name: 'enable_bluetooth.png'),
+        const CustomImage(name: 'enable_bluetooth.svg'),
         const Text(
           'This app needs Bluetooth to communicate with your Progressor. Please enable Bluetooth on your device.',
           textAlign: TextAlign.center,
