@@ -19,7 +19,8 @@ class TimePicker extends StatefulWidget {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Select duration', textAlign: TextAlign.center, style: TextStyle(fontSize: 26)),
+          scrollable: true,
+          title: const Text('Select duration', textAlign: TextAlign.center, style: TextStyle(fontSize: 26, fontFamily: 'Georgia')),
           buttonPadding: const EdgeInsets.symmetric(horizontal: 20),
           contentPadding: const EdgeInsets.only(top: 16, left: 16, right: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -33,12 +34,13 @@ class TimePicker extends StatefulWidget {
           actions: <CustomButton>[
             CustomButton(
               text: 'Submit',
+              background: Colors.blue,
               icon: Icons.done_rounded,
               onPressed: () => Navigator.pop<String>(context, Duration(minutes: _min, seconds: _sec).inSeconds.toString()),
             ),
             CustomButton(
               text: 'Cancel',
-              icon: Icons.cancel,
+              icon: Icons.close_rounded,
               onPressed: () => Navigator.pop<void>(context),
             ),
           ],

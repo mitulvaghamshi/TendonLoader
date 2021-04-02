@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:location/location.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
+import 'package:tendon_loader/utils/constants.dart' show Images, Descriptions;
 import 'package:tendon_loader/utils/location.dart';
 
 class DeviceScanner extends StatelessWidget {
   const DeviceScanner({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Location.instance.serviceEnabled().then(Locator.sink.add);
-    return const ConnectedDeviceTile();
-  }
+  Widget build(BuildContext context) => const ConnectedDeviceTile();
 }
 
 class ConnectedDeviceTile extends StatelessWidget {
@@ -24,7 +21,9 @@ class ConnectedDeviceTile extends StatelessWidget {
     return StreamBuilder<List<BluetoothDevice>>(
       initialData: const <BluetoothDevice>[],
       stream: Stream<List<BluetoothDevice>>.fromFuture(FlutterBlue.instance.connectedDevices),
-      builder: (_, AsyncSnapshot<List<BluetoothDevice>> snapshot) => snapshot.data.isNotEmpty ? const DisconnectTile() : const BluetoothTile(),
+      builder: (_, AsyncSnapshot<List<BluetoothDevice>> snapshot) {
+        return snapshot.data.isNotEmpty ? DeviceList(devices: snapshot.data) : const BluetoothTile();
+      },
     );
   }
 }
@@ -64,8 +63,7 @@ class ScanResultTile extends StatelessWidget {
     return StreamBuilder<List<ScanResult>>(
       initialData: const <ScanResult>[],
       stream: FlutterBlue.instance.scanResults,
-      builder: (_, AsyncSnapshot<List<ScanResult>> snapshot) =>
-          snapshot.data.isNotEmpty ? DeviceTile(result: snapshot.data.first) : const ScannerTile(),
+      builder: (_, AsyncSnapshot<List<ScanResult>> snapshot) => snapshot.data.isEmpty ? const ScannerTile() : DeviceList(results: snapshot.data),
     );
   }
 }
@@ -83,67 +81,64 @@ class ScannerTile extends StatelessWidget {
   }
 }
 
-class DeviceTile extends StatelessWidget {
-  const DeviceTile({Key key, @required this.result}) : super(key: key);
+class DeviceList extends StatelessWidget {
+  const DeviceList({Key key, this.results = const <ScanResult>[], this.devices = const <BluetoothDevice>[]}) : super(key: key);
 
-  final ScanResult result;
+  final List<ScanResult> results;
+  final List<BluetoothDevice> devices;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        const Text(Descriptions.descClickToConnect, textAlign: TextAlign.center),
+        const SizedBox(height: 20),
+        ...results?.map((ScanResult result) => DeviceTile(device: result.device)),
+        ...devices?.map((BluetoothDevice device) => DeviceTile(device: device)),
+        const SizedBox(height: 20),
+        CustomButton(text: 'Close', icon: Icons.cancel, onPressed: () => Navigator.pop<void>(context)),
+      ],
+    );
+  }
+}
+
+class DeviceTile extends StatelessWidget {
+  const DeviceTile({Key key, this.device}) : super(key: key);
+
+  final BluetoothDevice device;
+
+  String get _deviceName => device.name.isEmpty ? device.id.toString() : device.name;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<BluetoothDeviceState>(
-      stream: result.device.state,
-      builder: (_, AsyncSnapshot<BluetoothDeviceState> snapshot) =>
-          snapshot.data == BluetoothDeviceState.connected ? const DisconnectTile() : ConnectTile(device: result.device),
-    );
-  }
-}
-
-class ConnectTile extends StatelessWidget {
-  const ConnectTile({Key key, @required this.device}) : super(key: key);
-
-  final BluetoothDevice device;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const Text('Click on the device name to connect\n Note: this might take a moment to connect.', textAlign: TextAlign.center),
-        const SizedBox(height: 20),
-        CustomButton(
-          text: device.name,
-          background: Colors.blue[700],
-          icon: Icons.bluetooth_rounded,
-          onPressed: () => Bluetooth.instance.connect(device),
-        ),
-      ],
-    );
-  }
-}
-
-class DisconnectTile extends StatelessWidget {
-  const DisconnectTile({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const Text('Device is connected successfully and ready to use!\nClick on the device name to disconnect.', textAlign: TextAlign.center),
-        const SizedBox(height: 20),
-        CustomButton(
-          text: Bluetooth.device.name,
-          background: Colors.green[700],
-          icon: Icons.bluetooth_connected_rounded,
-          onPressed: Bluetooth.instance.disconnect,
-        ),
-        const SizedBox(height: 20),
-        CustomButton(
-          text: 'Close',
-          icon: Icons.cancel,
-          onPressed: () => Navigator.pop<void>(context),
-        ),
-      ],
+      stream: device.state,
+      builder: (_, AsyncSnapshot<BluetoothDeviceState> snapshot) {
+        if (snapshot.data == BluetoothDeviceState.connected) {
+          return ListTile(
+            horizontalTitleGap: 0,
+            title: Text(_deviceName),
+            subtitle: const Text('Click to disconnect'),
+            onTap: Bluetooth.disconnect,
+            contentPadding: const EdgeInsets.all(5),
+            leading: const Icon(Icons.bluetooth_connected_rounded, size: 40),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            trailing: const CircleAvatar(radius: 20, backgroundColor: Colors.green),
+          );
+        } else {
+          return ListTile(
+            horizontalTitleGap: 0,
+            title: Text(_deviceName),
+            subtitle: const Text('Click to connect'),
+            onTap: () => Bluetooth.connect(device),
+            contentPadding: const EdgeInsets.all(5),
+            leading: const Icon(Icons.bluetooth_rounded, size: 40),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            trailing: const CircleAvatar(radius: 20, backgroundColor: Colors.deepOrange),
+          );
+        }
+      },
     );
   }
 }
@@ -161,11 +156,7 @@ class StopScanTile extends StatelessWidget {
           children: const <Widget>[CircularProgressIndicator(), Text('Please wait...', style: TextStyle(fontSize: 20))],
         ),
         const SizedBox(height: 30),
-        CustomButton(
-          text: 'Stop',
-          icon: Icons.close_rounded,
-          onPressed: Bluetooth.instance.stopScan,
-        ),
+        const CustomButton(text: 'Stop', icon: Icons.close_rounded, onPressed: Bluetooth.stopScan),
       ],
     );
   }
@@ -178,15 +169,11 @@ class StartScanTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const CustomImage(name: 'enable_device.svg'),
-        const Text('Activate your device by pressing the button, then press scan to find the device', textAlign: TextAlign.center),
-        const SizedBox(height: 30),
-        CustomButton(
-          text: 'Scan',
-          icon: Icons.search_rounded,
-          onPressed: Bluetooth.instance.startScan,
-        ),
+      children: const <Widget>[
+        CustomImage(name: Images.imgEnableDevice),
+        Text(Descriptions.descEnableDevice, textAlign: TextAlign.center),
+        SizedBox(height: 30),
+        CustomButton(text: 'Scan', icon: Icons.search_rounded, onPressed: Bluetooth.startScan),
       ],
     );
   }
@@ -199,31 +186,15 @@ class EnableLocationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const CustomImage(name: 'enable_location.png'),
-        const Text(
-          'This app uses bluetooth to communicate with your Progressor.',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 20),
-        const Text(
-          'Scanning for bluetooth devices can be used to locate you. That\'s why we ask you to permit location services. We\'re only using this permission to scan for your Progressor.',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14),
-        ),
-        const SizedBox(height: 15),
-        const Text(
-          'We\'ll never collect your physical location.',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
-        ),
-        const SizedBox(height: 30),
-        CustomButton(
-          text: 'Enable',
-          icon: Icons.location_on_rounded,
-          onPressed: () async => Locator.sink.add(await Location.instance.requestService()),
-        ),
+      children: const <Widget>[
+        CustomImage(name: Images.imgEnableLocation),
+        Text(Descriptions.descLocation1, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
+        SizedBox(height: 20),
+        Text(Descriptions.descLocation2, textAlign: TextAlign.center, style: TextStyle(fontSize: 14)),
+        SizedBox(height: 15),
+        Text(Descriptions.descLocation3, textAlign: TextAlign.center, style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+        SizedBox(height: 30),
+        CustomButton(text: 'Enable', icon: Icons.location_on_rounded, onPressed: Locator.requestService),
       ],
     );
   }
@@ -236,18 +207,11 @@ class EnableBluetoothTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const CustomImage(name: 'enable_bluetooth.svg'),
-        const Text(
-          'This app needs Bluetooth to communicate with your Progressor. Please enable Bluetooth on your device.',
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 30),
-        CustomButton(
-          text: 'Enable',
-          icon: Icons.bluetooth_rounded,
-          onPressed: Bluetooth.instance.enable,
-        ),
+      children: const <Widget>[
+        CustomImage(name: Images.imgEnableBluetooth),
+        Text(Descriptions.descEnableBluetooth, textAlign: TextAlign.center),
+        SizedBox(height: 30),
+        CustomButton(text: 'Enable', icon: Icons.bluetooth_rounded, onPressed: Bluetooth.enable),
       ],
     );
   }

@@ -10,16 +10,15 @@ import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 import 'package:tendon_loader/webportal/homepage.dart';
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
-  Home.routeName: (_) => const Home(),
-  Login.routeName: (_) => const Login(),
-  SignUp.routeName: (_) => const SignUp(),
-  SignIn.routeName: (_) => const SignIn(),
-  LiveData.routeName: (_) => const LiveData(),
-  MVCTesting.routeName: (_) => const MVCTesting(),
-  NewExercise.routeName: (_) => const NewExercise(),
-  ExerciseMode.routeName: (_) => const ExerciseMode(),
-  /* Web portal */
-  HomePage.routeName: (_) => const HomePage(),
+  Home.route: (_) => const Home(),
+  Login.route: (_) => const Login(),
+  SignUp.route: (_) => const SignUp(),
+  SignIn.route: (_) => const SignIn(),
+  LiveData.route: (_) => const LiveData(),
+  MVCTesting.route: (_) => const MVCTesting(),
+  NewExercise.route: (_) => const NewExercise(),
+  ExerciseMode.route: (_) => const ExerciseMode(),
+  HomePage.route: (_) => const HomePage(),
 };
 
 /*Route<void> getRouteByName({String name}) {

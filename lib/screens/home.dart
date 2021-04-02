@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_listtile.dart';
 import 'package:tendon_loader/screens/bluetooth/device_scanner.dart';
@@ -12,7 +11,7 @@ import 'package:tendon_loader/utils/location.dart';
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
 
-  static const String routeName = '/home';
+  static const String route = '/home';
   static const String name = 'Tendon Loader';
 
   @override
@@ -30,14 +29,51 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    FlutterBlue.instance?.connectedDevices?.then((List<BluetoothDevice> value) => value?.forEach(Bluetooth.instance?.init));
+    Locator.init();
+    Bluetooth.reConnect();
   }
 
   @override
   void dispose() {
-    Bluetooth.instance?.sleep();
     Locator.dispose();
+    Bluetooth.sleep();
     super.dispose();
+  }
+
+  void _onSelected(ActionType type) {
+    switch (type) {
+      case ActionType.about:
+        return _aboutDialog();
+      case ActionType.export:
+        // TODO(mitul): Handle this case.
+        break;
+      case ActionType.close:
+        // TODO(mitul): Handle this case.
+        break;
+      case ActionType.settings:
+        // TODO(mitul): Handle this case.
+        break;
+    }
+  }
+
+  void _aboutDialog() {
+    showAboutDialog(
+      context: context,
+      applicationVersion: 'v1.0',
+      applicationName: Home.name,
+      applicationLegalese: 'Application Legalese',
+      applicationIcon: const CustomImage(isLogo: true, radius: 50),
+      children: <Widget>[
+        const SizedBox(height: 20),
+        const Text(
+          '♥ Mitul Vaghamshi',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.blue, fontSize: 20, fontFamily: 'Georgia', letterSpacing: 1.5),
+        ),
+        const SizedBox(height: 20),
+        const Text('✉ mitulvaghmashi@gmail.com', textAlign: TextAlign.center),
+      ],
+    );
   }
 
   @override
@@ -47,22 +83,8 @@ class _HomeState extends State<Home> {
         title: const Text(Home.name),
         actions: <Widget>[
           PopupMenuButton<ActionType>(
+            onSelected: _onSelected,
             icon: const Icon(Icons.more_vert_rounded),
-            onSelected: (ActionType type) {
-              switch (type) {
-                case ActionType.about:
-                  return _aboutDialog();
-                case ActionType.export:
-                  // TODO(mitul): Handle this case.
-                  break;
-                case ActionType.close:
-                  // TODO(mitul): Handle this case.
-                  break;
-                case ActionType.settings:
-                  // TODO(mitul): Handle this case.
-                  break;
-              }
-            },
             itemBuilder: (BuildContext context) => <PopupMenuItem<ActionType>>[
               const PopupMenuItem<ActionType>(value: ActionType.settings, child: Text('Settings')),
               const PopupMenuItem<ActionType>(value: ActionType.export, child: Text('Export')),
@@ -72,22 +94,22 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      body: SafeArea(
+      body: Card(
+        elevation: 16,
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.all(16),
-          child: Card(
-            elevation: 16,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const CustomImage(scale: 0.7),
-                CustomTile(context: context, name: LiveData.name, route: LiveData.routeName, icon: Icons.show_chart_rounded),
-                CustomTile(context: context, name: NewExercise.name, route: NewExercise.routeName, icon: Icons.directions_run_rounded),
-                CustomTile(context: context, name: MVCTesting.name, route: MVCTesting.routeName, icon: Icons.airline_seat_legroom_extra),
-              ],
-            ),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 50),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const CustomImage(isLogo: true),
+              const SizedBox(height: 30),
+              CustomTile(context: context, name: LiveData.name, route: LiveData.route, icon: Icons.show_chart_rounded),
+              CustomTile(context: context, name: NewExercise.name, route: NewExercise.route, icon: Icons.directions_run_rounded),
+              CustomTile(context: context, name: MVCTesting.name, route: MVCTesting.route, icon: Icons.airline_seat_legroom_extra),
+            ],
           ),
         ),
       ),
@@ -101,33 +123,11 @@ class _HomeState extends State<Home> {
           builder: (_) => AlertDialog(
             scrollable: true,
             content: const DeviceScanner(),
-            title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
           ),
         ),
       ),
-    );
-  }
-
-  void _aboutDialog() {
-    showAboutDialog(
-      context: context,
-      applicationVersion: 'v1.0',
-      applicationName: Home.name,
-      applicationLegalese: 'Application Legalese',
-      applicationIcon: const CustomImage(
-        scale: 0.25,
-      ),
-      children: <Widget>[
-        const SizedBox(height: 20),
-        const Text(
-          '♥ Mitul Vaghamshi',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.blue, fontSize: 20, fontFamily: 'Georgia', letterSpacing: 1.5),
-        ),
-        const SizedBox(height: 20),
-        const Text('✉ mitulvaghmashi@gmail.com', textAlign: TextAlign.center),
-      ],
     );
   }
 }

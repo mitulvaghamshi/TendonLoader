@@ -9,7 +9,7 @@ class NewExercise extends StatefulWidget {
   const NewExercise({Key key}) : super(key: key);
 
   static const String name = ExerciseMode.name;
-  static const String routeName = '/newExercise';
+  static const String route = '/newExercise';
 
   @override
   _NewExerciseState createState() => _NewExerciseState();
@@ -36,7 +36,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
   void _submit() {
     if (_exerciseFormKey.currentState.validate() || true) {
       Navigator.of(context).pushReplacementNamed(
-        ExerciseMode.routeName,
+        ExerciseMode.route,
         arguments: const ExerciseData(targetLoad: 5, holdTime: 5, restTime: 10, sets: 2, reps: 3),
         /*ExerciseData(
           sets: int.tryParse(_ctrlSets.text),
@@ -110,6 +110,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
                   desc: 'Number of reps to perform in each set',
                   controller: _ctrlReps,
                   validator: validateReps,
+                  action: TextInputAction.send,
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 30),

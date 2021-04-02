@@ -6,7 +6,7 @@ import 'package:tendon_loader/utils/authentication.dart';
 class Login extends StatelessWidget {
   const Login({Key key}) : super(key: key);
 
-  static const String routeName = '/';
+  static const String route = '/';
 
   @override
   Widget build(BuildContext context) {

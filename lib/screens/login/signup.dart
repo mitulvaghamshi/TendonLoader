@@ -12,7 +12,7 @@ import 'package:tendon_loader/utils/validator.dart' show ValidateCredentialMixin
 class SignUp extends StatefulWidget {
   const SignUp({Key key}) : super(key: key);
 
-  static const String routeName = '/signUp';
+  static const String route = '/signUp';
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -35,7 +35,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
         if (_rotateCtrl.status == AnimationStatus.completed) {
           if (_user != null) {
             await _setLoginInfo();
-            await Navigator.pushReplacementNamed(context, Home.routeName);
+            await Navigator.pushReplacementNamed(context, Home.route);
           } else {
             await _rotateCtrl.reverse();
             _busy = false;
@@ -68,86 +68,82 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
     );
   }
 
-  SingleChildScrollView _buildSignUpBody() {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Card(
-        elevation: 16,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        margin: const EdgeInsets.all(16),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 50),
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 3, color: Colors.green)),
-                child: const CircleAvatar(radius: 80, child: ClipOval(child: CustomImage(name: 'male_avatar.webp', zeroPad: true))),
-              ),
-              const SizedBox(height: 30),
-              Form(
-                key: _signUpFormKey,
-                child: Column(
-                  children: <CustomTextField>[
-                    CustomTextField(
-                      label: 'Name',
-                      hint: 'Enter your name',
-                      controller: _nameCtrl,
-                      keyboardType: TextInputType.name,
-                      validator: validateName,
-                    ),
-                    CustomTextField(
-                      label: 'Username',
-                      hint: 'Enter your username',
-                      controller: _usernameCtrl,
-                      validator: validateEmail,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    CustomTextField(
-                      isObscure: true,
-                      label: 'Password',
-                      hint: 'Enter your password',
-                      controller: _passwordCtrl,
-                      keyboardType: TextInputType.text,
-                      validator: validatePassword,
-                    ),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () => Navigator.pushReplacementNamed(context, SignIn.routeName),
-                child: const Text(
-                  'Already have an account? Sign in.',
-                  style: TextStyle(letterSpacing: 0.5, color: Colors.blue, height: 5),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  RotationTransition(
-                    turns: Tween<double>(begin: 0.0, end: 1.0).animate(_rotateCtrl),
-                    child: FloatingActionButton(
-                      heroTag: 'sign-up-tag',
-                      onPressed: () async {
-                        if (_signUpFormKey.currentState.validate() && !_busy) {
-                          _busy = true;
-                          await _rotateCtrl.forward();
-                          _user = await Authentication.signUp(
-                            context: context,
-                            name: _nameCtrl.text,
-                            email: _usernameCtrl.text,
-                            password: _passwordCtrl.text,
-                          );
-                        }
-                      },
-                      child: const Icon(Icons.send),
-                    ),
+  Card _buildSignUpBody() {
+    return Card(
+      elevation: 16,
+      margin: const EdgeInsets.all(16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 50),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const CustomImage(isLogo: true),
+            const SizedBox(height: 30),
+            Form(
+              key: _signUpFormKey,
+              child: Column(
+                children: <CustomTextField>[
+                  CustomTextField(
+                    label: 'Your name',
+                    hint: 'Enter your name',
+                    controller: _nameCtrl,
+                    keyboardType: TextInputType.name,
+                    validator: validateName,
+                  ),
+                  CustomTextField(
+                    label: 'Username',
+                    hint: 'Enter your username',
+                    controller: _usernameCtrl,
+                    validator: validateEmail,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  CustomTextField(
+                    isObscure: true,
+                    label: 'Password',
+                    hint: 'Enter your password',
+                    controller: _passwordCtrl,
+                    action: TextInputAction.send,
+                    keyboardType: TextInputType.text,
+                    validator: validatePassword,
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+            GestureDetector(
+              onTap: () => Navigator.pushReplacementNamed(context, SignIn.route),
+              child: const Text(
+                'Already have an account? Sign in.',
+                style: TextStyle(letterSpacing: 0.5, color: Colors.blue, height: 5),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                RotationTransition(
+                  turns: Tween<double>(begin: 0.0, end: 1.0).animate(_rotateCtrl),
+                  child: FloatingActionButton(
+                    heroTag: 'sign-up-tag',
+                    onPressed: () async {
+                      if (_signUpFormKey.currentState.validate() && !_busy) {
+                        _busy = true;
+                        await _rotateCtrl.forward();
+                        _user = await Authentication.signUp(
+                          context: context,
+                          name: _nameCtrl.text,
+                          email: _usernameCtrl.text,
+                          password: _passwordCtrl.text,
+                        );
+                      }
+                    },
+                    child: const Icon(Icons.send),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

@@ -11,9 +11,9 @@ import 'package:tendon_loader/utils/exercise_data.dart';
 import 'package:tendon_loader/utils/uploader.dart';
 
 mixin CreateXLSX {
-  static final List<ChartData> _measurements = <ChartData>[];
+  static final List<ChartData> _collection = <ChartData>[];
 
-  void addToList(ChartData chartData) => _measurements.add(chartData);
+  void collect(ChartData chartData) => _collection.add(chartData);
 
   Future<void> export({ExerciseData exerciseData}) async {
     // if (_measurements.isEmpty) return;
@@ -26,6 +26,7 @@ mixin CreateXLSX {
     final String _time = DateFormat('hh:mm a').format(_dtNow);
     final bool isExercise = exerciseData != null;
     final Worksheet _sheet = _workbook.worksheets[0];
+    final String _userId = (await SharedPreferences.getInstance()).getString(Keys.keyUsername);
 
     // date
     _iR++; // 1
@@ -42,12 +43,12 @@ mixin CreateXLSX {
     // user id
     _iR++; // 3
     _sheet.getRangeByName('$_iA$_iR').text = 'UserID:';
-    _sheet.getRangeByName('$_iD$_iR').text = 'User_XXXX';
+    _sheet.getRangeByName('$_iD$_iR').text = _userId;
 
     // progressor id
     _iR += 2; // 5
     _sheet.getRangeByName('$_iA$_iR').text = 'Tindeq Progressor #:';
-    _sheet.getRangeByName('$_iD$_iR').text = Bluetooth.device?.name ?? 'Device not connected';
+    _sheet.getRangeByName('$_iD$_iR').text = Bluetooth.deviceName ?? 'Device not connected';
 
     if (isExercise) {
       // Exercise info
@@ -94,7 +95,7 @@ mixin CreateXLSX {
     int count = 0;
     double _avgTime = 0;
     double _avgWeight = 0;
-    for (final ChartData chartData in _measurements) {
+    for (final ChartData chartData in _collection) {
       _avgTime += chartData.time;
       _avgWeight += chartData.weight;
       if (count++ == 8) {
@@ -105,14 +106,14 @@ mixin CreateXLSX {
         count = 0;
       }
     }
-    _measurements.clear();
-    final String _userId = (await SharedPreferences.getInstance()).getString(Keys.keyUsername).split('@')[0];
+    _collection.clear();
+
     final String _mode = isExercise ? 'Exercise' : 'MVCTest';
     final String _path = (await pp.getApplicationSupportDirectory()).path;
-    final String _name = '${_date}_${_time.replaceAll(RegExp(r'[\s:]'), '_')}_${_userId}_$_mode.xlsx';
+    final String _name = '${_date}_${_time.replaceAll(RegExp(r'[\s:]'), '_')}_${_userId.split('@')[0]}_$_mode.xlsx';
     final File _file = File('$_path/$_name');
     await _file.writeAsBytes(_workbook.saveAsStream());
     _workbook.dispose();
-    await Uploader.uploadFile(_file, _userId, _name);
+    await Uploader.uploadFile(_file, _userId.split('@')[0], _name);
   }
 }

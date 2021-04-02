@@ -6,7 +6,7 @@ import 'package:tendon_loader/webportal/right_panel.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
 
-  static const String routeName = '/homePage';
+  static const String route = '/homePage';
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
           if (size.height > size.width - 56) {
             return const RightPanel();
           } else {
-            return Row(children: const <Widget>[LimitedBox(maxWidth: Sizes.mobileSize, child: LeftPanel()), Expanded(child: RightPanel())]);
+            return Row(children: const <Widget>[LimitedBox(maxWidth: Sizes.sizeMobile, child: LeftPanel()), Expanded(child: RightPanel())]);
           }
         },
       ),

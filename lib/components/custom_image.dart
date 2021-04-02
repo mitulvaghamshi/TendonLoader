@@ -1,32 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart' show SvgPicture;
+import 'package:tendon_loader/utils/constants.dart' show Images;
 
-class CustomImage extends StatelessWidget {
-  const CustomImage({
-    Key key,
-    this.color,
-    this.scale = 0.6,
-    this.zeroPad = false,
-    this.dir = 'assets/images/',
-    this.name = 'ic_launcher-playstore.png',
-  })  : path = dir + name,
-        super(key: key);
+class CustomImage extends StatelessWidget with Images {
+  const CustomImage({Key key, this.name = Images.imgAppLogo, this.isLogo = false, this.radius = 100}) : super(key: key);
 
-  final String dir;
   final String name;
-  final String path;
-  final double scale;
-  final bool zeroPad;
-  final Color color;
+  final bool isLogo;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
-    if (zeroPad) {
-      return Image.asset(path, color: color);
-    } else {
-      return Padding(
-        padding: const EdgeInsets.all(16),
-        child: Image.asset(path, color: color, height: MediaQuery.of(context).size.width * scale),
-      );
-    }
+    if (!isLogo) return Image.asset(Images.imgRoot + name);
+    final Color _accent = Theme.of(context).accentColor;
+    final Color _primary = Theme.of(context).primaryColor;
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: _primary, border: Border.all(width: 3, color: _accent)),
+      child: CircleAvatar(radius: radius, backgroundColor: _primary, child: SvgPicture.asset(Images.imgRoot + name, color: _accent)),
+    );
   }
 }

@@ -7,7 +7,7 @@ class MVCTesting extends StatelessWidget with CreateXLSX {
   const MVCTesting({Key key}) : super(key: key);
 
   static const String name = 'MVC Testing';
-  static const String routeName = '/mvcTesting';
+  static const String route = '/mvcTesting';
 
   @override
   Widget build(BuildContext context) {

@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/screens/home.dart';
+import 'package:tendon_loader/screens/login/signup.dart';
 import 'package:tendon_loader/utils/authentication.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/validator.dart' show ValidateCredentialMixin;
@@ -13,7 +14,7 @@ import 'package:tendon_loader/webportal/homepage.dart';
 class SignIn extends StatefulWidget {
   const SignIn({Key key}) : super(key: key);
 
-  static const String routeName = '/sigIn';
+  static const String route = '/signIn';
 
   @override
   _SignInState createState() => _SignInState();
@@ -27,25 +28,34 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
   bool _busy = false;
   User _user;
 
-  SharedPreferences _preferences;
+  Box<Object> _loginBox;
+
+  // SharedPreferences _preferences;
   bool _staySignedIn = true;
 
   Future<void> _getLoginInfo() async {
-    _preferences = await SharedPreferences.getInstance();
+    _loginBox = await Hive.openBox<Object>('loginBox');
+    // _preferences = await SharedPreferences.getInstance();
     setState(() {
-      _staySignedIn = _preferences.getBool(Keys.keyStaySignIn) ?? true;
+      // _staySignedIn = _preferences.getBool(Keys.keyStaySignIn) ?? true;
+      _staySignedIn = _loginBox.get(Keys.keyStaySignIn, defaultValue: true) as bool;
       if (_staySignedIn) {
-        _usernameCtrl.text = _preferences.getString(Keys.keyUsername) ?? '';
-        _passwordCtrl.text = _preferences.getString(Keys.keyPassword) ?? '';
+        // _usernameCtrl.text = _preferences.getString(Keys.keyUsername) ?? '';
+        _usernameCtrl.text = _loginBox.get(Keys.keyUsername, defaultValue: '') as String;
+        // _passwordCtrl.text = _preferences.getString(Keys.keyPassword) ?? '';
+        _passwordCtrl.text = _loginBox.get(Keys.keyPassword, defaultValue: '') as String;
       }
     });
   }
 
   Future<void> _setLoginInfo() async {
-    await _preferences.setBool(Keys.keyStaySignIn, _staySignedIn);
+    // await _preferences.setBool(Keys.keyStaySignIn, _staySignedIn);
+    await _loginBox.put(Keys.keyStaySignIn, _staySignedIn);
     if (_staySignedIn) {
-      await _preferences.setString(Keys.keyUsername, _usernameCtrl.text);
-      await _preferences.setString(Keys.keyPassword, _passwordCtrl.text);
+      // await _preferences.setString(Keys.keyUsername, _usernameCtrl.text);
+      await _loginBox.put(Keys.keyUsername, _usernameCtrl.text);
+      // await _preferences.setString(Keys.keyPassword, _passwordCtrl.text);
+      await _loginBox.put(Keys.keyPassword, _passwordCtrl.text);
     }
   }
 
@@ -56,9 +66,9 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
     _rotateCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000))
       ..addStatusListener((AnimationStatus status) async {
         if (_rotateCtrl.status == AnimationStatus.completed) {
-          if (_user != null) {
+          if (true /*_user != null*/) {
             await _setLoginInfo();
-            await Navigator.pushReplacementNamed(context, kIsWeb ? HomePage.routeName : Home.routeName);
+            await Navigator.pushReplacementNamed(context, kIsWeb ? HomePage.route : Home.route);
           } else {
             _busy = false;
             await _rotateCtrl.reverse();
@@ -83,25 +93,18 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
     );
   }
 
-  Widget _buildSignInBody() {
+  Card _buildSignInBody() {
     return Card(
       elevation: 16,
       margin: const EdgeInsets.all(16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 50),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(width: 3, color: Colors.blue)),
-              child: CircleAvatar(
-                radius: 80,
-                backgroundColor: Theme.of(context).primaryColor,
-                child: ClipOval(child: CustomImage(color: Theme.of(context).accentColor)),
-              ),
-            ),
+            const CustomImage(isLogo: true),
             const SizedBox(height: 30),
             Form(
               key: _signInFormKey,
@@ -119,6 +122,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
                     label: 'Password',
                     hint: 'Enter your password',
                     controller: _passwordCtrl,
+                    action: TextInputAction.send,
                     validator: validatePassword,
                     keyboardType: TextInputType.text,
                   ),
@@ -135,7 +139,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
             GestureDetector(
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please contact your clinician!!!')));
-                // Navigator.pushReplacementNamed(context, SignUp.routeName);
+                Navigator.pushReplacementNamed(context, SignUp.route);
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
@@ -164,7 +168,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
                     child: const Icon(Icons.send),
                     onPressed: () async {
                       if (_signInFormKey.currentState.validate() && !_busy) {
-                        _user = await Authentication.signIn(context: context, email: _usernameCtrl.text, password: _passwordCtrl.text);
+                        // _user = await Authentication.signIn(context: context, email: _usernameCtrl.text, password: _passwordCtrl.text);
                         await _rotateCtrl.forward();
                         _busy = true;
                       }

@@ -13,6 +13,7 @@ class CustomTextField extends StatefulWidget {
     this.isObscure = false,
     @required this.controller,
     this.hint = 'Enter value',
+    this.action = TextInputAction.next,
     this.keyboardType = TextInputType.text,
   }) : super(key: key);
 
@@ -21,9 +22,10 @@ class CustomTextField extends StatefulWidget {
   final String label;
   final bool isPicker;
   final bool isObscure;
+  final TextInputAction action;
   final TextInputType keyboardType;
-  final String Function(String) validator;
   final TextEditingController controller;
+  final String Function(String) validator;
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -38,6 +40,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       readOnly: widget.isPicker,
       validator: widget.validator,
       controller: widget.controller,
+      textInputAction: widget.action,
       keyboardType: widget.keyboardType,
       obscureText: widget.isObscure ? _isObscure : false,
       style: const TextStyle(fontSize: 20, fontFamily: 'Georgia'),
@@ -49,12 +52,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
         focusedBorder: _buildBorder(color: Colors.blue),
         contentPadding: const EdgeInsets.only(left: 10),
         focusedErrorBorder: _buildBorder(color: Colors.red),
-        border: _buildBorder(color: Theme.of(context).accentColor),
-        hintStyle: TextStyle(color: Theme.of(context).accentColor),
-        labelStyle: TextStyle(color: Theme.of(context).accentColor),
+        border: _buildBorder(color: Theme
+            .of(context)
+            .accentColor),
+        hintStyle: TextStyle(color: Theme
+            .of(context)
+            .accentColor),
+        labelStyle: TextStyle(color: Theme
+            .of(context)
+            .accentColor),
         errorBorder: _buildBorder(width: 3, color: Colors.redAccent),
-        helperStyle: TextStyle(color: Theme.of(context).accentColor),
-        enabledBorder: _buildBorder(color: Theme.of(context).accentColor),
+        helperStyle: TextStyle(color: Theme
+            .of(context)
+            .accentColor),
+        enabledBorder: _buildBorder(color: Theme
+            .of(context)
+            .accentColor),
         errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
       ),
     );

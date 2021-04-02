@@ -43,16 +43,17 @@ class _RightPanelState extends State<RightPanel> with ValidateSearchMixin, UserP
                   return FutureBuilder<List<Reference>>(
                     future: Uploader.getUserData(snapshot.data),
                     builder: (BuildContext context, AsyncSnapshot<List<Reference>> snapshot) {
-                      if (snapshot.hasData)
+                      if (snapshot.hasData) {
                         return Column(
                             children: snapshot.data.map((Reference file) {
                           return CustomListItem(item: file, callback: () async => openLink(await file.getDownloadURL()));
                         }).toList());
+                      }
                       return const CircularProgressIndicator();
                     },
                   );
                 }
-                return  CustomImage(zeroPad: true, color: Theme.of(context).accentColor);
+                return const CustomImage(isLogo: true);
               },
             ),
           ],

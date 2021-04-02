@@ -8,7 +8,7 @@ class ExerciseMode extends StatelessWidget with CreateXLSX {
   const ExerciseMode({Key key}) : super(key: key);
 
   static const String name = 'Exercise Mode';
-  static const String routeName = '/exerciseMode';
+  static const String route = '/exerciseMode';
 
   @override
   Widget build(BuildContext context) {

@@ -11,8 +11,8 @@ class Authentication {
   }
 
   static Future<FirebaseApp> init() async {
-    final FirebaseApp app = await Firebase.initializeApp();
-    return Future<FirebaseApp>.delayed(const Duration(seconds: 1), () => app);
+    // final FirebaseApp app = await Firebase.initializeApp();
+    return Future<FirebaseApp>.delayed(const Duration(seconds: 1), () => null);
   }
 
   static Future<User> signIn({String email, String password, BuildContext context}) async {
