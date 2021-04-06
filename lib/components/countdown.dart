@@ -5,12 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CountDown extends StatefulWidget {
-  const CountDown({Key/*?*/ key, this.title, this.duration}) : super(key: key);
+  const CountDown({Key key, this.title, this.duration}) : super(key: key);
 
-  final String/*?*/ title;
-  final Duration/*?*/ duration;
+  final String title;
+  final Duration duration;
 
-  static Future<bool/*?*/> start(BuildContext context, {String title = 'Starts in', Duration duration = const Duration(seconds: 5)}) {
+  static Future<bool> start(BuildContext context, {String title = 'Starts in', Duration duration = const Duration(seconds: 5)}) {
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -23,11 +23,11 @@ class CountDown extends StatefulWidget {
 }
 
 class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
-  AnimationController/*!*/ _controller;
+  AnimationController _controller;
 
   String get _timerString {
-    if (_controller/*!*/.value == 0) return 'GO!';
-    final Duration duration = _controller.duration/*!*/ * _controller.value;
+    if (_controller.value == 0) return 'GO!';
+    final Duration duration = _controller.duration * _controller.value;
     return '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
@@ -51,13 +51,8 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
       backgroundColor: Colors.transparent,
       body: AnimatedBuilder(
         animation: _controller,
-<<<<<<< Updated upstream
-        child: Text(widget.title/*!*/, style: const TextStyle(fontSize: 22, color: Colors.white), textAlign: TextAlign.center),
-        builder: (BuildContext context, Widget/*!*/ child) {
-=======
         child: Text(widget.title, style: const TextStyle(fontSize: 36, color: Colors.white), textAlign: TextAlign.center),
         builder: (BuildContext context, Widget child) {
->>>>>>> Stashed changes
           return Padding(
             padding: const EdgeInsets.all(30),
             child: Align(
@@ -89,7 +84,7 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
 class _CustomTimePainter extends CustomPainter {
   const _CustomTimePainter({this.animation}) : super(repaint: animation);
 
-  final Animation<double>/*?*/ animation;
+  final Animation<double> animation;
 
   @override
   bool shouldRepaint(_) => false;
@@ -102,6 +97,6 @@ class _CustomTimePainter extends CustomPainter {
       ..strokeCap = StrokeCap.butt
       ..style = PaintingStyle.stroke;
     canvas.drawCircle(size.center(Offset.zero), size.width / 2, paint);
-    canvas.drawArc(Offset.zero & size, math.pi * 1.5, -(animation/*!*/.value * 2 * math.pi), false, paint..color = Colors.black);
+    canvas.drawArc(Offset.zero & size, math.pi * 1.5, -(animation.value * 2 * math.pi), false, paint..color = Colors.black);
   }
 }

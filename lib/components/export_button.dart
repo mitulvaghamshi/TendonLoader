@@ -1,15 +1,9 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/custom_button.dart';
-import 'package:tendon_loader/utils/storage.dart';
 
-<<<<<<< Updated upstream
 class ExportButton extends StatelessWidget {
-  const ExportButton({Key/*?*/ key, /*required*/ @required this.callback}) : super(key: key);
-=======
-class ExportButton extends StatelessWidget with Storage {
   const ExportButton({Key key, @required this.callback}) : super(key: key);
->>>>>>> Stashed changes
 
   final Future<UploadTask> Function() callback;
 

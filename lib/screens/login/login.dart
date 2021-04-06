@@ -11,10 +11,92 @@ import 'package:tendon_loader/utils/app_auth.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/validator.dart' show ValidateCredentialMixin;
 
-class Login extends StatelessWidget {
-  const Login({Key/*?*/ key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key key}) : super(key: key);
 
-  static const String route = '/';
+  static const String route = '/login';
+
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCredentialMixin, Keys {
+  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
+  final TextEditingController _nameCtrl = TextEditingController();
+  final TextEditingController _usernameCtrl = TextEditingController();
+  final TextEditingController _passwordCtrl = TextEditingController();
+  AnimationController _animCtrl;
+  Box<Object> _loginBox;
+  bool _staySignedIn = true;
+  bool _createNew = false;
+  bool _busy = false;
+  User _user;
+
+  Future<void> _getLoginInfo() async {
+    _loginBox = await Hive.openBox<Object>(Keys.keyLoginBox);
+    setState(() {
+      _staySignedIn = _loginBox.get(Keys.keyStaySignIn, defaultValue: true) as bool;
+      if (_staySignedIn) {
+        _usernameCtrl.text = _loginBox.get(Keys.keyUsername, defaultValue: '') as String;
+        _passwordCtrl.text = _loginBox.get(Keys.keyPassword, defaultValue: '') as String;
+      }
+    });
+  }
+
+  Future<void> _setLoginInfo() async {
+    await _loginBox.put(Keys.keyStaySignIn, _staySignedIn || _createNew);
+    if (_staySignedIn || _createNew) {
+      await _loginBox.put(Keys.keyUsername, _usernameCtrl.text);
+      await _loginBox.put(Keys.keyPassword, _passwordCtrl.text);
+    }
+  }
+
+  Future<void> _authenticate(AnimationStatus status) async {
+    switch (status) {
+      case AnimationStatus.forward:
+        if (_loginFormKey.currentState.validate() && !_busy) {
+          _busy = true;
+          _user = await AppAuth.authenticate(
+            context,
+            create: _createNew,
+            name: _nameCtrl.text ?? '',
+            username: _usernameCtrl.text,
+            password: _passwordCtrl.text,
+          );
+        }
+        break;
+      case AnimationStatus.completed:
+        _busy = false;
+        if (_user != null) {
+          await _setLoginInfo();
+          await Navigator.pushReplacementNamed(context, kIsWeb ? HomePage.route : Home.route);
+        } else {
+          await _animCtrl.reverse();
+        }
+        break;
+      case AnimationStatus.reverse:
+      case AnimationStatus.dismissed:
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Something wants wrong, Please try again!')));
+        break;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getLoginInfo();
+    _animCtrl = AnimationController(vsync: this, duration: const Duration(seconds: 1))..addStatusListener(_authenticate);
+  }
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    _animCtrl.dispose();
+    _usernameCtrl.dispose();
+    _passwordCtrl.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

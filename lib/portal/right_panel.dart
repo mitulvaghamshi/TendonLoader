@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_listitem.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
+import 'package:tendon_loader/portal/util.dart';
 import 'package:tendon_loader/utils/uploader.dart';
 import 'package:tendon_loader/utils/user_path.dart';
 import 'package:tendon_loader/utils/validator.dart';
-import 'package:tendon_loader/webportal/util.dart';
 
 class RightPanel extends StatefulWidget {
   const RightPanel({Key key}) : super(key: key);
