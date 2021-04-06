@@ -9,6 +9,21 @@ mixin Bluetooth {
 
   static BluetoothDevice get device => _device;
 
+  static String get deviceName => _device?.name ?? _device?.id.toString();
+
+  static BluetoothDevice/*?*/ _device; // Connected device
+  static BluetoothCharacteristic/*?*/ _dataChar; // data receiver
+  static BluetoothCharacteristic/*?*/ _controlChar; // data controller
+
+  static bool _isBusy = false;
+  static bool _isWorking = false;
+
+  bool get waiting => _isBusy || _isWorking;
+
+  static Bluetooth instance = const Bluetooth._();
+
+  static BluetoothDevice/*?*/ get device => _device;
+
   static String get deviceName => _device.name.isEmpty ? _device.id.toString() : _device.name;
 
   static void listen(void Function(List<int>) listener) {

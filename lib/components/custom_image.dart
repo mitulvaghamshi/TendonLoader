@@ -15,6 +15,7 @@ class CustomImage extends StatelessWidget with Images {
     final Color _accent = Theme.of(context).accentColor;
     final Color _primary = Theme.of(context).primaryColor;
     return Container(
+      margin: EdgeInsets.all(isLogo ? 30 : 0),
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(shape: BoxShape.circle, color: _primary, border: Border.all(width: 3, color: _accent)),
       child: CircleAvatar(radius: radius, backgroundColor: _primary, child: SvgPicture.asset(Images.imgRoot + name, color: _accent)),

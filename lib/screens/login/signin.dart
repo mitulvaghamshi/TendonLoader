@@ -12,7 +12,7 @@ import 'package:tendon_loader/utils/validator.dart' show ValidateCredentialMixin
 import 'package:tendon_loader/webportal/homepage.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key key}) : super(key: key);
+  const SignIn({Key/*?*/ key}) : super(key: key);
 
   static const String route = '/signIn';
 
@@ -26,7 +26,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
   final GlobalKey<FormState> _signInFormKey = GlobalKey<FormState>();
   AnimationController _rotateCtrl;
   bool _busy = false;
-  User _user;
+  User/*?*/ _user;
 
   Box<Object> _loginBox;
 
@@ -132,7 +132,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Checkbox(value: _staySignedIn, onChanged: (bool value) => setState(() => _staySignedIn = value)),
+                Checkbox(value: _staySignedIn, onChanged: (bool/*?*/ value) => setState(() => _staySignedIn = value)),
                 const Text('Stay signed in.', style: TextStyle(letterSpacing: 3)),
               ],
             ),
@@ -167,7 +167,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin, Validate
                     heroTag: 'sign-in-tag',
                     child: const Icon(Icons.send),
                     onPressed: () async {
-                      if (_signInFormKey.currentState.validate() && !_busy) {
+                      if (_signInFormKey.currentState/*!*/.validate() && !_busy) {
                         // _user = await Authentication.signIn(context: context, email: _usernameCtrl.text, password: _passwordCtrl.text);
                         await _rotateCtrl.forward();
                         _busy = true;

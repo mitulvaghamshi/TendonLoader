@@ -7,14 +7,14 @@ import 'package:tendon_loader/utils/constants.dart' show Images, Descriptions;
 import 'package:tendon_loader/utils/location.dart';
 
 class DeviceScanner extends StatelessWidget {
-  const DeviceScanner({Key key}) : super(key: key);
+  const DeviceScanner({Key/*?*/ key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => const ConnectedDeviceTile();
 }
 
 class ConnectedDeviceTile extends StatelessWidget {
-  const ConnectedDeviceTile({Key key}) : super(key: key);
+  const ConnectedDeviceTile({Key/*?*/ key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,34 +29,35 @@ class ConnectedDeviceTile extends StatelessWidget {
 }
 
 class BluetoothTile extends StatelessWidget {
-  const BluetoothTile({Key key}) : super(key: key);
+  const BluetoothTile({Key/*?*/ key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<BluetoothState>(
       initialData: BluetoothState.unknown,
       stream: FlutterBlue.instance.state,
-      builder: (_, AsyncSnapshot<BluetoothState> snapshot) =>
-          snapshot.data == BluetoothState.off ? const EnableBluetoothTile() : const LocationTile(),
+      builder: (_, AsyncSnapshot<BluetoothState> snapshot) {
+        return snapshot.data == BluetoothState.off ? const EnableBluetoothTile() : const LocationTile();
+      },
     );
   }
 }
 
 class LocationTile extends StatelessWidget {
-  const LocationTile({Key key}) : super(key: key);
+  const LocationTile({Key/*?*/ key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
       initialData: false,
       stream: Locator.stream,
-      builder: (_, AsyncSnapshot<bool> snapshot) => snapshot.data ? const ScanResultTile() : const EnableLocationTile(),
+      builder: (_, AsyncSnapshot<bool> snapshot) => snapshot.data/*!*/ ? const ScanResultTile() : const EnableLocationTile(),
     );
   }
 }
 
 class ScanResultTile extends StatelessWidget {
-  const ScanResultTile({Key key}) : super(key: key);
+  const ScanResultTile({Key/*?*/ key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,14 +70,14 @@ class ScanResultTile extends StatelessWidget {
 }
 
 class ScannerTile extends StatelessWidget {
-  const ScannerTile({Key key}) : super(key: key);
+  const ScannerTile({Key/*?*/ key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
       initialData: false,
       stream: FlutterBlue.instance.isScanning,
-      builder: (_, AsyncSnapshot<bool> snapshot) => snapshot.data ? const StopScanTile() : const StartScanTile(),
+      builder: (_, AsyncSnapshot<bool> snapshot) => snapshot.data/*!*/ ? const StopScanTile() : const StartScanTile(),
     );
   }
 }
@@ -144,7 +145,7 @@ class DeviceTile extends StatelessWidget {
 }
 
 class StopScanTile extends StatelessWidget {
-  const StopScanTile({Key key}) : super(key: key);
+  const StopScanTile({Key/*?*/ key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +164,7 @@ class StopScanTile extends StatelessWidget {
 }
 
 class StartScanTile extends StatelessWidget {
-  const StartScanTile({Key key}) : super(key: key);
+  const StartScanTile({Key/*?*/ key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +181,7 @@ class StartScanTile extends StatelessWidget {
 }
 
 class EnableLocationTile extends StatelessWidget {
-  const EnableLocationTile({Key key}) : super(key: key);
+  const EnableLocationTile({Key/*?*/ key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +202,7 @@ class EnableLocationTile extends StatelessWidget {
 }
 
 class EnableBluetoothTile extends StatelessWidget {
-  const EnableBluetoothTile({Key key}) : super(key: key);
+  const EnableBluetoothTile({Key/*?*/ key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

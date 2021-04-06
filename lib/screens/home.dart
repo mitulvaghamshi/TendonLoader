@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
+import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_listtile.dart';
 import 'package:tendon_loader/screens/bluetooth/device_scanner.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
+import 'package:tendon_loader/utils/app_auth.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/location.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key key}) : super(key: key);
+  const Home({Key/*?*/ key}) : super(key: key);
 
   static const String route = '/home';
   static const String name = 'Tendon Loader';
@@ -35,6 +38,7 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
+    AppAuth.signOut();
     Locator.dispose();
     Bluetooth.sleep();
     super.dispose();
@@ -94,23 +98,16 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      body: Card(
-        elevation: 16,
-        margin: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 50),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const CustomImage(isLogo: true),
-              const SizedBox(height: 30),
-              CustomTile(context: context, name: LiveData.name, route: LiveData.route, icon: Icons.show_chart_rounded),
-              CustomTile(context: context, name: NewExercise.name, route: NewExercise.route, icon: Icons.directions_run_rounded),
-              CustomTile(context: context, name: MVCTesting.name, route: MVCTesting.route, icon: Icons.airline_seat_legroom_extra),
-            ],
-          ),
+
+      body: AppFrame(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const CustomImage(isLogo: true),
+            CustomTile(context: context, name: LiveData.name, route: LiveData.route, icon: Icons.show_chart_rounded),
+            CustomTile(context: context, name: NewExercise.name, route: NewExercise.route, icon: Icons.directions_run_rounded),
+            CustomTile(context: context, name: MVCTesting.name, route: MVCTesting.route, icon: Icons.airline_seat_legroom_extra),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(

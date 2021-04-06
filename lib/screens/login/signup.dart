@@ -10,7 +10,7 @@ import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/validator.dart' show ValidateCredentialMixin;
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key key}) : super(key: key);
+  const SignUp({Key/*?*/ key}) : super(key: key);
 
   static const String route = '/signUp';
 
@@ -25,7 +25,7 @@ class _SignUpState extends State<SignUp> with TickerProviderStateMixin, Validate
   final GlobalKey<FormState> _signUpFormKey = GlobalKey<FormState>();
   AnimationController _rotateCtrl;
   bool _busy = false;
-  User _user;
+  User/*?*/ _user;
 
   @override
   void initState() {

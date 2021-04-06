@@ -7,12 +7,11 @@ import 'package:tendon_loader/utils/app_themes.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
-  final Box<String> box = await Hive.openBox<String>('');
   runApp(const TendonLoader());
 }
 
 class TendonLoader extends StatelessWidget {
-  const TendonLoader({Key key}) : super(key: key);
+  const TendonLoader({Key/*?*/ key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,3 +26,10 @@ class TendonLoader extends StatelessWidget {
   }
 }
 // /\*(.|\n)*?\*/
+// dart --enable-experiment=non-nullable lib/main.dart
+// dart migrate --skip-import-check
+
+// It is an error to call [setState] unless [mounted] is true.
+// if (!mounted) {
+// return;
+// }

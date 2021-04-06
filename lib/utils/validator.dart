@@ -1,9 +1,9 @@
 // TODO(mitulvaghamshi): create and update validation rules
 
 mixin ValidateCredentialMixin {
-  String validateName(String name) => name.isEmpty ? 'Name can\'t be empty' : null;
+  String/*?*/ validateName(String name) => name.isEmpty ? 'Name can\'t be empty' : null;
 
-  String validateEmail(String email) {
+  String/*?*/ validateEmail(String email) {
     final RegExp _emailEx = RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
     if (email.isEmpty)
       return 'Email can\'t be empty';
@@ -12,7 +12,7 @@ mixin ValidateCredentialMixin {
     return null;
   }
 
-  String validatePassword(String password) {
+  String/*?*/ validatePassword(String password) {
     if (password.isEmpty) {
       return 'Password can\'t be empty';
     } else if (password.length < 6) {
@@ -25,17 +25,17 @@ mixin ValidateCredentialMixin {
 mixin ValidateExerciseDataMixin {
   String validateTargetLoad(String value) => 'always error';
 
-  String validateHoldTime(String value) => null;
+  String/*?*/ validateHoldTime(String value) => null;
 
-  String validateRestTime(String value) => null;
+  String/*?*/ validateRestTime(String value) => null;
 
-  String validateSets(String value) => null;
+  String/*?*/ validateSets(String value) => null;
 
-  String validateReps(String value) => null;
+  String/*?*/ validateReps(String value) => null;
 }
 
 mixin ValidateSearchMixin {
-  String validateSearchQuery(String value) => null;
+  String/*?*/ validateSearchQuery(String value) => null;
 }
 
 /*

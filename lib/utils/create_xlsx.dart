@@ -1,21 +1,23 @@
+import 'dart:async';
 import 'dart:io' show File;
 
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart' as pp;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Alignment;
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/chart_data.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
-import 'package:tendon_loader/utils/uploader.dart';
+import 'package:tendon_loader/utils/storage.dart';
 
 mixin CreateXLSX {
   static final List<ChartData> _collection = <ChartData>[];
 
   void collect(ChartData chartData) => _collection.add(chartData);
 
-  Future<void> export({ExerciseData exerciseData}) async {
+  Future<UploadTask> export({ExerciseData exerciseData}) async {
     // if (_measurements.isEmpty) return;
     int _iR = 0;
     const String _iA = 'A';
@@ -26,8 +28,7 @@ mixin CreateXLSX {
     final String _time = DateFormat('hh:mm a').format(_dtNow);
     final bool isExercise = exerciseData != null;
     final Worksheet _sheet = _workbook.worksheets[0];
-    final String _userId = (await SharedPreferences.getInstance()).getString(Keys.keyUsername);
-
+    final String _userId = (await Hive.openBox<Object>(Keys.keyLoginBox)).get(Keys.keyUsername, defaultValue: '') as String;
     // date
     _iR++; // 1
     _sheet.getRangeByName('$_iA$_iR').text = 'Date:';
@@ -59,32 +60,32 @@ mixin CreateXLSX {
       _iR++; // 8
       _sheet.getRangeByName('$_iA$_iR').text = 'Last MVC Test Recorded [Kg]';
       // TODO(mitul): adjust last recorded MVC
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad * 1.3;
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad/*!*/ * 1.3;
 
       // Target Load
       _iR++; // 9
       _sheet.getRangeByName('$_iA$_iR').text = 'Target Load [Kg]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad;
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad/*!*/;
 
       // Hold Time
       _iR++; // 10
       _sheet.getRangeByName('$_iA$_iR').text = 'Hold Time [sec]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.holdTime.toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.holdTime/*!*/.toDouble();
 
       // Rest Time
       _iR++; // 11
       _sheet.getRangeByName('$_iA$_iR').text = 'Rest Time [sec]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.restTime.toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.restTime/*!*/.toDouble();
 
       // Sets
       _iR++; // 12
       _sheet.getRangeByName('$_iA$_iR').text = 'Sets [#]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.sets.toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.sets/*!*/.toDouble();
 
       // Reps
       _iR++; // 13
       _sheet.getRangeByName('$_iA$_iR').text = 'Reps [#]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.reps.toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.reps/*!*/.toDouble();
     }
 
     // data headers
@@ -114,6 +115,6 @@ mixin CreateXLSX {
     final File _file = File('$_path/$_name');
     await _file.writeAsBytes(_workbook.saveAsStream());
     _workbook.dispose();
-    await Uploader.uploadFile(_file, _userId.split('@')[0], _name);
+    return Storage.uploadFile(_file, _userId.split('@')[0], _name);
   }
 }

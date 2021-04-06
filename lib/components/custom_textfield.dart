@@ -34,6 +34,29 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   bool _isObscure = true;
 
+  Row _buildSuffix(BuildContext context) {
+    final List<IconButton> buttons = <IconButton>[];
+    if (widget.isPicker) {
+      buttons.add(IconButton(
+        icon: const Icon(Icons.timer_rounded),
+        onPressed: () async => widget.controller.text = await TimePicker.selectTime(context),
+      ));
+    } else if (widget.isObscure) {
+      buttons.add(IconButton(
+        onPressed: () => setState(() => _isObscure = !_isObscure),
+        icon: Icon(_isObscure ? Icons.visibility_rounded : Icons.visibility_off_rounded),
+      ));
+    }
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: buttons..add(IconButton(icon: const Icon(Icons.clear_rounded), onPressed: () => widget.controller.clear())),
+    );
+  }
+
+  UnderlineInputBorder _buildBorder({double width = 2, Color color}) {
+    return UnderlineInputBorder(borderSide: BorderSide(width: width, color: color));
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -71,28 +94,5 @@ class _CustomTextFieldState extends State<CustomTextField> {
         errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
       ),
     );
-  }
-
-  Row _buildSuffix(BuildContext context) {
-    final List<IconButton> buttons = <IconButton>[];
-    if (widget.isPicker) {
-      buttons.add(IconButton(
-        icon: const Icon(Icons.timer_rounded),
-        onPressed: () async => widget.controller.text = await TimePicker.selectTime(context),
-      ));
-    } else if (widget.isObscure) {
-      buttons.add(IconButton(
-        onPressed: () => setState(() => _isObscure = !_isObscure),
-        icon: Icon(_isObscure ? Icons.visibility_rounded : Icons.visibility_off_rounded),
-      ));
-    }
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: buttons..add(IconButton(icon: const Icon(Icons.clear_rounded), onPressed: () => widget.controller.clear())),
-    );
-  }
-
-  UnderlineInputBorder _buildBorder({double width = 2, Color color}) {
-    return UnderlineInputBorder(borderSide: BorderSide(width: width, color: color));
   }
 }

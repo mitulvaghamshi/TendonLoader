@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/webportal/left_panel.dart';
 import 'package:tendon_loader/webportal/right_panel.dart';
+import 'package:tendon_loader/screens/home.dart';
+import 'package:tendon_loader/utils/constants.dart';
+import 'package:tendon_loader/webportal/content.dart';
+import 'package:tendon_loader/webportal/aside_bar.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key/*?*/ key}) : super(key: key);
 
   static const String route = '/homePage';
 
@@ -12,7 +17,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: const Text('Tendon Loader - Admin')),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Tendon Loader - Admin',),
+        actions:  <Widget>[CustomButton(text: 'Logout', icon: Icons.logout, onPressed: () => AppAuth.signOut(context))],
+      ),
       drawer: size.width > size.height ? null : const Drawer(child: LeftPanel()),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {

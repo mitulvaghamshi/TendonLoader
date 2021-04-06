@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({Key key, this.text = 'Click', this.icon, this.color, this.background, this.onPressed}) : super(key: key);
+  const CustomButton({Key/*?*/ key, this.text = 'Click', this.icon, this.color, this.background, this.onPressed}) : super(key: key);
 
-  final Color color;
+<<<<<<< Updated upstream
+  final Color/*?*/ color;
   final String text;
+  final IconData/*?*/ icon;
+  final Color/*?*/ background;
+  final VoidCallback/*?*/ onPressed;
+=======
+  final String text;
+  final Color color;
   final IconData icon;
   final Color background;
   final VoidCallback onPressed;
+>>>>>>> Stashed changes
 
   @override
   Widget build(BuildContext context) {
