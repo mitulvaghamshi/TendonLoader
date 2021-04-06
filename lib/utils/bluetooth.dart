@@ -6,10 +6,14 @@ class Bluetooth {
 
   const Bluetooth._();
 
+<<<<<<< Updated upstream
   // UUIDs
   static const String _serviceUuid = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // main service
   static const String _controlPointUuid = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // send commands
   static const String _dataCharacteristicUuid = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57'; // receive data
+=======
+  static String get deviceName => _device?.name ?? _device?.id.toString();
+>>>>>>> Stashed changes
 
   // Responses
   static const int RES_CMD_RESPONSE = 0;

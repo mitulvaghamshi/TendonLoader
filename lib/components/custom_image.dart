@@ -20,6 +20,7 @@ class CustomImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< Updated upstream
     if (zeroPad) {
       return Image.asset(path, color: color);
     } else {
@@ -28,5 +29,16 @@ class CustomImage extends StatelessWidget {
         child: Image.asset(path, color: color, height: MediaQuery.of(context).size.width * scale),
       );
     }
+=======
+    if (!isLogo) return Image.asset(Images.imgRoot + name);
+    final Color _accent = Theme.of(context).accentColor;
+    final Color _primary = Theme.of(context).primaryColor;
+    return Container(
+      margin: EdgeInsets.all(isLogo ? 30 : 0),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: _primary, border: Border.all(width: 3, color: _accent)),
+      child: CircleAvatar(radius: radius, backgroundColor: _primary, child: SvgPicture.asset(Images.imgRoot + name, color: _accent)),
+    );
+>>>>>>> Stashed changes
   }
 }

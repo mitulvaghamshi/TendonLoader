@@ -1,21 +1,27 @@
+import 'dart:async';
 import 'dart:io' show File;
 
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart' as pp;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Alignment;
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/chart_data.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
-import 'package:tendon_loader/utils/uploader.dart';
+import 'package:tendon_loader/utils/storage.dart';
 
 mixin CreateXLSX {
   static final List<ChartData> _measurements = <ChartData>[];
 
   void addToList(ChartData chartData) => _measurements.add(chartData);
 
+<<<<<<< Updated upstream
   Future<void> export({ExerciseData/*?*/ exerciseData}) async {
+=======
+  Future<UploadTask> export({ExerciseData exerciseData}) async {
+>>>>>>> Stashed changes
     // if (_measurements.isEmpty) return;
     int _iR = 0;
     const String _iA = 'A';
@@ -26,6 +32,10 @@ mixin CreateXLSX {
     final String _time = DateFormat('hh:mm a').format(_dtNow);
     final bool isExercise = exerciseData != null;
     final Worksheet _sheet = _workbook.worksheets[0];
+<<<<<<< Updated upstream
+=======
+    final String _userId = (await Hive.openBox<Object>(Keys.keyLoginBox)).get(Keys.keyUsername, defaultValue: '') as String;
+>>>>>>> Stashed changes
 
     // date
     _iR++; // 1
@@ -113,6 +123,10 @@ mixin CreateXLSX {
     final File _file = File('$_path/$_name');
     await _file.writeAsBytes(_workbook.saveAsStream());
     _workbook.dispose();
+<<<<<<< Updated upstream
     await Uploader.uploadFile(_file, _userId, _name);
+=======
+    return Storage.uploadFile(_file, _userId.split('@')[0], _name);
+>>>>>>> Stashed changes
   }
 }

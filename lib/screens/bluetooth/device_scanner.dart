@@ -37,8 +37,9 @@ class BluetoothTile extends StatelessWidget {
     return StreamBuilder<BluetoothState>(
       initialData: BluetoothState.unknown,
       stream: FlutterBlue.instance.state,
-      builder: (_, AsyncSnapshot<BluetoothState> snapshot) =>
-          snapshot.data == BluetoothState.off ? const EnableBluetoothTile() : const LocationTile(),
+      builder: (_, AsyncSnapshot<BluetoothState> snapshot) {
+        return snapshot.data == BluetoothState.off ? const EnableBluetoothTile() : const LocationTile();
+      },
     );
   }
 }
@@ -108,7 +109,14 @@ class ConnectTile extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+<<<<<<< Updated upstream
         const Text('Click on the device name to connect\n Note: this might take a moment to connect.', textAlign: TextAlign.center),
+=======
+        const Text(Descriptions.descClickToConnect, textAlign: TextAlign.center),
+        const SizedBox(height: 20),
+        ...devices?.map((BluetoothDevice device) => DeviceTile(device: device)),
+        ...results?.map((ScanResult result) => DeviceTile(device: result.device)),
+>>>>>>> Stashed changes
         const SizedBox(height: 20),
         CustomButton(
           text: device.name,

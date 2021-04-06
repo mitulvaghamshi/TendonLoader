@@ -12,11 +12,8 @@ class MVCTesting extends StatelessWidget with CreateXLSX {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text(MVCTesting.name), actions: <ExportButton>[ExportButton(callback: export)]),
       body: const BarGraph(),
-      appBar: AppBar(
-        title: const Text(MVCTesting.name),
-        actions: <ExportButton>[ExportButton(callback: export)],
-      ),
     );
   }
 }

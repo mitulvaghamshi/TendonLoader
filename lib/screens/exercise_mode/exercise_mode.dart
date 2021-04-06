@@ -15,10 +15,7 @@ class ExerciseMode extends StatelessWidget with CreateXLSX {
     final ExerciseData/*?*/ _data = ModalRoute.of(context)/*!*/.settings.arguments as ExerciseData/*?*/;
     return Scaffold(
       body: BarGraph(exerciseData: _data),
-      appBar: AppBar(
-        title: const Text(ExerciseMode.name),
-        actions: <ExportButton>[ExportButton(callback: () => export(exerciseData: _data))],
-      ),
+      appBar: AppBar(title: const Text(ExerciseMode.name), actions: <ExportButton>[ExportButton(callback: () => export(exerciseData: _data))]),
     );
   }
 }

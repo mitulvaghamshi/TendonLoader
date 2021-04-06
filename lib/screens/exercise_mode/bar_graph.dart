@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/countdown.dart';
+import 'package:tendon_loader/components/custom_graph.dart';
+import 'package:tendon_loader/components/graph_controls.dart';
 import 'package:tendon_loader/utils/create_xlsx.dart';
 import 'package:tendon_loader/utils/data_handler.dart';
 import 'package:tendon_loader/utils/exercise_data.dart';
@@ -89,6 +91,7 @@ class _BarGraphState extends State<BarGraph> with CreateXLSX {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< Updated upstream
     return Card(
       elevation: 16,
       margin: const EdgeInsets.all(16),
@@ -160,16 +163,52 @@ class _BarGraphState extends State<BarGraph> with CreateXLSX {
                   onPressed: _handler.stop,
                   heroTag: 'stop-btn',
                   child: const Icon(Icons.stop_rounded),
+=======
+    return AppFrame(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          StreamBuilder<int>(
+            initialData: 0,
+            stream: _handler.timeStream,
+            builder: (_, AsyncSnapshot<int> snapshot) {
+              if (_isRunning) _update();
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Text>[
+                  Text(
+                    '🕒 ${snapshot.data ~/ 60}:${(snapshot.data % 60).toString().padLeft(2, '0')} s',
+                    style: const TextStyle(fontSize: 26, color: Colors.green, fontWeight: FontWeight.bold),
+                  ),
+                  Text(_isRunning ? _lapTime : '---', style: const TextStyle(fontSize: 26, color: Colors.deepOrange, fontWeight: FontWeight.bold)),
+                ],
+              );
+            },
+          ),
+          StreamBuilder<double>(
+            initialData: 0,
+            stream: _handler.weightStream,
+            builder: (_, AsyncSnapshot<double> snapshot) {
+              return Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(20),
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Color.lerp(Colors.yellow[100], Colors.green, snapshot.data / _targetLoad),
+>>>>>>> Stashed changes
                 ),
-                FloatingActionButton(
-                  onPressed: _reset,
-                  heroTag: 'reset-btn',
-                  child: const Icon(Icons.replay_rounded),
+                child: Text(
+                  'Set: $_currentSet of ${_exerciseData.sets}   |   Rep: $_currentRep of ${_exerciseData.reps}',
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
                 ),
-              ],
-            ),
-          ],
-        ),
+              );
+            },
+          ),
+          CustomGraph(series: _handler.getSeries),
+          const SizedBox(height: 30),
+          GraphControls(start: _start, stop: _handler.stop, reset: _reset),
+        ],
       ),
     );
   }

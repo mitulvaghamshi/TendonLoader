@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/utils/app_routes.dart';
 import 'package:tendon_loader/utils/app_themes.dart';
 
+<<<<<<< Updated upstream
 void main() => runApp(const TendonLoader());
+=======
+Future<void> main() async {
+  await Hive.initFlutter();
+  runApp(const TendonLoader());
+}
+>>>>>>> Stashed changes
 
 class TendonLoader extends StatelessWidget {
   const TendonLoader({Key/*?*/ key}) : super(key: key);

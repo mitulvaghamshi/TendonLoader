@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
 import 'package:flutter_blue/flutter_blue.dart';
+=======
+import 'package:tendon_loader/components/app_frame.dart';
+>>>>>>> Stashed changes
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_listtile.dart';
 import 'package:tendon_loader/screens/bluetooth/device_scanner.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
+import 'package:tendon_loader/utils/app_auth.dart';
 import 'package:tendon_loader/utils/bluetooth.dart';
 import 'package:tendon_loader/utils/location.dart';
 
@@ -35,7 +40,11 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
+<<<<<<< Updated upstream
     Bluetooth.instance?.sleep();
+=======
+    AppAuth.signOut();
+>>>>>>> Stashed changes
     Locator.dispose();
     super.dispose();
   }
@@ -72,6 +81,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
+<<<<<<< Updated upstream
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -89,6 +99,17 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
+=======
+      body: AppFrame(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const CustomImage(isLogo: true),
+            CustomTile(context: context, name: LiveData.name, route: LiveData.route, icon: Icons.show_chart_rounded),
+            CustomTile(context: context, name: NewExercise.name, route: NewExercise.route, icon: Icons.directions_run_rounded),
+            CustomTile(context: context, name: MVCTesting.name, route: MVCTesting.route, icon: Icons.airline_seat_legroom_extra),
+          ],
+>>>>>>> Stashed changes
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
