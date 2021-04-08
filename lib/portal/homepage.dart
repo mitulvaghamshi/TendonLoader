@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 import 'package:tendon_loader/portal/left_panel.dart';
 import 'package:tendon_loader/portal/right_panel.dart';
-import 'package:tendon_loader/utils/app_auth.dart';
+import 'package:tendon_loader/utils/app/app_auth.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 class HomePage extends StatelessWidget {

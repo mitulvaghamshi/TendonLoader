@@ -1,6 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 
-mixin UserPath {
+mixin FilePath {
   static final BehaviorSubject<String> _pathCtrl = BehaviorSubject<String>();
 
   static Stream<String> get stream => _pathCtrl.stream;

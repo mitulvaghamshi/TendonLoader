@@ -3,8 +3,8 @@ import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/screens/exercise_mode/exercise_mode.dart';
-import 'package:tendon_loader/utils/exercise_data.dart';
-import 'package:tendon_loader/utils/validator.dart' show ValidateExerciseDataMixin;
+import 'package:tendon_loader/utils/controller/validator.dart';
+import 'package:tendon_loader/utils/modal/exercise_data.dart';
 
 class NewExercise extends StatefulWidget {
   const NewExercise({Key key}) : super(key: key);

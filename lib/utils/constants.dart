@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 mixin Sizes {
   static const double sizeWeb = 768;
   static const double sizeMobile = 350;
@@ -58,4 +61,10 @@ mixin Progressor {
   static const int CMD_CLR_ERROR_INFORMATION = 109;
   static const int CMD_ENTER_SLEEP = 110;
   static const int CMD_GET_BATTERY_VOLTAGE = 111;
+}
+
+mixin Link {
+  Future<void> goto(String url) async {
+    if (await canLaunch(url)) await launch(url, webOnlyWindowName: 'Tendon Loader', statusBarBrightness: Brightness.light);
+  }
 }

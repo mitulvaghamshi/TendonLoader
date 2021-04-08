@@ -3,10 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/utils/bluetooth.dart';
-import 'package:tendon_loader/utils/chart_data.dart';
+import 'package:tendon_loader/utils/app/create_xlsx.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/utils/create_xlsx.dart';
+import 'package:tendon_loader/utils/controller/bluetooth.dart';
+import 'package:tendon_loader/utils/modal/chart_data.dart';
 
 class DataHandler with CreateXLSX {
   DataHandler({this.targetLoad, this.isMVC = false}) {
@@ -22,9 +22,9 @@ class DataHandler with CreateXLSX {
   final bool isMVC;
   ChartSeriesController _graphDataCtrl;
   ChartSeriesController _lineDataCtrl;
-  List<ChartData>/*?*/ _lineData;
-  double/*?*//*!*/ targetLoad;
-  Timer/*?*/ _timer;
+  List<ChartData> _lineData;
+  double targetLoad;
+  Timer _timer;
 
   Stream<int> get timeStream => _timeCtrl.stream;
 
@@ -87,9 +87,9 @@ class DataHandler with CreateXLSX {
           // _avgTime = double.parse((_timeSum.abs() / 10000000.0).toStringAsFixed(2));
           _graphData.insert(0, ChartData(weight: _avgWeight));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
-          if (isMVC && _avgWeight >= targetLoad/*!*/) {
+          if (isMVC && _avgWeight >= targetLoad) {
             targetLoad = _avgWeight;
-            _lineData/*!*/.insertAll(0, <ChartData>[ChartData(x: 0, weight: targetLoad), ChartData(x: 2, weight: targetLoad)]);
+            _lineData.insertAll(0, <ChartData>[ChartData(x: 0, weight: targetLoad), ChartData(x: 2, weight: targetLoad)]);
             _lineDataCtrl.updateDataSource(updatedDataIndexes: <int>[0, 1]);
           }
           if (!_weightCtrl.isClosed) _weightCtrl.add(_avgWeight);
@@ -101,8 +101,8 @@ class DataHandler with CreateXLSX {
     }
   }
 
-  List<ChartSeries<ChartData, int/*?*/>> getSeries() {
-    final List<ChartSeries<ChartData, int/*?*/>> components = <ChartSeries<ChartData, int>>[
+  List<ChartSeries<ChartData, int>> getSeries() {
+    final List<ChartSeries<ChartData, int>> components = <ChartSeries<ChartData, int>>[
       ColumnSeries<ChartData, int>(
         width: 0.9,
         borderWidth: 1,
@@ -111,7 +111,7 @@ class DataHandler with CreateXLSX {
         dataSource: _graphData,
         borderColor: Colors.black,
         xValueMapper: (ChartData data, _) => 1,
-        yValueMapper: (ChartData data, _) => data.weight/*!*/,
+        yValueMapper: (ChartData data, _) => data.weight,
         dataLabelSettings: DataLabelSettings(
           isVisible: true,
           showZeroValue: false,
@@ -123,13 +123,13 @@ class DataHandler with CreateXLSX {
       ),
     ];
     if (_lineData != null) {
-      components.add(LineSeries<ChartData, int/*?*/>(
+      components.add(LineSeries<ChartData, int>(
         width: 5,
         color: Colors.red,
         animationDuration: 0,
         dataSource: _lineData/*!*/,
         xValueMapper: (ChartData data, _) => data.x,
-        yValueMapper: (ChartData data, _) => data.weight/*!*/,
+        yValueMapper: (ChartData data, _) => data.weight,
         onRendererCreated: (ChartSeriesController controller) => _lineDataCtrl = controller,
       ));
     }

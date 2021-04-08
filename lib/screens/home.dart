@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_listtile.dart';
-import 'package:tendon_loader/screens/bluetooth/device_scanner.dart';
+import 'package:tendon_loader/screens/connect_device/connected_devices.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
-import 'package:tendon_loader/utils/app_auth.dart';
-import 'package:tendon_loader/utils/bluetooth.dart';
-import 'package:tendon_loader/utils/location.dart';
+import 'package:tendon_loader/utils/app/app_auth.dart';
+import 'package:tendon_loader/utils/controller/bluetooth.dart';
+import 'package:tendon_loader/utils/controller/location.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -98,7 +97,6 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-
       body: AppFrame(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -119,7 +117,7 @@ class _HomeState extends State<Home> {
           barrierDismissible: false,
           builder: (_) => AlertDialog(
             scrollable: true,
-            content: const DeviceScanner(),
+            content: const ConnectedDevices(),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
           ),

@@ -5,7 +5,7 @@ import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/countdown.dart';
 import 'package:tendon_loader/components/custom_graph.dart';
 import 'package:tendon_loader/components/graph_controls.dart';
-import 'package:tendon_loader/utils/data_handler.dart';
+import 'package:tendon_loader/utils/controller/data_handler.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key key}) : super(key: key);
