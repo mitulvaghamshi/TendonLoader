@@ -6,18 +6,15 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart' as pp;
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Alignment;
-import 'package:tendon_loader/utils/app/data_store.dart';
-import 'package:tendon_loader/utils/constants.dart' show Keys;
+import 'package:tendon_loader/utils/app/constants.dart' show Keys;
+import 'package:tendon_loader/utils/cloud/file_storage.dart';
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
+import 'package:tendon_loader/utils/controller/data_adapter.dart';
 import 'package:tendon_loader/utils/modal/chart_data.dart';
 import 'package:tendon_loader/utils/modal/exercise_data.dart';
 
-mixin CreateXLSX {
-  static final List<ChartData> _collection = <ChartData>[];
-
-  void collect(ChartData chartData) => _collection.add(chartData);
-
-  Future<UploadTask> export({ExerciseData exerciseData}) async {
+mixin CreateExcel {
+  Future<UploadTask> create({ExerciseData exerciseData}) async {
     // if (_measurements.isEmpty) return;
     int _iR = 0;
     const String _iA = 'A';
@@ -60,32 +57,32 @@ mixin CreateXLSX {
       _iR++; // 8
       _sheet.getRangeByName('$_iA$_iR').text = 'Last MVC Test Recorded [Kg]';
       // TODO(mitul): adjust last recorded MVC
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad /*!*/ * 1.3;
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad * 1.3;
 
       // Target Load
       _iR++; // 9
       _sheet.getRangeByName('$_iA$_iR').text = 'Target Load [Kg]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad /*!*/;
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.targetLoad;
 
       // Hold Time
       _iR++; // 10
       _sheet.getRangeByName('$_iA$_iR').text = 'Hold Time [sec]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.holdTime /*!*/ .toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.holdTime.toDouble();
 
       // Rest Time
       _iR++; // 11
       _sheet.getRangeByName('$_iA$_iR').text = 'Rest Time [sec]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.restTime /*!*/ .toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.restTime.toDouble();
 
       // Sets
       _iR++; // 12
       _sheet.getRangeByName('$_iA$_iR').text = 'Sets [#]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.sets /*!*/ .toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.sets.toDouble();
 
       // Reps
       _iR++; // 13
       _sheet.getRangeByName('$_iA$_iR').text = 'Reps [#]';
-      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.reps /*!*/ .toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = exerciseData.reps.toDouble();
     }
 
     // data headers
@@ -93,21 +90,11 @@ mixin CreateXLSX {
     _sheet.getRangeByName('$_iA$_iR').setText('TIME [s]');
     _sheet.getRangeByName('B$_iR').setText('LOAD [Kg]');
 
-    int count = 0;
-    double _avgTime = 0;
-    double _avgWeight = 0;
-    for (final ChartData chartData in _collection) {
-      _avgTime += chartData.time;
-      _avgWeight += chartData.weight;
-      if (count++ == 8) {
-        _iR++; // 16..N
-        _sheet.getRangeByName('$_iA$_iR').number = double.parse(((_avgTime / 8.0) / 1000000.0).toStringAsFixed(2));
-        _sheet.getRangeByName('B$_iR').number = double.parse((_avgWeight.abs() / 8.0).toStringAsFixed(2));
-        _avgWeight = _avgTime = 0;
-        count = 0;
-      }
+    for (final ChartData chartData in DataAdapter.average()) {
+      _iR++; // 16..N
+      _sheet.getRangeByName('$_iA$_iR').number = chartData.time;
+      _sheet.getRangeByName('B$_iR').number = chartData.load;
     }
-    _collection.clear();
 
     final String _mode = isExercise ? 'Exercise' : 'MVCTest';
     final String _path = (await pp.getApplicationSupportDirectory()).path;
@@ -115,6 +102,6 @@ mixin CreateXLSX {
     final File _file = File('$_path/$_name');
     await _file.writeAsBytes(_workbook.saveAsStream());
     _workbook.dispose();
-    return DataStore.uploadFile(_file, _userId.split('@')[0], _name);
+    return FileStorage.uploadFile(_file, _userId.split('@')[0], _name);
   }
 }

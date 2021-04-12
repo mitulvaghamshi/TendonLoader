@@ -3,7 +3,7 @@ import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/countdown.dart';
 import 'package:tendon_loader/components/custom_graph.dart';
 import 'package:tendon_loader/components/graph_controls.dart';
-import 'package:tendon_loader/utils/app/create_xlsx.dart';
+import 'package:tendon_loader/utils/controller/create_excel.dart';
 import 'package:tendon_loader/utils/controller/data_handler.dart';
 import 'package:tendon_loader/utils/modal/exercise_data.dart';
 
@@ -16,7 +16,7 @@ class BarGraph extends StatefulWidget {
   _BarGraphState createState() => _BarGraphState();
 }
 
-class _BarGraphState extends State<BarGraph> with CreateXLSX {
+class _BarGraphState extends State<BarGraph> with CreateExcel {
   int _holdTime = 0;
   int _restTime = 0;
   int _currentSet = 1;

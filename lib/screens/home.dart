@@ -6,7 +6,7 @@ import 'package:tendon_loader/screens/connect_device/connected_devices.dart';
 import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
-import 'package:tendon_loader/utils/app/app_auth.dart';
+import 'package:tendon_loader/utils/cloud/app_auth.dart';
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
 import 'package:tendon_loader/utils/controller/location.dart';
 

@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/screens/login/login.dart';
-import 'package:tendon_loader/utils/app/app_auth.dart';
+import 'package:tendon_loader/utils/cloud/app_auth.dart';
 
 class Splash extends StatelessWidget {
   const Splash({Key key}) : super(key: key);

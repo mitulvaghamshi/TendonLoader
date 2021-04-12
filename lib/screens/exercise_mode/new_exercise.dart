@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/screens/exercise_mode/exercise_mode.dart';
+import 'package:tendon_loader/utils/app/constants.dart';
 import 'package:tendon_loader/utils/controller/validator.dart';
 import 'package:tendon_loader/utils/modal/exercise_data.dart';
 
@@ -34,21 +36,31 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
     super.dispose();
   }
 
-  void _submit() {
-    if (_exerciseFormKey.currentState.validate() || true) {
-      Navigator.of(context).pushReplacementNamed(
-        ExerciseMode.route,
-        arguments: const ExerciseData(targetLoad: 5, holdTime: 5, restTime: 10, sets: 2, reps: 3),
-        /*ExerciseData(
-          sets: int.tryParse(_ctrlSets.text),
-          reps: int.tryParse(_ctrlReps.text),
-          holdTime: int.tryParse(_ctrlHoldTime.text),
-          restTime: int.tryParse(_ctrlRestTime.text),
-          targetLoad: double.tryParse(_ctrlTargetLoad.text),
-        ),*/
+  Future<void> _submit() async {
+    if (/*_exerciseFormKey.currentState.validate()*/ true) {
+      final ExerciseData _data = ExerciseData(
+        targetLoad: 5,
+        holdTime: 5,
+        restTime: 10,
+        sets: 2,
+        reps: 3,
+        isComplete: false,
+        progressorId: 'No device',
       );
+      final Box<Object> _exerciseBox = await Hive.openBox<Object>(Keys.keyExerciseBox);
+      await _exerciseBox.clear();
+      await _exerciseBox.putAll(_data.toMap());
+      await Navigator.pushReplacementNamed(context, ExerciseMode.route, arguments: _data);
     }
   }
+
+  // /*ExerciseData(
+  //   sets: int.tryParse(_ctrlSets.text),
+  //   reps: int.tryParse(_ctrlReps.text),
+  //   holdTime: int.tryParse(_ctrlHoldTime.text),
+  //   restTime: int.tryParse(_ctrlRestTime.text),
+  //   targetLoad: double.tryParse(_ctrlTargetLoad.text),
+  // ),*/
 
   @override
   Widget build(BuildContext context) {

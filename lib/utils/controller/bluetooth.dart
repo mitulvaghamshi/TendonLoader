@@ -1,6 +1,6 @@
 import 'package:bluetooth_enable/bluetooth_enable.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/utils/constants.dart' show Progressor;
+import 'package:tendon_loader/utils/app/constants.dart' show Progressor;
 
 mixin Bluetooth {
   static BluetoothDevice _device; // Connected device

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 import 'package:tendon_loader/portal/left_panel.dart';
 import 'package:tendon_loader/portal/right_panel.dart';
-import 'package:tendon_loader/utils/app/app_auth.dart';
-import 'package:tendon_loader/utils/constants.dart';
+import 'package:tendon_loader/utils/app/constants.dart';
+import 'package:tendon_loader/utils/cloud/app_auth.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
       drawer: size.width > size.height ? null : const Drawer(child: LeftPanel()),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          final Size size = constraints.biggest;
+          if (!constraints.isSatisfiedBy(const Size.fromRadius(150))) return const Center(child: Text('Unsupported window size!'));
           if (size.height > size.width - 56) {
             return const RightPanel();
           } else {

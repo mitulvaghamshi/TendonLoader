@@ -1,11 +1,10 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 
 class ExportButton extends StatelessWidget {
   const ExportButton({Key key, @required this.callback}) : super(key: key);
 
-  final Future<UploadTask> Function() callback;
+  final VoidCallback callback;
 
   @override
   Widget build(BuildContext context) {
@@ -13,26 +12,15 @@ class ExportButton extends StatelessWidget {
       text: 'Export',
       icon: Icons.backup_rounded,
       onPressed: () async {
-        final UploadTask _task = await callback();
-        final bool _result = await showDialog<bool>(
+        callback();
+        await showDialog<void>(
           context: context,
-          barrierDismissible: false,
+          barrierDismissible: true,
           barrierColor: Theme.of(context).primaryColor,
           builder: (BuildContext context) {
-            return StreamBuilder<TaskSnapshot>(
-              initialData: null,
-              stream: _task.snapshotEvents,
-              builder: (_, AsyncSnapshot<TaskSnapshot> snapshot) {
-                if (snapshot.hasData && snapshot.data.state == TaskState.success) Navigator.pop<bool>(context, true);
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const <Widget>[CircularProgressIndicator(), Text('Please wait...', style: TextStyle(fontSize: 20))],
-                );
-              },
-            );
+            return Row(children: const <Widget>[CircularProgressIndicator(), Text('Please wait...', style: TextStyle(fontSize: 20))]);
           },
         );
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_result ? 'Data exported successfully!' : 'Something wants wrong!')));
       },
     );
   }

@@ -7,8 +7,8 @@ import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/portal/homepage.dart';
 import 'package:tendon_loader/screens/home.dart';
-import 'package:tendon_loader/utils/app/app_auth.dart';
-import 'package:tendon_loader/utils/constants.dart' show Keys, Sizes;
+import 'package:tendon_loader/utils/cloud/app_auth.dart';
+import 'package:tendon_loader/utils/app/constants.dart' show Keys, Sizes;
 import 'package:tendon_loader/utils/controller/validator.dart';
 
 class Login extends StatefulWidget {

@@ -15,7 +15,7 @@ class TendonLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return  MaterialApp(
       routes: routes,
       theme: lightTheme,
       darkTheme: darkTheme,

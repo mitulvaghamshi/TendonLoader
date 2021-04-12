@@ -1,8 +1,6 @@
 name: tendon_loader
 description: A bluetooth based tendon injury monitoring application.
-
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
@@ -10,6 +8,7 @@ environment:
 
 dependencies:
   bluetooth_enable: ^0.1.1
+  cloud_firestore: ^1.0.4
   cupertino_icons: ^1.0.0
 #  firebase_analytics: ^7.1.1
   firebase_auth: ^1.0.1

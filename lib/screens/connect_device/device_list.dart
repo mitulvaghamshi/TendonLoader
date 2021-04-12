@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 import 'package:tendon_loader/screens/connect_device/device_tile.dart';
-import 'package:tendon_loader/utils/constants.dart' show Descriptions;
+import 'package:tendon_loader/utils/app/constants.dart' show Descriptions;
 
 class DeviceList extends StatelessWidget {
   const DeviceList({Key key, this.results = const <ScanResult>[], this.devices = const <BluetoothDevice>[]}) : super(key: key);

@@ -3,12 +3,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 mixin Sizes {
   static const double sizeWeb = 768;
-  static const double sizeMobile = 350;
+  static const double sizeMobile = 400;
   static const double sizeLeftPanel = 400;
 }
 
 mixin Keys {
   static const String keyLoginBox = 'loginBox';
+  static const String keyExerciseBox = 'exerciseBox';
 
   static const String keyStaySignIn = '_KEY_STAY_SIGNED_IN';
   static const String keyUsername = '_KEY_USERNAME';

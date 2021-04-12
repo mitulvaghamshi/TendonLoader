@@ -1,8 +1,10 @@
 # This is a generated file; do not edit or check into version control.
 bluetooth_enable=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\bluetooth_enable-0.1.1\\
+cloud_firestore=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\cloud_firestore-1.0.4\\
+cloud_firestore_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\cloud_firestore_web-1.0.4\\
 firebase_auth=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_auth-1.0.1\\
 firebase_auth_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_auth_web-1.0.3\\
-firebase_core=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core-1.0.2\\
+firebase_core=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core-1.0.3\\
 firebase_core_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core_web-1.0.2\\
 firebase_storage=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_storage-8.0.1\\
 firebase_storage_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_storage_web-1.0.2\\

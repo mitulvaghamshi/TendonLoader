@@ -4,7 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage, Re
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
-mixin DataStore {
+mixin FileStorage {
   static Future<UploadTask> uploadFile(final File file, final String userID, final String name) async {
     if (!file.existsSync()) return null;
     final Reference reference = FirebaseStorage.instance.ref().child('all-users').child(userID).child('/$name');
