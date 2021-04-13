@@ -19,9 +19,9 @@ class DataStorage {
 
     final CollectionReference allUsers = FirebaseFirestore.instance.collection('all-users');
     final DocumentReference currentUser = allUsers.doc(_userId);
-    final CollectionReference allExports = currentUser.collection('all_exports');
+    final CollectionReference allExports = currentUser.collection('all-exports');
     final DocumentReference day = allExports.doc(_date);
-    await day.update(<String, dynamic>{_type + _time: _data.toMap()});
+    await day.set(<String, dynamic>{_type + _time: _data.toMap()});
     DataAdapter.clear();
   }
 }

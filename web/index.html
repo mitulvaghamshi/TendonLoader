@@ -31,26 +31,41 @@
         navigator.serviceWorker.register('flutter_service_worker.js');
       });
     }
+
+
 </script>
 
-<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-storage.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<!--<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase/init.js"></script> &lt;!&ndash; 8.3.0 &ndash;&gt;-->
+
+<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script> <!-- 7.20.0 -->
+
+<!--
+<script src="/__/firebase/init.js"></script>  8.3.0
+<script src="/__/firebase/8.4.1/firebase-app.js"></script>
+<script src="/__/firebase/8.4.1/firebase-auth.js"></script>
+<script src="/__/firebase/8.4.1/firebase-storage.js"></script>
+<script src="/__/firebase/8.4.1/firebase-firestore.js"></script>  7.20.0
+-->
 
 <script>
-  var firebaseConfig = {
-    apiKey: "AIzaSyCnmMiiuYaLeA-FFrgCouoUdnkSwY4DMA4",
-    authDomain: "tendonloader.firebaseapp.com",
-    projectId: "tendonloader",
-    storageBucket: "tendonloader.appspot.com",
-    messagingSenderId: "1085962274300",
-    appId: "1:1085962274300:web:befb1e6004a4756e891e79",
-    measurementId: "G-RXG5PYZZWX"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  // firebase.analytics();
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDDyoyhwZtACT9Y6yzeNFl1Ch6mU1SZ-pc",
+      authDomain: "tendon-loader.firebaseapp.com",
+      databaseURL: "https://tendon-loader-default-rtdb.firebaseio.com",
+      projectId: "tendon-loader",
+      storageBucket: "tendon-loader.appspot.com",
+      messagingSenderId: "534221336745",
+      appId: "1:534221336745:web:8893c7f4e44b9e959639b8"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
 </script>
 
 <!-- Initialize App -->
