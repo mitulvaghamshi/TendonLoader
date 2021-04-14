@@ -32,23 +32,17 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/aidl_source_output_dir/debug/compileDebugAidl/out" />
     <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/aidl_source_output_dir/debugAndroidTest/compileDebugAndroidTestAidl/out" />
-    <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/ap_generated_sources/debug/out">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/ap_generated_sources/debug/out" isTestSource="false" generated="true" />
-    </content>
+    <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/ap_generated_sources/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/ap_generated_sources/debugAndroidTest/out" />
     <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/ap_generated_sources/debugUnitTest/out" />
     <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/renderscript_source_output_dir/debug/compileDebugRenderscript/out" />
     <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/renderscript_source_output_dir/debugAndroidTest/compileDebugAndroidTestRenderscript/out" />
     <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/res/resValues/androidTest/debug" />
-    <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/res/resValues/debug">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/res/resValues/debug" type="java-resource" />
-    </content>
+    <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/res/resValues/debug" />
     <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/res/rs/androidTest/debug" />
     <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/res/rs/debug" />
     <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/source/buildConfig/androidTest/debug" />
-    <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/source/buildConfig/debug">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
-    </content>
+    <content url="file://$MODULE_DIR$/../../../../build/bluetooth_enable/generated/source/buildConfig/debug" />
     <content url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/bluetooth_enable-0.1.1/android">
       <sourceFolder url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/bluetooth_enable-0.1.1/android/src/main/java" isTestSource="false" />
       <excludeFolder url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/bluetooth_enable-0.1.1/android/.gradle" />
