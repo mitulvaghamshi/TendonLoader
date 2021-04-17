@@ -20,8 +20,7 @@ class CustomTile extends StatelessWidget {
         if (false /* Bluetooth.device == null*/) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Progressor not connected!')));
         } else if (false /*Bluetooth.instance.waiting*/) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text('Too fast! device busy, try again!!!')));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Too fast! device busy, try again!!!')));
         } else {
           Navigator.pushNamed(context, route);
         }

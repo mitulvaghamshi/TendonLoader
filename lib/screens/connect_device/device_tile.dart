@@ -18,6 +18,7 @@ class DeviceTile extends StatelessWidget {
   }
 
   ListTile _buildTile(bool isConnected) {
+    if (isConnected) Bluetooth.getProps(device);
     return ListTile(
       horizontalTitleGap: 0,
       title: Text(_deviceName),

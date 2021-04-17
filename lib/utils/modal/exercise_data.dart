@@ -1,46 +1,32 @@
-import 'package:tendon_loader/utils/modal/chart_data.dart';
+import 'package:tendon_loader/utils/app/constants.dart' show Keys;
 
 class ExerciseData {
-  ExerciseData({
-    this.collection = const <ChartData>[],
-    this.sets,
-    this.reps,
-    this.holdTime,
-    this.restTime,
-    this.targetLoad,
-    this.isComplete,
-    this.progressorId,
-  });
+  ExerciseData({this.sets, this.reps, this.holdTime, this.restTime, this.targetLoad});
 
   ExerciseData.fromMap(Map<dynamic, dynamic> map) {
-    sets = int.parse(map['sets'].toString());
-    reps = int.parse(map['reps'].toString());
-    holdTime = int.parse(map['holdTime'].toString());
-    restTime = int.parse(map['restTime'].toString());
-    targetLoad = double.parse(map['targetLoad'].toString());
-    isComplete = map['isComplete'] as bool;
-    progressorId = map['progressorId'] as String;
+    sets = int.parse(map[Keys.keySets].toString());
+    reps = int.parse(map[Keys.keyReps].toString());
+    lastMVC = double.parse(map[Keys.keyLastMVC].toString());
+    holdTime = int.parse(map[Keys.keyHoldTime].toString());
+    restTime = int.parse(map[Keys.keyRestTime].toString());
+    targetLoad = double.parse(map[Keys.keyTargetLoad].toString());
   }
 
   int sets;
   int reps;
   int holdTime;
   int restTime;
-  bool isComplete;
+  double lastMVC;
   double targetLoad;
-  String progressorId;
-  List<ChartData> collection;
 
-  Map<String, dynamic> toMap() {
-    final Map<String, dynamic> map = <String, dynamic>{};
-    map['sets'] = sets;
-    map['reps'] = reps;
-    map['holdTime'] = holdTime;
-    map['restTime'] = restTime;
-    map['targetLoad'] = targetLoad;
-    map['isComplete'] = isComplete;
-    map['progressorId'] = progressorId;
-    map['data'] = collection.map((ChartData data) => data.toMap()).toList();
-    return map;
+  Map<String, String> toMap() {
+    return <String, String>{
+      Keys.keySets: sets.toString(),
+      Keys.keyReps: reps.toString(),
+      Keys.keyLastMVC: lastMVC.toString(),
+      Keys.keyHoldTime: holdTime.toString(),
+      Keys.keyRestTime: restTime.toString(),
+      Keys.keyTargetLoad: targetLoad.toString(),
+    };
   }
 }

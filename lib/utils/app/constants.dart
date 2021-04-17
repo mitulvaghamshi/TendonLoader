@@ -10,10 +10,29 @@ mixin Sizes {
 mixin Keys {
   static const String keyLoginBox = 'loginBox';
   static const String keyExerciseBox = 'exerciseBox';
+  static const String keyMVCBox = 'mvcBox';
 
   static const String keyStaySignIn = '_KEY_STAY_SIGNED_IN';
   static const String keyUsername = '_KEY_USERNAME';
   static const String keyPassword = '_KEY_PASSWORD';
+
+  static const String keySets = 'sets';
+  static const String keyReps = 'reps';
+  static const String keyLastMVC = 'lastMVC';
+  static const String keyHoldTime = 'holdTime';
+  static const String keyRestTime = 'restTime';
+  static const String keyTargetLoad = 'targetLoad';
+  static const String keyIsComplete = 'isComplete';
+  static const String keyExportData = 'exportData';
+  static const String keyLastActive = 'lastActive';
+  static const String keyExerciseInfo = 'exerciseInfo';
+  static const String keyProgressorId = 'progressorId';
+
+  static const String keyAllUsers = 'all-users';
+  static const String keyAllExports = 'all-exports';
+
+  static const String keyPrefixExercise = 'EXERCISE_';
+  static const String keyPrefixMVC = 'MVC_';
 }
 
 mixin Images {
@@ -33,7 +52,6 @@ mixin Descriptions {
   static const String descLocation3 = 'We\'ll never collect your physical location.';
   static const String descEnableBluetooth =
       '\nThis app needs Bluetooth to communicate with your Progressor.\n\nPlease enable Bluetooth on your device.';
-  static const String desc6 = '';
 }
 
 mixin Progressor {
@@ -57,11 +75,11 @@ mixin Progressor {
   static const int CMD_START_PEAK_RFD_MEAS_SERIES = 104;
   static const int CMD_ADD_CALIBRATION_POINT = 105;
   static const int CMD_SAVE_CALIBRATION = 106;
-  static const int CMD_GET_APP_VERSION = 107;
-  static const int CMD_GET_ERROR_INFORMATION = 108;
+  static const int CMD_GET_APP_VERSION = 107; //
+  static const int CMD_GET_ERROR_INFORMATION = 108; //
   static const int CMD_CLR_ERROR_INFORMATION = 109;
   static const int CMD_ENTER_SLEEP = 110;
-  static const int CMD_GET_BATTERY_VOLTAGE = 111;
+  static const int CMD_GET_BATTERY_VOLTAGE = 111; //
 }
 
 mixin Link {

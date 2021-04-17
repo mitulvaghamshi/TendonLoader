@@ -1,5 +1,8 @@
-import 'package:bluetooth_enable/bluetooth_enable.dart';
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' show FlutterBluetoothSerial;
 import 'package:tendon_loader/utils/app/constants.dart' show Progressor;
 
 mixin Bluetooth {
@@ -16,8 +19,11 @@ mixin Bluetooth {
   }
 
   static Future<void> enable() async {
-    //todo(mitul): not supported by iOS
-    await BluetoothEnable.enableBluetooth;
+    if (Platform.isIOS) {
+      await FlutterBluetoothSerial.instance.openSettings();
+    } else {
+      await FlutterBluetoothSerial.instance.requestEnable();
+    }
   }
 
   static Future<void> stopScan() async {
@@ -45,7 +51,9 @@ mixin Bluetooth {
   }
 
   static Future<void> write(int command) async {
-    await _controlChar?.write(<int>[command]);
+    Future<void>.delayed(const Duration(milliseconds: 50), () async {
+      await _controlChar?.write(<int>[command]);
+    });
   }
 
   static Future<void> disconnect() async {
@@ -55,7 +63,7 @@ mixin Bluetooth {
 
   static Future<void> startScan() async {
     await FlutterBlue.instance.startScan(
-      timeout: const Duration(seconds: 1),
+      timeout: const Duration(seconds: 3),
       withDevices: <Guid>[Guid(Progressor.serviceUuid)],
       withServices: <Guid>[Guid(Progressor.serviceUuid)],
     );
@@ -67,12 +75,12 @@ mixin Bluetooth {
   }
 
   static Future<void> reConnect() async {
-    final List<BluetoothDevice> devices = await FlutterBlue.instance.connectedDevices;
-    devices?.forEach(getProps);
+    (await FlutterBlue.instance.connectedDevices).forEach(connect);
   }
 
   static Future<void> getProps(BluetoothDevice device) async {
     _device = device;
+    await startNotify();
     final List<BluetoothService> services = await _device?.discoverServices();
     final BluetoothService service = services?.singleWhere((BluetoothService s) => s.uuid.toString() == Progressor.serviceUuid);
     final List<BluetoothCharacteristic> chars = service?.characteristics;

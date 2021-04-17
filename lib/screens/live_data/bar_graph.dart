@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/countdown.dart';
 import 'package:tendon_loader/components/custom_graph.dart';
 import 'package:tendon_loader/components/graph_controls.dart';
-import 'package:tendon_loader/utils/controller/data_handler.dart';
+import 'package:tendon_loader/utils/app/constants.dart';
+import 'package:tendon_loader/utils/controller/bluetooth.dart';
+import 'package:tendon_loader/utils/modal/chart_data.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key key}) : super(key: key);
@@ -19,8 +23,10 @@ class _BarGraphState extends State<BarGraph> {
   bool _isRunning = false;
 
   Future<void> _reset() async {
-    _isRunning = false;
-    await _handler.reset();
+    if (_isRunning) {
+      _isRunning = false;
+      await _handler.reset();
+    }
   }
 
   Future<void> _start() async {
@@ -57,5 +63,105 @@ class _BarGraphState extends State<BarGraph> {
         ],
       ),
     );
+  }
+}
+
+class DataHandler {
+  DataHandler() {
+    Bluetooth.listen(_listener);
+  }
+
+  final List<ChartData> dataList = <ChartData>[];
+
+  Timer _timer;
+  ChartSeriesController _graphDataCtrl;
+  final StreamController<int> _timeCtrl = StreamController<int>();
+  final StreamController<double> _weightCtrl = StreamController<double>();
+  final List<ChartData> _graphData = <ChartData>[ChartData(load: 0)];
+
+  Stream<int> get timeStream => _timeCtrl.stream;
+
+  Stream<double> get weightStream => _weightCtrl.stream;
+
+  Future<void> start() async {
+    if (_timer == null) {
+      await Bluetooth.startWeightMeas();
+      _timer = Timer.periodic(const Duration(seconds: 1), (_) => _timeCtrl.sink.add(_timer.tick));
+    }
+  }
+
+  Future<void> stop() async {
+    if (_timer != null) {
+      await Bluetooth.stopWeightMeas();
+      _timer.cancel();
+      _timer = null;
+    }
+  }
+
+  Future<void> reset() async {
+    await stop();
+    _timeCtrl.sink.add(0);
+    _weightCtrl.sink.add(0);
+    _graphData.insert(0, ChartData(load: 0));
+    _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
+  }
+
+  Future<void> dispose() async {
+    await stop();
+    if (!_timeCtrl.isClosed) await _timeCtrl.close();
+    if (!_weightCtrl.isClosed) await _weightCtrl.close();
+  }
+
+  void _listener(List<int> _data) {
+    int _counter = 0;
+    // int _time = 0;
+    // double _weight = 0;
+    double _avgTime = 0;
+    double _avgWeight = 0;
+    double _timeSum = 0;
+    double _weightSum = 0;
+
+    if (_data.isNotEmpty && _data[0] == Progressor.RES_WEIGHT_MEAS) {
+      for (int x = 2; x < _data.length; x += 8) {
+        _weightSum += /*_weight =*/ Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
+        _timeSum += /*_time =*/ Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
+        if (_counter++ == 8) {
+          _avgWeight = double.parse((_weightSum.abs() / 8.0).toStringAsFixed(2));
+          _avgTime = double.parse(((_timeSum / 8.0) / 1000000.0).toStringAsFixed(2));
+          dataList.add(ChartData(time: _avgTime, load: _avgWeight));
+          _graphData.insert(0, ChartData(load: _avgWeight));
+          _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
+          if (!_weightCtrl.isClosed) _weightCtrl.sink.add(_avgWeight);
+          _weightSum = 0;
+          _timeSum = 0;
+          _counter = 0;
+        }
+      }
+    } else if (_data.isNotEmpty && _data[0] == Progressor.RES_LOW_PWR_WARNING) {
+      print('Battery Low!');
+    }
+  }
+
+  List<ChartSeries<ChartData, int>> getSeries() {
+    return <ChartSeries<ChartData, int>>[
+      ColumnSeries<ChartData, int>(
+        width: 0.9,
+        borderWidth: 1,
+        color: Colors.blue,
+        animationDuration: 0,
+        dataSource: _graphData,
+        borderColor: Colors.black,
+        xValueMapper: (ChartData data, _) => 1,
+        yValueMapper: (ChartData data, _) => data.load,
+        dataLabelSettings: DataLabelSettings(
+          isVisible: true,
+          showZeroValue: false,
+          labelAlignment: ChartDataLabelAlignment.bottom,
+          textStyle: const TextStyle(fontSize: 56, fontWeight: FontWeight.bold),
+        ),
+        onRendererCreated: (ChartSeriesController controller) => _graphDataCtrl = controller,
+        borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+      ),
+    ];
   }
 }

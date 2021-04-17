@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/screens/exercise_mode/exercise_mode.dart';
-import 'package:tendon_loader/utils/app/constants.dart';
 import 'package:tendon_loader/utils/controller/validator.dart';
 import 'package:tendon_loader/utils/modal/exercise_data.dart';
 
@@ -38,29 +36,20 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
 
   Future<void> _submit() async {
     if (/*_exerciseFormKey.currentState.validate()*/ true) {
-      final ExerciseData _data = ExerciseData(
-        targetLoad: 5,
-        holdTime: 5,
-        restTime: 10,
-        sets: 2,
-        reps: 3,
-        isComplete: false,
-        progressorId: 'No device',
+      await Navigator.pushReplacementNamed(
+        context,
+        ExerciseMode.route,
+        arguments: ExerciseData(targetLoad: 5, holdTime: 5, restTime: 3, sets: 2, reps: 2),
+        // ExerciseData(
+        //   sets: int.tryParse(_ctrlSets.text),
+        //   reps: int.tryParse(_ctrlReps.text),
+        //   holdTime: int.tryParse(_ctrlHoldTime.text),
+        //   restTime: int.tryParse(_ctrlRestTime.text),
+        //   targetLoad: double.tryParse(_ctrlTargetLoad.text),
+        // ),
       );
-      final Box<Object> _exerciseBox = await Hive.openBox<Object>(Keys.keyExerciseBox);
-      await _exerciseBox.clear();
-      await _exerciseBox.putAll(_data.toMap());
-      await Navigator.pushReplacementNamed(context, ExerciseMode.route, arguments: _data);
     }
   }
-
-  // /*ExerciseData(
-  //   sets: int.tryParse(_ctrlSets.text),
-  //   reps: int.tryParse(_ctrlReps.text),
-  //   holdTime: int.tryParse(_ctrlHoldTime.text),
-  //   restTime: int.tryParse(_ctrlRestTime.text),
-  //   targetLoad: double.tryParse(_ctrlTargetLoad.text),
-  // ),*/
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +103,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
               ),
               CustomTextField(
                 label: 'Reps',
-                hint: 'Enter # of reps (#) e.g. 5',
+                hint: 'Enter # of reps e.g. 5',
                 desc: 'Number of reps to perform in each set',
                 controller: _ctrlReps,
                 validator: validateReps,

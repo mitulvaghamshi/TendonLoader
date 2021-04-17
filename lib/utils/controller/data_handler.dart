@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -5,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/utils/app/constants.dart';
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
-import 'package:tendon_loader/utils/controller/data_adapter.dart';
 import 'package:tendon_loader/utils/modal/chart_data.dart';
 
 class DataHandler {
@@ -48,11 +48,11 @@ class DataHandler {
   }
 
   Future<void> reset() async {
-    if (_timer?.isActive ?? false) _timer.cancel();
-    _stopwatch.reset();
-    timeSink.add(0);
-    weightSink.add(0);
     await Bluetooth.stopWeightMeas();
+    if (_timer != null && _timer.isActive) _timer.cancel();
+    _stopwatch.reset();
+    await timeSink.close();
+    await weightSink.close();
     _graphData.insert(0, const ChartData(load: 0));
     _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
     if (isMVC) {
@@ -64,27 +64,29 @@ class DataHandler {
   Future<void> dispose() async {
     await reset();
     await Bluetooth.stopNotify();
-    if (_timeCtrl.isClosed) await _timeCtrl.close();
-    if (_weightCtrl.isClosed) await _weightCtrl.close();
+    if (!_timeCtrl.isClosed) await _timeCtrl.close();
+    if (!_weightCtrl.isClosed) await _weightCtrl.close();
   }
 
   void _listener(List<int> _data) {
     int _counter = 0;
     int _time = 0;
-    // double _avgTime = 0;
-    // double _timeSum = 0;
+    double _avgTime = 0;
+    double _timeSum = 0;
     double _weight = 0;
     double _avgWeight = 0;
     double _weightSum = 0;
     if (_data.isNotEmpty && _data[0] == Progressor.RES_WEIGHT_MEAS) {
       for (int x = 2; x < _data.length; x += 8) {
-        _weightSum += _weight = Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        /*_timeSum += */
-        _time = Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
-        DataAdapter.collect(ChartData(load: _weight, time: _time.toDouble()));
+        _weightSum +=
+_weight =
+ Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
+        _timeSum +=
+_time =
+ Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
         if (_counter++ == 8) {
           _avgWeight = double.parse((_weightSum.abs() / 8.0).toStringAsFixed(2));
-          // _avgTime = double.parse((_timeSum / 1000000.0).toStringAsFixed(2));
+          _avgTime = double.parse(((_timeSum / 8.0) / 1000000.0).toStringAsFixed(2));
           _graphData.insert(0, ChartData(load: _avgWeight));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
           if (isMVC && _avgWeight >= targetLoad) {
@@ -92,9 +94,9 @@ class DataHandler {
             _lineData.insertAll(0, <ChartData>[ChartData(x: 0, load: targetLoad), ChartData(x: 2, load: targetLoad)]);
             _lineDataCtrl.updateDataSource(updatedDataIndexes: <int>[0, 1]);
           }
-          if (!_weightCtrl.isClosed) _weightCtrl.add(_avgWeight);
+          if (!_weightCtrl.isClosed) _weightCtrl.add(isMVC ? targetLoad : _avgWeight);
           _weightSum = 0;
-          // _timeSum = 0;
+          _timeSum = 0;
           _counter = 0;
         }
       }
@@ -136,3 +138,4 @@ class DataHandler {
     return components;
   }
 }
+*/

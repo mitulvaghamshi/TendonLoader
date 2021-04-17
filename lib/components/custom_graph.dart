@@ -18,7 +18,7 @@ class CustomGraph extends StatelessWidget {
         primaryYAxis: NumericAxis(
           maximum: 30,
           labelFormat: '{value} kg',
-          axisLine: AxisLine(width: 0),
+          axisLine: const AxisLine(width: 0),
           majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
           labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),

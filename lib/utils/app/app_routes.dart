@@ -19,14 +19,21 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   HomePage.route: (_) => const HomePage(),
 };
 
-/*Route<void> getRouteByName({String name}) {
+/*
+Route<void> getRoute() {
   return PageRouteBuilder<void>(
-    pageBuilder: (_, Animation<double> animation, Animation<double> secondaryAnimation) => ,
+    transitionDuration: const Duration(seconds: 1),
+    pageBuilder: (_, Animation<double> animation, Animation<double> secondaryAnimation) => const Home(),
     transitionsBuilder: (_, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
       return SlideTransition(
         child: child,
-        position: animation.drive(Tween<Offset>(begin: const Offset(-1.0, 0.0), end: Offset.zero).chain(CurveTween(curve: Curves.easeInOutCubic))),
+        position: animation.drive(
+          Tween<Offset>(begin: const Offset(-1.0, 0.0), end: Offset.zero).chain(
+            CurveTween(curve: Curves.easeInOutCubic),
+          ),
+        ),
       );
     },
   );
-}*/
+}
+*/

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/components/export_button.dart';
 import 'package:tendon_loader/screens/exercise_mode/bar_graph.dart';
-import 'package:tendon_loader/utils/cloud/data_storage.dart';
-import 'package:tendon_loader/utils/controller/create_excel.dart';
 import 'package:tendon_loader/utils/modal/exercise_data.dart';
 
-class ExerciseMode extends StatelessWidget with CreateExcel {
+class ExerciseMode extends StatelessWidget {
   const ExerciseMode({Key key}) : super(key: key);
 
   static const String name = 'Exercise Mode';
@@ -13,10 +10,9 @@ class ExerciseMode extends StatelessWidget with CreateExcel {
 
   @override
   Widget build(BuildContext context) {
-    final ExerciseData _data = ModalRoute.of(context).settings.arguments as ExerciseData;
     return Scaffold(
-      body: BarGraph(exerciseData: _data),
-      appBar: AppBar(title: const Text(ExerciseMode.name), actions: <ExportButton>[ExportButton(callback: () => DataStorage.upload())]),
+      appBar: AppBar(title: const Text(ExerciseMode.name)),
+      body: BarGraph(data: ModalRoute.of(context).settings.arguments as ExerciseData),
     );
   }
 }

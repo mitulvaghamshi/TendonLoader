@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/components/export_button.dart';
 import 'package:tendon_loader/screens/mvc_testing/bar_graph.dart';
-import 'package:tendon_loader/utils/cloud/data_storage.dart';
 import 'package:tendon_loader/utils/controller/create_excel.dart';
 
 class MVCTesting extends StatelessWidget with CreateExcel {
@@ -11,10 +9,5 @@ class MVCTesting extends StatelessWidget with CreateExcel {
   static const String route = '/mvcTesting';
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text(MVCTesting.name), actions: const <ExportButton>[ExportButton(callback: DataStorage.upload)]),
-      body: const BarGraph(),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(appBar: AppBar(title: const Text(MVCTesting.name)), body: const BarGraph());
 }

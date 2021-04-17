@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/components/custom_button.dart';
@@ -17,10 +18,10 @@ class DeviceList extends StatelessWidget {
       children: <Widget>[
         const Text(Descriptions.descClickToConnect, textAlign: TextAlign.center),
         const SizedBox(height: 20),
-        ...results.map((ScanResult result) => DeviceTile(device: result.device)),
-        ...devices.map((BluetoothDevice device) => DeviceTile(device: device)),
+        ...results?.map((ScanResult result) => DeviceTile(device: result.device)),
+        ...devices?.map((BluetoothDevice device) => DeviceTile(device: device)),
         const SizedBox(height: 20),
-        CustomButton(text: 'Close', icon: Icons.cancel, onPressed: () => Navigator.pop<void>(context)),
+        CustomButton(text: 'Close', icon: Icons.cancel_rounded, onPressed: Navigator.of(context).pop),
       ],
     );
   }

@@ -1,12 +1,17 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-@immutable
 class ChartData {
-  const ChartData({this.x, this.time, this.load});
+  ChartData({this.x, this.time, this.load});
 
-  final int x;
-  final double time;
-  final double load;
+  ChartData.fromString(String rawString) {
+    final Map<String, dynamic> map = jsonDecode(rawString) as Map<String, dynamic>;
+    time = map['time'] as double;
+    load = map['load'] as double;
+  }
 
-  Map<String, double> toMap() => <String, double>{'time': time, 'load': load};
+  int x;
+  double time;
+  double load;
+
+  String toLocalString() => '$time,$load';
 }

@@ -7,15 +7,13 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart' as pp;
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Alignment;
 import 'package:tendon_loader/utils/app/constants.dart' show Keys;
-import 'package:tendon_loader/utils/cloud/file_storage.dart';
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
-import 'package:tendon_loader/utils/controller/data_adapter.dart';
 import 'package:tendon_loader/utils/modal/chart_data.dart';
 import 'package:tendon_loader/utils/modal/exercise_data.dart';
 
 mixin CreateExcel {
-  Future<UploadTask> create({ExerciseData exerciseData}) async {
-    // if (_measurements.isEmpty) return;
+  Future<UploadTask> create({ExerciseData exerciseData, List<ChartData> data}) async {
+    print('create');
     int _iR = 0;
     const String _iA = 'A';
     const String _iD = 'D';
@@ -90,18 +88,21 @@ mixin CreateExcel {
     _sheet.getRangeByName('$_iA$_iR').setText('TIME [s]');
     _sheet.getRangeByName('B$_iR').setText('LOAD [Kg]');
 
-    for (final ChartData chartData in DataAdapter.average()) {
+    for (final ChartData chartData in data) {
       _iR++; // 16..N
       _sheet.getRangeByName('$_iA$_iR').number = chartData.time;
       _sheet.getRangeByName('B$_iR').number = chartData.load;
     }
 
     final String _mode = isExercise ? 'Exercise' : 'MVCTest';
-    final String _path = (await pp.getApplicationSupportDirectory()).path;
+    final String _path = (await pp.getExternalStorageDirectory()).path;
     final String _name = '${_date}_${_time.replaceAll(RegExp(r'[\s:]'), '_')}_${_userId.split('@')[0]}_$_mode.xlsx';
     final File _file = File('$_path/$_name');
+    // await _file.writeAsBytes(_workbook.saveAsStream());
     await _file.writeAsBytes(_workbook.saveAsStream());
     _workbook.dispose();
-    return FileStorage.uploadFile(_file, _userId.split('@')[0], _name);
+    print(_file.path);
+    // return FileStorage.uploadFile(_file, _userId.split('@')[0], _name);
+    return null;
   }
 }

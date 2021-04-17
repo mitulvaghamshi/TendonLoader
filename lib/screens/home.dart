@@ -7,8 +7,10 @@ import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 import 'package:tendon_loader/utils/cloud/app_auth.dart';
+import 'package:tendon_loader/utils/cloud/data_storage.dart';
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
 import 'package:tendon_loader/utils/controller/location.dart';
+import 'package:tendon_loader/utils/modal/chart_data.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -27,33 +29,61 @@ enum ActionType {
   close,
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
     Locator.init();
     Bluetooth.reConnect();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    AppAuth.signOut();
-    Locator.dispose();
+    WidgetsBinding.instance.addObserver(this);
     Bluetooth.sleep();
+    Locator.dispose();
+    AppAuth.signOut();
     super.dispose();
   }
 
-  void _onSelected(ActionType type) {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        Bluetooth.startNotify();
+        break;
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.paused:
+        Bluetooth.stopNotify();
+        break;
+      case AppLifecycleState.detached:
+        Bluetooth.disconnect();
+        break;
+    }
+  }
+
+  Future<void> _onSelected(ActionType type) async {
     switch (type) {
       case ActionType.about:
         return _aboutDialog();
       case ActionType.export:
-        // TODO(mitul): Handle this case.
+        {
+          final List<ChartData> xx = List<ChartData>.filled(500, ChartData(load: 10, time: 20));
+          await DataStorage.export(
+            dataList: xx,
+            exportType: 'MVC_',
+            dateTime: DateTime.now(),
+          );
+        }
         break;
       case ActionType.close:
+        // await await create();
         // TODO(mitul): Handle this case.
         break;
       case ActionType.settings:
+        await DataStorage.reExport();
         // TODO(mitul): Handle this case.
         break;
     }
@@ -85,6 +115,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text(Home.name),
         actions: <Widget>[
+          // ExportButton(callback: () => DataStorage.upload()),
           PopupMenuButton<ActionType>(
             onSelected: _onSelected,
             icon: const Icon(Icons.more_vert_rounded),
@@ -98,6 +129,7 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: AppFrame(
+        isScrollable: true,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
