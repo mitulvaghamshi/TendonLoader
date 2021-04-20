@@ -24,7 +24,7 @@ class LeftPanel extends StatelessWidget {
                     onTap: () async => FilePath.sink?.add(_docs[index].reference),
                     title: Text(_docs[index].id, style: const TextStyle(fontSize: 16)),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    subtitle: Text('Last active: ${_docs[index].get(Keys.KEY_LAST_ACTIVE)}', style: const TextStyle(fontSize: 12)),
+                    subtitle: Text('Last active: ${_docs[index].get(Keys.KEY_LAST_ACTIVE) ?? 'No activity yet'}', style: const TextStyle(fontSize: 12)),
                     leading: CircleAvatar(
                       backgroundColor: Theme.of(context).accentColor,
                       foregroundColor: Theme.of(context).primaryColor,

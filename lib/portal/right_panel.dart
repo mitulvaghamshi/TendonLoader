@@ -51,8 +51,7 @@ class RightPanel extends StatelessWidget {
                                       context: context,
                                       useSafeArea: true,
                                       builder: (_) {
-                                        final List<ChartData> _data =
-                                            List<Map<String, dynamic>>.from(_time.value[Keys.KEY_USER_DATA] as List<dynamic>)
+                                        final List<ChartData> _data = List<Map<String, dynamic>>.from(_time.value[Keys.KEY_USER_DATA] as List<dynamic>)
                                                 .map<ChartData>((Map<String, dynamic> item) {
                                           return ChartData(time: item[Keys.KEY_CHART_Y] as double, load: item[Keys.KEY_CHART_X] as double);
                                         }).toList();
