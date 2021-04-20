@@ -64,8 +64,8 @@ mixin Bluetooth {
   static Future<void> startScan() async {
     await FlutterBlue.instance.startScan(
       timeout: const Duration(seconds: 3),
-      withDevices: <Guid>[Guid(Progressor.serviceUuid)],
-      withServices: <Guid>[Guid(Progressor.serviceUuid)],
+      withDevices: <Guid>[Guid(Progressor.SERVICE_UUID)],
+      withServices: <Guid>[Guid(Progressor.SERVICE_UUID)],
     );
   }
 
@@ -82,9 +82,9 @@ mixin Bluetooth {
     _device = device;
     await startNotify();
     final List<BluetoothService> services = await _device?.discoverServices();
-    final BluetoothService service = services?.singleWhere((BluetoothService s) => s.uuid.toString() == Progressor.serviceUuid);
+    final BluetoothService service = services?.singleWhere((BluetoothService s) => s.uuid.toString() == Progressor.SERVICE_UUID);
     final List<BluetoothCharacteristic> chars = service?.characteristics;
-    _controlChar = chars?.singleWhere((BluetoothCharacteristic c) => c.uuid.toString() == Progressor.controlPointUuid);
-    _dataChar = chars?.singleWhere((BluetoothCharacteristic c) => c.uuid.toString() == Progressor.dataCharacteristicUuid);
+    _controlChar = chars?.singleWhere((BluetoothCharacteristic c) => c.uuid.toString() == Progressor.CONTROL_POINT_UUID);
+    _dataChar = chars?.singleWhere((BluetoothCharacteristic c) => c.uuid.toString() == Progressor.DATA_CHARACTERISTICS_UUID);
   }
 }

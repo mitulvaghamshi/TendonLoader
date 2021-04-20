@@ -51,8 +51,8 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
       backgroundColor: Colors.transparent,
       body: AnimatedBuilder(
         animation: _controller,
-        child: Text(widget.title, style: const TextStyle(fontSize: 36, color: Colors.white), textAlign: TextAlign.center),
-        builder: (BuildContext context, Widget child) {
+        child: Text(widget.title, style: const TextStyle(fontSize: 30, color: Colors.white), textAlign: TextAlign.center),
+        builder: (_, Widget child) {
           return Padding(
             padding: const EdgeInsets.all(30),
             child: Align(

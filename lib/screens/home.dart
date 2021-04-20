@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_listtile.dart';
@@ -7,27 +8,20 @@ import 'package:tendon_loader/screens/exercise_mode/new_exercise.dart';
 import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 import 'package:tendon_loader/utils/cloud/app_auth.dart';
-import 'package:tendon_loader/utils/cloud/data_storage.dart';
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
 import 'package:tendon_loader/utils/controller/location.dart';
-import 'package:tendon_loader/utils/modal/chart_data.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
 
-  static const String route = '/home';
   static const String name = 'Tendon Loader';
+  static const String route = '/home';
 
   @override
   _HomeState createState() => _HomeState();
 }
 
-enum ActionType {
-  settings,
-  export,
-  about,
-  close,
-}
+enum ActionType { settings, export, about, close }
 
 class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
@@ -69,22 +63,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       case ActionType.about:
         return _aboutDialog();
       case ActionType.export:
-        {
-          final List<ChartData> xx = List<ChartData>.filled(500, ChartData(load: 10, time: 20));
-          await DataStorage.export(
-            dataList: xx,
-            exportType: 'MVC_',
-            dateTime: DateTime.now(),
-          );
-        }
         break;
       case ActionType.close:
-        // await await create();
-        // TODO(mitul): Handle this case.
         break;
       case ActionType.settings:
-        await DataStorage.reExport();
-        // TODO(mitul): Handle this case.
         break;
     }
   }
@@ -115,7 +97,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       appBar: AppBar(
         title: const Text(Home.name),
         actions: <Widget>[
-          // ExportButton(callback: () => DataStorage.upload()),
           PopupMenuButton<ActionType>(
             onSelected: _onSelected,
             icon: const Icon(Icons.more_vert_rounded),
@@ -131,7 +112,6 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       body: AppFrame(
         isScrollable: true,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const CustomImage(isLogo: true),
             CustomTile(context: context, name: LiveData.name, route: LiveData.route, icon: Icons.show_chart_rounded),

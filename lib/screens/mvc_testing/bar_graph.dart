@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/countdown.dart';
 import 'package:tendon_loader/components/custom_graph.dart';
 import 'package:tendon_loader/components/graph_controls.dart';
+import 'package:tendon_loader/utils/app/common.dart' show textStyleBold26;
 import 'package:tendon_loader/utils/app/constants.dart';
 import 'package:tendon_loader/utils/cloud/data_storage.dart';
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
@@ -24,24 +23,24 @@ class BarGraph extends StatefulWidget {
 class _BarGraphState extends State<BarGraph> {
   final DataHandler _handler = DataHandler();
   bool _isRunning = false;
+  bool _isComplete = false;
+  DateTime _dateTime;
 
-  Future<void> _reset() async {
-    if (_isRunning) {
-      _isRunning = false;
-      await _handler.reset();
-
-      final Map<String, dynamic> _map = <String, dynamic>{};
-      _map[Keys.keyIsComplete] = true;
-      _map[Keys.keyProgressorId] = Bluetooth.deviceName;
-      // await DataStorage.upload(_map);
-
-    }
-  }
+  String _mvcValue(double weight) => 'MVC: ${weight.toStringAsFixed(2).padLeft(2, '0')} Kg';
 
   Future<void> _start() async {
     if (!_isRunning && (await CountDown.start(context) ?? false)) {
       _isRunning = true;
       await _handler.start();
+      _dateTime = DateTime.now();
+    }
+  }
+
+  Future<void> _reset() async {
+    if (_isRunning) {
+      _isRunning = false;
+      await _handler.reset();
+      await DataStorage.export(_handler.dataList, _dateTime, Keys.KEY_PREFIX_MVC, _isComplete);
     }
   }
 
@@ -60,23 +59,18 @@ class _BarGraphState extends State<BarGraph> {
           StreamBuilder<double>(
             initialData: 0,
             stream: _handler.weightStream,
-            builder: (_, AsyncSnapshot<double> snapshot) {
-              return Text(
-                'MVC: ${snapshot.data.toStringAsFixed(2).padLeft(2, '0')} Kg',
-                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-              );
-            },
+            builder: (_, AsyncSnapshot<double> snapshot) => Text(_mvcValue(snapshot.data), style: textStyleBold26),
           ),
           const SizedBox(height: 20),
           StreamBuilder<int>(
             initialData: 0,
             stream: _handler.timeStream,
             builder: (_, AsyncSnapshot<int> snapshot) {
-              if (5 - snapshot.data == 0) _handler.stop();
-              return Text(
-                'Remaining time: ${5 - snapshot.data} s',
-                style: const TextStyle(fontSize: 26, color: Colors.deepOrange, fontWeight: FontWeight.bold),
-              );
+              if (5 - snapshot.data == 0) {
+                _handler.stop();
+                _isComplete = true;
+              }
+              return Text('Time remaining : ${5 - snapshot.data} s', style: textStyleBold26.copyWith(color: Colors.deepOrange));
             },
           ),
           const SizedBox(height: 20),
@@ -94,16 +88,15 @@ class DataHandler {
     Bluetooth.listen(_listener);
   }
 
-  final List<ChartData> dataList = <ChartData>[];
-
   Timer _timer;
   double targetLoad = 0;
   ChartSeriesController _graphDataCtrl;
   ChartSeriesController _lineDataCtrl;
+  final List<ChartData> dataList = <ChartData>[];
   final StreamController<int> _timeCtrl = StreamController<int>();
   final StreamController<double> _weightCtrl = StreamController<double>();
-  final List<ChartData> _graphData = <ChartData>[ChartData(load: 0)];
-  final List<ChartData> _lineData = <ChartData>[ChartData(x: 0, load: 0), ChartData(x: 2, load: 0)];
+  final List<ChartData> _graphData = <ChartData>[ChartData()];
+  final List<ChartData> _lineData = <ChartData>[ChartData(), ChartData(time: 2)];
 
   Stream<int> get timeStream => _timeCtrl.stream;
 
@@ -129,9 +122,9 @@ class DataHandler {
     targetLoad = 0;
     if (!_timeCtrl.isClosed) _timeCtrl.sink.add(0);
     if (!_weightCtrl.isClosed) _weightCtrl.sink.add(0);
-    _graphData.insert(0, ChartData(load: 0));
+    _graphData.insert(0, ChartData());
     _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
-    _lineData.insertAll(0, <ChartData>[ChartData(x: 0, load: 0), ChartData(x: 2, load: 0)]);
+    _lineData.insertAll(0, <ChartData>[ChartData(), ChartData(time: 2)]);
     _lineDataCtrl.updateDataSource(updatedDataIndexes: <int>[0, 1]);
   }
 
@@ -142,8 +135,6 @@ class DataHandler {
 
   void _listener(List<int> _data) {
     int _counter = 0;
-    // int _time = 0;
-    // double _weight = 0;
     double _avgTime = 0;
     double _avgWeight = 0;
     double _timeSum = 0;
@@ -151,20 +142,20 @@ class DataHandler {
 
     if (_data.isNotEmpty && _data[0] == Progressor.RES_WEIGHT_MEAS) {
       for (int x = 2; x < _data.length; x += 8) {
-        _weightSum += /*_weight =*/ Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _timeSum += /*_time =*/ Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
+        _weightSum += Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
+        _timeSum += Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
         if (_counter++ == 8) {
           _avgWeight = double.parse((_weightSum.abs() / 8.0).toStringAsFixed(2));
           _avgTime = double.parse(((_timeSum / 8.0) / 1000000.0).toStringAsFixed(2));
           dataList.add(ChartData(time: _avgTime, load: _avgWeight));
           _graphData.insert(0, ChartData(load: _avgWeight));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
+          if (!_weightCtrl.isClosed) _weightCtrl.sink.add(targetLoad);
           if (_avgWeight >= targetLoad) {
             targetLoad = _avgWeight;
-            _lineData.insertAll(0, <ChartData>[ChartData(x: 0, load: targetLoad), ChartData(x: 2, load: targetLoad)]);
+            _lineData.insertAll(0, <ChartData>[ChartData(load: targetLoad), ChartData(time: 2, load: targetLoad)]);
             _lineDataCtrl.updateDataSource(updatedDataIndexes: <int>[0, 1]);
           }
-          if (!_weightCtrl.isClosed) _weightCtrl.sink.add(targetLoad);
           _weightSum = 0;
           _timeSum = 0;
           _counter = 0;
@@ -198,8 +189,8 @@ class DataHandler {
         color: Colors.red,
         animationDuration: 0,
         dataSource: _lineData,
-        xValueMapper: (ChartData data, _) => data.x,
         yValueMapper: (ChartData data, _) => data.load,
+        xValueMapper: (ChartData data, _) => data.time.toInt(),
         onRendererCreated: (ChartSeriesController controller) => _lineDataCtrl = controller,
       ),
     ];

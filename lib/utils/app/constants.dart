@@ -1,64 +1,73 @@
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 
 mixin Sizes {
-  static const double sizeWeb = 768;
-  static const double sizeMobile = 400;
-  static const double sizeLeftPanel = 400;
+  static const double SIZE_WEB = 768;
+  static const double SIZE_MOBILE = 370;
+  static const double SIZE_LEFT_PANEL = 400;
 }
 
 mixin Keys {
-  static const String keyLoginBox = 'loginBox';
-  static const String keyExerciseBox = 'exerciseBox';
-  static const String keyMVCBox = 'mvcBox';
+  static const String KEY_LOGIN_BOX = '_key_login_box';
+  static const String KEY_USER_EXPORTS_BOX = '_key_user_exports_box';
+  static const String KEY_PRESCRIPTION_BOX = '_key_prescription_box';
 
-  static const String keyStaySignIn = '_KEY_STAY_SIGNED_IN';
-  static const String keyUsername = '_KEY_USERNAME';
-  static const String keyPassword = '_KEY_PASSWORD';
+  static const String KEY_USERNAME = '_key_username';
+  static const String KEY_PASSWORD = '_key_password';
+  static const String KEY_STAY_SIGN_IN = '_key_stay_signed_in';
 
-  static const String keySets = 'sets';
-  static const String keyReps = 'reps';
-  static const String keyLastMVC = 'lastMVC';
-  static const String keyHoldTime = 'holdTime';
-  static const String keyRestTime = 'restTime';
-  static const String keyTargetLoad = 'targetLoad';
-  static const String keyIsComplete = 'isComplete';
-  static const String keyExportData = 'exportData';
-  static const String keyLastActive = 'lastActive';
-  static const String keyExerciseInfo = 'exerciseInfo';
-  static const String keyProgressorId = 'progressorId';
+  static const String KEY_SETS = '_key_sets';
+  static const String KEY_REPS = '_key_reps';
+  static const String KEY_LAST_MVC = '_last_mvc';
+  static const String KEY_HOLD_TIME = '_key_hold_time';
+  static const String KEY_REST_TIME = '_key_rest_time';
+  static const String KEY_TARGET_LOAD = '_key_target_load';
+  static const String KEY_DATA_STATUS = '_key_data_status';
+  static const String KEY_PROGRESSOR_ID = '_key_progressor_id';
+  static const String KEY_PRESCRIPTION = '_key_prescription';
 
-  static const String keyAllUsers = 'all-users';
-  static const String keyAllExports = 'all-exports';
+  static const String KEY_CHART_Y = 'time';
+  static const String KEY_CHART_X = 'load';
 
-  static const String keyPrefixExercise = 'EXERCISE_';
-  static const String keyPrefixMVC = 'MVC_';
+  static const String KEY_PREFIX_MVC = 'MVC';
+  static const String KEY_PREFIX_EXERCISE = 'EXERCISE';
+  static const String KEY_DATE_FORMAT = 'y-MM-dd';
+  static const String KEY_TIME_FORMAT = 'hh:mm:ss a';
+
+  static const String KEY_META_DATA = '_key_meta_data';
+  static const String KEY_USER_DATA = '_key_user_data';
+  static const String KEY_EXPORT_TYPE = '_key_export_type';
+  static const String KEY_EXPORT_DATE = '_key_export_date';
+  static const String KEY_EXPORT_TIME = '_key_export_time';
+
+  static const String KEY_ALL_USERS = 'all-users';
+  static const String KEY_ALL_EXPORTS = 'all-exports';
+  static const String KEY_LAST_ACTIVE = '_key_last_active';
 }
 
 mixin Images {
-  static const String imgRoot = 'assets/images/';
-  static const String imgAppLogo = 'app_logo.svg';
-  static const String imgEnableDevice = 'enable_device.png';
-  static const String imgEnableLocation = 'enable_location.png';
-  static const String imgEnableBluetooth = 'enable_bluetooth.png';
+  static const String IMG_ROOT = 'assets/images/';
+  static const String IMG_APP_LOGO = 'app_logo.svg';
+  static const String IMG_ENABLE_DEVICE = 'enable_device.png';
+  static const String IMG_ENABLE_LOCATION = 'enable_location.png';
+  static const String IMG_ENABLE_BLUETOOTH = 'enable_bluetooth.png';
 }
 
 mixin Descriptions {
-  static const String descEnableDevice = 'Activate your device by pressing the button, then press scan to find the device';
-  static const String descClickToConnect = 'Available devices.\nClick to connect/disconnect';
-  static const String descLocation1 = 'This app uses bluetooth to communicate with your Progressor.';
-  static const String descLocation2 =
-      'Scanning for bluetooth devices can be used to locate you. That\'s why we ask you to permit location services. We\'re only using this permission to scan for your Progressor.';
-  static const String descLocation3 = 'We\'ll never collect your physical location.';
-  static const String descEnableBluetooth =
+  static const String DESC_ENABLE_DEVICE = 'Activate your device by pressing the button, then press scan to find the device';
+  static const String DESC_CLICK_TO_CONNECT = 'Available devices';
+  static const String DESC_ENABLE_BLUETOOTH =
       '\nThis app needs Bluetooth to communicate with your Progressor.\n\nPlease enable Bluetooth on your device.';
+  static const String DESC_LOCATION_1 = 'This app uses bluetooth to communicate with your Progressor.';
+  static const String DESC_LOCATION_2 =
+      'Scanning for bluetooth devices can be used to locate you. That\'s why we ask you to permit location services. We\'re only using this permission to scan for your Progressor.';
+  static const String DESC_LOCATION_3 = 'We\'ll never collect your physical location.';
 }
 
 mixin Progressor {
   // UUIDs
-  static const String serviceUuid = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // main service
-  static const String controlPointUuid = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // send commands
-  static const String dataCharacteristicUuid = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57'; // receive data
+  static const String SERVICE_UUID = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // main service
+  static const String CONTROL_POINT_UUID = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // send commands
+  static const String DATA_CHARACTERISTICS_UUID = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57'; // receive data
 
   // Responses
   static const int RES_CMD_RESPONSE = 0;
@@ -80,10 +89,4 @@ mixin Progressor {
   static const int CMD_CLR_ERROR_INFORMATION = 109;
   static const int CMD_ENTER_SLEEP = 110;
   static const int CMD_GET_BATTERY_VOLTAGE = 111; //
-}
-
-mixin Link {
-  Future<void> goto(String url) async {
-    if (await canLaunch(url)) await launch(url, webOnlyWindowName: 'Tendon Loader', statusBarBrightness: Brightness.light);
-  }
 }

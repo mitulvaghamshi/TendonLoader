@@ -6,7 +6,7 @@ import 'package:tendon_loader/screens/connect_device/device_tile.dart';
 import 'package:tendon_loader/utils/app/constants.dart' show Descriptions;
 
 class DeviceList extends StatelessWidget {
-  const DeviceList({Key key, this.results = const <ScanResult>[], this.devices = const <BluetoothDevice>[]}) : super(key: key);
+  const DeviceList({Key key, this.results, this.devices}) : super(key: key);
 
   final List<ScanResult> results;
   final List<BluetoothDevice> devices;
@@ -16,11 +16,11 @@ class DeviceList extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const Text(Descriptions.descClickToConnect, textAlign: TextAlign.center),
-        const SizedBox(height: 20),
-        ...results?.map((ScanResult result) => DeviceTile(device: result.device)),
-        ...devices?.map((BluetoothDevice device) => DeviceTile(device: device)),
-        const SizedBox(height: 20),
+        const Text(Descriptions.DESC_CLICK_TO_CONNECT, textAlign: TextAlign.center),
+        const SizedBox(height: 10),
+        if (results != null) ...results.map((ScanResult result) => DeviceTile(device: result.device)),
+        if (devices != null) ...devices.map((BluetoothDevice device) => DeviceTile(device: device)),
+        const SizedBox(height: 10),
         CustomButton(text: 'Close', icon: Icons.cancel_rounded, onPressed: Navigator.of(context).pop),
       ],
     );

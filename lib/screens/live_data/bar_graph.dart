@@ -7,6 +7,7 @@ import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/countdown.dart';
 import 'package:tendon_loader/components/custom_graph.dart';
 import 'package:tendon_loader/components/graph_controls.dart';
+import 'package:tendon_loader/utils/app/common.dart';
 import 'package:tendon_loader/utils/app/constants.dart';
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
 import 'package:tendon_loader/utils/modal/chart_data.dart';
@@ -22,17 +23,19 @@ class _BarGraphState extends State<BarGraph> {
   final DataHandler _handler = DataHandler();
   bool _isRunning = false;
 
-  Future<void> _reset() async {
-    if (_isRunning) {
-      _isRunning = false;
-      await _handler.reset();
-    }
-  }
+  String _fromSecs(int secs) => 'Time elapsed: ${secs ~/ 60}:${(secs % 60).toString().padLeft(2, '0')} s';
 
   Future<void> _start() async {
     if (!_isRunning && (await CountDown.start(context) ?? false)) {
       _isRunning = true;
       await _handler.start();
+    }
+  }
+
+  Future<void> _reset() async {
+    if (_isRunning) {
+      _isRunning = false;
+      await _handler.reset();
     }
   }
 
@@ -51,10 +54,7 @@ class _BarGraphState extends State<BarGraph> {
           StreamBuilder<int>(
             initialData: 0,
             stream: _handler.timeStream,
-            builder: (_, AsyncSnapshot<int> snapshot) => Text(
-              'Time elapsed: ${snapshot.data ~/ 60}:${(snapshot.data % 60).toString().padLeft(2, '0')} s',
-              style: const TextStyle(fontSize: 26, color: Colors.green, fontWeight: FontWeight.bold),
-            ),
+            builder: (_, AsyncSnapshot<int> snapshot) => Text(_fromSecs(snapshot.data), style: textStyleBold26.copyWith(color: Colors.green)),
           ),
           const SizedBox(height: 20),
           CustomGraph(isLive: true, series: _handler.getSeries),
@@ -71,13 +71,12 @@ class DataHandler {
     Bluetooth.listen(_listener);
   }
 
-  final List<ChartData> dataList = <ChartData>[];
-
   Timer _timer;
   ChartSeriesController _graphDataCtrl;
+  final List<ChartData> dataList = <ChartData>[];
+  final List<ChartData> _graphData = <ChartData>[ChartData()];
   final StreamController<int> _timeCtrl = StreamController<int>();
   final StreamController<double> _weightCtrl = StreamController<double>();
-  final List<ChartData> _graphData = <ChartData>[ChartData(load: 0)];
 
   Stream<int> get timeStream => _timeCtrl.stream;
 
@@ -102,7 +101,7 @@ class DataHandler {
     await stop();
     _timeCtrl.sink.add(0);
     _weightCtrl.sink.add(0);
-    _graphData.insert(0, ChartData(load: 0));
+    _graphData.insert(0, ChartData());
     _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
   }
 
@@ -114,8 +113,6 @@ class DataHandler {
 
   void _listener(List<int> _data) {
     int _counter = 0;
-    // int _time = 0;
-    // double _weight = 0;
     double _avgTime = 0;
     double _avgWeight = 0;
     double _timeSum = 0;
@@ -123,8 +120,8 @@ class DataHandler {
 
     if (_data.isNotEmpty && _data[0] == Progressor.RES_WEIGHT_MEAS) {
       for (int x = 2; x < _data.length; x += 8) {
-        _weightSum += /*_weight =*/ Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _timeSum += /*_time =*/ Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
+        _weightSum += Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
+        _timeSum += Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
         if (_counter++ == 8) {
           _avgWeight = double.parse((_weightSum.abs() / 8.0).toStringAsFixed(2));
           _avgTime = double.parse(((_timeSum / 8.0) / 1000000.0).toStringAsFixed(2));

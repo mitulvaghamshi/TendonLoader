@@ -5,11 +5,11 @@ import 'package:tendon_loader/utils/app/constants.dart' show Images;
 class CustomImage extends StatelessWidget with Images {
   const CustomImage({
     Key key,
-    this.name = Images.imgAppLogo,
+    this.name = Images.IMG_APP_LOGO,
     this.isLogo = false,
     this.radius = 100,
     this.isBg = false,
-  })  : path = Images.imgRoot + name,
+  })  : path = Images.IMG_ROOT + name,
         super(key: key);
 
   final bool isBg;
@@ -24,8 +24,8 @@ class CustomImage extends StatelessWidget with Images {
     final Color _primary = Theme.of(context).primaryColor;
     if (isLogo) {
       return Container(
-        margin: EdgeInsets.all(isLogo ? 30 : 0),
         padding: const EdgeInsets.all(5),
+        margin: EdgeInsets.all(isLogo ? 30 : 0),
         decoration: BoxDecoration(shape: BoxShape.circle, color: _primary, border: Border.all(width: 3, color: _accent)),
         child: CircleAvatar(radius: radius, backgroundColor: _primary, child: SvgPicture.asset(path, color: _accent)),
       );

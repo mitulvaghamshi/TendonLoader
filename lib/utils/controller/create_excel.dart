@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io' show File;
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart' as pp;
@@ -9,11 +8,10 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Alignment;
 import 'package:tendon_loader/utils/app/constants.dart' show Keys;
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
 import 'package:tendon_loader/utils/modal/chart_data.dart';
-import 'package:tendon_loader/utils/modal/exercise_data.dart';
+import 'package:tendon_loader/utils/modal/prescription.dart';
 
 mixin CreateExcel {
-  Future<UploadTask> create({ExerciseData exerciseData, List<ChartData> data}) async {
-    print('create');
+  Future<void> create({Prescription exerciseData, List<ChartData> data}) async {
     int _iR = 0;
     const String _iA = 'A';
     const String _iD = 'D';
@@ -23,7 +21,8 @@ mixin CreateExcel {
     final String _time = DateFormat('hh:mm a').format(_dtNow);
     final bool isExercise = exerciseData != null;
     final Worksheet _sheet = _workbook.worksheets[0];
-    final String _userId = (await Hive.openBox<Object>(Keys.keyLoginBox)).get(Keys.keyUsername, defaultValue: '') as String;
+    final String _userId = (await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX)).get(Keys.KEY_USERNAME) as String;
+
     // date
     _iR++; // 1
     _sheet.getRangeByName('$_iA$_iR').text = 'Date:';
@@ -38,12 +37,12 @@ mixin CreateExcel {
 
     // user id
     _iR++; // 3
-    _sheet.getRangeByName('$_iA$_iR').text = 'UserID:';
+    _sheet.getRangeByName('$_iA$_iR').text = 'User ID:';
     _sheet.getRangeByName('$_iD$_iR').text = _userId;
 
     // progressor id
     _iR += 2; // 5
-    _sheet.getRangeByName('$_iA$_iR').text = 'Tindeq Progressor #:';
+    _sheet.getRangeByName('$_iA$_iR').text = 'Progressor ID:';
     _sheet.getRangeByName('$_iD$_iR').text = Bluetooth.deviceName ?? 'Device not connected';
 
     if (isExercise) {
@@ -64,12 +63,12 @@ mixin CreateExcel {
 
       // Hold Time
       _iR++; // 10
-      _sheet.getRangeByName('$_iA$_iR').text = 'Hold Time [sec]';
+      _sheet.getRangeByName('$_iA$_iR').text = 'Hold Time [Sec]';
       _sheet.getRangeByName('$_iD$_iR').number = exerciseData.holdTime.toDouble();
 
       // Rest Time
       _iR++; // 11
-      _sheet.getRangeByName('$_iA$_iR').text = 'Rest Time [sec]';
+      _sheet.getRangeByName('$_iA$_iR').text = 'Rest Time [Sec]';
       _sheet.getRangeByName('$_iD$_iR').number = exerciseData.restTime.toDouble();
 
       // Sets
@@ -98,11 +97,8 @@ mixin CreateExcel {
     final String _path = (await pp.getExternalStorageDirectory()).path;
     final String _name = '${_date}_${_time.replaceAll(RegExp(r'[\s:]'), '_')}_${_userId.split('@')[0]}_$_mode.xlsx';
     final File _file = File('$_path/$_name');
-    // await _file.writeAsBytes(_workbook.saveAsStream());
     await _file.writeAsBytes(_workbook.saveAsStream());
     _workbook.dispose();
-    print(_file.path);
-    // return FileStorage.uploadFile(_file, _userId.split('@')[0], _name);
-    return null;
+    // FileStorage.uploadFile(_file, _userId.split('@')[0], _name);
   }
 }

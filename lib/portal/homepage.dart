@@ -12,21 +12,21 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final Size _size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Tendon Loader - Admin'),
         actions: <Widget>[CustomButton(text: 'Logout', icon: Icons.logout, onPressed: () => AppAuth.signOut(context))],
       ),
-      drawer: size.width > size.height ? null : const Drawer(child: LeftPanel()),
+      drawer: _size.width > _size.height ? null : const Drawer(child: LeftPanel()),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           if (!constraints.isSatisfiedBy(const Size.fromRadius(150))) return const Center(child: Text('Unsupported window size!'));
-          if (size.height > size.width - 56) {
+          if (_size.height > _size.width - 56) {
             return const RightPanel();
           } else {
-            return Row(children: const <Widget>[LimitedBox(maxWidth: Sizes.sizeMobile, child: LeftPanel()), Expanded(child: RightPanel())]);
+            return Row(children: const <Widget>[LimitedBox(maxWidth: Sizes.SIZE_MOBILE, child: LeftPanel()), Expanded(child: RightPanel())]);
           }
         },
       ),

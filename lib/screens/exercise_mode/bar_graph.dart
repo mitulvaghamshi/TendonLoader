@@ -1,22 +1,25 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/countdown.dart';
 import 'package:tendon_loader/components/custom_graph.dart';
 import 'package:tendon_loader/components/graph_controls.dart';
+import 'package:tendon_loader/utils/app/common.dart' show textStyleBold26;
 import 'package:tendon_loader/utils/app/constants.dart';
+import 'package:tendon_loader/utils/cloud/data_storage.dart';
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
 import 'package:tendon_loader/utils/controller/create_excel.dart';
 import 'package:tendon_loader/utils/modal/chart_data.dart';
-import 'package:tendon_loader/utils/modal/exercise_data.dart';
+import 'package:tendon_loader/utils/modal/prescription.dart';
 
 class BarGraph extends StatefulWidget {
-  const BarGraph({Key key, @required this.data}) : super(key: key);
+  const BarGraph({Key key, @required this.prescription}) : super(key: key);
 
-  final ExerciseData data;
+  final Prescription prescription;
 
   @override
   _BarGraphState createState() => _BarGraphState();
@@ -31,18 +34,59 @@ class _BarGraphState extends State<BarGraph> with CreateExcel {
   bool _isHold = true;
   bool _isRunning = false;
   DataHandler _handler;
-  ExerciseData _exerciseData;
+  Prescription _prescription;
+  DateTime _dateTime;
+  bool _isComplete = false;
+
+  String get _lapTime => _isRunning
+      ? _isHold
+          ? 'Hold for: ${_holdTime--} s'
+          : 'Rest for: ${_restTime--} s'
+      : '---';
+
+  String get _progress => 'Set: $_currentSet of ${_prescription.sets}  |  Rep: $_currentRep of ${_prescription.reps}';
+
+  String _fromSecs(int secs) => '🕒 ${secs ~/ 60}:${(secs % 60).toString().padLeft(2, '0')} s';
+
+  Future<void> _start() async {
+    if (_isRunning) {
+      await _handler.start();
+    } else if (await CountDown.start(context) ?? false) {
+      _isRunning = true;
+      await _handler.start();
+      _dateTime = DateTime.now();
+    }
+  }
+
+  Future<void> _reset() async {
+    if (_isRunning) {
+      _isHold = true;
+      _isRunning = false;
+      _currentRep = _currentSet = 1;
+      _holdTime = _prescription.holdTime;
+      _restTime = _prescription.restTime;
+      await _handler.reset();
+      await DataStorage.export(_handler.dataList, _dateTime, Keys.KEY_PREFIX_EXERCISE, _isComplete, prescription: _prescription);
+    }
+  }
+
+  Future<void> _rest() async {
+    await _handler.stop();
+    final bool result = await CountDown.start(context, duration: const Duration(seconds: 15), title: 'SET OVER!\nREST!');
+    if (result ?? false) await _start();
+  }
 
   void _update() {
     if (_holdTime == 0) {
       _isHold = false;
-      _holdTime = _exerciseData.holdTime;
+      _holdTime = _prescription.holdTime;
     }
     if (_restTime == 0) {
       _isHold = true;
-      _restTime = _exerciseData.restTime;
-      if (_currentRep == _exerciseData.reps) {
-        if (_currentSet == _exerciseData.sets) {
+      _restTime = _prescription.restTime;
+      if (_currentRep == _prescription.reps) {
+        if (_currentSet == _prescription.sets) {
+          _isComplete = true;
           _reset();
         } else {
           _rest();
@@ -55,47 +99,13 @@ class _BarGraphState extends State<BarGraph> with CreateExcel {
     }
   }
 
-  Future<void> _reset() async {
-    if (_isRunning) {
-      _isHold = true;
-      _isRunning = false;
-      _currentRep = _currentSet = 1;
-      _holdTime = _exerciseData.holdTime;
-      _restTime = _exerciseData.restTime;
-      await _handler.reset();
-
-      // final Map<String, dynamic> _map = <String, dynamic>{};
-      // _map[Keys.keyIsComplete] = true;
-      // _map[Keys.keyProgressorId] = Bluetooth.deviceName;
-      // _map[Keys.keyExportData] = _handler.dataList.map((ChartData data) => data.toMap()).toList();
-      // _map[Keys.keyExerciseInfo] = widget.data.toMap();
-      // await DataStorage.save(_handler.dataList, 'file0001');
-      // await await create(exerciseData: widget.data, data: _handler.dataList);
-    }
-  }
-
-  Future<void> _rest() async {
-    await _handler.stop();
-    final bool result = await CountDown.start(context, duration: const Duration(seconds: 15), title: 'SET OVER! REST!\nNew Set will\nstart in');
-    if (result ?? false) await _start();
-  }
-
-  Future<void> _start() async {
-    if (_isRunning) {
-      await _handler.start();
-    } else if (await CountDown.start(context) ?? false) {
-      _isRunning = true;
-      await _handler.start();
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    _exerciseData = widget.data;
-    _targetLoad = _exerciseData.targetLoad;
-    _holdTime = _exerciseData.holdTime;
-    _restTime = _exerciseData.restTime;
+    _prescription = widget.prescription;
+    _targetLoad = _prescription.targetLoad;
+    _holdTime = _prescription.holdTime;
+    _restTime = _prescription.restTime;
     _handler = DataHandler(targetLoad: _targetLoad);
   }
 
@@ -105,8 +115,6 @@ class _BarGraphState extends State<BarGraph> with CreateExcel {
     _handler.dispose();
     super.dispose();
   }
-
-  String get _lapTime => _isHold ? 'Hold for: ${_holdTime--} s' : 'Rest for: ${_restTime--} s';
 
   @override
   Widget build(BuildContext context) {
@@ -122,11 +130,8 @@ class _BarGraphState extends State<BarGraph> with CreateExcel {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Text>[
-                  Text(
-                    '🕒 ${snapshot.data ~/ 60}:${(snapshot.data % 60).toString().padLeft(2, '0')} s',
-                    style: const TextStyle(fontSize: 26, color: Colors.green, fontWeight: FontWeight.bold),
-                  ),
-                  Text(_isRunning ? _lapTime : '---', style: const TextStyle(fontSize: 26, color: Colors.deepOrange, fontWeight: FontWeight.bold)),
+                  Text(_fromSecs(snapshot.data), style: textStyleBold26.copyWith(color: Colors.green)),
+                  Text(_lapTime, style: textStyleBold26.copyWith(color: Colors.deepOrange)),
                 ],
               );
             },
@@ -137,16 +142,13 @@ class _BarGraphState extends State<BarGraph> with CreateExcel {
             builder: (_, AsyncSnapshot<double> snapshot) {
               return Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.all(20),
                 margin: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  color: Color.lerp(Colors.yellow[100], Colors.green, snapshot.data / _targetLoad),
+                  color: snapshot.data >= _targetLoad ? Colors.green : Colors.yellow[200],
                 ),
-                child: Text(
-                  'Set: $_currentSet of ${_exerciseData.sets}   |   Rep: $_currentRep of ${_exerciseData.reps}',
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-                ),
+                child: Text(_progress, style: textStyleBold26.copyWith(color: Colors.black, letterSpacing: -1)),
               );
             },
           ),
@@ -164,16 +166,15 @@ class DataHandler {
     Bluetooth.listen(_listener);
   }
 
-  final List<ChartData> dataList = <ChartData>[];
-
   Timer _timer;
   bool _isRunning = false;
   final double targetLoad;
   ChartSeriesController _graphDataCtrl;
   final Stopwatch _stopwatch = Stopwatch();
+  final List<ChartData> dataList = <ChartData>[];
+  final List<ChartData> _graphData = <ChartData>[ChartData()];
   final StreamController<int> _timeCtrl = StreamController<int>();
   final StreamController<double> _weightCtrl = StreamController<double>();
-  final List<ChartData> _graphData = <ChartData>[ChartData(load: 0)];
 
   Stream<int> get timeStream => _timeCtrl.stream;
 
@@ -181,8 +182,10 @@ class DataHandler {
 
   Future<void> start() async {
     if (_timer == null) {
-      await Bluetooth.startWeightMeas();
-      _isRunning = true;
+      if (!_isRunning) {
+        await Bluetooth.startWeightMeas();
+        _isRunning = true;
+      }
       _stopwatch.start();
       _timer = Timer.periodic(const Duration(seconds: 1), (_) => _timeCtrl.sink.add(_stopwatch.elapsedMilliseconds ~/ 1000));
     }
@@ -190,7 +193,6 @@ class DataHandler {
 
   Future<void> stop() async {
     if (_timer != null) {
-      _isRunning = false;
       _timer.cancel();
       _timer = null;
     }
@@ -201,9 +203,10 @@ class DataHandler {
     await stop();
     _stopwatch.stop();
     _stopwatch.reset();
+    _isRunning = false;
     if (!_timeCtrl.isClosed) _timeCtrl.sink.add(0);
     if (!_weightCtrl.isClosed) _weightCtrl.sink.add(0);
-    _graphData.insert(0, ChartData(load: 0));
+    _graphData.insert(0, ChartData());
     _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
   }
 
@@ -213,7 +216,6 @@ class DataHandler {
   }
 
   void _listener(List<int> _data) {
-    if (!_isRunning) return;
     int _counter = 0;
     double _avgTime = 0;
     double _avgWeight = 0;
@@ -222,8 +224,8 @@ class DataHandler {
 
     if (_data.isNotEmpty && _data[0] == Progressor.RES_WEIGHT_MEAS) {
       for (int x = 2; x < _data.length; x += 8) {
-        _weightSum += /*_weight =*/ Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _timeSum += /*_time =*/ Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
+        _weightSum += Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
+        _timeSum += Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
         if (_counter++ == 8) {
           _avgWeight = double.parse((_weightSum.abs() / 8.0).toStringAsFixed(2));
           _avgTime = double.parse(((_timeSum / 8.0) / 1000000.0).toStringAsFixed(2));
@@ -263,9 +265,9 @@ class DataHandler {
         width: 5,
         color: Colors.red,
         animationDuration: 0,
-        xValueMapper: (ChartData data, _) => data.x,
         yValueMapper: (ChartData data, _) => data.load,
-        dataSource: <ChartData>[ChartData(x: 0, load: targetLoad), ChartData(x: 2, load: targetLoad)],
+        xValueMapper: (ChartData data, _) => data.time.toInt(),
+        dataSource: <ChartData>[ChartData(load: targetLoad), ChartData(time: 2, load: targetLoad)],
       ),
     ];
   }

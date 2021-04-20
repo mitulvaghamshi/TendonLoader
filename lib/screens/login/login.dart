@@ -7,8 +7,8 @@ import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/portal/homepage.dart';
 import 'package:tendon_loader/screens/home.dart';
-import 'package:tendon_loader/utils/cloud/app_auth.dart';
 import 'package:tendon_loader/utils/app/constants.dart' show Keys, Sizes;
+import 'package:tendon_loader/utils/cloud/app_auth.dart';
 import 'package:tendon_loader/utils/controller/validator.dart';
 
 class Login extends StatefulWidget {
@@ -33,21 +33,21 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
   User _user;
 
   Future<void> _getLoginInfo() async {
-    _loginBox = await Hive.openBox<Object>(Keys.keyLoginBox);
+    _loginBox = await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX);
     setState(() {
-      _staySignedIn = _loginBox.get(Keys.keyStaySignIn, defaultValue: true) as bool;
+      _staySignedIn = _loginBox.get(Keys.KEY_STAY_SIGN_IN, defaultValue: true) as bool;
       if (_staySignedIn) {
-        _usernameCtrl.text = _loginBox.get(Keys.keyUsername, defaultValue: '') as String;
-        _passwordCtrl.text = _loginBox.get(Keys.keyPassword, defaultValue: '') as String;
+        _usernameCtrl.text = _loginBox.get(Keys.KEY_USERNAME, defaultValue: '') as String;
+        _passwordCtrl.text = _loginBox.get(Keys.KEY_PASSWORD, defaultValue: '') as String;
       }
     });
   }
 
   Future<void> _setLoginInfo() async {
-    await _loginBox.put(Keys.keyStaySignIn, _staySignedIn || _createNew);
+    await _loginBox.put(Keys.KEY_STAY_SIGN_IN, _staySignedIn || _createNew);
     if (_staySignedIn || _createNew) {
-      await _loginBox.put(Keys.keyUsername, _usernameCtrl.text);
-      await _loginBox.put(Keys.keyPassword, _passwordCtrl.text);
+      await _loginBox.put(Keys.KEY_USERNAME, _usernameCtrl.text);
+      await _loginBox.put(Keys.KEY_PASSWORD, _passwordCtrl.text);
     }
   }
 
@@ -76,7 +76,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
         break;
       case AnimationStatus.reverse:
       case AnimationStatus.dismissed:
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Something wants wrong, Please try again!')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Something wants wrong!, Please try again!')));
         break;
     }
   }
@@ -101,7 +101,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Tendon Loader - ${_createNew ? 'Register' : 'Login'}')),
-      body: kIsWeb ? Center(child: SizedBox(width: Sizes.sizeMobile, child: _buildLoginBody())) : _buildLoginBody(),
+      body: kIsWeb ? Center(child: SizedBox(width: Sizes.SIZE_MOBILE, child: _buildLoginBody())) : _buildLoginBody(),
     );
   }
 
@@ -143,7 +143,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Checkbox(value: _staySignedIn, onChanged: (bool value) => setState(() => _staySignedIn = value)),
-                  const Text('Stay signed in.', style: TextStyle(letterSpacing: 3)),
+                  const Text('Keep me logged in.', style: TextStyle(letterSpacing: 3)),
                 ],
               ),
             GestureDetector(

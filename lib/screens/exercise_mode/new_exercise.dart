@@ -4,7 +4,7 @@ import 'package:tendon_loader/components/custom_button.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
 import 'package:tendon_loader/screens/exercise_mode/exercise_mode.dart';
 import 'package:tendon_loader/utils/controller/validator.dart';
-import 'package:tendon_loader/utils/modal/exercise_data.dart';
+import 'package:tendon_loader/utils/modal/prescription.dart';
 
 class NewExercise extends StatefulWidget {
   const NewExercise({Key key}) : super(key: key);
@@ -36,20 +36,20 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
 
   Future<void> _submit() async {
     if (/*_exerciseFormKey.currentState.validate()*/ true) {
-      await Navigator.pushReplacementNamed(
-        context,
+      await Navigator.of(context).pushReplacementNamed(
         ExerciseMode.route,
-        arguments: ExerciseData(targetLoad: 5, holdTime: 5, restTime: 3, sets: 2, reps: 2),
-        // ExerciseData(
-        //   sets: int.tryParse(_ctrlSets.text),
-        //   reps: int.tryParse(_ctrlReps.text),
-        //   holdTime: int.tryParse(_ctrlHoldTime.text),
-        //   restTime: int.tryParse(_ctrlRestTime.text),
-        //   targetLoad: double.tryParse(_ctrlTargetLoad.text),
-        // ),
+        arguments: Prescription(targetLoad: 5, sets: 2, reps: 2, holdTime: 5, restTime: 3),
       );
     }
   }
+
+  // Prescription(
+  //   sets: int.tryParse(_ctrlSets.text),
+  //   reps: int.tryParse(_ctrlReps.text),
+  //   holdTime: int.tryParse(_ctrlHoldTime.text),
+  //   restTime: int.tryParse(_ctrlRestTime.text),
+  //   targetLoad: double.tryParse(_ctrlTargetLoad.text),
+  // ),
 
   @override
   Widget build(BuildContext context) {

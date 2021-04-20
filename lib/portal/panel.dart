@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/custom_textfield.dart';
-import 'package:tendon_loader/utils/app/constants.dart';
 import 'package:tendon_loader/utils/controller/file_path.dart';
 import 'package:tendon_loader/utils/controller/validator.dart';
 
@@ -14,7 +13,7 @@ class Panel extends StatefulWidget {
   _PanelState createState() => _PanelState();
 }
 
-class _PanelState extends State<Panel> with ValidateSearchMixin, FilePath, Link {
+class _PanelState extends State<Panel> with ValidateSearchMixin, FilePath {
   final TextEditingController _searchCtrl = TextEditingController();
 
   @override

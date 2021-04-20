@@ -16,12 +16,12 @@ class LineGraph extends StatelessWidget {
         child: SfCartesianChart(
           plotAreaBorderWidth: 0,
           margin: const EdgeInsets.all(20),
-          primaryXAxis: NumericAxis(labelFormat: '{value} s', majorGridLines: MajorGridLines(width: 0)),
+          primaryXAxis: NumericAxis(labelFormat: '{value} s', majorGridLines: const MajorGridLines(width: 0)),
           primaryYAxis: NumericAxis(
             labelFormat: '{value} kg',
-            axisLine: AxisLine(width: 0),
+            axisLine: const AxisLine(width: 0),
             anchorRangeToVisiblePoints: true,
-            majorTickLines: MajorTickLines(size: 0),
+            majorTickLines: const MajorTickLines(size: 0),
             majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
           ),
           zoomPanBehavior: ZoomPanBehavior(
