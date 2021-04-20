@@ -1,5 +1,5 @@
 {
-    "name": "Tendon Loader PWA",
+    "name": "Tendon Loader",
     "short_name": "TendonLoader",
     "start_url": ".",
     "display": "standalone",
