@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:tendon_loader/utils/app/app_routes.dart';
-import 'package:tendon_loader/utils/app/app_themes.dart';
+import 'package:tendon_loader/shared/custom/custom_routes.dart';
+import 'package:tendon_loader/shared/custom/custom_themes.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -15,7 +15,7 @@ class TendonLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       routes: routes,
       theme: lightTheme,
       darkTheme: darkTheme,

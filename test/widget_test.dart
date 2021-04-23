@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:tendon_loader/main.dart';
 
 void main() {
@@ -15,7 +16,7 @@ void main() {
     await tester.pumpWidget(const TendonLoader());
 
     // Verify that our counter starts at 0.
-    expect(find.text(''), findsOneWidget);
+    expect(find.text('0'), findsOneWidget);
     expect(find.text('1'), findsNothing);
 
     // Tap the '+' icon and trigger a frame.
