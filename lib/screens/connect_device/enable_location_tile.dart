@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/bloc/locator.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/utils/app/constants.dart' show Descriptions, Images;
-import 'package:tendon_loader/utils/controller/location.dart';
 
 class EnableLocationTile extends StatelessWidget {
   const EnableLocationTile({Key key}) : super(key: key);

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/bloc/user_reference.dart';
+import 'package:tendon_loader/components/text_avater.dart';
 import 'package:tendon_loader/portal/panel.dart';
 import 'package:tendon_loader/utils/app/constants.dart';
-import 'package:tendon_loader/utils/controller/file_path.dart';
 
 class LeftPanel extends StatelessWidget {
   const LeftPanel({Key key}) : super(key: key);
@@ -10,32 +11,28 @@ class LeftPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Panel(
-      child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection(Keys.KEY_ALL_USERS).snapshots(),
-        builder: (_, AsyncSnapshot<QuerySnapshot> users) {
-          if (users.hasData) {
-            final List<QueryDocumentSnapshot> _docs = users.data.docs;
-            return Expanded(
-              child: ListView.separated(
-                itemCount: _docs.length,
-                separatorBuilder: (_, __) => Divider(color: Theme.of(context).accentColor),
-                itemBuilder: (_, int index) {
+      child: FutureBuilder<QuerySnapshot>(
+        future: FirebaseFirestore.instance.collectionGroup(Keys.KEY_ALL_USERS).get(),
+        builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) return const CircularProgressIndicator();
+          return Expanded(
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              children: ListTile.divideTiles(
+                color: Theme.of(context).accentColor,
+                tiles: snapshot.data.docs.map<ListTile>((QueryDocumentSnapshot user) {
                   return ListTile(
-                    onTap: () async => FilePath.sink?.add(_docs[index].reference),
-                    title: Text(_docs[index].id, style: const TextStyle(fontSize: 16)),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    subtitle: Text('Last active: ${_docs[index].get(Keys.KEY_LAST_ACTIVE) ?? 'No activity yet'}', style: const TextStyle(fontSize: 12)),
-                    leading: CircleAvatar(
-                      backgroundColor: Theme.of(context).accentColor,
-                      foregroundColor: Theme.of(context).primaryColor,
-                      child: Text(_docs[index].id[0].toUpperCase()),
-                    ),
+                    hoverColor: Colors.blue,
+                    key: ValueKey<String>(user.id),
+                    contentPadding: const EdgeInsets.all(10),
+                    leading: TextAvatar(user.id[0].toUpperCase()),
+                    title: Text(user.id, style: const TextStyle(fontSize: 18)),
+                    onTap: () => UserReference.sink?.add(user.reference.collection(Keys.KEY_ALL_EXPORTS)),
                   );
-                },
-              ),
-            );
-          }
-          return const CircularProgressIndicator();
+                }),
+              ).toList(),
+            ),
+          );
         },
       ),
     );

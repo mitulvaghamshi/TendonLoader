@@ -9,16 +9,6 @@ class AppAuth {
 
   static Future<FirebaseApp> init() async {
     final FirebaseApp app = await Firebase.initializeApp();
-
-    // // emulator
-    // await FirebaseAuth.instance.useEmulator(Platform.isAndroid ? 'http://10.0.0.149:9099' : '127.0.0.1:9099');
-    // FirebaseFirestore.instance.settings = Settings(
-    //   host: Platform.isAndroid ? 'http://10.0.0.149:8080' : '127.0.0.1:8080',
-    //   sslEnabled: false,
-    //   persistenceEnabled: false,
-    // );
-    // // end-emulator
-
     return Future<FirebaseApp>.delayed(const Duration(seconds: 2), () => app);
   }
 

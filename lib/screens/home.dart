@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:tendon_loader/bloc/locator.dart';
 import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/custom_image.dart';
 import 'package:tendon_loader/components/custom_listtile.dart';
@@ -9,7 +9,6 @@ import 'package:tendon_loader/screens/live_data/live_data.dart';
 import 'package:tendon_loader/screens/mvc_testing/mvc_testing.dart';
 import 'package:tendon_loader/utils/cloud/app_auth.dart';
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
-import 'package:tendon_loader/utils/controller/location.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);

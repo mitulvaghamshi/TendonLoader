@@ -3,13 +3,13 @@ import 'package:tendon_loader/utils/app/constants.dart' show Keys;
 class Prescription {
   Prescription({this.sets, this.reps, this.holdTime, this.restTime, this.targetLoad});
 
-  Prescription.fromMap(Map<dynamic, dynamic> map) {
-    sets = int.parse(map[Keys.KEY_SETS].toString());
-    reps = int.parse(map[Keys.KEY_REPS].toString());
-    lastMVC = double.parse(map[Keys.KEY_LAST_MVC].toString());
-    holdTime = int.parse(map[Keys.KEY_HOLD_TIME].toString());
-    restTime = int.parse(map[Keys.KEY_REST_TIME].toString());
-    targetLoad = double.parse(map[Keys.KEY_TARGET_LOAD].toString());
+  Prescription.fromMap(Map<String, dynamic> map) {
+    sets = int.tryParse(map[Keys.KEY_SETS].toString()) ?? 0;
+    reps = int.tryParse(map[Keys.KEY_REPS].toString()) ?? 0;
+    holdTime = int.tryParse(map[Keys.KEY_HOLD_TIME].toString()) ?? 0;
+    restTime = int.tryParse(map[Keys.KEY_REST_TIME].toString()) ?? 0;
+    lastMVC = double.tryParse(map[Keys.KEY_LAST_MVC].toString()) ?? 0;
+    targetLoad = double.tryParse(map[Keys.KEY_TARGET_LOAD].toString()) ?? 0;
   }
 
   int sets;

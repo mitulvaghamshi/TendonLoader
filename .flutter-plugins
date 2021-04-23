@@ -1,15 +1,13 @@
 # This is a generated file; do not edit or check into version control.
-cloud_firestore=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\cloud_firestore-1.0.4\\
-cloud_firestore_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\cloud_firestore_web-1.0.4\\
+cloud_firestore=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\cloud_firestore-1.0.6\\
+cloud_firestore_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\cloud_firestore_web-1.0.6\\
 connectivity=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\connectivity-3.0.3\\
 connectivity_for_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\connectivity_for_web-0.4.0\\
 connectivity_macos=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\connectivity_macos-0.2.0\\
-firebase_auth=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_auth-1.1.0\\
-firebase_auth_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_auth_web-1.0.6\\
-firebase_core=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core-1.0.3\\
+firebase_auth=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_auth-1.1.1\\
+firebase_auth_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_auth_web-1.0.7\\
+firebase_core=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core-1.0.4\\
 firebase_core_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core_web-1.0.2\\
-firebase_storage=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_storage-8.0.3\\
-firebase_storage_web=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_storage_web-1.0.3\\
 flutter_blue=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\flutter_blue-0.8.0\\
 flutter_bluetooth_serial=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\flutter_bluetooth_serial-0.2.2\\
 location=C:\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\location-4.1.1\\

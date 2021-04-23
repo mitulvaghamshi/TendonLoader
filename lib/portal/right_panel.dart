@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/bloc/user_reference.dart';
 import 'package:tendon_loader/components/custom_button.dart';
 import 'package:tendon_loader/components/custom_image.dart';
+import 'package:tendon_loader/components/text_avater.dart';
 import 'package:tendon_loader/portal/line_graph.dart';
 import 'package:tendon_loader/portal/panel.dart';
 import 'package:tendon_loader/utils/app/constants.dart';
-import 'package:tendon_loader/utils/controller/file_path.dart';
 import 'package:tendon_loader/utils/modal/chart_data.dart';
+import 'package:tendon_loader/utils/modal/prescription.dart';
+import 'package:tendon_loader/utils/modal/session_info.dart';
 
 class RightPanel extends StatelessWidget {
   const RightPanel({Key key}) : super(key: key);
@@ -14,66 +17,81 @@ class RightPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Panel(
-      child: StreamBuilder<DocumentReference>(
-        stream: FilePath.stream,
-        builder: (BuildContext context, AsyncSnapshot<DocumentReference> user) {
-          if (user.hasData)
+      child: StreamBuilder<CollectionReference>(
+        stream: UserReference.stream,
+        builder: (_, AsyncSnapshot<CollectionReference> snapshot) {
+          if (snapshot.hasData) {
             return FutureBuilder<QuerySnapshot>(
-              future: user.data.collection(Keys.KEY_ALL_EXPORTS).get(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> allExports) {
-                if (allExports.hasData) {
-                  final List<QueryDocumentSnapshot> _dayList = allExports.data.docs;
+              future: snapshot.data.get(),
+              builder: (_, AsyncSnapshot<QuerySnapshot> daysSnap) {
+                if (daysSnap.hasData) {
                   return Expanded(
-                    child: ListView.separated(
-                      itemCount: _dayList.length,
-                      separatorBuilder: (_, __) => Divider(color: Theme.of(context).accentColor),
-                      itemBuilder: (_, int index) {
-                        final Map<String, dynamic> _aDay = _dayList[index].data();
-                        return Column(
-                          children: _aDay.entries.map((MapEntry<String, dynamic> _time) {
-                            final Map<String, dynamic> _metaData = _time.value[Keys.KEY_META_DATA] as Map<String, dynamic>;
-                            return ListTile(
-                              title: Text(_time.key, style: const TextStyle(fontSize: 16)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              subtitle: Text('Status: ${_metaData[Keys.KEY_DATA_STATUS]}', style: const TextStyle(fontSize: 12)),
-                              leading: CircleAvatar(
-                                backgroundColor: Theme.of(context).accentColor,
-                                foregroundColor: Theme.of(context).primaryColor,
-                                child: Text(_metaData[Keys.KEY_EXPORT_TYPE].toString().substring(0, 3)),
-                              ),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  CustomButton(
-                                    withText: false,
-                                    icon: Icons.visibility_rounded,
-                                    onPressed: () async => showDialog<void>(
-                                      context: context,
-                                      useSafeArea: true,
-                                      builder: (_) {
-                                        final List<ChartData> _data = List<Map<String, dynamic>>.from(_time.value[Keys.KEY_USER_DATA] as List<dynamic>)
-                                                .map<ChartData>((Map<String, dynamic> item) {
-                                          return ChartData(time: item[Keys.KEY_CHART_Y] as double, load: item[Keys.KEY_CHART_X] as double);
-                                        }).toList();
-                                        return LineGraph(data: _data);
-                                      },
-                                    ),
+                    child: ListView(
+                      physics: const BouncingScrollPhysics(),
+                      children: ListTile.divideTiles(
+                        color: Theme.of(context).accentColor,
+                        tiles: daysSnap.data.docs.map((QueryDocumentSnapshot daySnap) {
+                          final Map<String, dynamic> exports = daySnap.data();
+                          return ExpansionTile(
+                            maintainState: true,
+                            key: ValueKey<String>(daySnap.id),
+                            tilePadding: const EdgeInsets.all(5),
+                            leading: TextAvatar(daySnap.id.substring(8, 10)),
+                            expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                            title: Text(daySnap.id, style: const TextStyle(fontSize: 18)),
+                            subtitle: Text('${exports.length} export${exports.length == 1 ? '' : 's'} found.'),
+                            children: ListTile.divideTiles(
+                              color: Colors.green,
+                              tiles: exports.entries.map((MapEntry<String, dynamic> _time) {
+                                final SessionInfo _info = SessionInfo.fromMap(_time.value[Keys.KEY_META_DATA] as Map<String, dynamic>);
+                                final bool _isMVC = _info.exportType.contains('MVC');
+                                return ListTile(
+                                  hoverColor: Colors.blue,
+                                  key: ValueKey<String>(_time.key),
+                                  contentPadding: const EdgeInsets.all(5),
+                                  subtitle: Text('Status: ${_info.dataStatus}'),
+                                  title: Text(_time.key, style: const TextStyle(fontSize: 18)),
+                                  leading: TextAvatar(_info.exportType.substring(0, 3), color: _isMVC ? Colors.green : Colors.amber),
+                                  onTap: () {},
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      CustomButton(
+                                        withText: false,
+                                        icon: Icons.visibility_rounded,
+                                        onPressed: () async => showDialog<void>(
+                                          context: context,
+                                          useSafeArea: true,
+                                          builder: (_) {
+                                            final String name = (daySnap.reference.path + '/' + _time.key)
+                                                .replaceAll('all-users/', 'Export: ')
+                                                .replaceAll('all-exports', _info.exportType);
+                                            final Prescription prescription =
+                                                _isMVC ? null : Prescription.fromMap(_time.value[Keys.KEY_META_DATA] as Map<String, dynamic>);
+                                            final List<ChartData> data =
+                                                List<Map<String, dynamic>>.from(_time.value[Keys.KEY_USER_DATA] as List<dynamic>)
+                                                    .map<ChartData>((Map<String, dynamic> item) {
+                                              return ChartData(time: item[Keys.KEY_CHART_Y] as double, load: item[Keys.KEY_CHART_X] as double);
+                                            }).toList();
+                                            return LineGraph(name: name, data: data, info: _info, prescription: prescription);
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              onTap: () {
-                                //
-                              },
-                            );
-                          }).toList(),
-                        );
-                      },
+                                );
+                              }),
+                            ).toList(),
+                          );
+                        }),
+                      ).toList(),
                     ),
                   );
                 }
                 return const Text('No data available!');
               },
             );
+          }
           return const CustomImage(isBg: true);
         },
       ),

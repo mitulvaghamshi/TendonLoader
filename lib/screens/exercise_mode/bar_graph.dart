@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/components/app_frame.dart';
 import 'package:tendon_loader/components/countdown.dart';
@@ -10,11 +11,12 @@ import 'package:tendon_loader/components/custom_graph.dart';
 import 'package:tendon_loader/components/graph_controls.dart';
 import 'package:tendon_loader/utils/app/common.dart' show textStyleBold26;
 import 'package:tendon_loader/utils/app/constants.dart';
-import 'package:tendon_loader/utils/cloud/data_storage.dart';
+import 'package:tendon_loader/utils/cloud/export_handler.dart';
 import 'package:tendon_loader/utils/controller/bluetooth.dart';
 import 'package:tendon_loader/utils/controller/create_excel.dart';
 import 'package:tendon_loader/utils/modal/chart_data.dart';
 import 'package:tendon_loader/utils/modal/prescription.dart';
+import 'package:tendon_loader/utils/modal/session_info.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key key, @required this.prescription}) : super(key: key);
@@ -66,7 +68,16 @@ class _BarGraphState extends State<BarGraph> with CreateExcel {
       _holdTime = _prescription.holdTime;
       _restTime = _prescription.restTime;
       await _handler.reset();
-      await DataStorage.export(_handler.dataList, _dateTime, Keys.KEY_PREFIX_EXERCISE, _isComplete, prescription: _prescription);
+      await ExportHandler.export(
+        _handler.dataList,
+        prescription: _prescription,
+        sessionInfo: SessionInfo(
+          dateTime: _dateTime,
+          dataStatus: _isComplete,
+          exportType: Keys.KEY_PREFIX_EXERCISE,
+          userId: (await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX)).get(Keys.KEY_USERNAME) as String,
+        ),
+      );
     }
   }
 
