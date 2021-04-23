@@ -4,19 +4,14 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/android.iml" filepath="$PROJECT_DIR$/.idea/modules/android.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/458780816/android.bluetooth_enable.iml" filepath="$PROJECT_DIR$/.idea/modules/458780816/android.bluetooth_enable.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-2066103622/android.cloud_firestore.iml" filepath="$PROJECT_DIR$/.idea/modules/-2066103622/android.cloud_firestore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1815629942/android.firebase_auth.iml" filepath="$PROJECT_DIR$/.idea/modules/1815629942/android.firebase_auth.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1754497135/android.firebase_core.iml" filepath="$PROJECT_DIR$/.idea/modules/1754497135/android.firebase_core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/153701800/android.firebase_storage.iml" filepath="$PROJECT_DIR$/.idea/modules/153701800/android.firebase_storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1386045252/android.cloud_firestore.iml" filepath="$PROJECT_DIR$/.idea/modules/-1386045252/android.cloud_firestore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1649141481/android.connectivity.iml" filepath="$PROJECT_DIR$/.idea/modules/-1649141481/android.connectivity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/8175479/android.firebase_auth.iml" filepath="$PROJECT_DIR$/.idea/modules/8175479/android.firebase_auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-52957328/android.firebase_core.iml" filepath="$PROJECT_DIR$/.idea/modules/-52957328/android.firebase_core.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/1825881343/android.flutter_blue.iml" filepath="$PROJECT_DIR$/.idea/modules/1825881343/android.flutter_blue.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1998992338/android.flutter_plugin_android_lifecycle.iml" filepath="$PROJECT_DIR$/.idea/modules/-1998992338/android.flutter_plugin_android_lifecycle.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1892413695/android.google_sign_in.iml" filepath="$PROJECT_DIR$/.idea/modules/-1892413695/android.google_sign_in.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1879387620/android.local_auth.iml" filepath="$PROJECT_DIR$/.idea/modules/-1879387620/android.local_auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-96951674/android.flutter_bluetooth_serial.iml" filepath="$PROJECT_DIR$/.idea/modules/-96951674/android.flutter_bluetooth_serial.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/1929287509/android.location.iml" filepath="$PROJECT_DIR$/.idea/modules/1929287509/android.location.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/376911842/android.path_provider.iml" filepath="$PROJECT_DIR$/.idea/modules/376911842/android.path_provider.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1283553665/android.shared_preferences.iml" filepath="$PROJECT_DIR$/.idea/modules/-1283553665/android.shared_preferences.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1577803636/android.sqflite.iml" filepath="$PROJECT_DIR$/.idea/modules/1577803636/android.sqflite.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1299369069/android.url_launcher.iml" filepath="$PROJECT_DIR$/.idea/modules/-1299369069/android.url_launcher.iml" />
     </modules>
   </component>

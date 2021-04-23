@@ -47,7 +47,7 @@ class _BarGraphState extends State<BarGraph> {
         sessionInfo: SessionInfo(
           dateTime: _dateTime,
           dataStatus: _isComplete,
-          exportType: Keys.KEY_PREFIX_EXERCISE,
+          exportType: Keys.KEY_PREFIX_MVC,
           userId: (await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX)).get(Keys.KEY_USERNAME) as String,
         ),
       );

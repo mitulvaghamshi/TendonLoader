@@ -10,8 +10,10 @@ class ExportHandler {
   static Future<bool> _isConnected() async => (await Connectivity().checkConnectivity()) != ConnectivityResult.none;
 
   static Future<void> export(List<ChartData> dataList, {SessionInfo sessionInfo, Prescription prescription}) async {
+    final Map<String, String> metaData = sessionInfo.toMap();
+    if(prescription != null) metaData.addAll(prescription.toMap());
     await (await _isConnected() ? _upload : _save)(<String, dynamic>{
-      Keys.KEY_META_DATA: sessionInfo.toMap()..addAll(prescription?.toMap()),
+      Keys.KEY_META_DATA: metaData,
       Keys.KEY_USER_DATA: dataList.map((ChartData data) => <String, double>{Keys.KEY_CHART_Y: data.time, Keys.KEY_CHART_X: data.load}).toList(),
     });
   }

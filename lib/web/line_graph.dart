@@ -27,7 +27,10 @@ class LineGraph extends StatelessWidget {
             Expanded(
               child: SfCartesianChart(
                 plotAreaBorderWidth: 0,
-                primaryXAxis: NumericAxis(labelFormat: '{value} s', majorGridLines: const MajorGridLines(width: 0)),
+                primaryXAxis: NumericAxis(
+                  labelFormat: '{value} s',
+                  majorGridLines: const MajorGridLines(width: 0),
+                ),
                 primaryYAxis: NumericAxis(
                   labelFormat: '{value} kg',
                   anchorRangeToVisiblePoints: true,
@@ -41,7 +44,7 @@ class LineGraph extends StatelessWidget {
                   zoomMode: ZoomMode.x,
                   enableMouseWheelZooming: true,
                 ),
-                series: <AreaSeries<ChartData, double>>[
+                series: <ChartSeries<ChartData, double>>[
                   AreaSeries<ChartData, double>(
                     borderWidth: 1,
                     dataSource: data,
@@ -51,6 +54,18 @@ class LineGraph extends StatelessWidget {
                     xValueMapper: (ChartData data, _) => data.time,
                     yValueMapper: (ChartData data, _) => data.load,
                   ),
+                  if (prescription != null)
+                    LineSeries<ChartData, double>(
+                      width: 5,
+                      color: Colors.red,
+                      animationDuration: 0,
+                      yValueMapper: (ChartData data, _) => data.load,
+                      xValueMapper: (ChartData data, _) => data.time,
+                      dataSource: <ChartData>[
+                        ChartData(load: prescription.targetLoad),
+                        ChartData(time: data.last.time, load: prescription.targetLoad)
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -61,8 +76,7 @@ class LineGraph extends StatelessWidget {
   }
 
   TableCell _cell(String text) {
-    return TableCell(
-        child: Padding(padding: const EdgeInsets.all(8), child: Text(text, style: const TextStyle(fontSize: 18))));
+    return TableCell(child: Padding(padding: const EdgeInsets.all(8), child: Text(text, style: const TextStyle(fontSize: 18))));
   }
 
   Table _buildTable(BuildContext context) {
