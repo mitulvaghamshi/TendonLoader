@@ -10,7 +10,7 @@ class DeviceTile extends StatelessWidget {
   String get _deviceName => device.name.isEmpty ? device.id.toString() : device.name;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(_) {
     return StreamBuilder<BluetoothDeviceState>(
       stream: device.state,
       builder: (_, AsyncSnapshot<BluetoothDeviceState> snapshot) => _buildTile(snapshot.data == BluetoothDeviceState.connected),
@@ -18,7 +18,6 @@ class DeviceTile extends StatelessWidget {
   }
 
   ListTile _buildTile(bool isConnected) {
-    if (isConnected) Bluetooth.getProps(device);
     return ListTile(
       horizontalTitleGap: 0,
       title: Text(_deviceName),

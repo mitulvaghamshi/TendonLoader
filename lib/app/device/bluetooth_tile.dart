@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/app/device/enable_bluetooth_tile.dart';
 import 'package:tendon_loader/app/device/location_tile.dart';
+import 'package:tendon_loader/app/device/tiles/enable_bluetooth_tile.dart';
 
 class BluetoothTile extends StatelessWidget {
   const BluetoothTile({Key key}) : super(key: key);

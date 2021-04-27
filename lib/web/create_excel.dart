@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:io' show File;
 
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:path_provider/path_provider.dart' as pp;
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Alignment;
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
-import 'package:tendon_loader/shared/constants.dart';
+import 'package:tendon_loader/shared/constants.dart' show Keys;
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
-
 
 mixin CreateExcel {
   Future<void> create({Prescription exerciseData, List<ChartData> data}) async {
@@ -99,6 +98,7 @@ mixin CreateExcel {
     final String _name = '${_date}_${_time.replaceAll(RegExp(r'[\s:]'), '_')}_${_userId.split('@')[0]}_$_mode.xlsx';
     final File _file = File('$_path/$_name');
     await _file.writeAsBytes(_workbook.saveAsStream());
+    print(_file.path);
     _workbook.dispose();
     // FileStorage.uploadFile(_file, _userId.split('@')[0], _name);
   }

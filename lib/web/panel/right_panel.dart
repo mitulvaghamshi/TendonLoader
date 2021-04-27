@@ -97,7 +97,7 @@ class RightPanel extends StatelessWidget {
               },
             );
           }
-          return const CustomImage(isBg: true);
+          return const Expanded(child: CustomImage(isLogo: true));
         },
       ),
     );

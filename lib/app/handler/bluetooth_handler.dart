@@ -14,6 +14,8 @@ mixin Bluetooth {
 
   static String get deviceName => _device?.name ?? _device?.id.toString();
 
+  static bool isConnected = false;
+
   static void listen(void Function(List<int>) listener) {
     _dataChar?.value?.listen(listener);
   }
@@ -58,6 +60,7 @@ mixin Bluetooth {
 
   static Future<void> disconnect() async {
     await _device?.disconnect();
+    isConnected = false;
     _device = _dataChar = _controlChar = null;
   }
 
@@ -74,9 +77,7 @@ mixin Bluetooth {
     await getProps(device);
   }
 
-  static Future<void> reConnect() async {
-    (await FlutterBlue.instance.connectedDevices).forEach(connect);
-  }
+  static Future<void> reConnect() async => (await FlutterBlue.instance.connectedDevices).forEach(getProps);
 
   static Future<void> getProps(BluetoothDevice device) async {
     _device = device;
@@ -86,5 +87,6 @@ mixin Bluetooth {
     final List<BluetoothCharacteristic> chars = service?.characteristics;
     _controlChar = chars?.singleWhere((BluetoothCharacteristic c) => c.uuid.toString() == Progressor.CONTROL_POINT_UUID);
     _dataChar = chars?.singleWhere((BluetoothCharacteristic c) => c.uuid.toString() == Progressor.DATA_CHARACTERISTICS_UUID);
+    isConnected = true;
   }
 }

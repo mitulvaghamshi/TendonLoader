@@ -12,7 +12,10 @@ class StopScanTile extends StatelessWidget {
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: const <Widget>[CircularProgressIndicator(), Text('Please wait...', style: TextStyle(fontSize: 20))],
+          children: const <Widget>[
+            CircularProgressIndicator(),
+            Text('Please wait...', style: TextStyle(fontSize: 20)),
+          ],
         ),
         const SizedBox(height: 30),
         const CustomButton(text: 'Stop', icon: Icons.close_rounded, onPressed: Bluetooth.stopScan),

@@ -11,6 +11,7 @@ import 'package:tendon_loader/shared/common.dart';
 import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
+import 'package:tendon_loader/web/create_excel.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key key}) : super(key: key);
@@ -19,7 +20,7 @@ class BarGraph extends StatefulWidget {
   _BarGraphState createState() => _BarGraphState();
 }
 
-class _BarGraphState extends State<BarGraph> {
+class _BarGraphState extends State<BarGraph> with CreateExcel {
   final DataHandler _handler = DataHandler();
   bool _isRunning = false;
 
@@ -37,6 +38,7 @@ class _BarGraphState extends State<BarGraph> {
       _isRunning = false;
       await _handler.reset();
     }
+    await create(data: _handler.dataList);
   }
 
   @override
@@ -54,8 +56,9 @@ class _BarGraphState extends State<BarGraph> {
           StreamBuilder<int>(
             initialData: 0,
             stream: _handler.timeStream,
-            builder: (_, AsyncSnapshot<int> snapshot) =>
-                Text(_fromSecs(snapshot.data), style: textStyleBold26.copyWith(color: Colors.green)),
+            builder: (_, AsyncSnapshot<int> snapshot) {
+              return Text(_fromSecs(snapshot.data), style: textStyleBold26.copyWith(color: Colors.green));
+            },
           ),
           const SizedBox(height: 20),
           CustomGraph(isLive: true, series: _handler.getSeries),
@@ -112,6 +115,8 @@ class DataHandler {
     if (!_weightCtrl.isClosed) await _weightCtrl.close();
   }
 
+  double lastTime = 0;
+
   void _listener(List<int> _data) {
     int _counter = 0;
     double _avgTime = 0;
@@ -119,22 +124,21 @@ class DataHandler {
     double _timeSum = 0;
     double _weightSum = 0;
 
+    double w;
+    int t;
+
     if (_data.isNotEmpty && _data[0] == Progressor.RES_WEIGHT_MEAS) {
       for (int x = 2; x < _data.length; x += 8) {
-        _weightSum +=
-            Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _timeSum +=
-            Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
-        if (_counter++ == 8) {
-          _avgWeight = double.parse((_weightSum.abs() / 8.0).toStringAsFixed(2));
-          _avgTime = double.parse(((_timeSum / 8.0) / 1000000.0).toStringAsFixed(2));
-          dataList.add(ChartData(time: _avgTime, load: _avgWeight));
-          _graphData.insert(0, ChartData(load: _avgWeight));
+        _weightSum += w = Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
+        /*_timeSum +=*/
+        t = Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
+        final double www = double.parse((w.abs()).toStringAsFixed(2));
+        final double ttt = double.parse((t / 1000000.0).toStringAsFixed(1));
+        if (ttt > lastTime) {
+          lastTime = ttt;
+          dataList.add(ChartData(load: www, time: ttt));
+          _graphData.insert(0, ChartData(load: www));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
-          if (!_weightCtrl.isClosed) _weightCtrl.sink.add(_avgWeight);
-          _weightSum = 0;
-          _timeSum = 0;
-          _counter = 0;
         }
       }
     } else if (_data.isNotEmpty && _data[0] == Progressor.RES_LOW_PWR_WARNING) {

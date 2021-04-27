@@ -1,6 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/shared/app_auth.dart';
+import 'package:tendon_loader/shared/custom/custom_image.dart';
 import 'package:tendon_loader/shared/login/login.dart';
 
 class Splash extends StatelessWidget {
@@ -10,16 +10,9 @@ class Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<FirebaseApp>(
+    return FutureBuilder<void>(
       future: AppAuth.init(),
-      builder: (_, AsyncSnapshot<FirebaseApp> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) return const Login();
-        return Container(
-          alignment: Alignment.center,
-          color: Theme.of(context).primaryColor,
-          child: const CircularProgressIndicator(),
-        );
-      },
+      builder: (_, AsyncSnapshot<void> snapshot) => snapshot.connectionState == ConnectionState.done ? const Login() : const CustomImage(),
     );
   }
 }

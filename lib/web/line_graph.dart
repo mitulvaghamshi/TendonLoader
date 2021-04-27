@@ -27,10 +27,7 @@ class LineGraph extends StatelessWidget {
             Expanded(
               child: SfCartesianChart(
                 plotAreaBorderWidth: 0,
-                primaryXAxis: NumericAxis(
-                  labelFormat: '{value} s',
-                  majorGridLines: const MajorGridLines(width: 0),
-                ),
+                primaryXAxis: NumericAxis(labelFormat: '{value} s', majorGridLines: const MajorGridLines(width: 0)),
                 primaryYAxis: NumericAxis(
                   labelFormat: '{value} kg',
                   anchorRangeToVisiblePoints: true,
@@ -56,7 +53,7 @@ class LineGraph extends StatelessWidget {
                   ),
                   if (prescription != null)
                     LineSeries<ChartData, double>(
-                      width: 5,
+                      width: 2,
                       color: Colors.red,
                       animationDuration: 0,
                       yValueMapper: (ChartData data, _) => data.load,

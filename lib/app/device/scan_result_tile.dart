@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/app/device/device_list.dart';
 import 'package:tendon_loader/app/device/scanner_tile.dart';
+import 'package:tendon_loader/app/device/tiles/device_list.dart';
 
 class ScanResultTile extends StatelessWidget {
   const ScanResultTile({Key key}) : super(key: key);

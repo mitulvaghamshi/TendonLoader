@@ -139,26 +139,23 @@ class _BarGraphState extends State<BarGraph> {
               if (_isRunning) _update();
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Text>[
+                children: <Widget>[
                   Text(_fromSecs(snapshot.data), style: textStyleBold26.copyWith(color: Colors.green)),
                   Text(_lapTime, style: textStyleBold26.copyWith(color: Colors.deepOrange)),
                 ],
               );
             },
           ),
-          StreamBuilder<double>(
-            initialData: 0,
+          StreamBuilder<bool>(
+            initialData: false,
             stream: _handler.weightStream,
-            builder: (_, AsyncSnapshot<double> snapshot) {
+            builder: (_, AsyncSnapshot<bool> snapshot) {
               return Container(
                 alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(vertical: 20),
+                margin: const EdgeInsets.symmetric(vertical: 16),
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: snapshot.data >= _targetLoad ? Colors.green : Colors.yellow[200],
-                ),
                 child: Text(_progress, style: textStyleBold26.copyWith(color: Colors.black, letterSpacing: -1)),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: snapshot.data ? Colors.green : Colors.yellow[200]),
               );
             },
           ),
@@ -181,14 +178,14 @@ class DataHandler {
   final double targetLoad;
   ChartSeriesController _graphDataCtrl;
   final Stopwatch _stopwatch = Stopwatch();
-  final List<ChartData> dataList = <ChartData>[];
+  final List<ChartData> dataList = <ChartData>[ChartData()];
   final List<ChartData> _graphData = <ChartData>[ChartData()];
   final StreamController<int> _timeCtrl = StreamController<int>();
-  final StreamController<double> _weightCtrl = StreamController<double>();
+  final StreamController<bool> _weightCtrl = StreamController<bool>();
 
   Stream<int> get timeStream => _timeCtrl.stream;
 
-  Stream<double> get weightStream => _weightCtrl.stream;
+  Stream<bool> get weightStream => _weightCtrl.stream;
 
   Future<void> start() async {
     if (_timer == null) {
@@ -215,7 +212,7 @@ class DataHandler {
     _stopwatch.reset();
     _isRunning = false;
     if (!_timeCtrl.isClosed) _timeCtrl.sink.add(0);
-    if (!_weightCtrl.isClosed) _weightCtrl.sink.add(0);
+    if (!_weightCtrl.isClosed) _weightCtrl.sink.add(false);
     _graphData.insert(0, ChartData());
     _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
   }
@@ -225,30 +222,48 @@ class DataHandler {
     if (!_weightCtrl.isClosed) await _weightCtrl.close();
   }
 
+  double _minTime = 0;
+
   void _listener(List<int> _data) {
-    int _counter = 0;
-    double _avgTime = 0;
-    double _avgWeight = 0;
-    double _timeSum = 0;
-    double _weightSum = 0;
+    // int _counter = 0;
+    // double _avgTime = 0;
+    // double _avgWeight = 0;
+    // double _timeSum = 0;
+    // double _weightSum = 0;
 
     if (_data.isNotEmpty && _data[0] == Progressor.RES_WEIGHT_MEAS) {
       for (int x = 2; x < _data.length; x += 8) {
-        _weightSum += Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
-        _timeSum += Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
-        if (_counter++ == 8) {
-          _avgWeight = double.parse((_weightSum.abs() / 8.0).toStringAsFixed(2));
-          _avgTime = double.parse(((_timeSum / 8.0) / 1000000.0).toStringAsFixed(2));
-          dataList.add(ChartData(time: _avgTime, load: _avgWeight));
-          _graphData.insert(0, ChartData(load: _avgWeight));
+        final double _weight = double.parse(
+            (Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little).abs()).toStringAsFixed(2));
+        final double _time = double.parse(
+            (Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little) / 1000000).toStringAsFixed(1));
+        if (_time > _minTime) {
+          _minTime = _time;
+          dataList.add(ChartData(load: _weight, time: _time));
+          _graphData.insert(0, ChartData(load: _weight));
           _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
-          if (!_weightCtrl.isClosed) _weightCtrl.sink.add(_avgWeight);
-          _weightSum = 0;
-          _timeSum = 0;
-          _counter = 0;
+          if (!_weightCtrl.isClosed) _weightCtrl.sink.add(_weight >= targetLoad);
         }
       }
     }
+
+    // if (_data.isNotEmpty && _data[0] == Progressor.RES_WEIGHT_MEAS) {
+    //   for (int x = 2; x < _data.length; x += 8) {
+    //     _weightSum += Uint8List.fromList(_data.getRange(x, x + 4).toList()).buffer.asByteData().getFloat32(0, Endian.little);
+    //     _timeSum += Uint8List.fromList(_data.getRange(x + 4, x + 8).toList()).buffer.asByteData().getUint32(0, Endian.little);
+    //     if (_counter++ == 8) {
+    //       _avgWeight = double.parse((_weightSum.abs() / 8.0).toStringAsFixed(2));
+    //       _avgTime = double.parse(((_timeSum / 8.0) / 1000000.0).toStringAsFixed(2));
+    //       dataList.add(ChartData(time: _avgTime, load: _avgWeight));
+    //       _graphData.insert(0, ChartData(load: _avgWeight));
+    //       _graphDataCtrl.updateDataSource(updatedDataIndex: 0);
+    //       if (!_weightCtrl.isClosed) _weightCtrl.sink.add(_avgWeight);
+    //       _weightSum = 0;
+    //       _timeSum = 0;
+    //       _counter = 0;
+    //     }
+    //   }
+    // }
   }
 
   List<ChartSeries<ChartData, int>> getSeries() {

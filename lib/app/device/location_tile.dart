@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app/device/enable_location_tile.dart';
 import 'package:tendon_loader/app/device/scan_result_tile.dart';
+import 'package:tendon_loader/app/device/tiles/enable_location_tile.dart';
 import 'package:tendon_loader/app/handler/location_handler.dart';
 
 class LocationTile extends StatelessWidget {
