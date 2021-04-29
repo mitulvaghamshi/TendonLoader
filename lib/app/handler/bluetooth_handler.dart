@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' show FlutterBluetoothSerial;
+// import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' show FlutterBluetoothSerial;
 import 'package:tendon_loader/shared/constants.dart';
 
 mixin Bluetooth {
@@ -22,9 +22,9 @@ mixin Bluetooth {
 
   static Future<void> enable() async {
     if (Platform.isIOS) {
-      await FlutterBluetoothSerial.instance.openSettings();
+      // await FlutterBluetoothSerial.instance.openSettings();
     } else {
-      await FlutterBluetoothSerial.instance.requestEnable();
+      // await FlutterBluetoothSerial.instance.requestEnable();
     }
   }
 

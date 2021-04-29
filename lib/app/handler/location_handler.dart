@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:location/location.dart';
+// import 'package:location/location.dart';
 import 'package:rxdart/rxdart.dart';
 
 mixin Locator {
@@ -10,9 +10,9 @@ mixin Locator {
 
   static StreamSink<bool> get sink => _controller.sink;
 
-  static Future<void> init() async => sink.add(await Location.instance.serviceEnabled());
+  static Future<void> init() async => sink.add(true /*await Location.instance.serviceEnabled()*/);
 
-  static Future<void> requestService() async => sink.add(await Location.instance.requestService());
+  static Future<void> requestService() async => sink.add(true/*await Location.instance.requestService()*/);
 
   static void dispose() {
     if (!_controller.isClosed) _controller.close();
