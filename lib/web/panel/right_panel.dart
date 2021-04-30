@@ -31,66 +31,7 @@ class RightPanel extends StatelessWidget with CreateExcel {
                       physics: const BouncingScrollPhysics(),
                       children: ListTile.divideTiles(
                         color: Theme.of(context).accentColor,
-                        tiles: daysSnap.data.docs.map((QueryDocumentSnapshot daySnap) {
-                          final Map<String, dynamic> exports = daySnap.data();
-                          return ExpansionTile(
-                            maintainState: true,
-                            key: ValueKey<String>(daySnap.id),
-                            tilePadding: const EdgeInsets.all(5),
-                            leading: TextAvatar(daySnap.id.substring(8, 10)),
-                            expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                            title: Text(daySnap.id, style: const TextStyle(fontSize: 18)),
-                            subtitle: Text('${exports.length} export${exports.length == 1 ? '' : 's'} found.'),
-                            children: ListTile.divideTiles(
-                              color: Colors.deepOrange,
-                              tiles: exports.entries.map((MapEntry<String, dynamic> _time) {
-                                final SessionInfo _info =
-                                    SessionInfo.fromMap(_time.value[Keys.KEY_META_DATA] as Map<String, dynamic>);
-                                final bool _isMVC = _info.exportType.contains('MVC');
-                                return ListTile(
-                                  hoverColor: Colors.blue,
-                                  key: ValueKey<String>(_time.key),
-                                  contentPadding: const EdgeInsets.all(5),
-                                  subtitle: Text('Status: ${_info.dataStatus}'),
-                                  title: Text(_time.key, style: const TextStyle(fontSize: 18)),
-                                  leading: TextAvatar(
-                                    _info.exportType.substring(0, 3),
-                                    color: _isMVC ? Colors.green : Colors.orange,
-                                  ),
-                                  onTap: () {},
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      CustomButton(
-                                        withText: false,
-                                        icon: Icons.visibility_rounded,
-                                        onPressed: () async => showDialog<void>(
-                                          context: context,
-                                          useSafeArea: true,
-                                          builder: (_) => LineGraph(
-                                            info: _info,
-                                            name: _getName(_info),
-                                            data: _getDataList(_time),
-                                            prescription: _getPrescription(_isMVC, _time),
-                                          ),
-                                        ),
-                                      ),
-                                      CustomButton(
-                                        withText: false,
-                                        icon: Icons.download_rounded,
-                                        onPressed: () => create(
-                                          sessionInfo: _info,
-                                          data: _getDataList(_time),
-                                          prescription: _getPrescription(_isMVC, _time),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }),
-                            ).toList(),
-                          );
-                        }),
+                        tiles: _buildGroupItems(daysSnap, context),
                       ).toList(),
                     ),
                   );
@@ -105,17 +46,83 @@ class RightPanel extends StatelessWidget with CreateExcel {
     );
   }
 
+  Iterable<Widget> _buildGroupItems(AsyncSnapshot<QuerySnapshot> daysSnap, BuildContext context) {
+    return daysSnap.data.docs.map((QueryDocumentSnapshot daySnap) {
+      final Map<String, dynamic> exports = daySnap.data();
+      return ExpansionTile(
+        maintainState: true,
+        key: ValueKey<String>(daySnap.id),
+        tilePadding: const EdgeInsets.all(5),
+        leading: TextAvatar(daySnap.id.substring(8, 10)),
+        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        title: Text(daySnap.id, style: const TextStyle(fontSize: 18)),
+        subtitle: Text('${exports.length} export${exports.length == 1 ? '' : 's'} found.'),
+        children: ListTile.divideTiles(color: Colors.deepOrange, tiles: _builldListItems(exports, context)).toList(),
+      );
+    });
+  }
+
+  Iterable<Widget> _builldListItems(Map<String, dynamic> exports, BuildContext context) {
+    return exports.entries.map((MapEntry<String, dynamic> _time) {
+      final SessionInfo _info = _getSessionInfo(_time);
+      final bool _isMVC = _info.exportType.contains('MVC');
+      return ListTile(
+        onTap: () {},
+        hoverColor: Colors.blue,
+        key: ValueKey<String>(_time.key),
+        contentPadding: const EdgeInsets.all(5),
+        subtitle: Text('Status: ${_info.dataStatus}'),
+        title: Text(_time.key, style: const TextStyle(fontSize: 18)),
+        trailing: _buildActionButtons(context, _info, _time, _isMVC),
+        leading: TextAvatar(_info.exportType.substring(0, 3), color: _isMVC ? Colors.green : Colors.orange),
+      );
+    });
+  }
+
+  Row _buildActionButtons(BuildContext context, SessionInfo _info, MapEntry<String, dynamic> _time, bool _isMVC) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        CustomButton(
+          withText: false,
+          icon: Icons.visibility_rounded,
+          onPressed: () async => showDialog<void>(
+            context: context,
+            useSafeArea: true,
+            builder: (_) => LineGraph(
+              info: _info,
+              name: _getName(_info),
+              data: _getDataList(_time),
+              prescription: _getPrescription(_isMVC, _time),
+            ),
+          ),
+        ),
+        CustomButton(
+          withText: false,
+          icon: Icons.download_rounded,
+          onPressed: () => create(
+            sessionInfo: _info,
+            fileName: _getName(_info),
+            data: _getDataList(_time),
+            prescription: _getPrescription(_isMVC, _time),
+          ),
+        ),
+      ],
+    );
+  }
+
   String _getName(SessionInfo _info) =>
-      '${_info.exportDate}_${_info.exportTime}_${_info.userId}_${_info.exportType}.xlsx';
+      '${_info.exportDate}_${_info.exportTime.replaceAll(RegExp(r'[\s:]'), '-')}_${_info.userId}_${_info.exportType}.xlsx';
 
-  Prescription _getPrescription(bool _isMVC, MapEntry<String, dynamic> _time) {
-    return _isMVC ? null : Prescription.fromMap(_time.value[Keys.KEY_META_DATA] as Map<String, dynamic>);
-  }
+  SessionInfo _getSessionInfo(MapEntry<String, dynamic> _time) =>
+      SessionInfo.fromMap(_time.value[Keys.KEY_META_DATA] as Map<String, dynamic>);
 
-  List<ChartData> _getDataList(MapEntry<String, dynamic> _time) {
-    return List<Map<String, dynamic>>.from(_time.value[Keys.KEY_USER_DATA] as List<dynamic>)
-        .map<ChartData>((Map<String, dynamic> item) {
-      return ChartData(time: item[Keys.KEY_CHART_Y] as double, load: item[Keys.KEY_CHART_X] as double);
-    }).toList();
-  }
+  Prescription _getPrescription(bool _isMVC, MapEntry<String, dynamic> _time) =>
+      _isMVC ? null : Prescription.fromMap(_time.value[Keys.KEY_META_DATA] as Map<String, dynamic>);
+
+  List<ChartData> _getDataList(MapEntry<String, dynamic> _time) =>
+      List<Map<String, dynamic>>.from(_time.value[Keys.KEY_USER_DATA] as List<dynamic>)
+          .map<ChartData>((Map<String, dynamic> item) =>
+              ChartData(time: item[Keys.KEY_CHART_Y] as double, load: item[Keys.KEY_CHART_X] as double))
+          .toList();
 }

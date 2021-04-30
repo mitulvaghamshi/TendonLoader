@@ -10,10 +10,10 @@ import 'package:tendon_loader/shared/modal/session_info.dart';
 class LineGraph extends StatelessWidget {
   const LineGraph({Key key, this.data, this.info, this.prescription, this.name}) : super(key: key);
 
+  final String name;
+  final SessionInfo info;
   final List<ChartData> data;
   final Prescription prescription;
-  final SessionInfo info;
-  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class LineGraph extends StatelessWidget {
                       xValueMapper: (ChartData data, _) => data.time,
                       dataSource: <ChartData>[
                         ChartData(load: prescription.targetLoad),
-                        ChartData(time: data.last.time, load: prescription.targetLoad)
+                        ChartData(time: data.last.time, load: prescription.targetLoad),
                       ],
                     ),
                 ],

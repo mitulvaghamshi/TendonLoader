@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Alignment;
-import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/shared/constants.dart' show Keys;
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
@@ -9,7 +8,7 @@ import 'package:tendon_loader/shared/modal/session_info.dart';
 import 'package:tendon_loader/web/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
 
 mixin CreateExcel {
-  void create({List<ChartData> data, SessionInfo sessionInfo, Prescription prescription}) {
+  void create({List<ChartData> data, SessionInfo sessionInfo, Prescription prescription, String fileName}) {
     int _iR = 0;
     const String _iA = 'A';
     const String _iD = 'D';
@@ -36,7 +35,7 @@ mixin CreateExcel {
     // progressor id
     _iR += 2; // 5
     _sheet.getRangeByName('$_iA$_iR').text = 'Progressor ID:';
-    _sheet.getRangeByName('$_iD$_iR').text = Bluetooth.deviceName ?? 'Device not connected';
+    _sheet.getRangeByName('$_iD$_iR').text = sessionInfo.progressorId;
 
     if (sessionInfo.exportType == Keys.KEY_PREFIX_EXERCISE) {
       // Exercise info
@@ -88,8 +87,7 @@ mixin CreateExcel {
 
     AnchorElement(
         href: 'data:application/octet-stream;charset=utf-16le;base64,${base64.encode(_workbook.saveAsStream())}')
-      ..setAttribute('download',
-          '${sessionInfo.exportDate}_${sessionInfo.exportTime.replaceAll(RegExp(r'[\s:]'), '-')}_${sessionInfo.userId}_${sessionInfo.exportType}.xlsx')
+      ..setAttribute('download', fileName)
       ..click();
 
     _workbook.dispose();
