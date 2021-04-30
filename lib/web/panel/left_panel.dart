@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_avater.dart';
-import 'package:tendon_loader/web/bloc/user_reference.dart';
+import 'package:tendon_loader/web/handler/user_reference.dart';
 import 'package:tendon_loader/web/panel/panel.dart';
 
 class LeftPanel extends StatelessWidget {

@@ -19,8 +19,8 @@ class EnableBluetoothTile extends StatelessWidget {
           text: 'Enable',
           icon: Icons.bluetooth_rounded,
           onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enable manually!')));
-            /*Bluetooth.enable*/
+            // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enable manually!')));
+            Bluetooth.enable();
           },
         ),
       ],

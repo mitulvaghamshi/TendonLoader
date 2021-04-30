@@ -1,8 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app/device/connected_devices.dart';
 import 'package:tendon_loader/app/exercise/new_exercise.dart';
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
-// import 'package:tendon_loader/app/handler/location_handler.dart';
+import 'package:tendon_loader/app/handler/location_handler.dart';
 import 'package:tendon_loader/app/livedata/live_data.dart';
 import 'package:tendon_loader/app/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/shared/app_auth.dart';
@@ -26,13 +27,13 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    // Locator.init();
+    Locator.init();
     Bluetooth.reConnect();
   }
 
   @override
   void dispose() {
-    // Locator.dispose();
+    Locator.dispose();
     AppAuth.signOut();
     Bluetooth.disconnect();
     super.dispose();
@@ -95,8 +96,13 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             const CustomImage(isLogo: true),
             CustomTile(context: context, name: LiveData.name, route: LiveData.route, icon: Icons.show_chart_rounded),
-            CustomTile(context: context, name: NewExercise.name, route: NewExercise.route, icon: Icons.directions_run_rounded),
-            CustomTile(context: context, name: MVCTesting.name, route: MVCTesting.route, icon: Icons.airline_seat_legroom_extra),
+            CustomTile(
+                context: context, name: NewExercise.name, route: NewExercise.route, icon: Icons.directions_run_rounded),
+            CustomTile(
+                context: context,
+                name: MVCTesting.name,
+                route: MVCTesting.route,
+                icon: Icons.airline_seat_legroom_extra),
           ],
         ),
       ),
