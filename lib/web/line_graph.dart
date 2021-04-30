@@ -6,9 +6,8 @@ import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
-import 'package:tendon_loader/web/handler/create_excel.dart';
 
-class LineGraph extends StatelessWidget with CreateExcel {
+class LineGraph extends StatelessWidget {
   const LineGraph({Key key, this.data, this.info, this.prescription, this.name}) : super(key: key);
 
   final List<ChartData> data;
@@ -19,15 +18,7 @@ class LineGraph extends StatelessWidget with CreateExcel {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(name),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.download_rounded),
-            onPressed: () => create(data, prescription: prescription, sessionInfo: info),
-          )
-        ],
-      ),
+      appBar: AppBar(title: Text(name)),
       body: AppFrame(
         child: Column(
           children: <Widget>[

@@ -7,11 +7,12 @@ import 'package:tendon_loader/shared/custom/custom_image.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
+import 'package:tendon_loader/web/handler/create_excel.dart';
 import 'package:tendon_loader/web/handler/user_reference.dart';
 import 'package:tendon_loader/web/line_graph.dart';
 import 'package:tendon_loader/web/panel/panel.dart';
 
-class RightPanel extends StatelessWidget {
+class RightPanel extends StatelessWidget with CreateExcel {
   const RightPanel({Key key}) : super(key: key);
 
   @override
@@ -43,9 +44,8 @@ class RightPanel extends StatelessWidget {
                             children: ListTile.divideTiles(
                               color: Colors.deepOrange,
                               tiles: exports.entries.map((MapEntry<String, dynamic> _time) {
-                                final SessionInfo _info = SessionInfo.fromMap(
-                                  _time.value[Keys.KEY_META_DATA] as Map<String, dynamic>,
-                                );
+                                final SessionInfo _info =
+                                    SessionInfo.fromMap(_time.value[Keys.KEY_META_DATA] as Map<String, dynamic>);
                                 final bool _isMVC = _info.exportType.contains('MVC');
                                 return ListTile(
                                   hoverColor: Colors.blue,
@@ -67,19 +67,21 @@ class RightPanel extends StatelessWidget {
                                         onPressed: () async => showDialog<void>(
                                           context: context,
                                           useSafeArea: true,
-                                          builder: (_) {
-                                            final String name = (daySnap.reference.path + '/' + _time.key)
-                                                .replaceAll('all-users/', 'Export: ')
-                                                .replaceAll('all-exports', _info.exportType);
-                                            final Prescription prescription =
-                                                _isMVC ? null : Prescription.fromMap(_time.value[Keys.KEY_META_DATA] as Map<String, dynamic>);
-                                            final List<ChartData> data =
-                                                List<Map<String, dynamic>>.from(_time.value[Keys.KEY_USER_DATA] as List<dynamic>)
-                                                    .map<ChartData>((Map<String, dynamic> item) {
-                                              return ChartData(time: item[Keys.KEY_CHART_Y] as double, load: item[Keys.KEY_CHART_X] as double);
-                                            }).toList();
-                                            return LineGraph(name: name, data: data, info: _info, prescription: prescription);
-                                          },
+                                          builder: (_) => LineGraph(
+                                            info: _info,
+                                            name: _getName(_info),
+                                            data: _getDataList(_time),
+                                            prescription: _getPrescription(_isMVC, _time),
+                                          ),
+                                        ),
+                                      ),
+                                      CustomButton(
+                                        withText: false,
+                                        icon: Icons.download_rounded,
+                                        onPressed: () => create(
+                                          sessionInfo: _info,
+                                          data: _getDataList(_time),
+                                          prescription: _getPrescription(_isMVC, _time),
                                         ),
                                       ),
                                     ],
@@ -101,5 +103,19 @@ class RightPanel extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String _getName(SessionInfo _info) =>
+      '${_info.exportDate}_${_info.exportTime}_${_info.userId}_${_info.exportType}.xlsx';
+
+  Prescription _getPrescription(bool _isMVC, MapEntry<String, dynamic> _time) {
+    return _isMVC ? null : Prescription.fromMap(_time.value[Keys.KEY_META_DATA] as Map<String, dynamic>);
+  }
+
+  List<ChartData> _getDataList(MapEntry<String, dynamic> _time) {
+    return List<Map<String, dynamic>>.from(_time.value[Keys.KEY_USER_DATA] as List<dynamic>)
+        .map<ChartData>((Map<String, dynamic> item) {
+      return ChartData(time: item[Keys.KEY_CHART_Y] as double, load: item[Keys.KEY_CHART_X] as double);
+    }).toList();
   }
 }

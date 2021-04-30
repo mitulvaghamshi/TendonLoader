@@ -68,7 +68,6 @@ mixin Bluetooth {
     await FlutterBlue.instance.startScan(
       timeout: const Duration(seconds: 3),
       withDevices: <Guid>[Guid(Progressor.SERVICE_UUID)],
-      withServices: <Guid>[Guid(Progressor.SERVICE_UUID)],
     );
   }
 
@@ -81,15 +80,27 @@ mixin Bluetooth {
 
   static Future<void> getProps(BluetoothDevice device) async {
     _device = device;
-    final List<BluetoothService> services = await _device?.discoverServices();
-    final BluetoothService service =
-        services?.singleWhere((BluetoothService s) => s.uuid.toString() == Progressor.SERVICE_UUID);
-    final List<BluetoothCharacteristic> chars = service?.characteristics;
-    _controlChar =
-        chars?.singleWhere((BluetoothCharacteristic c) => c.uuid.toString() == Progressor.CONTROL_POINT_UUID);
-    _dataChar =
-        chars?.singleWhere((BluetoothCharacteristic c) => c.uuid.toString() == Progressor.DATA_CHARACTERISTICS_UUID);
+    final List<BluetoothService> services = await _device.discoverServices();
+    if (services != null) {
+      final BluetoothService service =
+          services?.singleWhere((BluetoothService s) => s?.uuid == Guid(Progressor.SERVICE_UUID));
+      if (service != null) {
+        final List<BluetoothCharacteristic> chars = service?.characteristics;
+        if (chars != null) {
+          _controlChar =
+              chars?.singleWhere((BluetoothCharacteristic c) => c?.uuid == Guid(Progressor.CONTROL_POINT_UUID));
+          _dataChar =
+              chars?.singleWhere((BluetoothCharacteristic c) => c?.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
+        } else {
+          print('-----------> chars null');
+        }
+      } else {
+        print('-----------> service null');
+      }
+    } else {
+      print('-----------> all services null');
+    }
     isConnected = true;
-    await startNotify();
+    // await startNotify();
   }
 }

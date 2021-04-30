@@ -26,8 +26,8 @@ mixin Keys {
   static const String KEY_CHART_Y = 'time';
   static const String KEY_CHART_X = 'load';
 
-  static const String KEY_PREFIX_MVC = 'MVC';
-  static const String KEY_PREFIX_EXERCISE = 'EXERCISE';
+  static const String KEY_PREFIX_MVC = 'mvc_test';
+  static const String KEY_PREFIX_EXERCISE = 'exercise';
   static const String KEY_DATE_FORMAT = 'y-MM-dd';
   static const String KEY_TIME_FORMAT = 'hh:mm:ss a';
 
@@ -51,7 +51,8 @@ mixin Images {
 }
 
 mixin Descriptions {
-  static const String DESC_ENABLE_DEVICE = 'Activate your device by pressing the button, then press scan to find the device';
+  static const String DESC_ENABLE_DEVICE =
+      'Activate your device by pressing the button, then press scan to find the device';
   static const String DESC_CLICK_TO_CONNECT = 'Available devices';
   static const String DESC_ENABLE_BLUETOOTH =
       '\nThis app needs Bluetooth to communicate with your Progressor.\n\nPlease enable Bluetooth on your device.';
@@ -63,9 +64,13 @@ mixin Descriptions {
 
 mixin Progressor {
   // UUIDs
-  static const String SERVICE_UUID = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // main service
-  static const String CONTROL_POINT_UUID = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // send commands
-  static const String DATA_CHARACTERISTICS_UUID = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57'; // receive data
+  static const String SERVICE_UUID = '7E4E17011EA640C99DCC13D34FFEAD57'; // (01) main service
+  static const String CONTROL_POINT_UUID = '7E4E17031EA640C99DCC13D34FFEAD57'; // (03) send commands
+  static const String DATA_CHARACTERISTICS_UUID = '7E4E17021EA640C99DCC13D34FFEAD57'; // (02) receive data
+
+  // static const String SERVICE_UUID = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // (01) main service
+  // static const String CONTROL_POINT_UUID = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // (03) send commands
+  // static const String DATA_CHARACTERISTICS_UUID = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57'; // (02) receive data
 
   // Responses
   static const int RES_CMD_RESPONSE = 0;

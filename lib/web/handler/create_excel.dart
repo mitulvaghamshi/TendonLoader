@@ -1,7 +1,4 @@
-import 'dart:async';
 import 'dart:convert';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' show AnchorElement;
 
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Alignment;
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
@@ -9,9 +6,10 @@ import 'package:tendon_loader/shared/constants.dart' show Keys;
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
+import 'package:tendon_loader/web/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
 
 mixin CreateExcel {
-  Future<void> create(List<ChartData> dataList, {SessionInfo sessionInfo, Prescription prescription}) async {
+  void create({List<ChartData> data, SessionInfo sessionInfo, Prescription prescription}) {
     int _iR = 0;
     const String _iA = 'A';
     const String _iD = 'D';
@@ -82,7 +80,7 @@ mixin CreateExcel {
     _sheet.getRangeByName('$_iA$_iR').setText('TIME [s]');
     _sheet.getRangeByName('B$_iR').setText('LOAD [Kg]');
 
-    for (final ChartData chartData in dataList) {
+    for (final ChartData chartData in data) {
       _iR++; // 16..N
       _sheet.getRangeByName('$_iA$_iR').number = chartData.time;
       _sheet.getRangeByName('B$_iR').number = chartData.load;

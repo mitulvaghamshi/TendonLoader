@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     Locator.init();
-    Bluetooth.reConnect();
+    // Bluetooth.reConnect();
   }
 
   @override
