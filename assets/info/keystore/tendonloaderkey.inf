@@ -1,0 +1,49 @@
+tendonloaderkey.jks
+TendonLoader@123456
+tlkey
+Mitul Vaghamshi
+Research Department
+UBC
+Hamilton
+Ontario
+1
+
+keytool -list -v -alias tlkey -keystore tendonloaderkey.jks
+
+Alias name: tlkey
+Creation date: 18-Mar-2021
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: CN=Mitul Vaghamshi, OU=Research Department, O=UBC, L=Hamilton, ST=Ontario, C=1
+Issuer: CN=Mitul Vaghamshi, OU=Research Department, O=UBC, L=Hamilton, ST=Ontario, C=1
+Serial number: 549de433
+Valid from: Thu Mar 18 20:19:43 EDT 2021 until: Sat Feb 22 19:19:43 EST 2121
+Certificate fingerprints:
+         MD5:  13:05:12:B4:19:D3:36:69:CD:77:22:49:00:EF:39:AD
+         SHA1: 2F:E9:B7:D0:CB:4A:57:B8:F2:66:50:69:4C:1B:CE:D4:E0:C1:4B:27
+         SHA256: D3:24:12:24:6D:4C:EB:9B:EA:5E:F5:5B:E4:97:93:34:71:80:47:5E:28:5F:F8:BB:60:D2:00:55:F2:AC:28:40
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 55 1B 94 1C A4 D5 FD 78   EF EC 20 25 40 D4 F7 E4  U......x.. %@...
+0010: 09 31 5B E2                                        .1[.
+]
+]
+
+Warning:
+The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore ./tendonloaderkey.jks -destkeystore ./tendonloaderkey.jks -deststoretype pkcs12".
+
+$ keytool -importkeystore -srckeystore ./tendonloaderkey.jks -destkeystore ./tendonloaderkey.jks -deststoretype pkcs12
+Enter source keystore password:  TendonLoader@123456
+Entry for alias tlkey successfully imported.
+Import command completed:  1 entries successfully imported, 0 entries failed or cancelled
+
+Warning:
+Migrated "./tendonloaderkey.jks" to Non JKS/JCEKS. The JKS keystore is backed up as "./tendonloaderkey.jks.old".
