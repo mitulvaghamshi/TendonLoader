@@ -27,9 +27,7 @@ class DeviceTile extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       onTap: isConnected
           ? Bluetooth.disconnect
-          : () {
-              Bluetooth.connect(device).then((_) => Bluetooth.startNotify());
-            },
+          : () => Bluetooth.connect(device).then((_) => Bluetooth.startNotify()),
       leading: Icon(isConnected ? Icons.bluetooth_connected_rounded : Icons.bluetooth_rounded, size: 40),
       trailing: CircleAvatar(radius: 20, backgroundColor: isConnected ? Colors.green : Colors.deepOrange),
     );

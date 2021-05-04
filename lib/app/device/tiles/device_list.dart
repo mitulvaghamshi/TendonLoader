@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/app/device/tiles/device_tile.dart';
-import 'package:tendon_loader/shared/constants.dart';
+import 'package:tendon_loader/shared/constants.dart' show Descriptions;
 import 'package:tendon_loader/shared/custom/custom_button.dart';
 
 class DeviceList extends StatelessWidget {

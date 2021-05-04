@@ -1,14 +1,34 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' show FlutterBluetoothSerial;
 import 'package:tendon_loader/shared/constants.dart';
 
+enum BTActions {
+  ENABLE,
+  DISABLE,
+
+  CONNECT,
+  DISCONNECT,
+
+  START_SCAN,
+  STOP_SCAN,
+
+  START_NOTIFY,
+  STOP_NOTIFY,
+
+  START_WEIGHT_MEAS,
+  STOP_WEIGHT_MEAS,
+
+  LISTEN,
+
+  SLEEP,
+}
+
 mixin Bluetooth {
-  static BluetoothDevice _device; // Connected device
-  static BluetoothCharacteristic _dataChar; // data receiver
-  static BluetoothCharacteristic _controlChar; // data controller
+  static BluetoothDevice _device;
+  static BluetoothCharacteristic _dataChar;
+  static BluetoothCharacteristic _controlChar;
 
   static BluetoothDevice get device => _device;
 
@@ -16,16 +36,54 @@ mixin Bluetooth {
 
   static bool isConnected = false;
 
+  static Future<void> perform(BTActions actions) async {
+    if (isConnected) {
+      switch (actions) {
+        case BTActions.ENABLE:
+          break;
+        case BTActions.DISABLE:
+          // TODO: Handle this case.
+          break;
+        case BTActions.CONNECT:
+          // TODO: Handle this case.
+          break;
+        case BTActions.DISCONNECT:
+          // TODO: Handle this case.
+          break;
+        case BTActions.START_SCAN:
+          // TODO: Handle this case.
+          break;
+        case BTActions.STOP_SCAN:
+          // TODO: Handle this case.
+          break;
+        case BTActions.START_NOTIFY:
+          // TODO: Handle this case.
+          break;
+        case BTActions.STOP_NOTIFY:
+          // TODO: Handle this case.
+          break;
+        case BTActions.START_WEIGHT_MEAS:
+          // TODO: Handle this case.
+          break;
+        case BTActions.STOP_WEIGHT_MEAS:
+          // TODO: Handle this case.
+          break;
+        case BTActions.LISTEN:
+          // TODO: Handle this case.
+          break;
+        case BTActions.SLEEP:
+          // TODO: Handle this case.
+          break;
+      }
+    }
+  }
+
   static void listen(void Function(List<int>) listener) {
-    _dataChar?.value?.listen(listener);
+    _dataChar.value.listen(listener);
   }
 
   static Future<void> enable() async {
-    if (Platform.isIOS) {
-      await FlutterBluetoothSerial.instance.openSettings();
-    } else {
-      await FlutterBluetoothSerial.instance.requestEnable();
-    }
+    await AppSettings.openBluetoothSettings();
   }
 
   static Future<void> stopScan() async {
@@ -33,11 +91,11 @@ mixin Bluetooth {
   }
 
   static Future<void> stopNotify() async {
-    await _dataChar?.setNotifyValue(false);
+    await _dataChar.setNotifyValue(false);
   }
 
   static Future<void> startNotify() async {
-    await _dataChar?.setNotifyValue(true);
+    await _dataChar.setNotifyValue(true);
   }
 
   static Future<void> stopWeightMeas() async {
@@ -54,7 +112,7 @@ mixin Bluetooth {
 
   static Future<void> write(int command) async {
     Future<void>.delayed(const Duration(milliseconds: 50), () async {
-      await _controlChar?.write(<int>[command]);
+      await _controlChar.write(<int>[command]);
     });
   }
 
@@ -81,26 +139,12 @@ mixin Bluetooth {
   static Future<void> getProps(BluetoothDevice device) async {
     _device = device;
     final List<BluetoothService> services = await _device.discoverServices();
-    if (services != null) {
-      final BluetoothService service =
-          services?.singleWhere((BluetoothService s) => s?.uuid == Guid(Progressor.SERVICE_UUID));
-      if (service != null) {
-        final List<BluetoothCharacteristic> chars = service?.characteristics;
-        if (chars != null) {
-          _controlChar =
-              chars?.singleWhere((BluetoothCharacteristic c) => c?.uuid == Guid(Progressor.CONTROL_POINT_UUID));
-          _dataChar =
-              chars?.singleWhere((BluetoothCharacteristic c) => c?.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
-        } else {
-          print('-----------> chars null');
-        }
-      } else {
-        print('-----------> service null');
-      }
-    } else {
-      print('-----------> all services null');
-    }
+    final BluetoothService service =
+        services.firstWhere((BluetoothService s) => s.uuid == Guid(Progressor.SERVICE_UUID));
+    final List<BluetoothCharacteristic> chars = service.characteristics;
+    _controlChar = chars.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.CONTROL_POINT_UUID));
+    _dataChar = chars.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
     isConnected = true;
-    // await startNotify();
+    await startNotify();
   }
 }

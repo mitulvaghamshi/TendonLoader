@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app/device/connected_devices.dart';
 import 'package:tendon_loader/app/exercise/new_exercise.dart';
@@ -23,20 +22,36 @@ class Home extends StatefulWidget {
 
 enum ActionType { settings, export, about, close }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    Locator.init();
     // Bluetooth.reConnect();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     Locator.dispose();
     AppAuth.signOut();
     Bluetooth.disconnect();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        Locator.init();
+        break;
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.paused:
+        break;
+      case AppLifecycleState.detached:
+        break;
+    }
   }
 
   void _aboutDialog() {
