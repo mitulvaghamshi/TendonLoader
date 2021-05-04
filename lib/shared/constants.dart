@@ -1,7 +1,7 @@
 mixin Sizes {
   static const double SIZE_WEB = 768;
   static const double SIZE_MOBILE = 370;
-  static const double SIZE_LEFT_PANEL = 400;
+  static const double SIZE_MIN_WIDTH = 450;
 }
 
 mixin Keys {

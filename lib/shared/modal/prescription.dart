@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:tendon_loader/shared/constants.dart';
 
 class Prescription {
@@ -28,5 +29,35 @@ class Prescription {
       Keys.KEY_REST_TIME: restTime.toString(),
       Keys.KEY_TARGET_LOAD: targetLoad.toString(),
     };
+  }
+
+  DataTable toTable() {
+    return DataTable(
+      columnSpacing: 20,
+      dataRowHeight: 40,
+      horizontalMargin: 10,
+      headingRowHeight: 40,
+      headingRowColor: MaterialStateProperty.all<Color>(
+        Colors.grey.withOpacity(0.3),
+      ),
+      columns: const <DataColumn>[
+        DataColumn(label: Text('Last MVC')),
+        DataColumn(label: Text('Target Load')),
+        DataColumn(label: Text('Hold Time')),
+        DataColumn(label: Text('Rest Time')),
+        DataColumn(label: Text('Sets #')),
+        DataColumn(label: Text('Reps #')),
+      ],
+      rows: <DataRow>[
+        DataRow(cells: <DataCell>[
+          DataCell(Text('$lastMVC')),
+          DataCell(Text('$targetLoad')),
+          DataCell(Text('$holdTime')),
+          DataCell(Text('$restTime')),
+          DataCell(Text('$sets')),
+          DataCell(Text('$reps')),
+        ])
+      ],
+    );
   }
 }

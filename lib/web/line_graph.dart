@@ -2,16 +2,17 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
 
 class LineGraph extends StatelessWidget {
-  const LineGraph({Key key, this.data, this.info, this.prescription, this.name}) : super(key: key);
+  const LineGraph({Key key, this.data, this.sessionInfo, this.prescription, this.name}) : super(key: key);
 
   final String name;
-  final SessionInfo info;
+  final SessionInfo sessionInfo;
   final List<ChartData> data;
   final Prescription prescription;
 
@@ -20,89 +21,103 @@ class LineGraph extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(name)),
       body: AppFrame(
-        child: Column(
+        child: Row(
           children: <Widget>[
-            _buildTable(context),
-            const SizedBox(height: 20),
             Expanded(
-              child: SfCartesianChart(
-                plotAreaBorderWidth: 0,
-                primaryXAxis: NumericAxis(labelFormat: '{value} s', majorGridLines: const MajorGridLines(width: 0)),
-                primaryYAxis: NumericAxis(
-                  labelFormat: '{value} kg',
-                  anchorRangeToVisiblePoints: true,
-                  axisLine: const AxisLine(width: 0),
-                  majorTickLines: const MajorTickLines(size: 0),
-                  majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
-                ),
-                zoomPanBehavior: ZoomPanBehavior(
-                  enablePanning: true,
-                  enablePinching: true,
-                  zoomMode: ZoomMode.x,
-                  enableMouseWheelZooming: true,
-                ),
-                series: <ChartSeries<ChartData, double>>[
-                  AreaSeries<ChartData, double>(
-                    borderWidth: 1,
-                    dataSource: data,
-                    color: Colors.blue,
-                    animationDuration: 0,
-                    borderColor: Colors.black,
-                    xValueMapper: (ChartData data, _) => data.time,
-                    yValueMapper: (ChartData data, _) => data.load,
+              child: Column(
+                children: <Widget>[
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(children: <Widget>[
+                      sessionInfo.toTable(),
+                      if (prescription != null) prescription.toTable(),
+                    ]),
                   ),
-                  if (prescription != null)
-                    LineSeries<ChartData, double>(
-                      width: 2,
-                      color: Colors.red,
-                      animationDuration: 0,
-                      yValueMapper: (ChartData data, _) => data.load,
-                      xValueMapper: (ChartData data, _) => data.time,
-                      dataSource: <ChartData>[
-                        ChartData(load: prescription.targetLoad),
-                        ChartData(time: data.last.time, load: prescription.targetLoad),
+                  Expanded(
+                    child: SfCartesianChart(
+                      tooltipBehavior: TooltipBehavior(
+                        enable: true,
+                        header: prescription != null ? 'Peak value' : 'MVC',
+                      ),
+                      plotAreaBorderWidth: 0,
+                      primaryXAxis: NumericAxis(
+                        labelFormat: '{value} s',
+                        majorGridLines: const MajorGridLines(width: 0),
+                      ),
+                      primaryYAxis: NumericAxis(
+                        labelFormat: '{value} kg',
+                        anchorRangeToVisiblePoints: true,
+                        axisLine: const AxisLine(width: 0),
+                        majorTickLines: const MajorTickLines(size: 0),
+                        majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
+                      ),
+                      zoomPanBehavior: ZoomPanBehavior(
+                        enablePanning: true,
+                        enablePinching: true,
+                        zoomMode: ZoomMode.x,
+                        enableMouseWheelZooming: true,
+                      ),
+                      series: <ChartSeries<ChartData, double>>[
+                        AreaSeries<ChartData, double>(
+                          borderWidth: 1,
+                          dataSource: data,
+                          color: Colors.blue,
+                          animationDuration: 0,
+                          borderColor: Colors.black,
+                          xValueMapper: (ChartData data, _) => data.time,
+                          yValueMapper: (ChartData data, _) => data.load,
+                          gradient: LinearGradient(
+                            end: Alignment.topCenter,
+                            stops: const <double>[0.2, 0.6],
+                            begin: Alignment.bottomCenter,
+                            colors: prescription != null
+                                ? const <Color>[
+                                    Color.fromRGBO(269, 210, 255, 1),
+                                    Color.fromRGBO(143, 236, 154, 1),
+                                  ]
+                                : const <Color>[
+                                    Color.fromRGBO(140, 108, 245, 1),
+                                    Color.fromRGBO(125, 185, 253, 1),
+                                  ],
+                          ),
+                        ),
+                        if (prescription != null)
+                          LineSeries<ChartData, double>(
+                            width: 2,
+                            color: Colors.red,
+                            animationDuration: 0,
+                            yValueMapper: (ChartData data, _) => data.load,
+                            xValueMapper: (ChartData data, _) => data.time,
+                            dataSource: <ChartData>[
+                              ChartData(load: prescription.targetLoad),
+                              ChartData(time: data.last.time, load: prescription.targetLoad),
+                            ],
+                          ),
                       ],
                     ),
+                  ),
                 ],
               ),
             ),
+            const SizedBox(width: 16),
+            if (MediaQuery.of(context).size.width > Sizes.SIZE_MIN_WIDTH)
+              LimitedBox(
+                maxWidth: 180,
+                child: ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (_, int index) {
+                    return ListTile(
+                      tileColor: index.isEven ? Colors.grey.withOpacity(0.3) : null,
+                      leading: Text('${index + 1})', style: const TextStyle(fontSize: 14)),
+                      title: Text('${data[index].time}', style: const TextStyle(fontSize: 14)),
+                      trailing: Text('${data[index].load}', style: const TextStyle(fontSize: 14)),
+                    );
+                  },
+                ),
+              ),
           ],
         ),
       ),
-    );
-  }
-
-  TableCell _cell(String text) {
-    return TableCell(
-        child: Padding(padding: const EdgeInsets.all(8), child: Text(text, style: const TextStyle(fontSize: 18))));
-  }
-
-  Table _buildTable(BuildContext context) {
-    return Table(
-      border: TableBorder.symmetric(outside: BorderSide(width: 1, color: Theme.of(context).accentColor)),
-      children: <TableRow>[
-        TableRow(
-          children: <Widget>[
-            _cell('Date: ${info.exportDate}'),
-            if (prescription != null) _cell('MVC: ${prescription.lastMVC},    Target Load: ${prescription.targetLoad}'),
-            _cell('Type: ${info.exportType}'),
-          ],
-        ),
-        TableRow(
-          children: <Widget>[
-            _cell('Time: ${info.exportTime}'),
-            if (prescription != null) _cell('Hold: ${prescription.holdTime},    Rest: ${prescription.restTime}'),
-            _cell('User: ${info.userId}'),
-          ],
-        ),
-        TableRow(
-          children: <Widget>[
-            _cell('Status: ${info.dataStatus}'),
-            if (prescription != null) _cell('Sets: ${prescription.sets},    Reps: ${prescription.reps}'),
-            _cell('Device: ${info.progressorId}'),
-          ],
-        ),
-      ],
     );
   }
 }

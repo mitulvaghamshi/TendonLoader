@@ -2,10 +2,10 @@ name: build
 on:
   push:
     branches:
-      - master
+      - hosting
   pull_request:
     branches:
-      - master
+      - hosting
 
 jobs:
   build:

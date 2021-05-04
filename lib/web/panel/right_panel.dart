@@ -40,7 +40,7 @@ class RightPanel extends StatelessWidget with CreateExcel {
               },
             );
           }
-          return const Expanded(child: CustomImage(isLogo: true));
+          return const Expanded(child: CustomImage());
         },
       ),
     );
@@ -90,7 +90,7 @@ class RightPanel extends StatelessWidget with CreateExcel {
             context: context,
             useSafeArea: true,
             builder: (_) => LineGraph(
-              info: _info,
+              sessionInfo: _info,
               name: _getName(_info),
               data: _getDataList(_time),
               prescription: _getPrescription(_isMVC, _time),

@@ -23,12 +23,12 @@ class HomePage extends StatelessWidget {
       drawer: _size.width > _size.height ? null : const Drawer(child: LeftPanel()),
       body: LayoutBuilder(
         builder: (_, BoxConstraints constraints) {
-          //
-          if (AppAuth.user() == null) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('not authentic')));
-            Navigator.pushReplacementNamed(context, Login.route);
-          }
-          //
+          // //
+          // if (AppAuth.user() == null) {
+          //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please login!')));
+          //   Navigator.pushReplacementNamed(context, Login.route);
+          // }
+          // //
           if (!constraints.isSatisfiedBy(const Size.fromRadius(150))) {
             return const Center(child: Text('Unsupported window size!'));
           } else {

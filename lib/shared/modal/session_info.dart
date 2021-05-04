@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/shared/constants.dart';
@@ -34,5 +35,35 @@ class SessionInfo {
       Keys.KEY_EXPORT_TIME: exportTime,
       Keys.KEY_PROGRESSOR_ID: progressorId,
     };
+  }
+
+  DataTable toTable() {
+    return DataTable(
+      columnSpacing: 20,
+      dataRowHeight: 40,
+      horizontalMargin: 10,
+      headingRowHeight: 40,      
+      headingRowColor: MaterialStateProperty.all<Color>(
+        Colors.grey.withOpacity(0.3),
+      ),
+      columns: const <DataColumn>[
+        DataColumn(label: Text('Date')),
+        DataColumn(label: Text('Time')),
+        DataColumn(label: Text('Export Type')),
+        DataColumn(label: Text('Export Status')),
+        DataColumn(label: Text('Device ID')),
+        DataColumn(label: Text('User ID')),
+      ],
+      rows: <DataRow>[
+        DataRow(cells: <DataCell>[
+          DataCell(Text(exportDate)),
+          DataCell(Text(exportTime)),
+          DataCell(Text(exportType)),
+          DataCell(Text(dataStatus)),
+          DataCell(Text(progressorId)),
+          DataCell(Text(userId)),
+        ])
+      ],
+    );
   }
 }
