@@ -10,11 +10,12 @@ class DeviceTile extends StatelessWidget {
   String get _deviceName => device.name.isEmpty ? device.id.toString() : device.name;
 
   @override
-  Widget build(_) {
+  Widget build(BuildContext context) {
     return StreamBuilder<BluetoothDeviceState>(
       stream: device.state,
-      builder: (_, AsyncSnapshot<BluetoothDeviceState> snapshot) =>
-          _buildTile(snapshot.data == BluetoothDeviceState.connected),
+      builder: (_, AsyncSnapshot<BluetoothDeviceState> snapshot) {
+        return _buildTile(snapshot.data == BluetoothDeviceState.connected);
+      },
     );
   }
 
@@ -23,13 +24,11 @@ class DeviceTile extends StatelessWidget {
       horizontalTitleGap: 0,
       title: Text(_deviceName),
       contentPadding: const EdgeInsets.all(5),
-      subtitle: Text('Click to ${isConnected ? 'disconnect' : 'connect'}'),
+      subtitle: Text('Click to ${isConnected ? 'dis' : ''}connect'),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      onTap: isConnected
-          ? Bluetooth.disconnect
-          : () => Bluetooth.connect(device).then((_) => Bluetooth.startNotify()),
       leading: Icon(isConnected ? Icons.bluetooth_connected_rounded : Icons.bluetooth_rounded, size: 40),
       trailing: CircleAvatar(radius: 20, backgroundColor: isConnected ? Colors.green : Colors.deepOrange),
+      onTap: () => isConnected ? Bluetooth.disconnect(device) : Bluetooth.connect(device),
     );
   }
 }

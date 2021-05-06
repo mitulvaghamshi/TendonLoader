@@ -9,7 +9,7 @@ mixin Locator {
 
   static Stream<bool> get stream => _controller.stream;
 
-  static Future<void> init() async => _controller.sink.add(await Location.instance.serviceEnabled());
+  static Future<void> check() async => _controller.sink.add(await Location.instance.serviceEnabled());
 
   static Future<void> enable() async => AppSettings.openLocationSettings();
 

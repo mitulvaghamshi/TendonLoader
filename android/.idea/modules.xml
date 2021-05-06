@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/android.iml" filepath="$PROJECT_DIR$/.idea/modules/android.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1807982454/android.permission_handler.iml" filepath="$PROJECT_DIR$/.idea/modules/-1807982454/android.permission_handler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1903033646/android.app_settings.iml" filepath="$PROJECT_DIR$/.idea/modules/1903033646/android.app_settings.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/50876643/com.lyokone.location.android.location.iml" filepath="$PROJECT_DIR$/.idea/modules/50876643/com.lyokone.location.android.location.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/120258445/com.pauldemarco.flutter_blue.android.flutter_blue.iml" filepath="$PROJECT_DIR$/.idea/modules/120258445/com.pauldemarco.flutter_blue.android.flutter_blue.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/940202917/io.flutter.plugins.connectivity.android.connectivity.iml" filepath="$PROJECT_DIR$/.idea/modules/940202917/io.flutter.plugins.connectivity.android.connectivity.iml" />
@@ -13,7 +13,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-249760417/io.flutter.plugins.firebase.core.android.firebase_core.iml" filepath="$PROJECT_DIR$/.idea/modules/-249760417/io.flutter.plugins.firebase.core.android.firebase_core.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-957790444/io.flutter.plugins.pathprovider.android.path_provider.iml" filepath="$PROJECT_DIR$/.idea/modules/-957790444/io.flutter.plugins.pathprovider.android.path_provider.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/1289975329/io.flutter.plugins.urllauncher.android.url_launcher.iml" filepath="$PROJECT_DIR$/.idea/modules/1289975329/io.flutter.plugins.urllauncher.android.url_launcher.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-672563180/io.github.edufolly.flutterbluetoothserial.android.flutter_bluetooth_serial.iml" filepath="$PROJECT_DIR$/.idea/modules/-672563180/io.github.edufolly.flutterbluetoothserial.android.flutter_bluetooth_serial.iml" />
     </modules>
   </component>
 </project>

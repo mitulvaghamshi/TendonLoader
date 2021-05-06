@@ -11,11 +11,15 @@ class EnableBluetoothTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: const <Widget>[
-        CustomImage(name: Images.IMG_ENABLE_BLUETOOTH),
-        Text(Descriptions.DESC_ENABLE_BLUETOOTH, textAlign: TextAlign.center),
-        SizedBox(height: 30),
-        CustomButton(text: 'Enable', icon: Icons.bluetooth_rounded, onPressed: Bluetooth.enable),
+      children: <Widget>[
+        const CustomImage(name: Images.IMG_ENABLE_BLUETOOTH),
+        const Text(Descriptions.DESC_ENABLE_BLUETOOTH, textAlign: TextAlign.center),
+        const SizedBox(height: 30),
+        const CustomButton(
+          text: 'Enable',
+          icon: Icons.bluetooth_rounded,
+          onPressed: Bluetooth.enable,
+        ),
       ],
     );
   }

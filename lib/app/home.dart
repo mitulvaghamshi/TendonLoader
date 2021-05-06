@@ -26,7 +26,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    // Bluetooth.reConnect();
+    Locator.check();
+    Bluetooth.refresh();
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -43,7 +44,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        Locator.init();
+        Locator.check();
         break;
       case AppLifecycleState.inactive:
         break;

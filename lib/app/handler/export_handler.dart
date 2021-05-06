@@ -6,27 +6,32 @@ import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
 
-class ExportHandler {
+mixin ExportHandler {
+  static final List<ChartData> dataList = <ChartData>[];
+
   static Future<bool> _isConnected() async => (await Connectivity().checkConnectivity()) != ConnectivityResult.none;
 
-  static Future<void> export(List<ChartData> dataList, {SessionInfo sessionInfo, Prescription prescription}) async {
+  static Future<void> export(SessionInfo sessionInfo, [Prescription prescription, bool later = false]) async {
     final Map<String, String> metaData = sessionInfo.toMap();
-    if(prescription != null) metaData.addAll(prescription.toMap());
-    await (await _isConnected() ? _upload : _save)(<String, dynamic>{
+    if (prescription != null) metaData.addAll(prescription.toMap());
+    await (!later && await _isConnected() ? _upload : save)(<String, dynamic>{
       Keys.KEY_META_DATA: metaData,
-      Keys.KEY_USER_DATA: dataList.map((ChartData data) => <String, double>{Keys.KEY_CHART_Y: data.time, Keys.KEY_CHART_X: data.load}).toList(),
+      Keys.KEY_USER_DATA: dataList.map((ChartData data) {
+        return <String, double>{Keys.KEY_CHART_Y: data.time, Keys.KEY_CHART_X: data.load};
+      }).toList(),
     });
   }
 
   static Future<void> reExport() async {
-    final Box<Map<String, dynamic>> _userExportsBox = await Hive.openBox<Map<String, dynamic>>(Keys.KEY_USER_EXPORTS_BOX);
+    final Box<Map<String, dynamic>> _userExportsBox =
+        await Hive.openBox<Map<String, dynamic>>(Keys.KEY_USER_EXPORTS_BOX);
     for (final dynamic key in _userExportsBox.keys) {
       await _upload(_userExportsBox.get(key));
       await _userExportsBox.delete(key);
     }
   }
 
-  static Future<void> _save(Map<String, dynamic> exportInfo) async {
+  static Future<void> save(Map<String, dynamic> exportInfo) async {
     await (await Hive.openBox<Map<String, dynamic>>(Keys.KEY_USER_EXPORTS_BOX)).add(exportInfo);
   }
 
