@@ -14,7 +14,7 @@ import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/extensions.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
-import 'package:tendon_loader/shared/modal/data_handler.dart';
+import 'package:tendon_loader/shared/modal/data_controller.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
 
@@ -34,27 +34,22 @@ class _BarGraphState extends State<BarGraph> {
   int _currentRep = 1;
   double _targetLoad = 0;
   bool _isHold = true;
-  int _lastSec = 0;
-
   bool _isRest = false;
-
-  DateTime _dateTime;
-
   bool _hasData = false;
   bool _isRunning = false;
   bool _isComplete = false;
-
+  int _lastSec = 0;
   double _lastMilliSec = 0;
-
+  DateTime _dateTime;
   ChartSeriesController _graphDataCtrl;
-  final DataHandler _handler = DataHandler();
+  final DataController _handler = DataController();
   final List<ChartData> _graphData = <ChartData>[ChartData()];
 
-  String get _lapTime => _isRunning
+  String get _lapTime => _isRunning && !_isRest
       ? _isHold
           ? 'Hold for: ${_holdTime--} s'
           : 'Rest for: ${_restTime--} s'
-      : '---';
+      : '...';
 
   String get _progress =>
       'Set: $_currentSet of ${widget.prescription.sets}  |  Rep: $_currentRep of ${widget.prescription.reps}';
@@ -65,9 +60,10 @@ class _BarGraphState extends State<BarGraph> {
     } else if (!_isRunning && _hasData) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: const Text('Submit old data?'),
-        action: SnackBarAction(label: 'Show Me!', onPressed: _backPressed, textColor: Theme.of(context).primaryColor),
+        action: SnackBarAction(label: 'Show Me!', onPressed: _handleExport, textColor: Theme.of(context).primaryColor),
       ));
     } else if (await CountDown.start(context) ?? false) {
+      CustomGraph.updateLine(_targetLoad);
       await Bluetooth.startWeightMeas();
       _dateTime = DateTime.now();
       _isComplete = false;
@@ -147,7 +143,7 @@ class _BarGraphState extends State<BarGraph> {
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      onBackPressed: _backPressed,
+      onBackPressed: _handleExport,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
@@ -155,7 +151,7 @@ class _BarGraphState extends State<BarGraph> {
             initialData: ChartData(),
             stream: _handler.stream,
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
-              if (_isRunning) _update();
+              if (!_isRest && _isRunning) _update();
               return Column(
                 children: <Widget>[
                   Row(
@@ -179,7 +175,7 @@ class _BarGraphState extends State<BarGraph> {
               );
             },
           ),
-          CustomGraph(series: _getSeries),
+          CustomGraph(),
           const SizedBox(height: 30),
           GraphControls(start: _start, stop: stop, reset: _reset),
         ],
@@ -187,38 +183,7 @@ class _BarGraphState extends State<BarGraph> {
     );
   }
 
-  List<ChartSeries<ChartData, int>> _getSeries() {
-    return <ChartSeries<ChartData, int>>[
-      ColumnSeries<ChartData, int>(
-        width: 0.9,
-        borderWidth: 1,
-        color: Colors.blue,
-        animationDuration: 0,
-        dataSource: _graphData,
-        borderColor: Colors.black,
-        xValueMapper: (ChartData data, _) => 1,
-        yValueMapper: (ChartData data, _) => data.load,
-        dataLabelSettings: DataLabelSettings(
-          isVisible: true,
-          showZeroValue: false,
-          labelAlignment: ChartDataLabelAlignment.bottom,
-          textStyle: TextStyle(fontSize: 56, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
-        ),
-        onRendererCreated: (ChartSeriesController controller) => _graphDataCtrl = controller,
-        borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-      ),
-      LineSeries<ChartData, int>(
-        width: 5,
-        color: Colors.red,
-        animationDuration: 0,
-        yValueMapper: (ChartData data, _) => data.load,
-        xValueMapper: (ChartData data, _) => data.time.toInt(),
-        dataSource: <ChartData>[ChartData(load: _targetLoad), ChartData(time: 2, load: _targetLoad)],
-      ),
-    ];
-  }
-
-  Future<bool> _backPressed() async {
+  Future<bool> _handleExport() async {
     if (_isRunning) await _reset();
 
     if (!_hasData) return true;
@@ -251,14 +216,13 @@ class _BarGraphState extends State<BarGraph> {
           _lastMilliSec = time;
           final ChartData element = ChartData(load: weight, time: time);
           // ExportHandler.dataList.add(element);
-          if (!_isRest) {
-            if (time.truncate() > _lastSec) {
-              _lastSec = time.truncate();
-              _handler.sink.add(element);
-            }
-            _graphData.insert(0, element);
-            _graphDataCtrl?.updateDataSource(updatedDataIndex: 0);
+
+          if (time.truncate() > _lastSec) {
+            _lastSec = time.truncate();
+            _handler.sink.add(element);
           }
+          _graphData.insert(0, element);
+          _graphDataCtrl?.updateDataSource(updatedDataIndex: 0);
         }
       }
     }

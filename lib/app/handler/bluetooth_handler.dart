@@ -45,7 +45,6 @@ mixin Bluetooth {
   static Future<void> connect(BluetoothDevice device) async {
     _device = device;
     await _device.connect(autoConnect: false);
-    isConnected = true;
     await _getProps();
   }
 
@@ -69,7 +68,6 @@ mixin Bluetooth {
   static Future<void> _reConnect(BluetoothDevice device) async {
     await disconnect(device);
     await connect(device);
-    print('reConnect');
   }
 
   static Future<void> refresh() async => (await FlutterBlue.instance.connectedDevices).forEach(_reConnect);
@@ -81,14 +79,13 @@ mixin Bluetooth {
   }
 
   static Future<void> _getProps() async {
-    if (isConnected) {
-      final List<BluetoothService> _services = await _device.discoverServices();
-      final BluetoothService _service =
-          _services.firstWhere((BluetoothService s) => s.uuid == Guid(Progressor.SERVICE_UUID));
-      final List<BluetoothCharacteristic> chars = _service.characteristics;
-      _dataChar = chars.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
-      _controlChar = chars.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.CONTROL_POINT_UUID));
-      await startNotify();
-    }
+    final List<BluetoothService> _services = await _device?.discoverServices();
+    final BluetoothService _service =
+        _services?.firstWhere((BluetoothService s) => s.uuid == Guid(Progressor.SERVICE_UUID));
+    final List<BluetoothCharacteristic> chars = _service?.characteristics;
+    _dataChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
+    _controlChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.CONTROL_POINT_UUID));
+    isConnected = _dataChar != null && _controlChar != null;
+    await startNotify();
   }
 }
