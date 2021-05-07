@@ -4,8 +4,8 @@
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
         <option name="GRADLE_PROJECT_PATH" value=":firebase_core" />
-        <option name="LAST_SUCCESSFUL_SYNC_AGP_VERSION" value="4.1.3" />
-        <option name="LAST_KNOWN_AGP_VERSION" value="4.1.3" />
+        <option name="LAST_SUCCESSFUL_SYNC_AGP_VERSION" value="4.1.0" />
+        <option name="LAST_KNOWN_AGP_VERSION" value="4.1.0" />
       </configuration>
     </facet>
     <facet type="android" name="Android">
@@ -51,13 +51,7 @@
     </content>
     <content url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.1.0">
       <sourceFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.1.0/android/src/main/java" isTestSource="false" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.1.0/.dart_tool" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.1.0/.pub" />
       <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.1.0/android/.gradle" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.1.0/build" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.1.0/example/.dart_tool" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.1.0/example/.pub" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.1.0/example/build" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 29 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

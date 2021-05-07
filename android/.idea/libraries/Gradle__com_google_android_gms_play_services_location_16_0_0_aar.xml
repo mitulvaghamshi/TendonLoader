@@ -1,13 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.android.gms:play-services-location:16.0.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/da2746ed9e854b57bc75d52a22078e3d/jetified-play-services-location-16.0.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/da2746ed9e854b57bc75d52a22078e3d/jetified-play-services-location-16.0.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/da2746ed9e854b57bc75d52a22078e3d/jetified-play-services-location-16.0.0/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/dea5618886a69963ec049cbdc441fe92/jetified-play-services-location-16.0.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/79f026dcb8e720bb19dc2dc39bcd42c9/jetified-play-services-location-16.0.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/79f026dcb8e720bb19dc2dc39bcd42c9/jetified-play-services-location-16.0.0/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/79f026dcb8e720bb19dc2dc39bcd42c9/jetified-play-services-location-16.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/10e69710bfb086058fc9d9cbccb8f498/jetified-play-services-location-16.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/176fe226425ab42aa151389b8c3babd4/jetified-play-services-location-16.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/cff8addf2b0db5cb6ed2687a1618f5ae/jetified-play-services-location-16.0.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/cff8addf2b0db5cb6ed2687a1618f5ae/jetified-play-services-location-16.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/cff8addf2b0db5cb6ed2687a1618f5ae/jetified-play-services-location-16.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

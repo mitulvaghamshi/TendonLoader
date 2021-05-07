@@ -4,8 +4,8 @@
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
         <option name="GRADLE_PROJECT_PATH" value=":url_launcher" />
-        <option name="LAST_SUCCESSFUL_SYNC_AGP_VERSION" value="4.1.3" />
-        <option name="LAST_KNOWN_AGP_VERSION" value="4.1.3" />
+        <option name="LAST_SUCCESSFUL_SYNC_AGP_VERSION" value="4.1.0" />
+        <option name="LAST_KNOWN_AGP_VERSION" value="4.1.0" />
       </configuration>
     </facet>
     <facet type="android" name="Android">
@@ -52,13 +52,7 @@
     <content url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.0.3">
       <sourceFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.0.3/android/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.0.3/android/src/test/java" isTestSource="true" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.0.3/.dart_tool" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.0.3/.pub" />
       <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.0.3/android/.gradle" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.0.3/build" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.0.3/example/.dart_tool" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.0.3/example/.pub" />
-      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.0.3/example/build" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 29 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

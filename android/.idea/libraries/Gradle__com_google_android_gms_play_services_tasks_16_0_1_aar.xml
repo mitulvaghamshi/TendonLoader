@@ -1,13 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.android.gms:play-services-tasks:16.0.1@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0e392acc9e1c0f465d5ef9a92ab97c70/jetified-play-services-tasks-16.0.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0e392acc9e1c0f465d5ef9a92ab97c70/jetified-play-services-tasks-16.0.1/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0e392acc9e1c0f465d5ef9a92ab97c70/jetified-play-services-tasks-16.0.1/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/933d1db790331dfb264f9333227c9a45/jetified-play-services-tasks-16.0.1/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bc6eeeb724cc5a7585bd1a20e766ccf9/jetified-play-services-tasks-16.0.1/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bc6eeeb724cc5a7585bd1a20e766ccf9/jetified-play-services-tasks-16.0.1/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bc6eeeb724cc5a7585bd1a20e766ccf9/jetified-play-services-tasks-16.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d31f4897e87c4fd5d705febf097d53d5/jetified-play-services-tasks-16.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2a9362b96cb755857b2b60352c3c4c38/jetified-play-services-tasks-16.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/74936b1937551d400b4cf6d6418a33fd/jetified-play-services-tasks-16.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/74936b1937551d400b4cf6d6418a33fd/jetified-play-services-tasks-16.0.1/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/74936b1937551d400b4cf6d6418a33fd/jetified-play-services-tasks-16.0.1/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
