@@ -40,7 +40,7 @@ class RightPanel extends StatelessWidget with CreateExcel {
               },
             );
           }
-          return const Expanded(child: CustomImage());
+          return const Expanded(child: CustomImage(isLogo: true));
         },
       ),
     );
@@ -107,8 +107,29 @@ class RightPanel extends StatelessWidget with CreateExcel {
             prescription: _getPrescription(_isMVC, _time),
           ),
         ),
+        CustomButton(
+          withText: false,
+          icon: Icons.delete_rounded,
+          onPressed: () {
+            _deleteItem(_info, _time, context);
+            
+          },
+        ),
       ],
     );
+  }
+
+  Future<void> _deleteItem(SessionInfo _info, MapEntry<String, dynamic> _time, BuildContext context) {
+    return FirebaseFirestore.instance
+        .collection(Keys.KEY_ALL_USERS)
+        .doc(_info.userId)
+        .collection(Keys.KEY_ALL_EXPORTS)
+        .doc(_info.exportDate)
+        .update(<String, dynamic>{_time.key: FieldValue.delete()}).whenComplete(() {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Record deleted successfully!')),
+      );
+    });
   }
 
   String _getName(SessionInfo _info) =>
