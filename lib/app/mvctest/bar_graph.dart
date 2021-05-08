@@ -80,7 +80,7 @@ class _BarGraphState extends State<BarGraph> {
             initialData: ChartData(),
             stream: _handler.stream,
             builder: (_, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.data is SendPort) _handler.setPort(snapshot.data);
+              if (snapshot.data is SendPort) _handler.listen(snapshot.data);
               final ChartData data = snapshot.data as ChartData;
               CustomGraph.updateGraph(data);
               if (_isRunning && 5 - data.time == 0) {

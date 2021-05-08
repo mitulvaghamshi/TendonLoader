@@ -13,12 +13,15 @@ class CustomGraph extends StatelessWidget {
 
   static void updateGraph(ChartData data) {
     _graphData.insert(0, data);
-    _graphCtrl?.updateDataSource(updatedDataIndex: 0);
+    if (_graphCtrl != null)
+      _graphCtrl.updateDataSource(updatedDataIndex: 0);
+    else
+      print('-----=========> ctrl null');
   }
 
   static void updateLine(double value) {
     _lineData.insertAll(0, <ChartData>[ChartData(load: value), ChartData(time: 2, load: value)]);
-    _lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
+    if (_lineCtrl != null) _lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
   }
 
   @override

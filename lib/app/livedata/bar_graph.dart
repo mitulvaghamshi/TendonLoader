@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app/custom/countdown.dart';
 import 'package:tendon_loader/app/custom/custom_controls.dart';
 import 'package:tendon_loader/app/custom/custom_graph.dart';
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
@@ -23,17 +22,10 @@ class _BarGraphState extends State<BarGraph> {
   final DataHandler _handler = DataHandler();
   bool _isRunning = false;
 
-  SendPort sendPort;
-
   Future<void> _start() async {
     if (!_isRunning /* && (await CountDown.start(context) ?? false) */) {
-      await _handler.start();
-      await Bluetooth.startWeightMeas();
       _isRunning = true;
-      sendPort = await _handler.completer.future;
-      Future<void>.delayed(const Duration(seconds: 2), () {
-        Bluetooth.listen(sendPort.send);
-      });
+      await _handler.start();
     }
   }
 
@@ -41,8 +33,8 @@ class _BarGraphState extends State<BarGraph> {
     if (_isRunning) {
       _isRunning = false;
       await _handler.reset();
-      CustomGraph.updateGraph(ChartData());
     }
+    mData.forEach(print);
   }
 
   @override
@@ -51,6 +43,8 @@ class _BarGraphState extends State<BarGraph> {
     _handler.dispose();
     super.dispose();
   }
+
+  final List<ChartData> mData = <ChartData>[];
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +57,13 @@ class _BarGraphState extends State<BarGraph> {
             stream: _handler.stream,
             builder: (_, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.data is SendPort) {
-                _handler.completer.complete(snapshot.data as SendPort);
-                return Text('data');
+                _handler.listen(snapshot.data);
+                return const CircularProgressIndicator();
               }
-              final ChartData data = snapshot.data as ChartData;
-              CustomGraph.updateGraph(data);
-              return Text(data.time.formatTime, style: tsBold26.copyWith(color: Colors.green));
+              final ChartData _data = snapshot.data as ChartData;
+              mData.add(_data);
+              CustomGraph.updateGraph(_data);
+              return Text(_data.time.formatTime, style: tsBold26.copyWith(color: Colors.green));
             },
           ),
           const SizedBox(height: 20),
@@ -79,4 +74,6 @@ class _BarGraphState extends State<BarGraph> {
       ),
     );
   }
+
+  
 }
