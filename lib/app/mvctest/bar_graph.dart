@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -7,12 +6,13 @@ import 'package:tendon_loader/app/custom/confirm_dialod.dart';
 import 'package:tendon_loader/app/custom/countdown.dart';
 import 'package:tendon_loader/app/custom/custom_controls.dart';
 import 'package:tendon_loader/app/custom/custom_graph.dart';
-import 'package:tendon_loader/app/handler/data_handler.dart';
+import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/shared/common.dart';
 import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/extensions.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
+import 'package:tendon_loader/shared/modal/data_handler.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
 
 class BarGraph extends StatefulWidget {
@@ -23,12 +23,14 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
+  final List<ChartData> _dataList = <ChartData>[];
   final DataHandler _handler = DataHandler();
+  double _lastMilliSec = 0;
   bool _isComplete = false;
   bool _isRunning = false;
   bool _hasData = false;
   DateTime _dateTime;
-  double _mvc = 0;
+  double _lastMinLoad = 0;
 
   Future<void> _start() async {
     if (!_isRunning && _hasData) {
@@ -41,7 +43,7 @@ class _BarGraphState extends State<BarGraph> {
         ),
       ));
     } else if (!_isRunning && (await CountDown.start(context) ?? false)) {
-      await _handler.start();
+      await Bluetooth.startWeightMeas();
       _dateTime = DateTime.now();
       _isComplete = false;
       _isRunning = true;
@@ -50,17 +52,24 @@ class _BarGraphState extends State<BarGraph> {
   }
 
   Future<void> _stop() async {
-    await _handler.reset();
-    _mvc = 0;
+    await Bluetooth.stopWeightMeas();
+    _lastMinLoad = 0;
   }
 
   void _reset() {
     if (_isRunning) {
-      _stop();
       _isRunning = false;
+      _stop();
+      _lastMilliSec = 0;
+      _handler.sink.add(ChartData());
       CustomGraph.updateLine(0);
-      CustomGraph.updateGraph(ChartData());
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Bluetooth.listen(_listener);
   }
 
   @override
@@ -76,30 +85,31 @@ class _BarGraphState extends State<BarGraph> {
       onBackPressed: _backPress,
       child: Column(
         children: <Widget>[
-          StreamBuilder<dynamic>(
+          StreamBuilder<ChartData>(
             initialData: ChartData(),
             stream: _handler.stream,
-            builder: (_, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.data is SendPort) _handler.listen(snapshot.data);
-              final ChartData data = snapshot.data as ChartData;
-              CustomGraph.updateGraph(data);
-              if (_isRunning && 5 - data.time == 0) {
-                _isComplete = true;
-                _stop();
-              } else if (data.load > _mvc) {
-                CustomGraph.updateLine(_mvc = data.load);
+            builder: (_, AsyncSnapshot<ChartData> snapshot) {
+              if (_isRunning) {
+                if (5 - snapshot.data.time == 0) {
+                  _isRunning = false;
+                  _isComplete = true;
+                  _stop();
+                } else if (snapshot.data.load > _lastMinLoad) {
+                  CustomGraph.updateLine(_lastMinLoad = snapshot.data.load);
+                }
               }
+              CustomGraph.updateGraph(snapshot.data);
               return Column(
                 children: <Widget>[
-                  Text('MVC: ${_mvc.toStringAsFixed(2)} Kg', style: tsBold26),
+                  Text('MVC: ${_lastMinLoad.toStringAsFixed(2)} Kg', style: tsBold26),
                   const SizedBox(height: 16),
-                  Text(data.time.toRemaining, style: tsBold26.copyWith(color: Colors.red)),
+                  Text(snapshot.data.time.toRemaining, style: tsBold26.copyWith(color: Colors.red)),
                 ],
               );
             },
           ),
           const SizedBox(height: 20),
-          const CustomGraph(),
+          const CustomGraph(showLine: true),
           const SizedBox(height: 30),
           GraphControls(start: _start, reset: _reset),
         ],
@@ -127,25 +137,18 @@ class _BarGraphState extends State<BarGraph> {
     return result;
   }
 
-  // void _listener(List<int> data) {
-  //   if (_isRunning && data.isNotEmpty && data[0] == Progressor.RES_WEIGHT_MEAS) {
-  //     for (int x = 2; x < data.length; x += 8) {
-  //       final double weight = data.getRange(x, x + 4).toList().toWeight;
-  //       final double time = data.getRange(x + 4, x + 8).toList().toTime;
-  //       if (time > _lastMilliSec) {
-  //         _lastMilliSec = time;
-  //         final ChartData element = ChartData(load: weight, time: time);
-  //         // ExportHandler.dataList.add(element);
-  //         _handler.sink.add(element);
-  //         _graphData.insert(0, element);
-  //         _graphDataCtrl?.updateDataSource(updatedDataIndex: 0);
-  //         if (weight > _mvc) {
-  //           _mvc = weight;
-  //           _lineData.insertAll(0, <ChartData>[ChartData(load: _mvc), ChartData(time: 2, load: _mvc)]);
-  //           _lineDataCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
+  void _listener(List<int> data) {
+    if (_isRunning && data.isNotEmpty && data[0] == Progressor.RES_WEIGHT_MEAS) {
+      for (int x = 2; x < data.length; x += 8) {
+        final double weight = data.getRange(x, x + 4).toList().toWeight;
+        final double time = data.getRange(x + 4, x + 8).toList().toTime;
+        if (time > _lastMilliSec) {
+          _lastMilliSec = time;
+          final ChartData element = ChartData(load: weight, time: time);
+          _handler.sink.add(element);
+          _dataList.add(element);
+        }
+      }
+    }
+  }
 }

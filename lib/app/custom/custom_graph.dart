@@ -13,10 +13,7 @@ class CustomGraph extends StatelessWidget {
 
   static void updateGraph(ChartData data) {
     _graphData.insert(0, data);
-    if (_graphCtrl != null)
-      _graphCtrl.updateDataSource(updatedDataIndex: 0);
-    else
-      print('-----=========> ctrl null');
+    if (_graphCtrl != null) _graphCtrl.updateDataSource(updatedDataIndex: 0);
   }
 
   static void updateLine(double value) {

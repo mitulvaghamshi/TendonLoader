@@ -1,15 +1,16 @@
 import 'dart:async';
-import 'dart:isolate';
 
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app/custom/countdown.dart';
 import 'package:tendon_loader/app/custom/custom_controls.dart';
 import 'package:tendon_loader/app/custom/custom_graph.dart';
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
-import 'package:tendon_loader/app/handler/data_handler.dart';
 import 'package:tendon_loader/shared/common.dart';
+import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/extensions.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
+import 'package:tendon_loader/shared/modal/data_handler.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key key}) : super(key: key);
@@ -20,21 +21,30 @@ class BarGraph extends StatefulWidget {
 
 class _BarGraphState extends State<BarGraph> {
   final DataHandler _handler = DataHandler();
+  final List<ChartData> _dataList = <ChartData>[];
+  double _lastMilliSec = 0;
   bool _isRunning = false;
 
   Future<void> _start() async {
-    if (!_isRunning /* && (await CountDown.start(context) ?? false) */) {
+    if (!_isRunning && (await CountDown.start(context) ?? false)) {
+      await Bluetooth.startWeightMeas();
       _isRunning = true;
-      await _handler.start();
     }
   }
 
   Future<void> _reset() async {
     if (_isRunning) {
       _isRunning = false;
-      await _handler.reset();
+      await Bluetooth.stopWeightMeas();
+      _handler.sink.add(ChartData());
+      _lastMilliSec = 0;
     }
-    mData.forEach(print);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Bluetooth.listen(_listener);
   }
 
   @override
@@ -44,26 +54,18 @@ class _BarGraphState extends State<BarGraph> {
     super.dispose();
   }
 
-  final List<ChartData> mData = <ChartData>[];
-
   @override
   Widget build(BuildContext context) {
     return AppFrame(
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          StreamBuilder<dynamic>(
+          StreamBuilder<ChartData>(
             initialData: ChartData(),
             stream: _handler.stream,
-            builder: (_, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.data is SendPort) {
-                _handler.listen(snapshot.data);
-                return const CircularProgressIndicator();
-              }
-              final ChartData _data = snapshot.data as ChartData;
-              mData.add(_data);
-              CustomGraph.updateGraph(_data);
-              return Text(_data.time.formatTime, style: tsBold26.copyWith(color: Colors.green));
+            builder: (_, AsyncSnapshot<ChartData> snapshot) {
+              CustomGraph.updateGraph(snapshot.data);
+              return Text(snapshot.data.time.formatTime, style: tsBold26.copyWith(color: Colors.green));
             },
           ),
           const SizedBox(height: 20),
@@ -75,5 +77,18 @@ class _BarGraphState extends State<BarGraph> {
     );
   }
 
-  
+  void _listener(List<int> data) {
+    if (_isRunning && data.isNotEmpty && data[0] == Progressor.RES_WEIGHT_MEAS) {
+      for (int x = 2; x < data.length; x += 8) {
+        final double weight = data.getRange(x, x + 4).toList().toWeight;
+        final double time = data.getRange(x + 4, x + 8).toList().toTime;
+        if (time > _lastMilliSec) {
+          _lastMilliSec = time;
+          final ChartData element = ChartData(load: weight, time: time);
+          _handler.sink.add(element);
+          _dataList.add(element);
+        }
+      }
+    }
+  }
 }

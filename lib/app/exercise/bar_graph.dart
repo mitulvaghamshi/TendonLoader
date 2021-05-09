@@ -14,7 +14,7 @@ import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/extensions.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
-import 'package:tendon_loader/shared/modal/data_controller.dart';
+import 'package:tendon_loader/shared/modal/data_handler.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
 
@@ -42,7 +42,7 @@ class _BarGraphState extends State<BarGraph> {
   double _lastMilliSec = 0;
   DateTime _dateTime;
   ChartSeriesController _graphDataCtrl;
-  final DataController _handler = DataController();
+  final DataHandler _handler = DataHandler();
   final List<ChartData> _graphData = <ChartData>[ChartData()];
 
   String get _lapTime => _isRunning && !_isRest
