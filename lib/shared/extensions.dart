@@ -1,7 +1,11 @@
 import 'dart:typed_data';
 
+extension ExTimer on int {
+  String get toTime => this == 0 ? 'GO!' : '${this ~/ 60}:${(this % 60).toString().padLeft(2, '0')}';
+}
+
 extension ExTimeFormat on double {
-  String get formatTime => '🕒 ${this ~/ 60}:${(this % 60).toStringAsFixed(0).padLeft(2, '0')} Sec';
+  String get toTime => '🕒 ${this ~/ 60}:${(this % 60).toStringAsFixed(0).padLeft(2, '0')} Sec';
 
   String get toRemaining => 'Remaining: ${(5 - this).toStringAsFixed(1)} Sec';
 }

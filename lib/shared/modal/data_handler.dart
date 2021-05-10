@@ -8,7 +8,7 @@ class DataHandler {
 
   Sink<ChartData> get sink => _controller.sink;
 
-  void reset() => sink.add(ChartData());
+  void clear() => sink.add(ChartData());
 
   void dispose() {
     if (!_controller.isClosed) _controller.close();

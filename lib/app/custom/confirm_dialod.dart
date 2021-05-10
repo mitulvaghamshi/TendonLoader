@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:tendon_loader/app/handler/export_handler.dart';
-import 'package:tendon_loader/shared/modal/prescription.dart';
-import 'package:tendon_loader/shared/modal/session_info.dart';
+import 'package:tendon_loader/libs.dart';
 
 class ConfirmDialog extends StatelessWidget {
   const ConfirmDialog({Key key, this.sessionInfo, this.prescription}) : super(key: key);
@@ -9,11 +6,7 @@ class ConfirmDialog extends StatelessWidget {
   final SessionInfo sessionInfo;
   final Prescription prescription;
 
-  static Future<bool> export(
-    BuildContext context, {
-    @required SessionInfo sessionInfo,
-    Prescription prescription,
-  }) async {
+  static Future<bool> export(BuildContext context, {SessionInfo sessionInfo, Prescription prescription}) async {
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -21,9 +14,7 @@ class ConfirmDialog extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Submit data to Clinician?', textAlign: TextAlign.center),
         content: ConfirmDialog(sessionInfo: sessionInfo, prescription: prescription),
-        actions: <Widget>[
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Back')),
-        ],
+        actions: <Widget>[TextButton(onPressed: () => Navigator.pop(context), child: const Text('Back'))],
       ),
     );
   }
