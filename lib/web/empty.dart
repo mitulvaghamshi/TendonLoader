@@ -3,7 +3,7 @@ class AnchorElement {
 
   final String href;
 
-  void setAttribute(String attr, String value) {}
-
   void click() {}
+
+  void setAttribute(String attr, String value) {}
 }

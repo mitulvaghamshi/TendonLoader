@@ -18,132 +18,126 @@ class RightPanel extends StatelessWidget with CreateExcel {
   @override
   Widget build(BuildContext context) {
     return Panel(
-      child: StreamBuilder<CollectionReference>(
+      child: StreamBuilder<DocumentReference>(
         stream: UserReference.stream,
-        builder: (_, AsyncSnapshot<CollectionReference> snapshot) {
-          if (snapshot.hasData) {
-            return FutureBuilder<QuerySnapshot>(
-              future: snapshot.data.get(),
-              builder: (_, AsyncSnapshot<QuerySnapshot> daysSnap) {
-                if (daysSnap.hasData) {
-                  return Expanded(
-                    child: ListView(
-                      physics: const BouncingScrollPhysics(),
-                      children: ListTile.divideTiles(
-                        color: Theme.of(context).accentColor,
-                        tiles: _buildGroupItems(daysSnap, context),
-                      ).toList(),
-                    ),
-                  );
-                }
-                return const Text('No data available!');
-              },
-            );
-          }
-          return const Expanded(child: CustomImage(isLogo: true));
+        builder: (_, AsyncSnapshot<DocumentReference> snapshot) {
+          if (!snapshot.hasData) return const Expanded(child: Center(child: CustomImage(isBg: true)));
+          return StreamBuilder<QuerySnapshot>(
+            stream: snapshot.data.collection(Keys.KEY_ALL_EXPORTS).snapshots(),
+            builder: (_, AsyncSnapshot<QuerySnapshot> allAxport) {
+              if (!allAxport.hasData) return const Text('No data available!');
+              return Expanded(
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children: ListTile.divideTiles(
+                    color: Theme.of(context).accentColor,
+                    tiles: allAxport.data.docs.map((QueryDocumentSnapshot item) => _buildGroupItem(context, item)),
+                  ).toList(),
+                ),
+              );
+            },
+          );
         },
       ),
     );
   }
 
-  Iterable<Widget> _buildGroupItems(AsyncSnapshot<QuerySnapshot> daysSnap, BuildContext context) {
-    return daysSnap.data.docs.map((QueryDocumentSnapshot daySnap) {
-      final Map<String, dynamic> exports = daySnap.data();
-      return ExpansionTile(
-        maintainState: true,
-        key: ValueKey<String>(daySnap.id),
-        tilePadding: const EdgeInsets.all(5),
-        leading: TextAvatar(daySnap.id.substring(8, 10)),
-        expandedCrossAxisAlignment: CrossAxisAlignment.start,
-        title: Text(daySnap.id, style: const TextStyle(fontSize: 18)),
-        subtitle: Text('${exports.length} export${exports.length == 1 ? '' : 's'} found.'),
-        children: ListTile.divideTiles(color: Colors.deepOrange, tiles: _builldListItems(exports, context)).toList(),
-      );
-    });
-  }
-
-  Iterable<Widget> _builldListItems(Map<String, dynamic> exports, BuildContext context) {
-    return exports.entries.map((MapEntry<String, dynamic> _time) {
-      final SessionInfo _info = _getSessionInfo(_time);
-      final bool _isMVC = _info.exportType.contains('MVC');
+  Widget _buildGroupItem(BuildContext context, QueryDocumentSnapshot perDay) {
+    final Map<String, dynamic> exports = perDay.data();
+    if (exports.isEmpty) {
       return ListTile(
-        onTap: () {},
-        hoverColor: Colors.blue,
-        key: ValueKey<String>(_time.key),
+        onLongPress: () {
+          // FirebaseFirestore.instance
+          //     .collection(Keys.KEY_ALL_USERS)
+          //     .doc(_info.userId)
+          //     .collection(Keys.KEY_ALL_EXPORTS)
+          //     .doc(perDay.id)
+          //     .delete();
+        },
         contentPadding: const EdgeInsets.all(5),
-        subtitle: Text('Status: ${_info.dataStatus}'),
-        title: Text(_time.key, style: const TextStyle(fontSize: 18)),
-        trailing: _buildActionButtons(context, _info, _time, _isMVC),
-        leading: TextAvatar(_info.exportType.substring(0, 3), color: _isMVC ? Colors.green : Colors.orange),
+        title: Text('No exports available for "${perDay.id}"'),
+        leading: TextAvatar(perDay.id.substring(8, 10), color: Colors.red),
+        subtitle: const Text('Long press to remove empty container for this day from the server.'),
       );
-    });
-  }
-
-  Row _buildActionButtons(BuildContext context, SessionInfo _info, MapEntry<String, dynamic> _time, bool _isMVC) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        CustomButton(
-          withText: false,
-          icon: Icons.visibility_rounded,
-          onPressed: () async => showDialog<void>(
-            context: context,
-            useSafeArea: true,
-            builder: (_) => LineGraph(
-              sessionInfo: _info,
-              name: _getName(_info),
-              data: _getDataList(_time),
-              prescription: _getPrescription(_isMVC, _time),
-            ),
-          ),
-        ),
-        CustomButton(
-          withText: false,
-          icon: Icons.download_rounded,
-          onPressed: () => create(
-            sessionInfo: _info,
-            fileName: _getName(_info),
-            data: _getDataList(_time),
-            prescription: _getPrescription(_isMVC, _time),
-          ),
-        ),
-        CustomButton(
-          withText: false,
-          icon: Icons.delete_rounded,
-          onPressed: () {
-            _deleteItem(_info, _time, context);
-            
-          },
-        ),
-      ],
+    }
+    return ExpansionTile(
+      maintainState: true,
+      key: ValueKey<String>(perDay.id),
+      tilePadding: const EdgeInsets.all(5),
+      leading: TextAvatar(perDay.id.substring(8, 10)),
+      expandedCrossAxisAlignment: CrossAxisAlignment.start,
+      title: Text(perDay.id, style: const TextStyle(fontSize: 18)),
+      subtitle: Text('${exports.length} export${exports.length == 1 ? '' : 's'} found.'),
+      children: ListTile.divideTiles(
+        color: Colors.deepOrange,
+        tiles: exports.entries.map((MapEntry<String, dynamic> item) => _builldListItem(context, item)),
+      ).toList(),
     );
   }
 
-  Future<void> _deleteItem(SessionInfo _info, MapEntry<String, dynamic> _time, BuildContext context) {
-    return FirebaseFirestore.instance
-        .collection(Keys.KEY_ALL_USERS)
-        .doc(_info.userId)
-        .collection(Keys.KEY_ALL_EXPORTS)
-        .doc(_info.exportDate)
-        .update(<String, dynamic>{_time.key: FieldValue.delete()}).whenComplete(() {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Record deleted successfully!')),
-      );
-    });
+  Widget _builldListItem(BuildContext context, MapEntry<String, dynamic> export) {
+    final Map<String, dynamic> _meta = export.value[Keys.KEY_META_DATA] as Map<String, dynamic>;
+    final SessionInfo _info = SessionInfo.fromMap(_meta);
+    final Prescription _pre = Prescription.fromMap(_meta);
+    final List<ChartData> _dataList = List<Map<String, dynamic>>.from(export.value[Keys.KEY_USER_DATA] as List<dynamic>)
+        .map<ChartData>((Map<String, dynamic> item) => ChartData.fromMap(item))
+        .toList();
+    return ListTile(
+      onTap: () {},
+      hoverColor: Colors.blue,
+      key: ValueKey<String>(export.key),
+      contentPadding: const EdgeInsets.all(5),
+      subtitle: Text('Status: ${_info.dataStatus}'),
+      leading: TextAvatar(_info.typeAbbr, color: _info.color),
+      title: Text(export.key, style: const TextStyle(fontSize: 18)),
+      trailing: PopupMenuButton<int>(
+        onSelected: (int indexx) {},
+        icon: const Icon(Icons.more_vert_rounded),
+        itemBuilder: (BuildContext context) => <PopupMenuItem<int>>[
+          PopupMenuItem<int>(
+            value: 0,
+            child: CustomButton(
+              text: 'View',
+              simple: true,
+              icon: Icons.visibility_rounded,
+              onPressed: () async => showDialog<void>(
+                context: context,
+                useSafeArea: true,
+                builder: (_) => LineGraph(data: _dataList, sessionInfo: _info, prescription: _pre),
+              ),
+            ),
+          ),
+          PopupMenuItem<int>(
+            value: 1,
+            child: CustomButton(
+              simple: true,
+              text: 'Download',
+              icon: Icons.download_rounded,
+              onPressed: () => create(data: _dataList, sessionInfo: _info, prescription: _pre),
+            ),
+          ),
+          PopupMenuItem<int>(
+            value: 2,
+            child: CustomButton(
+              simple: true,
+              text: 'Delete',
+              icon: Icons.delete_rounded,
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection(Keys.KEY_ALL_USERS)
+                    .doc(_info.userId)
+                    .collection(Keys.KEY_ALL_EXPORTS)
+                    .doc(_info.exportDate)
+                    .update(<String, dynamic>{export.key: FieldValue.delete()}).whenComplete(() {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Export deleted successfully!')),
+                  );
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
-
-  String _getName(SessionInfo _info) =>
-      '${_info.exportDate}_${_info.exportTime.replaceAll(RegExp(r'[\s:]'), '-')}_${_info.userId}_${_info.exportType}.xlsx';
-
-  SessionInfo _getSessionInfo(MapEntry<String, dynamic> _time) =>
-      SessionInfo.fromMap(_time.value[Keys.KEY_META_DATA] as Map<String, dynamic>);
-
-  Prescription _getPrescription(bool _isMVC, MapEntry<String, dynamic> _time) =>
-      _isMVC ? null : Prescription.fromMap(_time.value[Keys.KEY_META_DATA] as Map<String, dynamic>);
-
-  List<ChartData> _getDataList(MapEntry<String, dynamic> _time) =>
-      List<Map<String, dynamic>>.from(_time.value[Keys.KEY_USER_DATA] as List<dynamic>)
-          .map<ChartData>((Map<String, dynamic> item) =>
-              ChartData(time: item[Keys.KEY_CHART_Y] as double, load: item[Keys.KEY_CHART_X] as double))
-          .toList();
 }

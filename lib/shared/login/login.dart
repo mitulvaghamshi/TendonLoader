@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -133,12 +132,13 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
               keyboardType: TextInputType.text,
               validator: validatePassword,
             ),
+            const SizedBox(height: 10),
             if (!_createNew)
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Checkbox(value: _staySignedIn, onChanged: (bool value) => setState(() => _staySignedIn = value)),
-                  const Text('Keep me logged in.', style: TextStyle(letterSpacing: 3)),
+                  const Text('Keep me logged in.', style: TextStyle(letterSpacing: 2)),
                 ],
               ),
             GestureDetector(

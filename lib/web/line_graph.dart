@@ -8,18 +8,48 @@ import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
 
-class LineGraph extends StatelessWidget {
-  const LineGraph({Key key, this.data, this.sessionInfo, this.prescription, this.name}) : super(key: key);
+class LineGraph extends StatefulWidget {
+  const LineGraph({Key key, this.data, this.sessionInfo, this.prescription}) : super(key: key);
 
-  final String name;
-  final SessionInfo sessionInfo;
   final List<ChartData> data;
+  final SessionInfo sessionInfo;
   final Prescription prescription;
 
   @override
+  _LineGraphState createState() => _LineGraphState();
+}
+
+class _LineGraphState extends State<LineGraph> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
   Widget build(BuildContext context) {
+    final bool _useDrawer = MediaQuery.of(context).size.width < Sizes.SIZE_MIN_WIDTH;
+    const TextStyle ts14 = TextStyle(fontSize: 14);
+    final LimitedBox _dataTable = LimitedBox(
+      maxWidth: 200,
+      child: Scrollbar(
+        thickness: 15,
+        isAlwaysShown: true,
+        controller: _scrollController,
+        child: ListView.builder(
+          itemExtent: 50,
+          controller: _scrollController,
+          itemCount: widget.data.length,
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          itemBuilder: (_, int index) => ListTile(
+            leading: Text('${index + 1})', style: ts14),
+            title: Text('${widget.data[index].time}', style: ts14),
+            trailing: Text('${widget.data[index].load}', style: ts14),
+            tileColor: index.isEven ? Colors.grey.withOpacity(0.3) : null,
+          ),
+        ),
+      ),
+    );
     return Scaffold(
-      appBar: AppBar(title: Text(name)),
+      appBar: AppBar(title: Text(widget.sessionInfo.fileName)),
+      endDrawer: _useDrawer ? Drawer(child: _dataTable) : null,
       body: AppFrame(
         child: Row(
           children: <Widget>[
@@ -28,18 +58,16 @@ class LineGraph extends StatelessWidget {
                 children: <Widget>[
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Row(children: <Widget>[
-                      sessionInfo.toTable(),
-                      if (prescription != null) prescription.toTable(),
-                    ]),
+                    child: Row(children: <Widget>[widget.sessionInfo.toTable(), widget.prescription?.toTable()]),
                   ),
                   Expanded(
                     child: SfCartesianChart(
+                      plotAreaBorderWidth: 0,
                       tooltipBehavior: TooltipBehavior(
                         enable: true,
-                        header: prescription != null ? 'Peak value' : 'MVC',
+                        animationDuration: 0,
+                        header: widget.prescription != null ? 'Measurement' : 'MVC',
                       ),
-                      plotAreaBorderWidth: 0,
                       primaryXAxis: NumericAxis(
                         labelFormat: '{value} s',
                         majorGridLines: const MajorGridLines(width: 0),
@@ -60,28 +88,19 @@ class LineGraph extends StatelessWidget {
                       series: <ChartSeries<ChartData, double>>[
                         AreaSeries<ChartData, double>(
                           borderWidth: 1,
-                          dataSource: data,
-                          color: Colors.blue,
+                          dataSource: widget.data,
                           animationDuration: 0,
                           borderColor: Colors.black,
                           xValueMapper: (ChartData data, _) => data.time,
                           yValueMapper: (ChartData data, _) => data.load,
-                          gradient: LinearGradient(
-                            end: Alignment.topCenter,
-                            stops: const <double>[0.2, 0.6],
-                            begin: Alignment.bottomCenter,
-                            colors: prescription != null
-                                ? const <Color>[
-                                    Color.fromRGBO(269, 210, 255, 1),
-                                    Color.fromRGBO(143, 236, 154, 1),
-                                  ]
-                                : const <Color>[
-                                    Color.fromRGBO(140, 108, 245, 1),
-                                    Color.fromRGBO(125, 185, 253, 1),
-                                  ],
+                          gradient: const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: <double>[0.2, 0.8],
+                            colors: <Color>[Colors.blue, Colors.indigo],
                           ),
                         ),
-                        if (prescription != null)
+                        if (widget.prescription != null)
                           LineSeries<ChartData, double>(
                             width: 2,
                             color: Colors.red,
@@ -89,8 +108,8 @@ class LineGraph extends StatelessWidget {
                             yValueMapper: (ChartData data, _) => data.load,
                             xValueMapper: (ChartData data, _) => data.time,
                             dataSource: <ChartData>[
-                              ChartData(load: prescription.targetLoad),
-                              ChartData(time: data.last.time, load: prescription.targetLoad),
+                              ChartData(load: widget.prescription.targetLoad),
+                              ChartData(time: widget.data.last.time, load: widget.prescription.targetLoad),
                             ],
                           ),
                       ],
@@ -99,22 +118,7 @@ class LineGraph extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 16),
-            if (MediaQuery.of(context).size.width > Sizes.SIZE_MIN_WIDTH)
-              LimitedBox(
-                maxWidth: 180,
-                child: ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (_, int index) {
-                    return ListTile(
-                      tileColor: index.isEven ? Colors.grey.withOpacity(0.3) : null,
-                      leading: Text('${index + 1})', style: const TextStyle(fontSize: 14)),
-                      title: Text('${data[index].time}', style: const TextStyle(fontSize: 14)),
-                      trailing: Text('${data[index].load}', style: const TextStyle(fontSize: 14)),
-                    );
-                  },
-                ),
-              ),
+            if (!_useDrawer) _dataTable
           ],
         ),
       ),

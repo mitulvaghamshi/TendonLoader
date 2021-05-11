@@ -3,8 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart' show SvgPicture;
 import 'package:tendon_loader/shared/constants.dart' show Images;
 
 class CustomImage extends StatelessWidget with Images {
-  const CustomImage({Key key, this.name, this.radius = 120, this.isLogo = false}) : super(key: key);
+  const CustomImage({Key key, this.name, this.radius = 120, this.isLogo = false, this.isBg = false}) : super(key: key);
 
+  final bool isBg;
   final bool isLogo;
   final String name;
   final double radius;
@@ -16,6 +17,8 @@ class CustomImage extends StatelessWidget with Images {
     final Color _accent = Theme.of(context).accentColor;
     final Color _primary = Theme.of(context).primaryColor;
     final SvgPicture _image = SvgPicture.asset(Images.IMG_APP_LOGO, color: _accent);
+
+    if (isBg) return _image;
 
     return Container(
       color: isLogo ? null : _primary,

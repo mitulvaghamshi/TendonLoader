@@ -26,6 +26,10 @@ class SessionInfo {
   String exportTime;
   String progressorId;
 
+  String get typeAbbr => exportType.substring(0, 3).toUpperCase();
+  Color get color => exportType.contains('MVC') ? Colors.orange : Colors.green;
+  String get fileName => '${exportDate}_${exportTime.replaceAll(RegExp(r'[\s:]'), '-')}_${userId}_$exportType.xlsx';
+
   Map<String, String> toMap() {
     return <String, String>{
       Keys.KEY_USERNAME: userId,

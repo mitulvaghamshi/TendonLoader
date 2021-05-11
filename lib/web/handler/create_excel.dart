@@ -8,7 +8,7 @@ import 'package:tendon_loader/shared/modal/session_info.dart';
 import 'package:tendon_loader/web/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
 
 mixin CreateExcel {
-  void create({List<ChartData> data, SessionInfo sessionInfo, Prescription prescription, String fileName}) {
+  void create({List<ChartData> data, SessionInfo sessionInfo, Prescription prescription}) {
     int _iR = 0;
     const String _iA = 'A';
     const String _iD = 'D';
@@ -87,7 +87,7 @@ mixin CreateExcel {
 
     AnchorElement(
         href: 'data:application/octet-stream;charset=utf-16le;base64,${base64.encode(_workbook.saveAsStream())}')
-      ..setAttribute('download', fileName)
+      ..setAttribute('download', sessionInfo.fileName)
       ..click();
 
     _workbook.dispose();

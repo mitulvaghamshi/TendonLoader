@@ -11,10 +11,14 @@ class LeftPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Panel(
-      child: FutureBuilder<QuerySnapshot>(
-        future: FirebaseFirestore.instance.collectionGroup(Keys.KEY_ALL_USERS).get(),
+      child: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection(Keys.KEY_ALL_USERS).snapshots(),
         builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) return const CircularProgressIndicator();
+          if (!snapshot.hasData) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return const Text('Something wants wrong!.');
+          }
           return Expanded(
             child: ListView(
               physics: const BouncingScrollPhysics(),
@@ -27,7 +31,7 @@ class LeftPanel extends StatelessWidget {
                     contentPadding: const EdgeInsets.all(10),
                     leading: TextAvatar(user.id[0].toUpperCase()),
                     title: Text(user.id, style: const TextStyle(fontSize: 18)),
-                    onTap: () => UserReference.sink?.add(user.reference.collection(Keys.KEY_ALL_EXPORTS)),
+                    onTap: () => UserReference.sink?.add(user.reference),
                   );
                 }),
               ).toList(),

@@ -11,7 +11,7 @@ import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/extensions.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
-import 'package:tendon_loader/shared/modal/data_handler.dart';
+import 'package:tendon_loader/shared/handler/data_handler.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key key}) : super(key: key);

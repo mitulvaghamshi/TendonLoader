@@ -75,7 +75,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
         helperText: widget.desc,
         suffix: _buildSuffix(context),
         focusedBorder: _buildBorder(color: Colors.blue),
-        contentPadding: const EdgeInsets.only(left: 10),
         focusedErrorBorder: _buildBorder(color: Colors.red),
         border: _buildBorder(color: Theme.of(context).accentColor),
         hintStyle: TextStyle(color: Theme.of(context).accentColor),

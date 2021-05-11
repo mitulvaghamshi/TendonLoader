@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/shared/app_auth.dart';
 import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_button.dart';
-import 'package:tendon_loader/shared/login/login.dart';
 import 'package:tendon_loader/web/panel/left_panel.dart';
 import 'package:tendon_loader/web/panel/right_panel.dart';
 
@@ -20,24 +19,21 @@ class HomePage extends StatelessWidget {
         title: const Text('Tendon Loader - Clinician'),
         actions: <Widget>[CustomButton(text: 'Logout', icon: Icons.logout, onPressed: () => AppAuth.signOut(context))],
       ),
-      drawer: _size.width > _size.height ? null : const Drawer(child: LeftPanel()),
+      drawer: _size.width < _size.height ? const Drawer(child: LeftPanel()) : null,
       body: LayoutBuilder(
         builder: (_, BoxConstraints constraints) {
-          // //
           // if (AppAuth.user() == null) {
-          //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please login!')));
+          //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Session timed out, please login again!!!')));
           //   Navigator.pushReplacementNamed(context, Login.route);
           // }
-          // //
-          if (!constraints.isSatisfiedBy(const Size.fromRadius(150))) {
-            return const Center(child: Text('Unsupported window size!'));
-          } else {
-            if (_size.height > _size.width - 56) {
-              return const RightPanel();
-            } else {
-              return Row(children: const <Widget>[LimitedBox(maxWidth: Sizes.SIZE_MOBILE, child: LeftPanel()), Expanded(child: RightPanel())]);
-            }
-          }
+          return constraints.isSatisfiedBy(const Size.fromRadius(150))
+              ? _size.height < _size.width - 56
+                  ? Row(children: const <Widget>[
+                      LimitedBox(maxWidth: Sizes.SIZE_MOBILE, child: LeftPanel()),
+                      Expanded(child: RightPanel()),
+                    ])
+                  : const RightPanel()
+              : const Center(child: Text('Unsupported window size!'));
         },
       ),
     );

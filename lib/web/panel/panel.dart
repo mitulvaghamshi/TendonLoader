@@ -13,11 +13,11 @@ class Panel extends StatefulWidget {
 }
 
 class _PanelState extends State<Panel> with ValidateSearchMixin {
-  final TextEditingController _searchCtrl = TextEditingController();
+  final TextEditingController searchCtrl = TextEditingController();
 
   @override
   void dispose() {
-    _searchCtrl.dispose();
+    searchCtrl.dispose();
     super.dispose();
   }
 
@@ -25,7 +25,7 @@ class _PanelState extends State<Panel> with ValidateSearchMixin {
   Widget build(BuildContext context) {
     return AppFrame(
       child: Column(children: <Widget>[
-        CustomTextField(label: 'Search...', controller: _searchCtrl),
+        CustomTextField(label: 'Search...', controller: searchCtrl),
         const SizedBox(height: 10),
         widget.child,
       ]),
