@@ -37,9 +37,7 @@ class Prescription {
       dataRowHeight: 40,
       horizontalMargin: 10,
       headingRowHeight: 40,
-      headingRowColor: MaterialStateProperty.all<Color>(
-        Colors.grey.withOpacity(0.3),
-      ),
+      headingRowColor: MaterialStateProperty.all<Color>(Colors.grey.withOpacity(0.3)),
       columns: const <DataColumn>[
         DataColumn(label: Text('Last MVC')),
         DataColumn(label: Text('Target Load')),

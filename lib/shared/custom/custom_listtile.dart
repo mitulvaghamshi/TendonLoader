@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/app/home.dart';
 
 class CustomTile extends StatelessWidget {
-  const CustomTile({Key /*?*/ key, this.context, this.name, this.route, this.icon}) : super(key: key);
+  const CustomTile({Key key, this.context, this.name, this.route, this.icon}) : super(key: key);
 
-  final String /*?*/ name;
-  final String /*?*/ route;
-  final IconData /*?*/ icon;
-  final BuildContext /*?*/ context;
+  final String name;
+  final String route;
+  final IconData icon;
+  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +19,13 @@ class CustomTile extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: Text(name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
       onTap: () {
-        if (false /* Bluetooth.device == null*/) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Progressor not connected!')));
-        } else if (false /*Bluetooth.instance.waiting*/) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Too fast! device busy, try again!!!')));
-        } else {
+        if (Bluetooth.isConnected) {
           Navigator.pushNamed(context, route);
+        } else {
+          Home.of(context).connectDevice();
         }
       },
     );
   }
 }
+// ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Progressor not connected!')));

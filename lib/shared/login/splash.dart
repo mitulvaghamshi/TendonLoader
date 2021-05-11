@@ -12,7 +12,9 @@ class Splash extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
       future: AppAuth.init(),
-      builder: (_, AsyncSnapshot<void> snapshot) => snapshot.connectionState == ConnectionState.done ? const Login() : const CustomImage(),
+      builder: (_, AsyncSnapshot<void> snapshot) {
+        return snapshot.connectionState == ConnectionState.done ? const Login() : const CustomImage();
+      },
     );
   }
 }

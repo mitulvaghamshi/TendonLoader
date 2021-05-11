@@ -1,4 +1,17 @@
-import 'package:tendon_loader/libs.dart';
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tendon_loader/app/custom/countdown.dart';
+import 'package:tendon_loader/app/custom/custom_controls.dart';
+import 'package:tendon_loader/app/custom/custom_graph.dart';
+import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/shared/common.dart';
+import 'package:tendon_loader/shared/constants.dart';
+import 'package:tendon_loader/shared/custom/custom_frame.dart';
+import 'package:tendon_loader/shared/extensions.dart';
+import 'package:tendon_loader/shared/modal/chartdata.dart';
+import 'package:tendon_loader/shared/modal/data_handler.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key key}) : super(key: key);
@@ -11,6 +24,7 @@ class _BarGraphState extends State<BarGraph> {
   final List<ChartData> _graphData = <ChartData>[];
   final List<ChartData> _dataList = <ChartData>[];
   final DataHandler _handler = DataHandler();
+  
   ChartSeriesController _graphCtrl;
   bool _isRunning = false;
   double _minTime = 0;
@@ -70,10 +84,7 @@ class _BarGraphState extends State<BarGraph> {
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               _graphData.insert(0, snapshot.data);
               _graphCtrl?.updateDataSource(updatedDataIndex: 0);
-              return Text(
-                snapshot.data.time.toTime,
-                style: tsBold28.copyWith(color: Colors.green),
-              );
+              return Text(snapshot.data.time.toTime, style: tsBold26.copyWith(color: Colors.green));
             },
           ),
           CustomGraph(graphData: _graphData, graphCtrl: (ChartSeriesController ctrl) => _graphCtrl = ctrl),

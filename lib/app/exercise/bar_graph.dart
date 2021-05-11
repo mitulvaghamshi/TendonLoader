@@ -1,4 +1,21 @@
-import 'package:tendon_loader/libs.dart';
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tendon_loader/app/custom/confirm_dialod.dart';
+import 'package:tendon_loader/app/custom/countdown.dart';
+import 'package:tendon_loader/app/custom/custom_controls.dart';
+import 'package:tendon_loader/app/custom/custom_graph.dart';
+import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/shared/common.dart';
+import 'package:tendon_loader/shared/constants.dart';
+import 'package:tendon_loader/shared/custom/custom_frame.dart';
+import 'package:tendon_loader/shared/extensions.dart';
+import 'package:tendon_loader/shared/modal/chartdata.dart';
+import 'package:tendon_loader/shared/modal/data_handler.dart';
+import 'package:tendon_loader/shared/modal/prescription.dart';
+import 'package:tendon_loader/shared/modal/session_info.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key key, @required this.prescription}) : super(key: key);
@@ -10,41 +27,45 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
+  final StreamController<double> _timeCtrl = StreamController<double>();
   final List<ChartData> _graphData = <ChartData>[];
   final List<ChartData> _dataList = <ChartData>[];
   final DataHandler _handler = DataHandler();
+
   ChartSeriesController _graphCtrl;
-  List<ChartData> _lineData;
-  double _minTime = 0;
-  double _minSec = 0;
+  DateTime _dateTime;
+
   double _targetLoad = 0;
-  bool _isComplete = false;
-  bool _isRunning = false;
-  bool _hasData = false;
-  bool _isRest = false;
-  bool _isHold = true;
   int _currentSet = 1;
   int _currentRep = 1;
   int _holdTime = 0;
   int _restTime = 0;
-  DateTime _dateTime;
 
-  String get _lapTime => _isRunning && !_isRest
+  bool _isComplete = false;
+  bool _isRunning = false;
+  bool _isSetRest = false;
+  bool _hasData = false;
+  bool _isHold = true;
+
+  double _minTime = 0;
+  int _minSec = 0;
+
+  String get _lapTime => _isRunning
       ? _isHold
           ? 'Hold for: ${_holdTime--} s'
           : 'Rest for: ${_restTime--} s'
       : '...';
 
   String get _progress =>
-      'Set: $_currentSet of ${widget.prescription.sets}  |  Rep: $_currentRep of ${widget.prescription.reps}';
+      'Set: $_currentSet of ${widget.prescription.sets} ● Rep: $_currentRep of ${widget.prescription.reps}';
 
   Future<void> _start() async {
-    if (_isRest && _isRunning) {
-      _isRest = false;
+    if (_isSetRest && _isRunning) {
+      _isSetRest = false;
     } else if (!_isRunning && _hasData) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: const Text('Submit old data?'),
-        action: SnackBarAction(label: 'Show Me!', onPressed: _handleExport, textColor: Theme.of(context).primaryColor),
+        action: SnackBarAction(label: 'Show Me!', onPressed: _onExit, textColor: Theme.of(context).primaryColor),
       ));
     } else if (await CountDown.start(context) ?? false) {
       await Bluetooth.startWeightMeas();
@@ -52,6 +73,7 @@ class _BarGraphState extends State<BarGraph> {
       _isComplete = false;
       _isRunning = true;
       _hasData = true;
+      _isSetRest = false;
     }
   }
 
@@ -59,33 +81,33 @@ class _BarGraphState extends State<BarGraph> {
     if (_isRunning) {
       _isRunning = false;
       await Bluetooth.stopWeightMeas();
-      _handler.sink.add(ChartData());
+      _handler.clear();
+      _timeCtrl.sink.add(0);
       _holdTime = widget.prescription.holdTime;
       _restTime = widget.prescription.restTime;
       _currentRep = _currentSet = 1;
       _isHold = true;
-      _isRest = false;
       _minTime = 0;
-      _graphData.insert(0, ChartData());
-      _graphCtrl.updateDataSource(updatedDataIndex: 0);
+      _minSec = 0;
     }
   }
 
-  Future<void> _rest() async {
-    Future<void>.delayed(Duration.zero, () async {
-      if (await CountDown.start(context, duration: const Duration(seconds: 5), title: 'SET OVER!\nREST!') ?? false)
-        await _start();
-    });
+  Future<void> _setRest() async {
+    final bool result = await CountDown.start(
+      context,
+      title: 'SET OVER!\nREST!',
+      duration: const Duration(seconds: 5),
+    );
+    if (result ?? false) await _start();
   }
 
-  void stop() => _isRest = true;
+  void stop() => _isSetRest = true;
 
-  void _update() {
-    if (_holdTime == 0) {
+  void _updateCounters() {
+    if (_isHold && _holdTime == 0) {
       _isHold = false;
       _holdTime = widget.prescription.holdTime;
-    }
-    if (_restTime == 0) {
+    } else if (!_isHold && _restTime == 0) {
       _isHold = true;
       _restTime = widget.prescription.restTime;
       if (_currentRep == widget.prescription.reps) {
@@ -93,10 +115,10 @@ class _BarGraphState extends State<BarGraph> {
           _isComplete = true;
           _reset();
         } else {
+          _setRest();
           _currentSet++;
           _currentRep = 1;
-          _isRest = true;
-          _rest();
+          _isSetRest = true;
         }
       } else {
         _currentRep++;
@@ -104,7 +126,7 @@ class _BarGraphState extends State<BarGraph> {
     }
   }
 
-  Future<bool> _handleExport() async {
+  Future<bool> _onExit() async {
     if (_isRunning) await _reset();
     if (!_hasData) return true;
     final bool result = await ConfirmDialog.export(
@@ -134,9 +156,11 @@ class _BarGraphState extends State<BarGraph> {
           _minTime = time;
           final ChartData element = ChartData(load: weight, time: time);
           _dataList.add(element);
-          if (time.truncate() > _minSec) {
-            _minSec = time;
-            _handler.sink.add(element);
+          _handler.sink.add(element);
+          if (!_isSetRest && time.truncate() > _minSec) {
+            _minSec = time.truncate();
+            _timeCtrl.sink.add(time);
+            _updateCounters();
           }
         }
       }
@@ -150,59 +174,53 @@ class _BarGraphState extends State<BarGraph> {
     _targetLoad = widget.prescription.targetLoad;
     _holdTime = widget.prescription.holdTime;
     _restTime = widget.prescription.restTime;
-    _lineData = <ChartData>[ChartData(load: _targetLoad), ChartData(time: 2, load: _targetLoad)];
   }
 
   @override
   void dispose() {
     _reset();
     _handler.dispose();
+    _timeCtrl.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      onExit: _handleExport,
+      onExit: _onExit,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
+          StreamBuilder<double>(
+            initialData: 0,
+            stream: _timeCtrl.stream,
+            builder: (_, AsyncSnapshot<double> snapshot) => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Text(snapshot.data.toTime, style: tsBold26.copyWith(color: Colors.green)),
+                Text(_lapTime, style: tsBold26.copyWith(color: Colors.red)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
           StreamBuilder<ChartData>(
             initialData: ChartData(),
             stream: _handler.stream,
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               _graphData.insert(0, snapshot.data);
               _graphCtrl?.updateDataSource(updatedDataIndex: 0);
-              if (!_isRest && _isRunning) _update();
-              return Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Text(snapshot.data.time.toTime, style: tsBold28.copyWith(color: Colors.green)),
-                      Text(_lapTime, style: tsBold28.copyWith(color: Colors.red)),
-                    ],
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.symmetric(vertical: 16),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Text(_progress, style: tsBold28.copyWith(color: Colors.black, letterSpacing: -1)),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: snapshot.data.load >= _targetLoad ? Colors.green : Colors.yellow[200],
-                    ),
-                  ),
-                ],
+              return Chip(
+                padding: const EdgeInsets.all(10),
+                label: Text(_progress, style: tsBold26.copyWith(color: Colors.black)),
+                backgroundColor: snapshot.data.load > _targetLoad ? Colors.green : Colors.yellow[200],
               );
             },
           ),
           CustomGraph(
-            lineData: _lineData,
             graphData: _graphData,
             graphCtrl: (ChartSeriesController ctrl) => _graphCtrl = ctrl,
+            lineData: <ChartData>[ChartData(load: _targetLoad), ChartData(time: 2, load: _targetLoad)],
           ),
-          const SizedBox(height: 30),
           GraphControls(start: _start, stop: stop, reset: _reset),
         ],
       ),

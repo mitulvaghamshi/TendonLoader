@@ -17,7 +17,7 @@ class NewExercise extends StatefulWidget {
 }
 
 class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixin {
-  final GlobalKey<FormState> _exerciseFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _ctrlSets = TextEditingController();
   final TextEditingController _ctrlReps = TextEditingController();
   final TextEditingController _ctrlHoldTime = TextEditingController();
@@ -35,21 +35,22 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
   }
 
   Future<void> _submit() async {
-    if (/*_exerciseFormKey.currentState.validate()*/ true) {
-      await Navigator.of(context).pushReplacementNamed(
+    if (_formKey.currentState.validate()) {
+      await Navigator.pushReplacementNamed(
+        context,
         ExerciseMode.route,
-        arguments: Prescription(targetLoad: 5, sets: 2, reps: 2, holdTime: 5, restTime: 3),
+        arguments: Prescription(
+          sets: int.tryParse(_ctrlSets.text),
+          reps: int.tryParse(_ctrlReps.text),
+          holdTime: int.tryParse(_ctrlHoldTime.text),
+          restTime: int.tryParse(_ctrlRestTime.text),
+          targetLoad: double.tryParse(_ctrlTargetLoad.text),
+        ),
       );
     }
   }
 
-  // Prescription(
-  //   sets: int.tryParse(_ctrlSets.text),
-  //   reps: int.tryParse(_ctrlReps.text),
-  //   holdTime: int.tryParse(_ctrlHoldTime.text),
-  //   restTime: int.tryParse(_ctrlRestTime.text),
-  //   targetLoad: double.tryParse(_ctrlTargetLoad.text),
-  // ),
+  // Prescription(targetLoad: 5, sets: 2, reps: 2, holdTime: 5, restTime: 3),
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +59,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
       body: AppFrame(
         isScrollable: true,
         child: Form(
-          key: _exerciseFormKey,
+          key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -76,19 +77,19 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
                 keyboardType: TextInputType.number,
               ),
               CustomTextField(
+                isPicker: true,
                 label: 'Hold time',
                 hint: 'Select hold time (sec)',
                 desc: 'Amount of time you can keep holding at target load',
-                isPicker: true,
                 controller: _ctrlHoldTime,
                 validator: validateHoldTime,
                 keyboardType: TextInputType.number,
               ),
               CustomTextField(
+                isPicker: true,
                 label: 'Rest time',
                 hint: 'Select rest time (sec)',
                 desc: 'Amount of time you can rest after every rep',
-                isPicker: true,
                 controller: _ctrlRestTime,
                 validator: validateRestTime,
                 keyboardType: TextInputType.number,
@@ -113,12 +114,18 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
               const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <CustomButton>[
-                  CustomButton(text: 'Submit', background: Colors.blue, color: Colors.white, icon: Icons.done_rounded, onPressed: _submit),
+                children: <Widget>[
                   CustomButton(
                     text: 'Clear all',
                     icon: Icons.clear_rounded,
-                    onPressed: () => _exerciseFormKey.currentState.reset(),
+                    onPressed: () => _formKey.currentState.reset(),
+                  ),
+                  CustomButton(
+                    text: 'Submit',
+                    onPressed: _submit,
+                    color: Colors.white,
+                    background: Colors.blue,
+                    icon: Icons.done_rounded,
                   ),
                 ],
               ),

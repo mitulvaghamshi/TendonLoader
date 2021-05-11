@@ -11,15 +11,11 @@ class StartScanTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const CustomImage(name: Images.IMG_ENABLE_DEVICE),
-        const Text(Descriptions.DESC_ENABLE_DEVICE, textAlign: TextAlign.center),
-        const SizedBox(height: 30),
-        CustomButton(
-          text: 'Scan',
-          icon: Icons.search_rounded,
-          onPressed: Bluetooth.startScan,
-        ),
+      children: const <Widget>[
+        CustomImage(name: Images.IMG_ENABLE_DEVICE),
+        Text(Descriptions.DESC_ENABLE_DEVICE, textAlign: TextAlign.center),
+        SizedBox(height: 30),
+        CustomButton(text: 'Scan', icon: Icons.search_rounded, onPressed: Bluetooth.startScan),
       ],
     );
   }

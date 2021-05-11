@@ -18,7 +18,12 @@ class ExportButton extends StatelessWidget {
           barrierDismissible: true,
           barrierColor: Theme.of(context).primaryColor,
           builder: (BuildContext context) {
-            return Row(children: const <Widget>[CircularProgressIndicator(), Text('Please wait...', style: TextStyle(fontSize: 20))]);
+            return Row(
+              children: const <Widget>[
+                CircularProgressIndicator(),
+                Text('Please wait...', style: TextStyle(fontSize: 20))
+              ],
+            );
           },
         );
       },

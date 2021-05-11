@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/shared/login/login.dart';
 
 class AppAuth {
-  static void customSnackBar(BuildContext context, String content) {
+  static void _showSnackBar(BuildContext context, String content) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(content)));
   }
 
@@ -24,16 +24,17 @@ class AppAuth {
     final FirebaseAuth auth = FirebaseAuth.instance;
     User user;
     try {
-      final UserCredential userCredential = await auth.createUserWithEmailAndPassword(email: username, password: password);
+      final UserCredential userCredential =
+          await auth.createUserWithEmailAndPassword(email: username, password: password);
       user = userCredential.user;
       await user.updateProfile(displayName: name);
       await user.reload();
       user = auth.currentUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        customSnackBar(context, 'The password is too weak.');
+        _showSnackBar(context, 'The password is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        customSnackBar(context, 'The account already exists for that email.');
+        _showSnackBar(context, 'The account already exists for that email.');
       }
     }
     return user;
@@ -47,9 +48,9 @@ class AppAuth {
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        customSnackBar(context, 'No user found for that email. Make sure you enter right credentials.');
+        _showSnackBar(context, 'No user found for that email. Make sure you enter right credentials.');
       } else if (e.code == 'wrong-password') {
-        customSnackBar(context, 'Invalid password.');
+        _showSnackBar(context, 'Invalid password.');
       }
     }
     return user;
@@ -68,7 +69,7 @@ class AppAuth {
       await FirebaseAuth.instance.signOut();
       if (context != null) await Navigator.pushReplacementNamed(context, Login.route);
     } catch (e) {
-      print('Error signing out. Try again.');
+      _showSnackBar(context, 'Error signing out. Try again.');
     }
   }
 

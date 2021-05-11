@@ -1,4 +1,20 @@
-import 'package:tendon_loader/libs.dart';
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tendon_loader/app/custom/confirm_dialod.dart';
+import 'package:tendon_loader/app/custom/countdown.dart';
+import 'package:tendon_loader/app/custom/custom_controls.dart';
+import 'package:tendon_loader/app/custom/custom_graph.dart';
+import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/shared/common.dart';
+import 'package:tendon_loader/shared/constants.dart';
+import 'package:tendon_loader/shared/custom/custom_frame.dart';
+import 'package:tendon_loader/shared/extensions.dart';
+import 'package:tendon_loader/shared/modal/chartdata.dart';
+import 'package:tendon_loader/shared/modal/data_handler.dart';
+import 'package:tendon_loader/shared/modal/session_info.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key key}) : super(key: key);
@@ -12,14 +28,17 @@ class _BarGraphState extends State<BarGraph> {
   final List<ChartData> _graphData = <ChartData>[];
   final List<ChartData> _dataList = <ChartData>[];
   final DataHandler _handler = DataHandler();
+
   ChartSeriesController _graphCtrl;
   ChartSeriesController _lineCtrl;
-  double _minTime = 0;
-  double _minLoad = 0;
+  DateTime _dateTime;
+
   bool _isComplete = false;
   bool _isRunning = false;
   bool _hasData = false;
-  DateTime _dateTime;
+
+  double _minTime = 0;
+  double _minLoad = 0;
 
   Future<void> _start() async {
     if (!_isRunning && _hasData) {
@@ -128,9 +147,9 @@ class _BarGraphState extends State<BarGraph> {
               _graphCtrl?.updateDataSource(updatedDataIndex: 0);
               return Column(
                 children: <Widget>[
-                  Text('MVC: ${_minLoad.toStringAsFixed(2)} Kg', style: tsBold28),
+                  Text('MVC: ${_minLoad.toStringAsFixed(2)} Kg', style: tsBold26),
                   const SizedBox(height: 16),
-                  Text(snapshot.data.time.toRemaining, style: tsBold28.copyWith(color: Colors.red)),
+                  Text(snapshot.data.time.toRemaining, style: tsBold26.copyWith(color: Colors.red)),
                 ],
               );
             },

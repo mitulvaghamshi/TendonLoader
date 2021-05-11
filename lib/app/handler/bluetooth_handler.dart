@@ -5,7 +5,6 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/shared/constants.dart';
 
 mixin Bluetooth {
-  static bool isBusy = false;
   static bool isConnected = false;
 
   static BluetoothDevice _device;
@@ -14,37 +13,30 @@ mixin Bluetooth {
 
   static String get deviceName => isConnected ? _device.name ?? _device.id.toString() : 'Device Not Connected!';
 
-  static Future<void> enable() async {
-    await AppSettings.openBluetoothSettings();
-  }
+  static Future<void> enable() async => AppSettings.openBluetoothSettings();
 
   static void listen(void Function(List<int>) listener) {
     if (isConnected) _dataChar.value.listen(listener);
   }
 
-  static Future<void> stopNotify() async {
-    if (isConnected) await _dataChar.setNotifyValue(false);
+  static Future<void> notify(bool value) async {
+    if (isConnected) await _dataChar.setNotifyValue(value);
   }
 
-  static Future<void> startNotify() async {
-    if (isConnected) await _dataChar.setNotifyValue(true);
-  }
+  static Future<void> startWeightMeas() async => _write(Progressor.CMD_START_WEIGHT_MEAS);
 
-  static Future<void> startWeightMeas() async {
-    await _write(Progressor.CMD_START_WEIGHT_MEAS);
-  }
+  static Future<void> stopWeightMeas() async => _write(Progressor.CMD_STOP_WEIGHT_MEAS);
 
-  static Future<void> stopWeightMeas() async {
-    await _write(Progressor.CMD_STOP_WEIGHT_MEAS);
-  }
+  static Future<void> sleep() async => _write(Progressor.CMD_ENTER_SLEEP);
 
-  static Future<void> sleep() async {
-    await _write(Progressor.CMD_ENTER_SLEEP);
+  static Future<void> _write(int command) async {
+    if (isConnected) {
+      Future<void>.delayed(const Duration(milliseconds: 20), () async => _controlChar.write(<int>[command]));
+    }
   }
 
   static Future<void> connect(BluetoothDevice device) async {
-    _device = device;
-    await _device.connect(autoConnect: false);
+    await (_device = device).connect(autoConnect: false);
     await _getProps();
   }
 
@@ -61,21 +53,13 @@ mixin Bluetooth {
     );
   }
 
-  static Future<void> stopScan() async {
-    await FlutterBlue.instance.stopScan();
-  }
+  static Future<void> stopScan() async => FlutterBlue.instance.stopScan();
+
+  static Future<void> refresh() async => (await FlutterBlue.instance.connectedDevices).forEach(_reConnect);
 
   static Future<void> _reConnect(BluetoothDevice device) async {
     await disconnect(device);
     await connect(device);
-  }
-
-  static Future<void> refresh() async => (await FlutterBlue.instance.connectedDevices).forEach(_reConnect);
-
-  static Future<void> _write(int command) async {
-    Future<void>.delayed(const Duration(milliseconds: 50), () async {
-      if (isConnected) await _controlChar.write(<int>[command]);
-    });
   }
 
   static Future<void> _getProps() async {
@@ -86,6 +70,6 @@ mixin Bluetooth {
     _dataChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
     _controlChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.CONTROL_POINT_UUID));
     isConnected = _dataChar != null && _controlChar != null;
-    await startNotify();
+    await notify(true);
   }
 }

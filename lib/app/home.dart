@@ -18,6 +18,8 @@ class Home extends StatefulWidget {
 
   @override
   _HomeState createState() => _HomeState();
+
+  static _HomeState of(BuildContext context) => context.findAncestorStateOfType<_HomeState>();
 }
 
 enum ActionType { settings, export, about, close }
@@ -45,12 +47,14 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     switch (state) {
       case AppLifecycleState.resumed:
         Locator.check();
+        Bluetooth.notify(true);
         break;
       case AppLifecycleState.inactive:
         break;
       case AppLifecycleState.paused:
         break;
       case AppLifecycleState.detached:
+        Bluetooth.notify(false);
         break;
     }
   }
@@ -75,10 +79,24 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     );
   }
 
+  void connectDevice() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        scrollable: true,
+        content: const ConnectedDevices(),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
+      ),
+    );
+  }
+
   Future<void> _onSelected(ActionType type) async {
     switch (type) {
       case ActionType.about:
-        return _aboutDialog();
+        // return _aboutDialog();
+        break;
       case ActionType.export:
         break;
       case ActionType.close:
@@ -89,7 +107,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   @override
-  Widget build(_) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(Home.name),
@@ -111,30 +129,31 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         child: Column(
           children: <Widget>[
             const CustomImage(isLogo: true),
-            CustomTile(context: context, name: LiveData.name, route: LiveData.route, icon: Icons.show_chart_rounded),
             CustomTile(
-                context: context, name: NewExercise.name, route: NewExercise.route, icon: Icons.directions_run_rounded),
+              context: context,
+              name: LiveData.name,
+              route: LiveData.route,
+              icon: Icons.show_chart_rounded,
+            ),
             CustomTile(
-                context: context,
-                name: MVCTesting.name,
-                route: MVCTesting.route,
-                icon: Icons.airline_seat_legroom_extra),
+              context: context,
+              name: NewExercise.name,
+              route: NewExercise.route,
+              icon: Icons.directions_run_rounded,
+            ),
+            CustomTile(
+              context: context,
+              name: MVCTesting.name,
+              route: MVCTesting.route,
+              icon: Icons.airline_seat_legroom_extra,
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        onPressed: connectDevice,
         label: const Text('Connect Device'),
         icon: const Icon(Icons.bluetooth_rounded),
-        onPressed: () => showDialog<void>(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => AlertDialog(
-            scrollable: true,
-            content: const ConnectedDevices(),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
-          ),
-        ),
       ),
     );
   }

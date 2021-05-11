@@ -1,4 +1,9 @@
-import 'package:tendon_loader/libs.dart';
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:tendon_loader/app/handler/export_handler.dart';
+import 'package:tendon_loader/shared/modal/prescription.dart';
+import 'package:tendon_loader/shared/modal/session_info.dart';
 
 class ConfirmDialog extends StatelessWidget {
   const ConfirmDialog({Key key, this.sessionInfo, this.prescription}) : super(key: key);
