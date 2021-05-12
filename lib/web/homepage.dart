@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/shared/app_auth.dart';
 import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_button.dart';
+import 'package:tendon_loader/web/line_graph.dart';
 import 'package:tendon_loader/web/panel/left_panel.dart';
-import 'package:tendon_loader/web/panel/right_panel.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
@@ -30,9 +30,9 @@ class HomePage extends StatelessWidget {
               ? _size.height < _size.width - 56
                   ? Row(children: const <Widget>[
                       LimitedBox(maxWidth: Sizes.SIZE_MOBILE, child: LeftPanel()),
-                      Expanded(child: RightPanel()),
+                      Expanded(child: LineGraph()),
                     ])
-                  : const RightPanel()
+                  : const LineGraph()
               : const Center(child: Text('Unsupported window size!'));
         },
       ),

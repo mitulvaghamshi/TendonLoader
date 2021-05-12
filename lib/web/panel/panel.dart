@@ -25,8 +25,8 @@ class _PanelState extends State<Panel> with ValidateSearchMixin {
   Widget build(BuildContext context) {
     return AppFrame(
       child: Column(children: <Widget>[
-        CustomTextField(label: 'Search...', controller: searchCtrl),
-        const SizedBox(height: 10),
+        // CustomTextField(label: 'Search...', controller: searchCtrl),
+        // const SizedBox(height: 10),
         widget.child,
       ]),
     );
