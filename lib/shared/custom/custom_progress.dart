@@ -5,13 +5,9 @@ class CustomProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const <Widget>[
-        CircularProgressIndicator(),
-        SizedBox(width: 30),
-        Text('Please wait...', style: TextStyle(fontSize: 20, fontFamily: 'Georgia')),
-      ],
+    return const ListTile(
+      leading: CircularProgressIndicator(),
+      title: Text('Please wait...', style: TextStyle(fontSize: 20, fontFamily: 'Georgia')),
     );
   }
 }

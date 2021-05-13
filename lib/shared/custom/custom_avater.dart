@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TextAvatar extends StatelessWidget {
-  const TextAvatar(this.text, {Key key, this.color}) : super(key: key);
+class CustomAvatar extends StatelessWidget {
+  const CustomAvatar(this.text, {Key key, this.color}) : super(key: key);
 
   final String text;
   final Color color;

@@ -8,23 +8,22 @@ import 'package:tendon_loader/app/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/shared/app_auth.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/custom/custom_image.dart';
-import 'package:tendon_loader/shared/custom/custom_listtile.dart';
+import 'package:tendon_loader/app/custom/custom_listtile.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key key}) : super(key: key);
+class AppHome extends StatefulWidget {
+  const AppHome({Key key}) : super(key: key);
 
   static const String name = 'Tendon Loader';
-  static const String route = '/home';
 
   @override
-  _HomeState createState() => _HomeState();
+  _AppHomeState createState() => _AppHomeState();
 
-  static _HomeState of(BuildContext context) => context.findAncestorStateOfType<_HomeState>();
+  static _AppHomeState of(BuildContext context) => context.findAncestorStateOfType<_AppHomeState>();
 }
 
 enum ActionType { settings, export, about, close }
 
-class _HomeState extends State<Home> with WidgetsBindingObserver {
+class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -63,7 +62,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     showAboutDialog(
       context: context,
       applicationVersion: 'v1.0',
-      applicationName: Home.name,
+      applicationName: AppHome.name,
       applicationLegalese: 'Application Legalese',
       applicationIcon: const CustomImage(radius: 50),
       children: <Widget>[
@@ -110,7 +109,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(Home.name),
+        title: const Text(AppHome.name),
         actions: <Widget>[
           PopupMenuButton<ActionType>(
             onSelected: _onSelected,

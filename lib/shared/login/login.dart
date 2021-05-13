@@ -2,19 +2,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:tendon_loader/app/home.dart';
+import 'package:tendon_loader/app/custom/custom_textfield.dart';
 import 'package:tendon_loader/shared/app_auth.dart';
 import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/custom/custom_image.dart';
-import 'package:tendon_loader/shared/custom/custom_textfield.dart';
 import 'package:tendon_loader/shared/validator.dart';
-import 'package:tendon_loader/web/homepage.dart';
 
 class Login extends StatefulWidget {
   const Login({Key key}) : super(key: key);
 
   static const String route = '/login';
+  static const String home = '/home';
 
   @override
   _LoginState createState() => _LoginState();
@@ -67,7 +66,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
       _busy = false;
       if (_user != null) {
         await _setLoginInfo();
-        await Navigator.pushReplacementNamed(context, kIsWeb ? HomePage.route : Home.route);
+        await Navigator.pushReplacementNamed(context, Login.home);
       } else {
         await _animCtrl.reverse();
       }
@@ -95,7 +94,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Tendon Loader - ${_createNew ? 'Register' : 'Login'}')),
-      body: kIsWeb ? Center(child: SizedBox(width: Sizes.SIZE_MOBILE, child: _buildLoginBody())) : _buildLoginBody(),
+      body:
+          kIsWeb ? Center(child: SizedBox(width: Sizes.SIZE_LEFT_PANEL, child: _buildLoginBody())) : _buildLoginBody(),
     );
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
-import 'package:tendon_loader/app/home.dart';
+import 'package:tendon_loader/app/apphome.dart';
 
 class CustomTile extends StatelessWidget {
   const CustomTile({Key key, this.context, this.name, this.route, this.icon}) : super(key: key);
@@ -22,7 +22,7 @@ class CustomTile extends StatelessWidget {
         if (Bluetooth.isConnected) {
           Navigator.pushNamed(context, route);
         } else {
-          Home.of(context).connectDevice();
+          AppHome.of(context).connectDevice();
         }
       },
     );

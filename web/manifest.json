@@ -3,11 +3,10 @@
     "short_name": "TendonLoader",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
+    "background_color": "black",
+    "theme_color": "black",
     "description": "Tendon Loader",
     "orientation": "portrait-primary",
-    "prefer_related_applications": false,
     "icons": [
         {
             "src": "icons/Icon-192.png",

@@ -10,27 +10,19 @@ class CustomButton extends StatelessWidget {
     this.onPressed,
     this.text = 'Click',
     this.withText = true,
-    this.simple = false,
   }) : super(key: key);
 
   final String text;
   final Color color;
   final double iSize;
   final IconData icon;
-  final bool simple;
   final bool withText;
   final Color background;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    if (simple) {
-      return TextButton.icon(
-        onPressed: onPressed,
-        icon: Icon(icon, size: iSize, color: color ?? Theme.of(context).accentColor),
-        label: Text(text, style: TextStyle(color: color ?? Theme.of(context).accentColor)),
-      );
-    } else if (withText) {
+    if (withText) {
       return TextButton.icon(
         onPressed: onPressed,
         icon: Icon(icon, size: iSize, color: color ?? Theme.of(context).accentColor),

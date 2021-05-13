@@ -8,16 +8,21 @@ import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/web/handler/item_click_controller.dart';
 import 'package:tendon_loader/web/handler/item_click_handler.dart';
 
-class LineGraph extends StatefulWidget {
-  const LineGraph({Key key}) : super(key: key);
+class RightPanel extends StatefulWidget {
+  const RightPanel({Key key}) : super(key: key);
 
   @override
-  _LineGraphState createState() => _LineGraphState();
+  _RightPanelState createState() => _RightPanelState();
 }
 
-class _LineGraphState extends State<LineGraph> {
+class _RightPanelState extends State<RightPanel> {
   final ScrollController _scrollController = ScrollController();
-  final TextStyle ts14 = const TextStyle(fontSize: 14);
+  final TextStyle ts14 = const TextStyle(
+    fontSize: 16,
+    wordSpacing: 20,
+    letterSpacing: 1.5,
+    fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,7 @@ class _LineGraphState extends State<LineGraph> {
       child: StreamBuilder<ItemClickHandler>(
         stream: ItemClickController.stream,
         builder: (_, AsyncSnapshot<ItemClickHandler> snapshot) {
-          if (!snapshot.hasData) return const Expanded(child: Center(child: CustomImage(isBg: true)));
+          if (!snapshot.hasData) return const Center(child: CustomImage(isBg: true));
           return Row(
             children: <Widget>[
               Expanded(
@@ -102,23 +107,38 @@ class _LineGraphState extends State<LineGraph> {
               if (snapshot.data.prescription != null)
                 LimitedBox(
                   maxWidth: 200,
-                  child: Scrollbar(
-                    thickness: 15,
-                    isAlwaysShown: true,
-                    controller: _scrollController,
-                    child: ListView.builder(
-                      itemExtent: 50,
-                      controller: _scrollController,
-                      itemCount: snapshot.data.dataList.length,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      itemBuilder: (_, int index) => ListTile(
-                        leading: Text('${index + 1})', style: ts14),
-                        title: Text('${snapshot.data.dataList[index].time}', style: ts14),
-                        trailing: Text('${snapshot.data.dataList[index].load}', style: ts14),
-                        tileColor: index.isEven ? Colors.grey.withOpacity(0.3) : null,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        'No. Time Load',
+                        style: TextStyle(fontStyle: FontStyle.italic, fontSize: 20, wordSpacing: 20),
                       ),
-                    ),
+                      const Divider(color: Colors.black, thickness: 3),
+                      Expanded(
+                        child: Scrollbar(
+                          thickness: 15,
+                          isAlwaysShown: true,
+                          controller: _scrollController,
+                          child: ListView.separated(
+                            separatorBuilder: (_, int index) => Divider(
+                              color: index % 10 == 9 ? Colors.red : Colors.grey,
+                              thickness: 1,
+                            ),
+                            controller: _scrollController,
+                            itemCount: snapshot.data.dataList.length,
+                            padding: const EdgeInsets.only(right: 20),
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemBuilder: (_, int index) {
+                              final String i = '${index + 1}'.padLeft(3, '  ');
+                              final String t = snapshot.data.dataList[index].time.toStringAsFixed(1).padRight(4);
+                              final String l = snapshot.data.dataList[index].load.toStringAsFixed(2).padRight(4);
+                              return Text('$i. $t $l', style: ts14);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
             ],

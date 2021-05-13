@@ -62,14 +62,13 @@ class AppAuth {
     return auth.currentUser;
   }
 
-  static Future<void> signOut([BuildContext context]) async {
+  static Future<void> signOut() async {
     // final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
       // if (!kIsWeb) await googleSignIn.signOut();
       await FirebaseAuth.instance.signOut();
-      if (context != null) await Navigator.pushReplacementNamed(context, Login.route);
     } catch (e) {
-      _showSnackBar(context, 'Error signing out. Try again.');
+      // 
     }
   }
 

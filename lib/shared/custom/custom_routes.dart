@@ -1,22 +1,22 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app/exercise/exercise_mode.dart';
 import 'package:tendon_loader/app/exercise/new_exercise.dart';
-import 'package:tendon_loader/app/home.dart';
+import 'package:tendon_loader/app/apphome.dart';
 import 'package:tendon_loader/app/livedata/live_data.dart';
 import 'package:tendon_loader/app/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/shared/login/login.dart';
 import 'package:tendon_loader/shared/login/splash.dart';
-import 'package:tendon_loader/web/homepage.dart';
+import 'package:tendon_loader/web/webhome.dart';
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
-  Home.route: (_) => const Home(),
+  Login.home: (_) => kIsWeb ? const WebHome() : const AppHome(),
   Login.route: (_) => const Login(),
   Splash.route: (_) => const Splash(),
   LiveData.route: (_) => const LiveData(),
   MVCTesting.route: (_) => const MVCTesting(),
   NewExercise.route: (_) => const NewExercise(),
   ExerciseMode.route: (_) => const ExerciseMode(),
-  HomePage.route: (_) => const HomePage(),
 };
 
 /*

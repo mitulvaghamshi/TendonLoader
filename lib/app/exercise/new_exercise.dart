@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/app/exercise/exercise_mode.dart';
 import 'package:tendon_loader/shared/custom/custom_button.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
-import 'package:tendon_loader/shared/custom/custom_textfield.dart';
+import 'package:tendon_loader/app/custom/custom_textfield.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/validator.dart';
 
