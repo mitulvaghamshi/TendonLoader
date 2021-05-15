@@ -1,27 +1,32 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app/custom/custom_listtile.dart';
 import 'package:tendon_loader/app/handler/export_handler.dart';
-import 'package:tendon_loader/shared/modal/prescription.dart';
-import 'package:tendon_loader/shared/modal/session_info.dart';
+import 'package:tendon_loader/shared/modal/data_model.dart';
 
 class ConfirmDialog extends StatelessWidget {
-  const ConfirmDialog({Key key, this.sessionInfo, this.prescription}) : super(key: key);
+  const ConfirmDialog({Key key, this.model}) : super(key: key);
 
-  final SessionInfo sessionInfo;
-  final Prescription prescription;
+  final DataModel model;
 
-  static Future<bool> export(BuildContext context, {SessionInfo sessionInfo, Prescription prescription}) async {
+  static Future<bool> show(BuildContext context, {DataModel model}) async {
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
+        content: ConfirmDialog(model: model),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Submit data to Clinician?', textAlign: TextAlign.center),
-        content: ConfirmDialog(sessionInfo: sessionInfo, prescription: prescription),
         actions: <Widget>[TextButton(onPressed: () => Navigator.pop(context), child: const Text('Back'))],
       ),
     );
+  }
+
+  void _export(BuildContext context, [bool later = false]) {
+    ExportHandler.export(model, later);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(later ? 'Saving...' : 'Uploading...')));
+    Navigator.of(context).pop(true);
   }
 
   @override
@@ -29,34 +34,26 @@ class ConfirmDialog extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        ListTile(
-          title: const Text('Submit now'),
-          contentPadding: const EdgeInsets.symmetric(vertical: 5),
-          leading: const Icon(Icons.circle, color: Colors.green, size: 50),
-          subtitle: const Text('Send data to the cloud. Requires an active internet connection.'),
-          onTap: () {
-            ExportHandler.export(sessionInfo, prescription);
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Uploading...')));
-            Navigator.of(context).pop(true);
-          },
+        CustomTile(
+          title: 'Submit now',
+          onTap: () => _export(context),
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          icon: const Icon(Icons.circle, color: Colors.green, size: 50),
+          desc: 'Send data to the cloud. Requires an active internet connection.',
         ),
-        ListTile(
-          title: const Text('Ask me later'),
-          contentPadding: const EdgeInsets.symmetric(vertical: 5),
-          leading: const Icon(Icons.circle, color: Colors.yellow, size: 50),
-          subtitle: const Text('Save data locally on device and submit later (manual action required).'),
-          onTap: () {
-            ExportHandler.export(sessionInfo, prescription, true);
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Saving...')));
-            Navigator.of(context).pop(true);
-          },
+        CustomTile(
+          title: 'Ask me later',
+          onTap: () => _export(context, true),
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          icon: const Icon(Icons.circle, color: Colors.yellow, size: 50),
+          desc: 'Save data locally on device and submit later (manual action required).',
         ),
-        ListTile(
-          title: const Text('Discard!'),
-          contentPadding: const EdgeInsets.symmetric(vertical: 5),
-          leading: const Icon(Icons.circle, color: Colors.red, size: 50),
-          subtitle: const Text('(Attention!) Destroy data without submitting (cannot be recovered).'),
+        CustomTile(
+          title: 'Discard!',
           onTap: () => Navigator.pop<bool>(context, false),
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          icon: const Icon(Icons.circle, color: Colors.red, size: 50),
+          desc: '(Attention!) Destroy data without submitting (cannot be recovered).',
         ),
       ],
     );

@@ -6,26 +6,32 @@ import 'package:tendon_loader/shared/login/login.dart';
 
 class AppAuth {
   static void _showSnackBar(BuildContext context, String content) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(content)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(content)));
   }
 
   static Future<void> init() async {
-    return Future<void>.delayed(const Duration(seconds: 2), () async => Firebase.initializeApp());
+    return Future<void>.delayed(
+        const Duration(seconds: 2), () async => Firebase.initializeApp());
   }
 
-  static Future<User> authenticate(BuildContext context, {bool create, String name, String username, String password}) {
+  static Future<User> authenticate(BuildContext context,
+      {bool create, String name, String username, String password}) {
     if (kIsWeb) FirebaseAuth.instance.setPersistence(Persistence.NONE);
-    return create ? _signUp(context, name, username, password) : _signIn(context, username, password);
+    return create
+        ? _signUp(context, name, username, password)
+        : _signIn(context, username, password);
   }
 
   static User user() => FirebaseAuth.instance.currentUser;
 
-  static Future<User> _signUp(BuildContext context, String name, String username, String password) async {
+  static Future<User> _signUp(BuildContext context, String name,
+      String username, String password) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     User user;
     try {
-      final UserCredential userCredential =
-          await auth.createUserWithEmailAndPassword(email: username, password: password);
+      final UserCredential userCredential = await auth
+          .createUserWithEmailAndPassword(email: username, password: password);
       user = userCredential.user;
       await user.updateProfile(displayName: name);
       await user.reload();
@@ -40,15 +46,18 @@ class AppAuth {
     return user;
   }
 
-  static Future<User> _signIn(BuildContext context, String username, String password) async {
+  static Future<User> _signIn(
+      BuildContext context, String username, String password) async {
     User user;
     final FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      final UserCredential userCredential = await auth.signInWithEmailAndPassword(email: username, password: password);
+      final UserCredential userCredential = await auth
+          .signInWithEmailAndPassword(email: username, password: password);
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        _showSnackBar(context, 'No user found for that email. Make sure you enter right credentials.');
+        _showSnackBar(context,
+            'No user found for that email. Make sure you enter right credentials.');
       } else if (e.code == 'wrong-password') {
         _showSnackBar(context, 'Invalid password.');
       }
@@ -68,7 +77,7 @@ class AppAuth {
       // if (!kIsWeb) await googleSignIn.signOut();
       await FirebaseAuth.instance.signOut();
     } catch (e) {
-      // 
+      //
     }
   }
 

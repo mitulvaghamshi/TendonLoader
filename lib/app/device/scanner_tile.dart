@@ -11,7 +11,8 @@ class ScannerTile extends StatelessWidget {
     return StreamBuilder<bool>(
       initialData: false,
       stream: FlutterBlue.instance.isScanning,
-      builder: (_, AsyncSnapshot<bool> snapshot) => snapshot.data ? const StopScanTile() : const StartScanTile(),
+      builder: (_, AsyncSnapshot<bool> snapshot) =>
+          snapshot.data ? const StopScanTile() : const StartScanTile(),
     );
   }
 }

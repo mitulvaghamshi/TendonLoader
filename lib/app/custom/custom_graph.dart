@@ -20,7 +20,7 @@ class CustomGraph extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 30),
+        padding: const EdgeInsets.only(top: 20, bottom: 20),
         child: SfCartesianChart(
           plotAreaBorderWidth: 0,
           primaryXAxis: lineData != null

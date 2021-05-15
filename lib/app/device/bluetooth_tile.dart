@@ -12,7 +12,9 @@ class BluetoothTile extends StatelessWidget {
       initialData: BluetoothState.unknown,
       stream: FlutterBlue.instance.state,
       builder: (_, AsyncSnapshot<BluetoothState> snapshot) {
-        return snapshot.data == BluetoothState.on ? const LocationTile() : const EnableBluetoothTile();
+        return snapshot.data == BluetoothState.on
+            ? const LocationTile()
+            : const EnableBluetoothTile();
       },
     );
   }

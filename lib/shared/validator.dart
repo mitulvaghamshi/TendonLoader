@@ -1,5 +1,6 @@
 mixin ValidateCredentialMixin {
-  String validateName(String name) => name.isEmpty ? 'Name can\'t be empty!' : null;
+  String validateName(String name) =>
+      name.isEmpty ? 'Name can\'t be empty!' : null;
 
   String validateEmail(String email) {
     final RegExp _emailEx = RegExp(
@@ -13,7 +14,8 @@ mixin ValidateCredentialMixin {
   String validatePassword(String password) {
     if (password.isEmpty)
       return 'Password can\'t be empty';
-    else if (password.length < 6) return 'Password must be at least 6 characters long!';
+    else if (password.length < 6)
+      return 'Password must be at least 6 characters long!';
     return null;
   }
 }
@@ -22,7 +24,8 @@ mixin ValidateExerciseDataMixin {
   String validateTargetLoad(String targetLoad) {
     if (targetLoad.isEmpty)
       return 'Target load can\'t be empty!';
-    else if (int.parse(targetLoad) < 0) return 'Target load can\'t be negative!';
+    else if (int.parse(targetLoad) < 0)
+      return 'Target load can\'t be negative!';
     return null;
   }
 

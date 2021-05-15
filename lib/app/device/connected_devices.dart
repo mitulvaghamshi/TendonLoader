@@ -10,9 +10,12 @@ class ConnectedDevices extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<List<BluetoothDevice>>(
       initialData: const <BluetoothDevice>[],
-      stream: Stream<List<BluetoothDevice>>.fromFuture(FlutterBlue.instance.connectedDevices),
+      stream: Stream<List<BluetoothDevice>>.fromFuture(
+          FlutterBlue.instance.connectedDevices),
       builder: (_, AsyncSnapshot<List<BluetoothDevice>> snapshot) {
-        return snapshot.data.isEmpty ? const BluetoothTile() : DeviceList(devices: snapshot.data);
+        return snapshot.data.isEmpty
+            ? const BluetoothTile()
+            : DeviceList(devices: snapshot.data);
       },
     );
   }

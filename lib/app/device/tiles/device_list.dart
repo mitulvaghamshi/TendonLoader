@@ -16,12 +16,20 @@ class DeviceList extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const Text(Descriptions.DESC_CLICK_TO_CONNECT, textAlign: TextAlign.center),
+        const Text(Descriptions.DESC_CLICK_TO_CONNECT,
+            textAlign: TextAlign.center),
         const SizedBox(height: 10),
-        if (results != null) ...results.map((ScanResult result) => DeviceTile(device: result.device)),
-        if (devices != null) ...devices.map((BluetoothDevice device) => DeviceTile(device: device)),
+        if (results != null)
+          ...results
+              .map((ScanResult result) => DeviceTile(device: result.device)),
+        if (devices != null)
+          ...devices
+              .map((BluetoothDevice device) => DeviceTile(device: device)),
         const SizedBox(height: 10),
-        CustomButton(text: 'Close', icon: Icons.cancel_rounded, onPressed: Navigator.of(context).pop),
+        CustomButton(
+            text: 'Close',
+            icon: Icons.cancel_rounded,
+            onPressed: Navigator.of(context).pop),
       ],
     );
   }

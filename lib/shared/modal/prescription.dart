@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/shared/constants.dart';
 
 class Prescription {
-  Prescription({this.sets, this.reps, this.holdTime, this.restTime, this.targetLoad});
+  Prescription(
+      {this.sets, this.reps, this.holdTime, this.restTime, this.targetLoad});
 
   Prescription.fromMap(Map<String, dynamic> map) {
     sets = int.tryParse(map[Keys.KEY_SETS].toString()) ?? 0;
@@ -37,7 +38,8 @@ class Prescription {
       dataRowHeight: 40,
       horizontalMargin: 10,
       headingRowHeight: 40,
-      headingRowColor: MaterialStateProperty.all<Color>(Colors.grey.withOpacity(0.3)),
+      headingRowColor:
+          MaterialStateProperty.all<Color>(Colors.grey.withOpacity(0.3)),
       columns: const <DataColumn>[
         DataColumn(label: Text('Last MVC')),
         DataColumn(label: Text('Target Load')),

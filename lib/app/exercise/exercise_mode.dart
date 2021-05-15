@@ -12,7 +12,9 @@ class ExerciseMode extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text(ExerciseMode.name)),
-      body: BarGraph(prescription: ModalRoute.of(context).settings.arguments as Prescription),
+      body: BarGraph(
+          prescription:
+              ModalRoute.of(context).settings.arguments as Prescription),
     );
   }
 }

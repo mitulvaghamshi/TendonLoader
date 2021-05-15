@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppFrame extends StatelessWidget {
-  const AppFrame({Key key, this.child, this.isScrollable = false, this.onExit}) : super(key: key);
+  const AppFrame({Key key, this.child, this.isScrollable = false, this.onExit})
+      : super(key: key);
 
   final Widget child;
   final bool isScrollable;
@@ -21,7 +22,9 @@ class AppFrame extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: child,
               )
-            : Padding(padding: const EdgeInsets.fromLTRB(16, 16, 16, 30), child: child),
+            : Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 30),
+                child: child),
       ),
     );
   }

@@ -11,7 +11,9 @@ mixin Bluetooth {
   static BluetoothCharacteristic _dataChar;
   static BluetoothCharacteristic _controlChar;
 
-  static String get deviceName => isConnected ? _device.name ?? _device.id.toString() : 'Device Not Connected!';
+  static String get deviceName => isConnected
+      ? _device.name ?? _device.id.toString()
+      : 'Device Not Connected!';
 
   static Future<void> enable() async => AppSettings.openBluetoothSettings();
 
@@ -23,15 +25,18 @@ mixin Bluetooth {
     if (isConnected) await _dataChar.setNotifyValue(value);
   }
 
-  static Future<void> startWeightMeas() async => _write(Progressor.CMD_START_WEIGHT_MEAS);
+  static Future<void> startWeightMeas() async =>
+      _write(Progressor.CMD_START_WEIGHT_MEAS);
 
-  static Future<void> stopWeightMeas() async => _write(Progressor.CMD_STOP_WEIGHT_MEAS);
+  static Future<void> stopWeightMeas() async =>
+      _write(Progressor.CMD_STOP_WEIGHT_MEAS);
 
   static Future<void> sleep() async => _write(Progressor.CMD_ENTER_SLEEP);
 
   static Future<void> _write(int command) async {
     if (isConnected) {
-      Future<void>.delayed(const Duration(milliseconds: 20), () async => _controlChar.write(<int>[command]));
+      Future<void>.delayed(const Duration(milliseconds: 20),
+          () async => _controlChar.write(<int>[command]));
     }
   }
 
@@ -55,7 +60,8 @@ mixin Bluetooth {
 
   static Future<void> stopScan() async => FlutterBlue.instance.stopScan();
 
-  static Future<void> refresh() async => (await FlutterBlue.instance.connectedDevices).forEach(_reConnect);
+  static Future<void> refresh() async =>
+      (await FlutterBlue.instance.connectedDevices).forEach(_reConnect);
 
   static Future<void> _reConnect(BluetoothDevice device) async {
     await disconnect(device);
@@ -64,11 +70,13 @@ mixin Bluetooth {
 
   static Future<void> _getProps() async {
     final List<BluetoothService> _services = await _device?.discoverServices();
-    final BluetoothService _service =
-        _services?.firstWhere((BluetoothService s) => s.uuid == Guid(Progressor.SERVICE_UUID));
+    final BluetoothService _service = _services?.firstWhere(
+        (BluetoothService s) => s.uuid == Guid(Progressor.SERVICE_UUID));
     final List<BluetoothCharacteristic> chars = _service?.characteristics;
-    _dataChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
-    _controlChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.CONTROL_POINT_UUID));
+    _dataChar = chars?.firstWhere((BluetoothCharacteristic c) =>
+        c.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
+    _controlChar = chars?.firstWhere((BluetoothCharacteristic c) =>
+        c.uuid == Guid(Progressor.CONTROL_POINT_UUID));
     isConnected = _dataChar != null && _controlChar != null;
     await notify(true);
   }

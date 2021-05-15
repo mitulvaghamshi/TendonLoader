@@ -16,7 +16,8 @@ class NewExercise extends StatefulWidget {
   _NewExerciseState createState() => _NewExerciseState();
 }
 
-class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixin {
+class _NewExerciseState extends State<NewExercise>
+    with ValidateExerciseDataMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _ctrlSets = TextEditingController();
   final TextEditingController _ctrlReps = TextEditingController();
@@ -55,7 +56,9 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create New Exercise', textAlign: TextAlign.center)),
+      appBar: AppBar(
+          title:
+              const Text('Create New Exercise', textAlign: TextAlign.center)),
       body: AppFrame(
         isScrollable: true,
         child: Form(
@@ -66,7 +69,10 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
               const Text(
                 'Please enter your\nexercise prescriptions',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 26, fontFamily: 'Georgia', fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 26,
+                    fontFamily: 'Georgia',
+                    fontWeight: FontWeight.bold),
               ),
               CustomTextField(
                 label: 'Target Load',

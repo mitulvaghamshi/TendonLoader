@@ -15,7 +15,10 @@ class StartScanTile extends StatelessWidget {
         CustomImage(name: Images.IMG_ENABLE_DEVICE),
         Text(Descriptions.DESC_ENABLE_DEVICE, textAlign: TextAlign.center),
         SizedBox(height: 30),
-        CustomButton(text: 'Scan', icon: Icons.search_rounded, onPressed: Bluetooth.startScan),
+        CustomButton(
+            text: 'Scan',
+            icon: Icons.search_rounded,
+            onPressed: Bluetooth.startScan),
       ],
     );
   }

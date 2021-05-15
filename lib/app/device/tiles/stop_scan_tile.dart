@@ -13,7 +13,10 @@ class StopScanTile extends StatelessWidget {
       children: const <Widget>[
         CustomProgress(),
         SizedBox(height: 30),
-        CustomButton(text: 'Stop', icon: Icons.close_rounded, onPressed: Bluetooth.stopScan),
+        CustomButton(
+            text: 'Stop',
+            icon: Icons.close_rounded,
+            onPressed: Bluetooth.stopScan),
       ],
     );
   }

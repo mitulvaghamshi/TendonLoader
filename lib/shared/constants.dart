@@ -54,17 +54,22 @@ mixin Descriptions {
   static const String DESC_CLICK_TO_CONNECT = 'Available devices';
   static const String DESC_ENABLE_BLUETOOTH =
       '\nThis app needs Bluetooth to communicate with your Progressor.\n\nPlease enable Bluetooth on your device.';
-  static const String DESC_LOCATION_1 = 'This app uses bluetooth to communicate with your Progressor.';
+  static const String DESC_LOCATION_1 =
+      'This app uses bluetooth to communicate with your Progressor.';
   static const String DESC_LOCATION_2 =
       'Scanning for bluetooth devices can be used to locate you. That\'s why we ask you to permit location services. We\'re only using this permission to scan for your Progressor.';
-  static const String DESC_LOCATION_3 = 'We\'ll never collect your physical location.';
+  static const String DESC_LOCATION_3 =
+      'We\'ll never collect your physical location.';
 }
 
 mixin Progressor {
   // UUIDs
-  static const String SERVICE_UUID = '7E4E17011EA640C99DCC13D34FFEAD57'; // (01) main service
-  static const String CONTROL_POINT_UUID = '7E4E17031EA640C99DCC13D34FFEAD57'; // (03) send commands
-  static const String DATA_CHARACTERISTICS_UUID = '7E4E17021EA640C99DCC13D34FFEAD57'; // (02) receive data
+  static const String SERVICE_UUID =
+      '7E4E17011EA640C99DCC13D34FFEAD57'; // (01) main service
+  static const String CONTROL_POINT_UUID =
+      '7E4E17031EA640C99DCC13D34FFEAD57'; // (03) send commands
+  static const String DATA_CHARACTERISTICS_UUID =
+      '7E4E17021EA640C99DCC13D34FFEAD57'; // (02) receive data
 
   // static const String SERVICE_UUID = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // (01) main service
   // static const String CONTROL_POINT_UUID = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // (03) send commands

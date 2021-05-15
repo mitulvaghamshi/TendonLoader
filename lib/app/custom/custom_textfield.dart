@@ -37,12 +37,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
     if (widget.isPicker) {
       buttons.add(IconButton(
         icon: const Icon(Icons.timer_rounded),
-        onPressed: () async => widget.controller.text = await TimePicker.selectTime(context),
+        onPressed: () async =>
+            widget.controller.text = await TimePicker.selectTime(context),
       ));
     } else if (widget.isObscure) {
       buttons.add(IconButton(
         onPressed: () => setState(() => _isObscure = !_isObscure),
-        icon: Icon(_isObscure ? Icons.visibility_rounded : Icons.visibility_off_rounded),
+        icon: Icon(_isObscure
+            ? Icons.visibility_rounded
+            : Icons.visibility_off_rounded),
       ));
     }
     return Row(
@@ -56,7 +59,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   UnderlineInputBorder _buildBorder({double width = 2, Color color}) {
-    return UnderlineInputBorder(borderSide: BorderSide(width: width, color: color));
+    return UnderlineInputBorder(
+        borderSide: BorderSide(width: width, color: color));
   }
 
   @override
@@ -82,7 +86,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         errorBorder: _buildBorder(width: 3, color: Colors.redAccent),
         helperStyle: TextStyle(color: Theme.of(context).accentColor),
         enabledBorder: _buildBorder(color: Theme.of(context).accentColor),
-        errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+        errorStyle: const TextStyle(
+            color: Colors.redAccent, fontWeight: FontWeight.bold),
       ),
     );
   }

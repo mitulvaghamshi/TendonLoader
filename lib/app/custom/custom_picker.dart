@@ -27,7 +27,8 @@ class TimePicker extends StatefulWidget {
           ),
           buttonPadding: const EdgeInsets.symmetric(horizontal: 20),
           contentPadding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <TimePicker>[

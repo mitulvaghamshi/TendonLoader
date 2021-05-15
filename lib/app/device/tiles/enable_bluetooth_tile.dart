@@ -15,7 +15,10 @@ class EnableBluetoothTile extends StatelessWidget {
         CustomImage(name: Images.IMG_ENABLE_BLUETOOTH),
         Text(Descriptions.DESC_ENABLE_BLUETOOTH, textAlign: TextAlign.center),
         SizedBox(height: 30),
-        CustomButton(text: 'Open Settings', icon: Icons.bluetooth_rounded, onPressed: Bluetooth.enable),
+        CustomButton(
+            text: 'Open Settings',
+            icon: Icons.bluetooth_rounded,
+            onPressed: Bluetooth.enable),
       ],
     );
   }

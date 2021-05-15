@@ -24,7 +24,7 @@ class _BarGraphState extends State<BarGraph> {
   final List<ChartData> _graphData = <ChartData>[];
   final List<ChartData> _dataList = <ChartData>[];
   final DataHandler _handler = DataHandler();
-  
+
   ChartSeriesController _graphCtrl;
   bool _isRunning = false;
   double _minTime = 0;

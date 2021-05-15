@@ -12,8 +12,9 @@ import 'package:tendon_loader/shared/common.dart';
 import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/extensions.dart';
-import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/handler/data_handler.dart';
+import 'package:tendon_loader/shared/modal/chartdata.dart';
+import 'package:tendon_loader/shared/modal/data_model.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
 
@@ -63,10 +64,7 @@ class _BarGraphState extends State<BarGraph> {
     if (_isSetRest && _isRunning) {
       _isSetRest = false;
     } else if (!_isRunning && _hasData) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Submit old data?'),
-        action: SnackBarAction(label: 'Show Me!', onPressed: _onExit, textColor: Theme.of(context).primaryColor),
-      ));
+      await _onExit();
     } else if (await CountDown.start(context) ?? false) {
       await Bluetooth.startWeightMeas();
       _dateTime = DateTime.now();
@@ -129,14 +127,17 @@ class _BarGraphState extends State<BarGraph> {
   Future<bool> _onExit() async {
     if (_isRunning) await _reset();
     if (!_hasData) return true;
-    final bool result = await ConfirmDialog.export(
+    final bool result = await ConfirmDialog.show(
       context,
-      prescription: widget.prescription,
-      sessionInfo: SessionInfo(
-        dateTime: _dateTime,
-        dataStatus: _isComplete,
-        exportType: Keys.KEY_PREFIX_EXERCISE,
-        userId: (await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX)).get(Keys.KEY_USERNAME) as String,
+      model: DataModel(
+        dataList: _dataList,
+        prescription: widget.prescription,
+        sessionInfo: SessionInfo(
+          dateTime: _dateTime,
+          dataStatus: _isComplete,
+          exportType: Keys.KEY_PREFIX_EXERCISE,
+          userId: (await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX)).get(Keys.KEY_USERNAME) as String,
+        ),
       ),
     );
     if (result == null) {

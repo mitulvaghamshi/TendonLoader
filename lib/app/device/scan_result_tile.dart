@@ -12,7 +12,9 @@ class ScanResultTile extends StatelessWidget {
       initialData: const <ScanResult>[],
       stream: FlutterBlue.instance.scanResults,
       builder: (_, AsyncSnapshot<List<ScanResult>> snapshot) {
-        return snapshot.data.isEmpty ? const ScannerTile() : DeviceList(results: snapshot.data);
+        return snapshot.data.isEmpty
+            ? const ScannerTile()
+            : DeviceList(results: snapshot.data);
       },
     );
   }

@@ -7,7 +7,8 @@ class CustomProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     return const ListTile(
       leading: CircularProgressIndicator(),
-      title: Text('Please wait...', style: TextStyle(fontSize: 20, fontFamily: 'Georgia')),
+      title: Text('Please wait...',
+          style: TextStyle(fontSize: 20, fontFamily: 'Georgia')),
     );
   }
 }

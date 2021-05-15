@@ -19,7 +19,8 @@ class CountDown extends StatefulWidget {
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      builder: (_) => CountDown(title: title, duration: duration + const Duration(seconds: 1)),
+      builder: (_) => CountDown(
+          title: title, duration: duration + const Duration(seconds: 1)),
     );
   }
 
@@ -34,7 +35,8 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: widget.duration);
-    _controller.reverse(from: _controller.value == 0.0 ? 1.0 : _controller.value);
+    _controller.reverse(
+        from: _controller.value == 0.0 ? 1.0 : _controller.value);
     _controller.addStatusListener((_) => Navigator.pop<bool>(context, true));
   }
 
@@ -57,7 +59,8 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
             label: Text(
               widget.title,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 30, color: Theme.of(context).primaryColor),
+              style: TextStyle(
+                  fontSize: 30, color: Theme.of(context).primaryColor),
             ),
           ),
           Padding(
@@ -69,10 +72,14 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
                 builder: (_, Widget child) => Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
-                    Positioned.fill(child: CustomPaint(painter: _Painter(_controller))),
+                    Positioned.fill(
+                        child: CustomPaint(painter: _Painter(_controller))),
                     Text(
-                      (_controller.duration * _controller.value).inSeconds.toTime,
-                      style: const TextStyle(fontSize: 100, color: Colors.white),
+                      (_controller.duration * _controller.value)
+                          .inSeconds
+                          .toTime,
+                      style:
+                          const TextStyle(fontSize: 100, color: Colors.white),
                     ),
                   ],
                 ),
@@ -99,6 +106,7 @@ class _Painter extends CustomPainter {
       ..strokeWidth = 15
       ..style = PaintingStyle.stroke;
     canvas.drawCircle(size.center(Offset.zero), size.width / 2, paint);
-    canvas.drawArc(Offset.zero & size, pi * 1.5, -(ctrl.value * 2 * pi), false, paint..color = Colors.white);
+    canvas.drawArc(Offset.zero & size, pi * 1.5, -(ctrl.value * 2 * pi), false,
+        paint..color = Colors.white);
   }
 }
