@@ -7,12 +7,11 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/1903033646/android.app_settings.iml" filepath="$PROJECT_DIR$/.idea/modules/1903033646/android.app_settings.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1647175057/android.cloud_firestore.iml" filepath="$PROJECT_DIR$/.idea/modules/-1647175057/android.cloud_firestore.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/940202917/android.connectivity.iml" filepath="$PROJECT_DIR$/.idea/modules/940202917/android.connectivity.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-646468437/android.firebase_auth.iml" filepath="$PROJECT_DIR$/.idea/modules/-646468437/android.firebase_auth.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-249760417/android.firebase_core.iml" filepath="$PROJECT_DIR$/.idea/modules/-249760417/android.firebase_core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1841044396/android.firebase_auth.iml" filepath="$PROJECT_DIR$/.idea/modules/1841044396/android.firebase_auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-2057214880/android.firebase_core.iml" filepath="$PROJECT_DIR$/.idea/modules/-2057214880/android.firebase_core.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/120258445/android.flutter_blue.iml" filepath="$PROJECT_DIR$/.idea/modules/120258445/android.flutter_blue.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/50876643/android.location.iml" filepath="$PROJECT_DIR$/.idea/modules/50876643/android.location.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-957790444/android.path_provider.iml" filepath="$PROJECT_DIR$/.idea/modules/-957790444/android.path_provider.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1289975329/android.url_launcher.iml" filepath="$PROJECT_DIR$/.idea/modules/1289975329/android.url_launcher.iml" />
     </modules>
   </component>
 </project>

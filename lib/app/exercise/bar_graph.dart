@@ -51,6 +51,8 @@ class _BarGraphState extends State<BarGraph> {
   double _minTime = 0;
   int _minSec = 0;
 
+  int _setRestTime;
+
   String get _lapTime => _isRunning
       ? _isHold
           ? 'Hold for: ${_holdTime--} s'
@@ -94,7 +96,7 @@ class _BarGraphState extends State<BarGraph> {
     final bool result = await CountDown.start(
       context,
       title: 'SET OVER!\nREST!',
-      duration: const Duration(seconds: 5),
+      duration: Duration(seconds: _setRestTime),
     );
     if (result ?? false) await _start();
   }
@@ -175,6 +177,7 @@ class _BarGraphState extends State<BarGraph> {
     _targetLoad = widget.prescription.targetLoad;
     _holdTime = widget.prescription.holdTime;
     _restTime = widget.prescription.restTime;
+    _setRestTime = widget.prescription.setRestTime;
   }
 
   @override

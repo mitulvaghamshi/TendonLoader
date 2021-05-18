@@ -18,8 +18,7 @@ class WebHome extends StatelessWidget {
     //   Navigator.pushReplacementNamed(context, Login.route);
     // }
     final Size _size = MediaQuery.of(context).size;
-    final bool _isTab =
-        _size <= const Size(1000, 800) || _size.aspectRatio <= 1.0;
+    final bool _isTab = _size <= const Size(1000, 800) || _size.aspectRatio <= 1.0;
     final bool _isSmall = _size.width < 500 || _size.height < 500;
 
     return Scaffold(

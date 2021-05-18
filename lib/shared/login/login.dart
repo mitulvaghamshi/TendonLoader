@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,7 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login>
-    with TickerProviderStateMixin, ValidateCredentialMixin, Keys {
+class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCredentialMixin, Keys {
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _usernameCtrl = TextEditingController();
@@ -30,24 +30,32 @@ class _LoginState extends State<Login>
   bool _staySignedIn = true;
   bool _createNew = false;
   bool _busy = false;
+  String _uniqueUserID;
   User _user;
 
   Future<void> _getLoginInfo() async {
     _loginBox = await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX);
     setState(() {
-      _staySignedIn =
-          _loginBox.get(Keys.KEY_STAY_SIGN_IN, defaultValue: true) as bool;
+      _uniqueUserID = _loginBox.get(Keys.KEY_IS_FIRST_TIME) as String;
+      _staySignedIn = _loginBox.get(Keys.KEY_STAY_SIGN_IN, defaultValue: true) as bool;
       if (_staySignedIn) {
-        _usernameCtrl.text =
-            _loginBox.get(Keys.KEY_USERNAME, defaultValue: '') as String;
-        _passwordCtrl.text =
-            _loginBox.get(Keys.KEY_PASSWORD, defaultValue: '') as String;
+        _usernameCtrl.text = _loginBox.get(Keys.KEY_USERNAME, defaultValue: '') as String;
+        _passwordCtrl.text = _loginBox.get(Keys.KEY_PASSWORD, defaultValue: '') as String;
       }
     });
   }
 
   Future<void> _setLoginInfo() async {
     await _loginBox.put(Keys.KEY_STAY_SIGN_IN, _staySignedIn || _createNew);
+    if (_uniqueUserID != null && _uniqueUserID == _usernameCtrl.text) {
+      await _loginBox.put(Keys.KEY_IS_FIRST_TIME, _usernameCtrl.text);
+    } else {
+      await _loginBox.put(Keys.KEY_IS_FIRST_TIME, _usernameCtrl.text);
+      await FirebaseFirestore.instance
+          .collection(Keys.KEY_ALL_USERS)
+          .doc(_usernameCtrl.text)
+          .set(<String, dynamic>{'UserJoinDate': DateTime.now()});
+    }
     if (_staySignedIn || _createNew) {
       await _loginBox.put(Keys.KEY_USERNAME, _usernameCtrl.text);
       await _loginBox.put(Keys.KEY_PASSWORD, _passwordCtrl.text);
@@ -81,9 +89,8 @@ class _LoginState extends State<Login>
   void initState() {
     super.initState();
     _getLoginInfo();
-    _animCtrl =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1))
-          ..addStatusListener(_authenticate);
+    _animCtrl = AnimationController(vsync: this, duration: const Duration(seconds: 1))
+      ..addStatusListener(_authenticate);
   }
 
   @override
@@ -98,13 +105,9 @@ class _LoginState extends State<Login>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Text('Tendon Loader - ${_createNew ? 'Register' : 'Login'}')),
-      body: kIsWeb
-          ? Center(
-              child: SizedBox(
-                  width: Sizes.SIZE_LEFT_PANEL, child: _buildLoginBody()))
-          : _buildLoginBody(),
+      appBar: AppBar(title: Text('Tendon Loader - ${_createNew ? 'Register' : 'Login'}')),
+      body:
+          kIsWeb ? Center(child: SizedBox(width: Sizes.SIZE_LEFT_PANEL, child: _buildLoginBody())) : _buildLoginBody(),
     );
   }
 
@@ -146,24 +149,22 @@ class _LoginState extends State<Login>
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Checkbox(
-                      value: _staySignedIn,
-                      onChanged: (bool value) =>
-                          setState(() => _staySignedIn = value)),
-                  const Text('Keep me logged in.',
-                      style: TextStyle(letterSpacing: 2)),
+                  Checkbox(value: _staySignedIn, onChanged: (bool value) => setState(() => _staySignedIn = value)),
+                  const Text('Keep me logged in.', style: TextStyle(letterSpacing: 2)),
                 ],
               ),
             GestureDetector(
-              onTap: () => setState(() => _createNew = !_createNew),
+              onTap: () {
+                // setState(() => _createNew = !_createNew);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Disabled for testing version...!')),
+                );
+              },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Text(
-                  _createNew
-                      ? 'Already have an account? Sign in.'
-                      : 'Don\'t have an account? Sign up',
-                  style:
-                      const TextStyle(letterSpacing: 0.5, color: Colors.blue),
+                  _createNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up',
+                  style: const TextStyle(letterSpacing: 0.5, color: Colors.blue),
                 ),
               ),
             ),
@@ -184,9 +185,7 @@ class _LoginState extends State<Login>
               children: <Widget>[
                 RotationTransition(
                   turns: Tween<double>(begin: 0.0, end: 1.0).animate(_animCtrl),
-                  child: FloatingActionButton(
-                      onPressed: _animCtrl.forward,
-                      child: const Icon(Icons.send)),
+                  child: FloatingActionButton(onPressed: _animCtrl.forward, child: const Icon(Icons.send)),
                 ),
               ],
             ),

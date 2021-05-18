@@ -11,10 +11,8 @@ class CustomAvatar extends StatelessWidget {
     return CircleAvatar(
       radius: 25,
       backgroundColor: color ?? Theme.of(context).accentColor,
-      foregroundColor:
-          color != null ? Colors.white : Theme.of(context).primaryColor,
-      child: Text(text,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      foregroundColor: color != null ? Colors.white : Theme.of(context).primaryColor,
+      child: Text(text, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
     );
   }
 }

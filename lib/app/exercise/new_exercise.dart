@@ -16,13 +16,13 @@ class NewExercise extends StatefulWidget {
   _NewExerciseState createState() => _NewExerciseState();
 }
 
-class _NewExerciseState extends State<NewExercise>
-    with ValidateExerciseDataMixin {
+class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _ctrlSets = TextEditingController();
   final TextEditingController _ctrlReps = TextEditingController();
   final TextEditingController _ctrlHoldTime = TextEditingController();
   final TextEditingController _ctrlRestTime = TextEditingController();
+  final TextEditingController _ctrlSetRestTime = TextEditingController();
   final TextEditingController _ctrlTargetLoad = TextEditingController();
 
   @override
@@ -46,6 +46,7 @@ class _NewExerciseState extends State<NewExercise>
           holdTime: int.tryParse(_ctrlHoldTime.text),
           restTime: int.tryParse(_ctrlRestTime.text),
           targetLoad: double.tryParse(_ctrlTargetLoad.text),
+          setRestTime: int.tryParse(_ctrlSetRestTime.text),
         ),
       );
     }
@@ -56,9 +57,7 @@ class _NewExerciseState extends State<NewExercise>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title:
-              const Text('Create New Exercise', textAlign: TextAlign.center)),
+      appBar: AppBar(title: const Text('Create New Exercise', textAlign: TextAlign.center)),
       body: AppFrame(
         isScrollable: true,
         child: Form(
@@ -66,18 +65,20 @@ class _NewExerciseState extends State<NewExercise>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const Text(
+              Text(
                 'Please enter your\nexercise prescriptions',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 26,
-                    fontFamily: 'Georgia',
-                    fontWeight: FontWeight.bold),
+                  fontSize: 26,
+                  fontFamily: 'Georgia',
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).accentColor.withOpacity(0.6),
+                ),
               ),
               CustomTextField(
                 label: 'Target Load',
                 hint: 'Target load (kg) e.g. 6.5',
-                desc: '~70% of last recorded MVC test',
+                desc: '~70% of last MVC test',
                 controller: _ctrlTargetLoad,
                 validator: validateTargetLoad,
                 keyboardType: TextInputType.number,
@@ -117,21 +118,30 @@ class _NewExerciseState extends State<NewExercise>
                 action: TextInputAction.send,
                 keyboardType: TextInputType.number,
               ),
+              CustomTextField(
+                isPicker: true,
+                label: 'Rest time b/w Sets',
+                hint: 'Select rest time for set (sec)',
+                desc: 'Amount of time you can rest after every set',
+                controller: _ctrlSetRestTime,
+                validator: validateRestTime,
+                keyboardType: TextInputType.number,
+              ),
               const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  CustomButton(
-                    text: 'Clear all',
-                    icon: Icons.clear_rounded,
-                    onPressed: () => _formKey.currentState.reset(),
-                  ),
                   CustomButton(
                     text: 'Submit',
                     onPressed: _submit,
                     color: Colors.white,
                     background: Colors.blue,
                     icon: Icons.done_rounded,
+                  ),
+                  CustomButton(
+                    text: 'Clear all',
+                    icon: Icons.clear_rounded,
+                    onPressed: () => _formKey.currentState.reset(),
                   ),
                 ],
               ),

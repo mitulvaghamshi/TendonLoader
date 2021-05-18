@@ -21,14 +21,13 @@ class TimePicker extends StatefulWidget {
         return AlertDialog(
           scrollable: true,
           title: const Text(
-            'Select duration',
+            'Select Time',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 26, fontFamily: 'Georgia'),
+            style: TextStyle(fontSize: 26, fontFamily: 'Georgia', fontWeight: FontWeight.w600),
           ),
           buttonPadding: const EdgeInsets.symmetric(horizontal: 20),
           contentPadding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <TimePicker>[
@@ -39,10 +38,9 @@ class TimePicker extends StatefulWidget {
           actions: <CustomButton>[
             CustomButton(
               text: 'Submit',
-              background: Colors.blue,
               icon: Icons.done_rounded,
-              onPressed: () => Navigator.pop<String>(
-                context,
+              background: Colors.green,
+              onPressed: () => Navigator.of(context).pop<String>(
                 Duration(minutes: _min, seconds: _sec).inSeconds.toString(),
               ),
             ),
@@ -69,9 +67,9 @@ class _TimePickerState extends State<TimePicker> {
         Text(
           widget.name,
           style: const TextStyle(
+            fontSize: 26,
+            fontFamily: 'monospace',
             fontWeight: FontWeight.bold,
-            fontFamily: 'Georgia',
-            fontSize: 20,
           ),
         ),
         NumberPicker(
@@ -80,18 +78,12 @@ class _TimePickerState extends State<TimePicker> {
           maxValue: 60,
           itemWidth: 80,
           haptics: true,
-          onChanged: (int value) => setState(() {
-            widget.onChange(_value = value);
-          }),
-          selectedTextStyle: const TextStyle(
-            fontSize: 36,
-            fontFamily: 'Georgia',
-            fontWeight: FontWeight.bold,
-          ),
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
             border: Border.all(color: Theme.of(context).accentColor),
-            borderRadius: BorderRadius.circular(16),
           ),
+          onChanged: (int value) => setState(() => widget.onChange(_value = value)),
+          selectedTextStyle: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
         ),
       ],
     );

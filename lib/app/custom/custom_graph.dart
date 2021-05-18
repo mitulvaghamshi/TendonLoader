@@ -3,13 +3,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 
 class CustomGraph extends StatelessWidget {
-  const CustomGraph({
-    Key key,
-    this.graphData,
-    this.lineData,
-    this.lineCtrl,
-    this.graphCtrl,
-  }) : super(key: key);
+  const CustomGraph({Key key, this.graphData, this.lineData, this.lineCtrl, this.graphCtrl}) : super(key: key);
 
   final List<ChartData> lineData;
   final List<ChartData> graphData;

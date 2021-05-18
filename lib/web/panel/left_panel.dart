@@ -33,21 +33,16 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
   Widget build(BuildContext context) {
     return AppFrame(
       child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection(Keys.KEY_ALL_USERS)
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection(Keys.KEY_ALL_USERS).snapshots(),
         builder: (_, AsyncSnapshot<QuerySnapshot> allUsers) {
           if (!allUsers.hasData) return const CustomProgress();
           return ListView(
             physics: const BouncingScrollPhysics(),
             children: ListTile.divideTiles(
               color: Theme.of(context).accentColor,
-              tiles: allUsers.data.docs.map<StreamBuilder<QuerySnapshot>>(
-                  (QueryDocumentSnapshot user) {
+              tiles: allUsers.data.docs.map<StreamBuilder<QuerySnapshot>>((QueryDocumentSnapshot user) {
                 return StreamBuilder<QuerySnapshot>(
-                  stream: user.reference
-                      .collection(Keys.KEY_ALL_EXPORTS)
-                      .snapshots(),
+                  stream: user.reference.collection(Keys.KEY_ALL_EXPORTS).snapshots(),
                   builder: (_, AsyncSnapshot<QuerySnapshot> allExports) {
                     if (!allExports.hasData) return const CustomProgress();
                     return ExpansionTile(
@@ -56,8 +51,7 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
                       tilePadding: const EdgeInsets.all(5),
                       leading: CustomAvatar(user.id[0].toUpperCase()),
                       expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                      title:
-                          Text(user.id, style: const TextStyle(fontSize: 18)),
+                      title: Text(user.id, style: const TextStyle(fontSize: 18)),
                       children: ListTile.divideTiles(
                         color: Colors.blue,
                         tiles: allExports.data.docs.map(_buildGroupItem),
@@ -91,8 +85,7 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
       leading: CustomAvatar(perDay.id.substring(8, 10)),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
       title: Text(perDay.id, style: const TextStyle(fontSize: 18)),
-      subtitle: Text(
-          '${exports.length} export${exports.length == 1 ? '' : 's'} found.'),
+      subtitle: Text('${exports.length} export${exports.length == 1 ? '' : 's'} found.'),
       children: ListTile.divideTiles(
         color: Colors.deepOrange,
         tiles: exports.entries.map(_builldListItem),
@@ -101,15 +94,12 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
   }
 
   Widget _builldListItem(MapEntry<String, dynamic> export) {
-    final Map<String, dynamic> _meta =
-        export.value[Keys.KEY_META_DATA] as Map<String, dynamic>;
+    final Map<String, dynamic> _meta = export.value[Keys.KEY_META_DATA] as Map<String, dynamic>;
     final SessionInfo _info = SessionInfo.fromMap(_meta);
     final Prescription _pre = Prescription.fromMap(_meta);
-    final List<ChartData> _dataList = List<Map<String, dynamic>>.from(
-            export.value[Keys.KEY_USER_DATA] as List<dynamic>)
+    final List<ChartData> _dataList = List<Map<String, dynamic>>.from(export.value[Keys.KEY_USER_DATA] as List<dynamic>)
         .map<ChartData>((Map<String, dynamic> item) => ChartData.fromMap(item))
         .toList();
-
     return ListTile(
       key: ValueKey<String>(export.key),
       contentPadding: const EdgeInsets.all(5),
@@ -118,11 +108,7 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
       title: Text(export.key, style: const TextStyle(fontSize: 18)),
       onTap: () {
         if (_dataList.isNotEmpty) {
-          ClickHandler.sink?.add(DataModel(
-            dataList: _dataList,
-            sessionInfo: _info,
-            prescription: _pre,
-          ));
+          ClickHandler.sink?.add(DataModel(dataList: _dataList, sessionInfo: _info, prescription: _pre));
         }
       },
       trailing: PopupMenuButton<ItemAction>(
@@ -130,8 +116,7 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
         itemBuilder: (_) => <PopupMenuItem<ItemAction>>[
           const PopupMenuItem<ItemAction>(
             value: ItemAction.download,
-            child: ListTile(
-                title: Text('Download'), leading: Icon(Icons.download_rounded)),
+            child: ListTile(title: Text('Download'), leading: Icon(Icons.download_rounded)),
           ),
           const PopupMenuItem<ItemAction>(
             value: ItemAction.delete,
@@ -153,9 +138,7 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
                   .doc(_info.userId)
                   .collection(Keys.KEY_ALL_EXPORTS)
                   .doc(_info.exportDate)
-                  .update(<String, dynamic>{
-                export.key: FieldValue.delete()
-              }).whenComplete(() {
+                  .update(<String, dynamic>{export.key: FieldValue.delete()}).whenComplete(() {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Export deleted successfully!')),
                 );

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:tendon_loader/app/custom/custom_listtile.dart';
-import 'package:tendon_loader/app/device/connected_devices.dart';
-import 'package:tendon_loader/app/exercise/exercise_mode.dart';
+import 'package:tendon_loader/app/device/tiles/bluetooth_tile.dart';
 import 'package:tendon_loader/app/exercise/new_exercise.dart';
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/app/handler/export_handler.dart';
@@ -22,8 +21,6 @@ class AppHome extends StatefulWidget {
 
   @override
   _AppHomeState createState() => _AppHomeState();
-
-  static _AppHomeState of(BuildContext context) => context.findAncestorStateOfType<_AppHomeState>();
 }
 
 class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
@@ -31,7 +28,6 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     Locator.check();
-    Bluetooth.refresh();
     WidgetsBinding.instance.addObserver(this);
     Future<void>.delayed(const Duration(seconds: 2), () async {
       final int _records = await ExportHandler.checkLocalData();
@@ -71,17 +67,22 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
       context: context,
       applicationVersion: 'v1.0',
       applicationName: AppHome.name,
-      applicationLegalese: 'Application Legalese',
-      applicationIcon: const CustomImage(radius: 50),
+      // applicationLegalese: 'Application Legalese',
+      applicationIcon: const CustomImage(isLogo: true, radius: 20, padding: 0),
       children: <Widget>[
-        const SizedBox(height: 20),
         const Text(
-          '♥ Mitul Vaghamshi',
+          'Tendon Loader :Preview',
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.blue, fontSize: 20, fontFamily: 'Georgia', letterSpacing: 1.5),
+          style: TextStyle(color: Colors.blue, fontSize: 18, fontFamily: 'Georgia'),
         ),
-        const SizedBox(height: 20),
-        const Text('✉ mitulvaghmashi@gmail.com', textAlign: TextAlign.center),
+        // const SizedBox(height: 20),
+        // const Text(
+        //   'Mitul Vaghamshi',
+        //   textAlign: TextAlign.center,
+        //   style: TextStyle(color: Colors.blue, fontSize: 20, fontFamily: 'Georgia', letterSpacing: 1.5),
+        // ),
+        // const SizedBox(height: 20),
+        // const Text('mitulvaghmashi@gmail.com', textAlign: TextAlign.center),
       ],
     );
   }
@@ -117,12 +118,13 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   void _connectDevice() {
     showDialog<void>(
       context: context,
-      barrierDismissible: false,
       builder: (_) => AlertDialog(
         scrollable: true,
-        content: const ConnectedDevices(),
+        content: const BluetoothTile(),
+        contentPadding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
+        actions: <Widget>[TextButton(child: const Text('Back'), onPressed: () => Navigator.pop(context))],
       ),
     );
   }
@@ -130,7 +132,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   Future<void> _onSelected(ActionType type) async {
     switch (type) {
       case ActionType.about:
-        // return _aboutDialog();
+        return _aboutDialog();
         break;
       case ActionType.export:
         await _manuallyExport();
@@ -138,6 +140,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
       case ActionType.close:
         break;
       case ActionType.settings:
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Available soon...')));
         break;
     }
   }
@@ -165,8 +168,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
     );
   }
 
-  void _handleTap(String route) =>
-      Bluetooth.isConnected || true ? Navigator.pushNamed(context, route) : _connectDevice();
+  void _handleTap(String route) => Bluetooth.isConnected ? Navigator.pushNamed(context, route) : _connectDevice();
 
   @override
   Widget build(BuildContext context) {

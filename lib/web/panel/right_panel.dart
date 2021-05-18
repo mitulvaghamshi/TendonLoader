@@ -5,8 +5,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/custom/custom_image.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
-import 'package:tendon_loader/web/handler/click_handler.dart';
 import 'package:tendon_loader/shared/modal/data_model.dart';
+import 'package:tendon_loader/web/handler/click_handler.dart';
 
 class RightPanel extends StatefulWidget {
   const RightPanel({Key key}) : super(key: key);

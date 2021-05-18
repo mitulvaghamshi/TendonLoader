@@ -13,9 +13,7 @@ class Splash extends StatelessWidget {
     return FutureBuilder<void>(
       future: AppAuth.init(),
       builder: (_, AsyncSnapshot<void> snapshot) {
-        return snapshot.connectionState == ConnectionState.done
-            ? const Login()
-            : const CustomImage();
+        return snapshot.connectionState == ConnectionState.done ? const Login() : const CustomImage();
       },
     );
   }

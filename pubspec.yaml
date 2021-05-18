@@ -25,7 +25,7 @@ dependencies:
   rxdart: ^0.26.0
   syncfusion_flutter_charts: ^19.1.56
   syncfusion_flutter_xlsio: ^19.1.56-beta
-  url_launcher: ^6.0.3
+  # url_launcher: ^6.0.3
 
 dev_dependencies:
   flutter_test:

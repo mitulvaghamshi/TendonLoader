@@ -5,14 +5,10 @@ import 'package:tendon_loader/shared/constants.dart' show Keys;
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
-import 'package:tendon_loader/web/empty.dart' if (dart.library.html) 'dart:html'
-    show AnchorElement;
+import 'package:tendon_loader/web/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
 
 mixin CreateExcel {
-  void create(
-      {List<ChartData> data,
-      SessionInfo sessionInfo,
-      Prescription prescription}) {
+  void create({List<ChartData> data, SessionInfo sessionInfo, Prescription prescription}) {
     int _iR = 0;
     const String _iA = 'A';
     const String _iD = 'D';
@@ -60,14 +56,12 @@ mixin CreateExcel {
       // Hold Time
       _iR++; // 10
       _sheet.getRangeByName('$_iA$_iR').text = 'Hold Time [Sec]';
-      _sheet.getRangeByName('$_iD$_iR').number =
-          prescription.holdTime.toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = prescription.holdTime.toDouble();
 
       // Rest Time
       _iR++; // 11
       _sheet.getRangeByName('$_iA$_iR').text = 'Rest Time [Sec]';
-      _sheet.getRangeByName('$_iD$_iR').number =
-          prescription.restTime.toDouble();
+      _sheet.getRangeByName('$_iD$_iR').number = prescription.restTime.toDouble();
 
       // Sets
       _iR++; // 12
@@ -92,8 +86,7 @@ mixin CreateExcel {
     }
 
     AnchorElement(
-        href:
-            'data:application/octet-stream;charset=utf-16le;base64,${base64.encode(_workbook.saveAsStream())}')
+        href: 'data:application/octet-stream;charset=utf-16le;base64,${base64.encode(_workbook.saveAsStream())}')
       ..setAttribute('download', sessionInfo.fileName)
       ..click();
 
