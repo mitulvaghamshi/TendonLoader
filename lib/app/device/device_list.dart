@@ -11,7 +11,7 @@ class DeviceList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         StreamBuilder<List<BluetoothDevice>>(
           initialData: const <BluetoothDevice>[],
           stream: Stream<List<BluetoothDevice>>.fromFuture(FlutterBlue.instance.connectedDevices),
@@ -26,7 +26,7 @@ class DeviceList extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: const <Widget>[
                         CustomImage(name: Images.IMG_ENABLE_DEVICE),
-                        Text(Descriptions.DESC_ENABLE_DEVICE),
+                        Text(Descriptions.DESC_ENABLE_DEVICE, textAlign: TextAlign.center),
                       ],
                     );
                   return Column(

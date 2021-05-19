@@ -77,7 +77,13 @@
     <content url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/location-4.1.1">
       <sourceFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/location-4.1.1/android/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/location-4.1.1/android/src/main/res" type="java-resource" />
+      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/location-4.1.1/.dart_tool" />
+      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/location-4.1.1/.pub" />
       <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/location-4.1.1/android/.gradle" />
+      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/location-4.1.1/build" />
+      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/location-4.1.1/example/.dart_tool" />
+      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/location-4.1.1/example/.pub" />
+      <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/location-4.1.1/example/build" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 29 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -168,7 +168,8 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
     );
   }
 
-  void _handleTap(String route) => Bluetooth.isConnected ? Navigator.pushNamed(context, route) : _connectDevice();
+  void _handleTap(String route) =>
+      Bluetooth.isConnected || true ? Navigator.pushNamed(context, route) : _connectDevice();
 
   @override
   Widget build(BuildContext context) {
