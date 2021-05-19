@@ -33,7 +33,10 @@ class _RightPanelState extends State<RightPanel> {
                 child: Column(children: <Widget>[
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Row(children: <Widget>[_model.sessionInfo.toTable(), _model.prescription?.toTable()]),
+                    child: Row(children: <Widget>[
+                      _model.sessionInfo.toTable(),
+                      if (_model.prescription != null) _model.prescription.toTable(),
+                    ]),
                   ),
                   Expanded(
                     child: SfCartesianChart(
@@ -44,8 +47,7 @@ class _RightPanelState extends State<RightPanel> {
                         header: _model.prescription != null ? 'Measurement' : 'MVC',
                       ),
                       primaryXAxis: NumericAxis(
-                        interval: 5,
-                        visibleMaximum: 50,
+                        visibleMaximum: _model.sessionInfo.type ? 5 : 50,
                         labelFormat: '{value} s',
                         enableAutoIntervalOnZooming: true,
                         majorGridLines: const MajorGridLines(width: 0),
@@ -58,7 +60,6 @@ class _RightPanelState extends State<RightPanel> {
                         axisLine: const AxisLine(width: 0),
                         majorTickLines: const MajorTickLines(size: 0),
                         majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
-                        visibleMaximum: _model.prescription != null ? _model.prescription.targetLoad + 5 : null,
                       ),
                       zoomPanBehavior: ZoomPanBehavior(
                         enablePanning: true,
@@ -73,11 +74,11 @@ class _RightPanelState extends State<RightPanel> {
                           width: 2,
                           color: Colors.blue,
                           animationDuration: 3000,
-                          dataSource: snapshot.data.dataList,
+                          dataSource: _model.dataList,
                           xValueMapper: (ChartData data, _) => data.time,
                           yValueMapper: (ChartData data, _) => data.load,
                         ),
-                        if (snapshot.data.prescription != null)
+                        if (_model.prescription != null)
                           LineSeries<ChartData, double>(
                             width: 2,
                             color: Colors.red,
@@ -94,7 +95,7 @@ class _RightPanelState extends State<RightPanel> {
                   ),
                 ]),
               ),
-              if (snapshot.data.prescription != null)
+              if (_model.dataList.isNotEmpty)
                 LimitedBox(
                   maxWidth: 250,
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
