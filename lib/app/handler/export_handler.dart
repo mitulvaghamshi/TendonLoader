@@ -20,11 +20,7 @@ mixin ExportHandler {
   }
 
   static Future<int> checkLocalData() async {
-    if (await _isConnected()) {
-      return (await Hive.openBox<Map<dynamic, dynamic>>(Keys.KEY_USER_EXPORTS_BOX)).length;
-    } else {
-      return 0;
-    }
+    return await _isConnected() ? Hive.box<Map<dynamic, dynamic>>(Keys.KEY_USER_EXPORTS_BOX).length : 0;
   }
 
   static Future<void> reExport() async {
@@ -38,8 +34,7 @@ mixin ExportHandler {
   }
 
   static Future<void> save(Map<String, dynamic> exportInfo) async {
-    final Box<Map<dynamic, dynamic>> _userExportsBox = Hive.box(Keys.KEY_USER_EXPORTS_BOX);
-    await _userExportsBox.put(exportInfo.hashCode, exportInfo);
+    await Hive.box<Map<dynamic, dynamic>>(Keys.KEY_USER_EXPORTS_BOX).put(exportInfo.hashCode, exportInfo);
   }
 
   static Future<void> _upload(Map<dynamic, dynamic> exportInfo) async {

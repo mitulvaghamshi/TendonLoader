@@ -4,6 +4,7 @@ mixin Sizes {
 
 mixin Keys {
   static const String KEY_LOGIN_BOX = '_key_login_box';
+  static const String KEY_BT_DEVICE = '_key_bluetooth_device';
   static const String KEY_USER_EXPORTS_BOX = '_key_user_exports_box';
   static const String KEY_PRESCRIPTION_BOX = '_key_prescription_box';
 

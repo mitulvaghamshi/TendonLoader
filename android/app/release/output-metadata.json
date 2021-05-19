@@ -8,37 +8,6 @@
   "variantName": "release",
   "elements": [
     {
-      "type": "UNIVERSAL",
-      "filters": [],
-      "versionCode": 1,
-      "versionName": "1.0.0",
-      "outputFile": "app-universal-release.apk"
-    },
-    {
-      "type": "ONE_OF_MANY",
-      "filters": [
-        {
-          "filterType": "ABI",
-          "value": "x86_64"
-        }
-      ],
-      "versionCode": 1,
-      "versionName": "1.0.0",
-      "outputFile": "app-x86_64-release.apk"
-    },
-    {
-      "type": "ONE_OF_MANY",
-      "filters": [
-        {
-          "filterType": "ABI",
-          "value": "armeabi-v7a"
-        }
-      ],
-      "versionCode": 1,
-      "versionName": "1.0.0",
-      "outputFile": "app-armeabi-v7a-release.apk"
-    },
-    {
       "type": "ONE_OF_MANY",
       "filters": [
         {
@@ -47,20 +16,8 @@
         }
       ],
       "versionCode": 1,
-      "versionName": "1.0.0",
+      "versionName": "flutterVersionName",
       "outputFile": "app-arm64-v8a-release.apk"
-    },
-    {
-      "type": "ONE_OF_MANY",
-      "filters": [
-        {
-          "filterType": "ABI",
-          "value": "x86"
-        }
-      ],
-      "versionCode": 1,
-      "versionName": "1.0.0",
-      "outputFile": "app-x86-release.apk"
     }
   ]
 }

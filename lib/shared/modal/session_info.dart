@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/shared/constants.dart';
 
 class SessionInfo {
-  SessionInfo({this.userId, this.exportType, bool dataStatus, DateTime dateTime})
+  SessionInfo({this.exportType, bool dataStatus, DateTime dateTime})
       : progressorId = Bluetooth.deviceName,
         dataStatus = dataStatus ? 'Complete' : 'Incomplete',
         exportDate = DateFormat(Keys.KEY_DATE_FORMAT).format(dateTime),
-        exportTime = DateFormat(Keys.KEY_TIME_FORMAT).format(dateTime);
+        exportTime = DateFormat(Keys.KEY_TIME_FORMAT).format(dateTime),
+        userId = (Hive.box<Object>(Keys.KEY_LOGIN_BOX)).get(Keys.KEY_USERNAME) as String;
 
   SessionInfo.fromMap(Map<dynamic, dynamic> map) {
     userId = map[Keys.KEY_USERNAME].toString();

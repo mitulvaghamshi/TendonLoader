@@ -26,15 +26,15 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
   final TextEditingController _usernameCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
   AnimationController _animCtrl;
-  Box<Object> _loginBox;
+
   bool _staySignedIn = true;
   bool _createNew = false;
   bool _busy = false;
   String _uniqueUserID;
   User _user;
 
-  Future<void> _getLoginInfo() async {
-    _loginBox = await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX);
+  void _getLoginInfo() {
+    final Box<Object> _loginBox = Hive.box<Object>(Keys.KEY_LOGIN_BOX);
     setState(() {
       _uniqueUserID = _loginBox.get(Keys.KEY_IS_FIRST_TIME) as String;
       _staySignedIn = _loginBox.get(Keys.KEY_STAY_SIGN_IN, defaultValue: true) as bool;
@@ -46,6 +46,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
   }
 
   Future<void> _setLoginInfo() async {
+    final Box<Object> _loginBox = Hive.box<Object>(Keys.KEY_LOGIN_BOX);
     await _loginBox.put(Keys.KEY_STAY_SIGN_IN, _staySignedIn || _createNew);
     if (_uniqueUserID != null && _uniqueUserID == _usernameCtrl.text) {
       await _loginBox.put(Keys.KEY_IS_FIRST_TIME, _usernameCtrl.text);
@@ -54,7 +55,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
       await FirebaseFirestore.instance
           .collection(Keys.KEY_ALL_USERS)
           .doc(_usernameCtrl.text)
-          .set(<String, dynamic>{'UserJoinDate': DateTime.now()});
+          .set(<String, dynamic>{'LastActive': DateTime.now()});
     }
     if (_staySignedIn || _createNew) {
       await _loginBox.put(Keys.KEY_USERNAME, _usernameCtrl.text);
@@ -73,11 +74,11 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
           username: _usernameCtrl.text,
           password: _passwordCtrl.text,
         );
+        if (_user != null) await _setLoginInfo();
       }
     } else if (status == AnimationStatus.completed) {
       _busy = false;
       if (_user != null) {
-        await _setLoginInfo();
         await Navigator.pushReplacementNamed(context, Login.home);
       } else {
         await _animCtrl.reverse();
@@ -95,8 +96,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
 
   @override
   void dispose() {
-    _nameCtrl.dispose();
     _animCtrl.dispose();
+    _nameCtrl.dispose();
     _usernameCtrl.dispose();
     _passwordCtrl.dispose();
     super.dispose();

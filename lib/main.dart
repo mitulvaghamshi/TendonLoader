@@ -1,14 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tendon_loader/shared/custom/custom_routes.dart';
 import 'package:tendon_loader/shared/custom/custom_themes.dart';
 
-Future<void> main() async {
-  await Hive.initFlutter();
-  runApp(const TendonLoader());
-}
+void main() => runApp(const TendonLoader());
 
 class TendonLoader extends StatelessWidget {
   const TendonLoader({Key key}) : super(key: key);

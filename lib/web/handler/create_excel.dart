@@ -5,7 +5,7 @@ import 'package:tendon_loader/shared/constants.dart' show Keys;
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
-import 'package:tendon_loader/web/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
+import 'package:tendon_loader/web/handler/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
 
 mixin CreateExcel {
   void create({List<ChartData> data, SessionInfo sessionInfo, Prescription prescription}) {

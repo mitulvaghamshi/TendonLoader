@@ -51,6 +51,8 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
         builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
+            switchInCurve: Curves.elasticIn,
+            switchOutCurve: Curves.easeOut,
             child: snapshot.hasData
                 ? ExpansionTile(
                     maintainState: true,

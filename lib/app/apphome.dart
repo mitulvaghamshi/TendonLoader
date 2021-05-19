@@ -28,6 +28,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     Locator.check();
+    Bluetooth.refresh();
     WidgetsBinding.instance.addObserver(this);
     Future<void>.delayed(const Duration(seconds: 2), () async {
       final int _records = await ExportHandler.checkLocalData();
@@ -47,19 +48,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        Locator.check();
-        Bluetooth.notify(true);
-        break;
-      case AppLifecycleState.inactive:
-        break;
-      case AppLifecycleState.paused:
-        break;
-      case AppLifecycleState.detached:
-        Bluetooth.notify(false);
-        break;
-    }
+    if (state == AppLifecycleState.resumed) Locator.check();
   }
 
   void _aboutDialog() {

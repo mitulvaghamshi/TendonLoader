@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app/custom/custom_textfield.dart';
 import 'package:tendon_loader/app/exercise/exercise_mode.dart';
 import 'package:tendon_loader/shared/custom/custom_button.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
-import 'package:tendon_loader/app/custom/custom_textfield.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/validator.dart';
 
@@ -35,10 +35,9 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
     super.dispose();
   }
 
-  Future<void> _submit() async {
+  void _submit() {
     if (_formKey.currentState.validate()) {
-      await Navigator.pushReplacementNamed(
-        context,
+      Navigator.of(context).pushReplacementNamed(
         ExerciseMode.route,
         arguments: Prescription(
           sets: int.tryParse(_ctrlSets.text),

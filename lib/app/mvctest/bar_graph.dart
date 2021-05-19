@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app/custom/confirm_dialod.dart';
 import 'package:tendon_loader/app/custom/countdown.dart';
@@ -102,12 +101,7 @@ class _BarGraphState extends State<BarGraph> {
       context,
       model: DataModel(
         dataList: _dataList,
-        sessionInfo: SessionInfo(
-          dateTime: _dateTime,
-          dataStatus: _isComplete,
-          exportType: Keys.KEY_PREFIX_MVC,
-          userId: (await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX)).get(Keys.KEY_USERNAME) as String,
-        ),
+        sessionInfo: SessionInfo(dateTime: _dateTime, dataStatus: _isComplete, exportType: Keys.KEY_PREFIX_MVC),
       ),
     );
     if (result == null) {

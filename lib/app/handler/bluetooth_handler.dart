@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:hive/hive.dart';
 import 'package:tendon_loader/shared/constants.dart';
 
 mixin Bluetooth {
@@ -49,7 +50,14 @@ mixin Bluetooth {
 
   static Future<void> stopScan() async => FlutterBlue.instance.stopScan();
 
-  static Future<void> refresh() async => (await FlutterBlue.instance.connectedDevices).forEach(reConnect);
+  static Future<void> refresh() async {
+    final List<BluetoothDevice> _connected = await FlutterBlue.instance.connectedDevices;
+    final String _deviceId = (Hive.box<String>(Keys.KEY_BT_DEVICE)).get(Keys.KEY_BT_DEVICE);
+    if (_connected != null && _connected.isNotEmpty) {
+      final BluetoothDevice device = _connected?.firstWhere((BluetoothDevice device) => device.id.id == _deviceId);
+      if (device != null) await reConnect(device);
+    }
+  }
 
   static Future<void> reConnect(BluetoothDevice device) async {
     await disconnect(device);
@@ -57,7 +65,7 @@ mixin Bluetooth {
   }
 
   static Future<void> connect(BluetoothDevice device) async {
-    await (_device = device).connect(autoConnect: false);
+    await (_device = device).connect(autoConnect: true);
     await _getProps();
   }
 
@@ -75,6 +83,7 @@ mixin Bluetooth {
     _dataChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
     _controlChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.CONTROL_POINT_UUID));
     isConnected = _dataChar != null && _controlChar != null;
+    await (Hive.box<String>(Keys.KEY_BT_DEVICE)).put(Keys.KEY_BT_DEVICE, _device.id.id);
     await notify(true);
   }
 }

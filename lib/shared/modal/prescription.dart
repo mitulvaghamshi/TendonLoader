@@ -1,28 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/shared/constants.dart';
 
+@immutable
 class Prescription {
-  Prescription({this.sets, this.reps, this.holdTime, this.restTime, this.targetLoad, this.setRestTime = 90});
+  const Prescription({
+    this.sets,
+    this.reps,
+    this.holdTime,
+    this.restTime,
+    this.targetLoad,
+    this.lastMVC = 0,
+    this.setRestTime = 90,
+  });
 
-  Prescription.fromMap(Map<String, dynamic> map) {
-    sets = int.tryParse(map[Keys.KEY_SETS].toString());
-    reps = int.tryParse(map[Keys.KEY_REPS].toString());
-    holdTime = int.tryParse(map[Keys.KEY_HOLD_TIME].toString());
-    restTime = int.tryParse(map[Keys.KEY_REST_TIME].toString());
-    lastMVC = double.tryParse(map[Keys.KEY_LAST_MVC].toString()) ?? 0;
-    targetLoad = double.tryParse(map[Keys.KEY_TARGET_LOAD].toString());
+  factory Prescription.fromMap(Map<String, dynamic> map) {
+    return Prescription(
+      sets: int.tryParse(map[Keys.KEY_SETS].toString()),
+      reps: int.tryParse(map[Keys.KEY_REPS].toString()),
+      holdTime: int.tryParse(map[Keys.KEY_HOLD_TIME].toString()),
+      restTime: int.tryParse(map[Keys.KEY_REST_TIME].toString()),
+      lastMVC: double.tryParse(map[Keys.KEY_LAST_MVC].toString()),
+      targetLoad: double.tryParse(map[Keys.KEY_TARGET_LOAD].toString()),
+    );
   }
 
-  int sets;
-  int reps;
-  int holdTime;
-  int restTime;
-  double lastMVC;
-  double targetLoad;
+  final int sets;
+  final int reps;
+  final int holdTime;
+  final int restTime;
+  final double lastMVC;
+  final double targetLoad;
 
-  //
-  int setRestTime;
-  //
+  final int setRestTime;
 
   Map<String, String> toMap() {
     return <String, String>{
@@ -58,7 +67,7 @@ class Prescription {
           DataCell(Text('$restTime')),
           DataCell(Text('$sets')),
           DataCell(Text('$reps')),
-        ])
+        ]),
       ],
     );
   }
