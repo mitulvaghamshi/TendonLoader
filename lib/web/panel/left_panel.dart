@@ -15,7 +15,7 @@ import 'package:tendon_loader/web/handler/create_excel.dart';
 enum ItemAction { download, delete }
 
 class LeftPanel extends StatefulWidget {
-  const LeftPanel({Key key}) : super(key: key);
+  const LeftPanel({Key key}) : super(key: key); 
 
   @override
   _LeftPanelState createState() => _LeftPanelState();

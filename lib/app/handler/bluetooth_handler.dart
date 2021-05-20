@@ -6,17 +6,16 @@ import 'package:hive/hive.dart';
 import 'package:tendon_loader/shared/constants.dart';
 
 mixin Bluetooth {
-  static bool isConnected = false;
-
   static BluetoothDevice _device;
   static BluetoothCharacteristic _dataChar;
   static BluetoothCharacteristic _controlChar;
 
-  static String get deviceName => isConnected ? _device.name ?? _device.id.toString() : 'Device Not Connected!';
+  static Stream<bool> get isConnecting => _device?.isDiscoveringServices;
+  static bool get isConnected => _device != null && _dataChar != null && _controlChar != null;
+  static String get deviceName => isConnected ? _device.name ?? _device.id.id : 'Device Not Connected!';
 
   static Future<void> enable() async {
     _device = _dataChar = _controlChar = null;
-    isConnected = false;
     await AppSettings.openBluetoothSettings();
   }
 
@@ -51,28 +50,30 @@ mixin Bluetooth {
   static Future<void> stopScan() async => FlutterBlue.instance.stopScan();
 
   static Future<void> refresh() async {
-    final List<BluetoothDevice> _connected = await FlutterBlue.instance.connectedDevices;
+    final List<BluetoothDevice> _devices = await FlutterBlue.instance.connectedDevices;
     final String _deviceId = (Hive.box<String>(Keys.KEY_BT_DEVICE)).get(Keys.KEY_BT_DEVICE);
-    if (_connected != null && _connected.isNotEmpty) {
-      final BluetoothDevice device = _connected?.firstWhere((BluetoothDevice device) => device.id.id == _deviceId);
+    if (_devices != null && _devices.isNotEmpty) {
+      final BluetoothDevice device = _devices?.firstWhere((BluetoothDevice device) => device.id.id == _deviceId);
       if (device != null) await reConnect(device);
     }
   }
 
   static Future<void> reConnect(BluetoothDevice device) async {
     await disconnect(device);
-    await connect(device);
+    await _connect(device);
   }
 
-  static Future<void> connect(BluetoothDevice device) async {
+  static Future<void> _connect(BluetoothDevice device) async {
     await (_device = device).connect(autoConnect: true);
     await _getProps();
   }
 
   static Future<void> disconnect([BluetoothDevice device]) async {
-    await (device ?? _device)?.disconnect();
-    _device = _dataChar = _controlChar = null;
-    isConnected = false;
+    await device?.disconnect();
+    if (isConnected) {
+      await _device.disconnect();
+      _device = _dataChar = _controlChar = null;
+    }
   }
 
   static Future<void> _getProps() async {
@@ -82,7 +83,6 @@ mixin Bluetooth {
     final List<BluetoothCharacteristic> chars = _service?.characteristics;
     _dataChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
     _controlChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.CONTROL_POINT_UUID));
-    isConnected = _dataChar != null && _controlChar != null;
     await (Hive.box<String>(Keys.KEY_BT_DEVICE)).put(Keys.KEY_BT_DEVICE, _device.id.id);
     await notify(true);
   }
