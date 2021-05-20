@@ -8,14 +8,14 @@ environment:
 
 dependencies:
   app_settings: ^4.1.0
-  cloud_firestore: ^1.0.4
+  cloud_firestore: ^2.2.0
   connectivity: ^3.0.3
   cupertino_icons: ^1.0.0
   firebase_auth: ^1.0.1
   flutter:
     sdk: flutter
   flutter_blue: ^0.8.0
-  flutter_svg: ^0.21.0+1 
+  flutter_svg: ^0.22.0 
   hive: ^2.0.2
   hive_flutter: ^1.0.0
   intl: ^0.17.0
@@ -25,7 +25,6 @@ dependencies:
   rxdart: ^0.26.0
   syncfusion_flutter_charts: ^19.1.56
   syncfusion_flutter_xlsio: ^19.1.56-beta
-  # url_launcher: ^6.0.3
 
 dev_dependencies:
   flutter_test:

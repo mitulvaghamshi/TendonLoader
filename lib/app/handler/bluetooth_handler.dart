@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:hive/hive.dart';
 import 'package:tendon_loader/shared/constants.dart';
 
 mixin Bluetooth {
@@ -41,7 +40,6 @@ mixin Bluetooth {
 
   static Future<void> startScan() async {
     await FlutterBlue.instance.startScan(
-      timeout: const Duration(seconds: 3),
       withDevices: <Guid>[Guid(Progressor.SERVICE_UUID)],
       withServices: <Guid>[Guid(Progressor.SERVICE_UUID)],
     );
@@ -49,27 +47,14 @@ mixin Bluetooth {
 
   static Future<void> stopScan() async => FlutterBlue.instance.stopScan();
 
-  static Future<void> refresh() async {
-    final List<BluetoothDevice> _devices = await FlutterBlue.instance.connectedDevices;
-    final String _deviceId = (Hive.box<String>(Keys.KEY_BT_DEVICE)).get(Keys.KEY_BT_DEVICE);
-    if (_devices != null && _devices.isNotEmpty) {
-      final BluetoothDevice device = _devices?.firstWhere((BluetoothDevice device) => device.id.id == _deviceId);
-      if (device != null) await reConnect(device);
+  static Future<void> connect(BluetoothDevice device) async {
+    if (!isConnected) {
+      await (_device = device).connect(autoConnect: false);
+      await _getProps();
     }
   }
 
-  static Future<void> reConnect(BluetoothDevice device) async {
-    await disconnect(device);
-    await _connect(device);
-  }
-
-  static Future<void> _connect(BluetoothDevice device) async {
-    await (_device = device).connect(autoConnect: true);
-    await _getProps();
-  }
-
-  static Future<void> disconnect([BluetoothDevice device]) async {
-    await device?.disconnect();
+  static Future<void> disconnect() async {
     if (isConnected) {
       await _device.disconnect();
       _device = _dataChar = _controlChar = null;
@@ -83,7 +68,6 @@ mixin Bluetooth {
     final List<BluetoothCharacteristic> chars = _service?.characteristics;
     _dataChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
     _controlChar = chars?.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.CONTROL_POINT_UUID));
-    await (Hive.box<String>(Keys.KEY_BT_DEVICE)).put(Keys.KEY_BT_DEVICE, _device.id.id);
     await notify(true);
   }
 }

@@ -18,7 +18,6 @@ class AppAuth {
 
   static Future<void> initHive() async {
     await Hive.initFlutter();
-    await Hive.openBox<String>(Keys.KEY_BT_DEVICE);
     await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX);
     await Hive.openBox<Map<dynamic, dynamic>>(Keys.KEY_USER_EXPORTS_BOX);
   }

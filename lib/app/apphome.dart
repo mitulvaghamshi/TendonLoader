@@ -28,7 +28,6 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     Locator.check();
-    Bluetooth.refresh();
     WidgetsBinding.instance.addObserver(this);
     Future<void>.delayed(const Duration(seconds: 2), () async {
       final int _records = await ExportHandler.checkLocalData();
@@ -39,10 +38,6 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    Hive.close();
-    Locator.dispose();
-    AppAuth.signOut();
-    Bluetooth.disconnect();
     super.dispose();
   }
 
@@ -166,6 +161,13 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
       appBar: AppBar(title: const Text(AppHome.name), actions: <Widget>[_buildMenu()]),
       body: AppFrame(
         isScrollable: true,
+        onExit: () async {
+          await Bluetooth.disconnect();
+          await AppAuth.signOut();
+          await Hive.close();
+          Locator.dispose();
+          return true;
+        },
         child: Column(
           children: <Widget>[
             const CustomImage(isLogo: true),

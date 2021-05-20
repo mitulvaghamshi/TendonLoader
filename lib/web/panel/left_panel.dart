@@ -33,22 +33,22 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      child: StreamBuilder<QuerySnapshot>(
+      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance.collection(Keys.KEY_ALL_USERS).snapshots(),
-        builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder: (_, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           return snapshot.hasData ? _buildUsers(snapshot.data.docs) : const CustomProgress();
         },
       ),
     );
   }
 
-  ListView _buildUsers(List<QueryDocumentSnapshot> users) {
+  ListView _buildUsers(List<QueryDocumentSnapshot<Map<String, dynamic>>> users) {
     return ListView.separated(
       itemCount: users.length,
       separatorBuilder: (_, int index) => Divider(color: Theme.of(context).accentColor),
-      itemBuilder: (_, int index) => StreamBuilder<QuerySnapshot>(
+      itemBuilder: (_, int index) => StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: users[index].reference.collection(Keys.KEY_ALL_EXPORTS).snapshots(),
-        builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder: (_, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
             switchInCurve: Curves.elasticIn,
@@ -73,7 +73,7 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
     );
   }
 
-  Widget _buildGroupItem(QueryDocumentSnapshot perDay) {
+  Widget _buildGroupItem(QueryDocumentSnapshot<Map<String, dynamic>> perDay) {
     final Map<String, dynamic> exports = perDay.data();
     if (exports.isEmpty) {
       return ListTile(
