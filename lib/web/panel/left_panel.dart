@@ -15,7 +15,7 @@ import 'package:tendon_loader/web/handler/create_excel.dart';
 enum ItemAction { download, delete }
 
 class LeftPanel extends StatefulWidget {
-  const LeftPanel({Key key}) : super(key: key); 
+  const LeftPanel({Key? key}) : super(key: key); 
 
   @override
   _LeftPanelState createState() => _LeftPanelState();
@@ -36,7 +36,7 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance.collection(Keys.KEY_ALL_USERS).snapshots(),
         builder: (_, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          return snapshot.hasData ? _buildUsers(snapshot.data.docs) : const CustomProgress();
+          return snapshot.hasData ? _buildUsers(snapshot.data!.docs) : const CustomProgress();
         },
       ),
     );
@@ -63,7 +63,7 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
                     title: Text(users[index].id, style: const TextStyle(fontSize: 18)),
                     children: ListTile.divideTiles(
                       color: Colors.blue,
-                      tiles: snapshot.data.docs.map(_buildGroupItem),
+                      tiles: snapshot.data!.docs.map(_buildGroupItem),
                     ).toList(),
                   )
                 : const SizedBox(height: 50),
@@ -102,7 +102,7 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
   Widget _builldListItem(MapEntry<String, dynamic> export) {
     final Map<String, dynamic> _meta = export.value[Keys.KEY_META_DATA] as Map<String, dynamic>;
     final SessionInfo _info = SessionInfo.fromMap(_meta);
-    final Prescription _pre = _info.type ? null : Prescription.fromMap(_meta);
+    final Prescription? _pre = _info.type ? null : Prescription.fromMap(_meta);
     final List<ChartData> _dataList = List<Map<String, dynamic>>.from(export.value[Keys.KEY_USER_DATA] as List<dynamic>)
         .map<ChartData>((Map<String, dynamic> item) => ChartData.fromMap(item))
         .toList();

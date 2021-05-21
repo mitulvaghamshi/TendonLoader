@@ -3,12 +3,12 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 
 class CustomGraph extends StatelessWidget {
-  const CustomGraph({Key key, this.graphData, this.lineData, this.lineCtrl, this.graphCtrl}) : super(key: key);
+  const CustomGraph({Key? key, this.graphData, this.lineData, this.lineCtrl, this.graphCtrl}) : super(key: key);
 
-  final List<ChartData> lineData;
-  final List<ChartData> graphData;
-  final void Function(ChartSeriesController) lineCtrl;
-  final void Function(ChartSeriesController) graphCtrl;
+  final List<ChartData>? lineData;
+  final List<ChartData?>? graphData;
+  final void Function(ChartSeriesController)? lineCtrl;
+  final void Function(ChartSeriesController)? graphCtrl;
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +27,13 @@ class CustomGraph extends StatelessWidget {
             majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
             labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          series: <ChartSeries<ChartData, int>>[
-            ColumnSeries<ChartData, int>(
+          series: <ChartSeries<ChartData?, int>>[
+            ColumnSeries<ChartData?, int>(
               width: 0.9,
               borderWidth: 1,
               color: Colors.blue,
               animationDuration: 0,
-              dataSource: graphData,
+              dataSource: graphData!,
               onRendererCreated: graphCtrl,
               dataLabelSettings: DataLabelSettings(
                 isVisible: true,
@@ -49,18 +49,18 @@ class CustomGraph extends StatelessWidget {
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              xValueMapper: (ChartData data, _) => 1,
-              yValueMapper: (ChartData data, _) => data.load,
+              xValueMapper: (ChartData? data, _) => 1,
+              yValueMapper: (ChartData? data, _) => data!.load,
             ),
             if (lineData != null)
               LineSeries<ChartData, int>(
                 width: 5,
                 color: Colors.red,
                 animationDuration: 0,
-                dataSource: lineData,
+                dataSource: lineData!,
                 onRendererCreated: lineCtrl,
                 yValueMapper: (ChartData data, _) => data.load,
-                xValueMapper: (ChartData data, _) => data.time.toInt(),
+                xValueMapper: (ChartData data, _) => data.time!.toInt(),
               ),
           ],
         ),

@@ -9,7 +9,7 @@ import 'package:tendon_loader/shared/modal/data_model.dart';
 import 'package:tendon_loader/web/handler/click_handler.dart';
 
 class RightPanel extends StatefulWidget {
-  const RightPanel({Key key}) : super(key: key);
+  const RightPanel({Key? key}) : super(key: key);
 
   @override
   _RightPanelState createState() => _RightPanelState();
@@ -24,15 +24,15 @@ class _RightPanelState extends State<RightPanel> {
         stream: ClickHandler.stream,
         builder: (_, AsyncSnapshot<DataModel> snapshot) {
           if (!snapshot.hasData) return const Center(child: CustomImage(isBg: true));
-          final DataModel _model = snapshot.data;
+          final DataModel _model = snapshot.data!;
           return Row(children: <Widget>[
             Expanded(
               child: Column(children: <Widget>[
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(children: <Widget>[
-                    _model.sessionInfo.toTable(),
-                    if (_model.prescription != null) _model.prescription.toTable(),
+                    _model.sessionInfo!.toTable(),
+                    if (_model.prescription != null) _model.prescription!.toTable(),
                   ]),
                 ),
                 Expanded(
@@ -44,7 +44,7 @@ class _RightPanelState extends State<RightPanel> {
                       header: _model.prescription != null ? 'Measurement' : 'MVC',
                     ),
                     primaryXAxis: NumericAxis(
-                      visibleMaximum: _model.sessionInfo.type ? 5 : 50,
+                      visibleMaximum: _model.sessionInfo!.type ? 5 : 50,
                       labelFormat: '{value} s',
                       enableAutoIntervalOnZooming: true,
                       majorGridLines: const MajorGridLines(width: 0),
@@ -71,7 +71,7 @@ class _RightPanelState extends State<RightPanel> {
                         width: 2,
                         color: Colors.blue,
                         animationDuration: 3000,
-                        dataSource: _model.dataList,
+                        dataSource: _model.dataList!,
                         xValueMapper: (ChartData data, _) => data.time,
                         yValueMapper: (ChartData data, _) => data.load,
                       ),
@@ -83,8 +83,8 @@ class _RightPanelState extends State<RightPanel> {
                           yValueMapper: (ChartData data, _) => data.load,
                           xValueMapper: (ChartData data, _) => data.time,
                           dataSource: <ChartData>[
-                            ChartData(load: _model.prescription.targetLoad),
-                            ChartData(time: _model.dataList.last.time, load: _model.prescription.targetLoad),
+                            ChartData(load: _model.prescription!.targetLoad),
+                            ChartData(time: _model.dataList!.last.time, load: _model.prescription!.targetLoad),
                           ],
                         ),
                     ],
@@ -92,7 +92,7 @@ class _RightPanelState extends State<RightPanel> {
                 ),
               ]),
             ),
-            if (_model.dataList.isNotEmpty)
+            if (_model.dataList!.isNotEmpty)
               LimitedBox(
                 maxWidth: 250,
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
@@ -108,7 +108,7 @@ class _RightPanelState extends State<RightPanel> {
                       controller: _scrollController,
                       child: ListView.separated(
                         controller: _scrollController,
-                        itemCount: _model.dataList.length,
+                        itemCount: _model.dataList!.length,
                         padding: const EdgeInsets.only(left: 5, right: 20),
                         physics: const AlwaysScrollableScrollPhysics(),
                         separatorBuilder: (_, int index) => Divider(
@@ -117,8 +117,8 @@ class _RightPanelState extends State<RightPanel> {
                         ),
                         itemBuilder: (_, int index) {
                           final String i = '${index + 1}'.padLeft(3, '  ');
-                          final String t = _model.dataList[index].time.toStringAsFixed(1).padRight(4);
-                          final String l = _model.dataList[index].load.toStringAsFixed(2).padRight(4);
+                          final String t = _model.dataList![index].time!.toStringAsFixed(1).padRight(4);
+                          final String l = _model.dataList![index].load!.toStringAsFixed(2).padRight(4);
                           return Text(
                             '$i. $t $l',
                             style: const TextStyle(

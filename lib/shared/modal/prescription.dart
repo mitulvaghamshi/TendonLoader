@@ -24,14 +24,14 @@ class Prescription {
     );
   }
 
-  final int sets;
-  final int reps;
-  final int holdTime;
-  final int restTime;
-  final double lastMVC;
-  final double targetLoad;
+  final int? sets;
+  final int? reps;
+  final int? holdTime;
+  final int? restTime;
+  final double? lastMVC;
+  final double? targetLoad;
 
-  final int setRestTime;
+  final int? setRestTime;
 
   Map<String, String> toMap() {
     return <String, String>{

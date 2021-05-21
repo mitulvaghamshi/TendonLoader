@@ -3,7 +3,7 @@ import 'package:tendon_loader/app/custom/custom_picker.dart';
 
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
-    Key key,
+    Key? key,
     this.desc,
     this.label,
     this.validator,
@@ -16,14 +16,14 @@ class CustomTextField extends StatefulWidget {
   }) : super(key: key);
 
   final String hint;
-  final String desc;
-  final String label;
+  final String? desc;
+  final String? label;
   final bool isPicker;
   final bool isObscure;
   final TextInputAction action;
   final TextInputType keyboardType;
-  final TextEditingController controller;
-  final String Function(String) validator;
+  final TextEditingController? controller;
+  final String? Function(String?)? validator;
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -37,7 +37,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
     if (widget.isPicker) {
       buttons.add(IconButton(
         icon: const Icon(Icons.timer_rounded),
-        onPressed: () async => widget.controller.text = await TimePicker.selectTime(context),
+        onPressed: () async {
+          final String? result = await TimePicker.selectTime(context);
+          if (result != null) widget.controller!.text = result;
+        },
       ));
     } else if (widget.isObscure) {
       buttons.add(IconButton(
@@ -50,12 +53,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
       children: buttons
         ..add(IconButton(
           icon: const Icon(Icons.clear_rounded),
-          onPressed: () => widget.controller.clear(),
+          onPressed: () => widget.controller!.clear(),
         )),
     );
   }
 
-  UnderlineInputBorder _buildBorder({double width = 2, Color color}) {
+  UnderlineInputBorder _buildBorder({double width = 2, required Color color}) {
     return UnderlineInputBorder(borderSide: BorderSide(width: width, color: color));
   }
 

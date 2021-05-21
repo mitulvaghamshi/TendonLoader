@@ -4,7 +4,7 @@ import 'package:tendon_loader/app/device/tiles/enable_bluetooth_tile.dart';
 import 'package:tendon_loader/app/device/tiles/location_tile.dart';
 
 class BluetoothTile extends StatelessWidget {
-  const BluetoothTile({Key key}) : super(key: key);
+  const BluetoothTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

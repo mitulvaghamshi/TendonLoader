@@ -6,7 +6,7 @@ import 'package:tendon_loader/shared/custom/custom_button.dart';
 import 'package:tendon_loader/shared/custom/custom_progress.dart';
 
 class ScannerTile extends StatelessWidget {
-  const ScannerTile({Key key}) : super(key: key);
+  const ScannerTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ScannerTile extends StatelessWidget {
           children: <Widget>[
             const DeviceList(),
             const SizedBox(height: 10),
-            if (snapshot.data)
+            if (snapshot.data!)
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: const <Widget>[

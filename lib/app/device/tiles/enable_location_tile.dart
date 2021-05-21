@@ -5,7 +5,7 @@ import 'package:tendon_loader/shared/custom/custom_button.dart';
 import 'package:tendon_loader/shared/custom/custom_image.dart';
 
 class EnableLocationTile extends StatelessWidget {
-  const EnableLocationTile({Key key}) : super(key: key);
+  const EnableLocationTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

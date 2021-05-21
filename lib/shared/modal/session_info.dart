@@ -5,12 +5,12 @@ import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/shared/constants.dart';
 
 class SessionInfo {
-  SessionInfo({this.exportType, bool dataStatus, DateTime dateTime})
+  SessionInfo({this.exportType, required bool dataStatus, required DateTime dateTime})
       : progressorId = Bluetooth.deviceName,
         dataStatus = dataStatus ? 'Complete' : 'Incomplete',
         exportDate = DateFormat(Keys.KEY_DATE_FORMAT).format(dateTime),
         exportTime = DateFormat(Keys.KEY_TIME_FORMAT).format(dateTime),
-        userId = (Hive.box<Object>(Keys.KEY_LOGIN_BOX)).get(Keys.KEY_USERNAME) as String;
+        userId = (Hive.box<Object>(Keys.KEY_LOGIN_BOX)).get(Keys.KEY_USERNAME) as String?;
 
   SessionInfo.fromMap(Map<dynamic, dynamic> map) {
     userId = map[Keys.KEY_USERNAME].toString();
@@ -21,20 +21,20 @@ class SessionInfo {
     progressorId = map[Keys.KEY_PROGRESSOR_ID].toString();
   }
 
-  String userId;
-  String exportType;
-  String dataStatus;
-  String exportDate;
-  String exportTime;
-  String progressorId;
+  String? userId;
+  String? exportType;
+  String? dataStatus;
+  String? exportDate;
+  String? exportTime;
+  String? progressorId;
 
-  bool get type => exportType.contains('mvc');
-  String get abbr => exportType.substring(0, 3).toUpperCase();
+  bool get type => exportType!.contains('mvc');
+  String get abbr => exportType!.substring(0, 3).toUpperCase();
   Color get color => type ? Colors.orange : Colors.green;
-  String get fileName => '${exportDate}_${exportTime.replaceAll(RegExp(r'[\s:]'), '-')}_${userId}_$exportType.xlsx';
+  String get fileName => '${exportDate}_${exportTime!.replaceAll(RegExp(r'[\s:]'), '-')}_${userId}_$exportType.xlsx';
 
-  Map<String, String> toMap() {
-    return <String, String>{
+  Map<String, String?> toMap() {
+    return <String, String?>{
       Keys.KEY_USERNAME: userId,
       Keys.KEY_EXPORT_TYPE: exportType,
       Keys.KEY_DATA_STATUS: dataStatus,
@@ -61,12 +61,12 @@ class SessionInfo {
       ],
       rows: <DataRow>[
         DataRow(cells: <DataCell>[
-          DataCell(Text(exportDate)),
-          DataCell(Text(exportTime)),
-          DataCell(Text(exportType)),
-          DataCell(Text(dataStatus)),
-          DataCell(Text(progressorId)),
-          DataCell(Text(userId)),
+          DataCell(Text(exportDate!)),
+          DataCell(Text(exportTime!)),
+          DataCell(Text(exportType!)),
+          DataCell(Text(dataStatus!)),
+          DataCell(Text(progressorId!)),
+          DataCell(Text(userId!)),
         ])
       ],
     );

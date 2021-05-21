@@ -1,7 +1,7 @@
 class AnchorElement {
   const AnchorElement({this.href});
 
-  final String href;
+  final String? href;
 
   void click() {}
 

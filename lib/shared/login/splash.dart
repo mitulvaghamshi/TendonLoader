@@ -4,7 +4,7 @@ import 'package:tendon_loader/shared/custom/custom_image.dart';
 import 'package:tendon_loader/shared/login/login.dart';
 
 class Splash extends StatelessWidget {
-  const Splash({Key key}) : super(key: key);
+  const Splash({Key? key}) : super(key: key);
 
   static const String route = '/';
 

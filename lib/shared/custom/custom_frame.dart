@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AppFrame extends StatelessWidget {
-  const AppFrame({Key key, this.child, this.isScrollable = false, this.onExit}) : super(key: key);
+  const AppFrame({Key? key, this.child, this.isScrollable = false, this.onExit}) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
   final bool isScrollable;
-  final Future<bool> Function() onExit;
+  final Future<bool> Function()? onExit;
 
   @override
   Widget build(BuildContext context) {

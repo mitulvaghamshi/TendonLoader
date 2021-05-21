@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomAvatar extends StatelessWidget {
-  const CustomAvatar(this.text, {Key key, this.color}) : super(key: key);
+  const CustomAvatar(this.text, {Key? key, this.color}) : super(key: key);
 
   final String text;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {

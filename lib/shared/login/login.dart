@@ -11,7 +11,7 @@ import 'package:tendon_loader/shared/custom/custom_image.dart';
 import 'package:tendon_loader/shared/validator.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key key}) : super(key: key);
+  const Login({Key? key}) : super(key: key);
 
   static const String route = '/login';
   static const String home = '/home';
@@ -25,29 +25,29 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _usernameCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
-  AnimationController _animCtrl;
+  late AnimationController _animCtrl;
 
-  bool _staySignedIn = true;
+  bool? _staySignedIn = true;
   bool _createNew = false;
   bool _busy = false;
-  String _uniqueUserID;
-  User _user;
+  String? _uniqueUserID;
+  User? _user;
 
   void _getLoginInfo() {
     final Box<Object> _loginBox = Hive.box<Object>(Keys.KEY_LOGIN_BOX);
     setState(() {
-      _uniqueUserID = _loginBox.get(Keys.KEY_IS_FIRST_TIME) as String;
-      _staySignedIn = _loginBox.get(Keys.KEY_STAY_SIGN_IN, defaultValue: true) as bool;
-      if (_staySignedIn) {
-        _usernameCtrl.text = _loginBox.get(Keys.KEY_USERNAME, defaultValue: '') as String;
-        _passwordCtrl.text = _loginBox.get(Keys.KEY_PASSWORD, defaultValue: '') as String;
+      _uniqueUserID = _loginBox.get(Keys.KEY_IS_FIRST_TIME) as String?;
+      _staySignedIn = _loginBox.get(Keys.KEY_STAY_SIGN_IN, defaultValue: true) as bool?;
+      if (_staySignedIn!) {
+        _usernameCtrl.text = (_loginBox.get(Keys.KEY_USERNAME, defaultValue: '') as String?)!;
+        _passwordCtrl.text = (_loginBox.get(Keys.KEY_PASSWORD, defaultValue: '') as String?)!;
       }
     });
   }
 
   Future<void> _setLoginInfo() async {
     final Box<Object> _loginBox = Hive.box<Object>(Keys.KEY_LOGIN_BOX);
-    await _loginBox.put(Keys.KEY_STAY_SIGN_IN, _staySignedIn || _createNew);
+    await _loginBox.put(Keys.KEY_STAY_SIGN_IN, _staySignedIn! || _createNew);
     if (_uniqueUserID != null && _uniqueUserID == _usernameCtrl.text) {
       await _loginBox.put(Keys.KEY_IS_FIRST_TIME, _usernameCtrl.text);
     } else {
@@ -57,7 +57,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
           .doc(_usernameCtrl.text)
           .set(<String, dynamic>{'LastActive': DateTime.now()});
     }
-    if (_staySignedIn || _createNew) {
+    if (_staySignedIn! || _createNew) {
       await _loginBox.put(Keys.KEY_USERNAME, _usernameCtrl.text);
       await _loginBox.put(Keys.KEY_PASSWORD, _passwordCtrl.text);
     }
@@ -65,12 +65,12 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
 
   Future<void> _authenticate(AnimationStatus status) async {
     if (status == AnimationStatus.forward) {
-      if (_loginFormKey.currentState.validate() && !_busy) {
+      if (_loginFormKey.currentState!.validate() && !_busy) {
         _busy = true;
         _user = await AppAuth.authenticate(
           context,
           create: _createNew,
-          name: _nameCtrl.text ?? '',
+          name: _nameCtrl.text,
           username: _usernameCtrl.text,
           password: _passwordCtrl.text,
         );
@@ -150,7 +150,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Checkbox(value: _staySignedIn, onChanged: (bool value) => setState(() => _staySignedIn = value)),
+                  Checkbox(value: _staySignedIn, onChanged: (bool? value) => setState(() => _staySignedIn = value)),
                   const Text('Keep me logged in.', style: TextStyle(letterSpacing: 2)),
                 ],
               ),

@@ -14,18 +14,18 @@ import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/handler/data_handler.dart';
 
 class BarGraph extends StatefulWidget {
-  const BarGraph({Key key}) : super(key: key);
+  const BarGraph({Key? key}) : super(key: key);
 
   @override
   _BarGraphState createState() => _BarGraphState();
 }
 
 class _BarGraphState extends State<BarGraph> {
-  final List<ChartData> _graphData = <ChartData>[];
+  final List<ChartData?> _graphData = <ChartData?>[];
   final List<ChartData> _dataList = <ChartData>[];
   final DataHandler _handler = DataHandler();
 
-  ChartSeriesController _graphCtrl;
+  ChartSeriesController? _graphCtrl;
   bool _isRunning = false;
   double _minTime = 0;
 
@@ -39,7 +39,7 @@ class _BarGraphState extends State<BarGraph> {
       Bluetooth.stopWeightMeas();
       _minTime = 0;
       _handler.clear();
-      _graphData.insert(0, ChartData());
+      _graphData.insert(0, const ChartData());
       _graphCtrl?.updateDataSource(updatedDataIndex: 0);
     }
   }
@@ -79,12 +79,12 @@ class _BarGraphState extends State<BarGraph> {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           StreamBuilder<ChartData>(
-            initialData: ChartData(),
+            initialData: const ChartData(),
             stream: _handler.stream,
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               _graphData.insert(0, snapshot.data);
               _graphCtrl?.updateDataSource(updatedDataIndex: 0);
-              return Text(snapshot.data.time.toTime, style: tsBold26.copyWith(color: Colors.green));
+              return Text(snapshot.data!.time!.toTime, style: tsBold26.copyWith(color: Colors.green));
             },
           ),
           CustomGraph(graphData: _graphData, graphCtrl: (ChartSeriesController ctrl) => _graphCtrl = ctrl),

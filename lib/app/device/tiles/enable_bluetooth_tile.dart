@@ -5,7 +5,7 @@ import 'package:tendon_loader/shared/custom/custom_button.dart';
 import 'package:tendon_loader/shared/custom/custom_image.dart';
 
 class EnableBluetoothTile extends StatelessWidget {
-  const EnableBluetoothTile({Key key}) : super(key: key);
+  const EnableBluetoothTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -17,21 +17,21 @@ import 'package:tendon_loader/shared/modal/data_model.dart';
 import 'package:tendon_loader/shared/modal/session_info.dart';
 
 class BarGraph extends StatefulWidget {
-  const BarGraph({Key key}) : super(key: key);
+  const BarGraph({Key? key}) : super(key: key);
 
   @override
   _BarGraphState createState() => _BarGraphState();
 }
 
 class _BarGraphState extends State<BarGraph> {
-  final List<ChartData> _lineData = <ChartData>[ChartData(), ChartData(time: 2)];
-  final List<ChartData> _graphData = <ChartData>[];
+  final List<ChartData> _lineData = <ChartData>[const ChartData(), const ChartData(time: 2)];
+  final List<ChartData?> _graphData = <ChartData?>[];
   final List<ChartData> _dataList = <ChartData>[];
   final DataHandler _handler = DataHandler();
 
-  ChartSeriesController _graphCtrl;
-  ChartSeriesController _lineCtrl;
-  DateTime _dateTime;
+  ChartSeriesController? _graphCtrl;
+  late ChartSeriesController _lineCtrl;
+  late DateTime _dateTime;
 
   bool _isComplete = false;
   bool _isRunning = false;
@@ -62,9 +62,9 @@ class _BarGraphState extends State<BarGraph> {
     _minLoad = 0;
     _minTime = 0;
     _handler.clear();
-    _graphData.insert(0, ChartData());
-    _graphCtrl.updateDataSource(updatedDataIndex: 0);
-    _lineData.insertAll(0, <ChartData>[ChartData(load: 0), ChartData(time: 2, load: 0)]);
+    _graphData.insert(0, const ChartData());
+    _graphCtrl!.updateDataSource(updatedDataIndex: 0);
+    _lineData.insertAll(0, <ChartData>[const ChartData(load: 0), const ChartData(time: 2, load: 0)]);
     _lineCtrl.updateDataSource(updatedDataIndexes: <int>[0, 1]);
   }
 
@@ -97,7 +97,7 @@ class _BarGraphState extends State<BarGraph> {
   Future<bool> _onExit() async {
     _reset();
     if (!_hasData) return true;
-    final bool result = await ConfirmDialog.show(
+    final bool? result = await ConfirmDialog.show(
       context,
       model: DataModel(
         dataList: _dataList,
@@ -132,7 +132,7 @@ class _BarGraphState extends State<BarGraph> {
       child: Column(
         children: <Widget>[
           StreamBuilder<ChartData>(
-            initialData: ChartData(),
+            initialData: const ChartData(),
             stream: _handler.stream,
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               _graphData.insert(0, snapshot.data);
@@ -141,7 +141,7 @@ class _BarGraphState extends State<BarGraph> {
                 children: <Widget>[
                   Text('MVC: ${_minLoad.toStringAsFixed(2)} Kg', style: tsBold26),
                   const SizedBox(height: 16),
-                  Text(snapshot.data.time.toRemaining, style: tsBold26.copyWith(color: Colors.red)),
+                  Text(snapshot.data!.time!.toRemaining, style: tsBold26.copyWith(color: Colors.red)),
                 ],
               );
             },
