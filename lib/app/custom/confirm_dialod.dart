@@ -6,11 +6,11 @@ import 'package:tendon_loader/app/handler/export_handler.dart';
 import 'package:tendon_loader/shared/modal/data_model.dart';
 
 class ConfirmDialog extends StatelessWidget {
-  const ConfirmDialog({Key key, this.model}) : super(key: key);
+  const ConfirmDialog({Key? key, this.model}) : super(key: key);
 
-  final DataModel model;
+  final DataModel? model;
 
-  static Future<bool> show(BuildContext context, {DataModel model}) async {
+  static Future<bool?> show(BuildContext context, {DataModel? model}) async {
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -24,7 +24,7 @@ class ConfirmDialog extends StatelessWidget {
   }
 
   void _export(BuildContext context, [bool later = false]) {
-    ExportHandler.export(model, later);
+    ExportHandler.export(model!, later);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(later ? 'Saving...' : 'Uploading...')));
     Navigator.of(context).pop(true);
   }

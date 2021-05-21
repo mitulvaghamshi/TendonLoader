@@ -22,21 +22,21 @@ class AppAuth {
     await Hive.openBox<Map<dynamic, dynamic>>(Keys.KEY_USER_EXPORTS_BOX);
   }
 
-  static Future<User> authenticate(BuildContext context, {bool create, String name, String username, String password}) {
+  static Future<User?> authenticate(BuildContext context, {required bool create, String? name, String? username, String? password}) {
     if (kIsWeb) FirebaseAuth.instance.setPersistence(Persistence.NONE);
-    return create ? _signUp(context, name, username, password) : _signIn(context, username, password);
+    return create ? _signUp(context, name, username!, password!) : _signIn(context, username!, password!);
   }
 
-  static User user() => FirebaseAuth.instance.currentUser;
+  static User? user() => FirebaseAuth.instance.currentUser;
 
-  static Future<User> _signUp(BuildContext context, String name, String username, String password) async {
+  static Future<User?> _signUp(BuildContext context, String? name, String username, String password) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
-    User user;
+    User? user;
     try {
       final UserCredential userCredential =
           await auth.createUserWithEmailAndPassword(email: username, password: password);
       user = userCredential.user;
-      await user.updateProfile(displayName: name);
+      await user!.updateProfile(displayName: name);
       await user.reload();
       user = auth.currentUser;
     } on FirebaseAuthException catch (e) {
@@ -49,8 +49,8 @@ class AppAuth {
     return user;
   }
 
-  static Future<User> _signIn(BuildContext context, String username, String password) async {
-    User user;
+  static Future<User?> _signIn(BuildContext context, String username, String password) async {
+    User? user;
     final FirebaseAuth auth = FirebaseAuth.instance;
     try {
       final UserCredential userCredential = await auth.signInWithEmailAndPassword(email: username, password: password);
@@ -65,7 +65,7 @@ class AppAuth {
     return user;
   }
 
-  static Future<User> refreshUser(User user) async {
+  static Future<User?> refreshUser(User user) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     await user.reload();
     return auth.currentUser;

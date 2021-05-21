@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: '>=2.13.0 <3.0.0'
 
 dependencies:
   app_settings: ^4.1.0
@@ -27,6 +27,7 @@ dependencies:
   syncfusion_flutter_xlsio: ^19.1.56-beta
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.9.0
   flutter_test:
     sdk: flutter
   pedantic: ^1.11.0
@@ -38,3 +39,8 @@ flutter:
     - assets/images/enable_device.png
     - assets/images/enable_location.png
     - assets/images/enable_bluetooth.png
+
+flutter_icons:
+  ios: true
+  remove_alpha_ios: true
+  image_path: "android/app/src/main/ic_launcher-playstore.png"

@@ -7,7 +7,7 @@ import 'package:tendon_loader/shared/modal/session_info.dart';
 class DataModel {
   const DataModel({this.dataList, this.sessionInfo, this.prescription});
 
-  final List<ChartData> dataList;
-  final SessionInfo sessionInfo;
-  final Prescription prescription;
+  final List<ChartData>? dataList;
+  final SessionInfo? sessionInfo;
+  final Prescription? prescription;
 }

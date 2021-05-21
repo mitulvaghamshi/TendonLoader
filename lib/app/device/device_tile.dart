@@ -4,23 +4,23 @@ import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/shared/custom/custom_progress.dart';
 
 class DeviceTile extends StatelessWidget {
-  const DeviceTile({Key key, this.device}) : super(key: key);
+  const DeviceTile({Key? key, this.device}) : super(key: key);
 
-  final BluetoothDevice device;
+  final BluetoothDevice? device;
 
-  String get _deviceName => device.name.isEmpty ? device.id.id : device.name;
+  String get _deviceName => device!.name.isEmpty ? device!.id.id : device!.name;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<BluetoothDeviceState>(
-      stream: device.state,
+      stream: device!.state,
       builder: (_, AsyncSnapshot<BluetoothDeviceState> snapshot) {
         final bool _isConnected = snapshot.data == BluetoothDeviceState.connected;
         return StreamBuilder<bool>(
             initialData: false,
             stream: Bluetooth.isConnecting,
             builder: (_, AsyncSnapshot<bool> snapshot) {
-              if (snapshot.data) return const CustomProgress();
+              if (snapshot.data!) return const CustomProgress();
               return ListTile(
                 horizontalTitleGap: 0,
                 title: Text(_deviceName),

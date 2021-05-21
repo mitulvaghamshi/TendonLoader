@@ -7,7 +7,7 @@ import 'package:tendon_loader/shared/modal/prescription.dart';
 import 'package:tendon_loader/shared/validator.dart';
 
 class NewExercise extends StatefulWidget {
-  const NewExercise({Key key}) : super(key: key);
+  const NewExercise({Key? key}) : super(key: key);
 
   static const String name = ExerciseMode.name;
   static const String route = '/newExercise';
@@ -36,7 +36,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
   }
 
   void _submit() {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       Navigator.of(context).pushReplacementNamed(
         ExerciseMode.route,
         arguments: Prescription(
@@ -140,7 +140,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
                   CustomButton(
                     text: 'Clear all',
                     icon: Icons.clear_rounded,
-                    onPressed: () => _formKey.currentState.reset(),
+                    onPressed: () => _formKey.currentState!.reset(),
                   ),
                 ],
               ),

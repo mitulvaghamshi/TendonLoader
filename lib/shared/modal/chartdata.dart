@@ -10,10 +10,10 @@ class ChartData {
   factory ChartData.fromJson(String data) => ChartData.fromMap(jsonDecode(data) as Map<String, dynamic>);
 
   factory ChartData.fromMap(Map<String, dynamic> map) =>
-      ChartData(time: map[Keys.KEY_CHART_Y] as double, load: map[Keys.KEY_CHART_X] as double);
+      ChartData(time: map[Keys.KEY_CHART_Y] as double?, load: map[Keys.KEY_CHART_X] as double?);
 
-  final double time;
-  final double load;
+  final double? time;
+  final double? load;
 
   @override
   String toString() => '$time,$load';

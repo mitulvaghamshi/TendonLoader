@@ -15,7 +15,7 @@ import 'package:tendon_loader/shared/custom/custom_image.dart';
 enum ActionType { settings, export, about, close }
 
 class AppHome extends StatefulWidget {
-  const AppHome({Key key}) : super(key: key);
+  const AppHome({Key? key}) : super(key: key);
 
   static const String name = 'Tendon Loader';
 
@@ -28,7 +28,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     Locator.check();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
     Future<void>.delayed(const Duration(seconds: 2), () async {
       final int _records = await ExportHandler.checkLocalData();
       if (_records > 0) await _tryUpload(_records);
@@ -37,7 +37,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 

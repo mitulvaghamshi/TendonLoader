@@ -4,7 +4,7 @@ import 'package:tendon_loader/shared/constants.dart' show Images;
 
 class CustomImage extends StatelessWidget with Images {
   const CustomImage({
-    Key key,
+    Key? key,
     this.name,
     this.padding = 30,
     this.radius = 120,
@@ -14,7 +14,7 @@ class CustomImage extends StatelessWidget with Images {
 
   final bool isBg;
   final bool isLogo;
-  final String name;
+  final String? name;
   final double radius;
   final double padding;
 
@@ -22,8 +22,8 @@ class CustomImage extends StatelessWidget with Images {
   Widget build(BuildContext context) {
     if (name != null) {
       return Image.asset(
-        name,
-        frameBuilder: (_, Widget child, int frame, bool wasSync) {
+        name!,
+        frameBuilder: (_, Widget child, int? frame, bool wasSync) {
           if (wasSync) {
             return child;
           } else {

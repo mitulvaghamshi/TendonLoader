@@ -7,7 +7,7 @@ import 'package:tendon_loader/web/panel/left_panel.dart';
 import 'package:tendon_loader/web/panel/right_panel.dart';
 
 class WebHome extends StatelessWidget {
-  const WebHome({Key key}) : super(key: key);
+  const WebHome({Key? key}) : super(key: key);
 
   static const String name = 'Tendon Loader - Clinician';
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class GraphControls extends StatelessWidget {
-  const GraphControls({Key key, this.start, this.stop, this.reset}) : super(key: key);
+  const GraphControls({Key? key, this.start, this.stop, this.reset}) : super(key: key);
 
-  final VoidCallback start;
-  final VoidCallback stop;
-  final VoidCallback reset;
+  final VoidCallback? start;
+  final VoidCallback? stop;
+  final VoidCallback? reset;
 
   @override
   Widget build(BuildContext context) {

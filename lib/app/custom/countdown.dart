@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/shared/extensions.dart' show ExTimer;
 
 class CountDown extends StatefulWidget {
-  const CountDown({Key key, this.title, this.duration}) : super(key: key);
+  const CountDown({Key? key, this.title, this.duration}) : super(key: key);
 
-  final Duration duration;
-  final String title;
+  final Duration? duration;
+  final String? title;
 
-  static Future<bool> start(
+  static Future<bool?> start(
     BuildContext context, {
     String title = 'Session start in',
     Duration duration = const Duration(seconds: 2),
@@ -28,19 +28,19 @@ class CountDown extends StatefulWidget {
 }
 
 class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
-  AnimationController _controller;
+  AnimationController? _controller;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: widget.duration);
-    _controller.reverse(from: _controller.value == 0.0 ? 1.0 : _controller.value);
-    _controller.addStatusListener((_) => Navigator.pop<bool>(context, true));
+    _controller!.reverse(from: _controller!.value == 0.0 ? 1.0 : _controller!.value);
+    _controller!.addStatusListener((_) => Navigator.pop<bool>(context, true));
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
@@ -55,7 +55,7 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
             padding: const EdgeInsets.all(10),
             backgroundColor: Theme.of(context).accentColor,
             label: Text(
-              widget.title,
+              widget.title!,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 30, color: Theme.of(context).primaryColor),
             ),
@@ -65,13 +65,13 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
             child: AspectRatio(
               aspectRatio: 1,
               child: AnimatedBuilder(
-                animation: _controller,
-                builder: (_, Widget child) => Stack(
+                animation: _controller!,
+                builder: (_, Widget? child) => Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
                     Positioned.fill(child: CustomPaint(painter: _Painter(_controller))),
                     Text(
-                      (_controller.duration * _controller.value).inSeconds.toTime,
+                      (_controller!.duration! * _controller!.value).inSeconds.toTime,
                       style: const TextStyle(fontSize: 100, color: Colors.white),
                     ),
                   ],
@@ -88,7 +88,7 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
 class _Painter extends CustomPainter {
   const _Painter(this.ctrl) : super(repaint: ctrl);
 
-  final Animation<double> ctrl;
+  final Animation<double>? ctrl;
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
@@ -99,6 +99,6 @@ class _Painter extends CustomPainter {
       ..strokeWidth = 20
       ..style = PaintingStyle.stroke;
     canvas.drawCircle(size.center(Offset.zero), size.width / 2, paint);
-    canvas.drawArc(Offset.zero & size, pi * 1.5, -(ctrl.value * 2 * pi), false, paint..color = Colors.white);
+    canvas.drawArc(Offset.zero & size, pi * 1.5, -(ctrl!.value * 2 * pi), false, paint..color = Colors.white);
   }
 }
