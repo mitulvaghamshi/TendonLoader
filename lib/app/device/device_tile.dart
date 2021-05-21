@@ -20,7 +20,7 @@ class DeviceTile extends StatelessWidget {
             initialData: false,
             stream: Bluetooth.isConnecting,
             builder: (_, AsyncSnapshot<bool> snapshot) {
-              if (snapshot.data!) return const CustomProgress();
+              if (snapshot.data!) return const CustomProgress(text: 'Connecting...');
               return ListTile(
                 horizontalTitleGap: 0,
                 title: Text(_deviceName),

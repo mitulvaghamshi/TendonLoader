@@ -102,6 +102,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   void _connectDevice() {
     showDialog<void>(
       context: context,
+      barrierDismissible: false,
       builder: (_) => AlertDialog(
         scrollable: true,
         content: const BluetoothTile(),
@@ -117,7 +118,6 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
     switch (type) {
       case ActionType.about:
         return _aboutDialog();
-        break;
       case ActionType.export:
         await _manuallyExport();
         break;
@@ -152,8 +152,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
     );
   }
 
-  void _handleTap(String route) =>
-      Bluetooth.isConnected || true ? Navigator.pushNamed(context, route) : _connectDevice();
+  void _handleTap(String route) => Bluetooth.isConnected ? Navigator.pushNamed(context, route) : _connectDevice();
 
   @override
   Widget build(BuildContext context) {

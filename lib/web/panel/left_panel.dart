@@ -114,7 +114,7 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
       title: Text(export.key, style: const TextStyle(fontSize: 18)),
       onTap: () {
         if (_dataList.isNotEmpty) {
-          ClickHandler.sink?.add(DataModel(dataList: _dataList, sessionInfo: _info, prescription: _pre));
+          ClickHandler.sink.add(DataModel(dataList: _dataList, sessionInfo: _info, prescription: _pre));
         }
       },
       trailing: PopupMenuButton<ItemAction>(

@@ -44,6 +44,7 @@ mixin Bluetooth {
 
   static Future<void> startScan() async {
     await FlutterBlue.instance.startScan(
+      timeout: const Duration(seconds: 2),
       withDevices: <Guid>[Guid(Progressor.SERVICE_UUID)],
       withServices: <Guid>[Guid(Progressor.SERVICE_UUID)],
     );
