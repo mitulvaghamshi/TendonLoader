@@ -1,16 +1,16 @@
 import 'package:rxdart/subjects.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 
-class DataHandler {
+mixin DataHandler {
   final BehaviorSubject<ChartData> _controller = BehaviorSubject<ChartData>.seeded(const ChartData());
 
-  Stream<ChartData> get stream => _controller.stream;
+  Stream<ChartData> get dataStream => _controller.stream;
 
-  Sink<ChartData> get sink => _controller.sink;
+  Sink<ChartData> get dataSink => _controller.sink;
 
-  void clear() => sink.add(const ChartData());
+  void dataClear() => dataSink.add(const ChartData());
 
-  void dispose() {
+  void dataDispose() {
     if (!_controller.isClosed) _controller.close();
   }
 }

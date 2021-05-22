@@ -40,14 +40,13 @@ class _RightPanelState extends State<RightPanel> {
                     plotAreaBorderWidth: 0,
                     tooltipBehavior: TooltipBehavior(
                       enable: true,
-                      animationDuration: 0,
                       header: _model.prescription != null ? 'Measurement' : 'MVC',
                     ),
                     primaryXAxis: NumericAxis(
-                      visibleMaximum: _model.sessionInfo!.type ? 5 : 50,
                       labelFormat: '{value} s',
                       enableAutoIntervalOnZooming: true,
                       majorGridLines: const MajorGridLines(width: 0),
+                      visibleMaximum: _model.sessionInfo!.type ? 5 : 50,
                     ),
                     primaryYAxis: NumericAxis(
                       interval: 1,
@@ -62,8 +61,8 @@ class _RightPanelState extends State<RightPanel> {
                       enablePanning: true,
                       enablePinching: true,
                       zoomMode: ZoomMode.xy,
-                      enableMouseWheelZooming: true,
                       enableSelectionZooming: true,
+                      enableMouseWheelZooming: true,
                     ),
                     selectionType: SelectionType.point,
                     series: <ChartSeries<ChartData, double>>[
@@ -79,9 +78,9 @@ class _RightPanelState extends State<RightPanel> {
                         LineSeries<ChartData, double>(
                           width: 2,
                           color: Colors.red,
-                          animationDuration: 1000,
-                          yValueMapper: (ChartData data, _) => data.load,
+                          animationDuration: 0,
                           xValueMapper: (ChartData data, _) => data.time,
+                          yValueMapper: (ChartData data, _) => data.load,
                           dataSource: <ChartData>[
                             ChartData(load: _model.prescription!.targetLoad),
                             ChartData(time: _model.dataList!.last.time, load: _model.prescription!.targetLoad),
@@ -102,34 +101,29 @@ class _RightPanelState extends State<RightPanel> {
                   ),
                   const Divider(color: Colors.black, thickness: 3),
                   Expanded(
-                    child: Scrollbar(
-                      thickness: 15,
-                      isAlwaysShown: true,
+                    child: ListView.separated(
                       controller: _scrollController,
-                      child: ListView.separated(
-                        controller: _scrollController,
-                        itemCount: _model.dataList!.length,
-                        padding: const EdgeInsets.only(left: 5, right: 20),
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        separatorBuilder: (_, int index) => Divider(
-                          thickness: 1,
-                          color: index % 10 == 9 ? Colors.red : Colors.grey,
-                        ),
-                        itemBuilder: (_, int index) {
-                          final String i = '${index + 1}'.padLeft(3, '  ');
-                          final String t = _model.dataList![index].time!.toStringAsFixed(1).padRight(4);
-                          final String l = _model.dataList![index].load!.toStringAsFixed(2).padRight(4);
-                          return Text(
-                            '$i. $t $l',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              wordSpacing: 20,
-                              letterSpacing: 1.5,
-                              fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
-                            ),
-                          );
-                        },
+                      itemCount: _model.dataList!.length,
+                      padding: const EdgeInsets.only(left: 5, right: 20),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      separatorBuilder: (_, int index) => Divider(
+                        thickness: 1,
+                        color: index % 10 == 9 ? Colors.red : Colors.grey,
                       ),
+                      itemBuilder: (_, int index) {
+                        final String i = '${index + 1}'.padLeft(3, '  ');
+                        final String t = _model.dataList![index].time!.toStringAsFixed(1).padRight(4);
+                        final String l = _model.dataList![index].load!.toStringAsFixed(2).padRight(4);
+                        return Text(
+                          '$i. $t $l',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            wordSpacing: 20,
+                            letterSpacing: 1.5,
+                            fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ]),

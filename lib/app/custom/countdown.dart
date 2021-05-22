@@ -14,7 +14,7 @@ class CountDown extends StatefulWidget {
   static Future<bool?> start(
     BuildContext context, {
     String title = 'Session start in',
-    Duration duration = const Duration(seconds: 2),
+    Duration duration = const Duration(seconds: 5),
   }) {
     return showDialog<bool>(
       context: context,

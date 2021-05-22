@@ -20,3 +20,5 @@ class TendonLoader extends StatelessWidget {
     );
   }
 }
+
+// flutter build apk --tree-shake-icons --obfuscate --split-debug-info=build/maps

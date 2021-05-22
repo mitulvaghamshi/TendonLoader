@@ -20,22 +20,21 @@ import 'package:tendon_loader/shared/modal/session_info.dart';
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key, required this.prescription}) : super(key: key);
 
-  final Prescription? prescription;
+  final Prescription prescription;
 
   @override
   _BarGraphState createState() => _BarGraphState();
 }
 
-class _BarGraphState extends State<BarGraph> {
+class _BarGraphState extends State<BarGraph> with DataHandler {
   final StreamController<double> _timeCtrl = StreamController<double>();
-  final List<ChartData?> _graphData = <ChartData?>[];
+  final List<ChartData> _graphData = <ChartData>[];
   final List<ChartData> _dataList = <ChartData>[];
-  final DataHandler _handler = DataHandler();
 
   ChartSeriesController? _graphCtrl;
   late DateTime _dateTime;
 
-  double? _targetLoad = 0;
+  double _targetLoad = 0;
   int _currentSet = 1;
   int _currentRep = 1;
   int _holdTime = 0;
@@ -50,7 +49,7 @@ class _BarGraphState extends State<BarGraph> {
   double _minTime = 0;
   int _minSec = 0;
 
-  int? _setRestTime;
+  int _setRestTime = 90;
 
   String get _lapTime => _isRunning
       ? _isHold
@@ -59,7 +58,7 @@ class _BarGraphState extends State<BarGraph> {
       : '...';
 
   String get _progress =>
-      'Set: $_currentSet of ${widget.prescription!.sets} ● Rep: $_currentRep of ${widget.prescription!.reps}';
+      'Set: $_currentSet of ${widget.prescription!.sets} • Rep: $_currentRep of ${widget.prescription!.reps}';
 
   Future<void> _start() async {
     if (_isSetRest && _isRunning) {
@@ -80,10 +79,10 @@ class _BarGraphState extends State<BarGraph> {
     if (_isRunning) {
       _isRunning = false;
       await Bluetooth.stopWeightMeas();
-      _handler.clear();
+      dataClear();
       _timeCtrl.sink.add(0);
-      _holdTime = widget.prescription!.holdTime!;
-      _restTime = widget.prescription!.restTime!;
+      _holdTime = widget.prescription.holdTime!;
+      _restTime = widget.prescription.restTime!;
       _currentRep = _currentSet = 1;
       _isHold = true;
       _minTime = 0;
@@ -95,7 +94,7 @@ class _BarGraphState extends State<BarGraph> {
     final bool? result = await CountDown.start(
       context,
       title: 'SET OVER!\nREST!',
-      duration: Duration(seconds: _setRestTime!),
+      duration: Duration(seconds: _setRestTime),
     );
     if (result ?? false) await _start();
   }
@@ -105,12 +104,12 @@ class _BarGraphState extends State<BarGraph> {
   void _updateCounters() {
     if (_isHold && _holdTime == 0) {
       _isHold = false;
-      _holdTime = widget.prescription!.holdTime!;
+      _holdTime = widget.prescription.holdTime!;
     } else if (!_isHold && _restTime == 0) {
       _isHold = true;
-      _restTime = widget.prescription!.restTime!;
-      if (_currentRep == widget.prescription!.reps) {
-        if (_currentSet == widget.prescription!.sets) {
+      _restTime = widget.prescription.restTime!;
+      if (_currentRep == widget.prescription.reps!) {
+        if (_currentSet == widget.prescription.sets!) {
           _isComplete = true;
           _reset();
         } else {
@@ -153,7 +152,9 @@ class _BarGraphState extends State<BarGraph> {
           _minTime = time;
           final ChartData element = ChartData(load: weight, time: time);
           _dataList.add(element);
-          _handler.sink.add(element);
+
+          dataSink.add(element);
+
           if (!_isSetRest && time.truncate() > _minSec) {
             _minSec = time.truncate();
             _timeCtrl.sink.add(time);
@@ -168,16 +169,16 @@ class _BarGraphState extends State<BarGraph> {
   void initState() {
     super.initState();
     Bluetooth.listen(_listener);
-    _targetLoad = widget.prescription!.targetLoad;
-    _holdTime = widget.prescription!.holdTime!;
-    _restTime = widget.prescription!.restTime!;
-    _setRestTime = widget.prescription!.setRestTime;
+    _targetLoad = widget.prescription.targetLoad!;
+    _holdTime = widget.prescription.holdTime!;
+    _restTime = widget.prescription.restTime!;
+    _setRestTime = widget.prescription.setRestTime!;
   }
 
   @override
   void dispose() {
     _reset();
-    _handler.dispose();
+    dataDispose();
     _timeCtrl.close();
     super.dispose();
   }
@@ -202,15 +203,15 @@ class _BarGraphState extends State<BarGraph> {
           ),
           const SizedBox(height: 20),
           StreamBuilder<ChartData>(
+            stream: dataStream,
             initialData: const ChartData(),
-            stream: _handler.stream,
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
-              _graphData.insert(0, snapshot.data);
+              _graphData.insert(0, snapshot.data!);
               _graphCtrl?.updateDataSource(updatedDataIndex: 0);
               return Chip(
                 padding: const EdgeInsets.all(10),
                 label: Text(_progress, style: tsBold26.copyWith(color: Colors.black)),
-                backgroundColor: snapshot.data!.load! > _targetLoad! ? Colors.green : Colors.yellow[200],
+                backgroundColor: snapshot.data!.load! > _targetLoad ? Colors.green : Colors.yellow[200],
               );
             },
           ),

@@ -76,8 +76,10 @@ class _BarGraphState extends State<BarGraph> {
         if (time > _minTime) {
           _minTime = time;
           final ChartData element = ChartData(load: weight, time: time);
-          _handler.sink.add(element);
           _dataList.add(element);
+
+          _handler.sink.add(element);
+
           if (5 - time == 0) {
             _isComplete = true;
             _stop();
