@@ -51,15 +51,19 @@ mixin Images {
 }
 
 mixin Descriptions {
-  static const String DESC_ENABLE_DEVICE =
-      'Activate your device by pressing the button, then press scan to find the device';
+  static const String DESC_ENABLE_DEVICE = 'Activate your device by pressing the button, '
+      'then press scan to find the device';
   static const String DESC_CLICK_TO_CONNECT = 'Available devices';
-  static const String DESC_ENABLE_BLUETOOTH =
-      '\nThis app needs Bluetooth to communicate with your Progressor.\n\nPlease enable Bluetooth on your device.';
+  static const String DESC_ENABLE_BLUETOOTH = '\nThis app needs Bluetooth to communicate with your Progressor.'
+      '\n\nPlease enable Bluetooth on your device.';
   static const String DESC_LOCATION_1 = 'This app uses bluetooth to communicate with your Progressor.';
-  static const String DESC_LOCATION_2 =
-      'Scanning for bluetooth devices can be used to locate you. That\'s why we ask you to permit location services. We\'re only using this permission to scan for your Progressor.';
+  static const String DESC_LOCATION_2 = 'Scanning for bluetooth devices can be used to locate you. '
+      'That\'s why we ask you to permit location services. '
+      'We\'re only using this permission to scan for your Progressor.';
   static const String DESC_LOCATION_3 = 'We\'ll never collect your physical location.';
+  static const String DESC_UPLOAD = 'To prevent accidental data loss,\n'
+      'we are uploading locally stored data to the cloud.\n\n'
+      'Please stay connected to the internet.\n\nYou can continue using the app.';
 }
 
 mixin Progressor {

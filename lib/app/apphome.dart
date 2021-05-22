@@ -4,11 +4,13 @@ import 'package:tendon_loader/app/custom/custom_listtile.dart';
 import 'package:tendon_loader/app/device/tiles/bluetooth_tile.dart';
 import 'package:tendon_loader/app/exercise/new_exercise.dart';
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/app/handler/data_handler.dart';
 import 'package:tendon_loader/app/handler/export_handler.dart';
 import 'package:tendon_loader/app/handler/location_handler.dart';
 import 'package:tendon_loader/app/livedata/live_data.dart';
 import 'package:tendon_loader/app/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/shared/app_auth.dart';
+import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/custom/custom_image.dart';
 
@@ -44,6 +46,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) Locator.check();
+    // if (state == AppLifecycleState.detached) Bluetooth.disconnect();
   }
 
   void _aboutDialog() {
@@ -80,17 +83,16 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
         return AlertDialog(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              const Icon(Icons.cloud_upload, size: 30, color: Colors.green),
-              Text('Uploading $records local file${records == 1 ? '' : 's'}.', textAlign: TextAlign.center),
+            children: const <Widget>[
+              Icon(Icons.cloud_upload, size: 30, color: Colors.green),
+              Text('Uploading local data', textAlign: TextAlign.center),
             ],
           ),
-          content: const Text(
-            'To prevent accidental data loss,\n'
-            'we are uploading locally stored data to the cloud.\n\n'
-            'Please stay connected to the internet.\n\n'
-            'You can continue using the app.',
-            style: TextStyle(fontSize: 14),
+          content: ExpansionTile(
+            subtitle: const Text('Tap for more info...'),
+            title: Text('$records file${records == 1 ? '' : 's'} uploaded.'),
+            leading: const Icon(Icons.check_circle_outline_rounded, size: 30, color: Colors.green),
+            children: const <Widget>[Text(Descriptions.DESC_UPLOAD)],
           ),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           actions: <Widget>[TextButton(onPressed: Navigator.of(context).pop, child: const Text('OK'))],
@@ -152,7 +154,8 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
     );
   }
 
-  void _handleTap(String route) => Bluetooth.isConnected ? Navigator.pushNamed(context, route) : _connectDevice();
+  void _handleTap(String route) =>
+      Bluetooth.isConnected || true ? Navigator.pushNamed(context, route) : _connectDevice();
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +168,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
           await AppAuth.signOut();
           await Hive.close();
           Locator.dispose();
+          DataHandler.dataDispose();
           return true;
         },
         child: Column(

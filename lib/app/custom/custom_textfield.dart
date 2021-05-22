@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tendon_loader/app/custom/custom_picker.dart';
 
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
     Key? key,
-    this.desc,
+    this.hint,
     this.label,
+    this.pattern,
     this.validator,
     this.controller,
     this.isPicker = false,
     this.isObscure = false,
-    this.hint = 'Enter value',
-    this.action = TextInputAction.next,
-    this.keyboardType = TextInputType.text,
+    this.keyboardType = TextInputType.number,
   }) : super(key: key);
 
-  final String hint;
-  final String? desc;
+  final String? hint;
   final String? label;
   final bool isPicker;
   final bool isObscure;
-  final TextInputAction action;
+  final String? pattern;
   final TextInputType keyboardType;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
@@ -68,25 +67,24 @@ class _CustomTextFieldState extends State<CustomTextField> {
       readOnly: widget.isPicker,
       validator: widget.validator,
       controller: widget.controller,
-      textInputAction: widget.action,
       keyboardType: widget.keyboardType,
       obscureText: widget.isObscure ? _isObscure : false,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       style: const TextStyle(fontSize: 20, fontFamily: 'Georgia'),
+      inputFormatters: <TextInputFormatter>[
+        if (widget.pattern != null) FilteringTextInputFormatter.allow(RegExp(widget.pattern!)),
+      ],
       decoration: InputDecoration(
         isDense: true,
+        hintMaxLines: 2,
         hintText: widget.hint,
         labelText: widget.label,
-        helperText: widget.desc,
         suffix: _buildSuffix(context),
         focusedBorder: _buildBorder(color: Colors.blue),
-        focusedErrorBorder: _buildBorder(color: Colors.red),
-        border: _buildBorder(color: Theme.of(context).accentColor),
-        hintStyle: TextStyle(color: Theme.of(context).accentColor),
-        labelStyle: TextStyle(color: Theme.of(context).accentColor),
-        errorBorder: _buildBorder(width: 3, color: Colors.redAccent),
-        helperStyle: TextStyle(color: Theme.of(context).accentColor),
+        errorBorder: _buildBorder(color: Colors.deepOrange),
+        errorStyle: const TextStyle(color: Colors.deepOrange),
         enabledBorder: _buildBorder(color: Theme.of(context).accentColor),
-        errorStyle: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+        hintStyle: TextStyle(color: Theme.of(context).accentColor.withOpacity(0.7), fontSize: 14),
       ),
     );
   }

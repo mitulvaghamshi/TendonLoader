@@ -26,7 +26,7 @@ class DeviceTile extends StatelessWidget {
                 title: Text(_deviceName),
                 contentPadding: const EdgeInsets.all(5),
                 onTap: () => Bluetooth.connect(device),
-                onLongPress: Bluetooth.disconnect,
+                onLongPress: () => Bluetooth.disconnect(device),
                 subtitle: Text(
                   _isConnected ? 'Long press to disconnect' : 'Click to connect',
                   style: const TextStyle(fontSize: 12),

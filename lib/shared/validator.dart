@@ -1,56 +1,84 @@
 mixin ValidateCredentialMixin {
-  String? validateName(String? name) => name!.isEmpty ? 'Name can\'t be empty!' : null;
+  String? validateName(String? name) => name != null && name.isEmpty ? 'Name can\'t be empty.' : null;
 
   String? validateEmail(String? email) {
-    final RegExp _emailEx = RegExp(
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
-    if (email!.isEmpty)
-      return 'Email can\'t be empty!';
-    else if (!_emailEx.hasMatch(email)) return 'Enter a correct email address!';
+    if (email != null) {
+      final RegExp _emailEx = RegExp(
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+      if (email.isEmpty) {
+        return 'Email can\'t be empty.';
+      } else if (!_emailEx.hasMatch(email)) {
+        return 'Enter a correct email address.';
+      }
+    }
     return null;
   }
 
   String? validatePassword(String? password) {
-    if (password!.isEmpty)
-      return 'Password can\'t be empty';
-    else if (password.length < 6) return 'Password must be at least 6 characters long!';
+    if (password != null) {
+      if (password.isEmpty) {
+        return 'Password can\'t be empty.';
+      } else if (password.length < 6) {
+        return 'Password must be at least 6 characters long.';
+      }
+    }
     return null;
   }
 }
 
 mixin ValidateExerciseDataMixin {
   String? validateTargetLoad(String? targetLoad) {
-    if (targetLoad!.isEmpty)
-      return 'Target load can\'t be empty!';
-    else if (int.parse(targetLoad) < 0) return 'Target load can\'t be negative!';
+    if (targetLoad != null) {
+      if (targetLoad.isEmpty) {
+        return '* required';
+      } else if (double.tryParse(targetLoad)! <= 0) {
+        return 'Must be greater then zero.';
+      }
+    }
     return null;
   }
 
   String? validateHoldTime(String? holdTime) {
-    if (holdTime!.isEmpty)
-      return 'Hold time can\'t be empty!';
-    else if (int.parse(holdTime) < 0) return 'Hold time can\'t be negative!';
+    if (holdTime != null) {
+      if (holdTime.isEmpty) {
+        return '* required';
+      } else if (int.tryParse(holdTime)! < 0) {
+        return 'Hold time can\'t be negative.';
+      }
+    }
     return null;
   }
 
   String? validateRestTime(String? restTime) {
-    if (restTime!.isEmpty)
-      return 'Rest time can\'t be empty!';
-    else if (int.parse(restTime) < 0) return 'Rest time  cn\'t be negative!';
+    if (restTime != null) {
+      if (restTime.isEmpty) {
+        return '* required';
+      } else if (int.tryParse(restTime)! < 0) {
+        return 'Rest time can\'t be negative.';
+      }
+    }
     return null;
   }
 
   String? validateSets(String? sets) {
-    if (sets!.isEmpty)
-      return '# of sets can\'t be empty!';
-    else if (int.parse(sets) < 0) return '# of sets can\'t be negative!';
+    if (sets != null) {
+      if (sets.isEmpty) {
+        return '* required';
+      } else if (int.tryParse(sets)! <= 0) {
+        return 'Must be greater then zero.';
+      }
+    }
     return null;
   }
 
   String? validateReps(String? reps) {
-    if (reps!.isEmpty)
-      return '# of reps can\'t be empty!';
-    else if (int.parse(reps) < 0) return '# of reps can\'t be negative!';
+    if (reps != null) {
+      if (reps.isEmpty) {
+        return '* required';
+      } else if (int.tryParse(reps)! <= 0) {
+        return 'Must be greater then zero.';
+      }
+    }
     return null;
   }
 }

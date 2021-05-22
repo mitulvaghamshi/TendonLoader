@@ -141,9 +141,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
               label: 'Password',
               hint: 'Enter your password',
               controller: _passwordCtrl,
-              action: TextInputAction.send,
-              keyboardType: TextInputType.text,
-              validator: validatePassword,
+              keyboardType: TextInputType.visiblePassword,
+              validator: validatePassword,              
             ),
             const SizedBox(height: 10),
             if (!_createNew)
@@ -181,14 +180,12 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
             //   ),
             // ),
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                RotationTransition(
-                  turns: Tween<double>(begin: 0.0, end: 1.0).animate(_animCtrl),
-                  child: FloatingActionButton(onPressed: _animCtrl.forward, child: const Icon(Icons.send)),
-                ),
-              ],
+            Align(
+              alignment: Alignment.bottomRight,
+              child: RotationTransition(
+                turns: Tween<double>(begin: 0.0, end: 1.0).animate(_animCtrl),
+                child: FloatingActionButton(onPressed: _animCtrl.forward, child: const Icon(Icons.send)),
+              ),
             ),
           ],
         ),

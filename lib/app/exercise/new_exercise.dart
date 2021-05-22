@@ -36,22 +36,24 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
   }
 
   void _submit() {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() || true) {
       Navigator.of(context).pushReplacementNamed(
         ExerciseMode.route,
-        arguments: Prescription(
+        arguments: const Prescription(sets: 5, reps: 10, holdTime: 5, restTime: 10, targetLoad: 5, setRestTime: 90),
+      );
+    }
+  }
+
+  /* 
+  Prescription(
           sets: int.tryParse(_ctrlSets.text),
           reps: int.tryParse(_ctrlReps.text),
           holdTime: int.tryParse(_ctrlHoldTime.text),
           restTime: int.tryParse(_ctrlRestTime.text),
           targetLoad: double.tryParse(_ctrlTargetLoad.text),
-          setRestTime: int.tryParse(_ctrlSetRestTime.text),
+          setRestTime: int.tryParse(_ctrlSetRestTime.text) ?? 90,
         ),
-      );
-    }
-  }
-
-  // Prescription(targetLoad: 5, sets: 2, reps: 2, holdTime: 5, restTime: 3),
+   */
 
   @override
   Widget build(BuildContext context) {
@@ -71,60 +73,50 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
                   fontSize: 26,
                   fontFamily: 'Georgia',
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).accentColor.withOpacity(0.6),
+                  color: Theme.of(context).accentColor.withOpacity(0.8),
                 ),
               ),
               CustomTextField(
-                label: 'Target Load',
-                hint: 'Target load (kg) e.g. 6.5',
-                desc: '~70% of last MVC test',
+                label: 'Target Load (kg)',
+                hint: '~70% of last MVC test',
                 controller: _ctrlTargetLoad,
                 validator: validateTargetLoad,
-                keyboardType: TextInputType.number,
+                pattern: r'^\d{1,2}(\.\d{0,2})?',
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
               ),
               CustomTextField(
                 isPicker: true,
-                label: 'Hold time',
-                hint: 'Select hold time (sec)',
-                desc: 'Amount of time you can keep holding at target load',
+                label: 'Hold time (sec)',
+                hint: 'Amount of time you can keep holding at target load.',
                 controller: _ctrlHoldTime,
                 validator: validateHoldTime,
-                keyboardType: TextInputType.number,
               ),
               CustomTextField(
                 isPicker: true,
-                label: 'Rest time',
-                hint: 'Select rest time (sec)',
-                desc: 'Amount of time you can rest after every rep',
+                label: 'Rest time (sec)',
+                hint: 'Amount of time you can rest after each rep.',
                 controller: _ctrlRestTime,
                 validator: validateRestTime,
-                keyboardType: TextInputType.number,
               ),
               CustomTextField(
-                label: 'Sets',
-                desc: 'Number of total sets',
-                hint: 'Enter # of sets e.g. 3',
+                label: 'Sets (#)',
+                hint: 'Number of total sets.',
                 controller: _ctrlSets,
                 validator: validateSets,
-                keyboardType: TextInputType.number,
+                pattern: r'^\d{1,2}',
               ),
               CustomTextField(
-                label: 'Reps',
-                hint: 'Enter # of reps e.g. 5',
-                desc: 'Number of reps to perform in each set',
+                label: 'Reps (#)',
+                hint: 'Number of reps to perform in each set.',
                 controller: _ctrlReps,
                 validator: validateReps,
-                action: TextInputAction.send,
-                keyboardType: TextInputType.number,
+                pattern: r'^\d{1,2}',
               ),
               CustomTextField(
                 isPicker: true,
-                label: 'Rest time b/w Sets',
-                hint: 'Select rest time for set (sec)',
-                desc: 'Amount of time you can rest after every set',
+                label: 'Rest time b/w Sets (sec)',
+                hint: 'Amount of time you can rest after every set (default: 90 sec).',
                 controller: _ctrlSetRestTime,
-                validator: validateRestTime,
-                keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 30),
               Row(

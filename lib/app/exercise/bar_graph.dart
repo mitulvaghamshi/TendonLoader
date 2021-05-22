@@ -7,11 +7,9 @@ import 'package:tendon_loader/app/custom/countdown.dart';
 import 'package:tendon_loader/app/custom/custom_controls.dart';
 import 'package:tendon_loader/app/custom/custom_graph.dart';
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
-import 'package:tendon_loader/shared/common.dart';
+import 'package:tendon_loader/app/handler/data_handler.dart';
 import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
-import 'package:tendon_loader/shared/extensions.dart';
-import 'package:tendon_loader/shared/handler/data_handler.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
 import 'package:tendon_loader/shared/modal/data_model.dart';
 import 'package:tendon_loader/shared/modal/prescription.dart';
@@ -27,9 +25,7 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> with DataHandler {
-  final StreamController<double> _timeCtrl = StreamController<double>();
   final List<ChartData> _graphData = <ChartData>[];
-  final List<ChartData> _dataList = <ChartData>[];
 
   ChartSeriesController? _graphCtrl;
   late DateTime _dateTime;
@@ -46,19 +42,18 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
   bool _hasData = false;
   bool _isHold = true;
 
-  double _minTime = 0;
   int _minSec = 0;
 
-  int _setRestTime = 90;
+  late int _setRestTime;
 
   String get _lapTime => _isRunning
       ? _isHold
-          ? 'Hold for: ${_holdTime--} s'
-          : 'Rest for: ${_restTime--} s'
-      : '...';
+          ? 'Hold for: $_holdTime s'
+          : 'Rest for: $_restTime s'
+      : '•••';
 
   String get _progress =>
-      'Set: $_currentSet of ${widget.prescription!.sets} • Rep: $_currentRep of ${widget.prescription!.reps}';
+      'Set: $_currentSet/${widget.prescription.sets} • Rep: $_currentRep/${widget.prescription.reps}';
 
   Future<void> _start() async {
     if (_isSetRest && _isRunning) {
@@ -67,6 +62,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
       await _onExit();
     } else if (await CountDown.start(context) ?? false) {
       await Bluetooth.startWeightMeas();
+      Bluetooth.dataList.clear();
       _dateTime = DateTime.now();
       _isComplete = false;
       _isRunning = true;
@@ -79,21 +75,20 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
     if (_isRunning) {
       _isRunning = false;
       await Bluetooth.stopWeightMeas();
-      dataClear();
-      _timeCtrl.sink.add(0);
       _holdTime = widget.prescription.holdTime!;
       _restTime = widget.prescription.restTime!;
       _currentRep = _currentSet = 1;
       _isHold = true;
-      _minTime = 0;
       _minSec = 0;
+      if (_isComplete) _congrats();
+      await _onExit();
     }
   }
 
   Future<void> _setRest() async {
     final bool? result = await CountDown.start(
       context,
-      title: 'SET OVER!\nREST!',
+      title: 'Set Over, Rest!!!',
       duration: Duration(seconds: _setRestTime),
     );
     if (result ?? false) await _start();
@@ -125,14 +120,17 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
   }
 
   Future<bool> _onExit() async {
-    if (_isRunning) await _reset();
     if (!_hasData) return true;
     final bool? result = await ConfirmDialog.show(
       context,
       model: DataModel(
-        dataList: _dataList,
+        dataList: Bluetooth.dataList,
         prescription: widget.prescription,
-        sessionInfo: SessionInfo(dateTime: _dateTime, dataStatus: _isComplete, exportType: Keys.KEY_PREFIX_EXERCISE),
+        sessionInfo: SessionInfo(
+          dateTime: _dateTime,
+          dataStatus: _isComplete,
+          exportType: Keys.KEY_PREFIX_EXERCISE,
+        ),
       ),
     );
     if (result == null) {
@@ -143,32 +141,36 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
     return result;
   }
 
-  void _listener(List<int> data) {
-    if (_isRunning && data.isNotEmpty && data[0] == Progressor.RES_WEIGHT_MEAS) {
-      for (int x = 2; x < data.length; x += 8) {
-        final double weight = data.getRange(x, x + 4).toList().toWeight;
-        final double time = data.getRange(x + 4, x + 8).toList().toTime;
-        if (time > _minTime) {
-          _minTime = time;
-          final ChartData element = ChartData(load: weight, time: time);
-          _dataList.add(element);
-
-          dataSink.add(element);
-
-          if (!_isSetRest && time.truncate() > _minSec) {
-            _minSec = time.truncate();
-            _timeCtrl.sink.add(time);
-            _updateCounters();
-          }
-        }
-      }
-    }
+  void _congrats() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const <Widget>[
+              Icon(Icons.emoji_events_rounded, size: 30, color: Colors.green),
+              Text('Congrats!!!', textAlign: TextAlign.center),
+            ],
+          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          content: const Text('Exercise session completed! Great work!', textAlign: TextAlign.center),
+          actions: <Widget>[
+            TextButton.icon(
+              label: const Text('Next'),
+              icon: const Icon(Icons.arrow_forward),
+              onPressed: Navigator.of(context).pop,
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    Bluetooth.listen(_listener);
     _targetLoad = widget.prescription.targetLoad!;
     _holdTime = widget.prescription.holdTime!;
     _restTime = widget.prescription.restTime!;
@@ -178,8 +180,6 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
   @override
   void dispose() {
     _reset();
-    dataDispose();
-    _timeCtrl.close();
     super.dispose();
   }
 
@@ -190,28 +190,33 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          StreamBuilder<double>(
-            initialData: 0,
-            stream: _timeCtrl.stream,
-            builder: (_, AsyncSnapshot<double> snapshot) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Text(snapshot.data!.toTime, style: tsBold26.copyWith(color: Colors.green)),
-                Text(_lapTime, style: tsBold26.copyWith(color: Colors.red)),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
           StreamBuilder<ChartData>(
             stream: dataStream,
             initialData: const ChartData(),
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               _graphData.insert(0, snapshot.data!);
               _graphCtrl?.updateDataSource(updatedDataIndex: 0);
-              return Chip(
-                padding: const EdgeInsets.all(10),
-                label: Text(_progress, style: tsBold26.copyWith(color: Colors.black)),
-                backgroundColor: snapshot.data!.load! > _targetLoad ? Colors.green : Colors.yellow[200],
+              if (!_isSetRest && snapshot.data!.time!.truncate() > _minSec) {
+                _minSec = snapshot.data!.time!.truncate();
+                _isHold ? _holdTime-- : _restTime--;
+                _updateCounters();
+              }
+              return Column(
+                children: <Widget>[
+                  Text(
+                    _lapTime,
+                    style: const TextStyle(fontSize: 40, color: Colors.green, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Chip(
+                    label: Text(
+                      _progress,
+                      style: const TextStyle(color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
+                    padding: const EdgeInsets.all(10),
+                    backgroundColor: snapshot.data!.load! > _targetLoad ? Colors.green : Colors.yellow[200],
+                  ),
+                ],
               );
             },
           ),

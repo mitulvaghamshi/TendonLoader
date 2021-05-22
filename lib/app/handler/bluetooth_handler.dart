@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:tendon_loader/app/handler/data_handler.dart';
 import 'package:tendon_loader/shared/constants.dart';
+import 'package:tendon_loader/shared/extensions.dart';
+import 'package:tendon_loader/shared/modal/chartdata.dart';
 
-mixin Bluetooth {
+class Bluetooth with DataHandler {
   static BluetoothDevice? _device;
   static BluetoothCharacteristic? _dataChar;
   static BluetoothCharacteristic? _controlChar;
@@ -22,10 +25,6 @@ mixin Bluetooth {
     await AppSettings.openBluetoothSettings();
   }
 
-  static void listen(void Function(List<int>) listener) {
-    if (isConnected) _dataChar!.value.listen(listener);
-  }
-
   static Future<void> notify(bool value) async {
     if (isConnected) await _dataChar!.setNotifyValue(value);
   }
@@ -38,7 +37,11 @@ mixin Bluetooth {
 
   static Future<void> _write(int command) async {
     if (isConnected) {
-      Future<void>.delayed(const Duration(milliseconds: 20), () async => _controlChar!.write(<int>[command]));
+      Future<void>.delayed(const Duration(milliseconds: 10), () async {
+        await _controlChar!.write(<int>[command]);
+        DataHandler.dataClear();
+        minTime = 0;
+      });
     }
   }
 
@@ -59,9 +62,10 @@ mixin Bluetooth {
     }
   }
 
-  static Future<void> disconnect() async {
+  static Future<void> disconnect([BluetoothDevice? device]) async {
+    await device?.disconnect();
     if (isConnected) {
-      await _device!.disconnect();
+      await _device?.disconnect();
       _device = _dataChar = _controlChar = null;
     }
   }
@@ -74,5 +78,29 @@ mixin Bluetooth {
     _controlChar = _chars.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.CONTROL_POINT_UUID));
     _dataChar = _chars.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.DATA_CHARACTERISTICS_UUID));
     await notify(true);
+    _listen();
+  }
+
+  // Data Listener
+  static final List<ChartData> dataList = <ChartData>[];
+  static double minTime = 0;
+
+  static void _listen() {
+    if (isConnected) {
+      _dataChar!.value.listen((List<int> data) {
+        if (data.isNotEmpty && data[0] == Progressor.RES_WEIGHT_MEAS) {
+          for (int x = 2; x < data.length; x += 8) {
+            final double weight = data.getRange(x, x + 4).toList().toWeight;
+            final double time = data.getRange(x + 4, x + 8).toList().toTime;
+            if (time > minTime) {
+              minTime = time;
+              final ChartData element = ChartData(load: weight, time: time);
+              dataList.add(element);
+              DataHandler.dataSink.add(element);
+            }
+          }
+        }
+      });
+    }
   }
 }

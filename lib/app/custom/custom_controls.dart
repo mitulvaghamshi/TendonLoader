@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app/custom/custom_fab.dart';
 
 class GraphControls extends StatelessWidget {
   const GraphControls({Key? key, this.start, this.stop, this.reset}) : super(key: key);
@@ -11,11 +12,10 @@ class GraphControls extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <FloatingActionButton>[
-        FloatingActionButton(onPressed: start, heroTag: 'start-btn', child: const Icon(Icons.play_arrow_rounded)),
-        if (stop != null)
-          FloatingActionButton(onPressed: stop, heroTag: 'stop-btn', child: const Icon(Icons.stop_rounded)),
-        FloatingActionButton(onPressed: reset, heroTag: 'reset-btn', child: const Icon(Icons.replay_rounded)),
+      children: <Widget>[
+        CustomFab(onTap: start, icon: Icons.play_arrow_rounded),
+        if (stop != null) CustomFab(onTap: stop, icon: Icons.stop_rounded),
+        CustomFab(onTap: reset, icon: Icons.replay_rounded),
       ],
     );
   }
