@@ -43,11 +43,11 @@ mixin Keys {
 }
 
 mixin Images {
-  static const String IMG_ROOT = 'assets/images/';
-  static const String IMG_APP_LOGO = IMG_ROOT + 'app_logo.svg';
-  static const String IMG_ENABLE_DEVICE = IMG_ROOT + 'enable_device.png';
-  static const String IMG_ENABLE_LOCATION = IMG_ROOT + 'enable_location.png';
-  static const String IMG_ENABLE_BLUETOOTH = IMG_ROOT + 'enable_bluetooth.png';
+  // static const String IMG_ROOT = 'assets/images/';
+  // static const String IMG_APP_LOGO = IMG_ROOT + 'app_logo.svg';
+  // static const String IMG_ENABLE_DEVICE = IMG_ROOT + 'enable_device.png';
+  // static const String IMG_ENABLE_LOCATION = IMG_ROOT + 'enable_location.png';
+  // static const String IMG_ENABLE_BLUETOOTH = IMG_ROOT + 'enable_bluetooth.png';
 }
 
 mixin Descriptions {

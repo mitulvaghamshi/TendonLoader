@@ -15,10 +15,7 @@ class TendonLoader extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       title: 'Tendon Loader',
-      themeMode: ThemeMode.system,
       initialRoute: Navigator.defaultRouteName,
     );
   }
 }
-
-// flutter build apk --tree-shake-icons --obfuscate --split-debug-info=build/maps

@@ -13,16 +13,20 @@ class AppAuth {
 
   static Future<void> init() async {
     await initHive();
-    return Future<void>.delayed(const Duration(seconds: 2), () async => Firebase.initializeApp());
+
+    return Future<void>.delayed(const Duration(seconds: 1), () async => Firebase.initializeApp());
   }
 
   static Future<void> initHive() async {
-    await Hive.initFlutter();
-    await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX);
-    await Hive.openBox<Map<dynamic, dynamic>>(Keys.KEY_USER_EXPORTS_BOX);
+    if (!Hive.isBoxOpen(Keys.KEY_LOGIN_BOX)) {
+      await Hive.initFlutter();
+      await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX);
+      await Hive.openBox<Map<dynamic, dynamic>>(Keys.KEY_USER_EXPORTS_BOX);
+    }
   }
 
-  static Future<User?> authenticate(BuildContext context, {required bool create, String? name, String? username, String? password}) {
+  static Future<User?> authenticate(BuildContext context,
+      {required bool create, String? name, String? username, String? password}) {
     if (kIsWeb) FirebaseAuth.instance.setPersistence(Persistence.NONE);
     return create ? _signUp(context, name, username!, password!) : _signIn(context, username!, password!);
   }

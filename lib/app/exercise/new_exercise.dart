@@ -59,84 +59,85 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Create New Exercise', textAlign: TextAlign.center)),
-      body: AppFrame(
-        isScrollable: true,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                'Please enter your\nexercise prescriptions',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 26,
-                  fontFamily: 'Georgia',
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).accentColor.withOpacity(0.8),
+      body: SingleChildScrollView(
+        child: AppFrame(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'Please enter your\nexercise prescriptions',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontFamily: 'Georgia',
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).accentColor.withOpacity(0.8),
+                  ),
                 ),
-              ),
-              CustomTextField(
-                label: 'Target Load (kg)',
-                hint: '~70% of last MVC test',
-                controller: _ctrlTargetLoad,
-                validator: validateTargetLoad,
-                pattern: r'^\d{1,2}(\.\d{0,2})?',
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              ),
-              CustomTextField(
-                isPicker: true,
-                label: 'Hold time (sec)',
-                hint: 'Amount of time you can keep holding at target load.',
-                controller: _ctrlHoldTime,
-                validator: validateHoldTime,
-              ),
-              CustomTextField(
-                isPicker: true,
-                label: 'Rest time (sec)',
-                hint: 'Amount of time you can rest after each rep.',
-                controller: _ctrlRestTime,
-                validator: validateRestTime,
-              ),
-              CustomTextField(
-                label: 'Sets (#)',
-                hint: 'Number of total sets.',
-                controller: _ctrlSets,
-                validator: validateSets,
-                pattern: r'^\d{1,2}',
-              ),
-              CustomTextField(
-                label: 'Reps (#)',
-                hint: 'Number of reps to perform in each set.',
-                controller: _ctrlReps,
-                validator: validateReps,
-                pattern: r'^\d{1,2}',
-              ),
-              CustomTextField(
-                isPicker: true,
-                label: 'Rest time b/w Sets (sec)',
-                hint: 'Amount of time you can rest after every set (default: 90 sec).',
-                controller: _ctrlSetRestTime,
-              ),
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  CustomButton(
-                    text: 'Submit',
-                    onPressed: _submit,
-                    color: Colors.white,
-                    background: Colors.blue,
-                    icon: Icons.done_rounded,
-                  ),
-                  CustomButton(
-                    text: 'Clear all',
-                    icon: Icons.clear_rounded,
-                    onPressed: () => _formKey.currentState!.reset(),
-                  ),
-                ],
-              ),
-            ],
+                CustomTextField(
+                  label: 'Target Load (kg)',
+                  hint: '~70% of last MVC test',
+                  controller: _ctrlTargetLoad,
+                  validator: validateTargetLoad,
+                  pattern: r'^\d{1,2}(\.\d{0,2})?',
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                ),
+                CustomTextField(
+                  isPicker: true,
+                  label: 'Hold time (sec)',
+                  hint: 'Amount of time you can keep holding at target load.',
+                  controller: _ctrlHoldTime,
+                  validator: validateHoldTime,
+                ),
+                CustomTextField(
+                  isPicker: true,
+                  label: 'Rest time (sec)',
+                  hint: 'Amount of time you can rest after each rep.',
+                  controller: _ctrlRestTime,
+                  validator: validateRestTime,
+                ),
+                CustomTextField(
+                  label: 'Sets (#)',
+                  hint: 'Number of total sets.',
+                  controller: _ctrlSets,
+                  validator: validateSets,
+                  pattern: r'^\d{1,2}',
+                ),
+                CustomTextField(
+                  label: 'Reps (#)',
+                  hint: 'Number of reps to perform in each set.',
+                  controller: _ctrlReps,
+                  validator: validateReps,
+                  pattern: r'^\d{1,2}',
+                ),
+                CustomTextField(
+                  isPicker: true,
+                  label: 'Rest time b/w Sets (sec)',
+                  hint: 'Amount of time you can rest after every set (default: 90 sec).',
+                  controller: _ctrlSetRestTime,
+                ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    CustomButton(
+                      text: 'Submit',
+                      onPressed: _submit,
+                      color: Colors.white,
+                      background: Colors.blue,
+                      icon: Icons.done_rounded,
+                    ),
+                    CustomButton(
+                      text: 'Clear all',
+                      icon: Icons.clear_rounded,
+                      onPressed: () => _formKey.currentState!.reset(),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

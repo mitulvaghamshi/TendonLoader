@@ -53,9 +53,12 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               _graphData.insert(0, snapshot.data);
               _graphCtrl?.updateDataSource(updatedDataIndex: 0);
-              return Text(
-                snapshot.data!.time!.toTime,
-                style: const TextStyle(color: Colors.green, fontSize: 36, fontWeight: FontWeight.bold),
+              return FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  snapshot.data!.time!.toTime,
+                  style: const TextStyle(color: Colors.green, fontSize: 40, fontWeight: FontWeight.bold),
+                ),
               );
             },
           ),

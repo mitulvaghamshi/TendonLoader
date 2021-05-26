@@ -115,18 +115,21 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
               }
               _graphData.insert(0, snapshot.data!);
               _graphCtrl?.updateDataSource(updatedDataIndex: 0);
-              return Column(
-                children: <Widget>[
-                  Text(
-                    'MVC: ${_minLoad.toStringAsFixed(2)} Kg',
-                    style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    snapshot.data!.time!.toRemaining,
-                    style: const TextStyle(color: Colors.deepOrange, fontSize: 40, fontWeight: FontWeight.bold),
-                  ),
-                ],
+              return FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'MVC: ${_minLoad.toStringAsFixed(2)} Kg',
+                      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      snapshot.data!.time!.toRemaining,
+                      style: const TextStyle(color: Colors.deepOrange, fontSize: 40, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               );
             },
           ),

@@ -46,7 +46,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
 
   late int _setRestTime;
 
-  String get _lapTime => _isRunning
+  String get _lapTime => !_isRunning
       ? _isHold
           ? 'Hold for: $_holdTime s'
           : 'Rest for: $_restTime s'
@@ -188,7 +188,6 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
     return AppFrame(
       onExit: _onExit,
       child: Column(
-        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           StreamBuilder<ChartData>(
             stream: dataStream,
@@ -201,22 +200,22 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
                 _isHold ? _holdTime-- : _restTime--;
                 _updateCounters();
               }
-              return Column(
-                children: <Widget>[
-                  Text(
-                    _lapTime,
-                    style: const TextStyle(fontSize: 40, color: Colors.green, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Chip(
-                    label: Text(
-                      _progress,
-                      style: const TextStyle(color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
+              return FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      _lapTime,
+                      style: const TextStyle(fontSize: 40, color: Colors.green, fontWeight: FontWeight.bold),
                     ),
-                    padding: const EdgeInsets.all(10),
-                    backgroundColor: snapshot.data!.load! > _targetLoad ? Colors.green : Colors.yellow[200],
-                  ),
-                ],
+                    const SizedBox(height: 10),
+                    Chip(
+                      padding: const EdgeInsets.all(16),
+                      label: Text(_progress, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
+                      backgroundColor: snapshot.data!.load! > _targetLoad ? Colors.green : Colors.yellow[200],
+                    ),
+                  ],
+                ),
               );
             },
           ),

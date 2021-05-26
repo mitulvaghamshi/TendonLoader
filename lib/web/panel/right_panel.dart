@@ -23,7 +23,7 @@ class _RightPanelState extends State<RightPanel> {
       child: StreamBuilder<DataModel>(
         stream: ClickHandler.stream,
         builder: (_, AsyncSnapshot<DataModel> snapshot) {
-          if (!snapshot.hasData) return const Center(child: CustomImage(isBg: true));
+          if (!snapshot.hasData) return const Center(child: CustomImage());
           final DataModel _model = snapshot.data!;
           return Row(children: <Widget>[
             Expanded(

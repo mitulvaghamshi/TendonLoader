@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:tendon_loader/app/custom/custom_listtile.dart';
 import 'package:tendon_loader/app/device/tiles/bluetooth_tile.dart';
@@ -13,8 +14,9 @@ import 'package:tendon_loader/shared/app_auth.dart';
 import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/custom/custom_image.dart';
+import 'package:tendon_loader/shared/login/login.dart';
 
-enum ActionType { settings, export, about, close }
+enum ActionType { settings, export, about, logout }
 
 class AppHome extends StatefulWidget {
   const AppHome({Key? key}) : super(key: key);
@@ -55,7 +57,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
       applicationVersion: 'v1.0',
       applicationName: AppHome.name,
       // applicationLegalese: 'Application Legalese',
-      applicationIcon: const CustomImage(isLogo: true, radius: 20, padding: 0),
+      applicationIcon: SvgPicture.asset(Images.IMG_APP_LOGO, height: 50, width: 50),
       children: <Widget>[
         const Text(
           'Tendon Loader :Preview',
@@ -123,7 +125,9 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
       case ActionType.export:
         await _manuallyExport();
         break;
-      case ActionType.close:
+      case ActionType.logout:
+        await AppAuth.signOut();
+        await Navigator.pushReplacementNamed(context, Login.route);
         break;
       case ActionType.settings:
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Available soon...')));
@@ -150,6 +154,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
         const PopupMenuItem<ActionType>(value: ActionType.settings, child: Text('Settings')),
         const PopupMenuItem<ActionType>(value: ActionType.export, child: Text('Export All')),
         const PopupMenuItem<ActionType>(value: ActionType.about, child: Text('About')),
+        const PopupMenuItem<ActionType>(value: ActionType.logout, child: Text('Logout')),
       ],
     );
   }
@@ -161,35 +166,36 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text(AppHome.name), actions: <Widget>[_buildMenu()]),
-      body: AppFrame(
-        isScrollable: true,
-        onExit: () async {
-          await Bluetooth.disconnect();
-          await AppAuth.signOut();
-          await Hive.close();
-          Locator.dispose();
-          DataHandler.dataDispose();
-          return true;
-        },
-        child: Column(
-          children: <Widget>[
-            const CustomImage(isLogo: true),
-            CustomTile(
-              title: LiveData.name,
-              onTap: () => _handleTap(LiveData.route),
-              icon: const Icon(Icons.show_chart_rounded, size: 30),
-            ),
-            CustomTile(
-              title: NewExercise.name,
-              onTap: () => _handleTap(NewExercise.route),
-              icon: const Icon(Icons.directions_run_rounded, size: 30),
-            ),
-            CustomTile(
-              title: MVCTesting.name,
-              onTap: () => _handleTap(MVCTesting.route),
-              icon: const Icon(Icons.airline_seat_legroom_extra, size: 30),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: AppFrame(
+          onExit: () async {
+            await Bluetooth.disconnect();
+            await AppAuth.signOut();
+            await Hive.close();
+            Locator.dispose();
+            DataHandler.dataDispose();
+            return true;
+          },
+          child: Column(
+            children: <Widget>[
+              const CustomImage(),
+              CustomTile(
+                title: LiveData.name,
+                onTap: () => _handleTap(LiveData.route),
+                icon: const Icon(Icons.show_chart_rounded, size: 30),
+              ),
+              CustomTile(
+                title: NewExercise.name,
+                onTap: () => _handleTap(NewExercise.route),
+                icon: const Icon(Icons.directions_run_rounded, size: 30),
+              ),
+              CustomTile(
+                title: MVCTesting.name,
+                onTap: () => _handleTap(MVCTesting.route),
+                icon: const Icon(Icons.airline_seat_legroom_extra, size: 30),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(

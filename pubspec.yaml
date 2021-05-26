@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   app_settings: ^4.1.0
+  audioplayers: ^0.19.0
   cloud_firestore: ^2.2.0
   connectivity: ^3.0.3
   cupertino_icons: ^1.0.0
@@ -38,3 +39,7 @@ flutter:
     - assets/images/enable_device.png
     - assets/images/enable_location.png
     - assets/images/enable_bluetooth.png
+    
+    - assets/audio/end.mpeg
+    - assets/audio/stop.mpeg
+    - assets/audio/start.mpeg

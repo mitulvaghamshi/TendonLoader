@@ -29,9 +29,9 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  bool _isObscure = true;
+  late bool _isObscure;
 
-  Row _buildSuffix(BuildContext context) {
+  Row get _buildSuffix {
     final List<IconButton> buttons = <IconButton>[];
     if (widget.isPicker) {
       buttons.add(IconButton(
@@ -57,18 +57,20 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 
-  UnderlineInputBorder _buildBorder({double width = 2, required Color color}) {
-    return UnderlineInputBorder(borderSide: BorderSide(width: width, color: color));
+  @override
+  void initState() {
+    super.initState();
+    _isObscure = widget.isObscure;
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      obscureText: _isObscure,
       readOnly: widget.isPicker,
       validator: widget.validator,
       controller: widget.controller,
       keyboardType: widget.keyboardType,
-      obscureText: widget.isObscure ? _isObscure : false,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       style: const TextStyle(fontSize: 20, fontFamily: 'Georgia'),
       inputFormatters: <TextInputFormatter>[
@@ -76,15 +78,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
       ],
       decoration: InputDecoration(
         isDense: true,
-        hintMaxLines: 2,
+        hintMaxLines: 3,
+        suffix: _buildSuffix,
         hintText: widget.hint,
         labelText: widget.label,
-        suffix: _buildSuffix(context),
-        focusedBorder: _buildBorder(color: Colors.blue),
-        errorBorder: _buildBorder(color: Colors.deepOrange),
         errorStyle: const TextStyle(color: Colors.deepOrange),
-        enabledBorder: _buildBorder(color: Theme.of(context).accentColor),
         hintStyle: TextStyle(color: Theme.of(context).accentColor.withOpacity(0.7), fontSize: 14),
+        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.blue)),
+        errorBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.deepOrange)),
+        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Theme.of(context).accentColor)),
       ),
     );
   }
