@@ -54,41 +54,27 @@ android {
             keyPassword keystoreProperties['keyPassword']
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
-
             enableV3Signing true
             enableV4Signing true
         }
     }
 
-    splits {
-        // Configures multiple APKs based on ABI.
-        abi {
-            // Enables building multiple APKs per ABI.
-            enable true
-            // By default all ABIs are included, so use reset() and include to specify that we only
-            // want APKs for x86 and x86_64.
-            // Resets the list of ABIs that Gradle should create APKs for to none.
-            // reset()
-            // Specifies a list of ABIs that Gradle should create APKs for.
-            // include "arm64-v8a"
-            // Specifies that we do not want to also generate a universal APK that includes all ABIs.
-            universalApk true
-        }
-
-        // Configures multiple APKs based on screen density.
-        density {
-            // Configures multiple APKs based on screen density.
-            enable true
-            // Specifies a list of screen densities Gradle should not create multiple APKs for.
-            // exclude "ldpi", "xxhdpi", "xxxhdpi"
-            // Specifies a list of compatible screen size settings for the manifest.
-            compatibleScreens 'small', 'normal', 'large', 'xlarge'
-        }
-    }
+//    splits {
+//        abi {
+//            enable true
+//            reset()
+//            include "arm64-v8a"
+//            universalApk true
+//        }
+//        density {
+//            enable true
+//            exclude "ldpi", "xxhdpi", "xxxhdpi"
+//            compatibleScreens 'small', 'normal', 'large', 'xlarge'
+//        }
+//    }
 
     buildTypes {
         release {
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt')
             shrinkResources true
@@ -103,8 +89,8 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.10'
     implementation "androidx.multidex:multidex:2.0.1"
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
-    api "androidx.core:core-ktx:1.3.2"
+    api "androidx.core:core-ktx:1.5.0"
 }
