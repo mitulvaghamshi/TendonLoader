@@ -23,10 +23,18 @@ class ConfirmDialog extends StatelessWidget {
     );
   }
 
-  void _export(BuildContext context, [bool later = false]) {
-    ExportHandler.export(model!, later);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(later ? 'Saving...' : 'Uploading...')));
-    Navigator.of(context).pop(true);
+  Future<void> _export(BuildContext context, [bool later = false]) async {
+    final bool result = await ExportHandler.export(model!, later);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(result
+            ? later
+                ? 'Data saved successfully...'
+                : 'Data uploaded successfully...'
+            : 'Something wants wrong...'),
+      ),
+    );
+    Navigator.of(context).pop(result);
   }
 
   @override
@@ -36,14 +44,14 @@ class ConfirmDialog extends StatelessWidget {
       children: <Widget>[
         CustomTile(
           title: 'Submit now',
-          onTap: () => _export(context),
+          onTap: () async => _export(context),
           padding: const EdgeInsets.symmetric(vertical: 5),
           icon: const Icon(Icons.circle, color: Colors.green, size: 50),
           desc: 'Send data to the cloud. Requires an active internet connection.',
         ),
         CustomTile(
-          title: 'Ask me later',
-          onTap: () => _export(context, true),
+          title: 'Do it later',
+          onTap: () async => _export(context, true),
           padding: const EdgeInsets.symmetric(vertical: 5),
           icon: const Icon(Icons.circle, color: Colors.yellow, size: 50),
           desc: 'Save data locally on device and submit later (manual action required).',

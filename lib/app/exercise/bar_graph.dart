@@ -63,6 +63,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
     } else if (await CountDown.start(context) ?? false) {
       await Bluetooth.startWeightMeas();
       Bluetooth.dataList.clear();
+      KPlayer.playStart();
       _dateTime = DateTime.now();
       _isComplete = false;
       _isRunning = true;
@@ -74,6 +75,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
   Future<void> _reset() async {
     if (_isRunning) {
       _isRunning = false;
+      KPlayer.playStop();
       await Bluetooth.stopWeightMeas();
       _holdTime = widget.prescription.holdTime!;
       _restTime = widget.prescription.restTime!;

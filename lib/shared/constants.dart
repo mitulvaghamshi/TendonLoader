@@ -1,3 +1,5 @@
+import 'package:audioplayers/audioplayers.dart';
+
 mixin Sizes {
   static const double SIZE_LEFT_PANEL = 370;
 }
@@ -43,11 +45,11 @@ mixin Keys {
 }
 
 mixin Images {
-  // static const String IMG_ROOT = 'assets/images/';
-  // static const String IMG_APP_LOGO = IMG_ROOT + 'app_logo.svg';
-  // static const String IMG_ENABLE_DEVICE = IMG_ROOT + 'enable_device.png';
-  // static const String IMG_ENABLE_LOCATION = IMG_ROOT + 'enable_location.png';
-  // static const String IMG_ENABLE_BLUETOOTH = IMG_ROOT + 'enable_bluetooth.png';
+  static const String IMG_ROOT = 'assets/images/';
+  static const String IMG_APP_LOGO = IMG_ROOT + 'app_logo.svg';
+  static const String IMG_ENABLE_DEVICE = IMG_ROOT + 'enable_device.png';
+  static const String IMG_ENABLE_LOCATION = IMG_ROOT + 'enable_location.png';
+  static const String IMG_ENABLE_BLUETOOTH = IMG_ROOT + 'enable_bluetooth.png';
 }
 
 mixin Descriptions {
@@ -96,4 +98,20 @@ mixin Progressor {
   static const int CMD_CLR_ERROR_INFORMATION = 109;
   static const int CMD_ENTER_SLEEP = 110;
   static const int CMD_GET_BATTERY_VOLTAGE = 111; //
+}
+
+mixin KPlayer {
+  static final AudioCache _kPlayer = AudioCache(
+    respectSilence: true,
+    prefix: 'assets/audio/',
+    fixedPlayer: AudioPlayer(playerId: 'tendonloader'),
+  );
+
+  static Future<void> load() async {
+    await _kPlayer.loadAll(<String>['start.mpeg', 'stop.mpeg']);
+  }
+
+  static void playStart() => _kPlayer.play('start.mpeg');
+
+  static void playStop() => _kPlayer.play('stop.mpeg');
 }

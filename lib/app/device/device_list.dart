@@ -16,12 +16,12 @@ class DeviceList extends StatelessWidget {
           initialData: const <BluetoothDevice>[],
           stream: Stream<List<BluetoothDevice>>.fromFuture(FlutterBlue.instance.connectedDevices),
           builder: (_, AsyncSnapshot<List<BluetoothDevice>> snapshot) {
-            if (snapshot.data!.isEmpty)
+            if (snapshot.data!.isEmpty) {
               return StreamBuilder<List<ScanResult>>(
                 initialData: const <ScanResult>[],
                 stream: FlutterBlue.instance.scanResults,
                 builder: (_, AsyncSnapshot<List<ScanResult>> snapshot) {
-                  if (snapshot.data!.isEmpty)
+                  if (snapshot.data!.isEmpty) {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: const <Widget>[
@@ -29,11 +29,13 @@ class DeviceList extends StatelessWidget {
                         Text(Descriptions.DESC_ENABLE_DEVICE, textAlign: TextAlign.center),
                       ],
                     );
+                  }
                   return Column(
                     children: snapshot.data!.map((ScanResult result) => DeviceTile(device: result.device)).toList(),
                   );
                 },
               );
+            }
             return Column(
               children: snapshot.data!.map((BluetoothDevice device) => DeviceTile(device: device)).toList(),
             );

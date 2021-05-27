@@ -158,10 +158,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin, ValidateCr
                 ),
               GestureDetector(
                 onTap: () {
-                  // setState(() => _createNew = !_createNew);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Disabled for testing version...!')),
-                  );
+                  setState(() => _createNew = !_createNew);
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(content: Text('Disabled for testing version...!')),
+                  // );
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20),

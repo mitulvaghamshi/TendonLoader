@@ -15,7 +15,7 @@ import 'package:tendon_loader/web/handler/create_excel.dart';
 enum ItemAction { download, delete }
 
 class LeftPanel extends StatefulWidget {
-  const LeftPanel({Key? key}) : super(key: key); 
+  const LeftPanel({Key? key}) : super(key: key);
 
   @override
   _LeftPanelState createState() => _LeftPanelState();
@@ -100,6 +100,7 @@ class _LeftPanelState extends State<LeftPanel> with CreateExcel {
   }
 
   Widget _builldListItem(MapEntry<String, dynamic> export) {
+    // final Map<String, String> value = export.value as Map<String, String>;
     final Map<String, dynamic> _meta = export.value[Keys.KEY_META_DATA] as Map<String, dynamic>;
     final SessionInfo _info = SessionInfo.fromMap(_meta);
     final Prescription? _pre = _info.type ? null : Prescription.fromMap(_meta);
