@@ -25,6 +25,7 @@ class _RightPanelState extends State<RightPanel> {
         builder: (_, AsyncSnapshot<DataModel> snapshot) {
           if (!snapshot.hasData) return const Center(child: CustomImage());
           final DataModel _model = snapshot.data!;
+          final bool _isExercise = _model.prescription != null;
           return Row(children: <Widget>[
             Expanded(
               child: Column(children: <Widget>[
@@ -32,39 +33,36 @@ class _RightPanelState extends State<RightPanel> {
                   scrollDirection: Axis.horizontal,
                   child: Row(children: <Widget>[
                     _model.sessionInfo!.toTable(),
-                    if (_model.prescription != null) _model.prescription!.toTable(),
+                    if (_isExercise) _model.prescription!.toTable(),
                   ]),
                 ),
                 Expanded(
                   child: SfCartesianChart(
                     plotAreaBorderWidth: 0,
-                    tooltipBehavior: TooltipBehavior(
-                      enable: true,
-                      header: _model.prescription != null ? 'Measurement' : 'MVC',
-                    ),
+                    selectionType: SelectionType.point,
+                    tooltipBehavior: TooltipBehavior(enable: true, header: _isExercise ? 'Measurement' : 'MVC'),
                     primaryXAxis: NumericAxis(
                       labelFormat: '{value} s',
+                      anchorRangeToVisiblePoints: true,
                       enableAutoIntervalOnZooming: true,
+                      visibleMaximum: 5,
+                      // visibleMaximum: _isExercise ? 50 : 5,
                       majorGridLines: const MajorGridLines(width: 0),
-                      visibleMaximum: _model.sessionInfo!.type ? 5 : 50,
                     ),
                     primaryYAxis: NumericAxis(
                       interval: 1,
                       labelFormat: '{value} kg',
                       anchorRangeToVisiblePoints: true,
                       enableAutoIntervalOnZooming: true,
-                      axisLine: const AxisLine(width: 0),
                       majorTickLines: const MajorTickLines(size: 0),
                       majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
                     ),
                     zoomPanBehavior: ZoomPanBehavior(
                       enablePanning: true,
                       enablePinching: true,
-                      zoomMode: ZoomMode.xy,
                       enableSelectionZooming: true,
                       enableMouseWheelZooming: true,
                     ),
-                    selectionType: SelectionType.point,
                     series: <ChartSeries<ChartData, double>>[
                       LineSeries<ChartData, double>(
                         width: 2,
@@ -74,11 +72,11 @@ class _RightPanelState extends State<RightPanel> {
                         xValueMapper: (ChartData data, _) => data.time,
                         yValueMapper: (ChartData data, _) => data.load,
                       ),
-                      if (_model.prescription != null)
+                      if (_isExercise)
                         LineSeries<ChartData, double>(
                           width: 2,
                           color: Colors.red,
-                          animationDuration: 0,
+                          animationDuration: 1000,
                           xValueMapper: (ChartData data, _) => data.time,
                           yValueMapper: (ChartData data, _) => data.load,
                           dataSource: <ChartData>[
@@ -91,43 +89,42 @@ class _RightPanelState extends State<RightPanel> {
                 ),
               ]),
             ),
-            if (_model.dataList!.isNotEmpty)
-              LimitedBox(
-                maxWidth: 250,
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  const Text(
-                    'No. Time Load',
-                    style: TextStyle(fontStyle: FontStyle.italic, fontSize: 20, wordSpacing: 25),
-                  ),
-                  const Divider(color: Colors.black, thickness: 3),
-                  Expanded(
-                    child: ListView.separated(
-                      controller: _scrollController,
-                      itemCount: _model.dataList!.length,
-                      padding: const EdgeInsets.only(left: 5, right: 20),
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      separatorBuilder: (_, int index) => Divider(
-                        thickness: 1,
-                        color: index % 10 == 9 ? Colors.red : Colors.grey,
-                      ),
-                      itemBuilder: (_, int index) {
-                        final String i = '${index + 1}'.padLeft(3, '  ');
-                        final String t = _model.dataList![index].time!.toStringAsFixed(1).padRight(4);
-                        final String l = _model.dataList![index].load!.toStringAsFixed(2).padRight(4);
-                        return Text(
-                          '$i. $t $l',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            wordSpacing: 20,
-                            letterSpacing: 1.5,
-                            fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
-                          ),
-                        );
-                      },
+            LimitedBox(
+              maxWidth: 250,
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                const Text(
+                  'No. Time Load',
+                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 20, wordSpacing: 25),
+                ),
+                const Divider(color: Colors.black, thickness: 3),
+                Expanded(
+                  child: ListView.separated(
+                    controller: _scrollController,
+                    itemCount: _model.dataList!.length,
+                    padding: const EdgeInsets.only(left: 5, right: 20),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    separatorBuilder: (_, int index) => Divider(
+                      thickness: 1,
+                      color: index % 10 == 9 ? Colors.red : Colors.grey,
                     ),
+                    itemBuilder: (_, int index) {
+                      final String i = '${index + 1}'.padLeft(3, '  ');
+                      final String t = _model.dataList![index].time!.toStringAsFixed(1).padRight(4);
+                      final String l = _model.dataList![index].load!.toStringAsFixed(2).padRight(4);
+                      return Text(
+                        '$i. $t $l',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          wordSpacing: 20,
+                          letterSpacing: 1.5,
+                          fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
+                        ),
+                      );
+                    },
                   ),
-                ]),
-              ),
+                ),
+              ]),
+            ),
           ]);
         },
       ),

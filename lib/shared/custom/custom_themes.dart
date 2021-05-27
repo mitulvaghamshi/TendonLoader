@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 final ThemeData lightTheme = ThemeData(
-  canvasColor: Colors.white,
+  // canvasColor: Colors.white,
   splashColor: Colors.black,
   accentColor: Colors.black,
   primaryColor: Colors.white,
@@ -20,10 +20,10 @@ final ThemeData darkTheme = ThemeData(
   primaryColor: Colors.black,
   brightness: Brightness.dark,
   visualDensity: VisualDensity.adaptivePlatformDensity,
-  checkboxTheme: CheckboxThemeData(
-    fillColor: MaterialStateProperty.all<Color>(Colors.white),
-    checkColor: MaterialStateProperty.all<Color>(Colors.black),
-  ),
+  // checkboxTheme: CheckboxThemeData(
+  //   fillColor: MaterialStateProperty.all<Color>(Colors.white),
+  //   checkColor: MaterialStateProperty.all<Color>(Colors.black),
+  // ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     splashColor: Colors.white,
     foregroundColor: Colors.white,

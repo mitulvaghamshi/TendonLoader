@@ -26,6 +26,9 @@ dependencies:
   rxdart: ^0.26.0
   syncfusion_flutter_charts: ^19.1.56
   syncfusion_flutter_xlsio: ^19.1.56-beta
+  tendon_support_lib:
+    path: ../tendon_support_lib
+  wakelock: ^0.5.2
 
 dev_dependencies:
   flutter_test:
@@ -35,11 +38,11 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/audio/stop.mpeg
+    - assets/audio/start.mpeg
+
     - assets/images/app_logo.svg
     - assets/images/enable_device.png
     - assets/images/enable_location.png
     - assets/images/enable_bluetooth.png
     
-    - assets/audio/end.mpeg
-    - assets/audio/stop.mpeg
-    - assets/audio/start.mpeg

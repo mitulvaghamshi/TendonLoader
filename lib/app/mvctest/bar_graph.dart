@@ -42,6 +42,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
     } else if (!_isRunning && (await CountDown.start(context) ?? false)) {
       await Bluetooth.startWeightMeas();
       Bluetooth.dataList.clear();
+      KPlayer.playStart();
       _dateTime = DateTime.now();
       _isComplete = false;
       _isRunning = true;
@@ -51,6 +52,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
 
   void _stop() {
     _isRunning = false;
+    KPlayer.playStop();
     Bluetooth.stopWeightMeas();
     Future<void>.delayed(const Duration(seconds: 1), _onExit);
   }
@@ -61,7 +63,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
     DataHandler.dataClear();
     _graphData.insert(0, const ChartData());
     _graphCtrl?.updateDataSource(updatedDataIndex: 0);
-    _lineData.insertAll(0, <ChartData>[const ChartData(load: 0), const ChartData(time: 2, load: 0)]);
+    _lineData.insertAll(0, <ChartData>[const ChartData(), const ChartData(time: 2)]);
     _lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
   }
 

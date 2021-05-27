@@ -39,13 +39,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
     if (_formKey.currentState!.validate() || true) {
       Navigator.of(context).pushReplacementNamed(
         ExerciseMode.route,
-        arguments: const Prescription(sets: 5, reps: 10, holdTime: 5, restTime: 10, targetLoad: 5, setRestTime: 90),
-      );
-    }
-  }
-
-  /* 
-  Prescription(
+        arguments: Prescription(
           sets: int.tryParse(_ctrlSets.text),
           reps: int.tryParse(_ctrlReps.text),
           holdTime: int.tryParse(_ctrlHoldTime.text),
@@ -53,7 +47,10 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
           targetLoad: double.tryParse(_ctrlTargetLoad.text),
           setRestTime: int.tryParse(_ctrlSetRestTime.text) ?? 90,
         ),
-   */
+        // const Prescription(sets: 5, reps: 10, holdTime: 5, restTime: 10, targetLoad: 5, setRestTime: 90),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

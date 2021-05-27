@@ -2,28 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:tendon_loader/shared/constants.dart';
 
 class AppAuth {
   static void _showSnackBar(BuildContext context, String content) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(content)));
   }
 
-  static Future<void> init() async {
-    await initHive();
-
-    return Future<void>.delayed(const Duration(seconds: 1), () async => Firebase.initializeApp());
-  }
-
-  static Future<void> initHive() async {
-    if (!Hive.isBoxOpen(Keys.KEY_LOGIN_BOX)) {
-      await Hive.initFlutter();
-      await Hive.openBox<Object>(Keys.KEY_LOGIN_BOX);
-      await Hive.openBox<Map<dynamic, dynamic>>(Keys.KEY_USER_EXPORTS_BOX);
-    }
-  }
+  static Future<void> init() async => Firebase.initializeApp();
 
   static Future<User?> authenticate(BuildContext context,
       {required bool create, String? name, String? username, String? password}) {

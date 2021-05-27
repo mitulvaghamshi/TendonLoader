@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hive/hive.dart';
 import 'package:tendon_loader/app/custom/custom_listtile.dart';
 import 'package:tendon_loader/app/device/tiles/bluetooth_tile.dart';
 import 'package:tendon_loader/app/exercise/new_exercise.dart';
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
-import 'package:tendon_loader/app/handler/data_handler.dart';
 import 'package:tendon_loader/app/handler/export_handler.dart';
 import 'package:tendon_loader/app/handler/location_handler.dart';
 import 'package:tendon_loader/app/livedata/live_data.dart';
@@ -15,6 +13,7 @@ import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/custom/custom_image.dart';
 import 'package:tendon_loader/shared/login/login.dart';
+import 'package:tendon_loader/shared/setup.dart';
 
 enum ActionType { settings, export, about, logout }
 
@@ -31,7 +30,6 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    Locator.check();
     WidgetsBinding.instance!.addObserver(this);
     Future<void>.delayed(const Duration(seconds: 2), () async {
       final int _records = await ExportHandler.checkLocalData();
@@ -48,7 +46,6 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) Locator.check();
-    // if (state == AppLifecycleState.detached) Bluetooth.disconnect();
   }
 
   void _aboutDialog() {
@@ -104,6 +101,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
   }
 
   void _connectDevice() {
+    Locator.check();
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -113,7 +111,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
         contentPadding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
-        actions: <Widget>[TextButton(child: const Text('Back'), onPressed: () => Navigator.pop(context))],
+        actions: <Widget>[TextButton(onPressed: () => Navigator.pop(context), child: const Text('Back'))],
       ),
     );
   }
@@ -123,7 +121,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
       case ActionType.about:
         return _aboutDialog();
       case ActionType.export:
-        await _manuallyExport();
+        await _manualExport();
         break;
       case ActionType.logout:
         await AppAuth.signOut();
@@ -135,7 +133,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _manuallyExport() async {
+  Future<void> _manualExport() async {
     final int _records = await ExportHandler.checkLocalData();
     if (_records > 0) {
       await _tryUpload(_records);
@@ -168,14 +166,7 @@ class _AppHomeState extends State<AppHome> with WidgetsBindingObserver {
       appBar: AppBar(title: const Text(AppHome.name), actions: <Widget>[_buildMenu()]),
       body: SingleChildScrollView(
         child: AppFrame(
-          onExit: () async {
-            await Bluetooth.disconnect();
-            await AppAuth.signOut();
-            await Hive.close();
-            Locator.dispose();
-            DataHandler.dataDispose();
-            return true;
-          },
+          onExit: Setup.dispose,
           child: Column(
             children: <Widget>[
               const CustomImage(),

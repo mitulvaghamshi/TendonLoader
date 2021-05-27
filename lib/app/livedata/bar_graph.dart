@@ -2,14 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/app/custom/countdown.dart';
 import 'package:tendon_loader/app/custom/custom_controls.dart';
 import 'package:tendon_loader/app/custom/custom_graph.dart';
 import 'package:tendon_loader/app/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/app/handler/data_handler.dart';
+import 'package:tendon_loader/shared/constants.dart';
 import 'package:tendon_loader/shared/custom/custom_frame.dart';
 import 'package:tendon_loader/shared/extensions.dart';
-import 'package:tendon_loader/app/handler/data_handler.dart';
 import 'package:tendon_loader/shared/modal/chartdata.dart';
+import 'package:tendon_support_lib/tendon_support_lib.dart' show CountDown;
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key}) : super(key: key);
@@ -25,12 +26,16 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
   bool _isRunning = false;
 
   Future<void> _start() async {
-    if (!_isRunning && (_isRunning = await CountDown.start(context) ?? false)) await Bluetooth.startWeightMeas();
+    if (!_isRunning && (_isRunning = await CountDown.start(context) ?? false)) {
+      await Bluetooth.startWeightMeas();
+      KPlayer.playStart();
+    }
   }
 
   void _reset() {
     if (_isRunning) {
       _isRunning = false;
+      KPlayer.playStop();
       Bluetooth.stopWeightMeas();
       Bluetooth.dataList.clear();
     }

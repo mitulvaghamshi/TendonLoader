@@ -11,6 +11,7 @@ import 'package:tendon_loader/web/webhome.dart';
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   Login.home: (_) => kIsWeb ? const WebHome() : const AppHome(),
+  // Login.home: (_) => const WebHome(),
   Login.route: (_) => const Login(),
   Splash.route: (_) => const Splash(),
   LiveData.route: (_) => const LiveData(),

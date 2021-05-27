@@ -214,6 +214,8 @@ PODS:
     - abseil/meta/type_traits
   - "app_settings (3.0.0+1)":
     - Flutter
+  - audioplayers (0.0.1):
+    - Flutter
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
     - BoringSSL-GRPC/Interface (= 0.0.7)
@@ -332,9 +334,12 @@ PODS:
   - PromisesObjC (1.2.12)
   - Protobuf (3.11.4)
   - Reachability (3.2)
+  - wakelock (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
+  - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - Firebase/Auth
@@ -345,6 +350,7 @@ DEPENDENCIES:
   - flutter_blue (from `.symlinks/plugins/flutter_blue/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 SPEC REPOS:
   trunk:
@@ -369,6 +375,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   app_settings:
     :path: ".symlinks/plugins/app_settings/ios"
+  audioplayers:
+    :path: ".symlinks/plugins/audioplayers/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   connectivity:
@@ -385,10 +393,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/location/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  wakelock:
+    :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
+  audioplayers: 455322b54050b30ea4b1af7cd9e9d105f74efa8c
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 8ead368e38b40bb2a4c97458b7b99272399f2214
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
@@ -413,6 +424,7 @@ SPEC CHECKSUMS:
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
 PODFILE CHECKSUM: 41bfec3d038afbbb326985c311606906958d2710
 
