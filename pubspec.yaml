@@ -1,7 +1,7 @@
 name: tendon_loader
 description: A bluetooth based tendon injury monitoring application.
 publish_to: 'none'
-version: 0.0.2-preview+2
+version: 0.0.3-preview+3
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -22,12 +22,14 @@ dependencies:
   syncfusion_flutter_xlsio: ^19.1.56-beta
 
   tendon_support_lib:
-    path: ../tendon_support_lib
-    # git:
-    #   url: https://github.com/mitulvaghamshi/tendon_support_lib.git
+    # path: ../tendon_support_lib
+    git:
+      url: https://github.com/mitulvaghamshi/tendon_support_lib.git
 
   tendon_support_module:
-    path: ../tendon_support_module
+    # path: ../tendon_support_module
+    git:
+      url: https://github.com/mitulvaghamshi/tendon_support_module.git
 
   wakelock: ^0.5.2
 

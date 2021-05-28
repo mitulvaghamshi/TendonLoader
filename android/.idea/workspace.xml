@@ -28,70 +28,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffde44be-2bdc-4980-b8eb-c46b0a2a0c35" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../info/.shared1/app_auth.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../info/.shared1/constants.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../info/.shared1/login/login.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../info/.shared1/login/splash.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../info/.shared1/modal/chartdata.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../info/.shared1/modal/data_model.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../info/.shared1/modal/prescription.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../info/.shared1/modal/session_info.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../info/.shared1/setup.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/../.flutter-plugins-dependencies" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_1_6_0_beta01_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_ktx_1_6_0_beta01_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_junit_4_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_1_3_50.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_1_4_32.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_50.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_4_32.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_3_50.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_4_21.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/-187193176/io.flutter.plugins.connectivity.android.connectivity.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/-621756290/android.wakelock.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/1529722389/io.flutter.plugins.pathprovider.android.path_provider.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/2114645784/android.audioplayers.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_errorprone_error_prone_annotations_2_5_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_errorprone_error_prone_annotations_2_3_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_guava_30_1_1_jre.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_checkerframework_checker_qual_3_8_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/-867251546/android.connectivity.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/-957790444/android.path_provider.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/android.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/android.app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../info/extra.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../info/extra.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/apphome.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/apphome.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/custom/confirm_dialod.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/custom/confirm_dialod.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/custom/countdown.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/custom/custom_controls.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/custom/custom_fab.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/custom/custom_graph.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/custom/custom_graph.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/custom/custom_listtile.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/custom/custom_picker.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/custom/custom_textfield.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/device/device_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/device/device_list.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/device/device_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/device/device_tile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/device/scanner_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/device/scanner_tile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/device/tiles/bluetooth_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/device/tiles/bluetooth_tile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/device/tiles/enable_bluetooth_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/device/tiles/enable_bluetooth_tile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/device/tiles/enable_location_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/device/tiles/enable_location_tile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/device/tiles/location_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/device/tiles/location_tile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/exercise/bar_graph.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/exercise/bar_graph.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/exercise/exercise_mode.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/exercise/exercise_mode.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/exercise/new_exercise.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/exercise/new_exercise.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/handler/bluetooth_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/handler/bluetooth_handler.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/handler/data_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/handler/data_handler.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/handler/export_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/handler/export_handler.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/handler/location_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/handler/location_handler.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/livedata/bar_graph.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/livedata/bar_graph.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/livedata/live_data.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/livedata/live_data.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/mvctest/bar_graph.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/mvctest/bar_graph.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/app/mvctest/mvc_testing.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/app/mvctest/mvc_testing.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/app_auth.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/constants.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/custom/custom_avater.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/custom/custom_button.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/custom/custom_frame.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/custom/custom_image.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/custom/custom_progress.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/custom/custom_routes.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/custom/custom_themes.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/extensions.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/login/login.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/login/splash.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/modal/chartdata.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/modal/data_model.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/modal/prescription.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/modal/session_info.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/setup.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/shared/validator.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/web/handler/click_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/web/handler/click_handler.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/web/handler/create_excel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/web/handler/create_excel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/web/handler/empty.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/web/panel/left_panel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/web/panel/left_panel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/web/panel/right_panel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/web/panel/right_panel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lib/web/webhome.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/web/webhome.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -132,7 +90,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/res/drawable-night" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.1120239" />
     <property name="project.structure.side.proportion" value="0.09009009" />
@@ -285,6 +243,10 @@
       <screen x="0" y="25" width="1920" height="1055" />
     </state>
     <state width="1876" height="287" key="GridCell.Tab.0.right/0.25.1920.1055/1920.25.1920.1055@0.25.1920.1055" timestamp="1621985242067" />
+    <state x="468" y="188" key="SettingsEditor" timestamp="1622198522281">
+      <screen x="0" y="25" width="1920" height="1055" />
+    </state>
+    <state x="468" y="188" key="SettingsEditor/0.25.1920.1055/1920.25.1920.1055@0.25.1920.1055" timestamp="1622198522281" />
     <state x="496" y="234" key="new project wizard" timestamp="1622182364201">
       <screen x="0" y="25" width="1920" height="1055" />
     </state>

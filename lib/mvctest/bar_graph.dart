@@ -49,8 +49,8 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
 
   void _stop() {
     _isRunning = false;
-    ClipPlayer.playStop();
     Bluetooth.stopWeightMeas();
+    ClipPlayer.playStop();
     Future<void>.delayed(const Duration(seconds: 1), _onExit);
   }
 
@@ -103,6 +103,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
             stream: dataStream,
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               if (5 - snapshot.data!.time! == 0) {
+                Bluetooth.isRunning = false;
                 _isComplete = true;
                 _stop();
               } else if (snapshot.data!.load! > _minLoad) {

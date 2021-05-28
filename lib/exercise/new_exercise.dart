@@ -34,7 +34,7 @@ class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixi
   }
 
   void _submit() {
-    if (_formKey.currentState!.validate() || true) {
+    if (_formKey.currentState!.validate()) {
       Navigator.of(context).pushReplacementNamed(
         ExerciseMode.route,
         arguments: Prescription(

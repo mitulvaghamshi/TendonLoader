@@ -30,9 +30,15 @@ class Bluetooth with DataHandler {
     if (isConnected) await _dataChar!.setNotifyValue(value);
   }
 
-  static Future<void> startWeightMeas() async => _write(Progressor.cmdStartWeightMeasurement);
+  static Future<void> startWeightMeas() async {
+    isRunning = true;
+    await _write(Progressor.cmdStartWeightMeasurement);
+  }
 
-  static Future<void> stopWeightMeas() async => _write(Progressor.cmdStopWeightMeasuremnt);
+  static Future<void> stopWeightMeas() async {
+    isRunning = false;
+    await _write(Progressor.cmdStopWeightMeasuremnt);
+  }
 
   static Future<void> sleep() async => _write(Progressor.cmdEnterSleep);
 
@@ -85,11 +91,12 @@ class Bluetooth with DataHandler {
   // Data Listener
   static final List<ChartData> dataList = <ChartData>[];
   static double minTime = 0;
+  static bool isRunning = false;
 
   static void _listen() {
     if (isConnected) {
       _dataChar!.value.listen((List<int> data) {
-        if (data.isNotEmpty && data[0] == Progressor.resWeightMeasurement) {
+        if (isRunning && data.isNotEmpty && data[0] == Progressor.resWeightMeasurement) {
           for (int x = 2; x < data.length; x += 8) {
             final double weight = data.getRange(x, x + 4).toList().toWeight;
             final double time = data.getRange(x + 4, x + 8).toList().toTime;

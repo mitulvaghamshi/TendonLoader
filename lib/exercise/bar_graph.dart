@@ -43,7 +43,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
 
   late int _setRestTime;
 
-  String get _lapTime => !_isRunning
+  String get _lapTime => _isRunning
       ? _isHold
           ? 'Hold for: $_holdTime s'
           : 'Rest for: $_restTime s'
@@ -79,8 +79,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
       _currentRep = _currentSet = 1;
       _isHold = true;
       _minSec = 0;
-      if (_isComplete) _congrats();
-      await _onExit();
+      if (_isComplete) await _congrats();
     }
   }
 
@@ -91,6 +90,14 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
       duration: Duration(seconds: _setRestTime),
     );
     if (result ?? false) await _start();
+    // Future<void>.delayed(const Duration(milliseconds: 5), () async {
+    //   final bool? result = await CountDown.start(
+    //     context,
+    //     title: 'Set Over, Rest!!!',
+    //     duration: Duration(seconds: _setRestTime),
+    //   );
+    //   if (result ?? false) await _start();
+    // });
   }
 
   void stop() => _isSetRest = true;
@@ -141,21 +148,29 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
     return result;
   }
 
-  void _congrats() {
-    showDialog<void>(
+  Future<void> _congrats() async {
+    await showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (_) {
         return AlertDialog(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const <Widget>[
-              Icon(Icons.emoji_events_rounded, size: 30, color: Colors.green),
-              Text('Congrats!!!', textAlign: TextAlign.center),
-            ],
+          title: FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: const <Widget>[
+              Icon(Icons.emoji_events_rounded, size: 50, color: Colors.green),
+              Text(
+                'Congratulations!!!',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 26),
+              ),
+            ]),
           ),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          content: const Text('Exercise session completed! Great work!', textAlign: TextAlign.center),
+          content: const Text(
+            'Exercise session completed!\nGreat work!',
+            style: TextStyle(fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
           actions: <Widget>[
             TextButton.icon(
               label: const Text('Next'),
@@ -166,6 +181,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
         );
       },
     );
+    await _onExit();
   }
 
   @override
