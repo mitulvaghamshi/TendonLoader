@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/shared/custom/custom_routes.dart';
-import 'package:tendon_loader/shared/custom/custom_themes.dart';
+import 'package:tendon_loader/routes.dart' show routes;
+import 'package:tendon_support_lib/tendon_support_lib.dart' show darkTheme, lightTheme;
 
 void main() => runApp(const TendonLoader());
 
