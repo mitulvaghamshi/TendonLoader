@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart' show BluetoothDevice, BluetoothDeviceState;
-import 'package:tendon_loader/handler/bluetooth_handler.dart' show Bluetooth;
+import 'package:tendon_loader/handler/bluetooth_handler.dart' show connectDevice, disconnectDevice, isDeviceConnecting;
 import 'package:tendon_support_lib/tendon_support_lib.dart' show CustomProgress;
 
 class DeviceTile extends StatelessWidget {
@@ -18,15 +18,15 @@ class DeviceTile extends StatelessWidget {
         final bool _isConnected = snapshot.data == BluetoothDeviceState.connected;
         return StreamBuilder<bool>(
           initialData: false,
-          stream: Bluetooth.isConnecting,
+          stream: isDeviceConnecting,
           builder: (_, AsyncSnapshot<bool> snapshot) {
             if (snapshot.data!) return const CustomProgress(text: 'Connecting...');
             return ListTile(
               horizontalTitleGap: 0,
               title: Text(_deviceName),
               contentPadding: const EdgeInsets.all(5),
-              onTap: () => Bluetooth.connect(device),
-              onLongPress: () => Bluetooth.disconnect(device),
+              onTap: () => connectDevice(device),
+              onLongPress: () => disconnectDevice(device),
               subtitle: Text(
                 _isConnected ? 'Long press to disconnect' : 'Click to connect',
                 style: const TextStyle(fontSize: 12),

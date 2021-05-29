@@ -2,15 +2,17 @@ import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' show ChartSeriesController;
-import 'package:tendon_loader/custom/confirm_dialod.dart' show ConfirmDialog;
-import 'package:tendon_loader/custom/custom_graph.dart' show CustomGraph;
-import 'package:tendon_loader/handler/bluetooth_handler.dart' show Bluetooth;
-import 'package:tendon_loader/handler/data_handler.dart' show DataHandler;
-import 'package:tendon_support_lib/tendon_support_lib.dart' show AppFrame, ClipPlayer, CountDown, GraphControls, Keys;
-import 'package:tendon_support_module/modal/chartdata.dart' show ChartData;
-import 'package:tendon_support_module/modal/data_model.dart' show DataModel;
-import 'package:tendon_support_module/modal/prescription.dart' show Prescription;
-import 'package:tendon_support_module/modal/session_info.dart' show SessionInfo;
+import 'package:tendon_loader/custom/confirm_dialod.dart';
+import 'package:tendon_loader/custom/custom_graph.dart';
+import 'package:tendon_loader/handler/bluetooth_handler.dart'
+    show exportDataList, deviceName, startWeightMeasuring, stopWeightMeasuring;
+import 'package:tendon_loader/handler/clip_player.dart';
+import 'package:tendon_loader/handler/data_handler.dart' show graphDataStream;
+import 'package:tendon_support_lib/tendon_support_lib.dart' show AppFrame, CountDown, GraphControls, Keys;
+import 'package:tendon_support_module/modal/chartdata.dart';
+import 'package:tendon_support_module/modal/data_model.dart';
+import 'package:tendon_support_module/modal/prescription.dart';
+import 'package:tendon_support_module/modal/session_info.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key, required this.prescription}) : super(key: key);
@@ -21,7 +23,7 @@ class BarGraph extends StatefulWidget {
   _BarGraphState createState() => _BarGraphState();
 }
 
-class _BarGraphState extends State<BarGraph> with DataHandler {
+class _BarGraphState extends State<BarGraph> {
   final List<ChartData> _graphData = <ChartData>[];
 
   ChartSeriesController? _graphCtrl;
@@ -58,9 +60,9 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
     } else if (!_isRunning && _hasData) {
       await _onExit();
     } else if (await CountDown.start(context) ?? false) {
-      await Bluetooth.startWeightMeas();
-      Bluetooth.dataList.clear();
-      ClipPlayer.playStart();
+      await startWeightMeasuring();
+      exportDataList.clear();
+      play(Clip.start);
       _dateTime = DateTime.now();
       _isComplete = false;
       _isRunning = true;
@@ -72,8 +74,8 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
   Future<void> _reset() async {
     if (_isRunning) {
       _isRunning = false;
-      ClipPlayer.playStop();
-      await Bluetooth.stopWeightMeas();
+      play(Clip.stop);
+      await stopWeightMeasuring();
       _holdTime = widget.prescription.holdTime!;
       _restTime = widget.prescription.restTime!;
       _currentRep = _currentSet = 1;
@@ -130,13 +132,13 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
     final bool? result = await ConfirmDialog.show(
       context,
       model: DataModel(
-        dataList: Bluetooth.dataList,
+        dataList: exportDataList,
         prescription: widget.prescription,
         sessionInfo: SessionInfo(
           dateTime: _dateTime,
           dataStatus: _isComplete,
+          progressorId: deviceName,
           exportType: Keys.keyPrefixExcercise,
-          progressorId: Bluetooth.deviceName,
         ),
       ),
     );
@@ -158,11 +160,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
             fit: BoxFit.fitWidth,
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: const <Widget>[
               Icon(Icons.emoji_events_rounded, size: 50, color: Colors.green),
-              Text(
-                'Congratulations!!!',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 26),
-              ),
+              Text('Congratulations!!!', textAlign: TextAlign.center, style: TextStyle(fontSize: 26)),
             ]),
           ),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -206,7 +204,7 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
       child: Column(
         children: <Widget>[
           StreamBuilder<ChartData>(
-            stream: dataStream,
+            stream: graphDataStream,
             initialData: const ChartData(),
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               _graphData.insert(0, snapshot.data!);

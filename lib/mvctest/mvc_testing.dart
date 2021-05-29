@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/mvctest/bar_graph.dart' show BarGraph;
+import 'package:tendon_loader/mvctest/bar_graph.dart';
 
 class MVCTesting extends StatelessWidget {
   const MVCTesting({Key? key}) : super(key: key);

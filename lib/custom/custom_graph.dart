@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart' show BorderRadius, BuildContext, Colors, EdgeInsets, Expanded, FontWeight, Key, Padding, Radius, StatelessWidget, TextStyle, Theme, Widget;
-import 'package:syncfusion_flutter_charts/charts.dart' show AxisLine, CategoryAxis, ChartDataLabelAlignment, ChartSeries, ChartSeriesController, ColumnSeries, DataLabelSettings, LineSeries, MajorGridLines, NumericAxis, SfCartesianChart;
+import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_support_module/modal/chartdata.dart';
 
 class CustomGraph extends StatelessWidget {

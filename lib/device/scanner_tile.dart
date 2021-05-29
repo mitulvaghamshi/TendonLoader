@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart' show FlutterBlue;
-import 'package:tendon_loader/device/device_list.dart' show DeviceList;
-import 'package:tendon_loader/handler/bluetooth_handler.dart' show Bluetooth;
+import 'package:tendon_loader/device/device_list.dart';
+import 'package:tendon_loader/handler/bluetooth_handler.dart' show startDeviceScan, stopDeviceScan;
 import 'package:tendon_support_lib/tendon_support_lib.dart' show CustomButton, CustomProgress;
 
 class ScannerTile extends StatelessWidget {
@@ -22,11 +22,11 @@ class ScannerTile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: const <Widget>[
                   CustomProgress(text: 'Scanning...'),
-                  CustomButton(text: 'Stop', icon: Icons.close_rounded, onPressed: Bluetooth.stopScan),
+                  CustomButton(text: 'Stop', icon: Icons.close_rounded, onPressed: stopDeviceScan),
                 ],
               )
             else
-              const CustomButton(text: 'Scan', icon: Icons.search_rounded, onPressed: Bluetooth.startScan),
+              const CustomButton(text: 'Scan', icon: Icons.search_rounded, onPressed: startDeviceScan),
           ],
         );
       },

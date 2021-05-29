@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart' show AsyncSnapshot, BuildContext, Key, StatelessWidget, StreamBuilder, Widget;
-import 'package:tendon_loader/device/scanner_tile.dart' show ScannerTile;
-import 'package:tendon_loader/device/tiles/enable_location_tile.dart' show EnableLocationTile;
-import 'package:tendon_loader/handler/location_handler.dart' show Locator;
+import 'package:flutter/material.dart';
+import 'package:tendon_loader/device/scanner_tile.dart';
+import 'package:tendon_loader/device/tiles/enable_location_tile.dart';
+import 'package:tendon_loader/handler/location_handler.dart';
 
 class LocationTile extends StatelessWidget {
   const LocationTile({Key? key}) : super(key: key);

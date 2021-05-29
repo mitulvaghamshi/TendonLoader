@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/exercise/exercise_mode.dart' show ExerciseMode;
-import 'package:tendon_support_lib/tendon_support_lib.dart' show AppFrame, CustomButton, CustomTextField;
-import 'package:tendon_support_lib/validator.dart' show ValidateExerciseDataMixin;
-import 'package:tendon_support_module/modal/prescription.dart' show Prescription;
+import 'package:tendon_loader/exercise/exercise_mode.dart';
+import 'package:tendon_support_lib/tendon_support_lib.dart'
+    show AppFrame, CustomButton, CustomTextField, ValidatePrescription;
+import 'package:tendon_support_module/modal/prescription.dart';
 
 class NewExercise extends StatefulWidget {
   const NewExercise({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class NewExercise extends StatefulWidget {
   _NewExerciseState createState() => _NewExerciseState();
 }
 
-class _NewExerciseState extends State<NewExercise> with ValidateExerciseDataMixin {
+class _NewExerciseState extends State<NewExercise> with ValidatePrescription {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _ctrlSets = TextEditingController();
   final TextEditingController _ctrlReps = TextEditingController();

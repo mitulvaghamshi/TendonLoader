@@ -1,7 +1,7 @@
 import 'dart:async' show Future;
 
-import 'package:flutter/material.dart' show AlertDialog, BorderRadius, BuildContext, Colors, Column, EdgeInsets, Icon, Icons, Key, MainAxisSize, Navigator, RoundedRectangleBorder, ScaffoldMessenger, SnackBar, StatelessWidget, Text, TextAlign, TextButton, Widget, showDialog;
-import 'package:tendon_loader/handler/export_handler.dart' show ExportHandler;
+import 'package:flutter/material.dart';
+import 'package:tendon_loader/handler/export_handler.dart' show export;
 import 'package:tendon_support_lib/tendon_support_lib.dart' show CustomTile;
 import 'package:tendon_support_module/modal/data_model.dart';
 
@@ -24,7 +24,7 @@ class ConfirmDialog extends StatelessWidget {
   }
 
   Future<void> _export(BuildContext context, [bool later = false]) async {
-    final bool result = await ExportHandler.export(model!, later);
+    final bool result = await export(model!, later);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(result

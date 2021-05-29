@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart' show SvgPicture;
 import 'package:hive/hive.dart' show Hive;
-import 'package:tendon_loader/device/tiles/bluetooth_tile.dart' show BluetoothTile;
-import 'package:tendon_loader/exercise/new_exercise.dart' show NewExercise;
-import 'package:tendon_loader/handler/bluetooth_handler.dart' show Bluetooth;
-import 'package:tendon_loader/handler/data_handler.dart' show DataHandler;
-import 'package:tendon_loader/handler/export_handler.dart' show ExportHandler;
-import 'package:tendon_loader/handler/location_handler.dart' show Locator;
-import 'package:tendon_loader/livedata/live_data.dart' show LiveData;
-import 'package:tendon_loader/mvctest/mvc_testing.dart' show MVCTesting;
-import 'package:tendon_support_lib/tendon_support_lib.dart' show AppFrame, AppLogo, CustomTile, Images, Descriptions;
-import 'package:tendon_support_module/app_auth.dart' show AppAuth;
-import 'package:tendon_support_module/login/login.dart' show Login;
+import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
+import 'package:tendon_loader/exercise/new_exercise.dart';
+import 'package:tendon_loader/handler/bluetooth_handler.dart' show disconnectDevice, isDeviceConnected;
+import 'package:tendon_loader/handler/data_handler.dart' show disposeGraphData;
+import 'package:tendon_loader/handler/export_handler.dart' show checkLocalData, reExport;
+import 'package:tendon_loader/handler/location_handler.dart';
+import 'package:tendon_loader/livedata/live_data.dart';
+import 'package:tendon_loader/mvctest/mvc_testing.dart';
+import 'package:tendon_support_lib/tendon_support_lib.dart' show AppFrame, AppLogo, CustomTile, Descriptions;
+import 'package:tendon_support_module/app_auth.dart' show signOut;
+import 'package:tendon_support_module/login/login.dart';
 import 'package:wakelock/wakelock.dart' show Wakelock;
 
 enum ActionType { settings, export, about, logout }
@@ -31,9 +30,10 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     Locator.check();
+    Wakelock.enable();
     WidgetsBinding.instance!.addObserver(this);
     Future<void>.delayed(const Duration(seconds: 2), () async {
-      final int _records = await ExportHandler.checkLocalData();
+      final int _records = await checkLocalData();
       if (_records > 0) await _tryUpload(_records);
     });
   }
@@ -55,7 +55,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       applicationVersion: 'v1.0',
       applicationName: Home.name,
       // applicationLegalese: 'Application Legalese',
-      applicationIcon: SvgPicture.asset(Images.imgAppLogo, height: 50, width: 50),
+      applicationIcon: const AppLogo(size: 50),
       children: <Widget>[
         const Text(
           'Tendon Loader :Preview',
@@ -79,21 +79,23 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       context: context,
       barrierDismissible: false,
       builder: (_) {
-        ExportHandler.reExport();
+        reExport();
         return AlertDialog(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const <Widget>[
-              Icon(Icons.cloud_upload, size: 30, color: Colors.green),
-              Text('Uploading local data', textAlign: TextAlign.center),
-            ],
+          title: FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: const <Widget>[
+              Icon(Icons.cloud_upload, size: 50, color: Colors.green),
+              Text('Uploading local data', textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
+            ]),
           ),
           content: ExpansionTile(
-            subtitle: const Text('Tap for more info...'),
+            tilePadding: const EdgeInsets.all(5),
             title: Text('$records file${records == 1 ? '' : 's'} uploaded.'),
+            subtitle: const Text('Tap for more info...', style: TextStyle(fontSize: 12)),
             leading: const Icon(Icons.check_circle_outline_rounded, size: 30, color: Colors.green),
             children: const <Widget>[Text(Descriptions.descUpload)],
           ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           actions: <Widget>[TextButton(onPressed: Navigator.of(context).pop, child: const Text('OK'))],
         );
@@ -125,7 +127,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         await _manualExport();
         break;
       case ActionType.logout:
-        await AppAuth.signOut();
+        await signOut();
         await Navigator.pushReplacementNamed(context, Login.route);
         break;
       case ActionType.settings:
@@ -135,7 +137,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   Future<void> _manualExport() async {
-    final int _records = await ExportHandler.checkLocalData();
+    final int _records = await checkLocalData();
     if (_records > 0) {
       await _tryUpload(_records);
     } else {
@@ -158,8 +160,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     );
   }
 
-  void _handleTap(String route) =>
-      Bluetooth.isConnected || true ? Navigator.pushNamed(context, route) : _connectDevice();
+  void _handleTap(String route) => isDeviceConnected || true ? Navigator.pushNamed(context, route) : _connectDevice();
 
   @override
   Widget build(BuildContext context) {
@@ -169,11 +170,11 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         child: AppFrame(
           onExit: () async {
             await Wakelock.disable();
-            await Bluetooth.disconnect();
-            await AppAuth.signOut();
+            await disconnectDevice();
+            await signOut();
             await Hive.close();
             Locator.dispose();
-            DataHandler.dataDispose();
+            disposeGraphData();
             return true;
           },
           child: Column(

@@ -2,15 +2,16 @@ import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' show ChartSeriesController;
-import 'package:tendon_loader/custom/confirm_dialod.dart' show ConfirmDialog;
-import 'package:tendon_loader/custom/custom_graph.dart' show CustomGraph;
-import 'package:tendon_loader/handler/bluetooth_handler.dart' show Bluetooth;
-import 'package:tendon_loader/handler/data_handler.dart' show DataHandler;
-import 'package:tendon_support_lib/tendon_support_lib.dart'
-    show AppFrame, ClipPlayer, CountDown, GraphControls, ExTimeFormat, Keys;
-import 'package:tendon_support_module/modal/chartdata.dart' show ChartData;
-import 'package:tendon_support_module/modal/data_model.dart' show DataModel;
-import 'package:tendon_support_module/modal/session_info.dart' show SessionInfo;
+import 'package:tendon_loader/custom/confirm_dialod.dart';
+import 'package:tendon_loader/custom/custom_graph.dart';
+import 'package:tendon_loader/handler/bluetooth_handler.dart'
+    show exportDataList, deviceName, isDeviceRunning, startWeightMeasuring, stopWeightMeasuring;
+import 'package:tendon_loader/handler/clip_player.dart';
+import 'package:tendon_loader/handler/data_handler.dart' show graphDataStream, clearGraphData;
+import 'package:tendon_support_lib/tendon_support_lib.dart' show AppFrame, CountDown, GraphControls, ExTimeFormat, Keys;
+import 'package:tendon_support_module/modal/chartdata.dart';
+import 'package:tendon_support_module/modal/data_model.dart';
+import 'package:tendon_support_module/modal/session_info.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class BarGraph extends StatefulWidget {
   _BarGraphState createState() => _BarGraphState();
 }
 
-class _BarGraphState extends State<BarGraph> with DataHandler {
+class _BarGraphState extends State<BarGraph> {
   final List<ChartData> _lineData = <ChartData>[const ChartData(), const ChartData(time: 2)];
   final List<ChartData> _graphData = <ChartData>[];
 
@@ -37,9 +38,9 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
     if (!_isRunning && _hasData) {
       await _onExit();
     } else if (!_isRunning && (await CountDown.start(context) ?? false)) {
-      await Bluetooth.startWeightMeas();
-      Bluetooth.dataList.clear();
-      ClipPlayer.playStart();
+      await startWeightMeasuring();
+      exportDataList.clear();
+      play(Clip.start);
       _dateTime = DateTime.now();
       _isComplete = false;
       _isRunning = true;
@@ -49,15 +50,15 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
 
   void _stop() {
     _isRunning = false;
-    Bluetooth.stopWeightMeas();
-    ClipPlayer.playStop();
+    stopWeightMeasuring();
+    play(Clip.stop);
     Future<void>.delayed(const Duration(seconds: 1), _onExit);
   }
 
   void _reset() {
     if (_isRunning) _stop();
     _minLoad = 0;
-    DataHandler.dataClear();
+    clearGraphData();
     _graphData.insert(0, const ChartData());
     _graphCtrl?.updateDataSource(updatedDataIndex: 0);
     _lineData.insertAll(0, <ChartData>[const ChartData(), const ChartData(time: 2)]);
@@ -69,12 +70,12 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
     final bool? result = await ConfirmDialog.show(
       context,
       model: DataModel(
-        dataList: Bluetooth.dataList,
+        dataList: exportDataList,
         sessionInfo: SessionInfo(
           dateTime: _dateTime,
           dataStatus: _isComplete,
+          progressorId: deviceName,
           exportType: Keys.keyPrefixMVC,
-          progressorId: Bluetooth.deviceName,
         ),
       ),
     );
@@ -100,10 +101,10 @@ class _BarGraphState extends State<BarGraph> with DataHandler {
         children: <Widget>[
           StreamBuilder<ChartData>(
             initialData: const ChartData(),
-            stream: dataStream,
+            stream: graphDataStream,
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               if (5 - snapshot.data!.time! == 0) {
-                Bluetooth.isRunning = false;
+                isDeviceRunning = false;
                 _isComplete = true;
                 _stop();
               } else if (snapshot.data!.load! > _minLoad) {

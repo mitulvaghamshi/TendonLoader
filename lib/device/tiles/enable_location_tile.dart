@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/handler/location_handler.dart' show Locator;
+import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_support_lib/tendon_support_lib.dart' show CustomButton, CustomImage, Images, Descriptions;
 
 class EnableLocationTile extends StatelessWidget {

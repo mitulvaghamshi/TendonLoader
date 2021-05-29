@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/livedata/bar_graph.dart' show BarGraph;
+import 'package:tendon_loader/livedata/bar_graph.dart';
 
 class LiveData extends StatelessWidget {
   const LiveData({Key? key}) : super(key: key);

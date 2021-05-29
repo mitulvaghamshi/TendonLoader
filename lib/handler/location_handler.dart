@@ -1,6 +1,6 @@
 import 'dart:async' show Future, Stream;
 
-import 'package:app_settings/app_settings.dart' show AppSettings;
+import 'package:app_settings/app_settings.dart';
 import 'package:location/location.dart' show Location;
 import 'package:rxdart/rxdart.dart' show BehaviorSubject;
 

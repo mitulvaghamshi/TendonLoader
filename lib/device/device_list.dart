@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart' show BluetoothDevice, FlutterBlue, ScanResult;
-import 'package:tendon_loader/device/device_tile.dart' show DeviceTile;
+import 'package:tendon_loader/device/device_tile.dart';
 import 'package:tendon_support_lib/tendon_support_lib.dart' show CustomImage, Images, Descriptions;
 
 class DeviceList extends StatelessWidget {
