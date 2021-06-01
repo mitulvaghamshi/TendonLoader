@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' show ChartSeriesController;
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
+import 'package:tendon_loader/handler/progress_handler.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart'
     show exportDataList, deviceName, startWeightMeasuring, stopWeightMeasuring;
 import 'package:tendon_loader/handler/clip_player.dart';
@@ -24,108 +25,61 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
+  late final ProgressHandler _handler = ProgressHandler(
+    onReset: _reset,
+    onSetOver: _setOver,
+    pre: widget.prescription,
+  );
   final List<ChartData> _graphData = <ChartData>[];
-
   ChartSeriesController? _graphCtrl;
   late DateTime _dateTime;
-
-  double _targetLoad = 0;
-  int _currentSet = 1;
-  int _currentRep = 1;
-  int _holdTime = 0;
-  int _restTime = 0;
-
-  bool _isComplete = false;
-  bool _isRunning = false;
-  bool _isSetRest = false;
   bool _hasData = false;
-  bool _isHold = true;
-
   int _minSec = 0;
 
-  late int _setRestTime;
-
-  String get _lapTime => _isRunning
-      ? _isHold
-          ? 'Hold for: $_holdTime s'
-          : 'Rest for: $_restTime s'
-      : '•••';
-
-  String get _progress =>
-      'Set: $_currentSet/${widget.prescription.sets} • Rep: $_currentRep/${widget.prescription.reps}';
-
   Future<void> _start() async {
-    if (_isSetRest && _isRunning) {
-      _isSetRest = false;
-    } else if (!_isRunning && _hasData) {
+    if (_handler.isSetOver && _handler.isRunning) {
+      _handler.isSetOver = false;
+    } else if (!_handler.isRunning && _hasData) {
       await _onExit();
     } else if (await CountDown.start(context) ?? false) {
       await startWeightMeasuring();
       exportDataList.clear();
-      play(Clip.start);
+      _handler.isRunning = true;
+      _handler.isComplete = false;
       _dateTime = DateTime.now();
-      _isComplete = false;
-      _isRunning = true;
       _hasData = true;
-      _isSetRest = false;
+      play(Clip.start);
     }
   }
 
   Future<void> _reset() async {
-    if (_isRunning) {
-      _isRunning = false;
-      play(Clip.stop);
+    if (_handler.isRunning) {
+      _handler.isRunning = false;
       await stopWeightMeasuring();
-      _holdTime = widget.prescription.holdTime!;
-      _restTime = widget.prescription.restTime!;
-      _currentRep = _currentSet = 1;
-      _isHold = true;
+      play(Clip.stop);
       _minSec = 0;
-      if (_isComplete) await _congrats();
+      if (_handler.isComplete) await _congrats();
     }
   }
 
-  Future<void> _setRest() async {
-    final bool? result = await CountDown.start(
-      context,
-      title: 'Set Over, Rest!!!',
-      duration: Duration(seconds: _setRestTime),
-    );
-    if (result ?? false) await _start();
-    // Future<void>.delayed(const Duration(milliseconds: 5), () async {
-    //   final bool? result = await CountDown.start(
-    //     context,
-    //     title: 'Set Over, Rest!!!',
-    //     duration: Duration(seconds: _setRestTime),
-    //   );
-    //   if (result ?? false) await _start();
-    // });
+  Future<void> _setOver() async {
+    // final bool? result = await CountDown.start(
+    //   context,
+    //   title: 'Set Over, Rest!!!',
+    //   duration: Duration(seconds: _setRestTime),
+    // );
+    // if (result ?? false) await _start();
+    Future<void>.delayed(const Duration(), () async {
+      final bool? result = await CountDown.start(
+        context,
+        title: 'Set Over, Rest!!!',
+        duration: Duration(seconds: widget.prescription.setRestTime!),
+      );
+      if (result ?? false) await _start();
+    });
   }
 
-  void stop() => _isSetRest = true;
-
-  void _updateCounters() {
-    if (_isHold && _holdTime == 0) {
-      _isHold = false;
-      _holdTime = widget.prescription.holdTime!;
-    } else if (!_isHold && _restTime == 0) {
-      _isHold = true;
-      _restTime = widget.prescription.restTime!;
-      if (_currentRep == widget.prescription.reps!) {
-        if (_currentSet == widget.prescription.sets!) {
-          _isComplete = true;
-          _reset();
-        } else {
-          _setRest();
-          _currentSet++;
-          _currentRep = 1;
-          _isSetRest = true;
-        }
-      } else {
-        _currentRep++;
-      }
-    }
-  }
+  void _stop() => _handler.isSetOver = true;
 
   Future<bool> _onExit() async {
     if (!_hasData) return true;
@@ -136,8 +90,8 @@ class _BarGraphState extends State<BarGraph> {
         prescription: widget.prescription,
         sessionInfo: SessionInfo(
           dateTime: _dateTime,
-          dataStatus: _isComplete,
           progressorId: deviceName,
+          dataStatus: _handler.isComplete,
           exportType: Keys.keyPrefixExcercise,
         ),
       ),
@@ -183,15 +137,6 @@ class _BarGraphState extends State<BarGraph> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _targetLoad = widget.prescription.targetLoad!;
-    _holdTime = widget.prescription.holdTime!;
-    _restTime = widget.prescription.restTime!;
-    _setRestTime = widget.prescription.setRestTime!;
-  }
-
-  @override
   void dispose() {
     _reset();
     super.dispose();
@@ -209,24 +154,31 @@ class _BarGraphState extends State<BarGraph> {
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               _graphData.insert(0, snapshot.data!);
               _graphCtrl?.updateDataSource(updatedDataIndex: 0);
-              if (!_isSetRest && snapshot.data!.time!.truncate() > _minSec) {
+              if (!_handler.isSetOver && snapshot.data!.time!.truncate() > _minSec) {
                 _minSec = snapshot.data!.time!.truncate();
-                _isHold ? _holdTime-- : _restTime--;
-                _updateCounters();
+                _handler.update();
               }
               return FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Column(
                   children: <Widget>[
                     Text(
-                      _lapTime,
-                      style: const TextStyle(fontSize: 40, color: Colors.green, fontWeight: FontWeight.bold),
+                      _handler.lapTime,
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: _handler.isHold ? Colors.green : Colors.red,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Chip(
                       padding: const EdgeInsets.all(16),
-                      label: Text(_progress, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
-                      backgroundColor: snapshot.data!.load! > _targetLoad ? Colors.green : Colors.yellow[200],
+                      label: Text(
+                        _handler.progress,
+                        style: const TextStyle(color: Colors.black, fontSize: 36, fontWeight: FontWeight.bold),
+                      ),
+                      backgroundColor:
+                          snapshot.data!.load! > widget.prescription.targetLoad! ? Colors.green : Colors.yellow,
                     ),
                   ],
                 ),
@@ -236,9 +188,12 @@ class _BarGraphState extends State<BarGraph> {
           CustomGraph(
             graphData: _graphData,
             graphCtrl: (ChartSeriesController ctrl) => _graphCtrl = ctrl,
-            lineData: <ChartData>[ChartData(load: _targetLoad), ChartData(time: 2, load: _targetLoad)],
+            lineData: <ChartData>[
+              ChartData(load: widget.prescription.targetLoad),
+              ChartData(time: 2, load: widget.prescription.targetLoad),
+            ],
           ),
-          GraphControls(start: _start, stop: stop, reset: _reset),
+          GraphControls(start: _start, stop: _stop, reset: _reset),
         ],
       ),
     );

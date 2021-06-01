@@ -1,0 +1,10 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "tendon_loader",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}

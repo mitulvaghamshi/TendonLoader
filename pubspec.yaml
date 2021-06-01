@@ -19,8 +19,8 @@ dependencies:
   intl: ^0.17.0
   location: ^4.1.1
   rxdart: ^0.26.0
-  syncfusion_flutter_charts: ^19.1.56
-  syncfusion_flutter_xlsio: ^19.1.56-beta
+  syncfusion_flutter_charts: ^19.1.66+1
+  syncfusion_flutter_xlsio: ^19.1.66-beta 
 
   tendon_support_lib:
     path: ../tendon_support_lib

@@ -1,4 +1,4 @@
-import 'dart:async' show Future, Stream;
+import 'dart:async' show Future, Stream, Timer;
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter_blue/flutter_blue.dart'
@@ -29,13 +29,20 @@ Future<void> setDataNotification(bool value) async {
 }
 
 Future<void> startWeightMeasuring() async {
-  isDeviceRunning = true;
-  await _write(Progressor.cmdStartWeightMeasurement);
+  // fakelisten();
+  if (!isDeviceRunning) {
+    isDeviceRunning = true;
+    await _write(Progressor.cmdStartWeightMeasurement);
+  }
 }
 
 Future<void> stopWeightMeasuring() async {
-  isDeviceRunning = false;
-  await _write(Progressor.cmdStopWeightMeasuremnt);
+  if (isDeviceRunning) {
+    await _write(Progressor.cmdStopWeightMeasuremnt);
+    isDeviceRunning = false;
+  }
+  // timer?.cancel();
+  // clearGraphData();
 }
 
 Future<void> sleepDevice() async => _write(Progressor.cmdEnterSleep);
@@ -76,20 +83,23 @@ Future<void> disconnectDevice([BluetoothDevice? device]) async {
 }
 
 Future<void> _getProps() async {
-  final List<BluetoothService> _services = await _device!.discoverServices();
-  final BluetoothService _service =
-      _services.firstWhere((BluetoothService s) => s.uuid == Guid(Progressor.uuidService));
-  final List<BluetoothCharacteristic> _chars = _service.characteristics;
-  _controlChar = _chars.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.uuidControl));
-  _dataChar = _chars.firstWhere((BluetoothCharacteristic c) => c.uuid == Guid(Progressor.uuidData));
+  final List<BluetoothService> s = await _device!.discoverServices();
+  for (int i = s.length - 1; i > 0 && (_controlChar == null || _dataChar == null); i--) {
+    for (final BluetoothCharacteristic c in s[i].characteristics) {
+      if (c.uuid == Guid(Progressor.uuidControl)) {
+        _controlChar = c;
+      } else if (c.uuid == Guid(Progressor.uuidData)) {
+        _dataChar = c;
+      }
+    }
+  }
   await setDataNotification(true);
   _listen();
 }
 
-// Data Listener
-final List<ChartData> exportDataList = <ChartData>[];
 double lastMinTime = 0;
 bool isDeviceRunning = false;
+final List<ChartData> exportDataList = <ChartData>[];
 
 void _listen() {
   if (isDeviceConnected) {
@@ -109,3 +119,14 @@ void _listen() {
     });
   }
 }
+
+// late Timer? timer;
+// void fakelisten() {
+//   double fakeLoad = 0;
+//   timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+//     final ChartData element = ChartData(load: fakeLoad += 1, time: timer.tick.toDouble());
+//     exportDataList.add(element);
+//     graphDataSink.add(element);
+//     if (fakeLoad > 10) fakeLoad = 0;
+//   });
+// }

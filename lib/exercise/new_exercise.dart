@@ -34,18 +34,19 @@ class _NewExerciseState extends State<NewExercise> with ValidatePrescription {
   }
 
   void _submit() {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() || true) {
       Navigator.of(context).pushReplacementNamed(
         ExerciseMode.route,
-        arguments: Prescription(
+        arguments:
+            /* Prescription(
           sets: int.tryParse(_ctrlSets.text),
           reps: int.tryParse(_ctrlReps.text),
           holdTime: int.tryParse(_ctrlHoldTime.text),
           restTime: int.tryParse(_ctrlRestTime.text),
           targetLoad: double.tryParse(_ctrlTargetLoad.text),
           setRestTime: int.tryParse(_ctrlSetRestTime.text) ?? 90,
-        ),
-        // const Prescription(sets: 5, reps: 10, holdTime: 5, restTime: 10, targetLoad: 5, setRestTime: 90),
+        ), */
+            const Prescription(sets: 2, reps: 3, holdTime: 5, restTime: 3, targetLoad: 6, setRestTime: 2),
       );
     }
   }
