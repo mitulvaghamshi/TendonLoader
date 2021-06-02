@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart' show Hive;
+import 'package:tendon_loader/custom/app_settings.dart';
 import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart' show disconnectDevice, isDeviceConnected;
@@ -131,7 +132,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
         await Navigator.pushReplacementNamed(context, Login.route);
         break;
       case ActionType.settings:
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Available soon...')));
+        await Navigator.pushNamed(context, AppSettings.route);
         break;
     }
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/custom/app_settings.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
 import 'package:tendon_loader/home.dart';
@@ -15,4 +16,6 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   MVCTesting.route: (_) => const MVCTesting(),
   NewExercise.route: (_) => const NewExercise(),
   ExerciseMode.route: (_) => const ExerciseMode(),
+
+  AppSettings.route: (_) => const AppSettings(),
 };
