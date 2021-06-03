@@ -9,11 +9,8 @@ import 'package:tendon_loader/handler/bluetooth_handler.dart'
     show exportDataList, deviceName, startWeightMeasuring, stopWeightMeasuring;
 import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/data_handler.dart' show graphDataStream;
-import 'package:tendon_support_lib/tendon_support_lib.dart' show AppFrame, CountDown, GraphControls, Keys;
-import 'package:tendon_support_module/modal/chartdata.dart';
-import 'package:tendon_support_module/modal/data_model.dart';
-import 'package:tendon_support_module/modal/prescription.dart';
-import 'package:tendon_support_module/modal/session_info.dart';
+import 'package:tendon_support_lib/tendon_support_lib.dart'
+    show AppFrame, ChartData, CountDown, DataModel, GraphControls, Keys, Prescription, SessionInfo;
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key, required this.prescription}) : super(key: key);
@@ -177,8 +174,9 @@ class _BarGraphState extends State<BarGraph> {
                         _handler.progress,
                         style: const TextStyle(color: Colors.black, fontSize: 36, fontWeight: FontWeight.bold),
                       ),
-                      backgroundColor:
-                          snapshot.data!.load! > widget.prescription.targetLoad! ? Colors.green : Colors.yellow,
+                      backgroundColor: snapshot.data!.load! > widget.prescription.targetLoad!
+                          ? const Color.fromRGBO(61, 220, 132, 1)
+                          : const Color.fromRGBO(239, 247, 207, 1),
                     ),
                   ],
                 ),

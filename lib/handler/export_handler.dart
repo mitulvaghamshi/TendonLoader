@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore, SetOptions;
 import 'package:connectivity/connectivity.dart' show Connectivity, ConnectivityResult;
 import 'package:hive/hive.dart' show Box, Hive;
-import 'package:tendon_support_lib/tendon_support_lib.dart' show Keys;
-import 'package:tendon_support_module/modal/chartdata.dart';
-import 'package:tendon_support_module/modal/data_model.dart';
+import 'package:tendon_support_lib/tendon_support_lib.dart' show ChartData, DataModel, Keys;
 
 Future<bool> _isConnected() async => (await Connectivity().checkConnectivity()) != ConnectivityResult.none;
 

@@ -9,9 +9,7 @@ import 'package:tendon_loader/handler/export_handler.dart' show checkLocalData, 
 import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
-import 'package:tendon_support_lib/tendon_support_lib.dart' show AppFrame, AppLogo, CustomTile, Descriptions;
-import 'package:tendon_support_module/app_auth.dart' show signOut;
-import 'package:tendon_support_module/login/login.dart';
+import 'package:tendon_support_lib/tendon_support_lib.dart' show AppFrame, AppLogo, CustomTile, Descriptions, Login, signOut;
 import 'package:wakelock/wakelock.dart' show Wakelock;
 
 enum ActionType { settings, export, about, logout }

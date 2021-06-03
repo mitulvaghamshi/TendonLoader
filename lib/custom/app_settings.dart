@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:tendon_support_lib/tendon_support_lib.dart';
-import 'package:tendon_support_module/app_auth.dart';
-import 'package:tendon_support_module/login/login.dart';
+import 'package:tendon_support_lib/tendon_support_lib.dart'; // use show
 
 class AppSettings extends StatefulWidget {
   const AppSettings({Key? key}) : super(key: key);

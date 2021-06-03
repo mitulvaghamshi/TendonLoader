@@ -1,11 +1,10 @@
-import 'dart:async' show Future, Stream, Timer;
+import 'dart:async' show Future, Stream;
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter_blue/flutter_blue.dart'
     show BluetoothCharacteristic, BluetoothDevice, BluetoothService, FlutterBlue, Guid;
 import 'package:tendon_loader/handler/data_handler.dart' show clearGraphData, graphDataSink;
-import 'package:tendon_support_lib/tendon_support_lib.dart' show ExConvert, Progressor;
-import 'package:tendon_support_module/modal/chartdata.dart';
+import 'package:tendon_support_lib/tendon_support_lib.dart' show ExConvert, Progressor, ChartData;
 
 BluetoothDevice? _device;
 BluetoothCharacteristic? _dataChar;

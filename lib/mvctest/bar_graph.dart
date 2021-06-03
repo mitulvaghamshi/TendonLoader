@@ -8,10 +8,8 @@ import 'package:tendon_loader/handler/bluetooth_handler.dart'
     show exportDataList, deviceName, isDeviceRunning, startWeightMeasuring, stopWeightMeasuring;
 import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/data_handler.dart' show graphDataStream, clearGraphData;
-import 'package:tendon_support_lib/tendon_support_lib.dart' show AppFrame, CountDown, GraphControls, ExTimeFormat, Keys;
-import 'package:tendon_support_module/modal/chartdata.dart';
-import 'package:tendon_support_module/modal/data_model.dart';
-import 'package:tendon_support_module/modal/session_info.dart';
+import 'package:tendon_support_lib/tendon_support_lib.dart'
+    show AppFrame, ChartData, CountDown, DataModel, GraphControls, Keys, SessionInfo, ExTimeFormat;
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key}) : super(key: key);

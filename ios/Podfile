@@ -32,7 +32,9 @@ target 'Runner' do
   use_modular_headers!
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
-
+  pod 'Firebase/Analytics'
+#  pod 'Firebase/AnalyticsWithoutAdIdSupport'
+  
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 

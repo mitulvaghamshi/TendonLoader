@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "534221336745",
+    "firebase_url": "https://tendon-loader-default-rtdb.firebaseio.com",
     "project_id": "tendon-loader",
     "storage_bucket": "tendon-loader.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "534221336745-adu54q04r51nqpeovbg0k0c2jeflbu39.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "534221336745-4njd506dbgfhclqou203hi64h0m3qu2t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ca.ubc.tendonLoader"
+              }
             }
           ]
         }

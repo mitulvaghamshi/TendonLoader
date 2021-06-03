@@ -1,5 +1,5 @@
 import 'package:rxdart/subjects.dart' show BehaviorSubject;
-import 'package:tendon_support_module/modal/chartdata.dart';
+import 'package:tendon_support_lib/tendon_support_lib.dart' show ChartData;
 
 final BehaviorSubject<ChartData> _controller = BehaviorSubject<ChartData>.seeded(const ChartData());
 

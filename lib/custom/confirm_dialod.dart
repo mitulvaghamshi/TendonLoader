@@ -2,8 +2,7 @@ import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/handler/export_handler.dart' show export;
-import 'package:tendon_support_lib/tendon_support_lib.dart' show CustomTile;
-import 'package:tendon_support_module/modal/data_model.dart';
+import 'package:tendon_support_lib/tendon_support_lib.dart' show CustomTile, DataModel;
 
 class ConfirmDialog extends StatelessWidget {
   const ConfirmDialog({Key? key, this.model}) : super(key: key);

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_support_lib/tendon_support_lib.dart'
-    show AppFrame, CustomButton, CustomTextField, ValidatePrescription;
-import 'package:tendon_support_module/modal/prescription.dart';
+    show AppFrame, CustomButton, CustomTextField, ValidatePrescription, Prescription;
 
 class NewExercise extends StatefulWidget {
   const NewExercise({Key? key}) : super(key: key);
