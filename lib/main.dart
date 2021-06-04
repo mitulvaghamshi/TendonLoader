@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tendon_loader/custom/custom_themes.dart';
 import 'package:tendon_loader/custom/routes.dart';
-import 'package:tendon_support_lib/tendon_support_lib.dart' show darkTheme, lightTheme;
+import 'package:tendon_loader/handler/user.dart';
 
-void main() => runApp(const TendonLoader());
+void main() {
+  runApp(MultiProvider(
+    providers: <ChangeNotifierProvider<User>>[ChangeNotifierProvider<User>(create: (_) => User())],
+    child: const TendonLoader(),
+  ));
+}
 
 class TendonLoader extends StatelessWidget {
   const TendonLoader({Key? key}) : super(key: key);

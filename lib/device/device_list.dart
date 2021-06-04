@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart' show BluetoothDevice, FlutterBlue, ScanResult;
+import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/device/device_tile.dart';
-import 'package:tendon_support_lib/tendon_support_lib.dart' show CustomImage, Images, Descriptions;
+import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class DeviceList extends StatelessWidget {
   const DeviceList({Key? key}) : super(key: key);
@@ -23,8 +24,8 @@ class DeviceList extends StatelessWidget {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: const <Widget>[
-                        CustomImage(name: Images.imgEnableDevice),
-                        Text(Descriptions.descEnableDevice, textAlign: TextAlign.center),
+                        CustomImage(name: imgEnableDevice),
+                        Text(descEnableDevice, textAlign: TextAlign.center),
                       ],
                     );
                   }

@@ -2,13 +2,16 @@ import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' show ChartSeriesController;
+import 'package:tendon_loader/custom/countdown.dart';
+import 'package:tendon_loader/custom/custom_controls.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
+import 'package:tendon_loader/custom/extensions.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart'
     show exportDataList, startWeightMeasuring, stopWeightMeasuring;
 import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/data_handler.dart' show graphDataStream;
-import 'package:tendon_support_lib/tendon_support_lib.dart'
-    show AppFrame, CountDown, GraphControls, ExTimeFormat, ChartData;
+import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key}) : super(key: key);

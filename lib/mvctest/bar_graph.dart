@@ -1,15 +1,21 @@
 import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' show ChartSeriesController;
 import 'package:tendon_loader/custom/confirm_dialod.dart';
+import 'package:tendon_loader/custom/countdown.dart';
+import 'package:tendon_loader/custom/custom_controls.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
+import 'package:tendon_loader/custom/extensions.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart'
     show exportDataList, deviceName, isDeviceRunning, startWeightMeasuring, stopWeightMeasuring;
 import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/data_handler.dart' show graphDataStream, clearGraphData;
-import 'package:tendon_support_lib/tendon_support_lib.dart'
-    show AppFrame, ChartData, CountDown, DataModel, GraphControls, Keys, SessionInfo, ExTimeFormat;
+import 'package:tendon_loader/handler/export_handler.dart';
+import 'package:tendon_loader/handler/user.dart';
+import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key}) : super(key: key);
@@ -36,27 +42,26 @@ class _BarGraphState extends State<BarGraph> {
     if (!_isRunning && _hasData) {
       await _onExit();
     } else if (!_isRunning && (await CountDown.start(context) ?? false)) {
-      await startWeightMeasuring();
-      exportDataList.clear();
-      play(Clip.start);
       _dateTime = DateTime.now();
       _isComplete = false;
       _isRunning = true;
       _hasData = true;
+      _minLoad = 0;
+      play(Clip.start);
+      exportDataList.clear();
+      await startWeightMeasuring();
     }
   }
 
   void _stop() {
-    _isRunning = false;
     stopWeightMeasuring();
+    _isRunning = false;
     play(Clip.stop);
     Future<void>.delayed(const Duration(seconds: 1), _onExit);
   }
 
   void _reset() {
     if (_isRunning) _stop();
-    _minLoad = 0;
-    clearGraphData();
     _graphData.insert(0, const ChartData());
     _graphCtrl?.updateDataSource(updatedDataIndex: 0);
     _lineData.insertAll(0, <ChartData>[const ChartData(), const ChartData(time: 2)]);
@@ -65,18 +70,27 @@ class _BarGraphState extends State<BarGraph> {
 
   Future<bool> _onExit() async {
     if (!_hasData) return true;
-    final bool? result = await ConfirmDialog.show(
-      context,
-      model: DataModel(
-        dataList: exportDataList,
-        sessionInfo: SessionInfo(
-          dateTime: _dateTime,
-          dataStatus: _isComplete,
-          progressorId: deviceName,
-          exportType: Keys.keyPrefixMVC,
-        ),
+    final DataModel _dataModel = DataModel(
+      dataList: exportDataList,
+      sessionInfo: SessionInfo(
+        dateTime: _dateTime,
+        dataStatus: _isComplete,
+        progressorId: deviceName,
+        exportType: keyPrefixMVC,
+        userId: context.read<User>().userId,
       ),
     );
+    final bool? result;
+    if (context.read<User>().autoUpload ?? false) {
+      result = await export(_dataModel, false);
+      if (result) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Data stored successfully...'),
+        ));
+      }
+    } else {
+      result = await ConfirmDialog.show(context, model: _dataModel);
+    }
     if (result == null) {
       return false;
     } else {
@@ -102,9 +116,8 @@ class _BarGraphState extends State<BarGraph> {
             stream: graphDataStream,
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               if (5 - snapshot.data!.time! == 0) {
-                isDeviceRunning = false;
                 _isComplete = true;
-                _stop();
+                if (_isRunning) _stop();
               } else if (snapshot.data!.load! > _minLoad) {
                 _minLoad = snapshot.data!.load!;
                 _lineData.insertAll(0, <ChartData>[

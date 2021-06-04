@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart' show Hive;
-import 'package:tendon_loader/custom/app_settings.dart';
+import 'package:provider/provider.dart';
+import 'package:tendon_loader/custom/app_logo.dart';
+import 'package:tendon_loader/screens/app_settings.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/custom_listtile.dart';
+import 'package:tendon_loader/handler/user.dart';
 import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
+import 'package:tendon_loader/handler/app_auth.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart' show disconnectDevice, isDeviceConnected;
 import 'package:tendon_loader/handler/data_handler.dart' show disposeGraphData;
 import 'package:tendon_loader/handler/export_handler.dart' show checkLocalData, reExport;
 import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
-import 'package:tendon_support_lib/tendon_support_lib.dart' show AppFrame, AppLogo, CustomTile, Descriptions, Login, signOut;
+import 'package:tendon_loader/screens/login.dart';
+import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 import 'package:wakelock/wakelock.dart' show Wakelock;
 
 enum ActionType { settings, export, about, logout }
@@ -28,7 +35,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    Locator.check();
+    LocationHandler.check();
     Wakelock.enable();
     WidgetsBinding.instance!.addObserver(this);
     Future<void>.delayed(const Duration(seconds: 2), () async {
@@ -45,7 +52,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) Locator.check();
+    if (state == AppLifecycleState.resumed) LocationHandler.check();
   }
 
   void _aboutDialog() {
@@ -92,9 +99,9 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
             title: Text('$records file${records == 1 ? '' : 's'} uploaded.'),
             subtitle: const Text('Tap for more info...', style: TextStyle(fontSize: 12)),
             leading: const Icon(Icons.check_circle_outline_rounded, size: 30, color: Colors.green),
-            children: const <Widget>[Text(Descriptions.descUpload)],
+            children: const <Widget>[Text(descUpload, style: TextStyle(fontSize: 12), textAlign: TextAlign.justify)],
           ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 20),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           actions: <Widget>[TextButton(onPressed: Navigator.of(context).pop, child: const Text('OK'))],
         );
@@ -103,7 +110,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   void _connectDevice() {
-    Locator.check();
+    LocationHandler.check();
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -159,10 +166,12 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
     );
   }
 
-  void _handleTap(String route) => isDeviceConnected || true ? Navigator.pushNamed(context, route) : _connectDevice();
+  void _handleTap(String route) => isDeviceConnected ? Navigator.pushNamed(context, route) : _connectDevice();
 
   @override
   Widget build(BuildContext context) {
+    final String? userId = ModalRoute.of(context)!.settings.arguments as String?;
+    context.read<User>().userId = userId;
     return Scaffold(
       appBar: AppBar(title: const Text(Home.name), actions: <Widget>[_buildMenu()]),
       body: SingleChildScrollView(
@@ -172,7 +181,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
             await disconnectDevice();
             await signOut();
             await Hive.close();
-            Locator.dispose();
+            LocationHandler.dispose();
             disposeGraphData();
             return true;
           },

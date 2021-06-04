@@ -1,16 +1,21 @@
 import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' show ChartSeriesController;
 import 'package:tendon_loader/custom/confirm_dialod.dart';
+import 'package:tendon_loader/custom/countdown.dart';
+import 'package:tendon_loader/custom/custom_controls.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
-import 'package:tendon_loader/handler/progress_handler.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart'
     show exportDataList, deviceName, startWeightMeasuring, stopWeightMeasuring;
 import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/data_handler.dart' show graphDataStream;
-import 'package:tendon_support_lib/tendon_support_lib.dart'
-    show AppFrame, ChartData, CountDown, DataModel, GraphControls, Keys, Prescription, SessionInfo;
+import 'package:tendon_loader/handler/export_handler.dart';
+import 'package:tendon_loader/handler/progress_handler.dart';
+import 'package:tendon_loader/handler/user.dart';
+import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key, required this.prescription}) : super(key: key);
@@ -63,7 +68,7 @@ class _BarGraphState extends State<BarGraph> {
     // final bool? result = await CountDown.start(
     //   context,
     //   title: 'Set Over, Rest!!!',
-    //   duration: Duration(seconds: _setRestTime),
+    //   duration: Duration(seconds: widget.prescription.setRestTime!),
     // );
     // if (result ?? false) await _start();
     Future<void>.delayed(const Duration(), () async {
@@ -80,19 +85,28 @@ class _BarGraphState extends State<BarGraph> {
 
   Future<bool> _onExit() async {
     if (!_hasData) return true;
-    final bool? result = await ConfirmDialog.show(
-      context,
-      model: DataModel(
-        dataList: exportDataList,
-        prescription: widget.prescription,
-        sessionInfo: SessionInfo(
-          dateTime: _dateTime,
-          progressorId: deviceName,
-          dataStatus: _handler.isComplete,
-          exportType: Keys.keyPrefixExcercise,
-        ),
+    final DataModel _dataModel = DataModel(
+      dataList: exportDataList,
+      prescription: widget.prescription,
+      sessionInfo: SessionInfo(
+        dateTime: _dateTime,
+        progressorId: deviceName,
+        dataStatus: _handler.isComplete,
+        exportType: keyPrefixExcercise,
+        userId: context.read<User>().userId,
       ),
     );
+    final bool? result;
+    if (context.read<User>().autoUpload ?? false) {
+      result = await export(_dataModel, false);
+      if (result) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Data stored successfully...'),
+        ));
+      }
+    } else {
+      result = await ConfirmDialog.show(context, model: _dataModel);
+    }
     if (result == null) {
       return false;
     } else {

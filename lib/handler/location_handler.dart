@@ -4,7 +4,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:location/location.dart' show Location;
 import 'package:rxdart/rxdart.dart' show BehaviorSubject;
 
-mixin Locator {
+mixin LocationHandler {
   static final BehaviorSubject<bool> _controller = BehaviorSubject<bool>.seeded(false);
 
   static Stream<bool> get stream => _controller.stream;

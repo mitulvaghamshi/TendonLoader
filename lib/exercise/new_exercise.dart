@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
-import 'package:tendon_support_lib/tendon_support_lib.dart'
-    show AppFrame, CustomButton, CustomTextField, ValidatePrescription, Prescription;
+import 'package:tendon_loader/exercise/validator.dart';
+import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class NewExercise extends StatefulWidget {
   const NewExercise({Key? key}) : super(key: key);
@@ -13,7 +16,7 @@ class NewExercise extends StatefulWidget {
   _NewExerciseState createState() => _NewExerciseState();
 }
 
-class _NewExerciseState extends State<NewExercise> with ValidatePrescription {
+class _NewExerciseState extends State<NewExercise> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _ctrlSets = TextEditingController();
   final TextEditingController _ctrlReps = TextEditingController();
@@ -33,19 +36,18 @@ class _NewExerciseState extends State<NewExercise> with ValidatePrescription {
   }
 
   void _submit() {
-    if (_formKey.currentState!.validate() || true) {
+    if (_formKey.currentState!.validate()) {
       Navigator.of(context).pushReplacementNamed(
         ExerciseMode.route,
-        arguments:
-            /* Prescription(
+        arguments: Prescription(
           sets: int.tryParse(_ctrlSets.text),
           reps: int.tryParse(_ctrlReps.text),
           holdTime: int.tryParse(_ctrlHoldTime.text),
           restTime: int.tryParse(_ctrlRestTime.text),
           targetLoad: double.tryParse(_ctrlTargetLoad.text),
           setRestTime: int.tryParse(_ctrlSetRestTime.text) ?? 90,
-        ), */
-            const Prescription(sets: 2, reps: 3, holdTime: 5, restTime: 3, targetLoad: 6, setRestTime: 2),
+        ),
+        // const Prescription(sets: 2, reps: 3, holdTime: 5, restTime: 3, targetLoad: 6, setRestTime: 2),
       );
     }
   }

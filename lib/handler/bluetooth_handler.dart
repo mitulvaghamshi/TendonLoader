@@ -1,10 +1,11 @@
-import 'dart:async' show Future, Stream;
+import 'dart:async' show Future, Stream, Timer;
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter_blue/flutter_blue.dart'
     show BluetoothCharacteristic, BluetoothDevice, BluetoothService, FlutterBlue, Guid;
+import 'package:tendon_loader/custom/extensions.dart';
 import 'package:tendon_loader/handler/data_handler.dart' show clearGraphData, graphDataSink;
-import 'package:tendon_support_lib/tendon_support_lib.dart' show ExConvert, Progressor, ChartData;
+import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 BluetoothDevice? _device;
 BluetoothCharacteristic? _dataChar;
@@ -28,30 +29,32 @@ Future<void> setDataNotification(bool value) async {
 }
 
 Future<void> startWeightMeasuring() async {
-  // fakelisten();
   if (!isDeviceRunning) {
+    await _write(cmdStartWeightMeasurement);
     isDeviceRunning = true;
-    await _write(Progressor.cmdStartWeightMeasurement);
   }
+
+  // fakelisten();
 }
 
 Future<void> stopWeightMeasuring() async {
   if (isDeviceRunning) {
-    await _write(Progressor.cmdStopWeightMeasuremnt);
+    await _write(cmdStopWeightMeasuremnt);
     isDeviceRunning = false;
+    lastMinTime = 0;
+    clearGraphData();
   }
+
   // timer?.cancel();
   // clearGraphData();
 }
 
-Future<void> sleepDevice() async => _write(Progressor.cmdEnterSleep);
+Future<void> sleepDevice() async => _write(cmdEnterSleep);
 
 Future<void> _write(int command) async {
   if (isDeviceConnected) {
     Future<void>.delayed(const Duration(milliseconds: 10), () async {
       await _controlChar!.write(<int>[command]);
-      clearGraphData();
-      lastMinTime = 0;
     });
   }
 }
@@ -59,8 +62,8 @@ Future<void> _write(int command) async {
 Future<void> startDeviceScan() async {
   await FlutterBlue.instance.startScan(
     timeout: const Duration(seconds: 2),
-    withDevices: <Guid>[Guid(Progressor.uuidService)],
-    withServices: <Guid>[Guid(Progressor.uuidService)],
+    withDevices: <Guid>[Guid(uuidService)],
+    withServices: <Guid>[Guid(uuidService)],
   );
 }
 
@@ -85,9 +88,9 @@ Future<void> _getProps() async {
   final List<BluetoothService> s = await _device!.discoverServices();
   for (int i = s.length - 1; i > 0 && (_controlChar == null || _dataChar == null); i--) {
     for (final BluetoothCharacteristic c in s[i].characteristics) {
-      if (c.uuid == Guid(Progressor.uuidControl)) {
+      if (c.uuid == Guid(uuidControl)) {
         _controlChar = c;
-      } else if (c.uuid == Guid(Progressor.uuidData)) {
+      } else if (c.uuid == Guid(uuidData)) {
         _dataChar = c;
       }
     }
@@ -103,7 +106,7 @@ final List<ChartData> exportDataList = <ChartData>[];
 void _listen() {
   if (isDeviceConnected) {
     _dataChar!.value.listen((List<int> data) {
-      if (isDeviceRunning && data.isNotEmpty && data[0] == Progressor.resWeightMeasurement) {
+      if (isDeviceRunning && data.isNotEmpty && data[0] == resWeightMeasurement) {
         for (int x = 2; x < data.length; x += 8) {
           final double weight = data.getRange(x, x + 4).toList().toWeight;
           final double time = data.getRange(x + 4, x + 8).toList().toTime;

@@ -57,17 +57,23 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/aidl_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/aidl_source_output_dir/debugAndroidTest/out" />
-    <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/ap_generated_sources/debug/out" />
+    <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/ap_generated_sources/debug/out">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/app_settings/generated/ap_generated_sources/debug/out" isTestSource="false" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/ap_generated_sources/debugAndroidTest/out" />
     <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/ap_generated_sources/debugUnitTest/out" />
     <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/renderscript_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/renderscript_source_output_dir/debugAndroidTest/out" />
     <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/res/resValues/androidTest/debug" />
-    <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/res/resValues/debug" />
+    <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/res/resValues/debug">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/app_settings/generated/res/resValues/debug" type="java-resource" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/res/rs/androidTest/debug" />
     <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/res/rs/debug" />
     <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/source/buildConfig/androidTest/debug" />
-    <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/source/buildConfig/debug" />
+    <content url="file://$MODULE_DIR$/../../../../build/app_settings/generated/source/buildConfig/debug">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/app_settings/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
+    </content>
     <content url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/app_settings-4.1.0">
       <sourceFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/app_settings-4.1.0/android/src/main/kotlin" isTestSource="false" />
       <excludeFolder url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/app_settings-4.1.0/.dart_tool" />
