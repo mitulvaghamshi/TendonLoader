@@ -3,9 +3,8 @@ import 'dart:async' show Completer, Future;
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart' show Hive;
 import 'package:hive_flutter/hive_flutter.dart' show HiveX;
-import 'package:tendon_loader/custom/app_logo.dart';
-import 'package:tendon_loader/handler/app_auth.dart';
-import 'package:tendon_loader/screens/login.dart';
+import 'package:tendon_loader/login/app_auth.dart';
+import 'package:tendon_loader/login/login.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 final Completer<void> _completer = Completer<void>();

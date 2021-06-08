@@ -1,23 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart' show Hive;
-import 'package:provider/provider.dart';
-import 'package:tendon_loader/custom/app_logo.dart';
-import 'package:tendon_loader/screens/app_settings.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_listtile.dart';
-import 'package:tendon_loader/handler/user.dart';
 import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
-import 'package:tendon_loader/handler/app_auth.dart';
-import 'package:tendon_loader/handler/bluetooth_handler.dart' show disconnectDevice, isDeviceConnected;
-import 'package:tendon_loader/handler/data_handler.dart' show disposeGraphData;
-import 'package:tendon_loader/handler/export_handler.dart' show checkLocalData, reExport;
+import 'package:tendon_loader/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/handler/data_handler.dart';
+import 'package:tendon_loader/handler/export_handler.dart';
 import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
-import 'package:tendon_loader/mvctest/mvc_testing.dart';
-import 'package:tendon_loader/screens/login.dart';
+import 'package:tendon_loader/login/app_auth.dart';
+import 'package:tendon_loader/login/login.dart';
+import 'package:tendon_loader/mvctest/new_mvc_test.dart';
+import 'package:tendon_loader/settings/app_settings.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
-import 'package:wakelock/wakelock.dart' show Wakelock;
+import 'package:wakelock/wakelock.dart';
 
 enum ActionType { settings, export, about, logout }
 
@@ -35,7 +32,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    LocationHandler.check();
+    checkLocation();
     Wakelock.enable();
     WidgetsBinding.instance!.addObserver(this);
     Future<void>.delayed(const Duration(seconds: 2), () async {
@@ -52,7 +49,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) LocationHandler.check();
+    if (state == AppLifecycleState.resumed) checkLocation();
   }
 
   void _aboutDialog() {
@@ -110,7 +107,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   }
 
   void _connectDevice() {
-    LocationHandler.check();
+    checkLocation();
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -159,19 +156,18 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
       icon: const Icon(Icons.more_vert_rounded),
       itemBuilder: (BuildContext context) => <PopupMenuItem<ActionType>>[
         const PopupMenuItem<ActionType>(value: ActionType.settings, child: Text('Settings')),
-        const PopupMenuItem<ActionType>(value: ActionType.export, child: Text('Export All')),
+        const PopupMenuItem<ActionType>(value: ActionType.export, child: Text('Export')),
         const PopupMenuItem<ActionType>(value: ActionType.about, child: Text('About')),
         const PopupMenuItem<ActionType>(value: ActionType.logout, child: Text('Logout')),
       ],
     );
   }
 
-  void _handleTap(String route) => isDeviceConnected ? Navigator.pushNamed(context, route) : _connectDevice();
+  void _handleTap(String route) => isDeviceConnected || true ? Navigator.pushNamed(context, route) : _connectDevice();
 
   @override
   Widget build(BuildContext context) {
-    final String? userId = ModalRoute.of(context)!.settings.arguments as String?;
-    context.read<User>().userId = userId;
+    print('home build...');
     return Scaffold(
       appBar: AppBar(title: const Text(Home.name), actions: <Widget>[_buildMenu()]),
       body: SingleChildScrollView(
@@ -180,8 +176,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
             await Wakelock.disable();
             await disconnectDevice();
             await signOut();
-            await Hive.close();
-            LocationHandler.dispose();
+            disposeLocationHandler();
             disposeGraphData();
             return true;
           },
@@ -199,8 +194,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
                 icon: const Icon(Icons.directions_run_rounded, size: 30),
               ),
               CustomTile(
-                title: MVCTesting.name,
-                onTap: () => _handleTap(MVCTesting.route),
+                title: NewMVCTest.name,
+                onTap: () => _handleTap(NewMVCTest.route),
                 icon: const Icon(Icons.airline_seat_legroom_extra, size: 30),
               ),
             ],

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
-import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/validator.dart';
+import 'package:tendon_loader/settings/settings_model.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class NewExercise extends StatefulWidget {
@@ -24,6 +22,7 @@ class _NewExerciseState extends State<NewExercise> {
   final TextEditingController _ctrlRestTime = TextEditingController();
   final TextEditingController _ctrlSetRestTime = TextEditingController();
   final TextEditingController _ctrlTargetLoad = TextEditingController();
+  final bool _enabled = SettingsModel.editableExercise!;
 
   @override
   void dispose() {
@@ -32,11 +31,25 @@ class _NewExerciseState extends State<NewExercise> {
     _ctrlHoldTime.dispose();
     _ctrlRestTime.dispose();
     _ctrlTargetLoad.dispose();
+    _ctrlSetRestTime.dispose();
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    if (!_enabled) {
+      _ctrlSets.text = 2.toString();
+      _ctrlReps.text = 3.toString();
+      _ctrlHoldTime.text = 5.toString();
+      _ctrlRestTime.text = 5.toString();
+      _ctrlTargetLoad.text = 6.toString();
+      _ctrlSetRestTime.text = 10.toString();
+    }
+  }
+
   void _submit() {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() || true) {
       Navigator.of(context).pushReplacementNamed(
         ExerciseMode.route,
         arguments: Prescription(
@@ -45,9 +58,17 @@ class _NewExerciseState extends State<NewExercise> {
           holdTime: int.tryParse(_ctrlHoldTime.text),
           restTime: int.tryParse(_ctrlRestTime.text),
           targetLoad: double.tryParse(_ctrlTargetLoad.text),
-          setRestTime: int.tryParse(_ctrlSetRestTime.text) ?? 90,
+          setRestTime: int.tryParse(_ctrlSetRestTime.text),
         ),
-        // const Prescription(sets: 2, reps: 3, holdTime: 5, restTime: 3, targetLoad: 6, setRestTime: 2),
+/*             const Prescription(
+          sets: 5,
+          reps: 10,
+          holdTime: 10,
+          restTime: 15,
+          targetLoad: 6,
+          setRestTime: 5,
+        ),
+ */
       );
     }
   }
@@ -74,6 +95,7 @@ class _NewExerciseState extends State<NewExercise> {
                   ),
                 ),
                 CustomTextField(
+                  enabled: _enabled,
                   label: 'Target Load (kg)',
                   hint: '~70% of last MVC test',
                   controller: _ctrlTargetLoad,
@@ -82,6 +104,7 @@ class _NewExerciseState extends State<NewExercise> {
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 ),
                 CustomTextField(
+                  enabled: _enabled,
                   isPicker: true,
                   label: 'Hold time (sec)',
                   hint: 'Amount of time you can keep holding at target load.',
@@ -89,6 +112,7 @@ class _NewExerciseState extends State<NewExercise> {
                   validator: validateHoldTime,
                 ),
                 CustomTextField(
+                  enabled: _enabled,
                   isPicker: true,
                   label: 'Rest time (sec)',
                   hint: 'Amount of time you can rest after each rep.',
@@ -96,6 +120,7 @@ class _NewExerciseState extends State<NewExercise> {
                   validator: validateRestTime,
                 ),
                 CustomTextField(
+                  enabled: _enabled,
                   label: 'Sets (#)',
                   hint: 'Number of total sets.',
                   controller: _ctrlSets,
@@ -103,6 +128,7 @@ class _NewExerciseState extends State<NewExercise> {
                   pattern: r'^\d{1,2}',
                 ),
                 CustomTextField(
+                  enabled: _enabled,
                   label: 'Reps (#)',
                   hint: 'Number of reps to perform in each set.',
                   controller: _ctrlReps,
@@ -110,6 +136,7 @@ class _NewExerciseState extends State<NewExercise> {
                   pattern: r'^\d{1,2}',
                 ),
                 CustomTextField(
+                  enabled: _enabled,
                   isPicker: true,
                   label: 'Rest time b/w Sets (sec)',
                   hint: 'Amount of time you can rest after every set (default: 90 sec).',
@@ -120,10 +147,10 @@ class _NewExerciseState extends State<NewExercise> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     CustomButton(
-                      text: 'Submit',
+                      text: 'Go',
                       onPressed: _submit,
                       color: Colors.white,
-                      background: Colors.blue,
+                      background: const Color.fromRGBO(61, 220, 132, 1),
                       icon: Icons.done_rounded,
                     ),
                     CustomButton(

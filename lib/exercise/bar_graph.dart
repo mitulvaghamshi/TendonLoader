@@ -1,20 +1,17 @@
-import 'dart:async' show Future;
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_charts/charts.dart' show ChartSeriesController;
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
-import 'package:tendon_loader/handler/bluetooth_handler.dart'
-    show exportDataList, deviceName, startWeightMeasuring, stopWeightMeasuring;
+import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/clip_player.dart';
-import 'package:tendon_loader/handler/data_handler.dart' show graphDataStream;
+import 'package:tendon_loader/handler/data_handler.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
-import 'package:tendon_loader/handler/progress_handler.dart';
-import 'package:tendon_loader/handler/user.dart';
+import 'package:tendon_loader/exercise/progress_handler.dart';
+import 'package:tendon_loader/settings/settings_model.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class BarGraph extends StatefulWidget {
@@ -26,7 +23,7 @@ class BarGraph extends StatefulWidget {
   _BarGraphState createState() => _BarGraphState();
 }
 
-class _BarGraphState extends State<BarGraph> {
+class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
   late final ProgressHandler _handler = ProgressHandler(
     onReset: _reset,
     onSetOver: _setOver,
@@ -37,6 +34,27 @@ class _BarGraphState extends State<BarGraph> {
   late DateTime _dateTime;
   bool _hasData = false;
   int _minSec = 0;
+
+  late Timer? _exitTimer;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused && isDeviceRunning) {
+      print('running in background');
+      _exitTimer = Timer(const Duration(seconds: 15), () async {
+        print('elapsed: ${_exitTimer!.tick}');
+        print('time out!, stop and save data.');
+        await Navigator.maybePop(context);
+      });
+    }
+    if (state == AppLifecycleState.resumed) {
+      print('resumed...');
+      if (_exitTimer?.isActive ?? false) {
+        print('timer canceled...');
+        _exitTimer?.cancel();
+      }
+    }
+  }
 
   Future<void> _start() async {
     if (_handler.isSetOver && _handler.isRunning) {
@@ -71,7 +89,7 @@ class _BarGraphState extends State<BarGraph> {
     //   duration: Duration(seconds: widget.prescription.setRestTime!),
     // );
     // if (result ?? false) await _start();
-    Future<void>.delayed(const Duration(), () async {
+    await Future<void>.microtask(() async {
       final bool? result = await CountDown.start(
         context,
         title: 'Set Over, Rest!!!',
@@ -85,6 +103,8 @@ class _BarGraphState extends State<BarGraph> {
 
   Future<bool> _onExit() async {
     if (!_hasData) return true;
+    print('on exit...');
+    late final bool? result;
     final DataModel _dataModel = DataModel(
       dataList: exportDataList,
       prescription: widget.prescription,
@@ -93,11 +113,17 @@ class _BarGraphState extends State<BarGraph> {
         progressorId: deviceName,
         dataStatus: _handler.isComplete,
         exportType: keyPrefixExcercise,
-        userId: context.read<User>().userId,
+        userId: SettingsModel.userId,
       ),
     );
-    final bool? result;
-    if (context.read<User>().autoUpload ?? false) {
+    if (_handler.isRunning) {
+      print('running... stop and upload....');
+      await stopWeightMeasuring();
+      return export(_dataModel, false);
+    }
+    print('later stuff...');
+    if (SettingsModel.autoUpload!) {
+      print('auto upload');
       result = await export(_dataModel, false);
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -150,7 +176,14 @@ class _BarGraphState extends State<BarGraph> {
   @override
   void dispose() {
     _reset();
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override

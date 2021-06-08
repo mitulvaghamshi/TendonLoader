@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
-import 'package:tendon_loader/handler/bluetooth_handler.dart' show openBluetoothSetting;
+import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class EnableBluetoothTile extends StatelessWidget {

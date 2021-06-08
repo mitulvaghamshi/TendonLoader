@@ -4,16 +4,14 @@ import 'package:app_settings/app_settings.dart';
 import 'package:location/location.dart' show Location;
 import 'package:rxdart/rxdart.dart' show BehaviorSubject;
 
-mixin LocationHandler {
-  static final BehaviorSubject<bool> _controller = BehaviorSubject<bool>.seeded(false);
+final BehaviorSubject<bool> _controller = BehaviorSubject<bool>.seeded(false);
 
-  static Stream<bool> get stream => _controller.stream;
+Stream<bool> get locationStream => _controller.stream;
 
-  static Future<void> enable() async => AppSettings.openLocationSettings();
+Future<void> enableLocation() async => AppSettings.openLocationSettings();
 
-  static Future<void> check() async => _controller.sink.add(await Location.instance.serviceEnabled());
+Future<void> checkLocation() async => _controller.sink.add(await Location.instance.serviceEnabled());
 
-  static void dispose() {
-    if (!_controller.isClosed) _controller.close();
-  }
+void disposeLocationHandler() {
+  if (!_controller.isClosed) _controller.close();
 }

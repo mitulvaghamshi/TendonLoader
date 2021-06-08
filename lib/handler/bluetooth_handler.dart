@@ -1,10 +1,9 @@
-import 'dart:async' show Future, Stream, Timer;
+import 'dart:async';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:flutter_blue/flutter_blue.dart'
-    show BluetoothCharacteristic, BluetoothDevice, BluetoothService, FlutterBlue, Guid;
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/custom/extensions.dart';
-import 'package:tendon_loader/handler/data_handler.dart' show clearGraphData, graphDataSink;
+import 'package:tendon_loader/handler/data_handler.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 BluetoothDevice? _device;
@@ -30,23 +29,20 @@ Future<void> setDataNotification(bool value) async {
 
 Future<void> startWeightMeasuring() async {
   if (!isDeviceRunning) {
-    await _write(cmdStartWeightMeasurement);
+    // await _write(cmdStartWeightMeasurement);
+    fakelisten(); // simulator
     isDeviceRunning = true;
   }
-
-  // fakelisten();
 }
 
 Future<void> stopWeightMeasuring() async {
   if (isDeviceRunning) {
-    await _write(cmdStopWeightMeasuremnt);
+    // await _write(cmdStopWeightMeasuremnt);
+    timer?.cancel(); // simulator
     isDeviceRunning = false;
     lastMinTime = 0;
     clearGraphData();
   }
-
-  // timer?.cancel();
-  // clearGraphData();
 }
 
 Future<void> sleepDevice() async => _write(cmdEnterSleep);
@@ -122,13 +118,14 @@ void _listen() {
   }
 }
 
-// late Timer? timer;
-// void fakelisten() {
-//   double fakeLoad = 0;
-//   timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-//     final ChartData element = ChartData(load: fakeLoad += 1, time: timer.tick.toDouble());
-//     exportDataList.add(element);
-//     graphDataSink.add(element);
-//     if (fakeLoad > 10) fakeLoad = 0;
-//   });
-// }
+late Timer? timer;
+
+void fakelisten() {
+  double fakeLoad = 0;
+  timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+    final ChartData element = ChartData(load: fakeLoad += 2, time: timer.tick.toDouble());
+    exportDataList.add(element);
+    graphDataSink.add(element);
+    if (fakeLoad++ > 10) fakeLoad = 0;
+  });
+}

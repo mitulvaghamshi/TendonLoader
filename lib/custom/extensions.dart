@@ -7,7 +7,7 @@ extension ExTimer on int {
 extension ExTimeFormat on double {
   String get toTime => '🕒 ${this ~/ 60}:${(this % 60).toStringAsFixed(0).padLeft(2, '0')} Sec';
 
-  String get toRemaining => '⏱ ${(5 - this).toStringAsFixed(1)} Sec';
+  // String get toRemaining => '⏱ ${(5 - this).toStringAsFixed(1)} Sec';
 }
 
 extension ExConvert on List<int> {

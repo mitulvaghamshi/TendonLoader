@@ -10,7 +10,7 @@ class LocationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
       initialData: false,
-      stream: LocationHandler.stream,
+      stream: locationStream,
       builder: (_, AsyncSnapshot<bool> snapshot) {
         return snapshot.data! ? const ScannerTile() : const EnableLocationTile();
       },

@@ -381,6 +381,8 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TRACK_WIDGET_CREATION = true;
+				TREE_SHAKE_ICONS = true;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Profile;
@@ -528,6 +530,8 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TRACK_WIDGET_CREATION = true;
+				TREE_SHAKE_ICONS = true;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -552,6 +556,8 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TRACK_WIDGET_CREATION = true;
+				TREE_SHAKE_ICONS = true;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

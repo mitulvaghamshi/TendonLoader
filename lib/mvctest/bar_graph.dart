@@ -1,24 +1,22 @@
 import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' show ChartSeriesController;
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
-import 'package:tendon_loader/custom/extensions.dart';
-import 'package:tendon_loader/handler/bluetooth_handler.dart'
-    show exportDataList, deviceName, isDeviceRunning, startWeightMeasuring, stopWeightMeasuring;
+import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/clip_player.dart';
-import 'package:tendon_loader/handler/data_handler.dart' show graphDataStream, clearGraphData;
+import 'package:tendon_loader/handler/data_handler.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
-import 'package:tendon_loader/handler/user.dart';
+import 'package:tendon_loader/settings/settings_model.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class BarGraph extends StatefulWidget {
-  const BarGraph({Key? key}) : super(key: key);
+  const BarGraph({Key? key, required this.duration}) : super(key: key);
+
+  final int duration;
 
   @override
   _BarGraphState createState() => _BarGraphState();
@@ -77,11 +75,11 @@ class _BarGraphState extends State<BarGraph> {
         dataStatus: _isComplete,
         progressorId: deviceName,
         exportType: keyPrefixMVC,
-        userId: context.read<User>().userId,
+        userId: SettingsModel.userId,
       ),
     );
     final bool? result;
-    if (context.read<User>().autoUpload ?? false) {
+    if (SettingsModel.autoUpload!) {
       result = await export(_dataModel, false);
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -115,7 +113,7 @@ class _BarGraphState extends State<BarGraph> {
             initialData: const ChartData(),
             stream: graphDataStream,
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
-              if (5 - snapshot.data!.time! == 0) {
+              if (widget.duration - snapshot.data!.time! == 0) {
                 _isComplete = true;
                 if (_isRunning) _stop();
               } else if (snapshot.data!.load! > _minLoad) {
@@ -138,7 +136,7 @@ class _BarGraphState extends State<BarGraph> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      snapshot.data!.time!.toRemaining,
+                      '⏱ ${(widget.duration - snapshot.data!.time!).toStringAsFixed(1)} Sec',
                       style: const TextStyle(color: Colors.deepOrange, fontSize: 40, fontWeight: FontWeight.bold),
                     ),
                   ],

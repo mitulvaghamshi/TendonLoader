@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' show ChartSeriesController;
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/custom/extensions.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart'

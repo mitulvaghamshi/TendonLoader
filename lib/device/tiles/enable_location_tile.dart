@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
@@ -27,7 +26,7 @@ class EnableLocationTile extends StatelessWidget {
           style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
         ),
         SizedBox(height: 30),
-        CustomButton(text: 'Open Settings', icon: Icons.location_on_rounded, onPressed: LocationHandler.enable),
+        CustomButton(text: 'Open Settings', icon: Icons.location_on_rounded, onPressed: enableLocation),
       ],
     );
   }

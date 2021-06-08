@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tendon_loader/custom/custom_themes.dart';
 import 'package:tendon_loader/custom/routes.dart';
-import 'package:tendon_loader/handler/user.dart';
+import 'package:tendon_loader_lib/custom/custom_themes.dart';
 
-void main() {
-  runApp(MultiProvider(
-    providers: <ChangeNotifierProvider<User>>[ChangeNotifierProvider<User>(create: (_) => User())],
-    child: const TendonLoader(),
-  ));
-}
+void main() => runApp(const TendonLoader());
 
 class TendonLoader extends StatelessWidget {
   const TendonLoader({Key? key}) : super(key: key);

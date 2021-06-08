@@ -16,13 +16,10 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_blue: ^0.8.0
-  flutter_svg: ^0.22.0
   hive: ^2.0.2
   hive_flutter: ^1.0.0
   intl: ^0.17.0
   location: ^4.1.1
-  numberpicker: ^2.0.1
-  provider: ^5.0.0
   rxdart: ^0.26.0
   syncfusion_flutter_charts: ^19.1.66+1
   syncfusion_flutter_xlsio: ^19.1.66-beta
@@ -42,7 +39,6 @@ flutter:
   assets:
     - assets/audio/stop.mpeg
     - assets/audio/start.mpeg
-    - assets/images/app_logo.svg
     - assets/images/enable_device.png
     - assets/images/enable_location.png
     - assets/images/enable_bluetooth.png

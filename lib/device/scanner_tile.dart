@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart' show FlutterBlue;
-import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_progress.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/device/device_list.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
+import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class ScannerTile extends StatelessWidget {
   const ScannerTile({Key? key}) : super(key: key);

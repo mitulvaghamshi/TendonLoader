@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart' show BluetoothDevice, BluetoothDeviceState;
-import 'package:tendon_loader/custom/custom_progress.dart';
-import 'package:tendon_loader/handler/bluetooth_handler.dart' show connectDevice, disconnectDevice, isDeviceConnecting;
+import 'package:flutter_blue/flutter_blue.dart';
+import 'package:tendon_loader/handler/bluetooth_handler.dart';
+import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class DeviceTile extends StatelessWidget {
   const DeviceTile({Key? key, this.device}) : super(key: key);

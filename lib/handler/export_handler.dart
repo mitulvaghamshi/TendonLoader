@@ -41,7 +41,7 @@ Future<bool> _upload(Map<dynamic, dynamic> exportInfo) async {
   final Map<String, dynamic> _metaData = Map<String, dynamic>.from(exportInfo[keyMetaData] as Map<dynamic, dynamic>);
   await FirebaseFirestore.instance
       .collection(keyAllUsers)
-      .doc(_metaData[keyUsername] as String)
+      .doc(_metaData[keyUserEmail] as String)
       .collection(keyAllExports)
       .doc(_metaData[keyExportDate] as String)
       .set(<String, dynamic>{_metaData[keyExportTime]! as String: exportInfo}, SetOptions(merge: true));
