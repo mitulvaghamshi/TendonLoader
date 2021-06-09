@@ -8,7 +8,7 @@ import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/clip_player.dart';
-import 'package:tendon_loader/handler/data_handler.dart';
+import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
 import 'package:tendon_loader/settings/settings_model.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
@@ -38,7 +38,7 @@ class _BarGraphState extends State<BarGraph> {
 
   Future<void> _start() async {
     if (!_isRunning && _hasData) {
-      await _onExit();
+      await _onMVCTestClose();
     } else if (!_isRunning && (await CountDown.start(context) ?? false)) {
       _dateTime = DateTime.now();
       _isComplete = false;
@@ -55,7 +55,7 @@ class _BarGraphState extends State<BarGraph> {
     stopWeightMeasuring();
     _isRunning = false;
     play(Clip.stop);
-    Future<void>.delayed(const Duration(seconds: 1), _onExit);
+    Future<void>.delayed(const Duration(seconds: 1), _onMVCTestClose);
   }
 
   void _reset() {
@@ -66,7 +66,7 @@ class _BarGraphState extends State<BarGraph> {
     _lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
   }
 
-  Future<bool> _onExit() async {
+  Future<bool> _onMVCTestClose() async {
     if (!_hasData) return true;
     final DataModel _dataModel = DataModel(
       dataList: exportDataList,
@@ -106,7 +106,7 @@ class _BarGraphState extends State<BarGraph> {
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      onExit: _onExit,
+      onExit: _onMVCTestClose,
       child: Column(
         children: <Widget>[
           StreamBuilder<ChartData>(

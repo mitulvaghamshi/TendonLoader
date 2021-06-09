@@ -6,11 +6,12 @@ import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
+import 'package:tendon_loader/exercise/progress_handler.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/clip_player.dart';
-import 'package:tendon_loader/handler/data_handler.dart';
+import 'package:tendon_loader/handler/graph_data_handler.dart';
+import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
-import 'package:tendon_loader/exercise/progress_handler.dart';
 import 'package:tendon_loader/settings/settings_model.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
@@ -60,7 +61,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
     if (_handler.isSetOver && _handler.isRunning) {
       _handler.isSetOver = false;
     } else if (!_handler.isRunning && _hasData) {
-      await _onExit();
+      await _onExerciseClose();
     } else if (await CountDown.start(context) ?? false) {
       await startWeightMeasuring();
       exportDataList.clear();
@@ -78,7 +79,10 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       await stopWeightMeasuring();
       play(Clip.stop);
       _minSec = 0;
-      if (_handler.isComplete) await _congrats();
+      if (_handler.isComplete) {
+        await congratulate(context);
+        await _onExerciseClose();
+      }
     }
   }
 
@@ -101,7 +105,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
 
   void _stop() => _handler.isSetOver = true;
 
-  Future<bool> _onExit() async {
+  Future<bool> _onExerciseClose() async {
     if (!_hasData) return true;
     print('on exit...');
     late final bool? result;
@@ -141,36 +145,10 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
     return result;
   }
 
-  Future<void> _congrats() async {
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return AlertDialog(
-          title: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: const <Widget>[
-              Icon(Icons.emoji_events_rounded, size: 50, color: Colors.green),
-              Text('Congratulations!!!', textAlign: TextAlign.center, style: TextStyle(fontSize: 26)),
-            ]),
-          ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          content: const Text(
-            'Exercise session completed!\nGreat work!',
-            style: TextStyle(fontSize: 18),
-            textAlign: TextAlign.center,
-          ),
-          actions: <Widget>[
-            TextButton.icon(
-              label: const Text('Next'),
-              icon: const Icon(Icons.arrow_forward),
-              onPressed: Navigator.of(context).pop,
-            ),
-          ],
-        );
-      },
-    );
-    await _onExit();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
@@ -181,15 +159,9 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addObserver(this);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return AppFrame(
-      onExit: _onExit,
+      onExit: _onExerciseClose,
       child: Column(
         children: <Widget>[
           StreamBuilder<ChartData>(

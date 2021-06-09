@@ -9,7 +9,7 @@ import 'package:tendon_loader/custom/extensions.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart'
     show exportDataList, startWeightMeasuring, stopWeightMeasuring;
 import 'package:tendon_loader/handler/clip_player.dart';
-import 'package:tendon_loader/handler/data_handler.dart' show graphDataStream;
+import 'package:tendon_loader/handler/graph_data_handler.dart' show graphDataStream;
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class BarGraph extends StatefulWidget {

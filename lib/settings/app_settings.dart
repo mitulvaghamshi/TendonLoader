@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/login/app_auth.dart';
-import 'package:tendon_loader/settings/settings_model.dart';
-import 'package:tendon_loader/settings/settings_handler.dart';
 import 'package:tendon_loader/login/login.dart';
+import 'package:tendon_loader/settings/settings_handler.dart';
+import 'package:tendon_loader/settings/settings_model.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class AppSettings extends StatefulWidget {
@@ -23,20 +24,14 @@ class _AppSettingsState extends State<AppSettings> {
         child: AppFrame(
           onExit: updateSettings,
           child: Column(children: <Widget>[
-            FittedBox(
-              child: Row(
-                children: <Widget>[
-                  const AppLogo(size: 70),
-                  const SizedBox(width: 20),
-                  Text(
-                    SettingsModel.userId!,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                  ),
-                ],
-              ),
+            const AppLogo(size: 150),
+            const SizedBox(height: 30),
+            Text(
+              SettingsModel.userId!,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
             ),
-            const SizedBox(height: 16),
-            SwitchListTile(
+            const SizedBox(height: 30),
+            SwitchListTile.adaptive(
               value: SettingsModel.autoUpload!,
               title: const Text('Automatic data upload'),
               onChanged: (bool value) => setState(() => SettingsModel.autoUpload = value),
@@ -47,9 +42,10 @@ class _AppSettingsState extends State<AppSettings> {
                 textAlign: TextAlign.justify,
               ),
             ),
-            SwitchListTile(
+            const SizedBox(height: 16),
+            SwitchListTile.adaptive(
               value: SettingsModel.editableExercise!,
-              title: const Text('Editable exercise mode *UNDER PROCESS'),
+              title: const Text('Editable exercise mode *Data?'),
               onChanged: (bool value) => setState(() => SettingsModel.editableExercise = value),
               subtitle: const Text(
                 'If enabled user allowed to fill up their own exercise prescriptions. '
@@ -58,6 +54,10 @@ class _AppSettingsState extends State<AppSettings> {
                 textAlign: TextAlign.justify,
               ),
             ),
+            const SizedBox(height: 16),
+            ListTile(title: const Text('Export data'), onTap: () async => manualExport(context)),
+            const Divider(thickness: 2),
+            ListTile(title: const Text('About'), onTap: () => aboutDialog(context)),
             const Divider(thickness: 2),
             ListTile(
               title: const Text('Logout'),
