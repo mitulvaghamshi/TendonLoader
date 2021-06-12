@@ -1,0 +1,7 @@
+11:49:00.072 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+11:49:00.140 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
+22:26:59.782 [Thread-1] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+22:26:59.784 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.Terminator$Terminator - 1 actors left to terminate: tendon-loader
+22:26:59.788 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.NamespaceActor - Stopping namespace actor for tendon-loader
+22:26:59.788 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.NamespaceActor - Gauges removed for tendon-loader
+22:26:59.790 [Thread-1] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.

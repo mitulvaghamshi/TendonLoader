@@ -115,8 +115,8 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       sessionInfo: SessionInfo(
         dateTime: _dateTime,
         progressorId: deviceName,
-        dataStatus: _handler.isComplete,
-        exportType: keyPrefixExcercise,
+        isComplate: _handler.isComplete,
+        isMVC: keyPrefixExcercise,
         userId: SettingsModel.userId,
       ),
     );

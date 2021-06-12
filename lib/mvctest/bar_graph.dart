@@ -72,9 +72,9 @@ class _BarGraphState extends State<BarGraph> {
       dataList: exportDataList,
       sessionInfo: SessionInfo(
         dateTime: _dateTime,
-        dataStatus: _isComplete,
+        isComplate: _isComplete,
         progressorId: deviceName,
-        exportType: keyPrefixMVC,
+        isMVC: keyPrefixMVC,
         userId: SettingsModel.userId,
       ),
     );

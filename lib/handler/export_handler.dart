@@ -11,7 +11,7 @@ Future<bool> export(DataModel model, bool later) async {
   return (!later && await _isConnected() ? _upload : _save)(<String, dynamic>{
     keyMetaData: _metaData,
     keyUserData: model.dataList!.map((ChartData data) {
-      return <String, double?>{keyChartX: data.time, keyChartY: data.load};
+      return <String, double>{keyChartX: data.time!, keyChartY: data.load!};
     }).toList(),
   });
 }
