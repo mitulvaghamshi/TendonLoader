@@ -1,49 +1,82 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore, SetOptions;
-import 'package:connectivity/connectivity.dart' show Connectivity, ConnectivityResult;
-import 'package:hive/hive.dart' show Box, Hive;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:hive/hive.dart';
+import 'package:tendon_loader_lib/constants/constants.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 Future<bool> _isConnected() async => (await Connectivity().checkConnectivity()) != ConnectivityResult.none;
 
-Future<bool> export(DataModel model, bool later) async {
-  final Map<String, String?> _metaData = model.sessionInfo!.toMap();
-  if (model.prescription != null) _metaData.addAll(model.prescription!.toMap());
-  return (!later && await _isConnected() ? _upload : _save)(<String, dynamic>{
-    keyMetaData: _metaData,
-    keyUserData: model.dataList!.map((ChartData data) {
-      return <String, double>{keyChartX: data.time!, keyChartY: data.load!};
-    }).toList(),
-  });
-}
-
 Future<int> checkLocalData() async {
-  return await _isConnected() ? Hive.box<Map<dynamic, dynamic>>(keyUserExportsBox).length : 0;
+  return await _isConnected() ? Hive.box<Map<dynamic, dynamic>>(keyExportBox).length : 0;
 }
 
-Future<bool> reExport() async {
-  late bool result;
+Future<bool> export(DataModel model, bool later) async {
+  final Map<String, double> _exportData = <String, double>{};
+
+  for (final ChartData data in model.dataList!) {
+    _exportData[data.time!.toString()] = data.load!;
+  }
+
+  final Map<String, dynamic> _export = <String, dynamic>{
+    'exportData': _exportData,
+    'isComplate': model.sessionInfo!.isComplate,
+  };
+
+  if (model.sessionInfo!.isMVC) {
+    _export['mvcValue'] = model.mvcValue;
+  } else {
+    _export['prescription'] = model.prescription!.toMap();
+  }
+
+  if (!later && await _isConnected()) {
+    return _upload(
+      _export,
+      model.sessionInfo!.userId,
+      model.sessionInfo!.progressorId,
+      '${model.sessionInfo!.isMVC ? 'M' : 'E'}${model.sessionInfo!.dateTime.millisecondsSinceEpoch}',
+    );
+  } else {
+    return _save(_export, model.sessionInfo!);
+  }
+}
+
+Future<bool> _save(Map<String, dynamic> export, SessionInfo info) async {
+  final Map<String, dynamic> _data = <String, dynamic>{
+    'export': export,
+    'userId': info.userId,
+    'prefix': info.isMVC ? 'M' : 'E',
+    'progressorId': info.progressorId,
+    'timeStamp': info.dateTime.millisecondsSinceEpoch,
+  };
+  await Hive.box<Map<dynamic, dynamic>>(keyExportBox).put(export.hashCode, _data);
+  return true;
+}
+
+Future<bool?> reExport() async {
+  late bool? result;
   if (await _isConnected()) {
-    final Box<Map<dynamic, dynamic>> _userExportsBox = Hive.box(keyUserExportsBox);
-    for (final dynamic key in _userExportsBox.keys) {
-      result = await _upload(_userExportsBox.get(key)!);
-      if (result) await _userExportsBox.delete(key);
+    final Box<Map<dynamic, dynamic>> _exportsBox = Hive.box(keyExportBox);
+    for (final dynamic key in _exportsBox.keys) {
+      final Map<String, dynamic> _data = Map<String, dynamic>.from(_exportsBox.get(key)!);
+      result = await _submit(_data);
+      if (result) await _exportsBox.delete(key);
     }
   }
   return result;
 }
 
-Future<bool> _save(Map<String, dynamic> exportInfo) async {
-  await Hive.box<Map<dynamic, dynamic>>(keyUserExportsBox).put(exportInfo.hashCode, exportInfo);
-  return true;
+Future<bool> _submit(Map<dynamic, dynamic> data) async {
+  final Map<String, dynamic> export = Map<String, dynamic>.from(data['export'] as Map<dynamic, dynamic>);
+  final String userId = data['userId'] as String;
+  final String progressorId = data['progressorId'] as String;
+  final String prefixedName = '${data['prefix']}${data['timeStamp']}';
+  return _upload(export, userId, progressorId, prefixedName);
 }
 
-Future<bool> _upload(Map<dynamic, dynamic> exportInfo) async {
-  final Map<String, dynamic> _metaData = Map<String, dynamic>.from(exportInfo[keyMetaData] as Map<dynamic, dynamic>);
+Future<bool> _upload(Map<String, dynamic> export, String userId, String progresorId, String prefixedName) async {
+  await FirebaseFirestore.instance.doc('/$keyDatabaseRoot/$userId/$keyExports/$prefixedName').set(export);
   await FirebaseFirestore.instance
-      .collection(keyAllUsers)
-      .doc(_metaData[keyUserEmail] as String)
-      .collection(keyAllExports)
-      .doc(_metaData[keyExportDate] as String)
-      .set(<String, dynamic>{_metaData[keyExportTime]! as String: exportInfo}, SetOptions(merge: true));
+      .doc('/$keyDatabaseRoot/$userId')
+      .update(<String, String>{'progressorId': progresorId});
   return true;
 }

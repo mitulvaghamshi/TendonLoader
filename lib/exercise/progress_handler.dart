@@ -10,7 +10,7 @@ class ProgressHandler {
     this.isSetOver = false,
     this.isRunning = false,
     this.isComplete = false,
-  })  : lapTimer = pre.holdTime!,
+  })  : lapTimer = pre.holdTime,
         sets = 1,
         reps = 1,
         rests = 1;
@@ -36,7 +36,7 @@ class ProgressHandler {
     sets = 1;
     reps = 1;
     rests = 1;
-    lapTimer = pre.holdTime!;
+    lapTimer = pre.holdTime;
   }
 
   void update() {
@@ -44,10 +44,10 @@ class ProgressHandler {
       if (isHold) {
         isHold = false;
         reps++;
-        lapTimer = pre.restTime!;
-        if (reps > pre.reps! && rests > pre.reps! - 1) {
+        lapTimer = pre.restTime;
+        if (reps > pre.reps&& rests > pre.reps- 1) {
           sets++;
-          if (sets > pre.sets!) {
+          if (sets > pre.sets) {
             isComplete = true;
             onReset();
             reset();
@@ -57,13 +57,13 @@ class ProgressHandler {
             reps = 1;
             isHold = true;
             isSetOver = true;
-            lapTimer = pre.holdTime!;
+            lapTimer = pre.holdTime;
           }
         }
       } else {
         rests++;
         isHold = true;
-        lapTimer = pre.holdTime!;
+        lapTimer = pre.holdTime;
       }
     }
   }

@@ -14,9 +14,9 @@ Future<void> _init() async {
     await initApp();
     await Hive.initFlutter();
     await Hive.openBox<Map<dynamic, dynamic>>(keyLoginBox);
-    await Hive.openBox<Map<dynamic, dynamic>>(keyUserExportsBox);
+    await Hive.openBox<Map<dynamic, dynamic>>(keyExportBox);
     await Hive.openBox<Map<dynamic, dynamic>>(keyAppSettingsBox);
-    Future<void>.delayed(const Duration(seconds: 2), () => _completer.complete());
+    Future<void>.delayed(const Duration(milliseconds: 1500), () => _completer.complete());
   }
   return _completer.future;
 }

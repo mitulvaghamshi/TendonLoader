@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
@@ -9,10 +10,9 @@ import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/exercise/progress_handler.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/clip_player.dart';
-import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
-import 'package:tendon_loader/settings/settings_model.dart';
+import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class BarGraph extends StatefulWidget {
@@ -97,7 +97,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       final bool? result = await CountDown.start(
         context,
         title: 'Set Over, Rest!!!',
-        duration: Duration(seconds: widget.prescription.setRestTime!),
+        duration: Duration(seconds: widget.prescription.setRest),
       );
       if (result ?? false) await _start();
     });
@@ -113,11 +113,11 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       dataList: exportDataList,
       prescription: widget.prescription,
       sessionInfo: SessionInfo(
+        isMVC: false,
         dateTime: _dateTime,
         progressorId: deviceName,
         isComplate: _handler.isComplete,
-        isMVC: keyPrefixExcercise,
-        userId: SettingsModel.userId,
+        userId: AppStateScope.of(context).userId!,
       ),
     );
     if (_handler.isRunning) {
@@ -126,7 +126,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       return export(_dataModel, false);
     }
     print('later stuff...');
-    if (SettingsModel.autoUpload!) {
+    if (AppStateScope.of(context).autoUpload!) {
       print('auto upload');
       result = await export(_dataModel, false);
       if (result) {
@@ -193,8 +193,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
                         _handler.progress,
                         style: const TextStyle(color: Colors.black, fontSize: 36, fontWeight: FontWeight.bold),
                       ),
-                      backgroundColor: snapshot.data!.load! > widget.prescription.targetLoad!
-                          ? const Color.fromRGBO(61, 220, 132, 1)
+                      backgroundColor: snapshot.data!.load! > widget.prescription.targetLoad? const Color.fromRGBO(61, 220, 132, 1)
                           : const Color.fromRGBO(239, 247, 207, 1),
                     ),
                   ],

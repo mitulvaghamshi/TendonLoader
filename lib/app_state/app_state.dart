@@ -1,19 +1,29 @@
+import 'package:hive/hive.dart';
+import 'package:tendon_loader_lib/tendon_loader_lib.dart';
+
 class AppState {
-  AppState({
-    required this.productList,
-    this.itemsInCart = const <String>{},
-  });
+  String? userId;
 
-  final List<String> productList;
-  final Set<String> itemsInCart;
+  bool? autoUpload;
+  bool? filedEditable;
 
-  AppState copyWith({
-    List<String>? productList,
-    Set<String>? itemsInCart,
-  }) {
-    return AppState(
-      productList: productList ?? this.productList,
-      itemsInCart: itemsInCart ?? this.itemsInCart,
-    );
+  Future<void> getSettings() async {
+    final Box<Map<dynamic, dynamic>> _settingsBox = Hive.box(keyAppSettingsBox);
+    if (_settingsBox.containsKey(keyAppSettingsBox)) {
+      final Map<String, dynamic> _settings = Map<String, dynamic>.from(_settingsBox.get(keyAppSettingsBox)!);
+      autoUpload = _settings['_key_auto_upload'] as bool? ?? false;
+      filedEditable = _settings['_key_exercise_editable'] as bool? ?? false;
+    } else {
+      autoUpload = false;
+      filedEditable = true;
+    }
+  }
+
+  Future<bool> updateSettings() async {
+    await Hive.box<Map<dynamic, dynamic>>(keyAppSettingsBox).put(keyAppSettingsBox, <String, dynamic>{
+      '_key_auto_upload': autoUpload,
+      '_key_exercise_editable': filedEditable,
+    });
+    return true;
   }
 }

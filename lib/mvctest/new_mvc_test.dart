@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/settings/settings_model.dart';
+import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
@@ -16,12 +16,16 @@ class NewMVCTest extends StatefulWidget {
 class _NewMVCTestState extends State<NewMVCTest> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _ctrlTestDuration = TextEditingController();
-  final bool _enabled = SettingsModel.editableExercise!;
 
   @override
   void initState() {
     super.initState();
-    if (!_enabled) {
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!AppStateScope.of(context).filedEditable!) {
       _ctrlTestDuration.text = 10.toString();
     }
   }
@@ -63,7 +67,7 @@ class _NewMVCTestState extends State<NewMVCTest> {
                   ),
                 ),
                 CustomTextField(
-                  enabled: _enabled,
+                  enabled: AppStateScope.of(context).filedEditable!,
                   isPicker: true,
                   label: 'Test duration (sec)',
                   hint: 'Time duration to record MVC Test for.',

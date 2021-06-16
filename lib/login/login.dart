@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:tendon_loader/login/app_auth.dart';
-import 'package:tendon_loader/settings/settings_model.dart';
-import 'package:tendon_loader/settings/settings_handler.dart';
+import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/home.dart';
+import 'package:tendon_loader/login/app_auth.dart';
+import 'package:tendon_loader_lib/constants/constants.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 import 'package:tendon_loader_lib/utils/validator.dart';
 
@@ -48,20 +48,19 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   Future<void> _setUser() async {
     final Box<Map<dynamic, dynamic>> _loginBox = Hive.box(keyLoginBox);
     final Map<String, dynamic> _login = <String, dynamic>{keyKeepLoggedIn: _staySignedIn || _isNew};
+    AppStateScope.of(context).userId = _emailCtrl.text;
     if (_oldUser == null || _oldUser != _emailCtrl.text) {
+      print('new user');
       await FirebaseFirestore.instance
-          .collection(keyAllUsers)
-          .doc(_emailCtrl.text)
-          .set(<String, dynamic>{'LastActive': DateTime.now()});
+          .doc('/$keyDatabaseRoot/${_emailCtrl.text}')
+          .set(<String, dynamic>{'Joined on': DateTime.now()});
     }
     if (_staySignedIn || _isNew) {
-      SettingsModel.userId = _emailCtrl.text;
       _login[keyUserEmail] = _emailCtrl.text;
       _login[keyPassword] = _passwordCtrl.text;
       _login[keyOldUserEmail] = _emailCtrl.text;
     }
     await _loginBox.put(keyLoginBox, _login);
-    await getSettings();
   }
 
   Future<void> _authenticate(AnimationStatus status) async {
@@ -87,6 +86,12 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     _getUser();
     _animCtrl = AnimationController(vsync: this, duration: const Duration(seconds: 1))
       ..addStatusListener(_authenticate);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    AppStateScope.of(context).getSettings();
   }
 
   @override
@@ -140,7 +145,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Text(
-                      _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up',
+                      _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
                       style: const TextStyle(letterSpacing: 0.5, color: Colors.blue),
                     ),
                   ),

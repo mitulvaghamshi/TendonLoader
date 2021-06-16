@@ -2,7 +2,7 @@ import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_listtile.dart';
-import 'package:tendon_loader/handler/export_handler.dart' show export;
+import 'package:tendon_loader/handler/export_handler.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class ConfirmDialog extends StatelessWidget {
@@ -23,7 +23,7 @@ class ConfirmDialog extends StatelessWidget {
     );
   }
 
-  Future<void> _export(BuildContext context, [bool later = false]) async {
+  Future<void> _startExport(BuildContext context, [bool later = false]) async {
     final bool result = await export(model!, later);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(result
@@ -42,14 +42,14 @@ class ConfirmDialog extends StatelessWidget {
       children: <Widget>[
         CustomTile(
           title: 'Submit now.',
-          onTap: () async => _export(context),
+          onTap: () async => _startExport(context),
           padding: const EdgeInsets.symmetric(vertical: 5),
           icon: const Icon(Icons.circle, color: Colors.green, size: 50),
           desc: 'Send data to the cloud. Requires an active internet connection.',
         ),
         CustomTile(
           title: 'Submit later.',
-          onTap: () async => _export(context, true),
+          onTap: () async => _startExport(context, true),
           padding: const EdgeInsets.symmetric(vertical: 5),
           icon: const Icon(Icons.circle, color: Colors.yellow, size: 50),
           desc: 'Save data locally on device and submit later (manual action required).',

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,17 @@ import 'package:flutter/material.dart';
 void _snackBar(BuildContext context, String content) =>
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(content)));
 
-Future<void> initApp() async => Firebase.initializeApp();
+Future<void> initApp() async {
+  await Firebase.initializeApp();
+  if (true) {
+    await FirebaseAuth.instance.useEmulator('http://localhost:9099');
+    FirebaseFirestore.instance.settings = const Settings(
+      host: 'localhost:8080',
+      sslEnabled: false,
+      persistenceEnabled: false,
+    );
+  }
+}
 
 Future<User?> authenticate(BuildContext context, bool isNew, String email, String password) async {
   late final UserCredential? _credential;

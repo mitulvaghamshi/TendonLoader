@@ -1,16 +1,16 @@
 import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart' show ChartSeriesController;
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/clip_player.dart';
-import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
-import 'package:tendon_loader/settings/settings_model.dart';
+import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
 
 class BarGraph extends StatefulWidget {
@@ -71,15 +71,15 @@ class _BarGraphState extends State<BarGraph> {
     final DataModel _dataModel = DataModel(
       dataList: exportDataList,
       sessionInfo: SessionInfo(
+        isMVC: true,
         dateTime: _dateTime,
         isComplate: _isComplete,
         progressorId: deviceName,
-        isMVC: keyPrefixMVC,
-        userId: SettingsModel.userId,
+        userId: AppStateScope.of(context).userId!,
       ),
     );
     final bool? result;
-    if (SettingsModel.autoUpload!) {
+    if (AppStateScope.of(context).autoUpload!) {
       result = await export(_dataModel, false);
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
