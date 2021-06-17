@@ -3,19 +3,19 @@ import 'dart:async' show Future;
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_listtile.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart';
+import 'package:tendon_loader_web/app_state/export.dart';
 
 class ConfirmDialog extends StatelessWidget {
-  const ConfirmDialog({Key? key, this.model}) : super(key: key);
+  const ConfirmDialog({Key? key, this.export}) : super(key: key);
 
-  final DataModel? model;
+  final Export? export;
 
-  static Future<bool?> show(BuildContext context, {DataModel? model}) async {
+  static Future<bool?> show(BuildContext context, {Export? export}) async {
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        content: ConfirmDialog(model: model),
+        content: ConfirmDialog(export: export),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Submit data to Clinician?', textAlign: TextAlign.center),
         actions: <Widget>[TextButton(onPressed: () => Navigator.pop(context), child: const Text('Back'))],
@@ -24,7 +24,7 @@ class ConfirmDialog extends StatelessWidget {
   }
 
   Future<void> _startExport(BuildContext context, [bool later = false]) async {
-    final bool result = await export(model!, later);
+    final bool result = await submit(export!, later);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(result
           ? later
@@ -41,14 +41,14 @@ class ConfirmDialog extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         CustomTile(
-          title: 'Submit now.',
+          title: 'Submit now',
           onTap: () async => _startExport(context),
           padding: const EdgeInsets.symmetric(vertical: 5),
           icon: const Icon(Icons.circle, color: Colors.green, size: 50),
           desc: 'Send data to the cloud. Requires an active internet connection.',
         ),
         CustomTile(
-          title: 'Submit later.',
+          title: 'Do it later',
           onTap: () async => _startExport(context, true),
           padding: const EdgeInsets.symmetric(vertical: 5),
           icon: const Icon(Icons.circle, color: Colors.yellow, size: 50),

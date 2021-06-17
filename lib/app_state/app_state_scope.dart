@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state.dart';
 
 class AppStateScope extends InheritedWidget {
-  const AppStateScope(this.data, {Key? key, required Widget child}) : super(key: key, child: child);
+  const AppStateScope({
+    Key? key,
+    required this.data,
+    required Widget child,
+  }) : super(key: key, child: child);
 
   final AppState data;
 
@@ -11,7 +15,5 @@ class AppStateScope extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(AppStateScope oldWidget) {
-    return false;
-  }
+  bool updateShouldNotify(AppStateScope oldWidget) => true;
 }

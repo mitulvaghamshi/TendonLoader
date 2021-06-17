@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
@@ -14,6 +15,7 @@ import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
+import 'package:tendon_loader_web/app_state/export.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key, required this.prescription}) : super(key: key);
@@ -69,7 +71,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       _handler.isComplete = false;
       _dateTime = DateTime.now();
       _hasData = true;
-      play(Clip.start);
+      play(true);
     }
   }
 
@@ -77,7 +79,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
     if (_handler.isRunning) {
       _handler.isRunning = false;
       await stopWeightMeasuring();
-      play(Clip.stop);
+      play(false);
       _minSec = 0;
       if (_handler.isComplete) {
         await congratulate(context);
@@ -109,33 +111,31 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
     if (!_hasData) return true;
     print('on exit...');
     late final bool? result;
-    final DataModel _dataModel = DataModel(
-      dataList: exportDataList,
+
+    final Export _export = Export(
+      progressorId: deviceName,
+      exportData: exportDataList,
+      isComplate: _handler.isComplete,
       prescription: widget.prescription,
-      sessionInfo: SessionInfo(
-        isMVC: false,
-        dateTime: _dateTime,
-        progressorId: deviceName,
-        isComplate: _handler.isComplete,
-        userId: AppStateScope.of(context).userId!,
-      ),
+      timestamp: Timestamp.fromDate(_dateTime),
+      userId: AppStateScope.of(context).userId,
     );
     if (_handler.isRunning) {
       print('running... stop and upload....');
       await stopWeightMeasuring();
-      return export(_dataModel, false);
+      return submit(_export, false);
     }
     print('later stuff...');
     if (AppStateScope.of(context).autoUpload!) {
       print('auto upload');
-      result = await export(_dataModel, false);
+      result = await submit(_export, false);
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Data stored successfully...'),
         ));
       }
     } else {
-      result = await ConfirmDialog.show(context, model: _dataModel);
+      result = await ConfirmDialog.show(context, export: _export);
     }
     if (result == null) {
       return false;
@@ -193,7 +193,8 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
                         _handler.progress,
                         style: const TextStyle(color: Colors.black, fontSize: 36, fontWeight: FontWeight.bold),
                       ),
-                      backgroundColor: snapshot.data!.load! > widget.prescription.targetLoad? const Color.fromRGBO(61, 220, 132, 1)
+                      backgroundColor: snapshot.data!.load! > widget.prescription.targetLoad
+                          ? const Color.fromRGBO(61, 220, 132, 1)
                           : const Color.fromRGBO(239, 247, 207, 1),
                     ),
                   ],

@@ -25,6 +25,8 @@ dependencies:
   syncfusion_flutter_xlsio: ^19.1.66-beta
   tendon_loader_lib:
     path: ../tendon_loader_lib
+  tendon_loader_web:
+    path: ../tendon_loader_web
     # git:
     #   url: https://github.com/mitulvaghamshi/tendon_loader_lib.git
   wakelock: ^0.5.2

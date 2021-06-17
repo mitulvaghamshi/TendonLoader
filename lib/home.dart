@@ -25,8 +25,8 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    tryAutoUpload(context);
     Wakelock.enable();
+    tryAutoUpload(context);
     checkLocation();
   }
 

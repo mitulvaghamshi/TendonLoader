@@ -1,5 +1,6 @@
 import 'dart:async' show Future;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
@@ -12,6 +13,7 @@ import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader_lib/tendon_loader_lib.dart';
+import 'package:tendon_loader_web/app_state/export.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key, required this.duration}) : super(key: key);
@@ -34,7 +36,7 @@ class _BarGraphState extends State<BarGraph> {
   bool _isRunning = false;
   bool _hasData = false;
 
-  double _minLoad = 0;
+  double _mvcValue = 0;
 
   Future<void> _start() async {
     if (!_isRunning && _hasData) {
@@ -44,8 +46,8 @@ class _BarGraphState extends State<BarGraph> {
       _isComplete = false;
       _isRunning = true;
       _hasData = true;
-      _minLoad = 0;
-      play(Clip.start);
+      _mvcValue = 0;
+      play(true);
       exportDataList.clear();
       await startWeightMeasuring();
     }
@@ -54,7 +56,7 @@ class _BarGraphState extends State<BarGraph> {
   void _stop() {
     stopWeightMeasuring();
     _isRunning = false;
-    play(Clip.stop);
+    play(false);
     Future<void>.delayed(const Duration(seconds: 1), _onMVCTestClose);
   }
 
@@ -68,26 +70,25 @@ class _BarGraphState extends State<BarGraph> {
 
   Future<bool> _onMVCTestClose() async {
     if (!_hasData) return true;
-    final DataModel _dataModel = DataModel(
-      dataList: exportDataList,
-      sessionInfo: SessionInfo(
-        isMVC: true,
-        dateTime: _dateTime,
-        isComplate: _isComplete,
-        progressorId: deviceName,
-        userId: AppStateScope.of(context).userId!,
-      ),
+    final Export _export = Export(
+      mvcValue: _mvcValue,
+      isComplate: _isComplete,
+      progressorId: deviceName,
+      exportData: exportDataList,
+      timestamp: Timestamp.fromDate(_dateTime),
+      userId: AppStateScope.of(context).userId,
     );
+
     final bool? result;
     if (AppStateScope.of(context).autoUpload!) {
-      result = await export(_dataModel, false);
+      result = await submit(_export, false);
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Data stored successfully...'),
         ));
       }
     } else {
-      result = await ConfirmDialog.show(context, model: _dataModel);
+      result = await ConfirmDialog.show(context, export: _export);
     }
     if (result == null) {
       return false;
@@ -116,11 +117,11 @@ class _BarGraphState extends State<BarGraph> {
               if (widget.duration - snapshot.data!.time! == 0) {
                 _isComplete = true;
                 if (_isRunning) _stop();
-              } else if (snapshot.data!.load! > _minLoad) {
-                _minLoad = snapshot.data!.load!;
+              } else if (snapshot.data!.load! > _mvcValue) {
+                _mvcValue = snapshot.data!.load!;
                 _lineData.insertAll(0, <ChartData>[
-                  ChartData(load: _minLoad),
-                  ChartData(time: 2, load: _minLoad),
+                  ChartData(load: _mvcValue),
+                  ChartData(time: 2, load: _mvcValue),
                 ]);
                 _lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
               }
@@ -131,7 +132,7 @@ class _BarGraphState extends State<BarGraph> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'MVC: ${_minLoad.toStringAsFixed(2)} Kg',
+                      'MVC: ${_mvcValue.toStringAsFixed(2)} Kg',
                       style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),

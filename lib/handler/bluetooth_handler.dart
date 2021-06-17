@@ -111,7 +111,7 @@ void _listen() {
             lastMinTime = time;
             final ChartData element = ChartData(load: weight, time: time);
             // eDdata[time] = weight;
-            
+
             exportDataList.add(element);
             graphDataSink.add(element);
           }
@@ -121,8 +121,10 @@ void _listen() {
   }
 }
 
+// simulator
 late Timer? timer;
 
+// simulator
 void fakelisten() {
   double fakeLoad = 0;
   timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {

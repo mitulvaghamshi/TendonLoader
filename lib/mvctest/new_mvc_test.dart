@@ -18,14 +18,9 @@ class _NewMVCTestState extends State<NewMVCTest> {
   final TextEditingController _ctrlTestDuration = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!AppStateScope.of(context).filedEditable!) {
+    if (!AppStateScope.of(context).fieldEditable!) {
       _ctrlTestDuration.text = 10.toString();
     }
   }
@@ -34,6 +29,15 @@ class _NewMVCTestState extends State<NewMVCTest> {
   void dispose() {
     _ctrlTestDuration.dispose();
     super.dispose();
+  }
+
+  String? _validator(String? duration) {
+    if (duration == null) return null;
+    if (duration.isEmpty) {
+      return '* required';
+    } else if (int.tryParse(duration)! < 0) {
+      return 'Test duration can\'t be negative.';
+    }
   }
 
   void _submit() {
@@ -67,21 +71,12 @@ class _NewMVCTestState extends State<NewMVCTest> {
                   ),
                 ),
                 CustomTextField(
-                  enabled: AppStateScope.of(context).filedEditable!,
+                  enabled: AppStateScope.of(context).fieldEditable!,
                   isPicker: true,
                   label: 'Test duration (sec)',
                   hint: 'Time duration to record MVC Test for.',
+                  validator: _validator,
                   controller: _ctrlTestDuration,
-                  validator: (String? duration) {
-                    if (duration != null) {
-                      if (duration.isEmpty) {
-                        return '* required';
-                      } else if (int.tryParse(duration)! < 0) {
-                        return 'Test duration can\'t be negative.';
-                      }
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(height: 30),
                 Row(

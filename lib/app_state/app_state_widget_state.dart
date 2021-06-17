@@ -8,6 +8,6 @@ class AppStateWidgetState extends State<AppStateWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return AppStateScope(_data, child: widget.child);
+    return AppStateScope(data: _data, child: widget.child);
   }
 }

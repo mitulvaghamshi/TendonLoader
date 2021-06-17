@@ -28,14 +28,14 @@ class _BarGraphState extends State<BarGraph> {
   Future<void> _start() async {
     if (!_isRunning && (_isRunning = await CountDown.start(context) ?? false)) {
       await startWeightMeasuring();
-      play(Clip.start);
+      play(true);
     }
   }
 
   void _reset() {
     if (_isRunning) {
       _isRunning = false;
-      play(Clip.stop);
+      play(false);
       stopWeightMeasuring();
       exportDataList.clear();
     }

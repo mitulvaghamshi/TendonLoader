@@ -38,7 +38,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         _oldUser = _login[keyOldUserEmail] as String?;
         _staySignedIn = _login[keyKeepLoggedIn] as bool? ?? true;
         if (_staySignedIn) {
-          _emailCtrl.text = _login[keyUserEmail] as String? ?? '';
+          _emailCtrl.text = _login[keyUsername] as String? ?? '';
           _passwordCtrl.text = _login[keyPassword] as String? ?? '';
         }
       });
@@ -52,11 +52,11 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     if (_oldUser == null || _oldUser != _emailCtrl.text) {
       print('new user');
       await FirebaseFirestore.instance
-          .doc('/$keyDatabaseRoot/${_emailCtrl.text}')
+          .doc('/$keyBase/${_emailCtrl.text}')
           .set(<String, dynamic>{'Joined on': DateTime.now()});
     }
     if (_staySignedIn || _isNew) {
-      _login[keyUserEmail] = _emailCtrl.text;
+      _login[keyUsername] = _emailCtrl.text;
       _login[keyPassword] = _passwordCtrl.text;
       _login[keyOldUserEmail] = _emailCtrl.text;
     }

@@ -20,7 +20,7 @@ class _NewExerciseState extends State<NewExercise> {
   final TextEditingController _ctrlReps = TextEditingController();
   final TextEditingController _ctrlHoldTime = TextEditingController();
   final TextEditingController _ctrlRestTime = TextEditingController();
-  final TextEditingController _ctrlSetRestTime = TextEditingController();
+  final TextEditingController _ctrlSetRest = TextEditingController();
   final TextEditingController _ctrlTargetLoad = TextEditingController();
 
   @override
@@ -30,45 +30,38 @@ class _NewExerciseState extends State<NewExercise> {
     _ctrlHoldTime.dispose();
     _ctrlRestTime.dispose();
     _ctrlTargetLoad.dispose();
-    _ctrlSetRestTime.dispose();
+    _ctrlSetRest.dispose();
     super.dispose();
   }
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     // todo(me): replace with actual values
-    if (!AppStateScope.of(context).filedEditable!) {
+    if (!AppStateScope.of(context).fieldEditable!) {
       _ctrlSets.text = 2.toString();
       _ctrlReps.text = 3.toString();
       _ctrlHoldTime.text = 5.toString();
       _ctrlRestTime.text = 5.toString();
       _ctrlTargetLoad.text = 6.toString();
-      _ctrlSetRestTime.text = 10.toString();
+      _ctrlSetRest.text = 10.toString();
     }
   }
 
   void _submit() {
-    // todo(me): remove explicite forced true value
+    // todo(me): remove explicitely forced true value
     if (_formKey.currentState!.validate() || true) {
       Navigator.of(context).pushReplacementNamed(
         ExerciseMode.route,
-        arguments: Prescription(
+        arguments: const Prescription(sets: 5, reps: 10, holdTime: 10, restTime: 15, targetLoad: 6, setRest: 5),
+        /* Prescription(
           sets: int.parse(_ctrlSets.text),
           reps: int.parse(_ctrlReps.text),
           holdTime: int.parse(_ctrlHoldTime.text),
           restTime: int.parse(_ctrlRestTime.text),
           setRest: int.parse(_ctrlSetRestTime.text),
           targetLoad: double.parse(_ctrlTargetLoad.text),
-        ),
-        /*const Prescription(
-          sets: 5,
-          reps: 10,
-          holdTime: 10,
-          restTime: 15,
-          targetLoad: 6,
-          setRestTime: 5,
-        ),*/
+        ), */
       );
     }
   }
@@ -95,7 +88,7 @@ class _NewExerciseState extends State<NewExercise> {
                   ),
                 ),
                 CustomTextField(
-                  enabled: AppStateScope.of(context).filedEditable!,
+                  enabled: AppStateScope.of(context).fieldEditable!,
                   label: 'Target Load (kg)',
                   hint: '~70% of last MVC test',
                   controller: _ctrlTargetLoad,
@@ -104,7 +97,7 @@ class _NewExerciseState extends State<NewExercise> {
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 ),
                 CustomTextField(
-                  enabled: AppStateScope.of(context).filedEditable!,
+                  enabled: AppStateScope.of(context).fieldEditable!,
                   isPicker: true,
                   label: 'Hold time (sec)',
                   hint: 'Amount of time you can keep holding at target load.',
@@ -112,7 +105,7 @@ class _NewExerciseState extends State<NewExercise> {
                   validator: validateHoldTime,
                 ),
                 CustomTextField(
-                  enabled: AppStateScope.of(context).filedEditable!,
+                  enabled: AppStateScope.of(context).fieldEditable!,
                   isPicker: true,
                   label: 'Rest time (sec)',
                   hint: 'Amount of time you can rest after each rep.',
@@ -120,7 +113,7 @@ class _NewExerciseState extends State<NewExercise> {
                   validator: validateRestTime,
                 ),
                 CustomTextField(
-                  enabled: AppStateScope.of(context).filedEditable!,
+                  enabled: AppStateScope.of(context).fieldEditable!,
                   label: 'Sets (#)',
                   hint: 'Number of total sets.',
                   controller: _ctrlSets,
@@ -128,7 +121,7 @@ class _NewExerciseState extends State<NewExercise> {
                   pattern: r'^\d{1,2}',
                 ),
                 CustomTextField(
-                  enabled: AppStateScope.of(context).filedEditable!,
+                  enabled: AppStateScope.of(context).fieldEditable!,
                   label: 'Reps (#)',
                   hint: 'Number of reps to perform in each set.',
                   controller: _ctrlReps,
@@ -136,11 +129,11 @@ class _NewExerciseState extends State<NewExercise> {
                   pattern: r'^\d{1,2}',
                 ),
                 CustomTextField(
-                  enabled: AppStateScope.of(context).filedEditable!,
+                  enabled: AppStateScope.of(context).fieldEditable!,
                   isPicker: true,
                   label: 'Rest time b/w Sets (sec)',
                   hint: 'Amount of time you can rest after every set (default: 90 sec).',
-                  controller: _ctrlSetRestTime,
+                  controller: _ctrlSetRest,
                 ),
                 const SizedBox(height: 30),
                 Row(

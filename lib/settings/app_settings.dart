@@ -43,9 +43,9 @@ class _AppSettingsState extends State<AppSettings> {
             ),
             const SizedBox(height: 16),
             SwitchListTile.adaptive(
-              value: AppStateScope.of(context).filedEditable!,
+              value: AppStateScope.of(context).fieldEditable!,
               title: const Text('Editable exercise mode *Data?'),
-              onChanged: (bool value) => setState(() => AppStateScope.of(context).filedEditable = value),
+              onChanged: (bool value) => setState(() => AppStateScope.of(context).fieldEditable = value),
               subtitle: const Text(
                 'If enabled user allowed to fill up their own exercise prescriptions. '
                 'Othervise, it will be auto filled by the clinitian.',

@@ -25,7 +25,7 @@ Future<void> tryUpload(BuildContext context, int records) async {
     context: context,
     barrierDismissible: false,
     builder: (_) {
-      reExport();
+      reSubmit();
       return AlertDialog(
         title: FittedBox(
           fit: BoxFit.fitWidth,
