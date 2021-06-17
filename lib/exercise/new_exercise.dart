@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/validator.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart';
-
+import 'package:tendon_loader/modal/prescription.dart';
+ 
 class NewExercise extends StatefulWidget {
   const NewExercise({Key? key}) : super(key: key);
 

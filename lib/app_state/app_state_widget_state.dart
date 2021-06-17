@@ -10,4 +10,6 @@ class AppStateWidgetState extends State<AppStateWidget> {
   Widget build(BuildContext context) {
     return AppStateScope(data: _data, child: widget.child);
   }
+
+  void refresh() => setState(() {});
 }

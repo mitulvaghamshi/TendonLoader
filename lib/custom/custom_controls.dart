@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart' show CustomFab;
-
+import 'package:tendon_loader/custom/custom_fab.dart';
+ 
 class GraphControls extends StatelessWidget {
   const GraphControls({Key? key, this.start, this.stop, this.reset}) : super(key: key);
 

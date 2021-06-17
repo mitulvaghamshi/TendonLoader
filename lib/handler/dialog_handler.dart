@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/constants/descriptions.dart';
+import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
 import 'package:tendon_loader/handler/location_handler.dart';
-import 'package:tendon_loader/home.dart';
+import 'package:tendon_loader/homescreen.dart';
 import 'package:tendon_loader/login/app_auth.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart';
-import 'package:wakelock/wakelock.dart';
+ import 'package:wakelock/wakelock.dart';
 
 Future<void> manualExport(BuildContext context) async {
   final int _records = await checkLocalData();

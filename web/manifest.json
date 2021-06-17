@@ -1,0 +1,16 @@
+{
+    "name": "Tendon Loader",
+    "short_name": "TendonLoader",
+    "start_url": ".",
+    "display": "fullscreen",
+    "background_color": "white",
+    "theme_color": "black",
+    "description": "Tendon Loader",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "icons/icon-universal.svg",
+            "type": "image/svg+xml"
+        }
+    ]
+}

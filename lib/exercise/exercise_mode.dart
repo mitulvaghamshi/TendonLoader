@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/exercise/bar_graph.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart';
-
+import 'package:tendon_loader/modal/prescription.dart';
+ 
 class ExerciseMode extends StatelessWidget {
   const ExerciseMode({Key? key}) : super(key: key);
 

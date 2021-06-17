@@ -5,7 +5,7 @@ import 'package:tendon_loader/livedata/live_data.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/settings/app_settings.dart';
-import 'package:tendon_loader/home.dart';
+import 'package:tendon_loader/homescreen.dart';
 import 'package:tendon_loader/login/login.dart';
 import 'package:tendon_loader/login/splash.dart';
 

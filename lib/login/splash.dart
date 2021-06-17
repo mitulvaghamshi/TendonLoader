@@ -1,12 +1,13 @@
-import 'dart:async' show Completer, Future;
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart' show Hive;
-import 'package:hive_flutter/hive_flutter.dart' show HiveX;
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tendon_loader/constants/constants.dart';
+import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart';
-
+ 
 final Completer<void> _completer = Completer<void>();
 
 Future<void> _init() async {
@@ -14,9 +15,9 @@ Future<void> _init() async {
     await initApp();
     await Hive.initFlutter();
     await Hive.openBox<Map<dynamic, dynamic>>(keyLoginBox);
-    await Hive.openBox<Map<dynamic, dynamic>>(keyExportBox);
-    await Hive.openBox<Map<dynamic, dynamic>>(keyAppSettingsBox);
-    Future<void>.delayed(const Duration(milliseconds: 1500), () => _completer.complete());
+    await Hive.openBox<Map<dynamic, dynamic>>(keyExportBox); // app
+    await Hive.openBox<Map<dynamic, dynamic>>(keyAppSettingsBox); // app
+    Future<void>.delayed(const Duration(seconds: 2), () => _completer.complete());
   }
   return _completer.future;
 }

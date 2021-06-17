@@ -1,7 +1,7 @@
 name: tendon_loader
 description: A bluetooth based tendon injury monitoring application.
 publish_to: "none"
-version: 0.0.4-preview+4 # already published to playstore
+version: 0.0.4-preview+4 # already published to interanal
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
@@ -16,6 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_blue: ^0.8.0
+  flutter_svg: ^0.22.0
   hive: ^2.0.2
   hive_flutter: ^1.0.0
   intl: ^0.17.0
@@ -23,12 +24,6 @@ dependencies:
   rxdart: ^0.26.0
   syncfusion_flutter_charts: ^19.1.66+1
   syncfusion_flutter_xlsio: ^19.1.66-beta
-  tendon_loader_lib:
-    path: ../tendon_loader_lib
-  tendon_loader_web:
-    path: ../tendon_loader_web
-    # git:
-    #   url: https://github.com/mitulvaghamshi/tendon_loader_lib.git
   wakelock: ^0.5.2
 
 dev_dependencies:
@@ -41,6 +36,7 @@ flutter:
   assets:
     - assets/audio/stop.mpeg
     - assets/audio/start.mpeg
+    - assets/images/app_logo.svg
     - assets/images/enable_device.png
     - assets/images/enable_location.png
     - assets/images/enable_bluetooth.png

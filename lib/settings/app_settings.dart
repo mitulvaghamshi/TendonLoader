@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/custom/app_logo.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart';
-
+ 
 class AppSettings extends StatefulWidget {
   const AppSettings({Key? key}) : super(key: key);
 
@@ -23,7 +24,7 @@ class _AppSettingsState extends State<AppSettings> {
         child: AppFrame(
           onExit: AppStateScope.of(context).updateSettings,
           child: Column(children: <Widget>[
-            const AppLogo(size: 150),
+            const AppLogo (size: 150),
             const SizedBox(height: 30),
             Text(
               AppStateScope.of(context).userId!,

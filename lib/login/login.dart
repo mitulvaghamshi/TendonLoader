@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/home.dart';
+import 'package:tendon_loader/constants/constants.dart';
+import 'package:tendon_loader/custom/app_logo.dart';
+import 'package:tendon_loader/custom/custom_fab.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/custom_textfield.dart';
+import 'package:tendon_loader/homescreen.dart';
 import 'package:tendon_loader/login/app_auth.dart';
-import 'package:tendon_loader_lib/constants/constants.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart';
-import 'package:tendon_loader_lib/utils/validator.dart';
+import 'package:tendon_loader/login/validator.dart'; 
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -46,21 +50,22 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   }
 
   Future<void> _setUser() async {
-    final Box<Map<dynamic, dynamic>> _loginBox = Hive.box(keyLoginBox);
     final Map<String, dynamic> _login = <String, dynamic>{keyKeepLoggedIn: _staySignedIn || _isNew};
     AppStateScope.of(context).userId = _emailCtrl.text;
-    if (_oldUser == null || _oldUser != _emailCtrl.text) {
-      print('new user');
-      await FirebaseFirestore.instance
-          .doc('/$keyBase/${_emailCtrl.text}')
-          .set(<String, dynamic>{'Joined on': DateTime.now()});
+    if (!kIsWeb) {
+      if (_oldUser == null || _oldUser != _emailCtrl.text) {
+        print('new user');
+        await FirebaseFirestore.instance
+            .doc('/$keyBase/${_emailCtrl.text}')
+            .set(<String, dynamic>{'Joined on': DateTime.now()});
+      }
     }
     if (_staySignedIn || _isNew) {
       _login[keyUsername] = _emailCtrl.text;
       _login[keyPassword] = _passwordCtrl.text;
       _login[keyOldUserEmail] = _emailCtrl.text;
     }
-    await _loginBox.put(keyLoginBox, _login);
+    await Hive.box<Map<dynamic, dynamic>>(keyLoginBox).put(keyLoginBox, _login);
   }
 
   Future<void> _authenticate(AnimationStatus status) async {

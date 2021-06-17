@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart';
-
+import 'package:tendon_loader/modal/chartdata.dart';
+ 
 class CustomGraph extends StatelessWidget {
   const CustomGraph({Key? key, this.graphData, this.lineData, this.lineCtrl, this.graphCtrl}) : super(key: key);
 

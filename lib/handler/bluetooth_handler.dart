@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:tendon_loader/constants/progressor.dart';
 import 'package:tendon_loader/custom/extensions.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart';
-
+import 'package:tendon_loader/modal/chartdata.dart';
+ 
 BluetoothDevice? _device;
 BluetoothCharacteristic? _dataChar;
 BluetoothCharacteristic? _controlChar;

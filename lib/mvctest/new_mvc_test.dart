@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart';
-
+ 
 class NewMVCTest extends StatefulWidget {
   const NewMVCTest({Key? key}) : super(key: key);
 

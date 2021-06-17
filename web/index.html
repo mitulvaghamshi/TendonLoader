@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <title>Tendon Loader</title>
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Tendon Loader">
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Tendon Loader">
+  <link rel="apple-touch-icon" href="icons/icon-universal.svg">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.ico" />
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body style="background-image: url('icons/icon-universal.svg'); background-size: 100vw 100vh;">
+  <script>
+    let serviceWorkerVersion = null;
+    let scriptLoaded = false;
+    function loadMainDartJs() {
+      if (scriptLoaded) return;
+      scriptLoaded = true;
+      let scriptTag = document.createElement('script');
+      scriptTag.src = 'main.dart.js';
+      scriptTag.type = 'application/javascript';
+      document.body.append(scriptTag);
+    }
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        let serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
+        navigator.serviceWorker.register(serviceWorkerUrl)
+          .then((reg) => {
+            function waitForActivation(serviceWorker) {
+              serviceWorker.addEventListener('statechange', () => {
+                if (serviceWorker.state == 'activated') {
+                  console.log('Installed new service worker.');
+                  loadMainDartJs();
+                }
+              });
+            }
+            if (!reg.active && (reg.installing || reg.waiting)) {
+              waitForActivation(reg.installing ?? reg.waiting);
+            } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
+              console.log('New service worker available.');
+              reg.update();
+              waitForActivation(reg.installing);
+            } else {
+              console.log('Loading app from service worker.');
+              loadMainDartJs();
+            }
+          });
+        setTimeout(() => {
+          if (!scriptLoaded) {
+            console.warn('Failed to load app from service worker. Falling back to plain <script> tag.');
+            loadMainDartJs();
+          }
+        }, 4000);
+      });
+    } else {
+      loadMainDartJs();
+    }
+  </script>
+  
+  <!-- 
+  <script defer src="/__/firebase/8.6.1/firebase-app.js"></script>
+  <script defer src="/__/firebase/8.6.1/firebase-auth.js"></script>
+  <script defer src="/__/firebase/8.6.1/firebase-firestore.js"></script>
+  <script defer src="/__/firebase/init.js"></script> 
+  -->
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+
+  <script type="text/javascript">
+    firebase.initializeApp({
+      projectId: "tendon-loader",
+      measurementId: "G-0CWKSVKJGS",
+      messagingSenderId: "534221336745",
+      storageBucket: "tendon-loader.appspot.com",
+      authDomain: "tendon-loader.firebaseapp.com",
+      apiKey: "AIzaSyDDyoyhwZtACT9Y6yzeNFl1Ch6mU1SZ-pc",
+      appId: "1:534221336745:web:8893c7f4e44b9e959639b8",
+      databaseURL: "https://tendon-loader-default-rtdb.firebaseio.com",
+    });
+    firebase.analytics();
+  </script>
+</body>
+
+</html>

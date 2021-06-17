@@ -4,16 +4,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/app_state/export.dart';
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
-import 'package:tendon_loader_lib/tendon_loader_lib.dart';
-import 'package:tendon_loader_web/app_state/export.dart';
+import 'package:tendon_loader/modal/chartdata.dart'; 
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key, required this.duration}) : super(key: key);
