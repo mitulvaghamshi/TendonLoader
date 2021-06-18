@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class CustomFab extends StatelessWidget {
   const CustomFab({
     Key? key,
-    this.fSize = 70,
+    this.size = 70,
     this.iSize = 30,
     required this.icon,
     required this.onTap,
   }) : super(key: key);
 
-  final double? fSize;
+  final double? size;
   final double? iSize;
   final IconData? icon;
   final VoidCallback? onTap;
@@ -22,7 +22,7 @@ class CustomFab extends StatelessWidget {
       shape: const CircleBorder(),
       fillColor: Theme.of(context).primaryColor,
       splashColor: Theme.of(context).accentColor,
-      constraints: BoxConstraints.expand(width: fSize, height: fSize),
+      constraints: BoxConstraints.expand(width: size, height: size),
       child: Icon(icon, size: iSize),
     );
   }

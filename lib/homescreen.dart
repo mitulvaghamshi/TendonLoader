@@ -11,17 +11,17 @@ import 'package:tendon_loader/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/settings/app_settings.dart';
 import 'package:wakelock/wakelock.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
-  static const String name = 'Tendon Loader';
   static const String route = '/home';
+  static const String name = 'Tendon Loader';
 
   @override
-  _HomeState createState() => _HomeState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeState extends State<Home> with WidgetsBindingObserver {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -48,7 +48,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(Home.name), actions: <Widget>[
+      appBar: AppBar(title: const Text(HomeScreen.name), actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.settings_rounded),
           onPressed: () async => Navigator.pushNamed(context, AppSettings.route),

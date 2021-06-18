@@ -3,7 +3,7 @@ import 'dart:ui' show Canvas, Offset, Paint, PaintingStyle, Size, TextAlign;
 
 import 'package:flutter/foundation.dart' show Key;
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/custom/extensions.dart';
+import 'package:tendon_loader/constants/extension.dart';
 
 class CountDown extends StatefulWidget {
   const CountDown({Key? key, this.title, this.duration}) : super(key: key);

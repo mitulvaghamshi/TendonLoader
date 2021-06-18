@@ -2,24 +2,35 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
-import 'package:tendon_loader/app_state/base.dart';
-import 'package:tendon_loader/app_state/export.dart';
-import 'package:tendon_loader/app_state/user.dart';
-import 'package:tendon_loader/constants/constants.dart';
- 
+import 'package:tendon_loader/constants/keys.dart';
+import 'package:tendon_loader/modal/base.dart';
+import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/modal/prescription.dart';
+import 'package:tendon_loader/modal/user.dart';
+
 class AppState {
   String? userId;
-
   bool? autoUpload;
+  double? graphSize;
   bool? fieldEditable;
+
+  DocumentReference<Prescription> userRef(String pUser) =>
+      FirebaseFirestore.instance.doc('/$keyBase/$pUser').withConverter<Prescription>(
+          fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
+        return Prescription.fromMap(snapshot.data()!);
+      }, toFirestore: (Prescription value, SetOptions? options) {
+        return value.toMap();
+      });
 
   Future<void> getSettings() async {
     final Box<Map<dynamic, dynamic>> _settingsBox = Hive.box(keyAppSettingsBox);
     if (_settingsBox.containsKey(keyAppSettingsBox)) {
       final Map<String, dynamic> _settings = Map<String, dynamic>.from(_settingsBox.get(keyAppSettingsBox)!);
-      autoUpload = _settings['_key_auto_upload'] as bool? ?? false;
       fieldEditable = _settings['_key_exercise_editable'] as bool? ?? false;
+      autoUpload = _settings['_key_auto_upload'] as bool? ?? false;
+      graphSize = _settings['_key_graph_size'] as double? ?? 30;
     } else {
+      graphSize = 30;
       autoUpload = false;
       fieldEditable = true;
     }
@@ -27,18 +38,19 @@ class AppState {
 
   Future<bool> updateSettings() async {
     await Hive.box<Map<dynamic, dynamic>>(keyAppSettingsBox).put(keyAppSettingsBox, <String, dynamic>{
-      '_key_auto_upload': autoUpload,
       '_key_exercise_editable': fieldEditable,
+      '_key_auto_upload': autoUpload,
+      '_key_graph_size': graphSize,
     });
     return true;
   }
 
-  final CollectionReference<Base> _base = FirebaseFirestore.instance.collection(keyBase).withConverter<Base>(
-      toFirestore: (Base value, SetOptions? options) {
-    return <String, Object>{};
-  }, fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
-    return Base.fromJson(snapshot);
-  });
+  CollectionReference<Base> get _base => FirebaseFirestore.instance.collection(keyBase).withConverter<Base>(
+          toFirestore: (Base value, SetOptions? options) {
+        return <String, Object>{};
+      }, fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
+        return Base.fromJson(snapshot);
+      });
 
   final List<User> users = <User>[];
 

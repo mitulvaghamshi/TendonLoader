@@ -1,22 +1,23 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/constants/constants.dart';
+import 'package:tendon_loader/constants/keys.dart';
+import 'package:tendon_loader/constants/others.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_fab.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/homescreen.dart';
 import 'package:tendon_loader/login/app_auth.dart';
-import 'package:tendon_loader/login/validator.dart'; 
+import 'package:tendon_loader/login/validator.dart';
+import 'package:tendon_loader/modal/prescription.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   static const String route = '/login';
+  static const String homeRoute = '/home';
 
   @override
   _LoginState createState() => _LoginState();
@@ -54,10 +55,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     AppStateScope.of(context).userId = _emailCtrl.text;
     if (!kIsWeb) {
       if (_oldUser == null || _oldUser != _emailCtrl.text) {
-        print('new user');
-        await FirebaseFirestore.instance
-            .doc('/$keyBase/${_emailCtrl.text}')
-            .set(<String, dynamic>{'Joined on': DateTime.now()});
+        await AppStateScope.of(context).userRef(_emailCtrl.text).set(
+            const Prescription(sets: 0, reps: 0, holdTime: 0, restTime: 0, targetLoad: 0, setRest: 0, mvcDuration: 0));
       }
     }
     if (_staySignedIn || _isNew) {
@@ -78,7 +77,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     } else if (status == AnimationStatus.completed) {
       _busy = false;
       if (_user != null) {
-        await Navigator.pushReplacementNamed(context, Home.route);
+        await Navigator.pushReplacementNamed(context, Login.homeRoute);
       } else {
         await _animCtrl.reverse();
       }
@@ -111,64 +110,68 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Tendon Loader - ${_isNew ? 'Register' : 'Login'}')),
-      body: SingleChildScrollView(
-        child: AppFrame(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                const AppLogo(),
-                CustomTextField(
-                  label: 'Username',
-                  hint: 'Enter your username',
-                  controller: _emailCtrl,
-                  validator: validateEmail,
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                CustomTextField(
-                  isObscure: true,
-                  label: 'Password',
-                  hint: 'Enter your password',
-                  controller: _passwordCtrl,
-                  validator: validatePassword,
-                  keyboardType: TextInputType.visiblePassword,
-                ),
-                const SizedBox(height: 10),
-                if (!_isNew)
-                  ListTile(
-                    horizontalTitleGap: 0,
-                    contentPadding: EdgeInsets.zero,
-                    onTap: () => setState(() => _staySignedIn = !_staySignedIn),
-                    title: const Text('Keep me logged in.', style: TextStyle(fontSize: 14)),
-                    leading: Icon(
-                      _staySignedIn ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
-                      color: Theme.of(context).accentColor,
-                    ),
-                  ),
-                GestureDetector(
-                  onTap: () => setState(() => _isNew = !_isNew),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Text(
-                      _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
-                      style: const TextStyle(letterSpacing: 0.5, color: Colors.blue),
-                    ),
+      body: kIsWeb ? Center(child: SizedBox(width: sizeleftPanel, child: _buildLoginBody())) : _buildLoginBody(),
+    );
+  }
+
+  Widget _buildLoginBody() {
+    return SingleChildScrollView(
+      child: AppFrame(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              const AppLogo(),
+              CustomTextField(
+                label: 'Username',
+                hint: 'Enter your username',
+                controller: _emailCtrl,
+                validator: validateEmail,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              CustomTextField(
+                isObscure: true,
+                label: 'Password',
+                hint: 'Enter your password',
+                controller: _passwordCtrl,
+                validator: validatePassword,
+                keyboardType: TextInputType.visiblePassword,
+              ),
+              const SizedBox(height: 10),
+              if (!_isNew)
+                ListTile(
+                  horizontalTitleGap: 0,
+                  contentPadding: EdgeInsets.zero,
+                  onTap: () => setState(() => _staySignedIn = !_staySignedIn),
+                  title: const Text('Keep me logged in.', style: TextStyle(fontSize: 14)),
+                  leading: Icon(
+                    _staySignedIn ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
+                    color: Theme.of(context).accentColor,
                   ),
                 ),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: RotationTransition(
-                    turns: Tween<double>(begin: 0.0, end: 1.0).animate(_animCtrl),
-                    child: CustomFab(
-                      fSize: 60,
-                      onTap: _animCtrl.forward,
-                      icon: _isNew ? Icons.add : Icons.send_rounded,
-                    ),
+              GestureDetector(
+                onTap: () => setState(() => _isNew = !_isNew),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
+                    style: const TextStyle(letterSpacing: 0.5, color: Colors.blue),
                   ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: RotationTransition(
+                  turns: Tween<double>(begin: 0.0, end: 1.0).animate(_animCtrl),
+                  child: CustomFab(
+                    size: 60,
+                    onTap: _animCtrl.forward,
+                    icon: _isNew ? Icons.add : Icons.send_rounded,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

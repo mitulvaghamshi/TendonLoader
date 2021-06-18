@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
+import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
- 
+
 class NewMVCTest extends StatefulWidget {
   const NewMVCTest({Key? key}) : super(key: key);
 
@@ -23,8 +25,16 @@ class _NewMVCTestState extends State<NewMVCTest> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!AppStateScope.of(context).fieldEditable!) {
-      _ctrlTestDuration.text = 10.toString();
+      init();
     }
+  }
+
+  Future<void> init() async {
+    final Prescription? prescription = await AppStateScope.of(context)
+        .userRef(AppStateScope.of(context).userId!)
+        .get()
+        .then((DocumentSnapshot<Prescription> value) => value.data());
+    _ctrlTestDuration.text = prescription!.mvcDuration.toString();
   }
 
   @override

@@ -36,13 +36,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Row get _buildSuffix {
     final List<IconButton> buttons = <IconButton>[];
     if (widget.isPicker) {
-      buttons.add(IconButton(
-        icon: const Icon(Icons.timer_rounded),
-        onPressed: () async {
-          final String? result = await CustomPicker.selectTime(context);
-          if (result != null) widget.controller!.text = result;
-        },
-      ));
+      buttons.add(
+        IconButton(
+            icon: const Icon(Icons.timer_rounded),
+            onPressed: () async {
+              final String? result = await CustomPicker.selectTime(context);
+              if (result != null) widget.controller!.text = result;
+            }),
+      );
     } else if (widget.isObscure) {
       buttons.add(IconButton(
         onPressed: () => setState(() => _isObscure = !_isObscure),
@@ -50,12 +51,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
       ));
     }
     return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: buttons
-          ..add(IconButton(
-            icon: const Icon(Icons.clear_rounded),
-            onPressed: () => widget.controller!.clear(),
-          )));
+      mainAxisSize: MainAxisSize.min,
+      children: buttons
+        ..add(IconButton(
+          icon: const Icon(Icons.clear_rounded),
+          onPressed: () => widget.controller!.clear(),
+        )),
+    );
   }
 
   @override

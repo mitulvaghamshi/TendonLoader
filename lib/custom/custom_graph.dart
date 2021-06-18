@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
- 
+
 class CustomGraph extends StatelessWidget {
   const CustomGraph({Key? key, this.graphData, this.lineData, this.lineCtrl, this.graphCtrl}) : super(key: key);
 
@@ -21,9 +22,9 @@ class CustomGraph extends StatelessWidget {
               ? NumericAxis(minimum: 0, isVisible: false)
               : CategoryAxis(minimum: 0, maximum: 0, isVisible: false),
           primaryYAxis: NumericAxis(
-            maximum: 30,
             labelFormat: '{value} kg',
             axisLine: const AxisLine(width: 0),
+            maximum: AppStateScope.of(context).graphSize,
             majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
             labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),

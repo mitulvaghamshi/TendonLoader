@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/app_state/app_state_widget.dart';
-import 'package:tendon_loader/app_state/export.dart';
+import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/custom/custom_avater.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/item_actions.dart';
+import 'package:tendon_loader/constants/item_action.dart';
 import 'package:tendon_loader/handler/click_handler.dart'; 
 
 class ExportListItem extends StatelessWidget {
@@ -22,8 +22,8 @@ class ExportListItem extends StatelessWidget {
           ? const Text('Complate', style: TextStyle(color: Colors.green))
           : const Text('Incomplate', style: TextStyle(color: Colors.red)),
       leading: export.isMVC
-          ? const CustomAvatar('MVC', color: Colors.orange)
-          : const CustomAvatar('EXE', color: Colors.green),
+          ? const CustomAvatar('MVC', bgColor: Colors.orange)
+          : const CustomAvatar('EXE', bgColor: Colors.green),
       onTap: () {
         if (export.exportData.isNotEmpty) exportItemSink.add(export);
       },

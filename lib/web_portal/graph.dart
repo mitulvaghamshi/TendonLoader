@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/app_state/export.dart';
+import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/chartdata.dart'; 
 
 class Graph extends StatelessWidget {

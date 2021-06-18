@@ -6,7 +6,7 @@ import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
-import 'package:tendon_loader/custom/extensions.dart';
+import 'package:tendon_loader/constants/extension.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';

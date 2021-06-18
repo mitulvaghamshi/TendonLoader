@@ -12,8 +12,7 @@ class AppLogo extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: size, maxWidth: size),
       padding: EdgeInsets.all(size < 300 ? 0 : 16),
       child: SvgPicture.asset(
-        'packages/tendon_loader_lib/assets/images/app_logo.svg',
-        excludeFromSemantics: true,
+        'assets/images/app_logo.svg',
         color: Theme.of(context).accentColor,
         placeholderBuilder: (_) => const SizedBox(),
       ),

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:hive/hive.dart';
-import 'package:tendon_loader/app_state/export.dart';
-import 'package:tendon_loader/constants/constants.dart';
+import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 
 Future<bool> _isConnected() async => (await Connectivity().checkConnectivity()) != ConnectivityResult.none;

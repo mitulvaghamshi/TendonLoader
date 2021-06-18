@@ -54,7 +54,7 @@ void aboutDialog(BuildContext context) {
   showAboutDialog(
     context: context,
     applicationVersion: 'v1.0',
-    applicationName: Home.name,
+    applicationName: HomeScreen.name,
     // applicationLegalese: 'Application Legalese',
     applicationIcon: const AppLogo(size: 50),
     children: <Widget>[

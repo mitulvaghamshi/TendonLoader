@@ -10,7 +10,7 @@ class CustomImage extends StatelessWidget {
     return Image.asset(name, frameBuilder: (_, Widget child, int? frame, bool wasSync) {
       if (wasSync) return child;
       return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 700),
+        duration: const Duration(milliseconds: 900),
         child: frame != null ? child : const SizedBox(),
       );
     }, excludeFromSemantics: true);

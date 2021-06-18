@@ -10,9 +10,10 @@ void _snackBar(BuildContext context, String content) =>
 Future<void> initApp() async {
   await Firebase.initializeApp();
   if (true) {
-    await FirebaseAuth.instance.useEmulator('http://localhost:9099');
-    FirebaseFirestore.instance.settings = const Settings(
-      host: 'localhost:8080',
+    final String host = defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost';
+    await FirebaseAuth.instance.useEmulator('http://$host:9099');
+    FirebaseFirestore.instance.settings = Settings(
+      host: '$host:8080',
       sslEnabled: false,
       persistenceEnabled: false,
     );

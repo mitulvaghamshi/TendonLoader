@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tendon_loader/constants/constants.dart';
+import 'package:intl/intl.dart';
+import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/handler/excel_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
-import 'package:tendon_loader/modal/prescription.dart'; 
+import 'package:tendon_loader/modal/prescription.dart';
 
 class Export {
   const Export({
@@ -41,8 +42,8 @@ class Export {
   final Prescription? prescription;
   final DocumentReference<Map<String, dynamic>>? reference;
 
-  String get title => timestamp.toDate().toString();
   bool get isMVC => mvcValue != null && prescription == null;
+  String get title => DateFormat(keyDateTimeFormat).format(timestamp.toDate());
   String get fileName =>
       title.replaceAll(RegExp(r'[\s:]'), '-') + '_${userId}_${isMVC ? 'MVCTest' : 'Exercise'}_$progressorId.xlsx';
 

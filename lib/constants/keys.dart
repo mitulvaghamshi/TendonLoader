@@ -1,4 +1,5 @@
 // prescription
+const String keyMvcDuration = 'mvcDuration';
 const String keySets = 'sets';
 const String keyReps = 'reps';
 const String keyLastMVC = 'lastMVC';

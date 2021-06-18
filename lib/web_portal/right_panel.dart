@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/export.dart';
+import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/handler/click_handler.dart';
@@ -20,7 +20,7 @@ class _RightPanelState extends State<RightPanel> {
       child: StreamBuilder<Export>(
         stream: exportItemStream,
         builder: (_, AsyncSnapshot<Export> snapshot) {
-          if (!snapshot.hasData) return const Center(child: AppLogo());
+          if (!snapshot.hasData) return const Center(child: AppLogo(size: 500));
           final Export _export = snapshot.data!;
           if (MediaQuery.of(context).size.width > 640) {
             return Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
@@ -30,8 +30,8 @@ class _RightPanelState extends State<RightPanel> {
           } else {
             return PageView(
               children: <Widget>[
-                Container(padding: const EdgeInsets.only(top: 30), child: Graph(export: _export)),
-                Container(padding: const EdgeInsets.only(top: 30), child: DataView(export: _export)),
+                Container(margin: const EdgeInsets.only(top: 30), child: Graph(export: _export)),
+                Container(margin: const EdgeInsets.only(top: 30), child: DataView(export: _export)),
               ],
             );
           }

@@ -1,7 +1,7 @@
 // UUIDs
-const String uuidService = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // (01) main service
-const String uuidControl = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // (03) send commands
-const String uuidData = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57'; // (02) receive data
+const String uuidService = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // main service
+const String uuidControl = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // send commands
+const String uuidData = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57'; // receive data
 
 // Responses
 const int resCommandResponse = 0;

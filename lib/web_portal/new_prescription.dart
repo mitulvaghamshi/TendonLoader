@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 
 class NewPrescription extends StatefulWidget {
-  const NewPrescription({Key? key}) : super(key: key);
+  const NewPrescription({Key? key, required this.userId}) : super(key: key);
+
+  final String userId;
 
   @override
   _NewPrescriptionState createState() => _NewPrescriptionState();
@@ -32,6 +36,26 @@ class _NewPrescriptionState extends State<NewPrescription> {
     super.dispose();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    init();
+  }
+
+  Future<void> init() async {
+    final Prescription? prescription = await AppStateScope.of(context)
+        .userRef(widget.userId)
+        .get()
+        .then((DocumentSnapshot<Prescription> value) => value.data());
+    _ctrlSets.text = prescription!.sets.toString();
+    _ctrlReps.text = prescription.reps.toString();
+    _ctrlHoldTime.text = prescription.holdTime.toString();
+    _ctrlRestTime.text = prescription.restTime.toString();
+    _ctrlTargetLoad.text = prescription.targetLoad.toString();
+    _ctrlSetRest.text = prescription.setRest.toString();
+    _ctrlMVCDuration.text = prescription.mvcDuration.toString();
+  }
+
   void _submit() {
     if (_formKey.currentState!.validate()) {
       final Map<String, num> map = Prescription(
@@ -41,9 +65,9 @@ class _NewPrescriptionState extends State<NewPrescription> {
         restTime: int.parse(_ctrlRestTime.text),
         setRest: int.parse(_ctrlSetRest.text),
         targetLoad: double.parse(_ctrlTargetLoad.text),
-        // mvcDuration: double.parse(_ctrl.text),
+        mvcDuration: int.tryParse(_ctrlMVCDuration.text),
       ).toMap();
-      print(map);
+      AppStateScope.of(context).userRef(widget.userId).update(map);
       Navigator.pop(context);
     }
   }

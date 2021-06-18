@@ -1,6 +1,5 @@
 const String descEnableDevice = 'Activate your device by pressing the button, '
     'then press scan to find the device';
-const String descAvaiableDevice = 'Available devices';
 const String descEnableBluetooth = '\nThis app needs Bluetooth to communicate with your Progressor.'
     '\n\nPlease enable Bluetooth on your device.';
 const String descLocationLine1 = 'This app uses bluetooth to communicate with your Progressor.';

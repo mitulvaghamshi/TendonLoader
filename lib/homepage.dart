@@ -5,8 +5,8 @@ import 'package:tendon_loader/login/login.dart';
 import 'package:tendon_loader/web_portal/left_panel.dart';
 import 'package:tendon_loader/web_portal/right_panel.dart';
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   static const String route = '/home';
   static const String name = 'Tendon Loader - Clinician';

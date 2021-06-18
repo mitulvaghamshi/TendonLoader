@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
@@ -6,7 +7,7 @@ import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/validator.dart';
 import 'package:tendon_loader/modal/prescription.dart';
- 
+
 class NewExercise extends StatefulWidget {
   const NewExercise({Key? key}) : super(key: key);
 
@@ -40,15 +41,22 @@ class _NewExerciseState extends State<NewExercise> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // todo(me): replace with actual values
     if (!AppStateScope.of(context).fieldEditable!) {
-      _ctrlSets.text = 2.toString();
-      _ctrlReps.text = 3.toString();
-      _ctrlHoldTime.text = 5.toString();
-      _ctrlRestTime.text = 5.toString();
-      _ctrlTargetLoad.text = 6.toString();
-      _ctrlSetRest.text = 10.toString();
+      init();
     }
+  }
+
+  Future<void> init() async {
+    final Prescription? prescription = await AppStateScope.of(context)
+        .userRef(AppStateScope.of(context).userId!)
+        .get()
+        .then((DocumentSnapshot<Prescription> value) => value.data());
+    _ctrlSets.text = prescription!.sets.toString();
+    _ctrlReps.text = prescription.reps.toString();
+    _ctrlHoldTime.text = prescription.holdTime.toString();
+    _ctrlRestTime.text = prescription.restTime.toString();
+    _ctrlTargetLoad.text = prescription.targetLoad.toString();
+    _ctrlSetRest.text = prescription.setRest.toString();
   }
 
   void _submit() {
@@ -56,15 +64,15 @@ class _NewExerciseState extends State<NewExercise> {
     if (_formKey.currentState!.validate() || true) {
       Navigator.of(context).pushReplacementNamed(
         ExerciseMode.route,
-        arguments: const Prescription(sets: 5, reps: 10, holdTime: 10, restTime: 15, targetLoad: 6, setRest: 5),
-        /* Prescription(
+        arguments: /* const Prescription(sets: 5, reps: 10, holdTime: 10, restTime: 15, targetLoad: 6, setRest: 5), */
+            Prescription(
           sets: int.parse(_ctrlSets.text),
           reps: int.parse(_ctrlReps.text),
           holdTime: int.parse(_ctrlHoldTime.text),
           restTime: int.parse(_ctrlRestTime.text),
-          setRest: int.parse(_ctrlSetRestTime.text),
+          setRest: int.parse(_ctrlSetRest.text),
           targetLoad: double.parse(_ctrlTargetLoad.text),
-        ), */
+        ),
       );
     }
   }

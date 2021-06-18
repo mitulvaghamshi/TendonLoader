@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tendon_loader/app_state/export.dart';
-import 'package:tendon_loader/constants/constants.dart'; 
+import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/constants/keys.dart'; 
 
 class Base {
   Base({required this.export, required this.reference});
