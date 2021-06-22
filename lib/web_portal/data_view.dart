@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/custom/custom_table.dart';
-import 'package:tendon_loader/constants/extension.dart';
+import 'package:tendon_loader/utils/extension.dart';
 
 class DataView extends StatelessWidget {
   const DataView({Key? key, required this.export}) : super(key: key);

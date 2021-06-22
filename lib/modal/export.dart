@@ -26,7 +26,7 @@ class Export {
             timestamp: snapshot.data()![keyTimeStamp] as Timestamp,
             progressorId: snapshot.data()![keyProgressorId] as String,
             prescription: snapshot.data()!.containsKey(keyPrescription)
-                ? Prescription.fromMap(snapshot.data()![keyPrescription] as Map<String, dynamic>)
+                ? Prescription.fromJson(snapshot.data()![keyPrescription] as Map<String, dynamic>)
                 : null,
             exportData: List<ChartData>.from((snapshot.data()![keyExportData] as Map<String, dynamic>)
                 .entries

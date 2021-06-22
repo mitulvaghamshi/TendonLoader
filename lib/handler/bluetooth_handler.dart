@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/constants/progressor.dart';
-import 'package:tendon_loader/constants/extension.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 
@@ -11,7 +11,7 @@ BluetoothDevice? _device;
 BluetoothCharacteristic? _dataChar;
 BluetoothCharacteristic? _controlChar;
 
-Stream<bool>? get isDeviceConnecting => _device?.isDiscoveringServices;
+Stream<bool>? get connectionStream => _device?.isDiscoveringServices;
 bool get isDeviceConnected => _device != null && _dataChar != null && _controlChar != null;
 String get deviceName => isDeviceConnected
     ? _device!.name.isEmpty

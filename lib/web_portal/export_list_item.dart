@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/app_state/app_state_widget.dart';
-import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/custom/custom_avater.dart';
+import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/constants/item_action.dart';
-import 'package:tendon_loader/handler/click_handler.dart'; 
+import 'package:tendon_loader/handler/click_handler.dart';
+import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/utils/item_action.dart';
 
 class ExportListItem extends StatelessWidget {
   const ExportListItem({Key? key, required this.export}) : super(key: key);
@@ -19,11 +19,11 @@ class ExportListItem extends StatelessWidget {
       contentPadding: const EdgeInsets.all(5),
       title: Text(export.title, style: const TextStyle(fontSize: 16)),
       subtitle: export.isComplate
-          ? const Text('Complate', style: TextStyle(color: Colors.green))
-          : const Text('Incomplate', style: TextStyle(color: Colors.red)),
+          ? const Text('Complate', style: TextStyle(color: colorGoogleGreen))
+          : const Text('Incomplate', style: TextStyle(color: colorRed400)),
       leading: export.isMVC
-          ? const CustomAvatar('MVC', bgColor: Colors.orange)
-          : const CustomAvatar('EXE', bgColor: Colors.green),
+          ? const CustomButton(text: Text('MVC'), color: colorOrange400)
+          : const CustomButton(text: Text('EXE'), color: colorGoogleGreen),
       onTap: () {
         if (export.exportData.isNotEmpty) exportItemSink.add(export);
       },
@@ -41,8 +41,8 @@ class ExportListItem extends StatelessWidget {
           const PopupMenuItem<ItemAction>(
             value: ItemAction.delete,
             child: ListTile(
-              title: Text('Delete', style: TextStyle(color: Colors.red)),
-              leading: Icon(Icons.delete_rounded, color: Colors.red),
+              title: Text('Delete', style: TextStyle(color: colorRed400)),
+              leading: Icon(Icons.delete_rounded, color: colorRed400),
             ),
           ),
         ],
@@ -66,21 +66,20 @@ class ExportListItem extends StatelessWidget {
             ]),
             actions: <Widget>[
               CustomButton(
-                color: Colors.red,
-                text: 'Yes, Delete!',
-                icon: Icons.delete_rounded,
+                color: colorOrange400,
+                text: const Text('Yes, Delete!'),
+                icon: const Icon(Icons.delete_rounded),
                 onPressed: () async {
-                  Navigator.pop(context);
                   await export.delete();
-                  AppStateScope.of(context).remove(export.reference!);
+                  Navigator.pop(context);
+                  AppStateScope.of(context).removeExport(export.reference!);
                   AppStateWidget.of(context).refresh();
                 },
               ),
               CustomButton(
-                text: 'Cencel',
-                icon: Icons.cancel,
+                text: const Text('Cencel'),
+                icon: const Icon(Icons.cancel),
                 onPressed: Navigator.of(context).pop,
-                color: const Color.fromRGBO(61, 220, 132, 1),
               ),
             ],
           );

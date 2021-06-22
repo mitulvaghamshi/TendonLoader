@@ -13,32 +13,32 @@ class Prescription {
     this.setRest = 90,
   });
 
-  Prescription.fromMap(Map<String, dynamic> map)
+  Prescription.fromJson(Map<String, dynamic> map)
       : this(
-            mvcDuration: int.tryParse(map[keyMvcDuration].toString()),
             sets: int.parse(map[keySets].toString()),
             reps: int.parse(map[keyReps].toString()),
-            holdTime: int.parse(map[keyHoldTime].toString()),
+            setRest: int.parse(map[keySetRest].toString()),
             restTime: int.parse(map[keyRestTime].toString()),
+            holdTime: int.parse(map[keyHoldTime].toString()),
             targetLoad: double.parse(map[keyTargetLoad].toString()),
-            setRest: int.parse(map[keySetRest].toString()));
+            mvcDuration: int.tryParse(map[keyMvcDuration].toString()));
 
-  final int? mvcDuration;
   final int sets;
   final int reps;
+  final int setRest;
   final int holdTime;
   final int restTime;
-  final int setRest;
+  final int? mvcDuration;
   final double targetLoad;
 
   Map<String, num> toMap() {
     return <String, num>{
       keySets: sets,
       keyReps: reps,
+      keySetRest: setRest,
       keyHoldTime: holdTime,
       keyRestTime: restTime,
       keyTargetLoad: targetLoad,
-      keySetRest: setRest,
       keyMvcDuration: mvcDuration!,
     };
   }

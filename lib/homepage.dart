@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/login/app_auth.dart';
+import 'package:tendon_loader/handler/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
 import 'package:tendon_loader/web_portal/left_panel.dart';
 import 'package:tendon_loader/web_portal/right_panel.dart';
@@ -20,8 +20,9 @@ class HomePage extends StatelessWidget {
 
     final AppBar _appBar = AppBar(title: const Text(name), actions: <Widget>[
       CustomButton(
-        text: 'Logout',
-        icon: Icons.logout,
+        reverce: true,
+        text: const Text('Logout'),
+        icon: const Icon(Icons.logout),
         onPressed: () async {
           await signOut();
           await Navigator.pushReplacementNamed(context, Login.route);

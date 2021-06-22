@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart' show BluetoothState, FlutterBlue;
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/device/tiles/enable_bluetooth_tile.dart';
 import 'package:tendon_loader/device/tiles/location_tile.dart';
 

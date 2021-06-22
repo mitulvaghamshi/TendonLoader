@@ -1,10 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
 
 class NewMVCTest extends StatefulWidget {
@@ -19,27 +18,11 @@ class NewMVCTest extends StatefulWidget {
 
 class _NewMVCTestState extends State<NewMVCTest> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _ctrlTestDuration = TextEditingController();
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!AppStateScope.of(context).fieldEditable!) {
-      init();
-    }
-  }
-
-  Future<void> init() async {
-    final Prescription? prescription = await AppStateScope.of(context)
-        .userRef(AppStateScope.of(context).userId!)
-        .get()
-        .then((DocumentSnapshot<Prescription> value) => value.data());
-    _ctrlTestDuration.text = prescription!.mvcDuration.toString();
-  }
+  final TextEditingController _ctrlMvcDuration = TextEditingController();
 
   @override
   void dispose() {
-    _ctrlTestDuration.dispose();
+    _ctrlMvcDuration.dispose();
     super.dispose();
   }
 
@@ -54,10 +37,8 @@ class _NewMVCTestState extends State<NewMVCTest> {
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      Navigator.of(context).pushReplacementNamed(
-        MVCTesting.route,
-        arguments: int.tryParse(_ctrlTestDuration.text),
-      );
+      AppStateScope.of(context).mvcDuration = int.parse(_ctrlMvcDuration.text);
+      Navigator.pushReplacementNamed(context, MVCTesting.route);
     }
   }
 
@@ -65,52 +46,36 @@ class _NewMVCTestState extends State<NewMVCTest> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Start new MVC Test', textAlign: TextAlign.center)),
-      body: SingleChildScrollView(
-        child: AppFrame(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  'Please enter duration for the MVC Test.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontFamily: 'Georgia',
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).accentColor.withOpacity(0.8),
-                  ),
-                ),
-                CustomTextField(
-                  enabled: AppStateScope.of(context).fieldEditable!,
-                  isPicker: true,
-                  label: 'Test duration (sec)',
-                  hint: 'Time duration to record MVC Test for.',
-                  validator: _validator,
-                  controller: _ctrlTestDuration,
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    CustomButton(
-                      text: 'Go',
-                      onPressed: _submit,
-                      color: Colors.white,
-                      background: const Color.fromRGBO(61, 220, 132, 1),
-                      icon: Icons.arrow_forward_rounded,
-                    ),
-                    CustomButton(
-                      text: 'Clear',
-                      icon: Icons.clear_rounded,
-                      onPressed: () => _formKey.currentState!.reset(),
-                    ),
-                  ],
-                ),
-              ],
+      body: AppFrame(
+        child: Form(
+          key: _formKey,
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            const Text(
+              'Please enter duration for the MVC Test.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 26,
+                fontFamily: 'Georgia',
+                color: colorGoogleGreen,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
+            CustomTextField(
+              isPicker: true,
+              validator: _validator,
+              label: 'Test duration (sec)',
+              controller: _ctrlMvcDuration,
+            ),
+            const SizedBox(height: 30),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+              CustomButton(
+                text: const Text('Go'),
+                color: colorGoogleGreen,
+                icon: const Icon(Icons.done_rounded),
+                onPressed: _submit,
+              ),
+            ]),
+          ]),
         ),
       ),
     );

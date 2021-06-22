@@ -4,7 +4,7 @@ import 'package:tendon_loader/constants/images.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
- 
+
 class EnableBluetoothTile extends StatelessWidget {
   const EnableBluetoothTile({Key? key}) : super(key: key);
 
@@ -16,7 +16,11 @@ class EnableBluetoothTile extends StatelessWidget {
         CustomImage(name: keyEnableBluetooth),
         Text(descEnableBluetooth, textAlign: TextAlign.center),
         SizedBox(height: 30),
-        CustomButton(text: 'Open Settings', icon: Icons.bluetooth_rounded, onPressed: openBluetoothSetting),
+        CustomButton(
+          text: Text('Open Settings'),
+          icon: Icon(Icons.bluetooth_rounded),
+          onPressed: openBluetoothSetting,
+        ),
       ],
     );
   }

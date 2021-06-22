@@ -26,7 +26,7 @@ class _LeftPanelState extends State<LeftPanel> {
         child: RefreshIndicator(
           onRefresh: _onRefresh,
           child: FutureBuilder<void>(
-            future: AppStateScope.of(context).fetchAll(),
+            future: AppStateScope.of(context).fetchAllData(),
             builder: (_, AsyncSnapshot<void> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) return const UserListItem();
               return const CustomProgress();

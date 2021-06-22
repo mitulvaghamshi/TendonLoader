@@ -3,45 +3,41 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   const CustomButton({
     Key? key,
+    this.text,
     this.icon,
     this.color,
-    this.iSize,
-    this.background,
     this.onPressed,
-    this.text = 'Click',
-    this.withText = true,
-  }) : super(key: key);
+    this.reverce = false,
+  })  : _extended = text != null && icon != null,
+        super(key: key);
 
-  final String text;
+  final Icon? icon;
   final Color? color;
-  final double? iSize;
-  final IconData? icon;
-  final bool withText;
-  final Color? background;
+  final Widget? text;
+  final bool reverce;
+  final bool _extended;
   final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    if (withText) {
-      return TextButton.icon(
-        onPressed: onPressed,
-        icon: Icon(icon, size: iSize, color: color ?? Theme.of(context).accentColor),
-        label: Text(text, style: TextStyle(color: color ?? Theme.of(context).accentColor)),
-        style: ButtonStyle(
-          elevation: MaterialStateProperty.all<double>(16),
-          visualDensity: const VisualDensity(vertical: 1.5, horizontal: 2),
-          backgroundColor: MaterialStateProperty.all<Color>(background ?? Theme.of(context).primaryColor),
-          shape: MaterialStateProperty.all<OutlinedBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-          ),
-        ),
-      );
-    } else {
-      return IconButton(
-        onPressed: onPressed,
-        iconSize: iSize ?? 24,
-        icon: Icon(icon, color: color ?? Theme.of(context).accentColor),
-      );
-    }
+    return RawMaterialButton(
+      elevation: 16,
+      onPressed: onPressed,
+      padding: EdgeInsets.all(_extended ? 10 : 0),
+      fillColor: color ?? Theme.of(context).primaryColor,
+      constraints: const BoxConstraints(minHeight: 25, minWidth: 25),
+      shape: _extended ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)) : const CircleBorder(),
+      child: _extended
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: reverce
+                  ? <Widget>[text!, const SizedBox(width: 5), icon!]
+                  : <Widget>[icon!, const SizedBox(width: 5), text!])
+          : CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.transparent,
+              foregroundColor: color != null ? Colors.white : Theme.of(context).accentColor,
+              child: text ?? icon),
+    );
   }
 }

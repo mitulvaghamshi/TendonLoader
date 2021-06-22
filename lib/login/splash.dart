@@ -5,9 +5,9 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
-import 'package:tendon_loader/login/app_auth.dart';
+import 'package:tendon_loader/handler/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
- 
+
 final Completer<void> _completer = Completer<void>();
 
 Future<void> _init() async {

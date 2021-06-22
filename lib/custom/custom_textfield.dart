@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/custom/custom_picker.dart';
 
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
     Key? key,
-    this.hint,
     this.label,
     this.pattern,
     this.validator,
     this.controller,
-    this.enabled = true,
     this.isPicker = false,
     this.isObscure = false,
     this.keyboardType = TextInputType.number,
   }) : super(key: key);
 
-  final String? hint;
   final String? label;
-  final bool enabled;
   final bool isPicker;
   final bool isObscure;
   final String? pattern;
@@ -54,7 +51,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       mainAxisSize: MainAxisSize.min,
       children: buttons
         ..add(IconButton(
-          icon: const Icon(Icons.clear_rounded),
+          icon: const Icon(Icons.clear_rounded, color: colorRed400),
           onPressed: () => widget.controller!.clear(),
         )),
     );
@@ -69,7 +66,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      enabled: widget.enabled,
       obscureText: _isObscure,
       readOnly: widget.isPicker,
       validator: widget.validator,
@@ -82,14 +78,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
       ],
       decoration: InputDecoration(
         isDense: true,
-        hintMaxLines: 3,
-        hintText: widget.hint,
+        suffix: _buildSuffix,
         labelText: widget.label,
-        suffix: widget.enabled ? _buildSuffix : null,
-        errorStyle: const TextStyle(color: Colors.deepOrange),
-        hintStyle: TextStyle(color: Theme.of(context).accentColor.withOpacity(0.7), fontSize: 14),
-        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.blue)),
-        errorBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Colors.deepOrange)),
+        errorStyle: const TextStyle(color: colorRed400),
+        labelStyle: TextStyle(color: Theme.of(context).accentColor),
+        errorBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorRed400)),
+        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
         enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Theme.of(context).accentColor)),
       ),
     );

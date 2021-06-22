@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/custom/custom_fab.dart';
- 
+import 'package:tendon_loader/custom/custom_button.dart';
+
 class GraphControls extends StatelessWidget {
   const GraphControls({Key? key, this.start, this.stop, this.reset}) : super(key: key);
 
@@ -11,9 +11,9 @@ class GraphControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
-      CustomFab(onTap: start, icon: Icons.play_arrow_rounded),
-      if (stop != null) CustomFab(onTap: stop, icon: Icons.stop_rounded),
-      CustomFab(onTap: reset, icon: Icons.replay_rounded),
+      CustomButton(onPressed: start, icon: const Icon(Icons.play_arrow_rounded)),
+      if (stop != null) CustomButton(onPressed: stop, icon: const Icon(Icons.stop_rounded)),
+      CustomButton(onPressed: reset, icon: const Icon(Icons.replay_rounded)),
     ]);
   }
 }

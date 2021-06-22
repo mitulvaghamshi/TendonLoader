@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 
 class CustomGraph extends StatelessWidget {
@@ -15,7 +16,7 @@ class CustomGraph extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: SfCartesianChart(
           plotAreaBorderWidth: 0,
           primaryXAxis: lineData != null
@@ -32,9 +33,9 @@ class CustomGraph extends StatelessWidget {
             ColumnSeries<ChartData?, int>(
               width: 0.9,
               borderWidth: 1,
-              color: Colors.blue,
               animationDuration: 0,
               dataSource: graphData!,
+              color: colorGoogleGreen,
               onRendererCreated: graphCtrl,
               dataLabelSettings: DataLabelSettings(
                 isVisible: true,
@@ -56,7 +57,7 @@ class CustomGraph extends StatelessWidget {
             if (lineData != null)
               LineSeries<ChartData, int>(
                 width: 5,
-                color: Colors.red,
+                color: colorRed400,
                 animationDuration: 0,
                 dataSource: lineData!,
                 onRendererCreated: lineCtrl,

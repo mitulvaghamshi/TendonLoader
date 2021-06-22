@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
@@ -14,12 +14,11 @@ import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
-import 'package:tendon_loader/modal/chartdata.dart'; 
+import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/modal/export.dart';
 
 class BarGraph extends StatefulWidget {
-  const BarGraph({Key? key, required this.duration}) : super(key: key);
-
-  final int duration;
+  const BarGraph({Key? key}) : super(key: key);
 
   @override
   _BarGraphState createState() => _BarGraphState();
@@ -31,6 +30,7 @@ class _BarGraphState extends State<BarGraph> {
 
   ChartSeriesController? _graphCtrl;
   ChartSeriesController? _lineCtrl;
+  late final int mvcDuration;
   late DateTime _dateTime;
 
   bool _isComplete = false;
@@ -39,7 +39,7 @@ class _BarGraphState extends State<BarGraph> {
 
   double _mvcValue = 0;
 
-  Future<void> _start() async {
+  Future<void> _onStart() async {
     if (!_isRunning && _hasData) {
       await _onMVCTestClose();
     } else if (!_isRunning && (await CountDown.start(context) ?? false)) {
@@ -54,15 +54,15 @@ class _BarGraphState extends State<BarGraph> {
     }
   }
 
-  void _stop() {
+  void _onStop() {
     stopWeightMeasuring();
     _isRunning = false;
     play(false);
     Future<void>.delayed(const Duration(seconds: 1), _onMVCTestClose);
   }
 
-  void _reset() {
-    if (_isRunning) _stop();
+  void _onReset() {
+    if (_isRunning) _onStop();
     _graphData.insert(0, const ChartData());
     _graphCtrl?.updateDataSource(updatedDataIndex: 0);
     _lineData.insertAll(0, <ChartData>[const ChartData(), const ChartData(time: 2)]);
@@ -77,7 +77,7 @@ class _BarGraphState extends State<BarGraph> {
       progressorId: deviceName,
       exportData: exportDataList,
       timestamp: Timestamp.fromDate(_dateTime),
-      userId: AppStateScope.of(context).userId,
+      userId: AppStateScope.of(context).currentUser.id,
     );
 
     final bool? result;
@@ -100,8 +100,14 @@ class _BarGraphState extends State<BarGraph> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    mvcDuration = AppStateScope.of(context).currentUser.prescription!.mvcDuration!;
+  }
+
+  @override
   void dispose() {
-    _reset();
+    _onReset();
     super.dispose();
   }
 
@@ -109,52 +115,48 @@ class _BarGraphState extends State<BarGraph> {
   Widget build(BuildContext context) {
     return AppFrame(
       onExit: _onMVCTestClose,
-      child: Column(
-        children: <Widget>[
-          StreamBuilder<ChartData>(
-            initialData: const ChartData(),
-            stream: graphDataStream,
-            builder: (_, AsyncSnapshot<ChartData> snapshot) {
-              if (widget.duration - snapshot.data!.time! == 0) {
-                _isComplete = true;
-                if (_isRunning) _stop();
-              } else if (snapshot.data!.load! > _mvcValue) {
-                _mvcValue = snapshot.data!.load!;
-                _lineData.insertAll(0, <ChartData>[
-                  ChartData(load: _mvcValue),
-                  ChartData(time: 2, load: _mvcValue),
-                ]);
-                _lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
-              }
-              _graphData.insert(0, snapshot.data!);
-              _graphCtrl?.updateDataSource(updatedDataIndex: 0);
-              return FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      'MVC: ${_mvcValue.toStringAsFixed(2)} Kg',
-                      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '⏱ ${(widget.duration - snapshot.data!.time!).toStringAsFixed(1)} Sec',
-                      style: const TextStyle(color: Colors.deepOrange, fontSize: 40, fontWeight: FontWeight.bold),
-                    ),
-                  ],
+      child: Column(children: <Widget>[
+        StreamBuilder<ChartData>(
+          initialData: const ChartData(),
+          stream: graphDataStream,
+          builder: (_, AsyncSnapshot<ChartData> snapshot) {
+            if (mvcDuration - snapshot.data!.time! == 0) {
+              _isComplete = true;
+              if (_isRunning) _onStop();
+            } else if (snapshot.data!.load! > _mvcValue) {
+              _mvcValue = snapshot.data!.load!;
+              _lineData.insertAll(0, <ChartData>[
+                ChartData(load: _mvcValue),
+                ChartData(time: 2, load: _mvcValue),
+              ]);
+              _lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
+            }
+            _graphData.insert(0, snapshot.data!);
+            _graphCtrl?.updateDataSource(updatedDataIndex: 0);
+            return FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Column(children: <Widget>[
+                Text(
+                  'MVC: ${_mvcValue.toStringAsFixed(2)} Kg',
+                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                 ),
-              );
-            },
-          ),
-          CustomGraph(
-            lineData: _lineData,
-            graphData: _graphData,
-            lineCtrl: (ChartSeriesController ctrl) => _lineCtrl = ctrl,
-            graphCtrl: (ChartSeriesController ctrl) => _graphCtrl = ctrl,
-          ),
-          GraphControls(start: _start, reset: _reset),
-        ],
-      ),
+                const SizedBox(height: 10),
+                Text(
+                  '⏱ ${(mvcDuration - snapshot.data!.time!).toStringAsFixed(1)} Sec',
+                  style: const TextStyle(color: colorRed400, fontSize: 40, fontWeight: FontWeight.bold),
+                ),
+              ]),
+            );
+          },
+        ),
+        CustomGraph(
+          lineData: _lineData,
+          graphData: _graphData,
+          lineCtrl: (ChartSeriesController ctrl) => _lineCtrl = ctrl,
+          graphCtrl: (ChartSeriesController ctrl) => _graphCtrl = ctrl,
+        ),
+        GraphControls(start: _onStart, reset: _onReset),
+      ]),
     );
   }
 }

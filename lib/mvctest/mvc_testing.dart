@@ -9,9 +9,6 @@ class MVCTesting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text(MVCTesting.name)),
-      body: BarGraph(duration: ModalRoute.of(context)!.settings.arguments! as int),
-    );
+    return Scaffold(appBar: AppBar(title: const Text(MVCTesting.name)), body: const BarGraph());
   }
 }

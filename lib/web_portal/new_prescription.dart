@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
@@ -6,9 +5,7 @@ import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 
 class NewPrescription extends StatefulWidget {
-  const NewPrescription({Key? key, required this.userId}) : super(key: key);
-
-  final String userId;
+  const NewPrescription({Key? key}) : super(key: key);
 
   @override
   _NewPrescriptionState createState() => _NewPrescriptionState();
@@ -36,18 +33,9 @@ class _NewPrescriptionState extends State<NewPrescription> {
     super.dispose();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    init();
-  }
-
   Future<void> init() async {
-    final Prescription? prescription = await AppStateScope.of(context)
-        .userRef(widget.userId)
-        .get()
-        .then((DocumentSnapshot<Prescription> value) => value.data());
-    _ctrlSets.text = prescription!.sets.toString();
+    final Prescription prescription = AppStateScope.of(context).prescription!;
+    _ctrlSets.text = prescription.sets.toString();
     _ctrlReps.text = prescription.reps.toString();
     _ctrlHoldTime.text = prescription.holdTime.toString();
     _ctrlRestTime.text = prescription.restTime.toString();
@@ -56,7 +44,7 @@ class _NewPrescriptionState extends State<NewPrescription> {
     _ctrlMVCDuration.text = prescription.mvcDuration.toString();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
       final Map<String, num> map = Prescription(
         sets: int.parse(_ctrlSets.text),
@@ -67,7 +55,7 @@ class _NewPrescriptionState extends State<NewPrescription> {
         targetLoad: double.parse(_ctrlTargetLoad.text),
         mvcDuration: int.tryParse(_ctrlMVCDuration.text),
       ).toMap();
-      AppStateScope.of(context).userRef(widget.userId).update(map);
+      await AppStateScope.of(context).currentUser.prescriptionRef.update(map);
       Navigator.pop(context);
     }
   }
@@ -119,14 +107,12 @@ class _NewPrescriptionState extends State<NewPrescription> {
           ),
           CustomTextField(
             label: 'Reps (#)',
-            hint: 'Number of reps to perform in each set.',
             controller: _ctrlReps,
             pattern: r'^\d{1,2}',
           ),
           CustomTextField(
             isPicker: true,
             label: 'Rest time b/w Sets (sec)',
-            hint: 'Amount of time you can rest after every set (default: 90 sec).',
             controller: _ctrlSetRest,
           ),
           const SizedBox(height: 30),
@@ -134,15 +120,14 @@ class _NewPrescriptionState extends State<NewPrescription> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               CustomButton(
-                text: 'Save',
+                text: const Text('Save'),
+                icon: const Icon(Icons.done_rounded),
+                color: const Color.fromRGBO(61, 220, 132, 1),
                 onPressed: _submit,
-                color: Colors.white,
-                background: const Color.fromRGBO(61, 220, 132, 1),
-                icon: Icons.done_rounded,
               ),
               CustomButton(
-                text: 'Clear',
-                icon: Icons.clear_rounded,
+                text: const Text('Clear all'),
+                icon: const Icon(Icons.clear_rounded),
                 onPressed: () => _formKey.currentState!.reset(),
               ),
             ],

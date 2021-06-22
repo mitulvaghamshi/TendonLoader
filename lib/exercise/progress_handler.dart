@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/modal/prescription.dart';
- 
+
 class ProgressHandler {
   ProgressHandler({
     required this.pre,

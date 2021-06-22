@@ -14,6 +14,7 @@ extension ExTimeFormat on double {
 
 extension ExCell on String {
   DataCell get toCell => DataCell(Center(child: Text(this)));
+  DataCell get toBigCell => DataCell(Text(this, style: const TextStyle(fontSize: 16)));
 }
 
 extension ExConvert on List<int> {

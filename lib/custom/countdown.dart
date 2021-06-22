@@ -3,7 +3,7 @@ import 'dart:ui' show Canvas, Offset, Paint, PaintingStyle, Size, TextAlign;
 
 import 'package:flutter/foundation.dart' show Key;
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/constants/extension.dart';
+import 'package:tendon_loader/utils/extension.dart';
 
 class CountDown extends StatefulWidget {
   const CountDown({Key? key, this.title, this.duration}) : super(key: key);
@@ -28,19 +28,19 @@ class CountDown extends StatefulWidget {
 }
 
 class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
-  AnimationController? _controller;
+  late final AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: widget.duration);
-    _controller!.reverse(from: _controller!.value == 0.0 ? 1.0 : _controller!.value);
-    _controller!.addStatusListener((_) => Navigator.pop<bool>(context, true));
+    _controller.reverse(from: _controller.value == 0.0 ? 1.0 : _controller.value);
+    _controller.addStatusListener((_) => Navigator.pop<bool>(context, true));
   }
 
   @override
   void dispose() {
-    _controller!.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -63,11 +63,11 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
           child: AspectRatio(
             aspectRatio: 1,
             child: AnimatedBuilder(
-              animation: _controller!,
+              animation: _controller,
               builder: (_, Widget? child) => Stack(alignment: Alignment.center, children: <Widget>[
                 Positioned.fill(child: CustomPaint(painter: _Painter(_controller))),
                 Text(
-                  (_controller!.duration! * _controller!.value).inSeconds.toTime,
+                  (_controller.duration! * _controller.value).inSeconds.toTime,
                   style: const TextStyle(fontSize: 100, color: Colors.white),
                 ),
               ]),

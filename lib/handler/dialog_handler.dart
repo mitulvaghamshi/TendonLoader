@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/constants/descriptions.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
+import 'package:tendon_loader/exercise/auto_exercise.dart';
+import 'package:tendon_loader/exercise/exercise_mode.dart';
+import 'package:tendon_loader/handler/app_auth.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
-import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
+import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_loader/homescreen.dart';
-import 'package:tendon_loader/login/app_auth.dart';
- import 'package:wakelock/wakelock.dart';
+import 'package:wakelock/wakelock.dart';
 
 Future<void> manualExport(BuildContext context) async {
   final int _records = await checkLocalData();
@@ -31,20 +35,20 @@ Future<void> tryUpload(BuildContext context, int records) async {
         title: FittedBox(
           fit: BoxFit.fitWidth,
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: const <Widget>[
-            Icon(Icons.cloud_upload, size: 50, color: Colors.green),
+            Icon(Icons.cloud_upload, size: 50, color: colorGoogleGreen),
             Text('Uploading local data', textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
           ]),
-        ),
-        content: ExpansionTile(
-          tilePadding: const EdgeInsets.all(5),
-          title: Text('$records file${records == 1 ? '' : 's'} uploaded.'),
-          subtitle: const Text('Tap for more info...', style: TextStyle(fontSize: 12)),
-          leading: const Icon(Icons.check_circle_outline_rounded, size: 30, color: Colors.green),
-          children: const <Widget>[Text(descUpload, style: TextStyle(fontSize: 12), textAlign: TextAlign.justify)],
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         actions: <Widget>[TextButton(onPressed: Navigator.of(context).pop, child: const Text('OK'))],
+        content: ExpansionTile(
+          tilePadding: const EdgeInsets.all(5),
+          title: Text('$records file${records == 1 ? '' : 's'} uploaded.'),
+          subtitle: const Text('Tap for more info...', style: TextStyle(fontSize: 12)),
+          leading: const Icon(Icons.check_circle_outline_rounded, size: 30, color: colorGoogleGreen),
+          children: const <Widget>[Text(descUpload, style: TextStyle(fontSize: 12), textAlign: TextAlign.justify)],
+        ),
       );
     },
   );
@@ -84,7 +88,7 @@ Future<void> congratulate(BuildContext context) async {
         title: FittedBox(
           fit: BoxFit.fitWidth,
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: const <Widget>[
-            Icon(Icons.emoji_events_rounded, size: 50, color: Colors.green),
+            Icon(Icons.emoji_events_rounded, size: 50, color: colorGoogleGreen),
             Text('Congratulations!!!', textAlign: TextAlign.center, style: TextStyle(fontSize: 26)),
           ]),
         ),
@@ -118,6 +122,30 @@ Future<void> selectDevice(BuildContext context) async {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
       actions: <Widget>[TextButton(onPressed: () => Navigator.pop(context), child: const Text('Back'))],
+    ),
+  );
+}
+
+Future<void> autoExercise(BuildContext context) async {
+  await showDialog<void>(
+    context: context,
+    builder: (_) => AlertDialog(
+      scrollable: true,
+      content: const AutoExercise(),
+      contentPadding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          const Text('Start Exercise', textAlign: TextAlign.center),
+          CustomButton(
+            text: const Text('Go'),
+            icon: const Icon(Icons.done_rounded),
+            color: const Color.fromRGBO(61, 220, 132, 1),
+            onPressed: () async => Navigator.pushReplacementNamed(context, ExerciseMode.route),
+          ),
+        ],
+      ),
     ),
   );
 }

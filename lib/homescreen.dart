@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
-import 'package:tendon_loader/custom/custom_listtile.dart';
+import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
-import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
+import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
+import 'package:tendon_loader/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/settings/app_settings.dart';
 import 'package:wakelock/wakelock.dart';
@@ -57,26 +60,34 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       body: SingleChildScrollView(
         child: AppFrame(
           onExit: onAppClose,
-          child: Column(
-            children: <Widget>[
-              const AppLogo(),
-              CustomTile(
-                title: LiveData.name,
-                onTap: () => _handleTap(LiveData.route),
-                icon: const Icon(Icons.show_chart_rounded, size: 30),
-              ),
-              CustomTile(
-                title: NewExercise.name,
-                onTap: () => _handleTap(NewExercise.route),
-                icon: const Icon(Icons.directions_run_rounded, size: 30),
-              ),
-              CustomTile(
-                title: NewMVCTest.name,
-                onTap: () => _handleTap(NewMVCTest.route),
-                icon: const Icon(Icons.airline_seat_legroom_extra, size: 30),
-              ),
-            ],
-          ),
+          child: Column(children: <Widget>[
+            const AppLogo(),
+            ListTile(
+              onTap: () => _handleTap(LiveData.route),
+              contentPadding: const EdgeInsets.all(16),
+              leading: const CustomButton(icon: Icon(Icons.show_chart_rounded, size: 30)),
+              trailing: const Icon(Icons.keyboard_arrow_right_rounded),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              title: const Text(LiveData.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.all(16),
+              leading: const CustomButton(icon: Icon(Icons.directions_run_rounded, size: 30)),
+              trailing: const Icon(Icons.keyboard_arrow_right_rounded),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              title: const Text(ExerciseMode.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              onTap: () =>
+                  AppStateScope.of(context).fieldEditable! ? _handleTap(NewExercise.route) : autoExercise(context),
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.all(16),
+              leading: const CustomButton(icon: Icon(Icons.airline_seat_legroom_extra, size: 30)),
+              trailing: const Icon(Icons.keyboard_arrow_right_rounded),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              title: const Text(NewMVCTest.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              onTap: () => _handleTap(AppStateScope.of(context).fieldEditable! ? NewMVCTest.route : MVCTesting.route),
+            ),
+          ]),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
