@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/handler/excel_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 
+@immutable
 class Export {
   const Export({
     this.userId,
@@ -45,7 +47,7 @@ class Export {
   bool get isMVC => mvcValue != null && prescription == null;
   String get title => DateFormat(keyDateTimeFormat).format(timestamp.toDate());
   String get fileName =>
-      title.replaceAll(RegExp(r'[\s:]'), '-') + '_${userId}_${isMVC ? 'MVCTest' : 'Exercise'}_$progressorId.xlsx';
+      title.replaceAll(RegExp(r'[\n\s:]'), '-') + '_${userId}_${isMVC ? 'MVCTest' : 'Exercise'}_$progressorId.xlsx';
 
   // long task
   Future<void> download() async {

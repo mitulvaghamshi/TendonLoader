@@ -65,7 +65,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       _handler.isSetOver = false;
     } else if (!_handler.isRunning && _hasData) {
       await _onExerciseClose();
-    } else if (await CountDown.start(context) ?? false) {
+    } else if (await CountDown.show(context) ?? false) {
       await startWeightMeasuring();
       exportDataList.clear();
       _handler.isRunning = true;
@@ -97,7 +97,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
     // );
     // if (result ?? false) await _start();
     await Future<void>.microtask(() async {
-      final bool? result = await CountDown.start(
+      final bool? result = await CountDown.show(
         context,
         title: 'Set Over, Rest!!!',
         duration: Duration(seconds: _pre.setRest),
@@ -189,7 +189,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: !_handler.isHold ? colorGoogleGreen : colorRed400,
+                    color: _handler.isHold ? colorGoogleGreen : colorRed400,
                   ),
                 ),
                 const SizedBox(height: 10),

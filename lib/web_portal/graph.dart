@@ -40,7 +40,6 @@ class Graph extends StatelessWidget {
         enablePanning: true,
         enablePinching: true,
         enableSelectionZooming: true,
-        enableDoubleTapZooming: true,
         enableMouseWheelZooming: true,
       ),
       series: <ChartSeries<ChartData, double>>[

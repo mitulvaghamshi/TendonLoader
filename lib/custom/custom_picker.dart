@@ -12,40 +12,39 @@ class CustomPicker extends StatefulWidget {
   @override
   _CustomPickerState createState() => _CustomPickerState();
 
-  static Future<String?> selectTime(BuildContext context) {
+  static Future<String?> show(BuildContext context) {
     int _min = 0;
     int _sec = 0;
     return showDialog<String>(
       context: context,
-      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           scrollable: true,
           title: const Text(
-            'Select Time',
+            'Select Time (m:s)',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 26, fontFamily: 'Georgia', fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 22, color: colorGoogleGreen, fontWeight: FontWeight.bold),
           ),
+          contentPadding: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          content: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <CustomPicker>[
-            CustomPicker(name: 'Min', onChange: (int value) => _min = value),
-            CustomPicker(name: 'Sec', onChange: (int value) => _sec = value),
-          ]),
-          actions: <CustomButton>[
-            CustomButton(
-              color: colorGoogleGreen,
-              text: const Text('Ok'),
-              icon: const Icon(Icons.done_rounded),
-              onPressed: () => Navigator.of(context).pop<String>(
-                Duration(minutes: _min, seconds: _sec).inSeconds.toString(),
+          content: Column(children: <Row>[
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <CustomPicker>[
+              CustomPicker(onChange: (int value) => _min = value),
+              CustomPicker(onChange: (int value) => _sec = value),
+            ]),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <CustomButton>[
+              CustomButton(
+                icon: const Icon(Icons.done_rounded, color: colorGoogleGreen),
+                onPressed: () => Navigator.of(context).pop<String>(
+                  Duration(minutes: _min, seconds: _sec).inSeconds.toString(),
+                ),
               ),
-            ),
-            CustomButton(
-              text: const Text('Cancel'),
-              icon: const Icon(Icons.close_rounded),
-              onPressed: () => Navigator.pop<void>(context),
-            ),
-          ],
+              CustomButton(
+                icon: const Icon(Icons.close_rounded),
+                onPressed: () => Navigator.pop<void>(context),
+              ),
+            ])
+          ]),
         );
       },
     );
@@ -56,19 +55,16 @@ class _CustomPickerState extends State<CustomPicker> {
   int _value = 0;
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-      Text(widget.name!, style: const TextStyle(fontSize: 26)),
-      TimePicker(
-        value: _value,
-        selectedTextStyle: const TextStyle(fontSize: 32),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: colorGoogleGreen),
-        ),
-        onChanged: (int value) {
-          setState(() => widget.onChange!(_value = value));
-        },
+    return TimePicker(
+      value: _value,
+      selectedTextStyle: const TextStyle(fontSize: 32, color: colorGoogleGreen),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(width: 2, color: Theme.of(context).accentColor),
       ),
-    ]);
+      onChanged: (int value) {
+        setState(() => widget.onChange!(_value = value));
+      },
+    );
   }
 }

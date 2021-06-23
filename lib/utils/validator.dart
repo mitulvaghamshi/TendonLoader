@@ -25,6 +25,15 @@ String? validateRestTime(String? restTime) {
   }
 }
 
+String? validateTestDuration(String? duration) {
+  if (duration == null) return null;
+  if (duration.isEmpty) {
+    return '* required';
+  } else if (int.tryParse(duration)! < 0) {
+    return 'Test duration can\'t be negative.';
+  }
+}
+
 String? validateSets(String? sets) {
   if (sets == null) return null;
   if (sets.isEmpty) {

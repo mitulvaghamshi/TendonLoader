@@ -5,13 +5,14 @@ import 'package:flutter/foundation.dart' show Key;
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/utils/extension.dart';
 
+@immutable
 class CountDown extends StatefulWidget {
   const CountDown({Key? key, this.title, this.duration}) : super(key: key);
 
-  final Duration? duration;
   final String? title;
+  final Duration? duration;
 
-  static Future<bool?> start(
+  static Future<bool?> show(
     BuildContext context, {
     String title = 'Session start in',
     Duration duration = const Duration(seconds: 5),

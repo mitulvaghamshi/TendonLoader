@@ -31,7 +31,7 @@ class EnableLocationTile extends StatelessWidget {
       ),
       SizedBox(height: 30),
       CustomButton(
-        text: Text('Open Settings'),
+        child: Text('Open Settings'),
         icon: Icon(Icons.location_on_rounded),
         onPressed: enableLocation,
       ),

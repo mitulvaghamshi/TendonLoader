@@ -9,11 +9,11 @@ import 'package:tendon_loader/web_portal/export_list_item.dart';
 @immutable
 class User {
   const User({
+    this.exports,
+    this.prescription,
     required this.userRef,
     required this.exportRef,
     required this.prescriptionRef,
-    this.prescription,
-    this.exports,
   });
 
   User.of(String id) : this.fromJson(FirebaseFirestore.instance.doc('/$keyBase/$id'));
@@ -69,5 +69,11 @@ class User {
 
   Future<void> download() async {
     exports!.forEach(generateExcel);
+  }
+
+  Future<void> deleteAll() async {
+    for (final Export export in exports!) {
+      await export.delete();
+    }
   }
 }

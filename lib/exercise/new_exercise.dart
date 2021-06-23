@@ -40,14 +40,14 @@ class _NewExerciseState extends State<NewExercise> {
   void _submit() {
     // todo(me): remove explicitely forced true value
     /* const Prescription(sets: 5, reps: 10, holdTime: 10, restTime: 15, targetLoad: 6, setRest: 5), */
-    if (_formKey.currentState!.validate() || true) {
+    if (_formKey.currentState!.validate()) {
       AppStateScope.of(context).prescription = Prescription(
         sets: int.parse(_ctrlSets.text),
         reps: int.parse(_ctrlReps.text),
-        setRest: int.parse(_ctrlSetRest.text),
         holdTime: int.parse(_ctrlHoldTime.text),
         restTime: int.parse(_ctrlRestTime.text),
         targetLoad: double.parse(_ctrlTargetLoad.text),
+        setRest: int.tryParse(_ctrlSetRest.text) ?? 90,
       );
       Navigator.pushReplacementNamed(context, ExerciseMode.route);
     }
@@ -66,14 +66,14 @@ class _NewExerciseState extends State<NewExercise> {
                 'Please enter your\nexercise prescriptions',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 26,
+                  fontSize: 22,
                   fontFamily: 'Georgia',
                   color: colorGoogleGreen,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               CustomTextField(
-                label: 'Target Load (kg)',
+                label: 'Target Load (Kg)',
                 controller: _ctrlTargetLoad,
                 validator: validateTargetLoad,
                 pattern: r'^\d{1,2}(\.\d{0,2})?',
@@ -81,13 +81,13 @@ class _NewExerciseState extends State<NewExercise> {
               ),
               CustomTextField(
                 isPicker: true,
-                label: 'Hold time (sec)',
+                label: 'Hold time (Sec)',
                 controller: _ctrlHoldTime,
                 validator: validateHoldTime,
               ),
               CustomTextField(
                 isPicker: true,
-                label: 'Rest time (sec)',
+                label: 'Rest time (Sec)',
                 controller: _ctrlRestTime,
                 validator: validateRestTime,
               ),
@@ -106,20 +106,19 @@ class _NewExerciseState extends State<NewExercise> {
               CustomTextField(
                 isPicker: true,
                 controller: _ctrlSetRest,
-                label: 'Rest time b/w Sets (sec)',
+                label: 'Rest time b/w Sets (default: 90 Sec)',
               ),
               const SizedBox(height: 30),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
                 CustomButton(
-                  text: const Text('Go'),
-                  color: colorGoogleGreen,
-                  icon: const Icon(Icons.done_rounded),
                   onPressed: _submit,
+                  icon: const Icon(Icons.done_rounded, color: colorGoogleGreen),
+                  child: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
                 ),
                 CustomButton(
-                  text: const Text('Clear all'),
-                  icon: const Icon(Icons.clear_rounded),
                   onPressed: () => _formKey.currentState!.reset(),
+                  icon: const Icon(Icons.clear_rounded),
+                  child: const Text('Clear all'),
                 ),
               ]),
             ]),

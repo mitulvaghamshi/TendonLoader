@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+@immutable
 class AnchorElement {
   const AnchorElement({this.href});
 

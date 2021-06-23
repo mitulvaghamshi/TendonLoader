@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/app_state/app_state_widget.dart';
+import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/utils/item_action.dart';
@@ -21,10 +23,13 @@ class UserListItem extends StatelessWidget {
           subtitle: Text(_user.childCount),
           tilePadding: const EdgeInsets.all(5),
           expandedCrossAxisAlignment: CrossAxisAlignment.start,
-          title: Text(_user.id, style: const TextStyle(fontSize: 18)),
-          leading: CustomButton(text: Text(_user.avatar), color: Colors.blue),
+          leading: CustomButton(onPressed: () {}, color: Colors.blue, child: Text(_user.avatar)),
+          title: Text(
+            _user.id,
+            style: const TextStyle(fontSize: 20, color: colorGoogleGreen, fontWeight: FontWeight.bold),
+          ),
           trailing: PopupMenuButton<ItemAction>(
-            icon: const Icon(Icons.more_vert_rounded),
+            icon: const Icon(Icons.apps_rounded),
             onSelected: (ItemAction action) async {
               if (action == ItemAction.download) {
                 await _user.download();
@@ -37,9 +42,45 @@ class UserListItem extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
                 );
+              } else if (action == ItemAction.delete) {
+                await showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      title: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: const <Widget>[
+                        Icon(Icons.warning_rounded, size: 50),
+                        Text('Do you really want to delete?'),
+                      ]),
+                      actions: <Widget>[
+                        CustomButton(
+                          onPressed: () async {
+                            await _user.deleteAll();
+                            AppStateScope.of(context).removeUser(_user.id);
+                            AppStateWidget.of(context).refresh();
+                          },
+                          icon: const Icon(Icons.delete_rounded, color: colorRed400),
+                          child: const Text('Yes, Delete!', style: TextStyle(color: colorRed400)),
+                        ),
+                        CustomButton(
+                          onPressed: Navigator.of(context).pop,
+                          icon: const Icon(Icons.cancel),
+                          child: const Text('Cencel'),
+                        ),
+                      ],
+                    );
+                  },
+                );
               }
             },
             itemBuilder: (_) => <PopupMenuItem<ItemAction>>[
+              const PopupMenuItem<ItemAction>(
+                value: ItemAction.prescribe,
+                child: ListTile(
+                  title: Text('Prescription'),
+                  leading: Icon(Icons.edit_rounded),
+                ),
+              ),
               const PopupMenuItem<ItemAction>(
                 value: ItemAction.download,
                 child: ListTile(
@@ -48,10 +89,10 @@ class UserListItem extends StatelessWidget {
                 ),
               ),
               const PopupMenuItem<ItemAction>(
-                value: ItemAction.prescribe,
+                value: ItemAction.delete,
                 child: ListTile(
-                  title: Text('Prescription'),
-                  leading: Icon(Icons.app_registration_rounded),
+                  title: Text('Delete all', style: TextStyle(color: colorRed400)),
+                  leading: Icon(Icons.delete_forever_rounded, color: colorRed400),
                 ),
               ),
             ],

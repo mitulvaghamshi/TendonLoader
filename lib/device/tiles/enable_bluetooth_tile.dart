@@ -17,7 +17,7 @@ class EnableBluetoothTile extends StatelessWidget {
         Text(descEnableBluetooth, textAlign: TextAlign.center),
         SizedBox(height: 30),
         CustomButton(
-          text: Text('Open Settings'),
+          child: Text('Open Settings'),
           icon: Icon(Icons.bluetooth_rounded),
           onPressed: openBluetoothSetting,
         ),

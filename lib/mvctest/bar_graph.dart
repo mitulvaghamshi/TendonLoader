@@ -42,7 +42,7 @@ class _BarGraphState extends State<BarGraph> {
   Future<void> _onStart() async {
     if (!_isRunning && _hasData) {
       await _onMVCTestClose();
-    } else if (!_isRunning && (await CountDown.start(context) ?? false)) {
+    } else if (!_isRunning && (await CountDown.show(context) ?? false)) {
       _dateTime = DateTime.now();
       _isComplete = false;
       _isRunning = true;
@@ -102,7 +102,7 @@ class _BarGraphState extends State<BarGraph> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    mvcDuration = AppStateScope.of(context).currentUser.prescription!.mvcDuration!;
+    mvcDuration = AppStateScope.of(context).mvcDuration!;
   }
 
   @override

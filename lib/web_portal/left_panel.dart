@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/app_state/app_state_widget.dart';
+import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/constants/others.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
-import 'package:tendon_loader/web_portal/user_list_item.dart'; 
+import 'package:tendon_loader/web_portal/user_list_item.dart';
+
 class LeftPanel extends StatefulWidget {
   const LeftPanel({Key? key}) : super(key: key);
 
@@ -24,6 +26,7 @@ class _LeftPanelState extends State<LeftPanel> {
       maxWidth: sizeleftPanel,
       child: AppFrame(
         child: RefreshIndicator(
+          color: colorGoogleGreen,
           onRefresh: _onRefresh,
           child: FutureBuilder<void>(
             future: AppStateScope.of(context).fetchAllData(),

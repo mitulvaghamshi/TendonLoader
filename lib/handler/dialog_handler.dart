@@ -4,8 +4,6 @@ import 'package:tendon_loader/constants/descriptions.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
-import 'package:tendon_loader/exercise/auto_exercise.dart';
-import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/handler/app_auth.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
@@ -23,6 +21,13 @@ Future<void> manualExport(BuildContext context) async {
       const SnackBar(content: Text('You have no local data available at this time!')),
     );
   }
+}
+
+Future<void> tryAutoUpload(BuildContext context) async {
+  Future<void>.delayed(const Duration(seconds: 2), () async {
+    final int _records = await checkLocalData();
+    if (_records > 0) await tryUpload(context, _records);
+  });
 }
 
 Future<void> tryUpload(BuildContext context, int records) async {
@@ -54,18 +59,44 @@ Future<void> tryUpload(BuildContext context, int records) async {
   );
 }
 
+Future<void> selectDevice(BuildContext context) async {
+  await checkLocation();
+  await showDialog<void>(
+    context: context,
+    builder: (_) => AlertDialog(
+      scrollable: true,
+      content: const BluetoothTile(),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
+    ),
+  );
+}
+
+Future<bool> onAppClose() async {
+  await Wakelock.disable();
+  await disconnectDevice();
+  await signOut();
+  disposeLocationHandler();
+  disposeGraphData();
+  return true;
+}
+
+void handleTap(BuildContext context, String route) {
+  isDeviceConnected || true ? Navigator.pushNamed(context, route) : selectDevice(context);
+}
+
 void aboutDialog(BuildContext context) {
   showAboutDialog(
     context: context,
     applicationVersion: 'v1.0',
     applicationName: HomeScreen.name,
     // applicationLegalese: 'Application Legalese',
-    applicationIcon: const AppLogo(size: 50),
+    applicationIcon: const AppLogo(radius: 30),
     children: <Widget>[
       const Text(
         'Tendon Loader :Preview',
         textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.blue, fontSize: 18, fontFamily: 'Georgia'),
+        style: TextStyle(color: colorGoogleGreen, fontSize: 18, fontFamily: 'Georgia'),
       ),
       // const SizedBox(height: 20),
       // const Text(
@@ -99,69 +130,14 @@ Future<void> congratulate(BuildContext context) async {
           textAlign: TextAlign.center,
         ),
         actions: <Widget>[
-          TextButton.icon(
-            label: const Text('Next'),
-            icon: const Icon(Icons.arrow_forward),
+          CustomButton(
+            reverce: true,
             onPressed: Navigator.of(context).pop,
+            icon: const Icon(Icons.arrow_forward, color: colorGoogleGreen),
+            child: const Text('Next', style: TextStyle(color: colorGoogleGreen)),
           ),
         ],
       );
     },
   );
-}
-
-Future<void> selectDevice(BuildContext context) async {
-  await checkLocation();
-  await showDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    builder: (_) => AlertDialog(
-      scrollable: true,
-      content: const BluetoothTile(),
-      contentPadding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
-      actions: <Widget>[TextButton(onPressed: () => Navigator.pop(context), child: const Text('Back'))],
-    ),
-  );
-}
-
-Future<void> autoExercise(BuildContext context) async {
-  await showDialog<void>(
-    context: context,
-    builder: (_) => AlertDialog(
-      scrollable: true,
-      content: const AutoExercise(),
-      contentPadding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          const Text('Start Exercise', textAlign: TextAlign.center),
-          CustomButton(
-            text: const Text('Go'),
-            icon: const Icon(Icons.done_rounded),
-            color: const Color.fromRGBO(61, 220, 132, 1),
-            onPressed: () async => Navigator.pushReplacementNamed(context, ExerciseMode.route),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-Future<void> tryAutoUpload(BuildContext context) async {
-  Future<void>.delayed(const Duration(seconds: 2), () async {
-    final int _records = await checkLocalData();
-    if (_records > 0) await tryUpload(context, _records);
-  });
-}
-
-Future<bool> onAppClose() async {
-  await Wakelock.disable();
-  await disconnectDevice();
-  await signOut();
-  disposeLocationHandler();
-  disposeGraphData();
-  return true;
 }

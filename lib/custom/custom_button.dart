@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   const CustomButton({
     Key? key,
-    this.text,
+    this.child,
     this.icon,
     this.color,
     this.onPressed,
+    this.radius = 30,
     this.reverce = false,
-  })  : _extended = text != null && icon != null,
+  })  : _extended = child != null && icon != null,
         super(key: key);
 
   final Icon? icon;
   final Color? color;
-  final Widget? text;
+  final Widget? child;
   final bool reverce;
+  final double radius;
   final bool _extended;
   final VoidCallback? onPressed;
 
@@ -31,13 +33,13 @@ class CustomButton extends StatelessWidget {
           ? Row(
               mainAxisSize: MainAxisSize.min,
               children: reverce
-                  ? <Widget>[text!, const SizedBox(width: 5), icon!]
-                  : <Widget>[icon!, const SizedBox(width: 5), text!])
+                  ? <Widget>[child!, const SizedBox(width: 5), icon!]
+                  : <Widget>[icon!, const SizedBox(width: 5), child!])
           : CircleAvatar(
-              radius: 30,
+              radius: radius,
               backgroundColor: Colors.transparent,
               foregroundColor: color != null ? Colors.white : Theme.of(context).accentColor,
-              child: text ?? icon),
+              child: child ?? icon),
     );
   }
 }

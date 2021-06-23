@@ -5,6 +5,7 @@ import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/handler/export_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
 
+@immutable
 class ConfirmDialog extends StatelessWidget {
   const ConfirmDialog({Key? key, this.export}) : super(key: key);
 
@@ -52,7 +53,7 @@ class ConfirmDialog extends StatelessWidget {
           onTap: () async => _startExport(context, true),
           contentPadding: const EdgeInsets.symmetric(vertical: 5),
           trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-          leading: const Icon(Icons.circle, color: colorYellow400 , size: 50),
+          leading: const Icon(Icons.circle, color: colorYellow400, size: 50),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           subtitle: const Text('Save data locally on device and submit later (manual action required).'),
           title: const Text('Do it later', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),

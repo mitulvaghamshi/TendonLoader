@@ -20,7 +20,7 @@ class _RightPanelState extends State<RightPanel> {
       child: StreamBuilder<Export>(
         stream: exportItemStream,
         builder: (_, AsyncSnapshot<Export> snapshot) {
-          if (!snapshot.hasData) return const Center(child: AppLogo(size: 500));
+          if (!snapshot.hasData) return const Center(child: AppLogo(radius: 300));
           final Export _export = snapshot.data!;
           if (MediaQuery.of(context).size.width > 640) {
             return Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 
+@immutable
 class AppStateWidget extends StatefulWidget {
   const AppStateWidget({Key? key, required this.child}) : super(key: key);
 

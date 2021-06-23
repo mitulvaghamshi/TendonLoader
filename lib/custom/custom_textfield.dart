@@ -37,7 +37,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         IconButton(
             icon: const Icon(Icons.timer_rounded),
             onPressed: () async {
-              final String? result = await CustomPicker.selectTime(context);
+              final String? result = await CustomPicker.show(context);
               if (result != null) widget.controller!.text = result;
             }),
       );

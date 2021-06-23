@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/modal/prescription.dart';
@@ -31,6 +32,12 @@ class _NewPrescriptionState extends State<NewPrescription> {
     _ctrlSetRest.dispose();
     _ctrlMVCDuration.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    init();
   }
 
   Future<void> init() async {
@@ -68,22 +75,20 @@ class _NewPrescriptionState extends State<NewPrescription> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
-            'Please enter new prescriptions',
+            'Enter prescriptions for:\n${AppStateScope.of(context).currentUser.id}',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 26,
-              fontFamily: 'Georgia',
+            style: const TextStyle(
+              fontSize: 22,
+              color: colorGoogleGreen,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).accentColor.withOpacity(0.8),
             ),
           ),
+          const SizedBox(height: 10),
           CustomTextField(
             isPicker: true,
             label: 'MVC Test duration',
             controller: _ctrlMVCDuration,
-            pattern: r'^\d{1,2}(\.\d{0,2})?',
           ),
-          const Divider(thickness: 1),
           CustomTextField(
             label: 'Target Load (kg)',
             controller: _ctrlTargetLoad,
@@ -120,14 +125,13 @@ class _NewPrescriptionState extends State<NewPrescription> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               CustomButton(
-                text: const Text('Save'),
-                icon: const Icon(Icons.done_rounded),
-                color: const Color.fromRGBO(61, 220, 132, 1),
+                child: const Text('Save', style: TextStyle(color: colorGoogleGreen)),
+                icon: const Icon(Icons.done_rounded, color: colorGoogleGreen),
                 onPressed: _submit,
               ),
               CustomButton(
-                text: const Text('Clear all'),
-                icon: const Icon(Icons.clear_rounded),
+                child: const Text('Reset'),
+                icon: const Icon(Icons.refresh),
                 onPressed: () => _formKey.currentState!.reset(),
               ),
             ],

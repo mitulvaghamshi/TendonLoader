@@ -1,11 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/constants/colors.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_table.dart';
+import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/utils/extension.dart';
 
 class AutoExercise extends StatelessWidget {
   const AutoExercise({Key? key}) : super(key: key);
+
+  static Future<void> show(BuildContext context) async {
+    await showDialog<void>(
+      context: context,
+      builder: (_) => AlertDialog(
+        scrollable: true,
+        content: const AutoExercise(),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            const Text('Start Exercise', textAlign: TextAlign.center),
+            CustomButton(
+              reverce: true,
+              icon: const Icon(Icons.arrow_forward_rounded, color: colorGoogleGreen),
+              onPressed: () async => Navigator.pushReplacementNamed(context, ExerciseMode.route),
+              child: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -3,9 +3,9 @@ import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/exercise/auto_exercise.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
-import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
@@ -45,9 +45,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) checkLocation();
   }
 
-  void _handleTap(String route) =>
-      isDeviceConnected || true ? Navigator.pushNamed(context, route) : selectDevice(context);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,31 +58,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         child: AppFrame(
           onExit: onAppClose,
           child: Column(children: <Widget>[
+            const SizedBox(height: 20),
             const AppLogo(),
-            ListTile(
-              onTap: () => _handleTap(LiveData.route),
-              contentPadding: const EdgeInsets.all(16),
-              leading: const CustomButton(icon: Icon(Icons.show_chart_rounded, size: 30)),
-              trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              title: const Text(LiveData.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+            _CustomTile(
+              name: LiveData.name,
+              icon: Icons.show_chart_rounded,
+              onTap: () => handleTap(context, LiveData.route),
             ),
-            ListTile(
-              contentPadding: const EdgeInsets.all(16),
-              leading: const CustomButton(icon: Icon(Icons.directions_run_rounded, size: 30)),
-              trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              title: const Text(ExerciseMode.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              onTap: () =>
-                  AppStateScope.of(context).fieldEditable! ? _handleTap(NewExercise.route) : autoExercise(context),
+            _CustomTile(
+              name: MVCTesting.name,
+              icon: Icons.airline_seat_legroom_extra,
+              onTap: () => NewMVCTest.show(context),
             ),
-            ListTile(
-              contentPadding: const EdgeInsets.all(16),
-              leading: const CustomButton(icon: Icon(Icons.airline_seat_legroom_extra, size: 30)),
-              trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              title: const Text(NewMVCTest.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              onTap: () => _handleTap(AppStateScope.of(context).fieldEditable! ? NewMVCTest.route : MVCTesting.route),
+            _CustomTile(
+              name: ExerciseMode.name,
+              icon: Icons.directions_run_rounded,
+              onTap: () => AppStateScope.of(context).fieldEditable!
+                  ? handleTap(context, NewExercise.route)
+                  : AutoExercise.show(context),
             ),
           ]),
         ),
@@ -95,6 +86,31 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         label: const Text('Connect Device'),
         icon: const Icon(Icons.bluetooth_rounded),
       ),
+    );
+  }
+}
+
+class _CustomTile extends StatelessWidget {
+  const _CustomTile({
+    Key? key,
+    required this.name,
+    required this.icon,
+    required this.onTap,
+  }) : super(key: key);
+
+  final String name;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      contentPadding: const EdgeInsets.all(16),
+      trailing: const Icon(Icons.keyboard_arrow_right_rounded),
+      leading: CustomButton(icon: Icon(icon, size: 30), onPressed: () {}),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Text(name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
     );
   }
 }

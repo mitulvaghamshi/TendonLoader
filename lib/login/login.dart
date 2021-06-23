@@ -78,13 +78,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     _animCtrl = AnimationController(vsync: this, duration: const Duration(seconds: 1))
       ..addStatusListener(_authenticate);
   }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    AppStateScope.of(context).initAppSettings();
-  }
-
+  
   @override
   void dispose() {
     _animCtrl.dispose();
@@ -107,7 +101,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         child: Form(
           key: _formKey,
           child: Column(children: <Widget>[
+            const SizedBox(height: 20),
             const AppLogo(),
+            const SizedBox(height: 20),
             CustomTextField(
               label: 'Username',
               controller: _emailCtrl,
@@ -132,13 +128,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                 color: Theme.of(context).accentColor,
               ),
             ),
-            ElevatedButton(
+            const SizedBox(height: 10),
+            CustomButton(
               onPressed: () => setState(() => _isNew = !_isNew),
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(20)),
-              ),
+              icon: Icon(_isNew ? Icons.check_rounded : Icons.add, color: colorGoogleGreen),
               child: Text(
                 _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
                 style: const TextStyle(letterSpacing: 0.5, color: colorGoogleGreen),

@@ -12,16 +12,15 @@ class AppState {
   bool? autoUpload;
   bool? fieldEditable;
 
-  late int? mvcDuration;
-  late Prescription? prescription;
+  int? mvcDuration;
+  Prescription? prescription;
 
   late final User currentUser;
   final List<User> users = <User>[];
 
   Future<void> initUser(String id) async {
     currentUser = await User.of(id).fetch();
-    prescription = currentUser.prescription;
-    mvcDuration = prescription!.mvcDuration;
+    togglePrescription();
   }
 
   Future<void> initAppSettings() async {
@@ -44,7 +43,18 @@ class AppState {
       '_key_auto_upload': autoUpload,
       '_key_exercise_editable': fieldEditable,
     });
+    togglePrescription();
     return Future<bool>.value(true);
+  }
+
+  void togglePrescription() {
+    if (fieldEditable!) {
+      mvcDuration = null;
+      prescription = null;
+    } else {
+      prescription = currentUser.prescription;
+      mvcDuration = prescription!.mvcDuration;
+    }
   }
 
   Completer<void> _complater = Completer<void>();
@@ -66,5 +76,10 @@ class AppState {
   void removeExport(DocumentReference<Map<String, dynamic>> reference) {
     final int index = users.indexWhere((User user) => user.id == reference.parent.parent!.id);
     users[index].exports?.removeWhere((Export export) => export.reference == reference);
+  }
+
+  void removeUser(String id) {
+    final int index = users.indexWhere((User user) => user.id == id);
+    users[index].exports?.clear();
   }
 }

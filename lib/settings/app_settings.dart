@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/handler/app_auth.dart';
+import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/login/login.dart';
 
 class AppSettings extends StatefulWidget {
@@ -43,14 +44,17 @@ class _AppSettingsState extends State<AppSettings> {
         child: AppFrame(
           onExit: AppStateScope.of(context).updateAppSettings,
           child: Column(children: <Widget>[
-            const AppLogo(size: 150),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
+            const AppLogo(),
+            const SizedBox(height: 20),
+            CustomButton(
+              onPressed: () {},
+              icon: const Icon(Icons.person_rounded, size: 30),
               child: Text(
                 AppStateScope.of(context).currentUser.id,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
+            const SizedBox(height: 20),
             SwitchListTile.adaptive(
               activeColor: colorGoogleGreen,
               title: const Text('Automatic data upload'),
@@ -59,7 +63,7 @@ class _AppSettingsState extends State<AppSettings> {
               subtitle: const Text(
                 'If device is connected to the internet, data is transfered to the cloud right away. '
                 'Or, data stored locally, and auto uploaded on launch.',
-                style: TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: 12, color: colorGoogleGreen),
                 textAlign: TextAlign.justify,
               ),
             ),
@@ -72,7 +76,7 @@ class _AppSettingsState extends State<AppSettings> {
               subtitle: const Text(
                 'If enabled user allowed to fill up their own exercise prescriptions. '
                 'Othervise, it will be auto filled by the clinitian.',
-                style: TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: 12, color: colorGoogleGreen),
                 textAlign: TextAlign.justify,
               ),
             ),

@@ -27,7 +27,7 @@ class _BarGraphState extends State<BarGraph> {
   bool _isRunning = false;
 
   Future<void> _start() async {
-    if (!_isRunning && (_isRunning = await CountDown.start(context) ?? false)) {
+    if (!_isRunning && (_isRunning = await CountDown.show(context) ?? false)) {
       await startWeightMeasuring();
       play(true);
     }

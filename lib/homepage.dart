@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/constants/colors.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/handler/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
@@ -21,12 +22,12 @@ class HomePage extends StatelessWidget {
     final AppBar _appBar = AppBar(title: const Text(name), actions: <Widget>[
       CustomButton(
         reverce: true,
-        text: const Text('Logout'),
-        icon: const Icon(Icons.logout),
         onPressed: () async {
           await signOut();
           await Navigator.pushReplacementNamed(context, Login.route);
         },
+        icon: const Icon(Icons.logout, color: colorRed400),
+        child: const Text('Logout', style: TextStyle(color: colorRed400)),
       ),
     ]);
 
