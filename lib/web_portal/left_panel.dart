@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/app_state/app_state_widget.dart';
-import 'package:tendon_loader/constants/colors.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/constants/others.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
@@ -26,7 +26,7 @@ class _LeftPanelState extends State<LeftPanel> {
       maxWidth: sizeleftPanel,
       child: AppFrame(
         child: RefreshIndicator(
-          color: colorGoogleGreen,
+          color: googleGreen,
           onRefresh: _onRefresh,
           child: FutureBuilder<void>(
             future: AppStateScope.of(context).fetchAllData(),

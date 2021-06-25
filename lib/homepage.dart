@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/constants/colors.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/handler/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
@@ -26,8 +26,8 @@ class HomePage extends StatelessWidget {
           await signOut();
           await Navigator.pushReplacementNamed(context, Login.route);
         },
-        icon: const Icon(Icons.logout, color: colorRed400),
-        child: const Text('Logout', style: TextStyle(color: colorRed400)),
+        icon: const Icon(Icons.logout, color: red400),
+        child: const Text('Logout', style: TextStyle(color: red400)),
       ),
     ]);
 

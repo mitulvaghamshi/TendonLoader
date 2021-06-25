@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/constants/colors.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
@@ -14,7 +14,6 @@ import 'package:tendon_loader/exercise/progress_handler.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
-import 'package:tendon_loader/handler/export_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
@@ -119,17 +118,17 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       exportData: exportDataList,
       isComplate: _handler.isComplete,
       timestamp: Timestamp.fromDate(_dateTime),
-      userId: AppStateScope.of(context).currentUser.id,
+      userId: AppStateScope.of(context).currentUser!.id,
     );
     if (_handler.isRunning) {
       print('running... stop and upload....');
       await stopWeightMeasuring();
-      return submit(_export, false);
+      return submit(context, _export, false);
     }
     print('later stuff...');
-    if (AppStateScope.of(context).autoUpload!) {
+    if (AppStateScope.of(context).settingsState!.autoUpload!) {
       print('auto upload');
-      result = await submit(_export, false);
+      result = await submit(context, _export, false);
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Data stored successfully...'),
@@ -155,7 +154,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _pre = AppStateScope.of(context).currentUser.prescription!;
+    _pre = AppStateScope.of(context).prescription!;
     _handler = ProgressHandler(pre: _pre, onReset: _onReset, onSetOver: _onSetOver);
   }
 
@@ -173,7 +172,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       child: Column(children: <Widget>[
         StreamBuilder<ChartData>(
           stream: graphDataStream,
-          initialData: const ChartData(),
+          initialData: ChartData(),
           builder: (_, AsyncSnapshot<ChartData> snapshot) {
             _graphData.insert(0, snapshot.data!);
             _graphCtrl?.updateDataSource(updatedDataIndex: 0);
@@ -189,7 +188,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: _handler.isHold ? colorGoogleGreen : colorRed400,
+                    color: _handler.isHold ? googleGreen : red400,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -199,7 +198,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
                     _handler.progress,
                     style: const TextStyle(color: Colors.black, fontSize: 36, fontWeight: FontWeight.bold),
                   ),
-                  backgroundColor: snapshot.data!.load! > _pre.targetLoad ? colorGoogleGreen : colorGoogleYellow,
+                  backgroundColor: snapshot.data!.load! > _pre.targetLoad? googleGreen : googleYellow,
                 ),
               ]),
             );

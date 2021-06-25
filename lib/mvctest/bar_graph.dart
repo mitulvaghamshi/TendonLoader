@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/constants/colors.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
@@ -12,7 +12,7 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/clip_player.dart';
-import 'package:tendon_loader/handler/export_handler.dart';
+import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
@@ -25,7 +25,7 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
-  final List<ChartData> _lineData = <ChartData>[const ChartData(), const ChartData(time: 2)];
+  final List<ChartData> _lineData = <ChartData>[ChartData(), ChartData(time: 2)];
   final List<ChartData> _graphData = <ChartData>[];
 
   ChartSeriesController? _graphCtrl;
@@ -63,9 +63,9 @@ class _BarGraphState extends State<BarGraph> {
 
   void _onReset() {
     if (_isRunning) _onStop();
-    _graphData.insert(0, const ChartData());
+    _graphData.insert(0, ChartData());
     _graphCtrl?.updateDataSource(updatedDataIndex: 0);
-    _lineData.insertAll(0, <ChartData>[const ChartData(), const ChartData(time: 2)]);
+    _lineData.insertAll(0, <ChartData>[ChartData(), ChartData(time: 2)]);
     _lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
   }
 
@@ -77,12 +77,12 @@ class _BarGraphState extends State<BarGraph> {
       progressorId: deviceName,
       exportData: exportDataList,
       timestamp: Timestamp.fromDate(_dateTime),
-      userId: AppStateScope.of(context).currentUser.id,
+      userId: AppStateScope.of(context).currentUser!.id,
     );
 
     final bool? result;
-    if (AppStateScope.of(context).autoUpload!) {
-      result = await submit(_export, false);
+    if (AppStateScope.of(context).settingsState!.autoUpload!) {
+      result = await submit(context, _export, false);
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Data stored successfully...'),
@@ -117,7 +117,7 @@ class _BarGraphState extends State<BarGraph> {
       onExit: _onMVCTestClose,
       child: Column(children: <Widget>[
         StreamBuilder<ChartData>(
-          initialData: const ChartData(),
+          initialData: ChartData(),
           stream: graphDataStream,
           builder: (_, AsyncSnapshot<ChartData> snapshot) {
             if (mvcDuration - snapshot.data!.time! == 0) {
@@ -138,12 +138,12 @@ class _BarGraphState extends State<BarGraph> {
               child: Column(children: <Widget>[
                 Text(
                   'MVC: ${_mvcValue.toStringAsFixed(2)} Kg',
-                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: googleGreen, fontSize: 36, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   '⏱ ${(mvcDuration - snapshot.data!.time!).toStringAsFixed(1)} Sec',
-                  style: const TextStyle(color: colorRed400, fontSize: 40, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: red400, fontSize: 40, fontWeight: FontWeight.bold),
                 ),
               ]),
             );

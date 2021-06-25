@@ -99,7 +99,6 @@ Future<void> _getProps() async {
 double lastMinTime = 0;
 bool isDeviceRunning = false;
 final List<ChartData> exportDataList = <ChartData>[];
-// final Map<double, double> eDdata = <double, double>{};
 
 void _listen() {
   if (isDeviceConnected) {
@@ -111,8 +110,6 @@ void _listen() {
           if (time > lastMinTime) {
             lastMinTime = time;
             final ChartData element = ChartData(load: weight, time: time);
-            // eDdata[time] = weight;
-
             exportDataList.add(element);
             graphDataSink.add(element);
           }

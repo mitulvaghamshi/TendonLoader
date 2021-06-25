@@ -1,8 +1,8 @@
 import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/constants/colors.dart';
-import 'package:tendon_loader/handler/export_handler.dart';
+import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
 
 @immutable
@@ -14,18 +14,16 @@ class ConfirmDialog extends StatelessWidget {
   static Future<bool?> show(BuildContext context, {Export? export}) async {
     return showDialog<bool>(
       context: context,
-      barrierDismissible: false,
       builder: (_) => AlertDialog(
         content: ConfirmDialog(export: export),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Submit data to Clinician?', textAlign: TextAlign.center),
-        actions: <Widget>[TextButton(onPressed: () => Navigator.pop(context), child: const Text('Back'))],
       ),
     );
   }
 
   Future<void> _startExport(BuildContext context, [bool later = false]) async {
-    final bool result = await submit(export!, later);
+    final bool result = await submit(context, export!, later);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(result
             ? later
@@ -44,7 +42,7 @@ class ConfirmDialog extends StatelessWidget {
           onTap: () async => _startExport(context),
           contentPadding: const EdgeInsets.symmetric(vertical: 5),
           trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-          leading: const Icon(Icons.circle, color: colorGoogleGreen, size: 50),
+          leading: const Icon(Icons.circle, color: googleGreen, size: 50),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           subtitle: const Text('Send data to the cloud. Requires an active internet connection.'),
           title: const Text('Submit now', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
@@ -53,7 +51,7 @@ class ConfirmDialog extends StatelessWidget {
           onTap: () async => _startExport(context, true),
           contentPadding: const EdgeInsets.symmetric(vertical: 5),
           trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-          leading: const Icon(Icons.circle, color: colorYellow400, size: 50),
+          leading: const Icon(Icons.circle, color: yellow400, size: 50),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           subtitle: const Text('Save data locally on device and submit later (manual action required).'),
           title: const Text('Do it later', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
@@ -62,7 +60,7 @@ class ConfirmDialog extends StatelessWidget {
           onTap: () async => Navigator.pop<bool>(context, false),
           contentPadding: const EdgeInsets.symmetric(vertical: 5),
           trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-          leading: const Icon(Icons.circle, color: colorRed400, size: 50),
+          leading: const Icon(Icons.circle, color: red400, size: 50),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           subtitle: const Text('(Attention!) Destroy data without submitting (cannot be recovered).'),
           title: const Text('Discard!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),

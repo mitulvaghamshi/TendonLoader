@@ -21,16 +21,16 @@ class ScannerTile extends StatelessWidget {
             Column(mainAxisSize: MainAxisSize.min, children: const <Widget>[
               CustomProgress(text: 'Scanning...'),
               CustomButton(
-                child: Text('Stop'),
                 icon: Icon(Icons.close_rounded),
                 onPressed: stopDeviceScan,
+                child: Text('Stop'),
               ),
             ])
           else
             const CustomButton(
-              child: Text('Scan'),
               icon: Icon(Icons.search_rounded),
               onPressed: startDeviceScan,
+              child: Text('Scan'),
             ),
         ]);
       },

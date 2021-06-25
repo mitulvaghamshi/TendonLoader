@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/constants/colors.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/time_picker.dart';
 
@@ -23,7 +23,7 @@ class CustomPicker extends StatefulWidget {
           title: const Text(
             'Select Time (m:s)',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 22, color: colorGoogleGreen, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 22, color: googleGreen, fontWeight: FontWeight.bold),
           ),
           contentPadding: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -34,7 +34,7 @@ class CustomPicker extends StatefulWidget {
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <CustomButton>[
               CustomButton(
-                icon: const Icon(Icons.done_rounded, color: colorGoogleGreen),
+                icon: const Icon(Icons.done_rounded, color: googleGreen),
                 onPressed: () => Navigator.of(context).pop<String>(
                   Duration(minutes: _min, seconds: _sec).inSeconds.toString(),
                 ),
@@ -57,7 +57,7 @@ class _CustomPickerState extends State<CustomPicker> {
   Widget build(BuildContext context) {
     return TimePicker(
       value: _value,
-      selectedTextStyle: const TextStyle(fontSize: 32, color: colorGoogleGreen),
+      selectedTextStyle: const TextStyle(fontSize: 32, color: googleGreen),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(width: 2, color: Theme.of(context).accentColor),

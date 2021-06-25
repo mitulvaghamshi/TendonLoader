@@ -1,15 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/constants/colors.dart';
-import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/constants/others.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/handler/app_auth.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/utils/validator.dart';
 
 class Login extends StatefulWidget {
@@ -26,41 +24,22 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late AnimationController _animCtrl;
+  late final AnimationController _animCtrl = AnimationController(vsync: this, duration: const Duration(seconds: 1))
+    ..addStatusListener(_authenticate);
 
-  bool _result = false;
   bool _isNew = false;
+  bool _result = false;
   bool _keepSigned = true;
-
-  void _getUser() {
-    final Box<Map<dynamic, dynamic>> _loginBox = Hive.box(keyLoginBox);
-    if (_loginBox.containsKey(keyLoginBox)) {
-      final Map<String, dynamic> _login = Map<String, dynamic>.from(_loginBox.get(keyLoginBox)!);
-      setState(() {
-        _keepSigned = _login[keyKeepLoggedIn] as bool? ?? true;
-        if (_keepSigned) {
-          _emailCtrl.text = _login[keyUsername] as String? ?? '';
-          _passwordCtrl.text = _login[keyPassword] as String? ?? '';
-        }
-      });
-    }
-  }
-
-  Future<void> _setUser() async {
-    final Map<String, dynamic> _login = <String, dynamic>{keyKeepLoggedIn: _keepSigned};
-    if (_keepSigned) {
-      _login[keyUsername] = _emailCtrl.text;
-      _login[keyPassword] = _passwordCtrl.text;
-    }
-    await Hive.box<Map<dynamic, dynamic>>(keyLoginBox).put(keyLoginBox, _login);
-    await AppStateScope.of(context).initUser(_emailCtrl.text);
-  }
 
   Future<void> _authenticate(AnimationStatus status) async {
     if (status == AnimationStatus.forward) {
-      if (_formKey.currentState!.validate()) {
-        _result = await authenticate(context, _isNew, _emailCtrl.text, _passwordCtrl.text);
-        if (_result) await _setUser();
+      _result = await authenticate(context, _isNew, _emailCtrl.text, _passwordCtrl.text);
+      if (_result) {
+        AppStateScope.of(context).userState!
+          ..keepSigned = _keepSigned
+          ..userName = _emailCtrl.text
+          ..passWord = _passwordCtrl.text;
+        await AppStateScope.of(context).initAppUser();
       }
     } else if (status == AnimationStatus.completed) {
       if (_result) {
@@ -72,13 +51,15 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _getUser();
-    _animCtrl = AnimationController(vsync: this, duration: const Duration(seconds: 1))
-      ..addStatusListener(_authenticate);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _keepSigned = AppStateScope.of(context).userState!.keepSigned!;
+    if (_keepSigned) {
+      _emailCtrl.text = AppStateScope.of(context).userState!.userName!;
+      _passwordCtrl.text = AppStateScope.of(context).userState!.passWord!;
+    }
   }
-  
+
   @override
   void dispose() {
     _animCtrl.dispose();
@@ -131,10 +112,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
             const SizedBox(height: 10),
             CustomButton(
               onPressed: () => setState(() => _isNew = !_isNew),
-              icon: Icon(_isNew ? Icons.check_rounded : Icons.add, color: colorGoogleGreen),
+              icon: Icon(_isNew ? Icons.check_rounded : Icons.add, color: googleGreen),
               child: Text(
                 _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
-                style: const TextStyle(letterSpacing: 0.5, color: colorGoogleGreen),
+                style: const TextStyle(letterSpacing: 0.5, color: googleGreen),
               ),
             ),
             const SizedBox(height: 10),
@@ -143,8 +124,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
               child: RotationTransition(
                 turns: Tween<double>(begin: 0.0, end: 1.0).animate(_animCtrl),
                 child: CustomButton(
-                  onPressed: _animCtrl.forward,
                   icon: Icon(_isNew ? Icons.add : Icons.send_rounded),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) _animCtrl.forward();
+                  },
                 ),
               ),
             ),

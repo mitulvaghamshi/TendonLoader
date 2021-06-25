@@ -45,7 +45,7 @@ class ProgressHandler {
         isHold = false;
         reps++;
         lapTimer = pre.restTime;
-        if (reps > pre.reps && rests > pre.reps - 1) {
+        if (reps > pre.reps&& rests > pre.reps- 1) {
           sets++;
           if (sets > pre.sets) {
             isComplete = true;

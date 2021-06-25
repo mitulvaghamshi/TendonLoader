@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/constants/colors.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 
 class CustomGraph extends StatelessWidget {
@@ -25,7 +25,7 @@ class CustomGraph extends StatelessWidget {
           primaryYAxis: NumericAxis(
             labelFormat: '{value} kg',
             axisLine: const AxisLine(width: 0),
-            maximum: AppStateScope.of(context).graphSize,
+            maximum: AppStateScope.of(context).settingsState!.graphSize,
             majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
             labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
@@ -35,7 +35,7 @@ class CustomGraph extends StatelessWidget {
               borderWidth: 1,
               animationDuration: 0,
               dataSource: graphData!,
-              color: colorGoogleGreen,
+              color: googleGreen,
               onRendererCreated: graphCtrl,
               dataLabelSettings: DataLabelSettings(
                 isVisible: true,
@@ -57,7 +57,7 @@ class CustomGraph extends StatelessWidget {
             if (lineData != null)
               LineSeries<ChartData, int>(
                 width: 5,
-                color: colorRed400,
+                color: red400,
                 animationDuration: 0,
                 dataSource: lineData!,
                 onRendererCreated: lineCtrl,

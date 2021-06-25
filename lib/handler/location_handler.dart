@@ -10,7 +10,11 @@ Stream<bool> get locationStream => _controller.stream;
 
 Future<void> enableLocation() async => AppSettings.openLocationSettings();
 
-Future<void> checkLocation() async => _controller.sink.add(await Location.instance.serviceEnabled());
+Future<void> checkLocation() async {
+  if (!_controller.isClosed) {
+    _controller.sink.add(await Location.instance.serviceEnabled());
+  }
+}
 
 void disposeLocationHandler() {
   if (!_controller.isClosed) _controller.close();

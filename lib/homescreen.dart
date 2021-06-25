@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(HomeScreen.name), actions: <Widget>[
+      appBar: AppBar(automaticallyImplyLeading: false, title: const Text(HomeScreen.name), actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.settings_rounded),
           onPressed: () async => Navigator.pushNamed(context, AppSettings.route),
@@ -64,19 +64,53 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             _CustomTile(
               name: LiveData.name,
               icon: Icons.show_chart_rounded,
-              onTap: () => handleTap(context, LiveData.route),
+              onTap: () => navigateTo(context, LiveData.route),
             ),
             _CustomTile(
               name: MVCTesting.name,
               icon: Icons.airline_seat_legroom_extra,
-              onTap: () => NewMVCTest.show(context),
+              onTap: () {
+                if (AppStateScope.of(context).settingsState!.customPrescriptions!) {
+                  navigateTo(context, NewMVCTest.route);
+                } else {
+                  if (AppStateScope.of(context).mvcDuration != null) {
+                    navigateTo(context, MVCTesting.route);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'No MVC test available, '
+                          'please contact your clinician or '
+                          'turn on editable exercise in settings.',
+                        ),
+                      ),
+                    );
+                  }
+                }
+              },
             ),
             _CustomTile(
               name: ExerciseMode.name,
               icon: Icons.directions_run_rounded,
-              onTap: () => AppStateScope.of(context).fieldEditable!
-                  ? handleTap(context, NewExercise.route)
-                  : AutoExercise.show(context),
+              onTap: () {
+                if (AppStateScope.of(context).settingsState!.customPrescriptions!) {
+                  navigateTo(context, NewExercise.route);
+                } else {
+                  if (AppStateScope.of(context).prescription != null) {
+                    AutoExercise.show(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'No exercise prescription available, '
+                          'please contact your clinician or '
+                          'turn on editable exercise in settings.',
+                        ),
+                      ),
+                    );
+                  }
+                }
+              },
             ),
           ]),
         ),

@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/constants/colors.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 final Map<String, String> _errors = <String, String>{
   'email-already-in-use': 'The account already exists for that email.',
@@ -23,7 +22,7 @@ Future<void> initApp() async {
 Future<void> signOut() async {
   try {
     await FirebaseAuth.instance.signOut();
-  } catch (_) {}
+  } finally {}
 }
 
 Future<bool> authenticate(BuildContext context, bool isNew, String email, String password) async {
@@ -35,17 +34,16 @@ Future<bool> authenticate(BuildContext context, bool isNew, String email, String
   } on FirebaseAuthException catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(_errors[e.code] ?? 'Unable to Login/Register. Try again later.',
-            style: const TextStyle(color: colorRed400, fontWeight: FontWeight.bold))));
+            style: const TextStyle(color: red400, fontWeight: FontWeight.bold))));
     return false;
   }
 }
 
 Future<void> _useEmulator() async {
-  final String host = defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost';
-  await FirebaseAuth.instance.useEmulator('http://$host:9099');
-  FirebaseFirestore.instance.settings = Settings(
-    host: '$host:8080',
+  await FirebaseAuth.instance.useEmulator('http://10.0.0.107:9099');
+  FirebaseFirestore.instance.settings = const Settings(
     sslEnabled: false,
+    host: '10.0.0.107:8080',
     persistenceEnabled: false,
   );
 }

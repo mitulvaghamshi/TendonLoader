@@ -2,7 +2,7 @@ import 'dart:async'  ;
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' ;
-import 'package:tendon_loader/constants/colors.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
@@ -54,7 +54,7 @@ class _BarGraphState extends State<BarGraph> {
       child: Column(
         children: <Widget>[
           StreamBuilder<ChartData>(
-            initialData: const ChartData(),
+            initialData: ChartData(),
             stream: graphDataStream,
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
               _graphData.insert(0, snapshot.data);
@@ -63,7 +63,7 @@ class _BarGraphState extends State<BarGraph> {
                 fit: BoxFit.fitWidth,
                 child: Text(
                   snapshot.data!.time!.toTime,
-                  style: const TextStyle(color: colorGoogleGreen, fontSize: 40, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: googleGreen, fontSize: 40, fontWeight: FontWeight.bold),
                 ),
               );
             },

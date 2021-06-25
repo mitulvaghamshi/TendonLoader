@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/constants/colors.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 
@@ -45,7 +45,7 @@ class Graph extends StatelessWidget {
       series: <ChartSeries<ChartData, double>>[
         LineSeries<ChartData, double>(
           width: 2,
-          color: colorGoogleGreen,
+          color: googleGreen,
           animationDuration: 3000,
           dataSource: export.exportData,
           xValueMapper: (ChartData data, _) => data.time,
@@ -53,7 +53,7 @@ class Graph extends StatelessWidget {
         ),
         LineSeries<ChartData, double>(
           width: 2,
-          color: colorRed400,
+          color: red400,
           animationDuration: 1000,
           xValueMapper: (ChartData data, _) => data.time,
           yValueMapper: (ChartData data, _) => data.load,
