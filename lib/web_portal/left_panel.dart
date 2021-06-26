@@ -5,7 +5,7 @@ import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/constants/others.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
-import 'package:tendon_loader/web_portal/user_list_item.dart';
+import 'package:tendon_loader/web_portal/custom/user_list_item.dart';
 
 class LeftPanel extends StatefulWidget {
   const LeftPanel({Key? key}) : super(key: key);

@@ -6,7 +6,7 @@ import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/handler/app_auth.dart';
+import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/utils/validator.dart';
 
@@ -71,7 +71,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tendon Loader - ${_isNew ? 'Register' : 'Login'}')),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text('Tendon Loader - ${_isNew ? 'Register' : 'Login'}'),
+      ),
       body: kIsWeb ? Center(child: SizedBox(width: sizeleftPanel, child: _buildLoginBody())) : _buildLoginBody(),
     );
   }

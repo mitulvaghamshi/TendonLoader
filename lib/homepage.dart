@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/handler/app_auth.dart';
+import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/web_portal/left_panel.dart';
 import 'package:tendon_loader/web_portal/right_panel.dart';
 
@@ -14,10 +14,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (AppAuth.user() == null) {
-    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Session timed out, please login again!!!')));
-    //   Navigator.pushReplacementNamed(context, Login.route);
-    // }
+    if (currentUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalid Access!!!, Please Login...')));
+      Navigator.pushReplacementNamed(context, Login.route);
+    }
 
     final AppBar _appBar = AppBar(title: const Text(name), actions: <Widget>[
       CustomButton(

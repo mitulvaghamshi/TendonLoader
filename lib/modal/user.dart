@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tendon_loader/constants/keys.dart';
-import 'package:tendon_loader/handler/excel_handler.dart';
+import 'package:tendon_loader/web_portal/handler/excel_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
-import 'package:tendon_loader/web_portal/export_list_item.dart';
+import 'package:tendon_loader/web_portal/custom/export_list_item.dart';
 
 part 'user.g.dart';
 
@@ -78,7 +78,7 @@ class User extends HiveObject {
     exports!.forEach(generateExcel);
   }
 
-  Future<void> deleteAll() async {
+  Future<void> deleteAllExports() async {
     for (final Export export in exports!) {
       await export.deleteExport();
     }

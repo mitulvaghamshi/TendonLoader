@@ -1,11 +1,16 @@
 import 'dart:async';
 
 import 'package:app_settings/app_settings.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/constants/progressor.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/utils/extension.dart';
+
+//
+late bool simulateBT;
+//
 
 BluetoothDevice? _device;
 BluetoothCharacteristic? _dataChar;
@@ -29,18 +34,29 @@ Future<void> setDataNotification(bool value) async {
 }
 
 Future<void> startWeightMeasuring() async {
-  if (!isDeviceRunning) {
-    // await _write(cmdStartWeightMeasurement);
-    fakelisten(); // simulator
-    isDeviceRunning = true;
+  if (!isSessionRunning) {
+    //
+    if (simulateBT) {
+      _fakeListen(); // simulator
+    } else {
+      await _write(cmdStartWeightMeasurement);
+    }
+    //
+    timestamp = Timestamp.now();
+    isSessionRunning = true;
   }
 }
 
 Future<void> stopWeightMeasuring() async {
-  if (isDeviceRunning) {
-    // await _write(cmdStopWeightMeasuremnt);
-    timer?.cancel(); // simulator
-    isDeviceRunning = false;
+  if (isSessionRunning) {
+    //
+    if (simulateBT) {
+      _timer?.cancel(); // simulator
+    } else {
+      await _write(cmdStopWeightMeasuremnt);
+    }
+    //
+    isSessionRunning = false;
     lastMinTime = 0;
     clearGraphData();
   }
@@ -93,17 +109,18 @@ Future<void> _getProps() async {
     }
   }
   await setDataNotification(true);
-  _listen();
+  _addListener();
 }
 
 double lastMinTime = 0;
-bool isDeviceRunning = false;
+late Timestamp timestamp;
+bool isSessionRunning = false;
 final List<ChartData> exportDataList = <ChartData>[];
 
-void _listen() {
+void _addListener() {
   if (isDeviceConnected) {
     _dataChar!.value.listen((List<int> data) {
-      if (isDeviceRunning && data.isNotEmpty && data[0] == resWeightMeasurement) {
+      if (isSessionRunning && data.isNotEmpty && data[0] == resWeightMeasurement) {
         for (int x = 2; x < data.length; x += 8) {
           final double weight = data.getRange(x, x + 4).toList().toWeight;
           final double time = data.getRange(x + 4, x + 8).toList().toTime;
@@ -120,12 +137,12 @@ void _listen() {
 }
 
 // simulator
-late Timer? timer;
+late Timer? _timer;
 
 // simulator
-void fakelisten() {
+void _fakeListen() {
   double fakeLoad = 0;
-  timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+  _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
     final ChartData element = ChartData(load: fakeLoad += 2, time: timer.tick.toDouble());
     exportDataList.add(element);
     graphDataSink.add(element);

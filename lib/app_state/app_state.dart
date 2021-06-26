@@ -2,13 +2,14 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:tendon_loader/app_state/initializer.dart';
-import 'package:tendon_loader/app_state/settings_state.dart';
-import 'package:tendon_loader/app_state/user_state.dart';
 import 'package:tendon_loader/constants/keys.dart';
+import 'package:tendon_loader/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/login/initializer.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
+import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/user.dart';
+import 'package:tendon_loader/modal/user_state.dart';
 
 class AppState {
   UserState? userState;
@@ -21,6 +22,9 @@ class AppState {
   final List<User> users = <User>[];
 
   Future<void> initAppUser() async {
+    //
+    simulateBT = false;
+    //
     if (userState!.isInBox) {
       await userState!.save();
     } else {

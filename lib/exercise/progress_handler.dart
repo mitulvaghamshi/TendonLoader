@@ -30,7 +30,7 @@ class ProgressHandler {
   String get lapTime => '${isHold ? 'Hold' : 'Rest'}: $lapTimer Sec';
   String get progress => 'Set: $sets/${pre.sets} • Rep: $reps/${pre.reps}';
 
-  void reset() {
+  void _clear() {
     isHold = true;
     isSetOver = false;
     sets = 1;
@@ -50,7 +50,7 @@ class ProgressHandler {
           if (sets > pre.sets) {
             isComplete = true;
             onReset();
-            reset();
+            _clear();
           } else {
             onSetOver();
             rests = 1;

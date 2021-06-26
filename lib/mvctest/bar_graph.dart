@@ -1,21 +1,18 @@
 import 'dart:async' show Future;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/custom/confirm_dialod.dart';
-import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
-import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/utils/clip_player.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key}) : super(key: key);
@@ -27,69 +24,62 @@ class BarGraph extends StatefulWidget {
 class _BarGraphState extends State<BarGraph> {
   final List<ChartData> _lineData = <ChartData>[ChartData(), ChartData(time: 2)];
   final List<ChartData> _graphData = <ChartData>[];
-
   ChartSeriesController? _graphCtrl;
   ChartSeriesController? _lineCtrl;
   late final int mvcDuration;
-  late DateTime _dateTime;
-
   bool _isComplete = false;
   bool _isRunning = false;
   bool _hasData = false;
-
-  double _mvcValue = 0;
+  double _maxForce = 0;
 
   Future<void> _onStart() async {
     if (!_isRunning && _hasData) {
-      await _onMVCTestClose();
-    } else if (!_isRunning && (await CountDown.show(context) ?? false)) {
-      _dateTime = DateTime.now();
+      await _onExit();
+    } else if (!_isRunning && (await startCountdown(context) ?? false)) {
       _isComplete = false;
       _isRunning = true;
       _hasData = true;
-      _mvcValue = 0;
+      _maxForce = 0;
       play(true);
       exportDataList.clear();
       await startWeightMeasuring();
     }
   }
 
-  void _onStop() {
-    stopWeightMeasuring();
+  Future<void> _onStop() async {
     _isRunning = false;
     play(false);
-    Future<void>.delayed(const Duration(seconds: 1), _onMVCTestClose);
+    await stopWeightMeasuring();
+    if (_hasData) await Future<void>.microtask(_onExit);
   }
 
-  void _onReset() {
-    if (_isRunning) _onStop();
+  Future<void> _onReset() async {
+    if (_isRunning) await _onStop();
     _graphData.insert(0, ChartData());
     _graphCtrl?.updateDataSource(updatedDataIndex: 0);
     _lineData.insertAll(0, <ChartData>[ChartData(), ChartData(time: 2)]);
     _lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
   }
 
-  Future<bool> _onMVCTestClose() async {
+  Future<bool> _onExit() async {
     if (!_hasData) return true;
     final Export _export = Export(
-      mvcValue: _mvcValue,
+      mvcValue: _maxForce,
+      timestamp: timestamp,
       isComplate: _isComplete,
       progressorId: deviceName,
       exportData: exportDataList,
-      timestamp: Timestamp.fromDate(_dateTime),
       userId: AppStateScope.of(context).currentUser!.id,
     );
-
+    if (_isRunning) {
+      await stopWeightMeasuring();
+      return submitData(context, _export, false);
+    }
     final bool? result;
     if (AppStateScope.of(context).settingsState!.autoUpload!) {
-      result = await submit(context, _export, false);
-      if (result) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Data stored successfully...'),
-        ));
-      }
+      result = await submitData(context, _export, false);
     } else {
-      result = await ConfirmDialog.show(context, export: _export);
+      result = await confirmSubmit(context, _export);
     }
     if (result == null) {
       return false;
@@ -114,7 +104,7 @@ class _BarGraphState extends State<BarGraph> {
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      onExit: _onMVCTestClose,
+      onExit: _onExit,
       child: Column(children: <Widget>[
         StreamBuilder<ChartData>(
           initialData: ChartData(),
@@ -123,11 +113,11 @@ class _BarGraphState extends State<BarGraph> {
             if (mvcDuration - snapshot.data!.time! == 0) {
               _isComplete = true;
               if (_isRunning) _onStop();
-            } else if (snapshot.data!.load! > _mvcValue) {
-              _mvcValue = snapshot.data!.load!;
+            } else if (snapshot.data!.load! > _maxForce) {
+              _maxForce = snapshot.data!.load!;
               _lineData.insertAll(0, <ChartData>[
-                ChartData(load: _mvcValue),
-                ChartData(time: 2, load: _mvcValue),
+                ChartData(load: _maxForce),
+                ChartData(time: 2, load: _maxForce),
               ]);
               _lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
             }
@@ -137,7 +127,7 @@ class _BarGraphState extends State<BarGraph> {
               fit: BoxFit.fitWidth,
               child: Column(children: <Widget>[
                 Text(
-                  'MVC: ${_mvcValue.toStringAsFixed(2)} Kg',
+                  'MVC: ${_maxForce.toStringAsFixed(2)} Kg',
                   style: const TextStyle(color: googleGreen, fontSize: 36, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),

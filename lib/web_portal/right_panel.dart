@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
-import 'package:tendon_loader/handler/click_handler.dart';
-import 'package:tendon_loader/web_portal/data_view.dart';
-import 'package:tendon_loader/web_portal/graph.dart';
+import 'package:tendon_loader/web_portal/handler/click_handler.dart';
+import 'package:tendon_loader/web_portal/custom/data_view.dart';
+import 'package:tendon_loader/web_portal/custom/graph.dart';
 
 class RightPanel extends StatefulWidget {
   const RightPanel({Key? key}) : super(key: key);

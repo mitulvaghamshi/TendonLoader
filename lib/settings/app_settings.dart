@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/app_state/app_state_widget.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/handler/app_auth.dart';
+import 'package:tendon_loader/handler/bluetooth_handler.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
+import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
+import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class AppSettings extends StatefulWidget {
@@ -19,7 +22,10 @@ class AppSettings extends StatefulWidget {
 }
 
 class _AppSettingsState extends State<AppSettings> {
-  final TextEditingController _ctrlGraphSize = TextEditingController();
+  late final TextEditingController _ctrlGraphSize = TextEditingController()
+    ..addListener(() {
+      AppStateScope.of(context).settingsState!.graphSize = double.tryParse(_ctrlGraphSize.text) ?? 30;
+    });
 
   @override
   void dispose() {
@@ -28,22 +34,33 @@ class _AppSettingsState extends State<AppSettings> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _ctrlGraphSize.addListener(() {
-      AppStateScope.of(context).settingsState!.graphSize = double.tryParse(_ctrlGraphSize.text) ?? 30;
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _ctrlGraphSize.text = AppStateScope.of(context).settingsState!.graphSize.toString();
   }
 
   @override
   Widget build(BuildContext context) {
-    _ctrlGraphSize.text = AppStateScope.of(context).settingsState!.graphSize.toString();
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: SingleChildScrollView(
         child: AppFrame(
           onExit: () => AppStateScope.of(context).settingsState!.save().then((_) => true),
           child: Column(children: <Widget>[
+            //
+            SwitchListTile.adaptive(
+              value: simulateBT,
+              tileColor: Colors.red,
+              activeColor: googleGreen,
+              title: const Text('Use without progressor', style: TextStyle(color: Colors.white, fontSize: 20)),
+              onChanged: (bool value) => setState(() => simulateBT = value),
+              subtitle: const Text(
+                  'Use app without the progressor, generate and submit fake data '
+                  'for MVC and Exercise Mode, testing perpose only!',
+                  style: TextStyle(color: Colors.white)),
+            ),
+            const SizedBox(height: 20),
+            //
             const AppLogo(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
@@ -91,7 +108,25 @@ class _AppSettingsState extends State<AppSettings> {
               ),
             ),
             const SizedBox(height: 10),
-            ListTile(title: const Text('Export data'), onTap: () async => manualExport(context)),
+            ListTile(
+              trailing: CustomButton(
+                child: Text(
+                  localDataCount.toString(),
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: red400),
+                ),
+              ),
+              title: const Text('Export locallly stored data'),
+              onTap: () async {
+                if (localDataCount > 0) {
+                  await Future<void>.microtask(() => tryUpload(context));
+                  AppStateWidget.of(context).refresh();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('No data available! or already submitted.'),
+                  ));
+                }
+              },
+            ),
             const Divider(thickness: 2),
             ListTile(title: const Text('About'), onTap: () => aboutDialog(context)),
             const Divider(thickness: 2),

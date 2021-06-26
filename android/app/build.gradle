@@ -79,12 +79,10 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            // proguardFiles getDefaultProguardFile('proguard-android.txt')
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             shrinkResources true
             multiDexEnabled true
             minifyEnabled true
-
             ndk {
                 debugSymbolLevel 'FULL'
             }
@@ -97,7 +95,7 @@ flutter {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.20'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation platform('com.google.firebase:firebase-bom:28.0.1')
     implementation 'com.google.firebase:firebase-analytics'

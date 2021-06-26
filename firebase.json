@@ -16,5 +16,13 @@
       "host": "10.0.0.107",
       "enabled": true
     }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
   }
 }

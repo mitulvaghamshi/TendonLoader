@@ -7,22 +7,10 @@ import 'package:tendon_loader/utils/extension.dart';
 
 @immutable
 class CountDown extends StatefulWidget {
-  const CountDown({Key? key, this.title, this.duration}) : super(key: key);
+  const CountDown({Key? key, required this.title, required this.duration}) : super(key: key);
 
-  final String? title;
-  final Duration? duration;
-
-  static Future<bool?> show(
-    BuildContext context, {
-    String title = 'Session start in',
-    Duration duration = const Duration(seconds: 5),
-  }) {
-    return showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => CountDown(title: title, duration: duration + const Duration(seconds: 1)),
-    );
-  }
+  final String title;
+  final Duration duration;
 
   @override
   _CountDownState createState() => _CountDownState();
@@ -34,7 +22,7 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: widget.duration);
+    _controller = AnimationController(vsync: this, duration: widget.duration + const Duration(seconds: 1));
     _controller.reverse(from: _controller.value == 0.0 ? 1.0 : _controller.value);
     _controller.addStatusListener((_) => Navigator.pop<bool>(context, true));
   }
@@ -54,7 +42,7 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
           padding: const EdgeInsets.all(10),
           backgroundColor: Theme.of(context).accentColor,
           label: Text(
-            widget.title!,
+            widget.title,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 30, color: Theme.of(context).primaryColor),
           ),

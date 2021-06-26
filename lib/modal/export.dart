@@ -4,9 +4,9 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/constants/keys.dart';
-import 'package:tendon_loader/handler/excel_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/prescription.dart';
+import 'package:tendon_loader/web_portal/handler/excel_handler.dart';
 
 part 'export.g.dart';
 
@@ -79,7 +79,7 @@ class Export extends HiveObject {
   }
 
   Future<bool> upload(BuildContext context) async {
-    late bool? result;
+    late bool result;
     try {
       await AppStateScope.of(context).currentUser!.exportRef!.doc().set(this);
       result = true;

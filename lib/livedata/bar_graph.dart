@@ -1,17 +1,17 @@
-import 'dart:async'  ;
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart' ;
-import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/custom/countdown.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
-import 'package:tendon_loader/handler/clip_player.dart';
+import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/utils/clip_player.dart';
+import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key}) : super(key: key);
@@ -27,17 +27,17 @@ class _BarGraphState extends State<BarGraph> {
   bool _isRunning = false;
 
   Future<void> _start() async {
-    if (!_isRunning && (_isRunning = await CountDown.show(context) ?? false)) {
-      await startWeightMeasuring();
+    if (!_isRunning && (_isRunning = await startCountdown(context) ?? false)) {
       play(true);
+      await startWeightMeasuring();
     }
   }
 
-  void _reset() {
+  Future<void> _reset() async {
     if (_isRunning) {
       _isRunning = false;
       play(false);
-      stopWeightMeasuring();
+      await stopWeightMeasuring();
       exportDataList.clear();
     }
   }

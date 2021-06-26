@@ -1,23 +1,20 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/custom/confirm_dialod.dart';
-import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/exercise/progress_handler.dart';
 import 'package:tendon_loader/handler/bluetooth_handler.dart';
-import 'package:tendon_loader/handler/clip_player.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
+import 'package:tendon_loader/utils/clip_player.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 class BarGraph extends StatefulWidget {
   const BarGraph({Key? key}) : super(key: key);
@@ -29,17 +26,12 @@ class BarGraph extends StatefulWidget {
 class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
   final List<ChartData> _graphData = <ChartData>[];
   ChartSeriesController? _graphCtrl;
-
   late final ProgressHandler _handler;
   late final Prescription _pre;
-
-  late DateTime _dateTime;
-
   bool _hasData = false;
   int _minSec = 0;
 
   // late Timer? _exitTimer;
-
   // @override
   // void didChangeAppLifecycleState(AppLifecycleState state) {
   //   if (state == AppLifecycleState.paused && isDeviceRunning) {
@@ -63,40 +55,33 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
     if (_handler.isSetOver && _handler.isRunning) {
       _handler.isSetOver = false;
     } else if (!_handler.isRunning && _hasData) {
-      await _onExerciseClose();
-    } else if (await CountDown.show(context) ?? false) {
-      await startWeightMeasuring();
-      exportDataList.clear();
-      _handler.isRunning = true;
+      await _onExit();
+    } else if (await startCountdown(context) ?? false) {
       _handler.isComplete = false;
-      _dateTime = DateTime.now();
+      _handler.isRunning = true;
       _hasData = true;
       play(true);
+      exportDataList.clear();
+      await startWeightMeasuring();
     }
   }
 
   Future<void> _onReset() async {
     if (_handler.isRunning) {
       _handler.isRunning = false;
-      await stopWeightMeasuring();
-      play(false);
       _minSec = 0;
+      play(false);
+      await stopWeightMeasuring();
       if (_handler.isComplete) {
         await congratulate(context);
-        await _onExerciseClose();
+        await _onExit();
       }
     }
   }
 
   Future<void> _onSetOver() async {
-    // final bool? result = await CountDown.start(
-    //   context,
-    //   title: 'Set Over, Rest!!!',
-    //   duration: Duration(seconds: widget.prescription.setRestTime!),
-    // );
-    // if (result ?? false) await _start();
     await Future<void>.microtask(() async {
-      final bool? result = await CountDown.show(
+      final bool? result = await startCountdown(
         context,
         title: 'Set Over, Rest!!!',
         duration: Duration(seconds: _pre.setRest),
@@ -107,35 +92,25 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
 
   void _onStop() => _handler.isSetOver = true;
 
-  Future<bool> _onExerciseClose() async {
+  Future<bool> _onExit() async {
     if (!_hasData) return true;
-    print('on exit...');
-    late final bool? result;
-
     final Export _export = Export(
       prescription: _pre,
+      timestamp: timestamp,
       progressorId: deviceName,
       exportData: exportDataList,
       isComplate: _handler.isComplete,
-      timestamp: Timestamp.fromDate(_dateTime),
       userId: AppStateScope.of(context).currentUser!.id,
     );
     if (_handler.isRunning) {
-      print('running... stop and upload....');
       await stopWeightMeasuring();
-      return submit(context, _export, false);
+      return submitData(context, _export, false);
     }
-    print('later stuff...');
+    final bool? result;
     if (AppStateScope.of(context).settingsState!.autoUpload!) {
-      print('auto upload');
-      result = await submit(context, _export, false);
-      if (result) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Data stored successfully...'),
-        ));
-      }
+      result = await submitData(context, _export, false);
     } else {
-      result = await ConfirmDialog.show(context, export: _export);
+      result = await confirmSubmit(context, _export);
     }
     if (result == null) {
       return false;
@@ -145,11 +120,11 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
     return result;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // WidgetsBinding.instance!.addObserver(this);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance!.addObserver(this);
+  // }
 
   @override
   void didChangeDependencies() {
@@ -168,7 +143,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      onExit: _onExerciseClose,
+      onExit: _onExit,
       child: Column(children: <Widget>[
         StreamBuilder<ChartData>(
           stream: graphDataStream,
@@ -198,7 +173,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
                     _handler.progress,
                     style: const TextStyle(color: Colors.black, fontSize: 36, fontWeight: FontWeight.bold),
                   ),
-                  backgroundColor: snapshot.data!.load! > _pre.targetLoad? googleGreen : googleYellow,
+                  backgroundColor: snapshot.data!.load! > _pre.targetLoad ? googleGreen : googleYellow,
                 ),
               ]),
             );

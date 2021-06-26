@@ -66,7 +66,7 @@ class _NewMVCTestState extends State<NewMVCTest> {
                 isPicker: true,
                 label: 'Test duration (sec)',
                 controller: _ctrlMvcDuration,
-                validator: validateTestDuration,
+                validator: validateNum,
               )
             ]),
           ),
