@@ -16,7 +16,7 @@ final Map<String, String> _errors = <String, String>{
 
 Future<void> initApp() async {
   await Firebase.initializeApp();
-  // await _useEmulator();
+  await _useEmulator();
 }
 
 User? get currentUser => FirebaseAuth.instance.currentUser;
@@ -42,10 +42,11 @@ Future<bool> authenticate(BuildContext context, bool isNew, String email, String
 }
 
 Future<void> _useEmulator() async {
-  await FirebaseAuth.instance.useEmulator('http://10.0.0.107:9099');
+  const String ip = '10.0.0.107';
+  await FirebaseAuth.instance.useEmulator('http://$ip:9099');
   FirebaseFirestore.instance.settings = const Settings(
     sslEnabled: false,
-    host: '10.0.0.107:8080',
+    host: '$ip:8099',
     persistenceEnabled: false,
   );
 }

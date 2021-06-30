@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,9 +9,23 @@ import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/utils/extension.dart';
 
-//
+// simulator start
 late bool simulateBT;
-//
+
+BluetoothDevice get device => _device!;
+
+late Timer? _timer;
+
+void _fakeListen() {
+  double fakeLoad = 0;
+  _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+    final ChartData element = ChartData(load: fakeLoad += 2, time: timer.tick.toDouble());
+    exportDataList.add(element);
+    graphDataSink.add(element);
+    if (fakeLoad++ > 10) fakeLoad = 0;
+  });
+}
+// simulator end
 
 BluetoothDevice? _device;
 BluetoothCharacteristic? _dataChar;
@@ -28,6 +43,8 @@ Future<void> openBluetoothSetting() async {
   _device = _dataChar = _controlChar = null;
   await AppSettings.openBluetoothSettings();
 }
+
+Future<void> tareDevice() async => _write(100);
 
 Future<void> setDataNotification(bool value) async {
   if (isDeviceConnected) await _dataChar!.setNotifyValue(value);
@@ -109,6 +126,9 @@ Future<void> _getProps() async {
     }
   }
   await setDataNotification(true);
+  if (Platform.isAndroid) {
+    await _device!.requestMtu(120);
+  }
   _addListener();
 }
 
@@ -127,25 +147,11 @@ void _addListener() {
           if (time > lastMinTime) {
             lastMinTime = time;
             final ChartData element = ChartData(load: weight, time: time);
-            exportDataList.add(element);
+            // exportDataList.add(element);
             graphDataSink.add(element);
           }
         }
       }
     });
   }
-}
-
-// simulator
-late Timer? _timer;
-
-// simulator
-void _fakeListen() {
-  double fakeLoad = 0;
-  _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-    final ChartData element = ChartData(load: fakeLoad += 2, time: timer.tick.toDouble());
-    exportDataList.add(element);
-    graphDataSink.add(element);
-    if (fakeLoad++ > 10) fakeLoad = 0;
-  });
 }

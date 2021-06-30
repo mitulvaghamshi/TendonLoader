@@ -4,7 +4,7 @@ import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
+import 'package:tendon_loader/device/bluetooth_tile.dart';
 import 'package:tendon_loader/exercise/auto_exercise.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';

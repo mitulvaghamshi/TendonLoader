@@ -13,7 +13,7 @@ class EnableBluetoothTile extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: const <Widget>[
-        CustomImage(name: keyEnableBluetooth),
+        CustomImage(name: imgEnableBluetooth),
         Text(descEnableBluetooth, textAlign: TextAlign.center),
         SizedBox(height: 30),
         CustomButton(

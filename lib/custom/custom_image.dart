@@ -9,9 +9,10 @@ class CustomImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.asset(name, frameBuilder: (_, Widget child, int? frame, bool wasSync) {
       if (wasSync) return child;
-      return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 900),
-        child: frame != null ? child : const SizedBox(),
+      return AnimatedOpacity(
+        duration: const Duration(seconds: 1),
+        opacity: frame == null ? 0 : 1,
+        child: child,
       );
     }, excludeFromSemantics: true);
   }
