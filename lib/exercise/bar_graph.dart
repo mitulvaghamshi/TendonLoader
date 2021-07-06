@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
@@ -7,7 +9,7 @@ import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/exercise/progress_handler.dart';
-import 'package:tendon_loader/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/handler/device_handler.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
@@ -28,6 +30,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
   ChartSeriesController? _graphCtrl;
   late final ProgressHandler _handler;
   late final Prescription _pre;
+  Timestamp? _timestamp;
   bool _hasData = false;
   int _minSec = 0;
 
@@ -57,6 +60,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
     } else if (!_handler.isRunning && _hasData) {
       await _onExit();
     } else if (await startCountdown(context) ?? false) {
+      _timestamp = Timestamp.now();
       _handler.isComplete = false;
       _handler.isRunning = true;
       _hasData = true;
@@ -96,7 +100,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
     if (!_hasData) return true;
     final Export _export = Export(
       prescription: _pre,
-      timestamp: timestamp,
+      timestamp: _timestamp!,
       progressorId: deviceName,
       exportData: exportDataList,
       isComplate: _handler.isComplete,

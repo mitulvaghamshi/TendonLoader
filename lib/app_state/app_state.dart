@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tendon_loader/constants/keys.dart';
-import 'package:tendon_loader/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/handler/device_handler.dart';
 import 'package:tendon_loader/login/initializer.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';

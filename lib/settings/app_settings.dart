@@ -5,7 +5,7 @@ import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/handler/device_handler.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';

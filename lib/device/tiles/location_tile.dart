@@ -3,10 +3,26 @@ import 'package:tendon_loader/constants/descriptions.dart';
 import 'package:tendon_loader/constants/images.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
+import 'package:tendon_loader/device/tiles/scanner_tile.dart';
 import 'package:tendon_loader/handler/location_handler.dart';
 
-class EnableLocationTile extends StatelessWidget {
-  const EnableLocationTile({Key? key}) : super(key: key);
+class LocationTile extends StatelessWidget {
+  const LocationTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<bool>(
+      initialData: false,
+      stream: locationStream,
+      builder: (_, AsyncSnapshot<bool> snapshot) {
+        return snapshot.data! ? const ScannerTile() : const _EnableLocationTile();
+      },
+    );
+  }
+}
+
+class _EnableLocationTile extends StatelessWidget {
+  const _EnableLocationTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

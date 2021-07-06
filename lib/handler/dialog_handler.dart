@@ -4,11 +4,12 @@ import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/device/bluetooth_tile.dart';
+import 'package:tendon_loader/device/device_tile.dart';
+import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
 import 'package:tendon_loader/exercise/auto_exercise.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
-import 'package:tendon_loader/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/handler/device_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_loader/homescreen.dart';
@@ -92,7 +93,7 @@ Future<void> tryUpload(BuildContext context) async {
 }
 
 void navigateTo(BuildContext context, RouteType route) {
-  if (isDeviceConnected || simulateBT) {
+  if (progressor != null || simulateBT) {
     if (route == RouteType.liveData) {
       Navigator.pushNamed(context, LiveData.route);
     } else if (route == RouteType.mvcTest) {
@@ -133,7 +134,7 @@ void navigateTo(BuildContext context, RouteType route) {
       }
     }
   } else {
-    selectDevice(context);
+    connectDevice(context);
   }
 }
 
@@ -183,15 +184,23 @@ Future<bool?> confirmSubmit(BuildContext context, Export export) async {
   );
 }
 
-Future<void> selectDevice(BuildContext context) async {
+Future<void> connectDevice(BuildContext context) async {
   await checkLocation();
   await showDialog<void>(
     context: context,
+    barrierDismissible: false,
     builder: (_) => AlertDialog(
       scrollable: true,
-      content: const BluetoothTile(),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: const Text('Select Bluetooth Device', textAlign: TextAlign.center),
+      content: progressor != null ? DeviceTile(device: progressor!, deviceName: deviceName) : const BluetoothTile(),
+      title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+        const Text('Select Bluetooth Device', textAlign: TextAlign.center),
+        CustomButton(
+          radius: 20,
+          icon: const Icon(Icons.clear, color: red400),
+          onPressed: () async => stopWeightMeasuring().then((_) => Navigator.pop(context)),
+        ),
+      ]),
     ),
   );
 }

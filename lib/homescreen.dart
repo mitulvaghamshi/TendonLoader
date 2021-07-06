@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
-import 'package:tendon_loader/debug.dart';
-import 'package:tendon_loader/device/device_finder.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/handler/location_handler.dart';
@@ -52,10 +50,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false, title: const Text(HomeScreen.name), actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.bluetooth),
-          onPressed: () async => Navigator.pushNamed(context, DebugBT.route),
-        ),
-        IconButton(
           icon: const Icon(Icons.settings_rounded),
           onPressed: () async => Navigator.pushNamed(context, AppSettings.route),
         ),
@@ -84,8 +78,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async => Navigator.of(context).pushNamed(DeviceFinder.route),
-        // onPressed: () async => selectDevice(context),
+        onPressed: () async => connectDevice(context),
         icon: const Icon(Icons.bluetooth_rounded),
         label: const Text('Connect Device'),
       ),

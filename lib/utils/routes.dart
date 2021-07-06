@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/debug.dart';
-import 'package:tendon_loader/device/device_finder.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
 import 'package:tendon_loader/homepage.dart';
@@ -23,6 +21,4 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   AppSettings.route: (_) => const AppSettings(),
   NewExercise.route: (_) => const NewExercise(),
   ExerciseMode.route: (_) => const ExerciseMode(),
-  DebugBT.route: (_) => DebugBT(),
-  DeviceFinder.route: (_) => DeviceFinder(),
 };

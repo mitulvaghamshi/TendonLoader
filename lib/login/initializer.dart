@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/modal/settings_state.dart';
-import 'package:tendon_loader/modal/user_state.dart';
 import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
+import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/timestamp_adapter.dart';
+import 'package:tendon_loader/modal/user_state.dart';
 
 late final Box<Export> boxExport;
 late final Box<UserState> boxUserState;
@@ -37,13 +37,15 @@ Future<void> initAppState(BuildContext context) async {
   AppStateScope.of(context).userState = boxUserState.get('box_user_state_item', defaultValue: UserState());
 }
 
-final Completer<void> _completer = Completer<void>();
+Completer<void>? _completer;
 
 Future<void> init(BuildContext context) async {
-  if (_completer.isCompleted) return;
-  await initApp();
-  await initBox();
-  await initAppState(context);
-  _completer.complete();
-  return _completer.future;
+  if (_completer == null) {
+    _completer = Completer<void>();
+    await initApp();
+    await initBox();
+    await initAppState(context);
+    _completer!.complete();
+  }
+  return _completer!.future;
 }
