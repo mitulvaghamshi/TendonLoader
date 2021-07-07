@@ -9,7 +9,7 @@ import 'package:tendon_loader/web_portal/right_panel.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  static const String route = '/home';
+  static const String route = '/homePage';
   static const String name = 'Tendon Loader - Clinician';
 
   @override

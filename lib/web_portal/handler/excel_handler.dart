@@ -1,12 +1,10 @@
-import 'dart:convert' show base64;
-
+import 'package:archive/archive_io.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
-import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/utils/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
 import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 
-void generateExcel(Export export) {
+ArchiveFile generateExcel(Export export) {
   int iR = 0;
   final Workbook workbook = Workbook();
   final Worksheet sheet = workbook.worksheets[0];
@@ -82,9 +80,24 @@ void generateExcel(Export export) {
     sheet.getRangeByIndex(iR, 2).number = chartData.load;
   }
 
-  AnchorElement(href: 'data:application/octet-stream;charset=utf-16le;base64,${base64.encode(workbook.saveAsStream())}')
-    ..setAttribute('download', export.fileName)
-    ..click();
+  // final ChartCollection charts = ChartCollection(sheet1);
+  //   final Chart chart = charts.add();
+  //   chart.chartType = ExcelChartType.pie;
+  //   chart.dataRange = sheet1.getRangeByName('A11:B17');
+  //   chart.isSeriesInRows = false;
+  //   chart.chartTitle = 'Event Expenses';
+  //   chart.chartTitleArea.bold = true;
+  //   chart.chartTitleArea.size = 16;
+  //   chart.topRow = 1;
+  //   chart.bottomRow = 10;
+  //   chart.leftColumn = 1;
+  //   chart.rightColumn = 5;
+  //   sheet1.charts = charts;
 
+  final List<int> fileBytes = workbook.saveAsStream();
+  final InputStream inputStream = InputStream(fileBytes);
+  final ArchiveFile archiveFile = ArchiveFile.stream(export.fileName, inputStream.length, inputStream);
   workbook.dispose();
+
+  return archiveFile;
 }

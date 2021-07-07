@@ -1,29 +1,29 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/constants/progressor.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/utils/extension.dart';
 
-double lastMinTime = 0;
-bool isDeviceRunning = false;
 final List<ChartData> exportDataList = <ChartData>[];
 
-Completer<bool>? propCompleter;
-BluetoothDevice? progressor;
-BluetoothCharacteristic? dataChar;
-BluetoothCharacteristic? controlChar;
+double _lastMillis = 0;
+bool _isRunning = false;
+Completer<bool>? _completer;
 
-String get deviceName => progressor!.name.isEmpty ? progressor!.id.id : progressor!.name;
+BluetoothDevice? _device;
+BluetoothCharacteristic? _dataChar;
+BluetoothCharacteristic? _controlChar;
 
-Future<void> openBluetoothSetting() async => AppSettings.openBluetoothSettings();
+BluetoothDevice? get connectedDevice => _device;
 
-Future<void> setNotification(bool value) async => dataChar!.setNotifyValue(value);
+String get deviceName => _device!.name.isEmpty ? _device!.id.id : _device!.name;
 
-Future<void> sleepDevice() async => controlChar!.write(<int>[cmdEnterSleep]);
+Future<void> setNotification(bool value) async => _dataChar!.setNotifyValue(value);
+
+Future<void> sleepDevice() async => _controlChar!.write(<int>[cmdEnterSleep]);
 
 Future<void> stopDeviceScan() async => FlutterBlue.instance.stopScan();
 
@@ -36,99 +36,95 @@ Future<void> startDeviceScan() async {
 }
 
 Future<void> startTaring() async {
-  if (!isDeviceRunning) {
-    isDeviceRunning = true;
-    await controlChar!.write(<int>[cmdStartWeightMeasurement]);
+  if (!_isRunning) {
+    _isRunning = true;
+    await _controlChar!.write(<int>[cmdStartWeightMeas]);
   }
 }
 
 Future<void> stopTaring() async {
-  if (isDeviceRunning) {
-    await controlChar!.write(<int>[cmdTareScale]).then((_) {
-      isDeviceRunning = false;
-      lastMinTime = 0;
-      clearGraphData();
-      exportDataList.clear();
-    });
+  if (_isRunning) {
+    _isRunning = false;
+    await _controlChar!.write(<int>[cmdTareScale]);
+    await _controlChar!.write(<int>[cmdStartWeightMeas]);
+    await _controlChar!.write(<int>[cmdStopWeightMeas]);
+    _lastMillis = 0;
+    clearGraphData();
+    exportDataList.clear();
   }
 }
 
-Future<void> startWeightMeasuring() async {
-  if (!isDeviceRunning) {
-    lastMinTime = 0;
-    clearGraphData();
-    exportDataList.clear();
+Future<void> startWeightMeas() async {
+  if (!_isRunning) {
     if (simulateBT) {
       _fakeListen();
     } else {
-      await controlChar!.write(<int>[cmdStartWeightMeasurement]);
+      await _controlChar!.write(<int>[cmdStartWeightMeas]);
     }
-    isDeviceRunning = true;
+    _isRunning = true;
   }
 }
 
-Future<void> stopWeightMeasuring() async {
-  if (isDeviceRunning) {
+Future<void> stopWeightMeas() async {
+  if (_isRunning) {
     if (simulateBT) {
       _timer?.cancel();
     } else {
-      await controlChar!.write(<int>[cmdStopWeightMeasuremnt]);
+      await _controlChar!.write(<int>[cmdStopWeightMeas]);
     }
-    isDeviceRunning = false;
-    lastMinTime = 0;
+    _isRunning = false;
+    _lastMillis = 0;
     clearGraphData();
   }
 }
 
 Future<void> disconnectDevice() async {
-  if (progressor != null) {
-    await progressor!.disconnect();
-    progressor = dataChar = controlChar = null;
-    isDeviceRunning = false;
-    lastMinTime = 0;
+  if (_device != null) {
+    await _device!.disconnect();
+    _device = _dataChar = _controlChar = null;
+    _isRunning = false;
+    _lastMillis = 0;
     clearGraphData();
-    propCompleter = null;
+    _completer = null;
     exportDataList.clear();
   }
 }
 
-Future<void> connectDevice(BluetoothDevice device) async => device.connect();
-
 Future<bool> getProps(BluetoothDevice device) async {
-  if (progressor != null && dataChar != null && controlChar != null) {
+  if (_device != null && _dataChar != null && _controlChar != null) {
     return Future<void>.delayed(const Duration(milliseconds: 800), startTaring).then((_) => true);
-  } else if (propCompleter == null) {
-    propCompleter = Completer<bool>();
+  } else if (_completer == null) {
+    _completer = Completer<bool>();
     for (final BluetoothService s in await device.discoverServices()) {
       for (final BluetoothCharacteristic c in s.characteristics) {
         if (c.uuid == Guid(uuidControl)) {
-          controlChar = c;
+          _controlChar = c;
         } else if (c.uuid == Guid(uuidData)) {
-          dataChar = c;
+          _dataChar = c;
         }
       }
     }
     await setNotification(true);
     if (Platform.isAndroid) await device.requestMtu(120);
-    if (dataChar != null && controlChar != null) {
-      addListener();
-      progressor = device;
+    if (_dataChar != null && _controlChar != null) {
+      _addListener();
+      _device = device;
       await Future<void>.delayed(const Duration(milliseconds: 800), startTaring).then((_) {
-        propCompleter!.complete(true);
+        _completer!.complete(true);
       });
     }
   }
-  return propCompleter!.future;
+  return _completer!.future;
 }
 
-void addListener() {
-  dataChar!.value.listen((List<int> data) {
-    if (isDeviceRunning && data.isNotEmpty && data[0] == resWeightMeasurement) {
+void _addListener() {
+  _dataChar!.value.listen((List<int> data) {
+    if (_isRunning && data.isNotEmpty && data[0] == resWeightMeasurement) {
       for (int x = 2; x < data.length; x += 8) {
         final double weight = data.getRange(x, x + 4).toList().toWeight;
         final double time = data.getRange(x + 4, x + 8).toList().toTime;
-        if (time > lastMinTime) {
-          lastMinTime = time;
+        if (time > _lastMillis) {
+          _lastMillis = time;
           final ChartData element = ChartData(load: weight, time: time);
           exportDataList.add(element);
           graphDataSink.add(element);

@@ -35,18 +35,18 @@ Future<bool> authenticate(BuildContext context, bool isNew, String email, String
     return _credential.user != null;
   } on FirebaseAuthException catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(_errors[e.code] ?? 'Unable to Login/Register. Try again later.',
+        content: Text(_errors[e.code] ?? 'Unable to reach the internet.',
             style: const TextStyle(color: red400, fontWeight: FontWeight.bold))));
     return false;
   }
 }
 
 Future<void> _useEmulator() async {
-  const String ip = '10.0.0.107';
+  const String ip = '10.0.0.108';
   await FirebaseAuth.instance.useEmulator('http://$ip:9099');
   FirebaseFirestore.instance.settings = const Settings(
     sslEnabled: false,
-    host: '$ip:8099',
+    host: '$ip:8080',
     persistenceEnabled: false,
   );
 }

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:archive/archive_io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -6,6 +9,7 @@ import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/prescription.dart';
+import 'package:tendon_loader/utils/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
 import 'package:tendon_loader/web_portal/handler/excel_handler.dart';
 
 part 'export.g.dart';
@@ -58,9 +62,8 @@ class Export extends HiveObject {
   final DocumentReference<Map<String, dynamic>>? reference;
 
   bool get isMVC => mvcValue != null && prescription == null;
-  String get title => DateFormat(keyDateTimeFormat).format(timestamp.toDate());
-  String get fileName =>
-      title.replaceAll(RegExp(r'[\n\s:]'), '-') + '_${userId}_${isMVC ? 'MVCTest' : 'Exercise'}_$progressorId.xlsx';
+  String get dateTime => DateFormat(keyDateTimeFormat).format(timestamp.toDate());
+  String get fileName => '$dateTime $userId ${isMVC ? 'MVCTest' : 'Exercise'}.xlsx'.replaceAll(RegExp(r'[\s:]'), '_');
 
   Map<String, dynamic> toMap() {
     final Map<String, double> exportDataMap = <String, double>{};
@@ -91,7 +94,11 @@ class Export extends HiveObject {
 
   // long task
   Future<void> download() async {
-    generateExcel(this);
+    final Archive archive = Archive();
+    archive.addFile(generateExcel(this));
+    AnchorElement(href: 'data:application/zip;base64,${base64.encode(ZipEncoder().encode(archive)!)}')
+      ..setAttribute('download', '$fileName.zip')
+      ..click();
   }
 
   Future<void> deleteExport() async {

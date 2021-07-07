@@ -4,10 +4,9 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
-import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
-import 'package:tendon_loader/settings/app_settings.dart';
+import 'package:tendon_loader/settings/user_settings.dart';
 import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/utils/route_type.dart';
 import 'package:wakelock/wakelock.dart';
@@ -15,34 +14,21 @@ import 'package:wakelock/wakelock.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  static const String route = '/home';
+  static const String route = '/homeScreen';
   static const String name = 'Tendon Loader';
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
     Wakelock.enable();
-    checkLocation();
     if (localDataCount > 0) {
       Future<void>.delayed(const Duration(seconds: 2), () => tryUpload(context));
     }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) checkLocation();
   }
 
   @override
@@ -51,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       appBar: AppBar(automaticallyImplyLeading: false, title: const Text(HomeScreen.name), actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.settings_rounded),
-          onPressed: () async => Navigator.pushNamed(context, AppSettings.route),
+          onPressed: () async => Navigator.pushNamed(context, UserSettings.route),
         ),
       ]),
       body: SingleChildScrollView(
@@ -78,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async => connectDevice(context),
+        onPressed: () async => connectProgressor(context),
         icon: const Icon(Icons.bluetooth_rounded),
         label: const Text('Connect Device'),
       ),

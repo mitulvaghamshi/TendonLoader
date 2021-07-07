@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/constants/descriptions.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
@@ -11,7 +12,6 @@ import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
 import 'package:tendon_loader/handler/device_handler.dart';
 import 'package:tendon_loader/handler/graph_data_handler.dart';
-import 'package:tendon_loader/handler/location_handler.dart';
 import 'package:tendon_loader/homescreen.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
 import 'package:tendon_loader/login/app_auth.dart';
@@ -28,7 +28,6 @@ Future<bool> onAppClose() async {
   await Wakelock.disable();
   await disconnectDevice();
   await signOut();
-  disposeLocationHandler();
   disposeGraphData();
   return true;
 }
@@ -93,7 +92,7 @@ Future<void> tryUpload(BuildContext context) async {
 }
 
 void navigateTo(BuildContext context, RouteType route) {
-  if (progressor != null || simulateBT) {
+  if (connectedDevice != null || simulateBT) {
     if (route == RouteType.liveData) {
       Navigator.pushNamed(context, LiveData.route);
     } else if (route == RouteType.mvcTest) {
@@ -103,15 +102,7 @@ void navigateTo(BuildContext context, RouteType route) {
         if (AppStateScope.of(context).mvcDuration != null) {
           Navigator.pushNamed(context, MVCTesting.route);
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'No MVC test available, '
-                'please contact your clinician or '
-                'turn on custom prescriptions in settings.',
-              ),
-            ),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(descNoMvcAvailable)));
         }
       }
     } else if (route == RouteType.exerciseMode) {
@@ -121,20 +112,12 @@ void navigateTo(BuildContext context, RouteType route) {
         if (AppStateScope.of(context).prescription != null) {
           _startAutoExercise(context);
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'No exercise prescription available, '
-                'please contact your clinician or '
-                'turn on custom prescriptions in settings.',
-              ),
-            ),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(descNoExerciseAvailable)));
         }
       }
     }
   } else {
-    connectDevice(context);
+    connectProgressor(context);
   }
 }
 
@@ -184,21 +167,20 @@ Future<bool?> confirmSubmit(BuildContext context, Export export) async {
   );
 }
 
-Future<void> connectDevice(BuildContext context) async {
-  await checkLocation();
+Future<void> connectProgressor(BuildContext context) async {
   await showDialog<void>(
     context: context,
     barrierDismissible: false,
     builder: (_) => AlertDialog(
       scrollable: true,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      content: progressor != null ? DeviceTile(device: progressor!, deviceName: deviceName) : const BluetoothTile(),
+      content: connectedDevice != null ? DeviceTile(device: connectedDevice!) : const BluetoothTile(),
       title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-        const Text('Select Bluetooth Device', textAlign: TextAlign.center),
+        const Text('Connect Progressor', textAlign: TextAlign.center),
         CustomButton(
           radius: 20,
           icon: const Icon(Icons.clear, color: red400),
-          onPressed: () async => stopWeightMeasuring().then((_) => Navigator.pop(context)),
+          onPressed: () async => stopWeightMeas().then((_) => Navigator.pop(context)),
         ),
       ]),
     ),

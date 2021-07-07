@@ -12,8 +12,8 @@ const int resLowPowerWarning = 4;
 
 // Commands
 const int cmdTareScale = 100;
-const int cmdStartWeightMeasurement = 101;
-const int cmdStopWeightMeasuremnt = 102;
+const int cmdStartWeightMeas = 101;
+const int cmdStopWeightMeas = 102;
 const int cmdStartPeakRFDMeasurement = 103;
 const int cmdStartPeakRFDSeriesMeasurement = 104;
 const int cmdAddCalibrationPoint = 105;

@@ -18,7 +18,7 @@ class CustomTable extends StatelessWidget {
       primary: false,
       scrollDirection: axis,
       physics: const AlwaysScrollableScrollPhysics(),
-      child: DataTable(
+      child: DataTable(        
         rows: rows,
         columns: columns,
         dataRowHeight: 40,

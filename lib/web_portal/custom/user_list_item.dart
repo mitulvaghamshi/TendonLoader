@@ -26,7 +26,7 @@ class UserListItem extends StatelessWidget {
           leading: CustomButton(onPressed: () {}, color: Colors.blue, child: Text(_user.avatar)),
           title: Text(
             _user.id,
-            style: const TextStyle(fontSize: 20, color: googleGreen, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 18, color: googleGreen, fontWeight: FontWeight.bold),
           ),
           trailing: PopupMenuButton<ItemAction>(
             icon: const Icon(Icons.apps_rounded),

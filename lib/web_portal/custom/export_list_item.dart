@@ -18,7 +18,7 @@ class ExportListItem extends StatelessWidget {
       key: ValueKey<String>(export.reference!.id),
       horizontalTitleGap: 5,
       contentPadding: const EdgeInsets.all(5),
-      title: Text(export.title, style: const TextStyle(fontSize: 16)),
+      title: Text(export.dateTime, style: const TextStyle(fontSize: 16)),
       subtitle: export.isComplate
           ? const Text('Complate', style: TextStyle(color: googleGreen))
           : const Text('Incomplate', style: TextStyle(color: red400)),

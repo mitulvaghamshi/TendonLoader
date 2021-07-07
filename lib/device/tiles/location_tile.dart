@@ -1,56 +1,64 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:tendon_loader/constants/descriptions.dart';
 import 'package:tendon_loader/constants/images.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/device/tiles/scanner_tile.dart';
-import 'package:tendon_loader/handler/location_handler.dart';
 
-class LocationTile extends StatelessWidget {
+class LocationTile extends StatefulWidget {
   const LocationTile({Key? key}) : super(key: key);
+
+  @override
+  _LocationTileState createState() => _LocationTileState();
+}
+
+class _LocationTileState extends State<LocationTile> {
+  final BehaviorSubject<bool> _controller = BehaviorSubject<bool>();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.doWhile(() async {
+      final bool _enabled = await Location.instance.serviceEnabled();
+      if (!_controller.isClosed) _controller.sink.add(_enabled);
+      return Future<bool>.delayed(const Duration(seconds: 2), () => !_enabled);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (!_controller.isClosed) _controller.close();
+  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-      initialData: false,
-      stream: locationStream,
+      stream: _controller.stream,
       builder: (_, AsyncSnapshot<bool> snapshot) {
-        return snapshot.data! ? const ScannerTile() : const _EnableLocationTile();
+        if (snapshot.hasData && snapshot.data!) return const ScannerTile();
+        return Column(mainAxisSize: MainAxisSize.min, children: const <Widget>[
+          CustomImage(name: imgEnableLocation),
+          Text(
+            descLocationLine1,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          ),
+          Text(
+            descLocationLine3,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+          ),
+          CustomButton(
+            onPressed: AppSettings.openLocationSettings,
+            icon: Icon(Icons.location_on_rounded),
+            child: Text('Open Settings'),
+          ),
+        ]);
       },
     );
-  }
-}
-
-class _EnableLocationTile extends StatelessWidget {
-  const _EnableLocationTile({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, children: const <Widget>[
-      CustomImage(name: imgEnableLocation),
-      Text(
-        descLocationLine1,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      SizedBox(height: 10),
-      Text(
-        descLocationLine2,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 12),
-      ),
-      SizedBox(height: 10),
-      Text(
-        descLocationLine3,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
-      ),
-      SizedBox(height: 30),
-      CustomButton(
-        icon: Icon(Icons.location_on_rounded),
-        onPressed: enableLocation,
-        child: Text('Open Settings'),
-      ),
-    ]);
   }
 }

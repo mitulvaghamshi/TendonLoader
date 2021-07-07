@@ -1,12 +1,17 @@
+import 'dart:convert';
+
+import 'package:archive/archive_io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tendon_loader/constants/keys.dart';
-import 'package:tendon_loader/web_portal/handler/excel_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
+import 'package:tendon_loader/utils/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
 import 'package:tendon_loader/web_portal/custom/export_list_item.dart';
+import 'package:tendon_loader/web_portal/handler/excel_handler.dart';
 
 part 'user.g.dart';
 
@@ -75,7 +80,13 @@ class User extends HiveObject {
   }
 
   Future<void> download() async {
-    exports!.forEach(generateExcel);
+    final Archive archive = Archive();
+    for (final Export export in exports!) {
+      archive.addFile(generateExcel(export));
+    }
+    AnchorElement(href: 'data:application/zip;base64,${base64.encode(ZipEncoder().encode(archive)!)}')
+      ..setAttribute('download', '$id (${DateFormat(keyDateTimeFormat).format(DateTime.now())}).zip')
+      ..click();
   }
 
   Future<void> deleteAllExports() async {

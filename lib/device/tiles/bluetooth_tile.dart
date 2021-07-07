@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/constants/descriptions.dart';
@@ -5,7 +6,6 @@ import 'package:tendon_loader/constants/images.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/device/tiles/location_tile.dart';
-import 'package:tendon_loader/handler/device_handler.dart';
 
 class BluetoothTile extends StatelessWidget {
   const BluetoothTile({Key? key}) : super(key: key);
@@ -16,26 +16,21 @@ class BluetoothTile extends StatelessWidget {
       initialData: BluetoothState.unknown,
       stream: FlutterBlue.instance.state,
       builder: (_, AsyncSnapshot<BluetoothState> snapshot) {
-        return snapshot.data == BluetoothState.on ? const LocationTile() : const _EnableBluetoothTile();
+        if (snapshot.data == BluetoothState.on) return const LocationTile();
+        return Column(mainAxisSize: MainAxisSize.min, children: const <Widget>[
+          CustomImage(name: imgEnableBluetooth),
+          Text(
+            descEnableBluetooth,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          ),
+          CustomButton(
+            onPressed: AppSettings.openBluetoothSettings,
+            icon: Icon(Icons.bluetooth),
+            child: Text('Open Settings'),
+          ),
+        ]);
       },
     );
-  }
-}
-
-class _EnableBluetoothTile extends StatelessWidget {
-  const _EnableBluetoothTile({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, children: const <Widget>[
-      CustomImage(name: imgEnableBluetooth),
-      Text(descEnableBluetooth, textAlign: TextAlign.center),
-      SizedBox(height: 30),
-      CustomButton(
-        icon: Icon(Icons.bluetooth_rounded),
-        onPressed: openBluetoothSetting,
-        child: Text('Open Settings'),
-      ),
-    ]);
   }
 }

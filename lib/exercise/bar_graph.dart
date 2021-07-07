@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
   ChartSeriesController? _graphCtrl;
   late final ProgressHandler _handler;
   late final Prescription _pre;
-  Timestamp? _timestamp;
+  late Timestamp? _timestamp;
   bool _hasData = false;
   int _minSec = 0;
 
@@ -66,7 +65,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       _hasData = true;
       play(true);
       exportDataList.clear();
-      await startWeightMeasuring();
+      await startWeightMeas();
     }
   }
 
@@ -75,7 +74,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       _handler.isRunning = false;
       _minSec = 0;
       play(false);
-      await stopWeightMeasuring();
+      await stopWeightMeas();
       if (_handler.isComplete) {
         await congratulate(context);
         await _onExit();
@@ -107,7 +106,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       userId: AppStateScope.of(context).currentUser!.id,
     );
     if (_handler.isRunning) {
-      await stopWeightMeasuring();
+      await stopWeightMeas();
       return submitData(context, _export, false);
     }
     final bool? result;

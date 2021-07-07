@@ -11,7 +11,7 @@ import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
-import 'package:tendon_loader/modal/timestamp_adapter.dart';
+import 'package:tendon_loader/modal/timestamp.g.dart';
 import 'package:tendon_loader/modal/user_state.dart';
 
 late final Box<Export> boxExport;

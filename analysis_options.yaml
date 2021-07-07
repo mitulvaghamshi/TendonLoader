@@ -23,6 +23,7 @@ analyzer:
     omit_local_variable_types: ignore
   exclude:
     - "bin/cache/**"
+    - "lib/**/*.g.dart"
 
 linter:
   rules:

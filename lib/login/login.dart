@@ -6,6 +6,8 @@ import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
+import 'package:tendon_loader/homepage.dart';
+import 'package:tendon_loader/homescreen.dart';
 import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/utils/validator.dart';
@@ -14,7 +16,7 @@ class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   static const String route = '/login';
-  static const String homeRoute = '/home';
+  static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
 
   @override
   _LoginState createState() => _LoginState();

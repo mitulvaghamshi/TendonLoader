@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/app_state/app_state_widget.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
+import 'package:tendon_loader/device/scanner_list.dart';
 import 'package:tendon_loader/handler/device_handler.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/login/app_auth.dart';
@@ -12,16 +14,16 @@ import 'package:tendon_loader/login/login.dart';
 import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
-class AppSettings extends StatefulWidget {
-  const AppSettings({Key? key}) : super(key: key);
+class UserSettings extends StatefulWidget {
+  const UserSettings({Key? key}) : super(key: key);
 
-  static const String route = '/settings';
+  static const String route = '/userSettings';
 
   @override
-  _AppSettingsState createState() => _AppSettingsState();
+  _UserSettingsState createState() => _UserSettingsState();
 }
 
-class _AppSettingsState extends State<AppSettings> {
+class _UserSettingsState extends State<UserSettings> {
   late final TextEditingController _ctrlGraphSize = TextEditingController()
     ..addListener(() {
       AppStateScope.of(context).settingsState!.graphSize = double.tryParse(_ctrlGraphSize.text) ?? 30;
@@ -47,7 +49,7 @@ class _AppSettingsState extends State<AppSettings> {
         child: AppFrame(
           onExit: () => AppStateScope.of(context).settingsState!.save().then((_) => true),
           child: Column(children: <Widget>[
-            //
+            // testing only
             SwitchListTile.adaptive(
               value: simulateBT,
               tileColor: Colors.red,
@@ -59,8 +61,22 @@ class _AppSettingsState extends State<AppSettings> {
                   'for MVC and Exercise Mode, testing perpose only!',
                   style: TextStyle(color: Colors.white)),
             ),
+            const SizedBox(height: 10),
+            ExpansionTile(
+              collapsedBackgroundColor: Colors.red,
+              title: const Text('Scan all devices.', style: TextStyle(color: Colors.white)),
+              subtitle: const Text('Click to start/stop scanning', style: TextStyle(color: Colors.white)),
+              onExpansionChanged: (bool isOpen) async {
+                if (isOpen) {
+                  await FlutterBlue.instance.startScan(timeout: const Duration(seconds: 5));
+                } else {
+                  await FlutterBlue.instance.stopScan();
+                }
+              },
+              children: const <Widget>[ScannerList()],
+            ),
             const SizedBox(height: 20),
-            //
+            // testing only
             const AppLogo(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),

@@ -27,7 +27,7 @@ class _BarGraphState extends State<BarGraph> {
   final List<ChartData> _graphData = <ChartData>[];
   ChartSeriesController? _graphCtrl;
   ChartSeriesController? _lineCtrl;
-  Timestamp? _timestamp;
+  late Timestamp? _timestamp;
   late final int mvcDuration;
   bool _isComplete = false;
   bool _isRunning = false;
@@ -45,14 +45,14 @@ class _BarGraphState extends State<BarGraph> {
       _maxForce = 0;
       play(true);
       exportDataList.clear();
-      await startWeightMeasuring();
+      await startWeightMeas();
     }
   }
 
   Future<void> _onStop() async {
     _isRunning = false;
     play(false);
-    await stopWeightMeasuring();
+    await stopWeightMeas();
     if (_hasData) await Future<void>.microtask(_onExit);
   }
 
@@ -75,7 +75,7 @@ class _BarGraphState extends State<BarGraph> {
       userId: AppStateScope.of(context).currentUser!.id,
     );
     if (_isRunning) {
-      await stopWeightMeasuring();
+      await stopWeightMeas();
       return submitData(context, _export, false);
     }
     final bool? result;
