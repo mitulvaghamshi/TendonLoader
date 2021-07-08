@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
@@ -34,7 +34,7 @@ Future<void> initBox() async {
 }
 
 Future<void> initAppState(BuildContext context) async {
-  AppStateScope.of(context).userState = boxUserState.get('box_user_state_item', defaultValue: UserState());
+  context.model.userState = boxUserState.get('box_user_state_item', defaultValue: UserState());
 }
 
 Completer<void>? _completer;

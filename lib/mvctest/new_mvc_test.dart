@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
@@ -35,14 +35,14 @@ class _NewMVCTestState extends State<NewMVCTest> {
         actions: <Widget>[
           CustomButton(
             reverce: true,
-            icon: const Icon(Icons.arrow_forward_rounded, color: googleGreen),
+            icon: const Icon(Icons.arrow_forward_rounded, color: colorGoogleGreen),
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                AppStateScope.of(context).mvcDuration = int.parse(_ctrlMvcDuration.text);
+                context.model.mvcDuration = int.parse(_ctrlMvcDuration.text);
                 await Navigator.pushReplacementNamed(context, MVCTesting.route);
               }
             },
-            child: const Text('Go', style: TextStyle(color: googleGreen)),
+            child: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
           ),
         ],
       ),
@@ -57,7 +57,7 @@ class _NewMVCTestState extends State<NewMVCTest> {
                 style: TextStyle(
                   fontSize: 22,
                   fontFamily: 'Georgia',
-                  color: googleGreen,
+                  color: colorGoogleGreen,
                   fontWeight: FontWeight.bold,
                 ),
               ),

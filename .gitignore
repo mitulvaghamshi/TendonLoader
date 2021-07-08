@@ -26,6 +26,7 @@ ui-debug.log
 firebase.json
 firestore.rules
 firestore-debug.log
+firebase-debug.log
 firestore.indexes.json
 
 .flutter-plugins

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/constants/descriptions.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/confirm_dialod.dart';
@@ -72,7 +72,7 @@ Future<void> tryUpload(BuildContext context) async {
               CustomButton(
                 onPressed: Navigator.of(context).pop,
                 icon: const Icon(Icons.check_rounded),
-                child: const Text('Ok', style: TextStyle(color: googleGreen)),
+                child: const Text('Ok', style: TextStyle(color: colorGoogleGreen)),
               ),
             ]),
           ),
@@ -81,7 +81,7 @@ Future<void> tryUpload(BuildContext context) async {
             title: Text('$_count file${_count == 1 ? '' : 's'} uploaded', style: const TextStyle(fontSize: 20)),
             leading: CustomButton(
               onPressed: () {},
-              color: googleGreen,
+              color: colorGoogleGreen,
               icon: const Icon(Icons.check_rounded, size: 30),
             ),
           ),
@@ -96,20 +96,20 @@ void navigateTo(BuildContext context, RouteType route) {
     if (route == RouteType.liveData) {
       Navigator.pushNamed(context, LiveData.route);
     } else if (route == RouteType.mvcTest) {
-      if (AppStateScope.of(context).settingsState!.customPrescriptions!) {
+      if (context.model.settingsState!.customPrescriptions!) {
         Navigator.pushNamed(context, NewMVCTest.route);
       } else {
-        if (AppStateScope.of(context).mvcDuration != null) {
+        if (context.model.mvcDuration != null) {
           Navigator.pushNamed(context, MVCTesting.route);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(descNoMvcAvailable)));
         }
       }
     } else if (route == RouteType.exerciseMode) {
-      if (AppStateScope.of(context).settingsState!.customPrescriptions!) {
+      if (context.model.settingsState!.customPrescriptions!) {
         Navigator.pushNamed(context, NewExercise.route);
       } else {
-        if (AppStateScope.of(context).prescription != null) {
+        if (context.model.prescription != null) {
           _startAutoExercise(context);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(descNoExerciseAvailable)));
@@ -134,9 +134,9 @@ Future<void> _startAutoExercise(BuildContext context) async {
           const Text('Start Exercise', textAlign: TextAlign.center),
           CustomButton(
             reverce: true,
-            icon: const Icon(Icons.arrow_forward_rounded, color: googleGreen),
+            icon: const Icon(Icons.arrow_forward_rounded, color: colorGoogleGreen),
             onPressed: () async => Navigator.pushReplacementNamed(context, ExerciseMode.route),
-            child: const Text('Go', style: TextStyle(color: googleGreen)),
+            child: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
           ),
         ],
       ),
@@ -179,7 +179,7 @@ Future<void> connectProgressor(BuildContext context) async {
         const Text('Connect Progressor', textAlign: TextAlign.center),
         CustomButton(
           radius: 20,
-          icon: const Icon(Icons.clear, color: red400),
+          icon: const Icon(Icons.clear, color: colorRed400),
           onPressed: () async => stopWeightMeas().then((_) => Navigator.pop(context)),
         ),
       ]),
@@ -200,8 +200,8 @@ Future<void> congratulate(BuildContext context) async {
             CustomButton(
               reverce: true,
               onPressed: Navigator.of(context).pop,
-              icon: const Icon(Icons.arrow_forward, color: googleGreen),
-              child: const Text('Next', style: TextStyle(color: googleGreen)),
+              icon: const Icon(Icons.arrow_forward, color: colorGoogleGreen),
+              child: const Text('Next', style: TextStyle(color: colorGoogleGreen)),
             ),
           ]),
         ),
@@ -227,7 +227,7 @@ void aboutDialog(BuildContext context) {
       const Text(
         'Tendon Loader :Preview',
         textAlign: TextAlign.center,
-        style: TextStyle(color: googleGreen, fontSize: 18, fontFamily: 'Georgia'),
+        style: TextStyle(color: colorGoogleGreen, fontSize: 18, fontFamily: 'Georgia'),
       ),
       // const SizedBox(height: 20),
       // const Text(

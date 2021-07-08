@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/app_state/app_state_widget.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/item_action.dart';
@@ -20,11 +19,11 @@ class ExportListItem extends StatelessWidget {
       contentPadding: const EdgeInsets.all(5),
       title: Text(export.dateTime, style: const TextStyle(fontSize: 16)),
       subtitle: export.isComplate
-          ? const Text('Complate', style: TextStyle(color: googleGreen))
-          : const Text('Incomplate', style: TextStyle(color: red400)),
+          ? const Text('Complate', style: TextStyle(color: colorGoogleGreen))
+          : const Text('Incomplate', style: TextStyle(color: colorRed400)),
       leading: export.isMVC
-          ? const CustomButton(color: orange400, child: Text('MVC'))
-          : const CustomButton(color: googleGreen, child: Text('EXE')),
+          ? const CustomButton(color: colorOrange400, child: Text('MVC'))
+          : const CustomButton(color: colorGoogleGreen, child: Text('EXE')),
       onTap: () {
         if (export.exportData.isNotEmpty) exportItemSink.add(export);
       },
@@ -41,8 +40,8 @@ class ExportListItem extends StatelessWidget {
           const PopupMenuItem<ItemAction>(
             value: ItemAction.delete,
             child: ListTile(
-              title: Text('Delete', style: TextStyle(color: red400)),
-              leading: Icon(Icons.delete_rounded, color: red400),
+              title: Text('Delete', style: TextStyle(color: colorRed400)),
+              leading: Icon(Icons.delete_rounded, color: colorRed400),
             ),
           ),
         ],
@@ -62,14 +61,14 @@ class ExportListItem extends StatelessWidget {
                   ]),
                   actions: <Widget>[
                     CustomButton(
-                      icon: const Icon(Icons.delete_rounded, color: red400),
+                      icon: const Icon(Icons.delete_rounded, color: colorRed400),
                       onPressed: () async {
                         Navigator.pop(context);
-                        AppStateScope.of(context).removeExportBy(export.reference!);
-                        AppStateWidget.of(context).refresh();
+                        context.model.removeExportBy(export.reference!);
+                        context.view.refresh();
                         await Future<void>.microtask(export.deleteExport);
                       },
-                      child: const Text('Yes, Delete!', style: TextStyle(color: red400)),
+                      child: const Text('Yes, Delete!', style: TextStyle(color: colorRed400)),
                     ),
                     CustomButton(
                       icon: const Icon(Icons.cancel),

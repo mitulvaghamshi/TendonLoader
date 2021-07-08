@@ -36,7 +36,7 @@ Future<bool> authenticate(BuildContext context, bool isNew, String email, String
   } on FirebaseAuthException catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(_errors[e.code] ?? 'Unable to reach the internet.',
-            style: const TextStyle(color: red400, fontWeight: FontWeight.bold))));
+            style: const TextStyle(color: colorRed400, fontWeight: FontWeight.bold))));
     return false;
   }
 }

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
@@ -72,14 +72,14 @@ class _BarGraphState extends State<BarGraph> {
       isComplate: _isComplete,
       progressorId: deviceName,
       exportData: exportDataList,
-      userId: AppStateScope.of(context).currentUser!.id,
+      userId: context.model.currentUser!.id,
     );
     if (_isRunning) {
       await stopWeightMeas();
       return submitData(context, _export, false);
     }
     final bool? result;
-    if (AppStateScope.of(context).settingsState!.autoUpload!) {
+    if (context.model.settingsState!.autoUpload!) {
       result = await submitData(context, _export, false);
     } else {
       result = await confirmSubmit(context, _export);
@@ -95,7 +95,7 @@ class _BarGraphState extends State<BarGraph> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    mvcDuration = AppStateScope.of(context).mvcDuration!;
+    mvcDuration = context.model.mvcDuration!;
   }
 
   @override
@@ -131,12 +131,12 @@ class _BarGraphState extends State<BarGraph> {
               child: Column(children: <Widget>[
                 Text(
                   'MVC: ${_maxForce.toStringAsFixed(2)} Kg',
-                  style: const TextStyle(color: googleGreen, fontSize: 36, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: colorGoogleGreen, fontSize: 36, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   '⏱ ${(mvcDuration - snapshot.data!.time!).toStringAsFixed(1)} Sec',
-                  style: const TextStyle(color: red400, fontSize: 40, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: colorRed400, fontSize: 40, fontWeight: FontWeight.bold),
                 ),
               ]),
             );

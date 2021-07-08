@@ -29,7 +29,7 @@ class ConnectedTile extends StatelessWidget {
               subtitle: const Text('Long press to disconnect', style: TextStyle(fontSize: 12)),
               leading: CustomButton(
                 radius: 25,
-                color: googleGreen,
+                color: colorGoogleGreen,
                 onPressed: () {},
                 icon: const Icon(Icons.bluetooth_connected_rounded, size: 30),
               ),
@@ -39,7 +39,7 @@ class ConnectedTile extends StatelessWidget {
               stream: graphDataStream,
               builder: (_, AsyncSnapshot<ChartData> snapshot) => Text(
                 '${snapshot.data!.load} Kg.',
-                style: const TextStyle(color: googleGreen, fontSize: 50, fontWeight: FontWeight.bold),
+                style: const TextStyle(color: colorGoogleGreen, fontSize: 50, fontWeight: FontWeight.bold),
               ),
             ),
             const Text(

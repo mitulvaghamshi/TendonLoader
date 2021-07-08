@@ -17,7 +17,7 @@ class ConfirmDialog extends StatelessWidget {
       children: <Widget>[
         CustomTile(
           name: 'Submit Now',
-          color: googleGreen,
+          color: colorGoogleGreen,
           icon: Icons.cloud_upload_rounded,
           onTap: () async {
             final bool result = await submitData(context, export, false);
@@ -26,7 +26,7 @@ class ConfirmDialog extends StatelessWidget {
         ),
         CustomTile(
           name: 'Do it later',
-          color: yellow400,
+          color: colorYellow400,
           icon: Icons.save_rounded,
           onTap: () async {
             final bool result = await submitData(context, export, true);
@@ -35,7 +35,7 @@ class ConfirmDialog extends StatelessWidget {
         ),
         CustomTile(
           name: 'Discard!',
-          color: red400,
+          color: colorRed400,
           icon: Icons.clear_rounded,
           onTap: () async => Navigator.pop(context, true),
         ),

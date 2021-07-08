@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/app_state/app_state_widget.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
@@ -9,6 +8,7 @@ import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/device/scanner_list.dart';
 import 'package:tendon_loader/handler/device_handler.dart';
 import 'package:tendon_loader/handler/dialog_handler.dart';
+import 'package:tendon_loader/homepage.dart';
 import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
 import 'package:tendon_loader/utils/helper.dart';
@@ -26,7 +26,7 @@ class UserSettings extends StatefulWidget {
 class _UserSettingsState extends State<UserSettings> {
   late final TextEditingController _ctrlGraphSize = TextEditingController()
     ..addListener(() {
-      AppStateScope.of(context).settingsState!.graphSize = double.tryParse(_ctrlGraphSize.text) ?? 30;
+      context.model.settingsState!.graphSize = double.tryParse(_ctrlGraphSize.text) ?? 30;
     });
 
   @override
@@ -38,22 +38,24 @@ class _UserSettingsState extends State<UserSettings> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _ctrlGraphSize.text = AppStateScope.of(context).settingsState!.graphSize.toString();
+    _ctrlGraphSize.text = context.model.settingsState!.graphSize.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: const Text('Settings'), actions: <Widget>[
+        CustomButton(icon: const Icon(Icons.public), onPressed: () => Navigator.pushNamed(context, HomePage.route)),
+      ]),
       body: SingleChildScrollView(
         child: AppFrame(
-          onExit: () => AppStateScope.of(context).settingsState!.save().then((_) => true),
+          onExit: () => context.model.settingsState!.save().then((_) => true),
           child: Column(children: <Widget>[
             // testing only
             SwitchListTile.adaptive(
               value: simulateBT,
               tileColor: Colors.red,
-              activeColor: googleGreen,
+              activeColor: colorGoogleGreen,
               title: const Text('Use without progressor', style: TextStyle(color: Colors.white, fontSize: 20)),
               onChanged: (bool value) => setState(() => simulateBT = value),
               subtitle: const Text(
@@ -84,16 +86,16 @@ class _UserSettingsState extends State<UserSettings> {
                 onPressed: () {},
                 icon: const Icon(Icons.person_rounded, size: 30),
                 child: Text(
-                  AppStateScope.of(context).currentUser!.id,
+                  context.model.currentUser!.id,
                   style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
             SwitchListTile.adaptive(
-              activeColor: googleGreen,
+              activeColor: colorGoogleGreen,
               title: const Text('Automatic data upload'),
-              value: AppStateScope.of(context).settingsState!.autoUpload!,
-              onChanged: (bool value) => setState(() => AppStateScope.of(context).settingsState!.autoUpload = value),
+              value: context.model.settingsState!.autoUpload!,
+              onChanged: (bool value) => setState(() => context.model.settingsState!.autoUpload = value),
               subtitle: const Text(
                 'If device is connected to the internet, '
                 'recorded data will be uploaded automatically.',
@@ -101,16 +103,16 @@ class _UserSettingsState extends State<UserSettings> {
             ),
             const SizedBox(height: 20),
             SwitchListTile.adaptive(
-              activeColor: googleGreen,
+              activeColor: colorGoogleGreen,
               title: const Text('Custom prescriptions'),
-              value: AppStateScope.of(context).settingsState!.customPrescriptions!,
+              value: context.model.settingsState!.customPrescriptions!,
               onChanged: (bool value) => setState(() {
-                AppStateScope.of(context).settingsState!.customPrescriptions = value;
-                AppStateScope.of(context).togglePrescription();
+                context.model.settingsState!.customPrescriptions = value;
+                context.model.togglePrescription();
               }),
               subtitle: const Text(
-                'Disable it to user prescriptions provided by '
-                'your clinician for MVC Test and Exercise Mode.',
+                'Disable it to user prescriptions provided by your '
+                'clinician for MVC Test and Exercise Mode.',
               ),
             ),
             const Divider(thickness: 2),
@@ -128,14 +130,14 @@ class _UserSettingsState extends State<UserSettings> {
               trailing: CustomButton(
                 child: Text(
                   localDataCount.toString(),
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: red400),
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: colorRed400),
                 ),
               ),
               title: const Text('Export locallly stored data'),
               onTap: () async {
                 if (localDataCount > 0) {
                   await Future<void>.microtask(() => tryUpload(context));
-                  AppStateWidget.of(context).refresh();
+                  context.view.refresh();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('No data available! or already submitted.'),
@@ -147,12 +149,12 @@ class _UserSettingsState extends State<UserSettings> {
             ListTile(title: const Text('About'), onTap: () => aboutDialog(context)),
             const Divider(thickness: 2),
             ListTile(
-              title: const Text('Logout', style: TextStyle(color: red400)),
+              title: const Text('Logout', style: TextStyle(color: colorRed400)),
               onTap: () async {
                 await signOut();
-                AppStateScope.of(context).userState!.keepSigned = false;
-                await AppStateScope.of(context).userState!.save();
-                await AppStateScope.of(context).settingsState!.save();
+                context.model.userState!.keepSigned = false;
+                await context.model.userState!.save();
+                await context.model.settingsState!.save();
                 await Navigator.pushReplacementNamed(context, Login.route);
               },
             ),

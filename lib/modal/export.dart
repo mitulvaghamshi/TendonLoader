@@ -1,15 +1,13 @@
-import 'dart:convert';
-
 import 'package:archive/archive_io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/prescription.dart';
-import 'package:tendon_loader/utils/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
+import 'package:tendon_loader/utils/downloader.dart';
 import 'package:tendon_loader/web_portal/handler/excel_handler.dart';
 
 part 'export.g.dart';
@@ -84,7 +82,7 @@ class Export extends HiveObject {
   Future<bool> upload(BuildContext context) async {
     late bool result;
     try {
-      await AppStateScope.of(context).currentUser!.exportRef!.doc().set(this);
+      await context.model.currentUser!.exportRef!.doc().set(this);
       result = true;
     } on FirebaseException {
       result = false;
@@ -96,9 +94,7 @@ class Export extends HiveObject {
   Future<void> download() async {
     final Archive archive = Archive();
     archive.addFile(generateExcel(this));
-    AnchorElement(href: 'data:application/zip;base64,${base64.encode(ZipEncoder().encode(archive)!)}')
-      ..setAttribute('download', '$fileName.zip')
-      ..click();
+    await Downloader(bytes: ZipEncoder().encode(archive)).download(name: '$fileName.zip');
   }
 
   Future<void> deleteExport() async {

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
@@ -103,14 +103,14 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
       progressorId: deviceName,
       exportData: exportDataList,
       isComplate: _handler.isComplete,
-      userId: AppStateScope.of(context).currentUser!.id,
+      userId: context.model.currentUser!.id,
     );
     if (_handler.isRunning) {
       await stopWeightMeas();
       return submitData(context, _export, false);
     }
     final bool? result;
-    if (AppStateScope.of(context).settingsState!.autoUpload!) {
+    if (context.model.settingsState!.autoUpload!) {
       result = await submitData(context, _export, false);
     } else {
       result = await confirmSubmit(context, _export);
@@ -132,7 +132,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _pre = AppStateScope.of(context).prescription!;
+    _pre = context.model.prescription!;
     _handler = ProgressHandler(pre: _pre, onReset: _onReset, onSetOver: _onSetOver);
   }
 
@@ -166,7 +166,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: _handler.isHold ? googleGreen : red400,
+                    color: _handler.isHold ? colorGoogleGreen : colorRed400,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -176,7 +176,7 @@ class _BarGraphState extends State<BarGraph> with WidgetsBindingObserver {
                     _handler.progress,
                     style: const TextStyle(color: Colors.black, fontSize: 36, fontWeight: FontWeight.bold),
                   ),
-                  backgroundColor: snapshot.data!.load! > _pre.targetLoad ? googleGreen : googleYellow,
+                  backgroundColor: snapshot.data!.load! > _pre.targetLoad ? colorGoogleGreen : colorGoogleYellow,
                 ),
               ]),
             );

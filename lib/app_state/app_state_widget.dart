@@ -8,10 +8,6 @@ class AppStateWidget extends StatefulWidget {
 
   final Widget child;
 
-  static AppStateWidgetState of(BuildContext context) {
-    return context.findAncestorStateOfType<AppStateWidgetState>()!;
-  }
-
   @override
   AppStateWidgetState createState() => AppStateWidgetState();
 }

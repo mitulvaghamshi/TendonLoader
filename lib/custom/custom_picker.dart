@@ -23,7 +23,7 @@ class CustomPicker extends StatefulWidget {
           title: const Text(
             'Select Time (m:s)',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 22, color: googleGreen, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 22, color: colorGoogleGreen, fontWeight: FontWeight.bold),
           ),
           contentPadding: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -34,7 +34,7 @@ class CustomPicker extends StatefulWidget {
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <CustomButton>[
               CustomButton(
-                icon: const Icon(Icons.done_rounded, color: googleGreen),
+                icon: const Icon(Icons.done_rounded, color: colorGoogleGreen),
                 onPressed: () => Navigator.of(context).pop<String>(
                   Duration(minutes: _min, seconds: _sec).inSeconds.toString(),
                 ),
@@ -57,7 +57,7 @@ class _CustomPickerState extends State<CustomPicker> {
   Widget build(BuildContext context) {
     return TimePicker(
       value: _value,
-      selectedTextStyle: const TextStyle(fontSize: 32, color: googleGreen),
+      selectedTextStyle: const TextStyle(fontSize: 32, color: colorGoogleGreen),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(width: 2, color: Theme.of(context).accentColor),

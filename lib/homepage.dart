@@ -26,8 +26,8 @@ class HomePage extends StatelessWidget {
           await signOut();
           await Navigator.pushReplacementNamed(context, Login.route);
         },
-        icon: const Icon(Icons.logout, color: red400),
-        child: const Text('Logout', style: TextStyle(color: red400)),
+        icon: const Icon(Icons.logout, color: colorRed400),
+        child: const Text('Logout', style: TextStyle(color: colorRed400)),
       ),
     ]);
 

@@ -28,7 +28,7 @@ class DeviceTile extends StatelessWidget {
               title: Text(_deviceName, style: const TextStyle(fontWeight: FontWeight.bold)),
               leading: CustomButton(
                 radius: 25,
-                color: red400,
+                color: colorRed400,
                 onPressed: () {},
                 icon: const Icon(Icons.bluetooth_rounded, size: 30),
               ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/app_state/app_state_widget.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
 import 'package:tendon_loader/modal/user.dart';
@@ -13,10 +12,10 @@ class UserListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: AppStateScope.of(context).users.length,
+      itemCount: context.model.users.length,
       separatorBuilder: (_, int index) => Divider(color: Theme.of(context).accentColor),
       itemBuilder: (_, int index) {
-        final User _user = AppStateScope.of(context).users[index];
+        final User _user = context.model.users[index];
         return ExpansionTile(
           maintainState: true,
           key: ValueKey<String>(_user.id),
@@ -26,7 +25,7 @@ class UserListItem extends StatelessWidget {
           leading: CustomButton(onPressed: () {}, color: Colors.blue, child: Text(_user.avatar)),
           title: Text(
             _user.id,
-            style: const TextStyle(fontSize: 18, color: googleGreen, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 18, color: colorGoogleGreen, fontWeight: FontWeight.bold),
           ),
           trailing: PopupMenuButton<ItemAction>(
             icon: const Icon(Icons.apps_rounded),
@@ -56,11 +55,11 @@ class UserListItem extends StatelessWidget {
                         CustomButton(
                           onPressed: () async {
                             Navigator.pop(context);
-                            AppStateWidget.of(context).refresh();
+                            context.view.refresh();
                             await Future<void>.microtask(_user.deleteAllExports);
                           },
-                          icon: const Icon(Icons.delete_rounded, color: red400),
-                          child: const Text('Yes, Delete All!', style: TextStyle(color: red400)),
+                          icon: const Icon(Icons.delete_rounded, color: colorRed400),
+                          child: const Text('Yes, Delete All!', style: TextStyle(color: colorRed400)),
                         ),
                         CustomButton(
                           onPressed: Navigator.of(context).pop,
@@ -91,8 +90,8 @@ class UserListItem extends StatelessWidget {
               const PopupMenuItem<ItemAction>(
                 value: ItemAction.delete,
                 child: ListTile(
-                  title: Text('Delete all', style: TextStyle(color: red400)),
-                  leading: Icon(Icons.delete_forever_rounded, color: red400),
+                  title: Text('Delete all', style: TextStyle(color: colorRed400)),
+                  leading: Icon(Icons.delete_forever_rounded, color: colorRed400),
                 ),
               ),
             ],

@@ -51,7 +51,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       mainAxisSize: MainAxisSize.min,
       children: buttons
         ..add(IconButton(
-          icon: const Icon(Icons.clear_rounded, color: red400),
+          icon: const Icon(Icons.clear_rounded, color: colorRed400),
           onPressed: () => widget.controller!.clear(),
         )),
     );
@@ -80,10 +80,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
         isDense: true,
         suffix: _buildSuffix,
         labelText: widget.label,
-        errorStyle: const TextStyle(color: red400),
+        errorStyle: const TextStyle(color: colorRed400),
         labelStyle: TextStyle(color: Theme.of(context).accentColor),
-        errorBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: red400)),
-        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: googleGreen)),
+        errorBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorRed400)),
+        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
         enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Theme.of(context).accentColor)),
       ),
     );

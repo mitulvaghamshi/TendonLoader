@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/constants/others.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
@@ -37,11 +37,11 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     if (status == AnimationStatus.forward) {
       _result = await authenticate(context, _isNew, _emailCtrl.text, _passwordCtrl.text);
       if (_result) {
-        AppStateScope.of(context).userState!
+        context.model.userState!
           ..keepSigned = _keepSigned
           ..userName = _emailCtrl.text
           ..passWord = _passwordCtrl.text;
-        await AppStateScope.of(context).initAppUser();
+        await context.model.initAppUser();
       }
     } else if (status == AnimationStatus.completed) {
       if (_result) {
@@ -55,10 +55,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _keepSigned = AppStateScope.of(context).userState!.keepSigned!;
+    _keepSigned = context.model.userState!.keepSigned!;
     if (_keepSigned) {
-      _emailCtrl.text = AppStateScope.of(context).userState!.userName!;
-      _passwordCtrl.text = AppStateScope.of(context).userState!.passWord!;
+      _emailCtrl.text = context.model.userState!.userName!;
+      _passwordCtrl.text = context.model.userState!.passWord!;
     }
   }
 
@@ -117,10 +117,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
             const SizedBox(height: 10),
             CustomButton(
               onPressed: () => setState(() => _isNew = !_isNew),
-              icon: Icon(_isNew ? Icons.check_rounded : Icons.add, color: googleGreen),
+              icon: Icon(_isNew ? Icons.check_rounded : Icons.add, color: colorGoogleGreen),
               child: Text(
                 _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
-                style: const TextStyle(letterSpacing: 0.5, color: googleGreen),
+                style: const TextStyle(letterSpacing: 0.5, color: colorGoogleGreen),
               ),
             ),
             const SizedBox(height: 10),

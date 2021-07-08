@@ -1,0 +1,100 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Current",
+				"request": "launch",
+				"type": "dart",
+			},
+			{
+				"name": "Web",
+				"request": "launch",
+				"type": "dart",
+				"deviceId": "Chrome",
+			},
+			{
+				"name": "Android",
+				"request": "launch",
+				"type": "dart",
+				"deviceId": "sdk gphone",
+			},
+			{
+				"name": "iPhone",
+				"request": "launch",
+				"type": "dart",
+				"deviceId": "iphone",
+			},
+		],
+		"compounds": [
+			{
+				"name": "All Devices",
+				"configurations": [
+					"Android",
+					"iPhone",
+					"Web",
+				],
+			}
+		]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Flutter: clean",
+				"type": "shell",
+				"command": "flutter clean",
+			},
+			{
+				"label": "Flutter: pub get",
+				"type": "shell",
+				"command": "flutter pub get",
+			},
+			{
+				"label": "iOS: pod install",
+				"type": "shell",
+				"command": "pod install",
+				"options": {
+					"cwd": "${workspaceFolder}/ios"
+				}
+			},
+			{
+				"label": "BuildRunner: build",
+				"type": "shell",
+				"command": "flutter pub run build_runner build --delete-conflicting-outputs",
+				"problemMatcher": [
+					"$dart-build_runner"
+				]
+			},
+			{
+				"label": "Project: rebuild",
+				"type": "shell",
+				"dependsOrder": "sequence",
+				"dependsOn": [
+					"Flutter: clean",
+					"Flutter: pub get",
+					"iOS: pod install",
+					"Build Runner: build overrite",
+				],
+				"isBackground": true,
+			},
+			{
+				"label": "Android: build appbundle",
+				"type": "shell",
+				"command": "flutter build appbundle --no-track-widget-creation --obfuscate --split-debug-info=build/app/outputs/bundle/release/map/",
+				"isBackground": true,
+			},
+			{
+				"label": "Firebase: start emulators",
+				"type": "shell",
+				"command": "firebase emulators:start --export-on-exit=../emulator-backup --import=../emulator-backup",
+				"isBackground": true,
+			}
+		]
+	}
+}

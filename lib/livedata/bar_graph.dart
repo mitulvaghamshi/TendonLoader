@@ -63,7 +63,7 @@ class _BarGraphState extends State<BarGraph> {
                 fit: BoxFit.fitWidth,
                 child: Text(
                   snapshot.data!.time!.toTime,
-                  style: const TextStyle(color: googleGreen, fontSize: 40, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: colorGoogleGreen, fontSize: 40, fontWeight: FontWeight.bold),
                 ),
               );
             },

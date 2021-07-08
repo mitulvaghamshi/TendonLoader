@@ -35,7 +35,7 @@ class AppState {
         settingsState = boxSettingsState.get(userState!.userName.hashCode);
       } else {
         await boxSettingsState.put(userState!.userName.hashCode, settingsState = SettingsState());
-        await _instance.doc(userState!.userName).set(User(prescription: Prescription.empty()));
+        await _dbRoot.doc(userState!.userName).set(User(prescription: Prescription.empty()));
       }
       currentUser = await User.of(userState!.userName!).fetch();
       togglePrescription();
@@ -56,27 +56,24 @@ class AppState {
     }
   }
 
-  CollectionReference<User> get _instance {
-    return FirebaseFirestore.instance.collection(keyBase).withConverter<User>(
-        toFirestore: (User value, SetOptions? options) {
-      return value.toMap();
-    }, fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
-      return User.fromJson(snapshot.reference);
-    });
-  }
+  CollectionReference<User> get _dbRoot => FirebaseFirestore.instance.collection(keyBase).withConverter<User>(
+      toFirestore: (User value, SetOptions? options) => value.toMap(),
+      fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) =>
+          User.fromJson(snapshot.reference));
 
   Completer<void> _complater = Completer<void>();
 
-  void markDirty() => _complater = Completer<void>();
+  void reload() => _complater = Completer<void>();
 
-  Future<void> fetchAllData() async {
+  Future<void> fetch() async {
     if (_complater.isCompleted) return;
     users.clear();
-    final QuerySnapshot<User> _snapshot = await _instance.get();
+    final QuerySnapshot<User> _snapshot = await _dbRoot.get();
     final Iterable<User> _iterable = _snapshot.docs.map((QueryDocumentSnapshot<User> u) => u.data());
     for (final User user in _iterable) {
       users.add(await user.fetch());
     }
+
     _complater.complete();
     return _complater.future;
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
@@ -75,7 +75,7 @@ class _NewExerciseState extends State<NewExercise> {
         await widget.user!.prescriptionRef!.update(_pre.toMap());
         Navigator.pop(context);
       } else {
-        AppStateScope.of(context).prescription = _pre;
+        context.model.prescription = _pre;
         await Navigator.pushReplacementNamed(context, ExerciseMode.route);
       }
     }
@@ -101,7 +101,7 @@ class _NewExerciseState extends State<NewExercise> {
           style: const TextStyle(
             fontSize: 22,
             fontFamily: 'Georgia',
-            color: googleGreen,
+            color: colorGoogleGreen,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -153,8 +153,8 @@ class _NewExerciseState extends State<NewExercise> {
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
           CustomButton(
             onPressed: _submit,
-            icon: const Icon(Icons.done_rounded, color: googleGreen),
-            child: const Text('Go', style: TextStyle(color: googleGreen)),
+            icon: const Icon(Icons.done_rounded, color: colorGoogleGreen),
+            child: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
           ),
           CustomButton(
             onPressed: () => _formKey.currentState!.reset(),

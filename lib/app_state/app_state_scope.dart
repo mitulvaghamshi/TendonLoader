@@ -11,10 +11,6 @@ class AppStateScope extends InheritedWidget {
 
   final AppState data;
 
-  static AppState of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AppStateScope>()!.data;
-  }
-
   @override
-  bool updateShouldNotify(AppStateScope oldWidget) => true;
+  bool updateShouldNotify(AppStateScope oldWidget) => oldWidget.data != data;
 }
