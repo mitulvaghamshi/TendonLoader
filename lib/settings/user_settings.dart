@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
+import 'package:tendon_loader/device/handler/device_handler.dart';
 import 'package:tendon_loader/device/scanner_list.dart';
-import 'package:tendon_loader/handler/device_handler.dart';
-import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/homepage.dart';
 import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
 import 'package:tendon_loader/utils/helper.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class UserSettings extends StatefulWidget {
@@ -59,9 +58,10 @@ class _UserSettingsState extends State<UserSettings> {
               title: const Text('Use without progressor', style: TextStyle(color: Colors.white, fontSize: 20)),
               onChanged: (bool value) => setState(() => simulateBT = value),
               subtitle: const Text(
-                  'Use app without the progressor, generate and submit fake data '
-                  'for MVC and Exercise Mode, testing perpose only!',
-                  style: TextStyle(color: Colors.white)),
+                'Use app without the progressor, generate and submit fake data '
+                'for MVC and Exercise Mode, testing perpose only!',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
             const SizedBox(height: 10),
             ExpansionTile(
@@ -136,12 +136,9 @@ class _UserSettingsState extends State<UserSettings> {
               title: const Text('Export locallly stored data'),
               onTap: () async {
                 if (localDataCount > 0) {
-                  await Future<void>.microtask(() => tryUpload(context));
-                  context.view.refresh();
+                  await Future<void>.microtask(() => tryUpload(context)).then((_) => context.view.refresh);
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('No data available! or already submitted.'),
-                  ));
+                  context.showSnackBar(const Text('No data available! or already submitted.'));
                 }
               },
             ),

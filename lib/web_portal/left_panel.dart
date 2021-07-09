@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/constants/others.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/web_portal/custom/user_list_item.dart';
 
@@ -15,10 +15,8 @@ class LeftPanel extends StatefulWidget {
 
 class _LeftPanelState extends State<LeftPanel> {
   Future<void> _onRefresh() async {
-    context.model.reload();
-    context.view.refresh();
-    // AppStateScope.of(context).reload();
-    // AppStateWidget.of(context).refresh();
+    context.model.reload;
+    context.view.refresh;
   }
 
   @override

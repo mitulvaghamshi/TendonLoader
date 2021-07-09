@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/constants/others.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
@@ -9,6 +8,7 @@ import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/homepage.dart';
 import 'package:tendon_loader/homescreen.dart';
 import 'package:tendon_loader/login/app_auth.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/utils/validator.dart';
 
@@ -87,9 +87,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         child: Form(
           key: _formKey,
           child: Column(children: <Widget>[
-            const SizedBox(height: 20),
-            const AppLogo(),
-            const SizedBox(height: 20),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: AppLogo()),
             CustomTextField(
               label: 'Username',
               controller: _emailCtrl,

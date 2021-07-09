@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
-import 'package:tendon_loader/handler/dialog_handler.dart';
+import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/themes.dart';
 

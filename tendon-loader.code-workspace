@@ -48,12 +48,12 @@
 			{
 				"label": "Flutter: clean",
 				"type": "shell",
-				"command": "flutter clean",
+				"command": "flutter clean"
 			},
 			{
 				"label": "Flutter: pub get",
 				"type": "shell",
-				"command": "flutter pub get",
+				"command": "flutter pub get"
 			},
 			{
 				"label": "iOS: pod install",
@@ -79,21 +79,25 @@
 					"Flutter: clean",
 					"Flutter: pub get",
 					"iOS: pod install",
-					"Build Runner: build overrite",
-				],
-				"isBackground": true,
+					"BuildRunner: build"
+				]
 			},
 			{
 				"label": "Android: build appbundle",
 				"type": "shell",
-				"command": "flutter build appbundle --no-track-widget-creation --obfuscate --split-debug-info=build/app/outputs/bundle/release/map/",
-				"isBackground": true,
+				"command": "flutter build appbundle --no-track-widget-creation --obfuscate --split-debug-info=build/app/outputs/bundle/release/map/"
+			},
+			{
+				"label": "Android: build apk",
+				"type": "shell",
+				"command": "flutter build apk --no-track-widget-creation --obfuscate --split-debug-info=build/app/outputs/bundle/release/map/",
+				"problemMatcher": []
 			},
 			{
 				"label": "Firebase: start emulators",
 				"type": "shell",
 				"command": "firebase emulators:start --export-on-exit=../emulator-backup --import=../emulator-backup",
-				"isBackground": true,
+				"problemMatcher": []
 			}
 		]
 	}

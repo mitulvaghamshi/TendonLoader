@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state.dart';
 import 'package:tendon_loader/custom/custom_table.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/utils/extension.dart';

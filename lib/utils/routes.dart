@@ -10,9 +10,7 @@ import 'package:tendon_loader/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/settings/user_settings.dart';
 
-Map<String, WidgetBuilder> get routes => _routes;
-
-final Map<String, WidgetBuilder> _routes = <String, WidgetBuilder>{
+final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   Login.route: (_) => const Login(),
   Splash.route: (_) => const Splash(),
   LiveData.route: (_) => const LiveData(),

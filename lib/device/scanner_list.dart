@@ -5,7 +5,7 @@ import 'package:tendon_loader/constants/images.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/device/device_tile.dart';
-import 'package:tendon_loader/handler/device_handler.dart';
+import 'package:tendon_loader/device/handler/device_handler.dart';
 
 class ScannerList extends StatelessWidget {
   const ScannerList({Key? key}) : super(key: key);

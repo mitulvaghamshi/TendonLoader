@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tendon_loader/constants/keys.dart';
-import 'package:tendon_loader/handler/device_handler.dart';
+import 'package:tendon_loader/device/handler/device_handler.dart';
 import 'package:tendon_loader/login/initializer.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
@@ -63,7 +63,7 @@ class AppState {
 
   Completer<void> _complater = Completer<void>();
 
-  void reload() => _complater = Completer<void>();
+  void get reload => _complater = Completer<void>();
 
   Future<void> fetch() async {
     if (_complater.isCompleted) return;
@@ -73,7 +73,6 @@ class AppState {
     for (final User user in _iterable) {
       users.add(await user.fetch());
     }
-
     _complater.complete();
     return _complater.future;
   }

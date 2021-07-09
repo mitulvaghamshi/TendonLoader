@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/exercise/new_exercise.dart';
+import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/modal/user.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/item_action.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
@@ -22,10 +22,14 @@ class UserListItem extends StatelessWidget {
           subtitle: Text(_user.childCount),
           tilePadding: const EdgeInsets.all(5),
           expandedCrossAxisAlignment: CrossAxisAlignment.start,
-          leading: CustomButton(onPressed: () {}, color: Colors.blue, child: Text(_user.avatar)),
+          leading: CustomButton(color: Colors.blue, child: Text(_user.avatar)),
           title: Text(
             _user.id,
-            style: const TextStyle(fontSize: 18, color: colorGoogleGreen, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontSize: 18,
+              color: colorGoogleGreen,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           trailing: PopupMenuButton<ItemAction>(
             icon: const Icon(Icons.apps_rounded),
@@ -33,43 +37,13 @@ class UserListItem extends StatelessWidget {
               if (action == ItemAction.download) {
                 await Future<void>.microtask(_user.download);
               } else if (action == ItemAction.prescribe) {
-                await showDialog<void>(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    scrollable: true,
-                    content: NewExercise(user: _user),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  ),
-                );
+                await setPrescriptions(context, _user);
               } else if (action == ItemAction.delete) {
-                await showDialog<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      title: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: const <Widget>[
-                        Icon(Icons.warning_rounded, size: 50),
-                        Text('Do you really want to delete?'),
-                      ]),
-                      actions: <Widget>[
-                        CustomButton(
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            context.view.refresh();
-                            await Future<void>.microtask(_user.deleteAllExports);
-                          },
-                          icon: const Icon(Icons.delete_rounded, color: colorRed400),
-                          child: const Text('Yes, Delete All!', style: TextStyle(color: colorRed400)),
-                        ),
-                        CustomButton(
-                          onPressed: Navigator.of(context).pop,
-                          icon: const Icon(Icons.cancel),
-                          child: const Text('Cencel'),
-                        ),
-                      ],
-                    );
-                  },
-                );
+                await confirmDelete(context, () async {
+                  Navigator.pop(context);
+                  context.view.refresh;
+                  await Future<void>.microtask(_user.deleteAllExports);
+                });
               }
             },
             itemBuilder: (_) => <PopupMenuItem<ItemAction>>[

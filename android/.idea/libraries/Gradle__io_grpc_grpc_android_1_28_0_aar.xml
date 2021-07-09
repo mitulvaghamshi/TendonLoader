@@ -3,8 +3,14 @@
     <CLASSES>
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3aeb2d62463266aa0c82da4132211d9d/jetified-grpc-android-1.28.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ba80d265f896885d99d90eb57edc36f4/jetified-grpc-android-1.28.0/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ba80d265f896885d99d90eb57edc36f4/jetified-grpc-android-1.28.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ba80d265f896885d99d90eb57edc36f4/jetified-grpc-android-1.28.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/8ec00c99913b7bfff75f027f8a4c36b4/transformed/jetified-grpc-android-1.28.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6482baf70813d4b6778ca154fe63bc68/transformed/jetified-grpc-android-1.28.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/f5dcfc473266e2068b693c8d685a6747/transformed/jetified-grpc-android-1.28.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0962352a55d74022f019e3b95ba06569/transformed/jetified-grpc-android-1.28.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/ae042563698fec7cc80a189f28cd55a9/transformed/jetified-grpc-android-1.28.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d3f2a6a9a5a4038ac3446de2395dd120/transformed/jetified-grpc-android-1.28.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d3f2a6a9a5a4038ac3446de2395dd120/transformed/jetified-grpc-android-1.28.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/d3f2a6a9a5a4038ac3446de2395dd120/transformed/jetified-grpc-android-1.28.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-android/1.28.0/e7c3f4a90a5862818fc0ff52806ab2b2986bea67/grpc-android-1.28.0-javadoc.jar!/" />

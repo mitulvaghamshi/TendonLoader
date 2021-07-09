@@ -6,13 +6,12 @@ import 'package:tendon_loader/custom/custom_button.dart';
 class AppLogo extends StatelessWidget {
   const AppLogo({Key? key, this.radius = 120}) : super(key: key);
 
-  final double? radius;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
     return CustomButton(
-      radius: radius!,
-      onPressed: () {},
+      radius: radius,
       child: SvgPicture.asset(
         'assets/images/app_logo.svg',
         color: Theme.of(context).accentColor,

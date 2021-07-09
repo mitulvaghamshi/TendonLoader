@@ -28,5 +28,8 @@ extension ExConvert on List<int> {
 
 extension ExAppState on BuildContext {
   AppState get model => dependOnInheritedWidgetOfExactType<AppStateScope>()!.data;
+
   AppStateWidgetState get view => findAncestorStateOfType<AppStateWidgetState>()!;
+
+  void showSnackBar(Widget content) => ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: content));
 }

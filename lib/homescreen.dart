@@ -3,7 +3,6 @@ import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
-import 'package:tendon_loader/handler/dialog_handler.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/settings/user_settings.dart';

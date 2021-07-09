@@ -1,12 +1,3 @@
-String? validateNum(String? value) {
-  if (value == null) return null;
-  if (value.isEmpty) {
-    return '* required.';
-  } else if (double.tryParse(value)! <= 0) {
-    return 'Value must be greater then zero.';
-  }
-}
-
 const String _regexEmail =
     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
@@ -25,5 +16,14 @@ String? validatePassword(String? password) {
     return 'Password can\'t be empty.';
   } else if (password.length < 6) {
     return 'Password must be at least 6 characters long.';
+  }
+}
+
+String? validateNum(String? value) {
+  if (value == null) return null;
+  if (value.isEmpty) {
+    return '* required.';
+  } else if (double.tryParse(value)! <= 0) {
+    return 'Value must be greater then zero.';
   }
 }
