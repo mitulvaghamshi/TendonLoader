@@ -37,7 +37,7 @@ class UserListItem extends StatelessWidget {
               if (action == ItemAction.download) {
                 await Future<void>.microtask(_user.download);
               } else if (action == ItemAction.prescribe) {
-                await setPrescriptions(context, _user);
+                await setPrescription(context, _user);
               } else if (action == ItemAction.delete) {
                 await confirmDelete(context, () async {
                   Navigator.pop(context);

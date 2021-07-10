@@ -6,29 +6,40 @@ const Color colorYellow400 = Color(0xfffdf061);
 const Color colorOrange400 = Color(0xffe18f3c);
 const Color colorRed400 = Color(0xffff534d);
 const Color colorRed900 = Color(0xffb71c1c);
+
 const Color colorWhite = Color(0xffffffff);
 const Color colorBlack = Color(0xff000000);
-const Color colorLight = Color(0xfffbfbfb);
-const Color colorDark = Color(0xff505050);
+
+const Color colorDark1 = Color(0xff161616);
+const Color colorDark2 = Color(0xff262626);
+const Color colorDark3 = Color(0xff363636);
 
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  buttonColor: colorLight,
+  cardColor: colorWhite,
+  buttonColor: colorWhite,
+  canvasColor: colorWhite,
   accentColor: colorBlack,
   primaryColor: colorWhite,
+  highlightColor: colorGoogleGreen,
+  dialogBackgroundColor: colorWhite,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: colorLight,
+    backgroundColor: colorWhite,
     foregroundColor: colorBlack,
   ),
 );
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  buttonColor: colorDark,
+  cardColor: colorDark2,
+  buttonColor: colorDark3,
+  canvasColor: colorDark1,
   accentColor: colorWhite,
-  primaryColor: colorBlack,
+  primaryColor: colorDark1,
+  highlightColor: colorGoogleGreen,
+  dialogBackgroundColor: colorDark2,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: colorDark,
+    backgroundColor: colorDark3,
     foregroundColor: colorWhite,
   ),
 );

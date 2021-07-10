@@ -7,10 +7,11 @@ import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/device/handler/device_handler.dart';
 import 'package:tendon_loader/device/scanner_list.dart';
 import 'package:tendon_loader/homepage.dart';
-import 'package:tendon_loader/login/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
-import 'package:tendon_loader/utils/helper.dart';
+import 'package:tendon_loader/utils/app_auth.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/helper.dart';
+import 'package:tendon_loader/utils/initializer.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class UserSettings extends StatefulWidget {
@@ -24,9 +25,7 @@ class UserSettings extends StatefulWidget {
 
 class _UserSettingsState extends State<UserSettings> {
   late final TextEditingController _ctrlGraphSize = TextEditingController()
-    ..addListener(() {
-      context.model.settingsState!.graphSize = double.tryParse(_ctrlGraphSize.text) ?? 30;
-    });
+    ..addListener(() => context.model.settingsState!.graphSize = double.tryParse(_ctrlGraphSize.text) ?? 30);
 
   @override
   void dispose() {
@@ -52,11 +51,11 @@ class _UserSettingsState extends State<UserSettings> {
           child: Column(children: <Widget>[
             // testing only
             SwitchListTile.adaptive(
-              value: simulateBT,
+              value: isSumulation,
               tileColor: Colors.red,
               activeColor: colorGoogleGreen,
               title: const Text('Use without progressor', style: TextStyle(color: Colors.white, fontSize: 20)),
-              onChanged: (bool value) => setState(() => simulateBT = value),
+              onChanged: (bool value) => setState(() => isSumulation = value),
               subtitle: const Text(
                 'Use app without the progressor, generate and submit fake data '
                 'for MVC and Exercise Mode, testing perpose only!',
@@ -78,16 +77,17 @@ class _UserSettingsState extends State<UserSettings> {
               children: const <Widget>[ScannerList()],
             ),
             const SizedBox(height: 20),
-            // testing only
+            // testing only end
             const AppLogo(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
-              child: CustomButton(
-                onPressed: () {},
-                icon: const Icon(Icons.person_rounded, size: 30),
-                child: Text(
-                  context.model.currentUser!.id,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              child: FittedBox(
+                child: CustomButton(
+                  icon: const Icon(Icons.person_rounded, size: 30),
+                  child: Text(
+                    context.model.currentUser!.id,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ),
@@ -121,7 +121,7 @@ class _UserSettingsState extends State<UserSettings> {
               child: CustomTextField(
                 controller: _ctrlGraphSize,
                 pattern: r'^\d{1,3}(\.\d{0,2})?',
-                label: 'Graph Y-Axis max size (default: 30 Kg)',
+                label: 'Y-Axis Size (default: 30 Kg)',
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
               ),
             ),
@@ -129,21 +129,21 @@ class _UserSettingsState extends State<UserSettings> {
             ListTile(
               trailing: CustomButton(
                 child: Text(
-                  localDataCount.toString(),
+                  boxExport.length.toString(),
                   style: const TextStyle(fontWeight: FontWeight.bold, color: colorRed400),
                 ),
               ),
-              title: const Text('Export locallly stored data'),
+              title: const Text('Click to export locallly stored data'),
               onTap: () async {
-                if (localDataCount > 0) {
-                  await Future<void>.microtask(() => tryUpload(context)).then((_) => context.view.refresh);
+                if (boxExport.isNotEmpty) {
+                  await tryUpload(context).then((_) => context.view.refresh);
                 } else {
                   context.showSnackBar(const Text('No data available! or already submitted.'));
                 }
               },
             ),
             const Divider(thickness: 2),
-            ListTile(title: const Text('About'), onTap: () => aboutDialog(context)),
+            ListTile(title: const Text('About'), onTap: () => about(context)),
             const Divider(thickness: 2),
             ListTile(
               title: const Text('Logout', style: TextStyle(color: colorRed400)),
@@ -152,7 +152,7 @@ class _UserSettingsState extends State<UserSettings> {
                 context.model.userState!.keepSigned = false;
                 await context.model.userState!.save();
                 await context.model.settingsState!.save();
-                await Navigator.pushReplacementNamed(context, Login.route);
+                await context.push(Login.route, replace: true);
               },
             ),
           ]),

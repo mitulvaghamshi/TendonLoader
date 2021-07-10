@@ -14,6 +14,6 @@ class CustomImage extends StatelessWidget {
         opacity: frame == null ? 0 : 1,
         child: child,
       );
-    }, excludeFromSemantics: true);
+    }, excludeFromSemantics: true, fit: BoxFit.contain);
   }
 }

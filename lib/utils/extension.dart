@@ -5,8 +5,8 @@ import 'package:tendon_loader/app_state/app_state.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/app_state/app_state_widget.dart';
 
-extension ExTimer on int {
-  String get toTime => this == 0 ? 'GO!' : '${this ~/ 60}:${(this % 60).toString().padLeft(2, '0')}';
+extension ExTimeer on int {
+  String get toSec => this < 100 ? 'GO!' : (this / 1000).truncate().toString();
 }
 
 extension ExTimeFormat on double {
@@ -32,4 +32,12 @@ extension ExAppState on BuildContext {
   AppStateWidgetState get view => findAncestorStateOfType<AppStateWidgetState>()!;
 
   void showSnackBar(Widget content) => ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: content));
+
+  void pop<T extends Object?>([T? result]) => Navigator.pop<T>(this, result);
+
+  Future<T?> push<T extends Object?>(String routeName, {bool? replace = false, Object? arguments}) {
+    return replace!
+        ? Navigator.pushReplacementNamed<T, T>(this, routeName, arguments: arguments)
+        : Navigator.pushNamed<T>(this, routeName, arguments: arguments);
+  }
 }

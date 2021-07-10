@@ -22,7 +22,13 @@
 				"name": "Android",
 				"request": "launch",
 				"type": "dart",
-				"deviceId": "sdk gphone",
+				"deviceId": "sdk gphone64",
+			},
+			{
+				"name": "Redmi Note 7 Pro",
+				"request": "launch",
+				"type": "dart",
+				"deviceId": "Redmi Note 7 Pro",
 			},
 			{
 				"name": "iPhone",
@@ -35,6 +41,7 @@
 			{
 				"name": "All Devices",
 				"configurations": [
+					"Redmi Note 7 Pro",
 					"Android",
 					"iPhone",
 					"Web",

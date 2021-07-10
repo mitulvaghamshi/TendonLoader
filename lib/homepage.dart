@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/login/app_auth.dart';
+import 'package:tendon_loader/utils/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/web_portal/left_panel.dart';

@@ -3,15 +3,16 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/device/handler/device_handler.dart';
-import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/clip_player.dart';
+import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/helper.dart';
+import 'package:tendon_loader/utils/initializer.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class BarGraph extends StatefulWidget {
@@ -23,15 +24,16 @@ class BarGraph extends StatefulWidget {
 
 class _BarGraphState extends State<BarGraph> {
   final List<ChartData> _lineData = <ChartData>[ChartData(), ChartData(time: 2)];
+  late final int mvcDuration = context.model.mvcDuration!;
   final List<ChartData> _graphData = <ChartData>[];
   ChartSeriesController? _graphCtrl;
   ChartSeriesController? _lineCtrl;
   late Timestamp? _timestamp;
-  late final int mvcDuration;
   bool _isComplete = false;
   bool _isRunning = false;
   bool _hasData = false;
   double _maxForce = 0;
+  Export? _export;
 
   Future<void> _onStart() async {
     if (!_isRunning && _hasData) {
@@ -52,7 +54,7 @@ class _BarGraphState extends State<BarGraph> {
     _isRunning = false;
     play(false);
     await stopWeightMeas();
-    if (_hasData) await Future<void>.microtask(_onExit);
+    await _onExit();
   }
 
   Future<void> _onReset() async {
@@ -65,36 +67,24 @@ class _BarGraphState extends State<BarGraph> {
 
   Future<bool> _onExit() async {
     if (!_hasData) return true;
-    final Export _export = Export(
-      mvcValue: _maxForce,
-      timestamp: _timestamp!,
-      isComplate: _isComplete,
-      progressorId: deviceName,
-      exportData: exportDataList,
-      userId: context.model.currentUser!.id,
-    );
-    if (_isRunning) {
-      await stopWeightMeas();
-      return submitData(context, _export, false);
+    if (_export == null) {
+      _export = Export(
+        mvcValue: _maxForce,
+        timestamp: _timestamp!,
+        isComplate: _isComplete,
+        progressorId: deviceName,
+        exportData: exportDataList,
+        userId: context.model.currentUser!.id,
+      );
+      await boxExport.add(_export!);
     }
-    final bool? result;
-    if (context.model.settingsState!.autoUpload!) {
-      result = await submitData(context, _export, false);
-    } else {
-      result = await confirmSubmit(context, _export);
-    }
-    if (result == null) {
-      return false;
-    } else {
+    if (_isRunning) return stopWeightMeas().then((_) => true);
+    final bool result = await submitData(context, _export!) ?? true;
+    if (result) {
       _hasData = false;
+      _export = null;
     }
     return result;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    mvcDuration = context.model.mvcDuration!;
   }
 
   @override

@@ -29,9 +29,15 @@ BluetoothDevice? _device;
 BluetoothCharacteristic? _dataChar;
 BluetoothCharacteristic? _controlChar;
 
-BluetoothDevice? get connectedDevice => _device;
+BluetoothDevice? get progressor => _device;
 
-String get deviceName => _device!.name.isEmpty ? _device!.id.id : _device!.name;
+String get deviceName {
+  return progressor == null
+      ? 'Device not connected!'
+      : _device!.name.isEmpty
+          ? _device!.id.id
+          : _device!.name;
+}
 
 Future<void> setNotification(bool value) async => _dataChar!.setNotifyValue(value);
 
@@ -68,7 +74,7 @@ Future<void> stopTaring() async {
 
 Future<void> startWeightMeas() async {
   if (!_isRunning) {
-    if (simulateBT) {
+    if (isSumulation) {
       _fakeListen();
     } else {
       await _controlChar!.write(<int>[cmdStartWeightMeas]);
@@ -79,7 +85,7 @@ Future<void> startWeightMeas() async {
 
 Future<void> stopWeightMeas() async {
   if (_isRunning) {
-    if (simulateBT) {
+    if (isSumulation) {
       _timer?.cancel();
     } else {
       await _controlChar!.write(<int>[cmdStopWeightMeas]);
@@ -148,7 +154,7 @@ void _addListener() {
 
 // simulator start
 late Timer? _timer;
-late bool simulateBT;
+late bool isSumulation;
 
 void _fakeListen() {
   double fakeLoad = 0;

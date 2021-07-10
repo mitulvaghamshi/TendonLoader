@@ -6,10 +6,10 @@ import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/device/handler/device_handler.dart';
-import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/utils/clip_player.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class BarGraph extends StatefulWidget {
@@ -20,8 +20,7 @@ class BarGraph extends StatefulWidget {
 }
 
 class _BarGraphState extends State<BarGraph> {
-  final List<ChartData?> _graphData = <ChartData?>[];
-
+  final List<ChartData> _graphData = <ChartData>[];
   ChartSeriesController? _graphCtrl;
   bool _isRunning = false;
 
@@ -42,21 +41,16 @@ class _BarGraphState extends State<BarGraph> {
   }
 
   @override
-  void dispose() {
-    _reset();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return AppFrame(
+      onExit: () => _reset().then((_) => true),
       child: Column(
         children: <Widget>[
           StreamBuilder<ChartData>(
             initialData: ChartData(),
             stream: graphDataStream,
             builder: (_, AsyncSnapshot<ChartData> snapshot) {
-              _graphData.insert(0, snapshot.data);
+              _graphData.insert(0, snapshot.data!);
               _graphCtrl?.updateDataSource(updatedDataIndex: 0);
               return FittedBox(
                 fit: BoxFit.fitWidth,

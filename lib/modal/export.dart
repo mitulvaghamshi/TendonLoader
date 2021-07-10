@@ -3,11 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/utils/downloader.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/web_portal/handler/excel_handler.dart';
 
 part 'export.g.dart';
@@ -39,8 +39,6 @@ class Export extends HiveObject {
             exportData: List<ChartData>.from((snapshot.data()![keyExportData] as Map<String, dynamic>)
                 .entries
                 .map<ChartData>((MapEntry<String, dynamic> e) => ChartData.fromEntry(e))));
-  // ..sort((ChartData a, ChartData b) => a.time!.compareTo(b.time!)));
-  // remove sorting
 
   @HiveField(0)
   final String? userId;
@@ -80,24 +78,16 @@ class Export extends HiveObject {
   }
 
   Future<bool> upload(BuildContext context) async {
-    late bool result;
     try {
-      await context.model.currentUser!.exportRef!.doc().set(this);
-      result = true;
+      return context.model.currentUser!.exportRef!.doc().set(this).then((_) => delete()).then((_) => true);
     } on FirebaseException {
-      result = false;
+      return false;
     }
-    return Future<bool>.value(result);
   }
 
   // long task
-  Future<void> download() async {
-    final Archive archive = Archive();
-    archive.addFile(generateExcel(this));
-    await Downloader(bytes: ZipEncoder().encode(archive)).download(name: '$fileName.zip');
-  }
+  Future<void> download() async =>
+      Downloader(bytes: ZipEncoder().encode(Archive()..addFile(generateExcel(this)))).download(name: '$fileName.zip');
 
-  Future<void> deleteExport() async {
-    await reference!.delete();
-  }
+  Future<void> cloudDelete() async => reference!.delete();
 }

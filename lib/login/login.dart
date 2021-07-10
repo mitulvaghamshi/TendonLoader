@@ -7,7 +7,7 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/homepage.dart';
 import 'package:tendon_loader/homescreen.dart';
-import 'package:tendon_loader/login/app_auth.dart';
+import 'package:tendon_loader/utils/app_auth.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/utils/validator.dart';
@@ -118,7 +118,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
               icon: Icon(_isNew ? Icons.check_rounded : Icons.add, color: colorGoogleGreen),
               child: Text(
                 _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
-                style: const TextStyle(letterSpacing: 0.5, color: colorGoogleGreen),
+                style: const TextStyle(letterSpacing: -1, color: colorGoogleGreen),
               ),
             ),
             const SizedBox(height: 10),

@@ -87,7 +87,7 @@ class User extends HiveObject {
 
   Future<void> deleteAllExports() async {
     for (final Export export in exports!) {
-      await export.deleteExport();
+      await export.cloudDelete();
     }
     exports!.clear();
   }

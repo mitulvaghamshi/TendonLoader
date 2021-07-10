@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/user.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/utils/validator.dart';
 
@@ -14,7 +14,6 @@ class NewExercise extends StatefulWidget {
   const NewExercise({Key? key, this.user}) : super(key: key);
 
   final User? user;
-
   static const String route = '/newExercise';
 
   @override
@@ -72,11 +71,10 @@ class _NewExerciseState extends State<NewExercise> {
         mvcDuration: int.tryParse(_ctrlMVCDuration.text) ?? 0,
       );
       if (kIsWeb) {
-        await widget.user!.prescriptionRef!.update(_pre.toMap());
-        Navigator.pop(context);
+        await widget.user!.prescriptionRef!.update(_pre.toMap()).then((_) => context.pop());
       } else {
         context.model.prescription = _pre;
-        await Navigator.pushReplacementNamed(context, ExerciseMode.route);
+        await context.push(ExerciseMode.route, replace: true);
       }
     }
   }

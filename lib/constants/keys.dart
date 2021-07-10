@@ -11,8 +11,10 @@ const String keySetRest = 'setRest';
 // boxes
 const String keyLoginBox = 'login_box';
 const String keyExportBox = 'user_exports_box';
-const String keyAppSettingsBox = 'app_settings_box';
-const String keyPrescriptionBox = 'prescription_box';
+const String keyUserStateBox = 'box_user_state';
+const String keySettingsStateBox = 'box_settings_state';
+
+const String keyUserStateBoxItem = 'box_user_state_item';
 
 // login
 const String keyUsername = 'username';

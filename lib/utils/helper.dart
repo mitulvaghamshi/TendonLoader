@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/constants/descriptions.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
-import 'package:tendon_loader/custom/confirm_dialod.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/custom/custom_dialog.dart';
+import 'package:tendon_loader/custom/custom_progress.dart';
+import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/device/device_tile.dart';
 import 'package:tendon_loader/device/handler/device_handler.dart';
 import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
@@ -13,256 +17,222 @@ import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
 import 'package:tendon_loader/homescreen.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
-import 'package:tendon_loader/login/app_auth.dart';
-import 'package:tendon_loader/login/initializer.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/mvctest/new_mvc_test.dart';
+import 'package:tendon_loader/utils/app_auth.dart';
+import 'package:tendon_loader/utils/clip_player.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/initializer.dart';
 import 'package:tendon_loader/utils/route_type.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:wakelock/wakelock.dart';
 
-Future<bool> get isConnected async => (await Connectivity().checkConnectivity()) != ConnectivityResult.none;
+Future<bool> get _isNetworkOn async => (await Connectivity().checkConnectivity()) != ConnectivityResult.none;
 
-int get localDataCount => boxExport.length;
-
-Future<bool> onAppClose() async {
+Future<bool> _cleanup() async {
   await Wakelock.disable();
   await disconnectDevice();
   await signOut();
   disposeGraphData();
-  return true;
+  releasePlayer();
+  return Future<bool>.delayed(const Duration(seconds: 1), () => true);
 }
 
-Future<bool> submitData(BuildContext context, Export export, bool isLocal) async {
-  return Future<bool>.microtask(() async {
-    late bool result;
-    if (!isLocal && await isConnected) {
-      result = await export.upload(context);
-    } else {
-      await boxExport.add(export);
-      result = true;
-    }
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(result ? 'Data stored successfully...' : 'Something wants wrong...'),
-    ));
-    return Future<bool>.value(result);
-  });
-}
-
-Future<bool> _reSubmitData(BuildContext context) async {
-  bool result = false;
-  for (final Export export in boxExport.values) {
-    result = await export.upload(context);
-    if (result) await export.delete();
-  }
-  return Future<bool>.value(result);
-}
-
-Future<void> tryUpload(BuildContext context) async {
-  final int _count = localDataCount;
-  if (await isConnected && await _reSubmitData(context)) {
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return AlertDialog(
-          title: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-              const Text('Data Submitted', textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
-              CustomButton(
-                onPressed: Navigator.of(context).pop,
-                icon: const Icon(Icons.check_rounded),
-                child: const Text('Ok', style: TextStyle(color: colorGoogleGreen)),
-              ),
-            ]),
-          ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          content: ListTile(
-            title: Text('$_count file${_count == 1 ? '' : 's'} uploaded', style: const TextStyle(fontSize: 20)),
-            leading: CustomButton(
-              onPressed: () {},
-              color: colorGoogleGreen,
-              icon: const Icon(Icons.check_rounded, size: 30),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-void navigateTo(BuildContext context, RouteType route) {
-  if (connectedDevice != null || simulateBT) {
-    if (route == RouteType.liveData) {
-      Navigator.pushNamed(context, LiveData.route);
-    } else if (route == RouteType.mvcTest) {
-      if (context.model.settingsState!.customPrescriptions!) {
-        Navigator.pushNamed(context, NewMVCTest.route);
-      } else {
-        if (context.model.mvcDuration != null) {
-          Navigator.pushNamed(context, MVCTesting.route);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(descNoMvcAvailable)));
-        }
-      }
-    } else if (route == RouteType.exerciseMode) {
-      if (context.model.settingsState!.customPrescriptions!) {
-        Navigator.pushNamed(context, NewExercise.route);
-      } else {
-        if (context.model.prescription != null) {
-          _startAutoExercise(context);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(descNoExerciseAvailable)));
-        }
-      }
-    }
-  } else {
-    connectProgressor(context);
-  }
-}
-
-Future<void> _startAutoExercise(BuildContext context) async {
-  await showDialog<void>(
+Future<bool?> onAppClose(BuildContext context) async {
+  return showDialog<bool>(
     context: context,
-    builder: (_) => AlertDialog(
-      scrollable: true,
-      content: const AutoExercise(),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          const Text('Start Exercise', textAlign: TextAlign.center),
-          CustomButton(
-            reverce: true,
-            icon: const Icon(Icons.arrow_forward_rounded, color: colorGoogleGreen),
-            onPressed: () async => Navigator.pushReplacementNamed(context, ExerciseMode.route),
-            child: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
-          ),
-        ],
+    builder: (_) => CustomDialog(
+      content: FutureBuilder<bool>(
+        future: _cleanup(),
+        builder: (_, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) context.pop(true);
+          return const CustomProgress();
+        },
       ),
     ),
   );
 }
 
-Future<bool?> startCountdown(
-  BuildContext context, {
-  String title = 'Session start in...',
-  Duration duration = const Duration(seconds: 5),
-}) {
-  return showDialog<bool>(
-    context: context,
-    barrierDismissible: false,
-    builder: (_) => CountDown(title: title, duration: duration),
-  );
+void navigateTo(BuildContext context, [RouteType? type]) {
+  if (type == null || progressor == null && !isSumulation) {
+    _connectProgressor(context);
+  } else {
+    final bool isCustom = context.model.settingsState!.customPrescriptions!;
+    if (type == RouteType.liveData) {
+      context.push(LiveData.route);
+    } else if (type == RouteType.mvcTest) {
+      if (isCustom) {
+        context.push(NewMVCTest.route);
+      } else if (context.model.mvcDuration != null) {
+        context.push(MVCTesting.route);
+      } else {
+        context.showSnackBar(const Text(descNoMvcAvailable));
+      }
+    } else if (type == RouteType.exerciseMode) {
+      if (isCustom) {
+        context.push(NewExercise.route);
+      } else if (context.model.prescription != null) {
+        _startAutoExercise(context);
+      } else {
+        context.showSnackBar(const Text(descNoExerciseAvailable));
+      }
+    }
+  }
 }
 
-Future<bool?> confirmSubmit(BuildContext context, Export export) async {
-  return showDialog<bool>(
+Future<bool?> submitData(BuildContext context, Export export) async {
+  return context.model.settingsState!.autoUpload!
+      ? await _isNetworkOn
+          ? export.upload(context)
+          : Future<bool>.value(true)
+      : _confirmSubmit(context, export);
+}
+
+Future<int> _reSubmitData(BuildContext context) async {
+  int count = 0;
+  for (final Export export in boxExport.values) {
+    if (await export.upload(context)) count++;
+  }
+  return count;
+}
+
+Future<void> tryUpload(BuildContext context) async {
+  if (await _isNetworkOn) {
+    await _reSubmitData(context).then((int count) async {
+      return showDialog<void>(
+        context: context,
+        builder: (_) => FittedBox(
+          child: CustomDialog(
+            title: 'Data upload complate',
+            content: CustomTile(name: '$count file(s) uploaded', icon: Icons.check_rounded, onTap: context.pop),
+          ),
+        ),
+      );
+    });
+  }
+}
+
+Future<bool?> _confirmSubmit(BuildContext context, Export export) async {
+  return showDialog<bool?>(
     context: context,
-    builder: (_) => AlertDialog(
-      content: ConfirmDialog(export: export),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: const Text('Submit data to Clinician?', textAlign: TextAlign.center),
+    barrierDismissible: false,
+    builder: (_) => FittedBox(
+      child: CustomDialog(
+        title: 'Submit data?',
+        content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          CustomTile(
+            name: 'Submit Now',
+            color: colorGoogleGreen,
+            icon: Icons.cloud_upload_rounded,
+            onTap: () => export.upload(context).then(context.pop),
+          ),
+          CustomTile(
+            name: 'Do it later',
+            color: colorYellow400,
+            icon: Icons.save_rounded,
+            onTap: context.pop,
+          ),
+          CustomTile(
+            name: 'Discard!',
+            color: colorRed400,
+            icon: Icons.clear_rounded,
+            onTap: () => export.delete().then(context.pop),
+          ),
+        ]),
+      ),
     ),
   );
 }
 
-Future<void> connectProgressor(BuildContext context) async {
-  await showDialog<void>(
+Future<bool?> startCountdown(BuildContext context, {String? title, Duration? duration}) {
+  return showDialog<bool>(
     context: context,
     barrierDismissible: false,
-    builder: (_) => AlertDialog(
-      scrollable: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      content: connectedDevice != null ? DeviceTile(device: connectedDevice!) : const BluetoothTile(),
-      title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-        const Text('Connect Progressor', textAlign: TextAlign.center),
+    builder: (_) => CustomDialog(
+      title: title ?? 'Session start in...',
+      content: CountDown(duration: duration ?? const Duration(seconds: 5)),
+    ),
+  );
+}
+
+Future<void> _connectProgressor(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => CustomDialog(
+      title: 'Connect Progressor',
+      trieling: CustomButton(
+        radius: 20,
+        icon: const Icon(Icons.clear, color: colorRed400),
+        onPressed: () async => stopWeightMeas().then((_) => context.pop()),
+      ),
+      content: progressor != null ? DeviceTile(device: progressor!) : const BluetoothTile(),
+    ),
+  );
+}
+
+Future<void> congratulate(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    builder: (_) => const CustomDialog(
+      title: 'Congratulation!',
+      content: Text(
+        'Exercise session completed.\nGreat work!!!',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 20, color: colorGoogleGreen),
+      ),
+    ),
+  );
+}
+
+Future<void> setPrescription(BuildContext context, User _user) async {
+  return showDialog<void>(context: context, builder: (_) => CustomDialog(content: NewExercise(user: _user)));
+}
+
+Future<void> confirmDelete(BuildContext context, VoidCallback action) async {
+  return showDialog<void>(
+    context: context,
+    builder: (_) => CustomDialog(
+      title: 'Delete export(s)?',
+      content: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
         CustomButton(
-          radius: 20,
-          icon: const Icon(Icons.clear, color: colorRed400),
-          onPressed: () async => stopWeightMeas().then((_) => Navigator.pop(context)),
+          elevation: 0,
+          onPressed: context.pop,
+          color: Colors.transparent,
+          icon: const Icon(Icons.cancel),
+          child: const Text('Cencel'),
+        ),
+        CustomButton(
+          radius: 8,
+          onPressed: action,
+          color: colorRed900,
+          icon: const Icon(Icons.delete_rounded, color: colorWhite),
+          child: const Text('Permanently delete', style: TextStyle(color: colorWhite)),
         ),
       ]),
     ),
   );
 }
 
-Future<void> congratulate(BuildContext context) async {
-  await showDialog<void>(
+Future<void> _startAutoExercise(BuildContext context) async {
+  return showDialog<void>(
     context: context,
-    barrierDismissible: false,
-    builder: (_) {
-      return AlertDialog(
-        title: FittedBox(
-          fit: BoxFit.fitWidth,
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
-            const Text('Congratulations!!!', textAlign: TextAlign.center, style: TextStyle(fontSize: 22)),
-            CustomButton(
-              reverce: true,
-              onPressed: Navigator.of(context).pop,
-              icon: const Icon(Icons.arrow_forward, color: colorGoogleGreen),
-              child: const Text('Next', style: TextStyle(color: colorGoogleGreen)),
-            ),
-          ]),
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        content: const Text(
-          'Exercise session completed!\nGreat work!',
-          style: TextStyle(fontSize: 20),
-          textAlign: TextAlign.center,
-        ),
-      );
-    },
-  );
-}
-
-Future<void> setPrescriptions(BuildContext context, User _user) async {
-  await showDialog<void>(
-    context: context,
-    builder: (_) => AlertDialog(
-      scrollable: true,
-      content: NewExercise(user: _user),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    builder: (_) => CustomDialog(
+      title: 'Start Exercise',
+      content: const AutoExercise(),
+      trieling: CustomButton(
+        reverce: true,
+        onPressed: () => context.push(ExerciseMode.route, replace: true),
+        icon: const Icon(Icons.arrow_forward_rounded, color: colorGoogleGreen),
+        child: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
+      ),
     ),
   );
 }
 
-Future<void> confirmDelete(BuildContext context, VoidCallback action) async {
-  await showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: const <Widget>[
-          Icon(Icons.warning_rounded, size: 50),
-          Text('Delete export(s)?', style: TextStyle(fontWeight: FontWeight.bold)),
-        ]),
-        actions: <Widget>[
-          CustomButton(
-            elevation: 0,
-            color: Colors.transparent,
-            icon: const Icon(Icons.cancel),
-            onPressed: Navigator.of(context).pop,
-            child: const Text('Cencel'),
-          ),
-          CustomButton(
-            radius: 16,
-            onPressed: action,
-            color: colorRed900,
-            icon: const Icon(Icons.delete_rounded),
-            child: const Text('Permanently delete'),
-          ),
-        ],
-      );
-    },
-  );
-}
-
-void aboutDialog(BuildContext context) {
+void about(BuildContext context) {
   showAboutDialog(
     context: context,
     applicationVersion: 'v1.0',

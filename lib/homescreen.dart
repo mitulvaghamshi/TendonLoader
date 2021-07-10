@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
@@ -7,6 +10,7 @@ import 'package:tendon_loader/livedata/live_data.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/settings/user_settings.dart';
 import 'package:tendon_loader/utils/helper.dart';
+import 'package:tendon_loader/utils/initializer.dart';
 import 'package:tendon_loader/utils/route_type.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -25,8 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Wakelock.enable();
-    if (localDataCount > 0) {
-      Future<void>.delayed(const Duration(seconds: 2), () => tryUpload(context));
+    if (boxExport.isNotEmpty) {
+      Future<void>.delayed(const Duration(seconds: 1), () => tryUpload(context));
     }
   }
 
@@ -39,9 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () async => Navigator.pushNamed(context, UserSettings.route),
         ),
       ]),
+      floatingActionButton: CustomButton(
+        onPressed: () => navigateTo(context),
+        icon: const Icon(Icons.bluetooth_rounded),
+        child: const Text('Connect Device'),
+      ),
       body: SingleChildScrollView(
         child: AppFrame(
-          onExit: onAppClose,
+          onExit: () async => await onAppClose(context) ?? false,
           child: Column(children: <Widget>[
             const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: AppLogo()),
             CustomTile(
@@ -59,13 +68,13 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icons.directions_run_rounded,
               onTap: () => navigateTo(context, RouteType.exerciseMode),
             ),
+            CustomTile(
+              name: 'Pain Tracking',
+              icon: Icons.feedback,
+              onTap: () {},
+            ),
           ]),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async => connectProgressor(context),
-        icon: const Icon(Icons.bluetooth_rounded),
-        label: const Text('Connect Device'),
       ),
     );
   }

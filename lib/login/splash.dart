@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/login/initializer.dart';
+import 'package:tendon_loader/utils/initializer.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/login/login.dart';
 

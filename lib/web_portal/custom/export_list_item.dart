@@ -54,7 +54,7 @@ class ExportListItem extends StatelessWidget {
               Navigator.pop(context);
               context.model.removeExportBy(export.reference!);
               context.view.refresh;
-              await Future<void>.microtask(export.deleteExport);
+              await Future<void>.microtask(export.cloudDelete);
             });
           }
         },

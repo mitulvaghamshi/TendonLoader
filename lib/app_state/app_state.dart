@@ -4,12 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/device/handler/device_handler.dart';
-import 'package:tendon_loader/login/initializer.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/modal/user_state.dart';
+import 'package:tendon_loader/utils/initializer.dart';
 
 class AppState {
   UserState? userState;
@@ -23,12 +23,12 @@ class AppState {
 
   Future<void> initAppUser() async {
     //
-    simulateBT = false;
+    isSumulation = false;
     //
     if (userState!.isInBox) {
       await userState!.save();
     } else {
-      await boxUserState.put('box_user_state_item', userState!);
+      await boxUserState.put(keyUserStateBoxItem, userState!);
     }
     if (!kIsWeb) {
       if (boxSettingsState.containsKey(userState!.userName.hashCode)) {
