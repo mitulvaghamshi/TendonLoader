@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/exercise/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class CustomGraph extends StatelessWidget {
-  const CustomGraph({Key? key, this.graphData, this.lineData, this.lineCtrl, this.graphCtrl}) : super(key: key);
+  const CustomGraph({Key? key, required this.handler}) : super(key: key);
 
-  final List<ChartData>? lineData;
-  final List<ChartData?>? graphData;
-  final void Function(ChartSeriesController)? lineCtrl;
-  final void Function(ChartSeriesController)? graphCtrl;
+  final GraphHandler handler;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +17,7 @@ class CustomGraph extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: SfCartesianChart(
           plotAreaBorderWidth: 0,
-          primaryXAxis: lineData != null
+          primaryXAxis: handler.lineData != null
               ? NumericAxis(minimum: 0, isVisible: false)
               : CategoryAxis(minimum: 0, maximum: 0, isVisible: false),
           primaryYAxis: NumericAxis(
@@ -34,9 +32,9 @@ class CustomGraph extends StatelessWidget {
               width: 0.9,
               borderWidth: 1,
               animationDuration: 0,
-              dataSource: graphData!,
+              dataSource: handler.graphData,
               color: colorGoogleGreen,
-              onRendererCreated: graphCtrl,
+              onRendererCreated: (ChartSeriesController ctrl) => handler.graphCtrl = ctrl,
               dataLabelSettings: DataLabelSettings(
                 isVisible: true,
                 showZeroValue: false,
@@ -54,15 +52,15 @@ class CustomGraph extends StatelessWidget {
               xValueMapper: (ChartData? data, _) => 1,
               yValueMapper: (ChartData? data, _) => data!.load,
             ),
-            if (lineData != null)
+            if (handler.lineData != null)
               LineSeries<ChartData, int>(
                 width: 5,
                 color: colorRed400,
                 animationDuration: 0,
-                dataSource: lineData!,
-                onRendererCreated: lineCtrl,
+                dataSource: handler.lineData!,
+                onRendererCreated: (ChartSeriesController ctrl) => handler.lineCtrl = ctrl,
                 yValueMapper: (ChartData data, _) => data.load,
-                xValueMapper: (ChartData data, _) => data.time!.toInt(),
+                xValueMapper: (ChartData data, _) => data.time.toInt(),
               ),
           ],
         ),

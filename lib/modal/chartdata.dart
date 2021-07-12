@@ -11,13 +11,13 @@ class ChartData extends HiveObject {
 
   ChartData.fromJson(String data) : this.fromMap(jsonDecode(data) as Map<String, dynamic>);
 
-  ChartData.fromMap(Map<String, dynamic> map) : this(time: map[keyChartX] as double?, load: map[keyChartY] as double?);
+  ChartData.fromMap(Map<String, dynamic> map) : this(time: map[keyChartX] as double, load: map[keyChartY] as double);
 
   ChartData.fromEntry(MapEntry<String, dynamic> entry)
       : this(time: double.parse(entry.key), load: double.parse(entry.value.toString()));
 
   @HiveField(0)
-  final double? time;
+  final double time;
   @HiveField(1)
-  final double? load;
+  final double load;
 }

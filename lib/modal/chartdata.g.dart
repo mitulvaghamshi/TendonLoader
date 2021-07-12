@@ -17,8 +17,8 @@ class ChartDataAdapter extends TypeAdapter<ChartData> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ChartData(
-      time: fields[0] as double?,
-      load: fields[1] as double?,
+      time: fields[0] as double,
+      load: fields[1] as double,
     );
   }
 

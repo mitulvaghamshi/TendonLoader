@@ -56,8 +56,8 @@ class DataView extends StatelessWidget {
                   color: index.isOdd ? MaterialStateProperty.all<Color?>(Colors.grey.withOpacity(0.3)) : null,
                   cells: <DataCell>[
                     '${index + 1}.'.toCell,
-                    DataCell(Text(export.exportData[index].time!.toStringAsFixed(1))),
-                    DataCell(Text(export.exportData[index].load!.toStringAsFixed(2))),
+                    DataCell(Text(export.exportData[index].time.toStringAsFixed(1))),
+                    DataCell(Text(export.exportData[index].load.toStringAsFixed(2))),
                   ],
                 );
               }),

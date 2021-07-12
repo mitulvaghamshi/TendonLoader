@@ -1,36 +1,31 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/device/handler/device_handler.dart';
+import 'package:tendon_loader/exercise/graph_handler.dart';
+import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
-import 'package:tendon_loader/utils/clip_player.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/helper.dart';
+import 'package:tendon_loader/utils/initializer.dart';
 
-class ProgressHandler {
-  ProgressHandler({required this.onExit, required this.context})
+class ExerciseHandler extends GraphHandler {
+  ExerciseHandler({required BuildContext context})
       : pre = context.model.prescription!,
-        userId = context.model.currentUser!.id {
-    isRunning = isComplete = hasData = false;
+        super(context: context, lineData: <ChartData>[
+          ChartData(load: context.model.prescription!.targetLoad),
+          ChartData(time: 2, load: context.model.prescription!.targetLoad),
+        ]) {
     _clear();
   }
 
   int _minTime = 0;
-
   late int sets;
   late int reps;
   late int rests;
   late int lapTimer;
   late bool isHold;
-  late bool hasData;
   late bool isSetOver;
-  late bool isRunning;
-  late bool isComplete;
-  late Timestamp timestamp;
-
-  final String userId;
   final Prescription pre;
-  final VoidCallback onExit;
-  final BuildContext context;
 
   String get lapTime => '${isHold ? 'Hold' : 'Rest'}: $lapTimer Sec';
   String get progress => 'Set: $sets/${pre.sets} • Rep: $reps/${pre.reps}';
@@ -40,49 +35,6 @@ class ProgressHandler {
     lapTimer = pre.holdTime;
     sets = reps = rests = 1;
     isSetOver = false;
-  }
-
-  Future<void> start() async {
-    if (isSetOver && isRunning) {
-      isSetOver = false;
-    } else if (!isRunning && hasData) {
-      onExit();
-    } else if (await startCountdown(context) ?? false) {
-      play(true);
-      hasData = true;
-      isRunning = true;
-      isComplete = false;
-      exportDataList.clear();
-      timestamp = Timestamp.now();
-      await startWeightMeas();
-    }
-  }
-
-  void stop() {
-    if (isRunning) isSetOver = true;
-  }
-
-  Future<void> reset() async {
-    if (isRunning) {
-      _clear();
-      play(false);
-      _minTime = 0;
-      isRunning = false;
-      await stopWeightMeas();
-      if (isComplete) await congratulate(context);
-      onExit();
-    }
-  }
-
-  Future<void> onSetOver() async {
-    await Future<void>.microtask(() async {
-      final bool? result = await startCountdown(
-        context,
-        title: 'Set Over, Rest!!!',
-        duration: Duration(seconds: pre.setRest),
-      );
-      await (result ?? false ? start : reset)();
-    });
   }
 
   void update(int time) {
@@ -112,5 +64,66 @@ class ProgressHandler {
         }
       }
     }
+  }
+
+  Future<void> onSetOver() async {
+    await Future<void>.microtask(() async {
+      final bool? result = await startCountdown(
+        context,
+        title: 'Set Over, Rest!!!',
+        duration: Duration(seconds: pre.setRest),
+      );
+      await (result ?? false ? start : reset)();
+    });
+  }
+
+  @override
+  Future<void> start() async {
+    if (isSetOver && isRunning) {
+      isSetOver = false;
+    } else if (!isRunning && hasData) {
+      await exit();
+    } else {
+      await super.start();
+    }
+  }
+
+  @override
+  void stop() {
+    if (isRunning) isSetOver = true;
+  }
+
+  @override
+  Future<void> reset() async {
+    if (isRunning) {
+      await super.reset();
+      _clear();
+      _minTime = 0;
+      if (isComplete) await congratulate(context);
+      await exit();
+    }
+  }
+
+  @override
+  Future<bool> exit() async {
+    if (!hasData) return true;
+    if (export == null) {
+      export = Export(
+        userId: userId,
+        prescription: pre,
+        timestamp: timestamp,
+        isComplate: isComplete,
+        progressorId: deviceName,
+        exportData: exportDataList,
+      );
+      await boxExport.add(export!);
+    }
+    if (isRunning) return stopWeightMeas().then((_) => true);
+    final bool result = await submitData(context, export!) ?? true;
+    if (result) {
+      hasData = false;
+      export = null;
+    }
+    return result;
   }
 }

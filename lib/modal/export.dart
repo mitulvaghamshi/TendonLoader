@@ -64,7 +64,7 @@ class Export extends HiveObject {
   Map<String, dynamic> toMap() {
     final Map<String, double> exportDataMap = <String, double>{};
     for (final ChartData data in exportData) {
-      exportDataMap[data.time!.toString()] = data.load!;
+      exportDataMap[data.time.toString()] = data.load;
     }
     return <String, dynamic>{
       keyUserId: userId,
