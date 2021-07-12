@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/device/handler/device_handler.dart';
-import 'package:tendon_loader/exercise/graph_handler.dart';
+import 'package:tendon_loader/handlers/device_handler.dart';
+import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';

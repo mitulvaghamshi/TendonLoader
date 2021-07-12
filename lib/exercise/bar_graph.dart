@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
-import 'package:tendon_loader/device/handler/device_handler.dart';
-import 'package:tendon_loader/exercise/progress_handler.dart';
+import 'package:tendon_loader/handlers/device_handler.dart';
+import 'package:tendon_loader/handlers/exercise_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/utils/themes.dart';
 

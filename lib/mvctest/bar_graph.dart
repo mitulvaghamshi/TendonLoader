@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
-import 'package:tendon_loader/device/handler/device_handler.dart';
+import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
-import 'package:tendon_loader/mvctest/progress_handler.dart';
+import 'package:tendon_loader/handlers/mvc_handler.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class BarGraph extends StatefulWidget {

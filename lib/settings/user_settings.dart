@@ -4,7 +4,7 @@ import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/device/handler/device_handler.dart';
+import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/device/scanner_list.dart';
 import 'package:tendon_loader/homepage.dart';
 import 'package:tendon_loader/login/login.dart';

@@ -10,7 +10,7 @@ import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/device/device_tile.dart';
-import 'package:tendon_loader/device/handler/device_handler.dart';
+import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
 import 'package:tendon_loader/exercise/auto_exercise.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
