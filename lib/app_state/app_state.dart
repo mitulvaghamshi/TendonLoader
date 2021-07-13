@@ -43,10 +43,8 @@ class AppState {
   }
 
   void togglePrescription() {
-    if (settingsState!.customPrescriptions!) {
-      mvcDuration = null;
-      prescription = null;
-    } else {
+    mvcDuration = prescription = null;
+    if (!settingsState!.customPrescriptions!) {
       if (currentUser!.prescription!.targetLoad > 0) {
         prescription = currentUser!.prescription;
       }

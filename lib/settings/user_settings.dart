@@ -4,8 +4,8 @@ import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/device/scanner_list.dart';
+import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/homepage.dart';
 import 'package:tendon_loader/login/login.dart';
 import 'package:tendon_loader/utils/app_auth.dart';
@@ -25,6 +25,7 @@ class UserSettings extends StatefulWidget {
 
 class _UserSettingsState extends State<UserSettings> {
   late final TextEditingController _ctrlGraphSize = TextEditingController()
+    ..text = context.model.settingsState!.graphSize.toString()
     ..addListener(() => context.model.settingsState!.graphSize = double.tryParse(_ctrlGraphSize.text) ?? 30);
 
   @override
@@ -33,11 +34,11 @@ class _UserSettingsState extends State<UserSettings> {
     super.dispose();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _ctrlGraphSize.text = context.model.settingsState!.graphSize.toString();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   _ctrlGraphSize.text = context.model.settingsState!.graphSize.toString();
+  // }
 
   @override
   Widget build(BuildContext context) {

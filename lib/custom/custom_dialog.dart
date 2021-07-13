@@ -25,7 +25,8 @@ class CustomDialog extends StatelessWidget {
             textAlign: TextAlign.center,
             style: const TextStyle(fontWeight: FontWeight.w500),
           ),
-          trieling ?? CustomButton(radius: 20, icon: const Icon(Icons.clear), onPressed: () => context.pop(false)),
+          const SizedBox(width: 5),
+          trieling ?? CustomButton(radius: 16, icon: const Icon(Icons.clear), onPressed: () => context.pop(false)),
         ]),
       ),
     );
