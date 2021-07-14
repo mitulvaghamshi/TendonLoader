@@ -36,9 +36,9 @@ class Export extends HiveObject {
             prescription: snapshot.data()!.containsKey(keyPrescription)
                 ? Prescription.fromJson(snapshot.data()![keyPrescription] as Map<String, dynamic>)
                 : null,
-            exportData: List<ChartData>.from((snapshot.data()![keyExportData] as Map<String, dynamic>)
-                .entries
-                .map<ChartData>((MapEntry<String, dynamic> e) => ChartData.fromEntry(e))));
+            exportData: List<Map<String, dynamic>>.from(snapshot.data()![keyExportData] as List<dynamic>)
+                .map((Map<String, dynamic> map) => ChartData.fromEntry(map.entries.first))
+                .toList());
 
   @HiveField(0)
   final String? userId;
@@ -62,18 +62,14 @@ class Export extends HiveObject {
   String get fileName => '$dateTime $userId ${isMVC ? 'MVCTest' : 'Exercise'}.xlsx'.replaceAll(RegExp(r'[\s:]'), '_');
 
   Map<String, dynamic> toMap() {
-    final Map<String, double> exportDataMap = <String, double>{};
-    for (final ChartData data in exportData) {
-      exportDataMap[data.time.toString()] = data.load;
-    }
     return <String, dynamic>{
       keyUserId: userId,
-      if (isMVC) keyMvcValue: mvcValue,
       keyTimeStamp: timestamp,
       keyIsComplate: isComplate,
-      keyExportData: exportDataMap,
       keyProgressorId: progressorId,
+      if (isMVC) keyMvcValue: mvcValue,
       if (!isMVC) keyPrescription: prescription?.toMap(),
+      keyExportData: exportData.map((ChartData e) => e.toMap()).toList(),
     };
   }
 

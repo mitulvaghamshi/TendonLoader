@@ -7,6 +7,7 @@ import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/utils/initializer.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 class ExerciseHandler extends GraphHandler {
   ExerciseHandler({required BuildContext context})
@@ -19,6 +20,8 @@ class ExerciseHandler extends GraphHandler {
   }
 
   int _minTime = 0;
+  bool _isHit = false;
+
   late int sets;
   late int reps;
   late int rests;
@@ -28,39 +31,45 @@ class ExerciseHandler extends GraphHandler {
   final Prescription pre;
 
   String get lapTime => '${isHold ? 'Hold' : 'Rest'}: $lapTimer Sec';
-  String get progress => 'Set: $sets/${pre.sets} • Rep: $reps/${pre.reps}';
+  String get counterValue => 'Set: $sets/${pre.sets} • Rep: $reps/${pre.reps}';
+  Color get feedColor => _isHit ? colorGoogleGreen : colorGoogleYellow;
 
   void _clear() {
     isHold = true;
     lapTimer = pre.holdTime;
     sets = reps = rests = 1;
-    isSetOver = false;
+    isSetOver = _isHit = false;
   }
 
-  void update(int time) {
-    if (!isSetOver && time > _minTime) {
-      _minTime = time;
-      if (lapTimer-- == 0) {
-        if (isHold) {
-          isHold = false;
-          reps++;
-          lapTimer = pre.restTime;
-          if (reps > pre.reps && rests > pre.reps - 1) {
-            sets++;
-            if (sets > pre.sets) {
-              isComplete = true;
-              reset();
-            } else {
-              onSetOver();
-              rests = reps = 1;
-              isHold = isSetOver = true;
-              lapTimer = pre.holdTime;
+  @override
+  void update(ChartData data) {
+    if (isRunning) {
+      _isHit = data.load > pre.targetLoad;
+      final int time = data.time.truncate();
+      if (!isSetOver && time > _minTime) {
+        _minTime = time;
+        if (lapTimer-- == 0) {
+          if (isHold) {
+            isHold = false;
+            reps++;
+            lapTimer = pre.restTime;
+            if (reps > pre.reps && rests > pre.reps - 1) {
+              sets++;
+              if (sets > pre.sets) {
+                isComplete = true;
+                reset();
+              } else {
+                onSetOver();
+                rests = reps = 1;
+                isHold = isSetOver = true;
+                lapTimer = pre.holdTime;
+              }
             }
+          } else {
+            rests++;
+            isHold = true;
+            lapTimer = pre.holdTime;
           }
-        } else {
-          rests++;
-          isHold = true;
-          lapTimer = pre.holdTime;
         }
       }
     }
@@ -96,6 +105,7 @@ class ExerciseHandler extends GraphHandler {
   @override
   Future<void> reset() async {
     if (isRunning) {
+      isRunning = isWorking = false;
       await super.reset();
       _clear();
       _minTime = 0;

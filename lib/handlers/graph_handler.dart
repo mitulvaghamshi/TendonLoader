@@ -39,10 +39,11 @@ class GraphHandler {
 
   void stop() {}
 
+  void update(ChartData data) {}
+
   Future<void> reset() async {
-    play(false);
-    isRunning = false;
     await stopWeightMeas();
+    play(false);
   }
 
   Future<bool> exit() async {

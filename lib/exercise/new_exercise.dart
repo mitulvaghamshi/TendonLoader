@@ -34,17 +34,17 @@ class _NewExerciseState extends State<NewExercise> {
   void dispose() {
     _ctrlSets.dispose();
     _ctrlReps.dispose();
+    _ctrlSetRest.dispose();
     _ctrlHoldTime.dispose();
     _ctrlRestTime.dispose();
     _ctrlTargetLoad.dispose();
-    _ctrlSetRest.dispose();
     _ctrlMVCDuration.dispose();
     super.dispose();
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     if (kIsWeb) _init();
   }
 
@@ -52,10 +52,10 @@ class _NewExerciseState extends State<NewExercise> {
     final Prescription _pre = widget.user!.prescription!;
     _ctrlSets.text = _pre.sets.toString();
     _ctrlReps.text = _pre.reps.toString();
+    _ctrlSetRest.text = _pre.setRest.toString();
     _ctrlHoldTime.text = _pre.holdTime.toString();
     _ctrlRestTime.text = _pre.restTime.toString();
     _ctrlTargetLoad.text = _pre.targetLoad.toString();
-    _ctrlSetRest.text = _pre.setRest.toString();
     _ctrlMVCDuration.text = _pre.mvcDuration.toString();
   }
 
@@ -66,12 +66,12 @@ class _NewExerciseState extends State<NewExercise> {
         reps: int.parse(_ctrlReps.text),
         holdTime: int.parse(_ctrlHoldTime.text),
         restTime: int.parse(_ctrlRestTime.text),
-        setRest: int.parse(_ctrlSetRest.text),
         targetLoad: double.parse(_ctrlTargetLoad.text),
+        setRest: int.tryParse(_ctrlSetRest.text) ?? 90,
         mvcDuration: int.tryParse(_ctrlMVCDuration.text) ?? 0,
       );
       if (kIsWeb) {
-        await widget.user!.prescriptionRef!.update(_pre.toMap()).then((_) => context.pop());
+        await widget.user!.prescriptionRef!.update(_pre.toMap()).then(context.pop);
       } else {
         context.model.prescription = _pre;
         await context.push(ExerciseMode.route, replace: true);

@@ -23,9 +23,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> with TickerProviderStateMixin {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final AnimationController _animCtrl = AnimationController(vsync: this, duration: const Duration(seconds: 1))
     ..addStatusListener(_authenticate);
 

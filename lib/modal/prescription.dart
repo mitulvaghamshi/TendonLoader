@@ -6,16 +6,16 @@ part 'prescription.g.dart';
 @HiveType(typeId: 3)
 class Prescription extends HiveObject {
   Prescription({
-    this.sets = 0,
-    this.reps = 0,
-    this.setRest = 0,
-    this.holdTime = 0,
-    this.restTime = 0,
-    this.targetLoad = 0,
-    this.mvcDuration = 0,
+    required this.sets,
+    required this.reps,
+    required this.setRest,
+    required this.holdTime,
+    required this.restTime,
+    required this.targetLoad,
+    required this.mvcDuration,
   });
 
-  Prescription.empty() : this();
+  Prescription.empty() : this(sets: 0, reps: 0, setRest: 90, holdTime: 0, restTime: 0, targetLoad: 0, mvcDuration: 0);
 
   Prescription.fromJson(Map<String, dynamic> map)
       : this(

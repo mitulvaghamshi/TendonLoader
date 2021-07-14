@@ -16,6 +16,8 @@ class ChartData extends HiveObject {
   ChartData.fromEntry(MapEntry<String, dynamic> entry)
       : this(time: double.parse(entry.key), load: double.parse(entry.value.toString()));
 
+  Map<String, double> toMap() => <String, double>{'$time': load};
+
   @HiveField(0)
   final double time;
   @HiveField(1)

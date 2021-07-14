@@ -10,11 +10,11 @@ import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/device/device_tile.dart';
-import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
 import 'package:tendon_loader/exercise/auto_exercise.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
+import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/homescreen.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
 import 'package:tendon_loader/modal/export.dart';
@@ -132,13 +132,13 @@ Future<bool?> _confirmSubmit(BuildContext context, Export export) async {
             name: 'Do it later',
             color: colorYellow400,
             icon: Icons.save_rounded,
-            onTap: context.pop,
+            onTap: () => context.pop(true),
           ),
           CustomTile(
             name: 'Discard!',
             color: colorRed400,
             icon: Icons.clear_rounded,
-            onTap: () => export.delete().then(context.pop),
+            onTap: () => export.delete().then((_) => context.pop(true)),
           ),
         ]),
       ),

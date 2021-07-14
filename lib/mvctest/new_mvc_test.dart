@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/constants/text_styles.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/utils/validator.dart';
-import 'package:tendon_loader/utils/extension.dart';
 
 class NewMVCTest extends StatefulWidget {
   const NewMVCTest({Key? key}) : super(key: key);
@@ -42,34 +43,23 @@ class _NewMVCTestState extends State<NewMVCTest> {
                 await Navigator.pushReplacementNamed(context, MVCTesting.route);
               }
             },
-            child: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
+            child: const Text('Go', style: tsG18BFF),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: AppFrame(
-          child: Form(
-            key: _formKey,
-            child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-              const Text(
-                'MVC Test duration.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontFamily: 'Georgia',
-                  color: colorGoogleGreen,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 10),
-              CustomTextField(
-                isPicker: true,
-                label: 'Test duration (sec)',
-                controller: _ctrlMvcDuration,
-                validator: validateNum,
-              )
-            ]),
-          ),
+      body: AppFrame(
+        child: Form(
+          key: _formKey,
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            const Text('MVC Test duration.', style: tsG22BFF, textAlign: TextAlign.center),
+            const SizedBox(height: 10),
+            CustomTextField(
+              isPicker: true,
+              label: 'Test duration (sec)',
+              controller: _ctrlMvcDuration,
+              validator: validateNum,
+            )
+          ]),
         ),
       ),
     );

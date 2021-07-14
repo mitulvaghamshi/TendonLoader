@@ -10,10 +10,15 @@ import 'package:tendon_loader/utils/initializer.dart';
 class MVCHandler extends GraphHandler {
   MVCHandler({required BuildContext context})
       : mvcDuration = context.model.mvcDuration!,
+        timeDiff = context.model.mvcDuration!.toDouble(),
         super(context: context, lineData: <ChartData>[ChartData(), ChartData(time: 2)]);
 
   final int mvcDuration;
   double maxForce = 0;
+  double timeDiff;
+
+  String get maxForceValue => 'MVC: $maxForce Kg';
+  String get timeDiffValue => '🕒 ${timeDiff.toStringAsFixed(1)} Sec';
 
   void _updateLine() {
     lineData!.insertAll(0, <ChartData>[
@@ -23,13 +28,17 @@ class MVCHandler extends GraphHandler {
     lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
   }
 
+  @override
   void update(ChartData data) {
-    if (mvcDuration - data.time == 0) {
-      isComplete = true;
-      if (isRunning) stop();
-    } else if (data.load > maxForce) {
-      maxForce = data.load;
-      _updateLine();
+    if (isRunning) {
+      timeDiff = (mvcDuration - data.time).abs();
+      if (timeDiff == 0) {
+        isComplete = true;
+        stop();
+      } else if (data.load > maxForce) {
+        maxForce = data.load;
+        _updateLine();
+      }
     }
   }
 
@@ -45,8 +54,9 @@ class MVCHandler extends GraphHandler {
   }
 
   @override
-  Future<void> stop() async {
+  Future<void> reset() async {
     if (isRunning) {
+      isRunning = isWorking = false;
       await super.reset();
       if (isComplete) await congratulate(context);
       await exit();
@@ -68,12 +78,16 @@ class MVCHandler extends GraphHandler {
       await boxExport.add(export!);
     }
     if (isRunning) return stopWeightMeas().then((_) => true);
-    final bool result = await submitData(context, export!) ?? true;
-    if (result) {
+    final bool? result = await submitData(context, export!);
+    if (result == null) {
+      return false;
+    } else if (result) {
       hasData = false;
       export = null;
       maxForce = 0;
+      timeDiff = mvcDuration.toDouble();
       _updateLine();
+      clearGraphData();
     }
     return result;
   }

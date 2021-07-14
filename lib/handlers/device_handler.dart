@@ -21,8 +21,10 @@ void disposeGraphData() {
 
 final List<ChartData> exportDataList = <ChartData>[];
 
+bool isBusy = false;
+bool isWorking = false;
 double _lastMillis = 0;
-bool _isRunning = false;
+
 Completer<bool>? _completer;
 
 BluetoothDevice? _device;
@@ -54,15 +56,15 @@ Future<void> startDeviceScan() async {
 }
 
 Future<void> startTaring() async {
-  if (!_isRunning) {
-    _isRunning = true;
+  if (!isBusy) {
+    isBusy = isWorking = true;
     await _controlChar!.write(<int>[cmdStartWeightMeas]);
   }
 }
 
 Future<void> stopTaring() async {
-  if (_isRunning) {
-    _isRunning = false;
+  if (isBusy) {
+    isBusy = isWorking = false;
     await _controlChar!.write(<int>[cmdTareScale]);
     await _controlChar!.write(<int>[cmdStartWeightMeas]);
     await _controlChar!.write(<int>[cmdStopWeightMeas]);
@@ -73,24 +75,24 @@ Future<void> stopTaring() async {
 }
 
 Future<void> startWeightMeas() async {
-  if (!_isRunning) {
+  if (!isBusy) {
+    isBusy = isWorking = true;
     if (isSumulation) {
       _fakeListen();
     } else {
       await _controlChar!.write(<int>[cmdStartWeightMeas]);
     }
-    _isRunning = true;
   }
 }
 
 Future<void> stopWeightMeas() async {
-  if (_isRunning) {
+  if (isBusy) {
+    isBusy = isWorking = false;
     if (isSumulation) {
       _timer?.cancel();
     } else {
       await _controlChar!.write(<int>[cmdStopWeightMeas]);
     }
-    _isRunning = false;
     _lastMillis = 0;
     clearGraphData();
   }
@@ -100,7 +102,7 @@ Future<void> disconnectDevice() async {
   if (_device != null) {
     await _device!.disconnect();
     _device = _dataChar = _controlChar = null;
-    _isRunning = false;
+    isBusy = false;
     _lastMillis = 0;
     clearGraphData();
     _completer = null;
@@ -127,9 +129,8 @@ Future<bool> getProps(BluetoothDevice device) async {
     if (_dataChar != null && _controlChar != null) {
       _addListener();
       _device = device;
-      await Future<void>.delayed(const Duration(milliseconds: 800), startTaring).then((_) {
-        _completer!.complete(true);
-      });
+      await Future<void>.delayed(const Duration(milliseconds: 800), startTaring)
+          .then((_) => _completer!.complete(true));
     }
   }
   return _completer!.future;
@@ -137,7 +138,7 @@ Future<bool> getProps(BluetoothDevice device) async {
 
 void _addListener() {
   _dataChar!.value.listen((List<int> data) {
-    if (_isRunning && data.isNotEmpty && data[0] == resWeightMeasurement) {
+    if (isWorking && data.isNotEmpty && data[0] == resWeightMeasurement) {
       for (int x = 2; x < data.length; x += 8) {
         final double weight = data.getRange(x, x + 4).toList().toWeight;
         final double time = data.getRange(x + 4, x + 8).toList().toTime;

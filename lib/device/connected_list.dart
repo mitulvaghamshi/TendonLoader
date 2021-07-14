@@ -9,7 +9,6 @@ class ConnectedList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<BluetoothDevice>>(
-      // initialData: const <BluetoothDevice>[],
       future: FlutterBlue.instance.connectedDevices,
       builder: (_, AsyncSnapshot<List<BluetoothDevice>> snapshot) {
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {

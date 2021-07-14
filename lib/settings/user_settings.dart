@@ -34,12 +34,6 @@ class _UserSettingsState extends State<UserSettings> {
     super.dispose();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   _ctrlGraphSize.text = context.model.settingsState!.graphSize.toString();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +44,7 @@ class _UserSettingsState extends State<UserSettings> {
         child: AppFrame(
           onExit: () => context.model.settingsState!.save().then((_) => true),
           child: Column(children: <Widget>[
-            // testing only
+            // testing only ----------------------
             SwitchListTile.adaptive(
               value: isSumulation,
               tileColor: Colors.red,
@@ -78,7 +72,7 @@ class _UserSettingsState extends State<UserSettings> {
               children: const <Widget>[ScannerList()],
             ),
             const SizedBox(height: 20),
-            // testing only end
+            // testing only end -----------------------
             const AppLogo(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),

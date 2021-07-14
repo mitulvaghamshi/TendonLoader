@@ -53,7 +53,7 @@ class ConnectedTile extends StatelessWidget {
             ),
           ]);
         } else {
-          return const CustomProgress(text: 'Connecting...');
+          return const CustomProgress();
         }
       },
     );

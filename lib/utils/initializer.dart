@@ -28,14 +28,14 @@ Future<void> init(BuildContext context) async {
   if (_completer == null) {
     _completer = Completer<void>();
     await initFirebase();
-    Hive..registerAdapter(UserStateAdapter())..registerAdapter(SettingsStateAdapter());
+    await Hive.initFlutter();
+    Hive.registerAdapter(UserStateAdapter());
+    Hive.registerAdapter(SettingsStateAdapter());
     if (!kIsWeb) {
-      await Hive.initFlutter();
-      Hive
-        ..registerAdapter(ExportAdapter())
-        ..registerAdapter(ChartDataAdapter())
-        ..registerAdapter(TimestampAdapter())
-        ..registerAdapter(PrescriptionAdapter());
+      Hive.registerAdapter(ExportAdapter());
+      Hive.registerAdapter(ChartDataAdapter());
+      Hive.registerAdapter(TimestampAdapter());
+      Hive.registerAdapter(PrescriptionAdapter());
       _boxExport = await Hive.openBox<Export>(keyExportBox);
       _boxSettingsState = await Hive.openBox<SettingsState>(keySettingsStateBox);
     }
