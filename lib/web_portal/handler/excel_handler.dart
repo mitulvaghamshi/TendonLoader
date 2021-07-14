@@ -80,30 +80,6 @@ ArchiveFile generateExcel(Export export) {
     sheet.getRangeByIndex(iR, 2).number = chartData.load;
   }
 
-  // final ChartCollection charts = ChartCollection(sheet);
-  // final Chart lineChart = charts.add();
-  // lineChart.chartType = ExcelChartType.line;
-  // lineChart.dataRange = sheet.getRangeByName('A1:C13');
-  // lineChart.isSeriesInRows = false;
-  // lineChart.chartTitleArea.bold = true;
-  // lineChart.chartTitleArea.size = 11;
-  // lineChart.chartTitleArea.color = '#595959';
-  // lineChart.chartTitleArea.text = 'Internet Sales vs Reseller Sales';
-  // lineChart.legend!.position = ExcelLegendPosition.bottom;
-  // lineChart.legend!.textArea.size = 9;
-  // lineChart.legend!.textArea.color = '#595959';
-  // lineChart.topRow = 20;
-  // lineChart.bottomRow = 32;
-  // lineChart.leftColumn = 1;
-  // lineChart.rightColumn = 8;
-  // lineChart.primaryValueAxis.numberFormat = r'$#,###';
-  // lineChart.primaryValueAxis.hasMajorGridLines = false;
-  // lineChart.primaryCategoryAxis.titleArea.size = 9;
-  // lineChart.primaryCategoryAxis.titleArea.color = '#595959';
-  // lineChart.primaryValueAxis.titleArea.size = 9;
-  // lineChart.primaryValueAxis.titleArea.color = '#595959';
-  // sheet.charts = charts;
-
   final List<int> fileBytes = workbook.saveAsStream();
   final InputStream inputStream = InputStream(fileBytes);
   final ArchiveFile archiveFile = ArchiveFile.stream(export.fileName, inputStream.length, inputStream);

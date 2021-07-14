@@ -34,7 +34,7 @@ Future<bool> get _isNetworkOn async => (await Connectivity().checkConnectivity()
 Future<bool> _cleanup() async {
   await Wakelock.disable();
   await disconnectDevice();
-  await signOut();
+  await firebaseLogout();
   disposeGraphData();
   releasePlayer();
   return Future<bool>.delayed(const Duration(seconds: 1), () => true);
@@ -188,7 +188,10 @@ Future<void> congratulate(BuildContext context) async {
 }
 
 Future<void> setPrescription(BuildContext context, User _user) async {
-  return showDialog<void>(context: context, builder: (_) => CustomDialog(content: NewExercise(user: _user)));
+  return showDialog<void>(
+    context: context,
+    builder: (_) => CustomDialog(title: _user.id, content: NewExercise(user: _user)),
+  );
 }
 
 Future<void> confirmDelete(BuildContext context, VoidCallback action) async {

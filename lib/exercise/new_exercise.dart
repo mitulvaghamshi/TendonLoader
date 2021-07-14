@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/constants/text_styles.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
@@ -93,24 +94,16 @@ class _NewExerciseState extends State<NewExercise> {
     return Form(
       key: _formKey,
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        Text(
-          kIsWeb ? 'Please enter prescriptions for:\n${widget.user!.id}' : 'Please enter your\nexercise prescriptions',
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 22,
-            fontFamily: 'Georgia',
-            color: colorGoogleGreen,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 10),
-        if (kIsWeb)
+        if (!kIsWeb)
+          Text('Please enter your\nexercise prescriptions', textAlign: TextAlign.center, style: tsG18BFF)
+        else
           CustomTextField(
             isPicker: true,
+            validator: validateNum,
             label: 'MVC Test duration',
             controller: _ctrlMVCDuration,
-            validator: validateNum,
           ),
+        const SizedBox(height: 10),
         CustomTextField(
           label: 'Target Load (Kg)',
           controller: _ctrlTargetLoad,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_table.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';
@@ -15,37 +16,29 @@ class DataView extends StatelessWidget {
       maxWidth: 250,
       child: Column(
         children: <Widget>[
-          if (export.isMVC)
-            CustomTable(columns: const <DataColumn>[
-              DataColumn(label: Text('Max Force')),
-              DataColumn(label: Text('Progressor ID')),
-            ], rows: <DataRow>[
-              DataRow(cells: <DataCell>[
-                '${export.mvcValue} Kg'.toCell,
-                export.progressorId.toCell,
-              ]),
-            ])
-          else
-            CustomTable(columns: const <DataColumn>[
-              DataColumn(label: Text('Target Load')),
-              DataColumn(label: Text('Hold Time')),
-              DataColumn(label: Text('Rest Time')),
-              DataColumn(label: Text('Sets #')),
-              DataColumn(label: Text('Reps #')),
-              DataColumn(label: Text('Progressor ID')),
-            ], rows: <DataRow>[
-              DataRow(cells: <DataCell>[
-                '${export.prescription!.targetLoad} Kg'.toCell,
-                '${export.prescription!.holdTime} Sec'.toCell,
-                '${export.prescription!.restTime} Sec'.toCell,
-                '${export.prescription!.sets}'.toCell,
-                '${export.prescription!.reps}'.toCell,
-                export.progressorId.toCell,
-              ]),
-            ]),
+          ListTile(
+            title: Text(export.progressorId),
+            leading: const CustomButton(icon: Icon(Icons.bluetooth), radius: 25),
+          ),
+          const Divider(),
+          CustomTable(columns: const <DataColumn>[
+            DataColumn(label: Text('Prescription')),
+            DataColumn(label: Text('Value')),
+          ], rows: <DataRow>[
+            if (export.isMVC)
+              DataRow(cells: <DataCell>['Max Force: '.toBigCell, '${export.mvcValue} Kg'.toBigCell])
+            else ...<DataRow>[
+              DataRow(cells: <DataCell>['Target Load: '.toBigCell, '${export.prescription!.targetLoad} Kg'.toBigCell]),
+              DataRow(cells: <DataCell>['Hold Time: '.toBigCell, '${export.prescription!.holdTime} Sec'.toBigCell]),
+              DataRow(cells: <DataCell>['Rest Time: '.toBigCell, '${export.prescription!.restTime} Sec'.toBigCell]),
+              DataRow(cells: <DataCell>['Sets #: '.toBigCell, '${export.prescription!.sets}'.toBigCell]),
+              DataRow(cells: <DataCell>['Reps #: '.toBigCell, '${export.prescription!.reps}'.toBigCell]),
+              DataRow(cells: <DataCell>['Set rest time: '.toBigCell, '${export.prescription!.setRest} Sec'.toBigCell])
+            ],
+          ]),
+          const Divider(),
           Expanded(
             child: CustomTable(
-              axis: Axis.vertical,
               columns: const <DataColumn>[
                 DataColumn(label: Text('No.')),
                 DataColumn(label: Text('TIME'), numeric: true),

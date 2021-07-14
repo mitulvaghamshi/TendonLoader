@@ -55,8 +55,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _keepSigned = context.model.userState!.keepSigned!;
-    if (_keepSigned) {
+    if (context.model.userState != null && (_keepSigned = context.model.userState!.keepSigned!)) {
       _emailCtrl.text = context.model.userState!.userName!;
       _passwordCtrl.text = context.model.userState!.passWord!;
     }
@@ -101,27 +100,28 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
               validator: validatePassword,
               keyboardType: TextInputType.visiblePassword,
             ),
-            const SizedBox(height: 10),
-            ListTile(
-              horizontalTitleGap: 0,
+            CheckboxListTile(
+              value: _keepSigned,
+              activeColor: colorGoogleGreen,
               contentPadding: EdgeInsets.zero,
-              onTap: () => setState(() => _keepSigned = !_keepSigned),
-              title: const Text('Keep me signed in.', style: TextStyle(fontSize: 14)),
-              leading: Icon(
-                _keepSigned ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
-                color: Theme.of(context).accentColor,
+              title: const Text('Keep me logged in.'),
+              controlAffinity: ListTileControlAffinity.leading,
+              onChanged: (_) => setState(() => _keepSigned = !_keepSigned),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: FittedBox(
+                child: CustomButton(
+                  onPressed: () => setState(() => _isNew = !_isNew),
+                  icon: Icon(_isNew ? Icons.check_rounded : Icons.add, color: colorGoogleGreen),
+                  child: Text(
+                    _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
+                    style: const TextStyle(letterSpacing: 0.5, color: colorGoogleGreen),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: 10),
-            CustomButton(
-              onPressed: () => setState(() => _isNew = !_isNew),
-              icon: Icon(_isNew ? Icons.check_rounded : Icons.add, color: colorGoogleGreen),
-              child: Text(
-                _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
-                style: const TextStyle(letterSpacing: -1, color: colorGoogleGreen),
-              ),
-            ),
-            const SizedBox(height: 10),
             Align(
               alignment: Alignment.bottomRight,
               child: RotationTransition(

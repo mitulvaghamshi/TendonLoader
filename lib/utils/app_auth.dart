@@ -22,7 +22,7 @@ Future<void> initFirebase() async {
 
 User? get currentUser => FirebaseAuth.instance.currentUser;
 
-Future<void> signOut() async {
+Future<void> firebaseLogout() async {
   try {
     await FirebaseAuth.instance.signOut();
   } finally {}
@@ -43,10 +43,6 @@ Future<bool> authenticate(BuildContext context, bool isNew, String email, String
 
 Future<void> _useEmulator() async {
   const String host = '10.0.0.110';
-  await FirebaseAuth.instance.useAuthEmulator(host, 9099);
-  FirebaseFirestore.instance.settings = const Settings(
-    host: '$host:8080',
-    sslEnabled: false,
-    persistenceEnabled: false,
-  );
+  await FirebaseAuth.instance.useAuthEmulator(host, 10001);
+  FirebaseFirestore.instance.useFirestoreEmulator(host, 10002);
 }

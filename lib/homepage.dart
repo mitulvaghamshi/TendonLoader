@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/utils/app_auth.dart';
 import 'package:tendon_loader/login/login.dart';
+import 'package:tendon_loader/utils/app_auth.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/web_portal/left_panel.dart';
 import 'package:tendon_loader/web_portal/right_panel.dart';
@@ -16,29 +16,21 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (currentUser == null) {
       context.showSnackBar(const Text('Invalid Access!!!, Please Login...'));
-      Navigator.pushReplacementNamed(context, Login.route);
+      context.push(Login.route, replace: true);
     }
-
-    final AppBar _appBar = AppBar(title: const Text(name), actions: <Widget>[
-      CustomButton(
-        onPressed: () async {
-          await signOut();
-          await Navigator.pushReplacementNamed(context, Login.route);
-        },
-        radius: 16,
-        reverce: true,
-        icon: const Icon(Icons.logout),
-        child: const Text('Logout', style: TextStyle(fontWeight: FontWeight.bold)),
-      ),
-    ]);
-
-    if (MediaQuery.of(context).size.width > 960) {
-      return Scaffold(
-        appBar: _appBar,
-        body: Row(children: const <Widget>[LeftPanel(), Expanded(child: RightPanel())]),
-      );
-    } else {
-      return Scaffold(appBar: _appBar, drawer: const LeftPanel(), body: const RightPanel());
-    }
+    final bool _isWide = MediaQuery.of(context).size.width > 960;
+    return Scaffold(
+      appBar: AppBar(title: const Text(name), actions: <Widget>[
+        CustomButton(
+          radius: 16,
+          reverce: true,
+          icon: const Icon(Icons.logout),
+          onPressed: () async => firebaseLogout().then((_) async => context.push(Login.route, replace: true)),
+          child: const Text('Logout', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+      ]),
+      drawer: _isWide ? null : const LeftPanel(),
+      body: _isWide ? Row(children: const <Widget>[LeftPanel(), Expanded(child: RightPanel())]) : const RightPanel(),
+    );
   }
 }

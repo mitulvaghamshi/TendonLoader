@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:tendon_loader/constants/text_styles.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
@@ -38,7 +39,7 @@ class _UserSettingsState extends State<UserSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Settings'), actions: <Widget>[
-        CustomButton(icon: const Icon(Icons.public), onPressed: () => Navigator.pushNamed(context, HomePage.route)),
+        CustomButton(icon: const Icon(Icons.public), onPressed: () => context.push(HomePage.route)),
       ]),
       body: SingleChildScrollView(
         child: AppFrame(
@@ -112,7 +113,7 @@ class _UserSettingsState extends State<UserSettings> {
             ),
             const Divider(thickness: 2),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: CustomTextField(
                 controller: _ctrlGraphSize,
                 pattern: r'^\d{1,3}(\.\d{0,2})?',
@@ -120,15 +121,9 @@ class _UserSettingsState extends State<UserSettings> {
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
               ),
             ),
-            const SizedBox(height: 10),
             ListTile(
-              trailing: CustomButton(
-                child: Text(
-                  boxExport.length.toString(),
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: colorRed400),
-                ),
-              ),
               title: const Text('Click to export locallly stored data'),
+              trailing: CustomButton(child: Text(boxExport.length.toString(), style: tsG18BFF)),
               onTap: () async {
                 if (boxExport.isNotEmpty) {
                   await tryUpload(context).then((_) => context.view.refresh);
@@ -143,11 +138,10 @@ class _UserSettingsState extends State<UserSettings> {
             ListTile(
               title: const Text('Logout', style: TextStyle(color: colorRed400)),
               onTap: () async {
-                await signOut();
                 context.model.userState!.keepSigned = false;
                 await context.model.userState!.save();
                 await context.model.settingsState!.save();
-                await context.push(Login.route, replace: true);
+                await firebaseLogout().then((_) => context.push(Login.route, replace: true));
               },
             ),
           ]),

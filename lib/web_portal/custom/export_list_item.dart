@@ -20,8 +20,8 @@ class ExportListItem extends StatelessWidget {
       key: ValueKey<String>(export.reference!.id),
       title: Text(export.dateTime, style: const TextStyle(fontSize: 16)),
       subtitle: export.isComplate
-          ? const Text('Complate', style: TextStyle(color: colorGoogleGreen))
-          : const Text('Incomplate', style: TextStyle(color: colorRed400)),
+          ? const Text('Complete', style: TextStyle(color: colorGoogleGreen))
+          : const Text('Incomplete', style: TextStyle(color: colorRed400)),
       leading: export.isMVC
           ? const CustomButton(color: colorOrange400, child: Text('MVC'))
           : const CustomButton(color: colorGoogleGreen, child: Text('EXE')),

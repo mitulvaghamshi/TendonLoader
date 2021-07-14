@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomTable extends StatelessWidget {
-  const CustomTable({
-    Key? key,
-    required this.rows,
-    required this.columns,
-    this.axis = Axis.horizontal,
-  }) : super(key: key);
+  const CustomTable({Key? key, required this.rows, required this.columns}) : super(key: key);
 
-  final Axis axis;
   final List<DataRow> rows;
   final List<DataColumn> columns;
 
@@ -16,9 +10,8 @@ class CustomTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       primary: false,
-      scrollDirection: axis,
       physics: const AlwaysScrollableScrollPhysics(),
-      child: DataTable(        
+      child: DataTable(
         rows: rows,
         columns: columns,
         dataRowHeight: 40,
