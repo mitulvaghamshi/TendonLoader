@@ -37,8 +37,8 @@ class Graph extends StatelessWidget {
         majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
       ),
       zoomPanBehavior: ZoomPanBehavior(
+        maximumZoomLevel: 0.5,
         enablePanning: true,
-        enablePinching: true,
         enableSelectionZooming: true,
         enableMouseWheelZooming: true,
       ),

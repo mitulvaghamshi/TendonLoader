@@ -48,11 +48,7 @@ Future<void> sleepDevice() async => _controlChar!.write(<int>[cmdEnterSleep]);
 Future<void> stopDeviceScan() async => FlutterBlue.instance.stopScan();
 
 Future<void> startDeviceScan() async {
-  await FlutterBlue.instance.startScan(
-    timeout: const Duration(seconds: 2),
-    withDevices: <Guid>[Guid(uuidService)],
-    withServices: <Guid>[Guid(uuidService)],
-  );
+  await FlutterBlue.instance.startScan(timeout: const Duration(seconds: 2));
 }
 
 Future<void> startTaring() async {
@@ -101,11 +97,10 @@ Future<void> stopWeightMeas() async {
 Future<void> disconnectDevice() async {
   if (_device != null) {
     await _device!.disconnect();
-    _device = _dataChar = _controlChar = null;
-    isBusy = false;
+    _device = _dataChar = _controlChar = _completer = null;
+    isBusy = isWorking = false;
     _lastMillis = 0;
     clearGraphData();
-    _completer = null;
     exportDataList.clear();
   }
 }

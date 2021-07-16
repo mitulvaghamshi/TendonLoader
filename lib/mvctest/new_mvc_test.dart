@@ -61,7 +61,7 @@ class _NewMVCTestState extends State<NewMVCTest> {
         child: Form(
           key: _formKey,
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            const Text('MVC Test duration.', style: tsG22BFF, textAlign: TextAlign.center),
+            const Text('MVC Test duration.', style: tsG24BFF, textAlign: TextAlign.center),
             if (_lastDuration != null)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),

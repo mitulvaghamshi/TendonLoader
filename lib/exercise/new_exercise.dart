@@ -118,7 +118,7 @@ class _NewExerciseState extends State<NewExercise> {
       key: _formKey,
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         if (!kIsWeb) ...<Widget>[
-          const Text('Please enter your\nexercise prescriptions', textAlign: TextAlign.center, style: tsG18BFF),
+          const Text('Please enter your\nexercise prescriptions', style: tsG24BFF, textAlign: TextAlign.center),
           if (_lastPre != null)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),

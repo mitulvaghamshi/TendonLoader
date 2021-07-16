@@ -9,8 +9,7 @@ import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
-import 'package:tendon_loader/device/device_tile.dart';
-import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
+import 'package:tendon_loader/device/connected_list.dart';
 import 'package:tendon_loader/exercise/auto_exercise.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
@@ -31,22 +30,22 @@ import 'package:wakelock/wakelock.dart';
 
 Future<bool> get _isNetworkOn async => (await Connectivity().checkConnectivity()) != ConnectivityResult.none;
 
-Future<bool> _cleanup() async {
+Future<void> _cleanup() async {
   await Wakelock.disable();
   await disconnectDevice();
   await firebaseLogout();
   disposeGraphData();
   releasePlayer();
-  return Future<bool>.delayed(const Duration(seconds: 1), () => true);
+  return Future<void>.delayed(const Duration(microseconds: 500));
 }
 
 Future<bool?> onAppClose(BuildContext context) async {
   return showDialog<bool>(
     context: context,
     builder: (_) => CustomDialog(
-      content: FutureBuilder<bool>(
+      content: FutureBuilder<void>(
         future: _cleanup(),
-        builder: (_, AsyncSnapshot<bool> snapshot) {
+        builder: (_, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) context.pop(true);
           return const CustomProgress();
         },
@@ -152,7 +151,10 @@ Future<bool?> startCountdown(BuildContext context, {String? title, Duration? dur
     barrierDismissible: false,
     builder: (_) => CustomDialog(
       title: title ?? 'Session start in...',
-      content: CountDown(duration: duration ?? const Duration(seconds: 5)),
+      content: Padding(
+        padding: const EdgeInsets.all(16),
+        child: CountDown(duration: duration ?? const Duration(seconds: 5)),
+      ),
     ),
   );
 }
@@ -161,16 +163,10 @@ Future<void> _connectProgressor(BuildContext context) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false,
-    builder: (_) => CustomDialog(
-      title: 'Connect Progressor',
-      trieling: CustomButton(
-        radius: 20,
-        icon: const Icon(Icons.clear, color: colorRed400),
-        onPressed: () async => stopWeightMeas().then((_) => context.pop()),
-      ),
-      content: progressor != null ? DeviceTile(device: progressor!) : const BluetoothTile(),
-    ),
-  );
+    builder: (_) => const CustomDialog(title: 'Connect Progressor', content: ConnectedList()),
+  ).then((_) async {
+    if (isBusy || isWorking) await stopWeightMeas();
+  });
 }
 
 Future<void> congratulate(BuildContext context) async {
@@ -224,10 +220,14 @@ Future<void> _startAutoExercise(BuildContext context) async {
     context: context,
     builder: (_) => CustomDialog(
       title: 'Start Exercise',
-      content: const AutoExercise(),
+      content: const FittedBox(child: AutoExercise()),
       trieling: CustomButton(
         reverce: true,
-        onPressed: () => context.push(ExerciseMode.route, replace: true),
+        onPressed: () async {
+          context.model.settingsState!.lastPrescriptions = context.model.prescription;
+          await context.model.settingsState!.save();
+          await context.push(ExerciseMode.route, replace: true);
+        },
         icon: const Icon(Icons.arrow_forward_rounded, color: colorGoogleGreen),
         child: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
       ),

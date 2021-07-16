@@ -129,8 +129,10 @@ class ExerciseHandler extends GraphHandler {
       await boxExport.add(export!);
     }
     if (isRunning) return stopWeightMeas().then((_) => true);
-    final bool result = await submitData(context, export!) ?? true;
-    if (result) {
+    final bool? result = await submitData(context, export!);
+    if (result == null) {
+      return false;
+    } else if (result) {
       hasData = false;
       export = null;
     }

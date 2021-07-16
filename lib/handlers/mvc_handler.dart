@@ -18,7 +18,7 @@ class MVCHandler extends GraphHandler {
   double timeDiff;
 
   String get maxForceValue => 'MVC: $maxForce Kg';
-  String get timeDiffValue => '🕒 ${timeDiff.toStringAsFixed(1)} Sec';
+  String get timeDiffValue => '🕒 ${timeDiff.abs().toStringAsFixed(1)} Sec';
 
   void _updateLine() {
     lineData!.insertAll(0, <ChartData>[
@@ -31,10 +31,10 @@ class MVCHandler extends GraphHandler {
   @override
   void update(ChartData data) {
     if (isRunning) {
-      timeDiff = (mvcDuration - data.time).abs();
+      timeDiff = mvcDuration - data.time;
       if (timeDiff == 0) {
         isComplete = true;
-        stop();
+        reset();
       } else if (data.load > maxForce) {
         maxForce = data.load;
         _updateLine();

@@ -7,7 +7,6 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/device/scanner_list.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
-import 'package:tendon_loader/homepage.dart';
 import 'package:tendon_loader/login/login.dart';
 import 'package:tendon_loader/utils/app_auth.dart';
 import 'package:tendon_loader/utils/extension.dart';
@@ -35,12 +34,25 @@ class _UserSettingsState extends State<UserSettings> {
     super.dispose();
   }
 
+  Future<void> _tryUpload() async {
+    if (boxExport.isNotEmpty) {
+      await tryUpload(context).then((_) => context.view.refresh);
+    } else {
+      context.showSnackBar(const Text('No data available! or already submitted.'));
+    }
+  }
+
+  Future<void> _logout() async {
+    context.model.userState!.keepSigned = false;
+    await context.model.userState!.save();
+    await context.model.settingsState!.save();
+    await firebaseLogout().then((_) => context.push(Login.route, replace: true));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings'), actions: <Widget>[
-        CustomButton(icon: const Icon(Icons.public), onPressed: () => context.push(HomePage.route)),
-      ]),
+      appBar: AppBar(title: const Text('Settings')),
       body: SingleChildScrollView(
         child: AppFrame(
           onExit: () => context.model.settingsState!.save().then((_) => true),
@@ -122,28 +134,16 @@ class _UserSettingsState extends State<UserSettings> {
               ),
             ),
             ListTile(
-              title: const Text('Click to export locallly stored data'),
-              trailing: CustomButton(child: Text(boxExport.length.toString(), style: tsG18BFF)),
-              onTap: () async {
-                if (boxExport.isNotEmpty) {
-                  await tryUpload(context).then((_) => context.view.refresh);
-                } else {
-                  context.showSnackBar(const Text('No data available! or already submitted.'));
-                }
-              },
+              title: const Text('Press the button to export locallly stored data'),
+              trailing: CustomButton(
+                onPressed: _tryUpload,
+                child: Text(boxExport.length.toString(), style: tsG24BFF),
+              ),
             ),
             const Divider(thickness: 2),
             ListTile(title: const Text('About'), onTap: () => about(context)),
             const Divider(thickness: 2),
-            ListTile(
-              title: const Text('Logout', style: TextStyle(color: colorRed400)),
-              onTap: () async {
-                context.model.userState!.keepSigned = false;
-                await context.model.userState!.save();
-                await context.model.settingsState!.save();
-                await firebaseLogout().then((_) => context.push(Login.route, replace: true));
-              },
-            ),
+            ListTile(onTap: _logout, title: const Text('Logout', style: TextStyle(color: colorRed400))),
           ]),
         ),
       ),

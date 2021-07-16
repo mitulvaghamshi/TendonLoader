@@ -11,6 +11,19 @@ class LiveDataHandler extends GraphHandler {
   String get elapsed => time.toTime;
 
   @override
+  Future<void> reset() async {
+    if (isRunning) {
+      isRunning = false;
+      await super.reset();
+    }
+  }
+
+  @override
+  Future<void> start() async {
+    if (!isRunning) await super.start();
+  }
+
+  @override
   void update(ChartData data) {
     if (isRunning) time = data.time;
   }

@@ -29,8 +29,8 @@ const TextStyle ts18BFF = TextStyle(
   fontFamily: 'Georgia',
   fontWeight: FontWeight.bold,
 );
-const TextStyle tsG22BFF = TextStyle(
-  fontSize: 22,
+const TextStyle tsG24BFF = TextStyle(
+  fontSize: 24,
   fontFamily: 'Georgia',
   color: colorGoogleGreen,
   fontWeight: FontWeight.bold,

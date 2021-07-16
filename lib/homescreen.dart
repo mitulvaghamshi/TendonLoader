@@ -68,11 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icons.directions_run_rounded,
               onTap: () => navigateTo(context, RouteType.exerciseMode),
             ),
-            CustomTile(
-              name: 'Pain Tracking',
-              icon: Icons.feedback,
-              onTap: () {},
-            ),
           ]),
         ),
       ),

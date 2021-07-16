@@ -43,7 +43,7 @@ class GraphHandler {
 
   Future<void> reset() async {
     await stopWeightMeas();
-    play(false);
+     play(false);
   }
 
   Future<bool> exit() async {
