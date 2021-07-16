@@ -42,7 +42,7 @@ Future<void> init(BuildContext context) async {
       await SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
     }
   } finally {
-    _completer!.complete();
+    await Future<void>.delayed(const Duration(seconds: 1)).then(_completer!.complete);
   }
   return _completer!.future;
 }

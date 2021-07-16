@@ -98,21 +98,22 @@
 				"label": "Android: build apk",
 				"type": "shell",
 				"command": "flutter build apk --no-track-widget-creation --obfuscate --split-debug-info=build/app/outputs/bundle/release/map/",
+				"problemMatcher": []
 			},
 			{
 				"label": "Web: build",
 				"type": "shell",
-				"command": "flutter build web",
+				"command": "flutter build web"
 			},
 			{
 				"label": "Firebase: start emulators",
 				"type": "shell",
-				"command": "firebase emulators:start --export-on-exit=../emulator-backup --import=../emulator-backup",
+				"command": "firebase emulators:start --export-on-exit=../emulator-backup --import=../emulator-backup"
 			},
 			{
 				"label": "Connect Redmi",
 				"type": "shell",
-				"command": "adb connect 10.0.0.172",
+				"command": "adb connect 10.0.0.172"
 			}
 		]
 	}

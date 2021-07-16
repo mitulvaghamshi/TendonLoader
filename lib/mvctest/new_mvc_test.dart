@@ -21,6 +21,8 @@ class NewMVCTest extends StatefulWidget {
 class _NewMVCTestState extends State<NewMVCTest> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _ctrlMvcDuration = TextEditingController();
+  late final int? _lastDuration = context.model.settingsState!.lastDuration;
+  bool _useLastDuration = false;
 
   @override
   void dispose() {
@@ -28,37 +30,53 @@ class _NewMVCTestState extends State<NewMVCTest> {
     super.dispose();
   }
 
+  Future<void> _onSubmit() async {
+    if (_formKey.currentState!.validate()) {
+      final int _duration = int.parse(_ctrlMvcDuration.text);
+      context.model
+        ..mvcDuration = _duration
+        ..settingsState!.lastDuration = _duration;
+      await context.model.settingsState!.save();
+      await context.push(MVCTesting.route, replace: true);
+    }
+  }
+
+  void _onChanged(bool value) {
+    _ctrlMvcDuration.text = value ? _lastDuration.toString() : '';
+    setState(() => _useLastDuration = value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('New MVC Test', textAlign: TextAlign.center),
-        actions: <Widget>[
-          CustomButton(
-            reverce: true,
-            icon: const Icon(Icons.arrow_forward_rounded, color: colorGoogleGreen),
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                context.model.mvcDuration = int.parse(_ctrlMvcDuration.text);
-                await Navigator.pushReplacementNamed(context, MVCTesting.route);
-              }
-            },
-            child: const Text('Go', style: tsG18BFF),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('New MVC Test', textAlign: TextAlign.center), actions: <Widget>[
+        CustomButton(
+          reverce: true,
+          onPressed: _onSubmit,
+          icon: const Icon(Icons.arrow_forward_rounded, color: colorGoogleGreen),
+          child: const Text('Go', style: tsG18BFF),
+        ),
+      ]),
       body: AppFrame(
         child: Form(
           key: _formKey,
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
             const Text('MVC Test duration.', style: tsG22BFF, textAlign: TextAlign.center),
-            const SizedBox(height: 10),
+            if (_lastDuration != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: SwitchListTile.adaptive(
+                  onChanged: _onChanged,
+                  value: _useLastDuration,
+                  title: const Text('Use duration from last test.'),
+                ),
+              ),
             CustomTextField(
               isPicker: true,
               label: 'Test duration (sec)',
               controller: _ctrlMvcDuration,
               validator: validateNum,
-            )
+            ),
           ]),
         ),
       ),

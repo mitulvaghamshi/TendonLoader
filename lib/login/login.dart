@@ -45,7 +45,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
       }
     } else if (status == AnimationStatus.completed) {
       if (_result) {
-        await Navigator.pushReplacementNamed(context, Login.homeRoute);
+        await context.push(Login.homeRoute, replace: true);
       } else {
         await _animCtrl.reverse();
       }
@@ -58,6 +58,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     if (context.model.userState != null && (_keepSigned = context.model.userState!.keepSigned!)) {
       _emailCtrl.text = context.model.userState!.userName!;
       _passwordCtrl.text = context.model.userState!.passWord!;
+    } else {
+      _keepSigned = true;
     }
   }
 

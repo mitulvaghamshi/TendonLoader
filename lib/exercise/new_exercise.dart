@@ -30,6 +30,8 @@ class _NewExerciseState extends State<NewExercise> {
   final TextEditingController _ctrlSetRest = TextEditingController();
   final TextEditingController _ctrlTargetLoad = TextEditingController();
   final TextEditingController _ctrlMVCDuration = TextEditingController();
+  late final Prescription? _lastPre = context.model.settingsState!.lastPrescriptions;
+  bool _useLastPrescription = false;
 
   @override
   void dispose() {
@@ -46,11 +48,10 @@ class _NewExerciseState extends State<NewExercise> {
   @override
   void initState() {
     super.initState();
-    if (kIsWeb) _init();
+    if (kIsWeb) _init(widget.user!.prescription!);
   }
 
-  Future<void> _init() async {
-    final Prescription _pre = widget.user!.prescription!;
+  Future<void> _init(Prescription _pre) async {
     _ctrlSets.text = _pre.sets.toString();
     _ctrlReps.text = _pre.reps.toString();
     _ctrlSetRest.text = _pre.setRest.toString();
@@ -58,6 +59,16 @@ class _NewExerciseState extends State<NewExercise> {
     _ctrlRestTime.text = _pre.restTime.toString();
     _ctrlTargetLoad.text = _pre.targetLoad.toString();
     _ctrlMVCDuration.text = _pre.mvcDuration.toString();
+  }
+
+  void _clearForm() {
+    _ctrlSets.clear();
+    _ctrlReps.clear();
+    _ctrlSetRest.clear();
+    _ctrlHoldTime.clear();
+    _ctrlRestTime.clear();
+    _ctrlTargetLoad.clear();
+    _ctrlMVCDuration.clear();
   }
 
   Future<void> _submit() async {
@@ -74,10 +85,22 @@ class _NewExerciseState extends State<NewExercise> {
       if (kIsWeb) {
         await widget.user!.prescriptionRef!.update(_pre.toMap()).then(context.pop);
       } else {
-        context.model.prescription = _pre;
+        context.model
+          ..prescription = _pre
+          ..settingsState!.lastPrescriptions = _pre;
+        await context.model.settingsState!.save();
         await context.push(ExerciseMode.route, replace: true);
       }
     }
+  }
+
+  Future<void> _onChanged(bool value) async {
+    if (value) {
+      await _init(context.model.settingsState!.lastPrescriptions!);
+    } else {
+      _clearForm();
+    }
+    setState(() => _useLastPrescription = value);
   }
 
   @override
@@ -94,16 +117,24 @@ class _NewExerciseState extends State<NewExercise> {
     return Form(
       key: _formKey,
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        if (!kIsWeb)
-          Text('Please enter your\nexercise prescriptions', textAlign: TextAlign.center, style: tsG18BFF)
-        else
+        if (!kIsWeb) ...<Widget>[
+          const Text('Please enter your\nexercise prescriptions', textAlign: TextAlign.center, style: tsG18BFF),
+          if (_lastPre != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: SwitchListTile.adaptive(
+                onChanged: _onChanged,
+                value: _useLastPrescription,
+                title: const Text('Use prescriptions from last exercise.'),
+              ),
+            ),
+        ] else
           CustomTextField(
             isPicker: true,
             validator: validateNum,
             label: 'MVC Test duration',
             controller: _ctrlMVCDuration,
           ),
-        const SizedBox(height: 10),
         CustomTextField(
           label: 'Target Load (Kg)',
           controller: _ctrlTargetLoad,
@@ -148,7 +179,7 @@ class _NewExerciseState extends State<NewExercise> {
             child: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
           ),
           CustomButton(
-            onPressed: () => _formKey.currentState!.reset(),
+            onPressed: _clearForm,
             icon: const Icon(Icons.clear_rounded),
             child: const Text('Clear'),
           ),

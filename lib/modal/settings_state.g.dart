@@ -20,19 +20,25 @@ class SettingsStateAdapter extends TypeAdapter<SettingsState> {
       autoUpload: fields[0] as bool?,
       graphSize: fields[1] as double?,
       customPrescriptions: fields[2] as bool?,
+      lastDuration: fields[3] as int?,
+      lastPrescriptions: fields[4] as Prescription?,
     );
   }
 
   @override
   void write(BinaryWriter writer, SettingsState obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.autoUpload)
       ..writeByte(1)
       ..write(obj.graphSize)
       ..writeByte(2)
-      ..write(obj.customPrescriptions);
+      ..write(obj.customPrescriptions)
+      ..writeByte(3)
+      ..write(obj.lastDuration)
+      ..writeByte(4)
+      ..write(obj.lastPrescriptions);
   }
 
   @override

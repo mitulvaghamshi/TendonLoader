@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:tendon_loader/modal/prescription.dart';
 
 part 'settings_state.g.dart';
 
@@ -8,6 +9,8 @@ class SettingsState extends HiveObject {
     this.autoUpload = false,
     this.graphSize = 30,
     this.customPrescriptions = true,
+    this.lastDuration,
+    this.lastPrescriptions,
   });
 
   @HiveField(0)
@@ -16,4 +19,8 @@ class SettingsState extends HiveObject {
   double? graphSize;
   @HiveField(2)
   bool? customPrescriptions;
+  @HiveField(3)
+  int? lastDuration;
+  @HiveField(4)
+  Prescription? lastPrescriptions;
 }

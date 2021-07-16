@@ -65,11 +65,13 @@ class AppState {
 
   Future<void> fetch() async {
     if (_complater.isCompleted) return;
-    users.clear();
     final QuerySnapshot<User> _snapshot = await _dbRoot.get();
     final Iterable<User> _iterable = _snapshot.docs.map((QueryDocumentSnapshot<User> u) => u.data());
-    for (final User user in _iterable) {
-      users.add(await user.fetch());
+    if (_iterable.isNotEmpty) {
+      users.clear();
+      for (final User user in _iterable) {
+        users.add(await user.fetch());
+      }
     }
     _complater.complete();
     return _complater.future;
