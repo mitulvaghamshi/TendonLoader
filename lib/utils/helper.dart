@@ -14,6 +14,7 @@ import 'package:tendon_loader/exercise/auto_exercise.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
+import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/homescreen.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
 import 'package:tendon_loader/modal/export.dart';
@@ -34,7 +35,7 @@ Future<void> _cleanup() async {
   await Wakelock.disable();
   await disconnectDevice();
   await firebaseLogout();
-  disposeGraphData();
+  // disposeGraphData();
   releasePlayer();
   return Future<void>.delayed(const Duration(microseconds: 500));
 }
@@ -152,7 +153,7 @@ Future<bool?> startCountdown(BuildContext context, {String? title, Duration? dur
     builder: (_) => CustomDialog(
       title: title ?? 'Session start in...',
       content: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(5),
         child: CountDown(duration: duration ?? const Duration(seconds: 5)),
       ),
     ),
@@ -164,9 +165,7 @@ Future<void> _connectProgressor(BuildContext context) async {
     context: context,
     barrierDismissible: false,
     builder: (_) => const CustomDialog(title: 'Connect Progressor', content: ConnectedList()),
-  ).then((_) async {
-    if (isBusy || isWorking) await stopWeightMeas();
-  });
+  ).then((_) async => stopWeightMeas());
 }
 
 Future<void> congratulate(BuildContext context) async {
@@ -238,13 +237,13 @@ Future<void> _startAutoExercise(BuildContext context) async {
 void about(BuildContext context) {
   showAboutDialog(
     context: context,
-    applicationVersion: 'v1.0',
+    applicationVersion: 'v0.0.8',
     applicationName: HomeScreen.name,
     applicationIcon: const AppLogo(radius: 30),
     // applicationLegalese: 'Add Application Legalese',
     children: <Widget>[
       const Text(
-        'Tendon Loader :Preview',
+        'Tendon Loader :Preview-v0.0.8',
         textAlign: TextAlign.center,
         style: TextStyle(color: colorGoogleGreen, fontSize: 18, fontFamily: 'Georgia'),
       ),

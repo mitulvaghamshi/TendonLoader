@@ -5,6 +5,7 @@ import 'package:tendon_loader/constants/text_styles.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
+import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
@@ -35,7 +36,7 @@ class ConnectedTile extends StatelessWidget {
             ),
             StreamBuilder<ChartData>(
               initialData: ChartData(),
-              stream: graphDataStream,
+              stream: GraphHandler.stream,
               builder: (_, AsyncSnapshot<ChartData> snapshot) => Text('${snapshot.data!.load} Kg.', style: tsG40B),
             ),
             const Text(
@@ -44,7 +45,7 @@ class ConnectedTile extends StatelessWidget {
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
             CustomButton(
-              onPressed: () async => stopTaring().then(context.pop),
+              onPressed: () async => tareProgressor().then(context.pop),
               icon: const Icon(Icons.adjust),
               child: const Text('Tare Progressor'),
             ),

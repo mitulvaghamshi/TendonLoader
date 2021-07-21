@@ -11,7 +11,7 @@ import 'package:tendon_loader/utils/themes.dart';
 
 class ExerciseHandler extends GraphHandler {
   ExerciseHandler({required BuildContext context})
-      : pre = context.model.prescription!,
+      : _pre = context.model.prescription!,
         super(context: context, lineData: <ChartData>[
           ChartData(load: context.model.prescription!.targetLoad),
           ChartData(time: 2, load: context.model.prescription!.targetLoad),
@@ -22,75 +22,78 @@ class ExerciseHandler extends GraphHandler {
   int _minTime = 0;
   bool _isHit = false;
 
-  late int sets;
-  late int reps;
-  late int rests;
-  late int lapTimer;
+  late int _set;
+  late int _rep;
+  late int _rest;
+  late int _lapTime;
   late bool isHold;
-  late bool isSetOver;
-  final Prescription pre;
+  late bool _isSetOver;
+  final Prescription _pre;
 
-  String get lapTime => '${isHold ? 'Hold' : 'Rest'}: $lapTimer Sec';
-  String get counterValue => 'Set: $sets/${pre.sets} • Rep: $reps/${pre.reps}';
+  String get lapTime => '${isHold ? 'Hold' : 'Rest'}: $_lapTime Sec';
+  String get counterValue => 'Set: $_set/${_pre.sets} • Rep: $_rep/${_pre.reps}';
   Color get feedColor => _isHit ? colorGoogleGreen : colorGoogleYellow;
 
   void _clear() {
     isHold = true;
-    lapTimer = pre.holdTime;
-    sets = reps = rests = 1;
-    isSetOver = _isHit = false;
+    _minTime = 0;
+    _lapTime = _pre.holdTime;
+    _set = _rep = _rest = 1;
+    _isSetOver = _isHit = false;
   }
 
   @override
   void update(ChartData data) {
     if (isRunning) {
-      _isHit = data.load > pre.targetLoad;
-      final int time = data.time.truncate();
-      if (!isSetOver && time > _minTime) {
-        _minTime = time;
-        if (lapTimer-- == 0) {
+      _isHit = data.load > _pre.targetLoad;
+      final int _time = data.time.truncate();
+      if (!isPause && _time > _minTime) {
+        _minTime = _time;
+        if (_lapTime-- == 0) {
           if (isHold) {
             isHold = false;
-            reps++;
-            lapTimer = pre.restTime;
-            if (reps > pre.reps && rests > pre.reps - 1) {
-              sets++;
-              if (sets > pre.sets) {
+            _rep++;
+            _lapTime = _pre.restTime;
+            if (_rep > _pre.reps && _rest > _pre.reps - 1) {
+              _set++;
+              if (_set > _pre.sets) {
                 isComplete = true;
-                reset();
+                stop();
               } else {
-                onSetOver();
-                rests = reps = 1;
-                isHold = isSetOver = true;
-                lapTimer = pre.holdTime;
+                _rest = _rep = 1;
+                isHold = _isSetOver = true;
+                _lapTime = _pre.holdTime;
+                _setOver();
               }
             }
           } else {
-            rests++;
+            _rest++;
             isHold = true;
-            lapTimer = pre.holdTime;
+            _lapTime = _pre.holdTime;
           }
         }
       }
     }
   }
 
-  Future<void> onSetOver() async {
+  Future<void> _setOver() async {
     await Future<void>.microtask(() async {
       final bool? result = await startCountdown(
         context,
         title: 'Set Over, Rest!!!',
-        duration: Duration(seconds: pre.setRest),
+        duration: Duration(seconds: _pre.setRest),
       );
-      await (result ?? false ? start : reset)();
+      await (result ?? false ? start : stop)();
     });
   }
 
   @override
   Future<void> start() async {
-    if (isSetOver && isRunning) {
-      isSetOver = false;
-    } else if (!isRunning && hasData) {
+    if (isPause && isRunning) {
+      isPause = false;
+    } else if (_isSetOver && isRunning) {
+      _isSetOver = false;
+    } else if (hasData && !isRunning) {
       await exit();
     } else {
       await super.start();
@@ -98,17 +101,16 @@ class ExerciseHandler extends GraphHandler {
   }
 
   @override
-  void stop() {
-    if (isRunning) isSetOver = true;
+  void pause() {
+    if (isRunning) isPause = true;
   }
 
   @override
-  Future<void> reset() async {
+  Future<void> stop() async {
     if (isRunning) {
-      isRunning = isWorking = false;
-      await super.reset();
+      isRunning = false;
+      await super.stop();
       _clear();
-      _minTime = 0;
       if (isComplete) await congratulate(context);
       await exit();
     }
@@ -120,22 +122,14 @@ class ExerciseHandler extends GraphHandler {
     if (export == null) {
       export = Export(
         userId: userId,
-        prescription: pre,
+        prescription: _pre,
         timestamp: timestamp,
         isComplate: isComplete,
         progressorId: deviceName,
-        exportData: exportDataList,
+        exportData: GraphHandler.exportData,
       );
       await boxExport.add(export!);
     }
-    if (isRunning) return stopWeightMeas().then((_) => true);
-    final bool? result = await submitData(context, export!);
-    if (result == null) {
-      return false;
-    } else if (result) {
-      hasData = false;
-      export = null;
-    }
-    return result;
+    return super.exit();
   }
 }

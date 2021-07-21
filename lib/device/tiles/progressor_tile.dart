@@ -17,7 +17,7 @@ class ProgressorTile extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
       ),
-      CustomButton(icon: Icon(Icons.search), onPressed: startDeviceScan, child: Text('Scan')),
+      CustomButton(icon: Icon(Icons.search), onPressed: startScan, child: Text('Scan')),
     ]);
   }
 }

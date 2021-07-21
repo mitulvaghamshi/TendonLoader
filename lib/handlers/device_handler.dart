@@ -2,29 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:rxdart/subjects.dart';
 import 'package:tendon_loader/constants/progressor.dart';
-import 'package:tendon_loader/modal/chartdata.dart';
-import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/handlers/graph_handler.dart';
 
-final BehaviorSubject<ChartData> _controller = BehaviorSubject<ChartData>.seeded(ChartData());
-
-Stream<ChartData> get graphDataStream => _controller.stream;
-
-Sink<ChartData> get graphDataSink => _controller.sink;
-
-void clearGraphData() => graphDataSink.add(ChartData());
-
-void disposeGraphData() {
-  if (!_controller.isClosed) _controller.close();
-}
-
-final List<ChartData> exportDataList = <ChartData>[];
-
-bool isBusy = false;
-bool isWorking = false;
-double _lastMillis = 0;
-
+bool isPause = false;
+bool _isRunning = false;
 Completer<bool>? _completer;
 
 BluetoothDevice? _device;
@@ -33,81 +15,49 @@ BluetoothCharacteristic? _controlChar;
 
 BluetoothDevice? get progressor => _device;
 
-String get deviceName {
-  return progressor == null
-      ? 'Device not connected!'
-      : _device!.name.isEmpty
-          ? _device!.id.id
-          : _device!.name;
-}
+String get deviceName => _device == null
+    ? 'Not connected!'
+    : _device!.name.isEmpty
+        ? _device!.id.id
+        : _device!.name;
 
-Future<void> setNotification(bool value) async => _dataChar!.setNotifyValue(value);
+Future<void> startScan() async => FlutterBlue.instance.startScan(timeout: const Duration(seconds: 2));
 
-Future<void> sleepDevice() async => _controlChar!.write(<int>[cmdEnterSleep]);
-
-Future<void> stopDeviceScan() async => FlutterBlue.instance.stopScan();
-
-Future<void> startDeviceScan() async {
-  await FlutterBlue.instance.startScan(timeout: const Duration(seconds: 2));
-}
-
-Future<void> startTaring() async {
-  if (!isBusy) {
-    isBusy = isWorking = true;
-    await _controlChar!.write(<int>[cmdStartWeightMeas]);
-  }
-}
-
-Future<void> stopTaring() async {
-  if (isBusy) {
-    isBusy = isWorking = false;
+Future<void> tareProgressor() async {
+  if (_isRunning) {
+    _isRunning = false;
     await _controlChar!.write(<int>[cmdTareScale]);
     await _controlChar!.write(<int>[cmdStartWeightMeas]);
     await _controlChar!.write(<int>[cmdStopWeightMeas]);
-    _lastMillis = 0;
-    clearGraphData();
-    exportDataList.clear();
   }
 }
 
 Future<void> startWeightMeas() async {
-  if (!isBusy) {
-    isBusy = isWorking = true;
-    if (isSumulation) {
-      _fakeListen();
-    } else {
-      await _controlChar!.write(<int>[cmdStartWeightMeas]);
-    }
+  if (!_isRunning) {
+    _isRunning = true;
+    await _controlChar!.write(<int>[cmdStartWeightMeas]);
   }
 }
 
 Future<void> stopWeightMeas() async {
-  if (isBusy) {
-    isBusy = isWorking = false;
-    if (isSumulation) {
-      _timer?.cancel();
-    } else {
-      await _controlChar!.write(<int>[cmdStopWeightMeas]);
-    }
-    _lastMillis = 0;
-    clearGraphData();
+  if (_isRunning) {
+    _isRunning = false;
+    await _controlChar!.write(<int>[cmdStopWeightMeas]);
   }
 }
 
 Future<void> disconnectDevice() async {
   if (_device != null) {
+    // await _controlChar!.write(<int>[cmdEnterSleep]);
     await _device!.disconnect();
+    _isRunning = false;
     _device = _dataChar = _controlChar = _completer = null;
-    isBusy = isWorking = false;
-    _lastMillis = 0;
-    clearGraphData();
-    exportDataList.clear();
   }
 }
 
 Future<bool> getProps(BluetoothDevice device) async {
   if (_device != null && _dataChar != null && _controlChar != null) {
-    return Future<void>.delayed(const Duration(milliseconds: 800), startTaring).then((_) => true);
+    return Future<void>.delayed(const Duration(milliseconds: 800), startWeightMeas).then((_) => true);
   } else if (_completer == null) {
     _completer = Completer<bool>();
     for (final BluetoothService s in await device.discoverServices()) {
@@ -119,46 +69,14 @@ Future<bool> getProps(BluetoothDevice device) async {
         }
       }
     }
-    await setNotification(true);
+    await _dataChar!.setNotifyValue(true);
     if (Platform.isAndroid) await device.requestMtu(120);
     if (_dataChar != null && _controlChar != null) {
-      _addListener();
+      _dataChar!.value.listen(GraphHandler.onData);
       _device = device;
-      await Future<void>.delayed(const Duration(milliseconds: 800), startTaring)
+      await Future<void>.delayed(const Duration(milliseconds: 800), startWeightMeas)
           .then((_) => _completer!.complete(true));
     }
   }
   return _completer!.future;
 }
-
-void _addListener() {
-  _dataChar!.value.listen((List<int> data) {
-    if (isWorking && data.isNotEmpty && data[0] == resWeightMeasurement) {
-      for (int x = 2; x < data.length; x += 8) {
-        final double weight = data.getRange(x, x + 4).toList().toWeight;
-        final double time = data.getRange(x + 4, x + 8).toList().toTime;
-        if (time > _lastMillis) {
-          _lastMillis = time;
-          final ChartData element = ChartData(load: weight, time: time);
-          exportDataList.add(element);
-          graphDataSink.add(element);
-        }
-      }
-    }
-  });
-}
-
-// simulator start
-late Timer? _timer;
-late bool isSumulation;
-
-void _fakeListen() {
-  double fakeLoad = 0;
-  _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-    final ChartData element = ChartData(load: fakeLoad += 2, time: timer.tick.toDouble());
-    exportDataList.add(element);
-    graphDataSink.add(element);
-    if (fakeLoad++ > 10) fakeLoad = 0;
-  });
-}
-// simulator end

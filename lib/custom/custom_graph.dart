@@ -77,8 +77,8 @@ class CustomGraph extends StatelessWidget {
           ),
           GraphControls(
             start: handler.start,
-            reset: handler.reset,
-            stop: handler is ExerciseHandler ? handler.stop : null,
+            stop: handler.stop,
+            pause: handler is ExerciseHandler ? handler.pause : null,
           ),
         ],
       ),

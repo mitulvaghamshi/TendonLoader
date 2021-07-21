@@ -43,7 +43,7 @@ class ScannerList extends StatelessWidget {
                             icon: Icon(Icons.bluetooth_rounded, size: 30),
                           ),
                         ),
-                        const CustomButton(icon: Icon(Icons.search), onPressed: startDeviceScan, child: Text('Scan')),
+                        const CustomButton(icon: Icon(Icons.search), onPressed: startScan, child: Text('Scan')),
                       ],
                     );
                   }

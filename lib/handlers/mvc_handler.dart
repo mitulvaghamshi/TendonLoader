@@ -28,13 +28,19 @@ class MVCHandler extends GraphHandler {
     lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
   }
 
+  void _clear() {
+    maxForce = 0;
+    timeDiff = mvcDuration.toDouble();
+    _updateLine();
+  }
+
   @override
   void update(ChartData data) {
     if (isRunning) {
       timeDiff = mvcDuration - data.time;
       if (timeDiff == 0) {
         isComplete = true;
-        reset();
+        stop();
       } else if (data.load > maxForce) {
         maxForce = data.load;
         _updateLine();
@@ -44,22 +50,17 @@ class MVCHandler extends GraphHandler {
 
   @override
   Future<void> start() async {
-    if (!isRunning) {
-      if (hasData) {
-        await exit();
-      } else {
-        await super.start();
-      }
-    }
+    if (!isRunning) hasData ? await exit() : await super.start();
   }
 
   @override
-  Future<void> reset() async {
+  Future<void> stop() async {
     if (isRunning) {
-      isRunning = isWorking = false;
-      await super.reset();
+      isRunning = false;
+      await super.stop();
       if (isComplete) await congratulate(context);
       await exit();
+      _clear();
     }
   }
 
@@ -73,22 +74,10 @@ class MVCHandler extends GraphHandler {
         timestamp: timestamp,
         isComplate: isComplete,
         progressorId: deviceName,
-        exportData: exportDataList,
+        exportData: GraphHandler.exportData,
       );
       await boxExport.add(export!);
     }
-    if (isRunning) return stopWeightMeas().then((_) => true);
-    final bool? result = await submitData(context, export!);
-    if (result == null) {
-      return false;
-    } else if (result) {
-      hasData = false;
-      export = null;
-      maxForce = 0;
-      timeDiff = mvcDuration.toDouble();
-      _updateLine();
-      clearGraphData();
-    }
-    return result;
+    return super.exit();
   }
 }

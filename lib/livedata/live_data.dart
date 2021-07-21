@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/constants/text_styles.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
-import 'package:tendon_loader/handlers/device_handler.dart';
+import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/livedata_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 
@@ -26,7 +26,7 @@ class _LiveDataState extends State<LiveData> {
         handler: _handler,
         header: StreamBuilder<ChartData>(
           initialData: ChartData(),
-          stream: graphDataStream..listen(_handler.update),
+          stream: GraphHandler.stream,
           builder: (_, AsyncSnapshot<ChartData> snapshot) {
             _handler.graphData.insert(0, snapshot.data!);
             _handler.graphCtrl?.updateDataSource(updatedDataIndex: 0);
