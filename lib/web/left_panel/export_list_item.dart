@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/homepage.dart';
+import 'package:tendon_loader/utils/enums.dart';
 import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/utils/item_action.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/web_portal/handler/click_handler.dart';
 
 class ExportListItem extends StatelessWidget {
   const ExportListItem({Key? key, required this.export}) : super(key: key);
@@ -26,7 +26,7 @@ class ExportListItem extends StatelessWidget {
           ? const CustomButton(color: colorOrange400, child: Text('MVC'))
           : const CustomButton(color: colorGoogleGreen, child: Text('EXE')),
       onTap: () {
-        if (export.exportData.isNotEmpty) exportItemSink.add(export);
+        if (export.exportData.isNotEmpty) selectedItemSink.add(export);
       },
       trailing: PopupMenuButton<ItemAction>(
         icon: const Icon(Icons.more_vert_rounded),

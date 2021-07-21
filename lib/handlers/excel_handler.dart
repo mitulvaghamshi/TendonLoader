@@ -80,10 +80,9 @@ ArchiveFile generateExcel(Export export) {
     sheet.getRangeByIndex(iR, 2).number = chartData.load;
   }
 
-  final List<int> fileBytes = workbook.saveAsStream();
-  final InputStream inputStream = InputStream(fileBytes);
-  final ArchiveFile archiveFile = ArchiveFile.stream(export.fileName, inputStream.length, inputStream);
+  final InputStream _stream = InputStream(workbook.saveAsStream());
+  final ArchiveFile _file = ArchiveFile.stream(export.fileName, _stream.length, _stream);
   workbook.dispose();
 
-  return archiveFile;
+  return _file;
 }

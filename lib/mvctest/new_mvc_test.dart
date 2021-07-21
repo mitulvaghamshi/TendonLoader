@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/constants/text_styles.dart';
+import 'package:tendon_loader/constants/textstyles.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/utils/validator.dart';
+import 'package:tendon_loader/handlers/validator.dart';
 
 class NewMVCTest extends StatefulWidget {
   const NewMVCTest({Key? key}) : super(key: key);

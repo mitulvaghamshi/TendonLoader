@@ -13,19 +13,20 @@ import 'package:tendon_loader/device/connected_list.dart';
 import 'package:tendon_loader/exercise/auto_exercise.dart';
 import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/exercise/new_exercise.dart';
+import 'package:tendon_loader/handlers/audio_handler.dart';
+import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
+import 'package:tendon_loader/handlers/splash_handler.dart';
+import 'package:tendon_loader/homepage.dart';
 import 'package:tendon_loader/homescreen.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/mvctest/new_mvc_test.dart';
-import 'package:tendon_loader/utils/app_auth.dart';
-import 'package:tendon_loader/utils/clip_player.dart';
+import 'package:tendon_loader/utils/enums.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/utils/initializer.dart';
-import 'package:tendon_loader/utils/route_type.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -35,9 +36,9 @@ Future<void> _cleanup() async {
   await Wakelock.disable();
   await disconnectDevice();
   await firebaseLogout();
-  // disposeGraphData();
-  releasePlayer();
-  return Future<void>.delayed(const Duration(microseconds: 500));
+  await disposePlayer();
+  disposeSelectedItem();
+  return Future<void>.delayed(const Duration(microseconds: 800));
 }
 
 Future<bool?> onAppClose(BuildContext context) async {

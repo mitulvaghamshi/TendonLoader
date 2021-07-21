@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/custom/custom_controls.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
-import 'package:tendon_loader/handlers/exercise_handler.dart';
+import 'package:tendon_loader/exercise/exercise_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/utils/extension.dart';

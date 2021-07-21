@@ -9,9 +9,10 @@ import 'package:tendon_loader/exercise/exercise_mode.dart';
 import 'package:tendon_loader/livedata/live_data.dart';
 import 'package:tendon_loader/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/settings/user_settings.dart';
+import 'package:tendon_loader/utils/enums.dart';
 import 'package:tendon_loader/utils/helper.dart';
-import 'package:tendon_loader/utils/initializer.dart';
-import 'package:tendon_loader/utils/route_type.dart';
+import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/handlers/splash_handler.dart';
 import 'package:wakelock/wakelock.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,10 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false, title: const Text(HomeScreen.name), actions: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.settings_rounded),
-          onPressed: () async => Navigator.pushNamed(context, UserSettings.route),
-        ),
+        IconButton(icon: const Icon(Icons.settings), onPressed: () async => context.push(UserSettings.route)),
       ]),
       floatingActionButton: CustomButton(
         onPressed: () => navigateTo(context),

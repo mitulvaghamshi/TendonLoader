@@ -8,9 +8,12 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0ff484be0258ebc4c80d9e8bfc199cfa/transformed/jetified-firebase-measurement-connector-19.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4086a9af87cd954a94a4564f9f93b6b7/transformed/jetified-firebase-measurement-connector-19.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/290308fdbd6c0926f5a62b39d3fad565/transformed/jetified-firebase-measurement-connector-19.0.0/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/4c898d95126cd8bd225b56aeb2916f30/transformed/jetified-firebase-measurement-connector-19.0.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4c898d95126cd8bd225b56aeb2916f30/transformed/jetified-firebase-measurement-connector-19.0.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4c898d95126cd8bd225b56aeb2916f30/transformed/jetified-firebase-measurement-connector-19.0.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/9453571aee97b47122ff7f2268cfad42/transformed/jetified-firebase-measurement-connector-19.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0a1dd303cce9ed8652b4f0d26c72a0c7/transformed/jetified-firebase-measurement-connector-19.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/905022cdd71373fb3c6c8bb208c41e95/transformed/jetified-firebase-measurement-connector-19.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0a1dd303cce9ed8652b4f0d26c72a0c7/transformed/jetified-firebase-measurement-connector-19.0.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/0a1dd303cce9ed8652b4f0d26c72a0c7/transformed/jetified-firebase-measurement-connector-19.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-measurement-connector/19.0.0/c0d58b8efa926b2c607984c54fb3d274490badd1/firebase-measurement-connector-19.0.0-javadoc.jar!/" />

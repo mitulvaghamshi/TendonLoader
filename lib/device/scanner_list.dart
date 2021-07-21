@@ -1,61 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/device/connected_tile.dart';
-import 'package:tendon_loader/device/tiles/progressor_tile.dart';
-import 'package:tendon_loader/handlers/device_handler.dart';
-import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/custom/custom_progress.dart';
+import 'package:tendon_loader/device/device_list.dart';
+import 'package:tendon_loader/device/tiles/bluetooth_tile.dart';
 
 class ScannerList extends StatelessWidget {
   const ScannerList({Key? key}) : super(key: key);
 
-  String _deviceName(BluetoothDevice device) => device.name.isEmpty ? device.id.id : device.name;
-
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<ScanResult>>(
-      stream: FlutterBlue.instance.scanResults,
-      builder: (_, AsyncSnapshot<List<ScanResult>> snapshot) {
-        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-          final Iterable<ScanResult> results = snapshot.data!.where((ScanResult result) {
-            return _deviceName(result.device).contains('Progressor');
-          });
-          if (results.isNotEmpty) {
-            return Column(
-                children: results.map((ScanResult result) {
-              return StreamBuilder<BluetoothDeviceState>(
-                stream: result.device.state,
-                builder: (_, AsyncSnapshot<BluetoothDeviceState> snapshot) {
-                  if (snapshot.data == BluetoothDeviceState.connected) {
-                    return ConnectedTile(device: result.device);
-                  } else {
-                    return Column(
-                      children: <Widget>[
-                        ListTile(
-                          onTap: result.device.connect,
-                          contentPadding: const EdgeInsets.all(5),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          subtitle: const Text('Click to connect', style: TextStyle(fontSize: 12)),
-                          title: Text(_deviceName(result.device), style: const TextStyle(fontWeight: FontWeight.bold)),
-                          leading: const CustomButton(
-                            radius: 25,
-                            color: colorRed400,
-                            icon: Icon(Icons.bluetooth_rounded, size: 30),
-                          ),
-                        ),
-                        const CustomButton(icon: Icon(Icons.search), onPressed: startScan, child: Text('Scan')),
-                      ],
-                    );
-                  }
-                },
-              );
-            }).toList());
-          } else {
-            return const ProgressorTile();
-          }
-        } else {
-          return const ProgressorTile();
-        }
+    return StreamBuilder<Iterable<BluetoothDevice>>(
+      stream: FlutterBlue.instance.scanResults.asyncMap((List<ScanResult> list) =>
+          list.where((ScanResult r) => r.device.name.contains('Progressor')).map((ScanResult r) => r.device)),
+      builder: (_, AsyncSnapshot<Iterable<BluetoothDevice>> snapshot) {
+        if (!snapshot.hasData) return const CustomProgress();
+        return snapshot.data!.isEmpty ? const BluetoothTile() : DeviceList(devices: snapshot.data!);
       },
     );
   }

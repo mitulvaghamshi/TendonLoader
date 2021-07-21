@@ -8,9 +8,12 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/c378cfed0228100c1d34203e58a33516/transformed/legacy-support-core-ui-1.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2b85629cc07b73f9f22d0bf71ea74481/transformed/legacy-support-core-ui-1.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6b04b923967a978cf22770aa73b571a6/transformed/legacy-support-core-ui-1.0.0/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/c6aacc99496ccce4ce7d82a499952377/transformed/legacy-support-core-ui-1.0.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/c6aacc99496ccce4ce7d82a499952377/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/c6aacc99496ccce4ce7d82a499952377/transformed/legacy-support-core-ui-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/c34ffb5cfada8d33c6d1d496030cfce7/transformed/legacy-support-core-ui-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b580b5f63f02bdaf9e833f9d2015ba96/transformed/legacy-support-core-ui-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b95c2b20365d9ef3d48a787baf1b91c8/transformed/legacy-support-core-ui-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b580b5f63f02bdaf9e833f9d2015ba96/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/b580b5f63f02bdaf9e833f9d2015ba96/transformed/legacy-support-core-ui-1.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

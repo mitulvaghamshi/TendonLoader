@@ -6,9 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:tendon_loader/constants/keys.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/prescription.dart';
-import 'package:tendon_loader/utils/downloader.dart';
+import 'package:tendon_loader/handlers/download_handler.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/web_portal/handler/excel_handler.dart';
+import 'package:tendon_loader/handlers/excel_handler.dart';
 
 part 'export.g.dart';
 

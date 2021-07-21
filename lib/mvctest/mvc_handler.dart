@@ -5,7 +5,7 @@ import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/helper.dart';
-import 'package:tendon_loader/utils/initializer.dart';
+import 'package:tendon_loader/handlers/splash_handler.dart';
 
 class MVCHandler extends GraphHandler {
   MVCHandler({required BuildContext context})

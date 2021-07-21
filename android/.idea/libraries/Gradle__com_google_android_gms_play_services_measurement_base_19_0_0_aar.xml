@@ -8,9 +8,12 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/ae6fcd895a96d0613bee61cdb2484aef/transformed/jetified-play-services-measurement-base-19.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5771adb97f8b16fe75f5d467e4c4bfc0/transformed/jetified-play-services-measurement-base-19.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7770b13bc4926f516ba976ca827e5627/transformed/jetified-play-services-measurement-base-19.0.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/70e121ef023ea95b0f2b4447306c396e/transformed/jetified-play-services-measurement-base-19.0.0/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/70e121ef023ea95b0f2b4447306c396e/transformed/jetified-play-services-measurement-base-19.0.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/70e121ef023ea95b0f2b4447306c396e/transformed/jetified-play-services-measurement-base-19.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b473305e66ab4db115d2b3cc80daf8d3/transformed/jetified-play-services-measurement-base-19.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b6c92a57d4d4cbef8476ee3b215fcf6e/transformed/jetified-play-services-measurement-base-19.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/fca54ee5c50bbcddc7b3d119663fa62d/transformed/jetified-play-services-measurement-base-19.0.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/b6c92a57d4d4cbef8476ee3b215fcf6e/transformed/jetified-play-services-measurement-base-19.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b6c92a57d4d4cbef8476ee3b215fcf6e/transformed/jetified-play-services-measurement-base-19.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.android.gms/play-services-measurement-base/19.0.0/c0d58b8efa926b2c607984c54fb3d274490badd1/play-services-measurement-base-19.0.0-javadoc.jar!/" />

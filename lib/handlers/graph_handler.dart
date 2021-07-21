@@ -8,7 +8,7 @@ import 'package:tendon_loader/constants/progressor.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/utils/clip_player.dart';
+import 'package:tendon_loader/handlers/audio_handler.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/helper.dart';
 

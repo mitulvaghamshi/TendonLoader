@@ -1,4 +1,4 @@
-import 'dart:typed_data' show Endian, Uint8List;
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state.dart';

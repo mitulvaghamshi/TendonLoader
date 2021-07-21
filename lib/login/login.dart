@@ -1,16 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/constants/others.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
+import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/homepage.dart';
 import 'package:tendon_loader/homescreen.dart';
-import 'package:tendon_loader/utils/app_auth.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/utils/validator.dart';
+import 'package:tendon_loader/handlers/validator.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -78,7 +77,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         automaticallyImplyLeading: false,
         title: Text('Tendon Loader - ${_isNew ? 'Register' : 'Login'}'),
       ),
-      body: kIsWeb ? Center(child: SizedBox(width: sizeleftPanel, child: _buildLoginBody())) : _buildLoginBody(),
+      body: kIsWeb ? Center(child: SizedBox(width: 370, child: _buildLoginBody())) : _buildLoginBody(),
     );
   }
 

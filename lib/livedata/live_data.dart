@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/constants/text_styles.dart';
+import 'package:tendon_loader/constants/textstyles.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
-import 'package:tendon_loader/handlers/livedata_handler.dart';
+import 'package:tendon_loader/livedata/livedata_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 
 class LiveData extends StatefulWidget {

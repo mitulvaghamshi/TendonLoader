@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/placeholder.dart' if (dart.library.html) 'dart:html' show AnchorElement;
+import 'package:tendon_loader/custom/placeholder.dart' if (dart.library.html) 'dart:html' show AnchorElement;
 
 @immutable
 class Downloader {

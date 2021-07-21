@@ -12,7 +12,7 @@ import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/timestamp.g.dart';
 import 'package:tendon_loader/modal/user_state.dart';
-import 'package:tendon_loader/utils/app_auth.dart';
+import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/utils/extension.dart';
 
 late final Box<Export> boxExport;

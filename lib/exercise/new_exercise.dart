@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/constants/text_styles.dart';
+import 'package:tendon_loader/constants/textstyles.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
@@ -9,7 +9,7 @@ import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/utils/validator.dart';
+import 'package:tendon_loader/handlers/validator.dart';
 
 class NewExercise extends StatefulWidget {
   const NewExercise({Key? key, this.user}) : super(key: key);

@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/login/login.dart';
-import 'package:tendon_loader/utils/app_auth.dart';
+import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/web_portal/left_panel.dart';
-import 'package:tendon_loader/web_portal/right_panel.dart';
+import 'package:tendon_loader/web/left_panel/left_panel.dart';
+import 'package:tendon_loader/web/right_panel/right_panel.dart';
+
+final BehaviorSubject<Export> _clickCtrl = BehaviorSubject<Export>();
+
+Stream<Export> get selectedItemStream => _clickCtrl.stream;
+
+Sink<Export> get selectedItemSink => _clickCtrl.sink;
+
+void disposeSelectedItem() {
+  if (!_clickCtrl.isClosed) _clickCtrl.close();
+}
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,10 +26,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (currentUser == null) {
-      context.showSnackBar(const Text('Invalid Access!!!, Please Login...'));
-      context.push(Login.route, replace: true);
-    }
+    if (currentUser == null) context.push(Login.route, replace: true);
     final bool _isWide = MediaQuery.of(context).size.width > 960;
     return Scaffold(
       appBar: AppBar(title: const Text(name), actions: <Widget>[

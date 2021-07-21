@@ -58,13 +58,11 @@ class _CustomPickerState extends State<CustomPicker> {
     return TimePicker(
       value: _value,
       selectedTextStyle: const TextStyle(fontSize: 32, color: colorGoogleGreen),
+      onChanged: (int value) => setState(() => widget.onChange!(_value = value)),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(width: 2, color: Theme.of(context).accentColor),
       ),
-      onChanged: (int value) {
-        setState(() => widget.onChange!(_value = value));
-      },
     );
   }
 }

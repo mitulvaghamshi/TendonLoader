@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
-class Graph extends StatelessWidget {
-  const Graph({Key? key, required this.export}) : super(key: key);
+class DataView extends StatelessWidget {
+  const DataView({Key? key, required this.export}) : super(key: key);
 
   final Export export;
 
@@ -15,10 +15,7 @@ class Graph extends StatelessWidget {
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
       selectionType: SelectionType.point,
-      tooltipBehavior: TooltipBehavior(
-        enable: true,
-        header: export.isMVC ? 'MVC' : 'Measurement',
-      ),
+      tooltipBehavior: TooltipBehavior(enable: true, header: export.isMVC ? 'MVC' : 'Measurement'),
       primaryXAxis: NumericAxis(
         interval: 1,
         visibleMaximum: 5,
@@ -37,8 +34,8 @@ class Graph extends StatelessWidget {
         majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
       ),
       zoomPanBehavior: ZoomPanBehavior(
-        maximumZoomLevel: 0.5,
         enablePanning: true,
+        maximumZoomLevel: 0.5,
         enableSelectionZooming: true,
         enableMouseWheelZooming: true,
       ),
@@ -59,7 +56,7 @@ class Graph extends StatelessWidget {
           yValueMapper: (ChartData data, _) => data.load,
           dataSource: <ChartData>[
             ChartData(load: _targetLine),
-            ChartData(time: export.exportData.last.time, load: _targetLine),
+            ChartData(time: double.infinity, load: _targetLine),
           ],
         ),
       ],

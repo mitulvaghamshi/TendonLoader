@@ -9,7 +9,7 @@ import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/modal/user_state.dart';
-import 'package:tendon_loader/utils/initializer.dart';
+import 'package:tendon_loader/handlers/splash_handler.dart';
 
 class AppState {
   UserState? userState;
