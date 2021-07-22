@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:tendon_loader/constants/keys.dart';
+import 'package:tendon_loader/utils/constant/keys.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/handlers/download_handler.dart';

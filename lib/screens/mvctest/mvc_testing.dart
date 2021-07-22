@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/constants/textstyles.dart';
+import 'package:tendon_loader/utils/textstyles.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
-import 'package:tendon_loader/mvctest/mvc_handler.dart';
+import 'package:tendon_loader/screens/mvctest/mvc_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 
 class MVCTesting extends StatefulWidget {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/constants/textstyles.dart';
+import 'package:tendon_loader/utils/textstyles.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/device/scanner_list.dart';
+import 'package:tendon_loader/screens/device/scanner_list.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
-import 'package:tendon_loader/login/login.dart';
+import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/helper.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/device/tiles/connected_tile.dart';
+import 'package:tendon_loader/screens/device/tiles/connected_tile.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/utils/themes.dart';
 

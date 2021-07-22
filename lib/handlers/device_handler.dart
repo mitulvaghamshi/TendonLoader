@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/constants/progressor.dart';
+import 'package:tendon_loader/utils/constant/progressor.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 
 bool isPause = false;

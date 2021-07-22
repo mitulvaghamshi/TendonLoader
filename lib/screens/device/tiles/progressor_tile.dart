@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/constants/descriptions.dart';
-import 'package:tendon_loader/constants/images.dart';
+import 'package:tendon_loader/utils/constant/descriptions.dart';
+import 'package:tendon_loader/utils/constant/images.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';

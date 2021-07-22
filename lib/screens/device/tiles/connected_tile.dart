@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/constants/descriptions.dart';
-import 'package:tendon_loader/constants/textstyles.dart';
+import 'package:tendon_loader/utils/constant/descriptions.dart';
+import 'package:tendon_loader/utils/textstyles.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';

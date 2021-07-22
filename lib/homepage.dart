@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
-import 'package:tendon_loader/login/login.dart';
+import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/web/left_panel/left_panel.dart';

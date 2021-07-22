@@ -1,11 +1,11 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:tendon_loader/constants/descriptions.dart';
-import 'package:tendon_loader/constants/images.dart';
+import 'package:tendon_loader/utils/constant/descriptions.dart';
+import 'package:tendon_loader/utils/constant/images.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
-import 'package:tendon_loader/device/tiles/progressor_tile.dart';
+import 'package:tendon_loader/screens/device/tiles/progressor_tile.dart';
 
 class LocationTile extends StatelessWidget {
   const LocationTile({Key? key}) : super(key: key);

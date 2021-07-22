@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/constants/progressor.dart';
+import 'package:tendon_loader/utils/constant/progressor.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
