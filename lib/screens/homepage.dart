@@ -5,8 +5,8 @@ import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/web/left_panel/left_panel.dart';
-import 'package:tendon_loader/web/right_panel/right_panel.dart';
+import 'package:tendon_loader/screens/web/left_panel/left_panel.dart';
+import 'package:tendon_loader/screens/web/right_panel/right_panel.dart';
 
 final BehaviorSubject<Export> _clickCtrl = BehaviorSubject<Export>();
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
-import 'package:tendon_loader/homepage.dart';
-import 'package:tendon_loader/homescreen.dart';
+import 'package:tendon_loader/screens/homepage.dart';
+import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/screens/livedata/live_data.dart';
 import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/screens/login/splash.dart';

@@ -3,11 +3,11 @@ import 'package:hive/hive.dart';
 
 class TimestampAdapter extends TypeAdapter<Timestamp> {
   @override
-  final typeId = 7;
+  final int typeId = 7;
 
   @override
   Timestamp read(BinaryReader reader) {
-    var millis = reader.readInt();
+    final int millis = reader.readInt();
     return Timestamp.fromMillisecondsSinceEpoch(millis);
   }
 

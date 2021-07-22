@@ -7,7 +7,7 @@ import 'package:tendon_loader/utils/constant/keys.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/handlers/download_handler.dart';
-import 'package:tendon_loader/web/left_panel/export_list_item.dart';
+import 'package:tendon_loader/screens/web/left_panel/export_list_item.dart';
 import 'package:tendon_loader/handlers/excel_handler.dart';
 
 part 'user.g.dart';
