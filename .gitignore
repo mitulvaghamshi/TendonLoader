@@ -33,3 +33,5 @@ firestore.indexes.json
 .flutter-plugins-dependencies
 .idea/dictionaries/
 local.properties
+
+lib/**/*.g.dart

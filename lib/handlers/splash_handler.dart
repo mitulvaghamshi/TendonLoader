@@ -10,7 +10,7 @@ import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
-import 'package:tendon_loader/modal/timestamp.g.dart';
+import 'package:tendon_loader/modal/timestamp.dart';
 import 'package:tendon_loader/modal/user_state.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/utils/extension.dart';
