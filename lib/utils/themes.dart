@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 const Color colorGoogleYellow = Color(0xffeff7cf);
 const Color colorGoogleGreen = Color(0xff3ddc85);
+const Color colorAccentGreen = Color(0xff69f0ae);
+const Color colorAGreen400 = Color(0xff00e676);
 const Color colorYellow400 = Color(0xfffdf061);
 const Color colorOrange400 = Color(0xffe18f3c);
+const Color colorModerate = Color(0xff7f9c61);
 const Color colorRed400 = Color(0xffff534d);
 const Color colorRed900 = Color(0xffb71c1c);
 

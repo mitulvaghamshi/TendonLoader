@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/custom/custom_picker.dart';
 
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
@@ -28,18 +28,19 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  late bool _isObscure;
+  late bool _isObscure = widget.isObscure;
 
-  Row get _buildSuffix {
+  Row _buildSuffixes() {
     final List<IconButton> buttons = <IconButton>[];
     if (widget.isPicker) {
       buttons.add(
         IconButton(
-            icon: const Icon(Icons.timer_rounded),
-            onPressed: () async {
-              final String? result = await CustomPicker.show(context);
-              if (result != null) widget.controller!.text = result;
-            }),
+          icon: const Icon(Icons.timer_rounded),
+          onPressed: () async {
+            final Duration? result = await selectTime(context);
+            if (result != null) widget.controller!.text = result.inSeconds.toString();
+          },
+        ),
       );
     } else if (widget.isObscure) {
       buttons.add(IconButton(
@@ -47,20 +48,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
         icon: Icon(_isObscure ? Icons.visibility_rounded : Icons.visibility_off_rounded),
       ));
     }
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: buttons
         ..add(IconButton(
+          onPressed: widget.controller!.clear,
           icon: const Icon(Icons.clear_rounded, color: colorRed400),
-          onPressed: () => widget.controller!.clear(),
         )),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _isObscure = widget.isObscure;
   }
 
   @override
@@ -78,7 +74,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       ],
       decoration: InputDecoration(
         isDense: true,
-        suffix: _buildSuffix,
+        suffix: _buildSuffixes(),
         labelText: widget.label,
         errorStyle: const TextStyle(color: colorRed400),
         labelStyle: TextStyle(color: Theme.of(context).accentColor),

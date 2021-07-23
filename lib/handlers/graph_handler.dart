@@ -4,11 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/utils/constant/progressor.dart';
+import 'package:tendon_loader/handlers/audio_handler.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/handlers/audio_handler.dart';
+import 'package:tendon_loader/utils/constant/progressor.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/helper.dart';
 
@@ -18,18 +18,26 @@ class GraphHandler {
     stream.listen(update);
   }
 
-  @protected
-  Export? export;
+
   late bool hasData;
   final String userId;
   late bool isRunning;
   late bool isComplete;
   late Timestamp timestamp;
-  List<ChartData>? lineData;
+
   final BuildContext context;
+
+  List<ChartData>? lineData;
   ChartSeriesController? lineCtrl;
   ChartSeriesController? graphCtrl;
   final List<ChartData> graphData = <ChartData>[];
+
+  @protected
+  Export? export;
+  @protected
+  int? pain;
+  @protected
+  String? tolerance;
   @protected
   static final List<ChartData> exportData = <ChartData>[];
 

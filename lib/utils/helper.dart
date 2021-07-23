@@ -2,31 +2,34 @@ import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/constant/descriptions.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/countdown.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
+import 'package:tendon_loader/custom/custom_picker.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
+import 'package:tendon_loader/custom/custom_slider.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
-import 'package:tendon_loader/screens/device/connected_list.dart';
-import 'package:tendon_loader/screens/exercise/auto_exercise.dart';
-import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
-import 'package:tendon_loader/screens/exercise/new_exercise.dart';
 import 'package:tendon_loader/handlers/audio_handler.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/splash_handler.dart';
+import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/modal/user.dart';
+import 'package:tendon_loader/screens/device/connected_list.dart';
+import 'package:tendon_loader/screens/exercise/auto_exercise.dart';
+import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
+import 'package:tendon_loader/screens/exercise/new_exercise.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/screens/livedata/live_data.dart';
-import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
+import 'package:tendon_loader/utils/constant/descriptions.dart';
 import 'package:tendon_loader/utils/enums.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/textstyles.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -235,16 +238,88 @@ Future<void> _startAutoExercise(BuildContext context) async {
   );
 }
 
+Future<Duration?> selectTime(BuildContext context) {
+  int _min = 0;
+  int _sec = 0;
+  return showDialog<Duration?>(
+    context: context,
+    builder: (_) => CustomDialog(
+      title: 'Select Time (m:s)',
+      trieling: CustomButton(
+        radius: 25,
+        icon: const Icon(Icons.done_rounded, color: colorGoogleGreen),
+        onPressed: () => context.pop<Duration>(Duration(minutes: _min, seconds: _sec)),
+      ),
+      content: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
+        CustomPicker(onChanged: (int val) => _min = val),
+        CustomPicker(onChanged: (int val) => _sec = val),
+      ]),
+    ),
+  );
+}
+
+Future<int?> selectPain(BuildContext context) {
+  double _value = 0;
+  return showDialog<int>(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => CustomDialog(
+      title: 'Pain score(0~10)',
+      content: CustomSlider(onChanged: (double val) => _value = val),
+      trieling: CustomButton(
+        radius: 20,
+        onPressed: () => context.pop<int>(_value.round()),
+        icon: const Icon(Icons.done_rounded, color: colorGoogleGreen),
+      ),
+    ),
+  );
+}
+
+Future<String?> selectTolerability(BuildContext context) {
+  return showDialog<String>(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => CustomDialog(
+      title: 'Tolerability',
+      content: Column(
+        children: <Widget>[
+          const Text('Was the pain during that\ntolerable for you?', style: ts18BFF, textAlign: TextAlign.center),
+          const SizedBox(height: 16),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+            CustomButton(
+              onPressed: () => context.pop('Yes'),
+              icon: const Icon(Icons.check, color: colorGoogleGreen),
+              child: const Text('Yes', style: TextStyle(color: colorGoogleGreen)),
+            ),
+            const SizedBox(width: 5),
+            CustomButton(
+              onPressed: () => context.pop('No pain'),
+              icon: const Icon(Icons.remove, color: colorYellow400),
+              child: const Text('No pain', style: TextStyle(color: colorYellow400)),
+            ),
+            const SizedBox(width: 5),
+            CustomButton(
+              onPressed: () => context.pop('No'),
+              icon: const Icon(Icons.clear, color: colorRed400),
+              child: const Text('No', style: TextStyle(color: colorRed400)),
+            ),
+          ]),
+        ],
+      ),
+    ),
+  );
+}
+
 void about(BuildContext context) {
   showAboutDialog(
     context: context,
-    applicationVersion: 'v0.0.8',
+    applicationVersion: 'v0.0.9',
     applicationName: HomeScreen.name,
     applicationIcon: const AppLogo(radius: 30),
     // applicationLegalese: 'Add Application Legalese',
     children: <Widget>[
       const Text(
-        'Tendon Loader :Preview-v0.0.8',
+        'Tendon Loader :Preview-v0.0.9',
         textAlign: TextAlign.center,
         style: TextStyle(color: colorGoogleGreen, fontSize: 18, fontFamily: 'Georgia'),
       ),

@@ -5,14 +5,14 @@ import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
+import 'package:tendon_loader/handlers/splash_handler.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/screens/livedata/live_data.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/screens/settings/user_settings.dart';
 import 'package:tendon_loader/utils/enums.dart';
-import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/handlers/splash_handler.dart';
+import 'package:tendon_loader/utils/helper.dart';
 import 'package:wakelock/wakelock.dart';
 
 class HomeScreen extends StatefulWidget {

@@ -67,17 +67,15 @@ class MVCHandler extends GraphHandler {
   @override
   Future<bool> exit() async {
     if (!hasData) return true;
-    if (export == null) {
-      export = Export(
-        userId: userId,
-        mvcValue: maxForce,
-        timestamp: timestamp,
-        isComplate: isComplete,
-        progressorId: deviceName,
-        exportData: GraphHandler.exportData,
-      );
-      await boxExport.add(export!);
-    }
+    export ??= Export(
+      userId: userId,
+      mvcValue: maxForce,
+      timestamp: timestamp,
+      isComplate: isComplete,
+      progressorId: deviceName,
+      exportData: GraphHandler.exportData,
+    );
+    await boxExport.add(export!);
     return super.exit();
   }
 }

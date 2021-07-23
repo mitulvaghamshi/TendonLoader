@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/utils/textstyles.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 class CustomSlider extends StatefulWidget {
-  const CustomSlider({Key? key}) : super(key: key);
+  const CustomSlider({Key? key, required this.onChanged}) : super(key: key);
+
+  final ValueChanged<double> onChanged;
 
   @override
   _CustomSliderState createState() => _CustomSliderState();
@@ -11,33 +15,47 @@ class _CustomSliderState extends State<CustomSlider> {
   double value = 0;
   @override
   Widget build(BuildContext context) {
-    return SliderTheme(
-      data: SliderThemeData(
-        trackHeight: 50,
-        activeTrackColor: Colors.greenAccent,
-        inactiveTrackColor: Colors.red.shade100,
-        thumbShape: const _CustomThumb(radius: 25),
-        showValueIndicator: ShowValueIndicator.never,
-        valueIndicatorTextStyle: const TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
-      ),
-      child: Slider(
-        max: 10,
-        value: value,
-        divisions: 10,
-        label: value.round().toString(),
-        onChanged: (double newValue) => setState(() => value = newValue),
-      ),
+    return Column(
+      children: <Widget>[
+        const Text('Please describe your pain during that session', style: ts18BFF, textAlign: TextAlign.center),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30),
+          child: SliderTheme(
+            data: SliderThemeData(
+              trackHeight: 50,
+              thumbShape: const _CustomThumb(),
+              showValueIndicator: ShowValueIndicator.never,
+              activeTrackColor: Color.lerp(colorAGreen400, colorRed400, value / 10),
+              inactiveTrackColor: Color.lerp(colorAGreen400, colorRed400, value / 10),
+              valueIndicatorTextStyle: const TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
+            ),
+            child: Slider(
+              max: 10,
+              value: value,
+              divisions: 10,
+              label: value.round().toString(),
+              onChanged: (double val) => setState(() => widget.onChanged(value = val)),
+            ),
+          ),
+        ),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+          _buildText('0\n\nNo\npain', colorAGreen400),
+          _buildText('5\n\nModerate\npain', colorModerate),
+          _buildText('10\n\nWorst\npain', colorRed400),
+        ]),
+      ],
     );
   }
+
+  Text _buildText(String text, Color color) => Text(text,
+      textAlign: TextAlign.center, style: TextStyle(color: color, fontWeight: FontWeight.w900, letterSpacing: 1.5));
 }
 
 class _CustomThumb extends SliderComponentShape {
-  const _CustomThumb({required this.radius});
-
-  final double radius;
+  const _CustomThumb();
 
   @override
-  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.fromRadius(radius);
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.zero;
 
   @override
   void paint(PaintingContext context, Offset center,
@@ -51,8 +69,8 @@ class _CustomThumb extends SliderComponentShape {
       required double value,
       required double textScaleFactor,
       required Size sizeWithOverflow}) {
-    context.canvas.drawCircle(center, radius, Paint()..color = Colors.white);
-    context.canvas.drawCircle(center, radius * .8, Paint()..color = Colors.blueAccent);
+    context.canvas.drawCircle(center, sliderTheme.trackHeight! / 2 + 5, Paint()..color = colorWhite);
+    context.canvas.drawCircle(center, sliderTheme.trackHeight! / 2, Paint());
     labelPainter.paint(
       context.canvas,
       Offset(center.dx - (labelPainter.width / 2), center.dy - (labelPainter.height / 2)),
