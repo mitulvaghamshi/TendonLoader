@@ -1,7 +1,7 @@
 name: tendon_loader
 description: A bluetooth based tendon injury monitoring application.
 publish_to: "none"
-version: 0.0.8+8 # 
+version: 0.0.9+9 #
 
 environment:
   sdk: ">=2.13.0 <3.0.0"

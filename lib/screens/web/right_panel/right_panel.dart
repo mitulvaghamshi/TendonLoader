@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
-import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/web/right_panel/data_list.dart';
 import 'package:tendon_loader/screens/web/right_panel/data_view.dart';
 
-class RightPanel extends StatelessWidget {
+class RightPanel extends StatefulWidget {
   const RightPanel({Key? key}) : super(key: key);
 
+  @override
+  _RightPanelState createState() => _RightPanelState();
+}
+
+class _RightPanelState extends State<RightPanel> {
   @override
   Widget build(BuildContext context) {
     return AppFrame(

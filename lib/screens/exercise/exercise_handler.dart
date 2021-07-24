@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
-import 'package:tendon_loader/handlers/splash_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
@@ -40,11 +40,12 @@ class ExerciseHandler extends GraphHandler {
     _lapTime = _pre.holdTime;
     _set = _rep = _rest = 1;
     _isSetOver = _isHit = false;
+    GraphHandler.clear();
   }
 
   @override
   void update(ChartData data) {
-    if (isRunning) {
+    if (isRunning && !_isSetOver) {
       _isHit = data.load > _pre.targetLoad;
       final int _time = data.time.truncate();
       if (!isPause && _time > _minTime) {
@@ -71,6 +72,7 @@ class ExerciseHandler extends GraphHandler {
             isHold = true;
             _lapTime = _pre.holdTime;
           }
+          HapticFeedback.heavyImpact();
         }
       }
     }
@@ -119,17 +121,7 @@ class ExerciseHandler extends GraphHandler {
   @override
   Future<bool> exit() async {
     if (!hasData) return true;
-    pain ??= await selectPain(context);
-    tolerance ??= await selectTolerability(context);
-    export ??= Export(
-      userId: userId,
-      prescription: _pre,
-      timestamp: timestamp,
-      isComplate: isComplete,
-      progressorId: deviceName,
-      exportData: GraphHandler.exportData,
-    );
-    if (!export!.isInBox) await boxExport.add(export!);
+    export ??= Export(prescription: _pre);
     return super.exit();
   }
 }

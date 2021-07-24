@@ -5,7 +5,6 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/utils/constant/progressor.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 
-bool isPause = false;
 bool _isRunning = false;
 Completer<bool>? _completer;
 
@@ -29,6 +28,7 @@ Future<void> tareProgressor() async {
     await _controlChar!.write(<int>[cmdTareScale]);
     await _controlChar!.write(<int>[cmdStartWeightMeas]);
     await _controlChar!.write(<int>[cmdStopWeightMeas]);
+    GraphHandler.clear();
   }
 }
 
@@ -43,6 +43,7 @@ Future<void> stopWeightMeas() async {
   if (_isRunning) {
     _isRunning = false;
     await _controlChar!.write(<int>[cmdStopWeightMeas]);
+    GraphHandler.clear();
   }
 }
 

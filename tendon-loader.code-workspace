@@ -8,7 +8,7 @@
 		"version": "0.2.0",
 		"configurations": [
 			{
-				"name": "Current",
+				"name": "Any",
 				"request": "launch",
 				"type": "dart",
 			},

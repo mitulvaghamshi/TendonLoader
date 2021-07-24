@@ -110,7 +110,7 @@ Future<void> tryUpload(BuildContext context) async {
         builder: (_) => FittedBox(
           child: CustomDialog(
             title: 'Data upload complate',
-            content: CustomTile(name: '$count file(s) uploaded', icon: Icons.check_rounded, onTap: context.pop),
+            content: CustomTile(name: '$count file(s) submitted', icon: Icons.check_rounded, onTap: context.pop),
           ),
         ),
       );
@@ -258,29 +258,43 @@ Future<Duration?> selectTime(BuildContext context) {
   );
 }
 
-Future<int?> selectPain(BuildContext context) {
+Future<double?> selectPain(BuildContext context) {
   double _value = 0;
-  return showDialog<int>(
+  return showDialog<double>(
     context: context,
     barrierDismissible: false,
     builder: (_) => CustomDialog(
       title: 'Pain score(0~10)',
-      content: CustomSlider(onChanged: (double val) => _value = val),
       trieling: CustomButton(
         radius: 20,
-        onPressed: () => context.pop<int>(_value.round()),
+        onPressed: () => context.pop<double>(_value),
         icon: const Icon(Icons.done_rounded, color: colorGoogleGreen),
       ),
+      content: Column(children: <Widget>[
+        const Text('Please describe your pain during that session', style: ts18BFF, textAlign: TextAlign.center),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30),
+          child: CustomSlider(onChanged: (double val) => _value = val),
+        ),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+          _buildPainText('0\n\nNo\npain', colorAGreen400),
+          _buildPainText('5\n\nModerate\npain', colorModerate),
+          _buildPainText('10\n\nWorst\npain', colorRed400),
+        ]),
+      ]),
     ),
   );
 }
 
-Future<String?> selectTolerability(BuildContext context) {
+Text _buildPainText(String text, Color color) => Text(text,
+    textAlign: TextAlign.center, style: TextStyle(color: color, fontWeight: FontWeight.w900, letterSpacing: 1.5));
+
+Future<String?> selectTolerance(BuildContext context) {
   return showDialog<String>(
     context: context,
     barrierDismissible: false,
     builder: (_) => CustomDialog(
-      title: 'Tolerability',
+      title: 'One more thing...',
       content: Column(
         children: <Widget>[
           const Text('Was the pain during that\ntolerable for you?', style: ts18BFF, textAlign: TextAlign.center),
@@ -294,8 +308,8 @@ Future<String?> selectTolerability(BuildContext context) {
             const SizedBox(width: 5),
             CustomButton(
               onPressed: () => context.pop('No pain'),
-              icon: const Icon(Icons.remove, color: colorYellow400),
-              child: const Text('No pain', style: TextStyle(color: colorYellow400)),
+              icon: const Icon(Icons.remove, color: colorModerate),
+              child: const Text('No pain', style: TextStyle(color: colorModerate)),
             ),
             const SizedBox(width: 5),
             CustomButton(

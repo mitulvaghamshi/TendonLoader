@@ -13,12 +13,12 @@ class AutoExercise extends StatelessWidget {
       DataColumn(label: Text('Prescription', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
       DataColumn(label: Text('Detail', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
     ], rows: <DataRow>[
-      DataRow(cells: <DataCell>['Target Load: '.toBigCell, '${_pre.targetLoad} Kg'.toBigCell]),
-      DataRow(cells: <DataCell>['Hold Time: '.toBigCell, '${_pre.holdTime} Sec'.toBigCell]),
-      DataRow(cells: <DataCell>['Rest Time: '.toBigCell, '${_pre.restTime} Sec'.toBigCell]),
-      DataRow(cells: <DataCell>['Sets #: '.toBigCell, '${_pre.sets}'.toBigCell]),
-      DataRow(cells: <DataCell>['Reps #: '.toBigCell, '${_pre.reps}'.toBigCell]),
-      DataRow(cells: <DataCell>['Set rest time: '.toBigCell, '${_pre.setRest} Sec'.toBigCell]),
+      DataRow(cells: <DataCell>['Target Load: '.toCell, '${_pre.targetLoad} Kg'.toCell]),
+      DataRow(cells: <DataCell>['Hold Time: '.toCell, '${_pre.holdTime} Sec'.toCell]),
+      DataRow(cells: <DataCell>['Rest Time: '.toCell, '${_pre.restTime} Sec'.toCell]),
+      DataRow(cells: <DataCell>['Sets #: '.toCell, '${_pre.sets}'.toCell]),
+      DataRow(cells: <DataCell>['Reps #: '.toCell, '${_pre.reps}'.toCell]),
+      DataRow(cells: <DataCell>['Set rest time: '.toCell, '${_pre.setRest} Sec'.toCell]),
     ]);
   }
 }

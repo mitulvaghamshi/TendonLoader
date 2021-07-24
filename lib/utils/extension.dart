@@ -14,13 +14,12 @@ extension ExTimeFormat on double {
 }
 
 extension ExCell on String {
-  DataCell get toCell => DataCell(Center(child: Text(this)));
-  DataCell get toBigCell => DataCell(Text(this, style: const TextStyle(fontSize: 16)));
+  DataCell get toCell => DataCell(Text(this, style: const TextStyle(fontSize: 16)));
 }
 
 extension ExConvert on List<int> {
   double get toWeight => double.parse(
-      (Uint8List.fromList(this).buffer.asByteData().getFloat32(0, Endian.little).abs()).toStringAsFixed(1));
+      (Uint8List.fromList(this).buffer.asByteData().getFloat32(0, Endian.little).abs()).toStringAsFixed(2));
 
   double get toTime => double.parse(
       (Uint8List.fromList(this).buffer.asByteData().getUint32(0, Endian.little) / 1000000.0).toStringAsFixed(1));

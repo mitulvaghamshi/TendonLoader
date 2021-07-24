@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/handlers/device_handler.dart';
+import 'package:flutter/services.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/helper.dart';
-import 'package:tendon_loader/handlers/splash_handler.dart';
 
 class MVCHandler extends GraphHandler {
   MVCHandler({required BuildContext context})
@@ -32,6 +31,7 @@ class MVCHandler extends GraphHandler {
     maxForce = 0;
     timeDiff = mvcDuration.toDouble();
     _updateLine();
+    GraphHandler.clear();
   }
 
   @override
@@ -44,6 +44,7 @@ class MVCHandler extends GraphHandler {
       } else if (data.load > maxForce) {
         maxForce = data.load;
         _updateLine();
+        HapticFeedback.vibrate();
       }
     }
   }
@@ -67,15 +68,7 @@ class MVCHandler extends GraphHandler {
   @override
   Future<bool> exit() async {
     if (!hasData) return true;
-    export ??= Export(
-      userId: userId,
-      mvcValue: maxForce,
-      timestamp: timestamp,
-      isComplate: isComplete,
-      progressorId: deviceName,
-      exportData: GraphHandler.exportData,
-    );
-    await boxExport.add(export!);
+    export ??= Export(mvcValue: maxForce);
     return super.exit();
   }
 }

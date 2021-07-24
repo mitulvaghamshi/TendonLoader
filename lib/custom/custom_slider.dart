@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/textstyles.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class CustomSlider extends StatefulWidget {
@@ -12,43 +11,27 @@ class CustomSlider extends StatefulWidget {
 }
 
 class _CustomSliderState extends State<CustomSlider> {
-  double value = 0;
+  double _value = 0;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const Text('Please describe your pain during that session', style: ts18BFF, textAlign: TextAlign.center),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30),
-          child: SliderTheme(
-            data: SliderThemeData(
-              trackHeight: 50,
-              thumbShape: const _CustomThumb(),
-              showValueIndicator: ShowValueIndicator.never,
-              activeTrackColor: Color.lerp(colorAGreen400, colorRed400, value / 10),
-              inactiveTrackColor: Color.lerp(colorAGreen400, colorRed400, value / 10),
-              valueIndicatorTextStyle: const TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
-            ),
-            child: Slider(
-              max: 10,
-              value: value,
-              divisions: 10,
-              label: value.round().toString(),
-              onChanged: (double val) => setState(() => widget.onChanged(value = val)),
-            ),
-          ),
-        ),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-          _buildText('0\n\nNo\npain', colorAGreen400),
-          _buildText('5\n\nModerate\npain', colorModerate),
-          _buildText('10\n\nWorst\npain', colorRed400),
-        ]),
-      ],
+    return SliderTheme(
+      data: SliderThemeData(
+        trackHeight: 50,
+        thumbShape: const _CustomThumb(),
+        showValueIndicator: ShowValueIndicator.never,
+        activeTrackColor: Color.lerp(colorAGreen400, colorRed400, _value / 10),
+        inactiveTrackColor: Color.lerp(colorAGreen400, colorRed400, _value / 10),
+        valueIndicatorTextStyle: const TextStyle(fontSize: 25, color: colorWhite, fontWeight: FontWeight.w900),
+      ),
+      child: Slider(
+        max: 10,
+        value: _value,
+        divisions: 10,
+        label: _value.round().toString(),
+        onChanged: (double val) => setState(() => widget.onChanged(_value = val)),
+      ),
     );
   }
-
-  Text _buildText(String text, Color color) => Text(text,
-      textAlign: TextAlign.center, style: TextStyle(color: color, fontWeight: FontWeight.w900, letterSpacing: 1.5));
 }
 
 class _CustomThumb extends SliderComponentShape {

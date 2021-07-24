@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/utils/enums.dart';
-import 'package:tendon_loader/utils/helper.dart';
-import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class ExportListItem extends StatelessWidget {
@@ -19,14 +19,16 @@ class ExportListItem extends StatelessWidget {
       contentPadding: const EdgeInsets.all(5),
       key: ValueKey<String>(export.reference!.id),
       title: Text(export.dateTime, style: const TextStyle(fontSize: 16)),
-      subtitle: export.isComplate
+      subtitle: export.isComplate!
           ? const Text('Complete', style: TextStyle(color: colorGoogleGreen))
           : const Text('Incomplete', style: TextStyle(color: colorRed400)),
       leading: export.isMVC
           ? const CustomButton(color: colorOrange400, child: Text('MVC'))
           : const CustomButton(color: colorGoogleGreen, child: Text('EXE')),
       onTap: () {
-        if (export.exportData.isNotEmpty) selectedItemSink.add(export);
+        if (export.exportData!.isNotEmpty) {
+          Future<void>.microtask(() => selectedItemSink.add(export));
+        }
       },
       trailing: PopupMenuButton<ItemAction>(
         icon: const Icon(Icons.more_vert_rounded),

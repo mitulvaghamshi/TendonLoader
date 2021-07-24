@@ -27,6 +27,8 @@ const String keyMvcDuration = 'mvcDuration';
 // export
 const String keyUserId = 'userId';
 const String keyMvcValue = 'mvcValue';
+const String keyPainScore = 'painScore';
+const String keyIsTolerable = 'isTolerable';
 const String keyTimeStamp = 'timeStamp';
 const String keyExportData = 'exportData';
 const String keyIsComplate = 'isComplate';

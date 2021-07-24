@@ -18,9 +18,10 @@ class LiveDataHandler extends GraphHandler {
   @override
   Future<void> stop() async {
     if (isRunning) {
-      isRunning = false;
+      isRunning = hasData = false;
       await super.stop();
       time = 0;
+      GraphHandler.clear();
     }
   }
 
@@ -31,7 +32,7 @@ class LiveDataHandler extends GraphHandler {
 
   @override
   Future<bool> exit() async {
-    hasData = false;
+    await stop();
     return super.exit();
   }
 }

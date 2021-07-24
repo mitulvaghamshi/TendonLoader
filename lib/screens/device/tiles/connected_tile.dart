@@ -37,7 +37,7 @@ class ConnectedTile extends StatelessWidget {
           StreamBuilder<ChartData>(
             initialData: ChartData(),
             stream: GraphHandler.stream,
-            builder: (_, AsyncSnapshot<ChartData> snapshot) => Text('${snapshot.data!.load} Kg.', style: tsG40B),
+            builder: (_, AsyncSnapshot<ChartData> snapshot) => Text('${snapshot.data!.load.toStringAsFixed(1)} Kg.', style: tsG40B),
           ),
           const Text(
             descTareProgressor,
