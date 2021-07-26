@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SingleChildScrollView(
         child: AppFrame(
-          onExit: () async => await onAppClose(context) ?? false,
+          onExit: () async => await onExit(context) ?? false,
           child: Column(children: <Widget>[
             const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: AppLogo()),
             CustomTile(

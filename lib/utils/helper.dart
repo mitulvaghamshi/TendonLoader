@@ -16,7 +16,6 @@ import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/splash_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/screens/device/connected_list.dart';
 import 'package:tendon_loader/screens/exercise/auto_exercise.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
@@ -44,7 +43,7 @@ Future<void> _cleanup() async {
   return Future<void>.delayed(const Duration(microseconds: 800));
 }
 
-Future<bool?> onAppClose(BuildContext context) async {
+Future<bool?> onExit(BuildContext context) async {
   return showDialog<bool>(
     context: context,
     builder: (_) => CustomDialog(
@@ -110,7 +109,7 @@ Future<void> tryUpload(BuildContext context) async {
         builder: (_) => FittedBox(
           child: CustomDialog(
             title: 'Data upload complate',
-            content: CustomTile(name: '$count file(s) submitted', icon: Icons.check_rounded, onTap: context.pop),
+            content: CustomTile(name: '$count file(s) submitted', icon: Icons.check),
           ),
         ),
       );
@@ -186,31 +185,22 @@ Future<void> congratulate(BuildContext context) async {
   );
 }
 
-Future<void> setPrescription(BuildContext context, User _user) async {
-  return showDialog<void>(
-    context: context,
-    builder: (_) => CustomDialog(title: _user.id, content: NewExercise(user: _user)),
-  );
-}
-
-Future<void> confirmDelete(BuildContext context, VoidCallback action) async {
+Future<void> confirmDelete(BuildContext context, VoidCallback onDelete) async {
   return showDialog<void>(
     context: context,
     builder: (_) => CustomDialog(
       title: 'Delete export(s)?',
-      content: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
-        CustomButton(
-          elevation: 0,
-          onPressed: context.pop,
-          color: Colors.transparent,
-          icon: const Icon(Icons.cancel),
-          child: const Text('Cencel'),
-        ),
+      content: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+        TextButton(onPressed: context.pop, child: const Text('Cencel')),
         CustomButton(
           radius: 8,
-          onPressed: action,
           color: colorRed900,
-          icon: const Icon(Icons.delete_rounded, color: colorWhite),
+          onPressed: () async {
+            onDelete();
+            context.view.refresh;
+            context.pop();
+          },
+          icon: const Icon(Icons.delete, color: colorWhite),
           child: const Text('Permanently delete', style: TextStyle(color: colorWhite)),
         ),
       ]),

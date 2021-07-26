@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:tendon_loader/utils/constant/keys.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
+import 'package:tendon_loader/handlers/splash_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/modal/user_state.dart';
-import 'package:tendon_loader/handlers/splash_handler.dart';
+import 'package:tendon_loader/utils/constant/keys.dart';
 
 class AppState {
   UserState? userState;
@@ -75,10 +75,5 @@ class AppState {
     }
     _complater.complete();
     return _complater.future;
-  }
-
-  void removeExportBy(DocumentReference<Map<String, dynamic>> reference) {
-    final int index = users.indexWhere((User user) => user.id == reference.parent.parent!.id);
-    users[index].exports?.removeWhere((Export export) => export.reference == reference);
   }
 }

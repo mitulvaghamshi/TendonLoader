@@ -3,14 +3,14 @@ import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/utils/enums.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
-class ExportListItem extends StatelessWidget {
-  const ExportListItem({Key? key, required this.export}) : super(key: key);
+class ExportTile extends StatelessWidget {
+  const ExportTile({Key? key, required this.export, required this.onDelete}) : super(key: key);
 
   final Export export;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -30,34 +30,26 @@ class ExportListItem extends StatelessWidget {
           Future<void>.microtask(() => selectedItemSink.add(export));
         }
       },
-      trailing: PopupMenuButton<ItemAction>(
+      trailing: PopupMenuButton<PopupAction>(
         icon: const Icon(Icons.more_vert_rounded),
-        itemBuilder: (_) => <PopupMenuItem<ItemAction>>[
-          const PopupMenuItem<ItemAction>(
-            value: ItemAction.download,
-            child: ListTile(
-              title: Text('Download'),
-              leading: Icon(Icons.download_rounded),
-            ),
+        itemBuilder: (_) => <PopupMenuItem<PopupAction>>[
+          const PopupMenuItem<PopupAction>(
+            value: PopupAction.download,
+            child: ListTile(title: Text('Download'), leading: Icon(Icons.download_rounded)),
           ),
-          const PopupMenuItem<ItemAction>(
-            value: ItemAction.delete,
+          const PopupMenuItem<PopupAction>(
+            value: PopupAction.delete,
             child: ListTile(
               title: Text('Delete', style: TextStyle(color: colorRed400)),
               leading: Icon(Icons.delete_rounded, color: colorRed400),
             ),
           ),
         ],
-        onSelected: (ItemAction action) async {
-          if (action == ItemAction.download) {
+        onSelected: (PopupAction action) async {
+          if (action == PopupAction.download) {
             await Future<void>.microtask(export.download);
-          } else if (action == ItemAction.delete) {
-            await confirmDelete(context, () async {
-              Navigator.pop(context);
-              context.model.removeExportBy(export.reference!);
-              context.view.refresh;
-              await Future<void>.microtask(export.cloudDelete);
-            });
+          } else if (action == PopupAction.delete) {
+            await confirmDelete(context, () async => onDelete());
           }
         },
       ),

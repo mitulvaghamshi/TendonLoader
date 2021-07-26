@@ -3,12 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:tendon_loader/utils/constant/keys.dart';
+import 'package:tendon_loader/custom/custom_dialog.dart';
+import 'package:tendon_loader/handlers/download_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
-import 'package:tendon_loader/handlers/download_handler.dart';
-import 'package:tendon_loader/screens/web/left_panel/export_list_item.dart';
-import 'package:tendon_loader/handlers/excel_handler.dart';
+import 'package:tendon_loader/screens/exercise/new_exercise.dart';
+import 'package:tendon_loader/screens/web/left_panel/export_tile.dart';
+import 'package:tendon_loader/utils/constant/keys.dart';
 
 part 'user.g.dart';
 
@@ -17,9 +18,9 @@ part 'user.g.dart';
 class User extends HiveObject {
   User({
     this.exports,
-    this.prescription,
-    this.userRef,
+    this.reference,
     this.exportRef,
+    this.prescription,
     this.prescriptionRef,
   });
 
@@ -27,7 +28,7 @@ class User extends HiveObject {
 
   User.fromJson(DocumentReference<Map<String, dynamic>> reference)
       : this(
-            userRef: reference,
+            reference: reference,
             prescriptionRef: reference.withConverter<Prescription>(
                 fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) {
               return Prescription.fromJson(snapshot.data()!);
@@ -52,12 +53,14 @@ class User extends HiveObject {
   @HiveField(3)
   final DocumentReference<Prescription>? prescriptionRef;
   @HiveField(4)
-  final DocumentReference<Map<String, dynamic>>? userRef;
+  final DocumentReference<Map<String, dynamic>>? reference;
 
-  String get id => userRef!.id;
+  String get id => reference!.id;
   String get avatar => id[0].toUpperCase();
   String get childCount => '${exports?.length} export${exports?.length == 1 ? '' : 's'} found.';
-  Iterable<Widget> get exportTiles => exports!.map((Export export) => ExportListItem(export: export));
+
+  Iterable<Widget> exportTiles() => exports!.map((Export export) => ExportTile(
+      export: export, onDelete: () async => export.reference!.delete().then((_) => exports!.remove(export))));
 
   Future<User> fetch() async {
     final DocumentSnapshot<Prescription> _prescription = await prescriptionRef!.get();
@@ -65,30 +68,35 @@ class User extends HiveObject {
     final List<Export> _list = _exports.docs.map((QueryDocumentSnapshot<Export> e) => e.data()).toList();
     return User(
       exports: _list,
-      prescription: _prescription.data(),
+      reference: reference,
       exportRef: exportRef,
-      userRef: userRef,
       prescriptionRef: prescriptionRef,
+      prescription: _prescription.data(),
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return prescription!.toMap();
-  }
+  Map<String, dynamic> toMap() => prescription!.toMap();
 
   // long task
   Future<void> download() async {
-    final Archive archive = Archive();
+    final Archive _archive = Archive();
     for (final Export export in exports!) {
-      archive.addFile(generateExcel(export));
+      _archive.addFile(export.zipExcel());
     }
-    await Downloader(bytes: ZipEncoder().encode(archive)).download(name: '$id.zip');
+    await Downloader(bytes: ZipEncoder().encode(_archive)).download(name: '$id.zip');
   }
 
-  Future<void> deleteAllExports() async {
+  Future<void> deleteAll() async {
     for (final Export export in exports!) {
-      await export.cloudDelete();
+      await export.reference!.delete();
     }
     exports!.clear();
+  }
+
+  Future<void> prescribe(BuildContext context) async {
+    await showDialog<void>(
+      context: context,
+      builder: (_) => CustomDialog(title: id, content: NewExercise(user: this)),
+    );
   }
 }

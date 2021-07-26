@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
-import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/screens/web/left_panel/left_panel.dart';
 import 'package:tendon_loader/screens/web/right_panel/right_panel.dart';
+import 'package:tendon_loader/utils/extension.dart';
 
 final BehaviorSubject<Export> _clickCtrl = BehaviorSubject<Export>();
 
@@ -17,6 +17,8 @@ Sink<Export> get selectedItemSink => _clickCtrl.sink;
 void disposeSelectedItem() {
   if (!_clickCtrl.isClosed) _clickCtrl.close();
 }
+
+final ValueNotifier<Export?> onSelect = ValueNotifier<Export?>(null);
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
