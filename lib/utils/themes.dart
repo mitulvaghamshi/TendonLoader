@@ -13,7 +13,7 @@ const Color colorRed900 = Color(0xffb71c1c);
 const Color colorWhite = Color(0xffffffff);
 const Color colorBlack = Color(0xff000000);
 
-const Color colorDark1 = Color(0xff161616);
+const Color colorDark1 = Color(0xff141414);
 const Color colorDark2 = Color(0xff262626);
 const Color colorDark3 = Color(0xff363636);
 

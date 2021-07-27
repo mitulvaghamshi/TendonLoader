@@ -15,21 +15,11 @@ class ExportTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      horizontalTitleGap: 5,
-      contentPadding: const EdgeInsets.all(5),
+      minVerticalPadding: 24,
       key: ValueKey<String>(export.reference!.id),
-      title: Text(export.dateTime, style: const TextStyle(fontSize: 16)),
-      subtitle: export.isComplate!
-          ? const Text('Complete', style: TextStyle(color: colorGoogleGreen))
-          : const Text('Incomplete', style: TextStyle(color: colorRed400)),
-      leading: export.isMVC
-          ? const CustomButton(color: colorOrange400, child: Text('MVC'))
-          : const CustomButton(color: colorGoogleGreen, child: Text('EXE')),
-      onTap: () {
-        if (export.exportData!.isNotEmpty) {
-          Future<void>.microtask(() => selectedItemSink.add(export));
-        }
-      },
+      leading: CustomButton(child: Text(export.isMVC ? 'MVC' : 'EXE')),
+      onTap: () => Future<void>.microtask(() => clickNotifier.value = export),
+      title: Text(export.dateTime, style: TextStyle(color: export.isComplate! ? colorAGreen400 : colorRed400)),
       trailing: PopupMenuButton<PopupAction>(
         icon: const Icon(Icons.more_vert_rounded),
         itemBuilder: (_) => <PopupMenuItem<PopupAction>>[

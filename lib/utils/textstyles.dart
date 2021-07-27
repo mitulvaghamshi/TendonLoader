@@ -22,6 +22,7 @@ const TextStyle tsB40B = TextStyle(color: colorBlack, fontSize: 40, fontWeight: 
 const TextStyle ts18BFF = TextStyle(fontFamily: 'Georgia', fontSize: 18, fontWeight: FontWeight.bold);
 const TextStyle ts20BFF = TextStyle(fontFamily: 'Georgia', fontSize: 20, fontWeight: FontWeight.bold);
 const TextStyle ts22BFF = TextStyle(fontFamily: 'Georgia', fontSize: 22, fontWeight: FontWeight.bold);
+
 const TextStyle tsG18BFF = TextStyle(
   fontSize: 18,
   fontFamily: 'Georgia',

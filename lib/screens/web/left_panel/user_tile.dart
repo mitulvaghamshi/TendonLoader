@@ -15,12 +15,12 @@ class UserTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExpansionTile(
       maintainState: true,
+      iconColor: colorAGreen400,
       key: ValueKey<String>(user.id),
       subtitle: Text(user.childCount),
-      tilePadding: const EdgeInsets.all(5),
-      title: Text(user.id, style: tsG18BFF),
+      title: Text(user.id, style: ts18BFF),
+      leading: CustomButton(child: Text(user.avatar)),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      leading: CustomButton(color: Colors.blue, child: Text(user.avatar)),
       trailing: PopupMenuButton<PopupAction>(
         icon: const Icon(Icons.apps),
         itemBuilder: (_) => <PopupMenuItem<PopupAction>>[
@@ -50,7 +50,7 @@ class UserTile extends StatelessWidget {
           }
         },
       ),
-      children: ListTile.divideTiles(color: Colors.blue, tiles: user.exportTiles()).toList(),
+      children: ListTile.divideTiles(context: context, tiles: user.exportTiles()).toList(),
     );
   }
 }

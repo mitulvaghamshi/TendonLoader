@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/splash_handler.dart';
-import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/user.dart';
@@ -55,13 +54,12 @@ class AppState {
   }
 
   CollectionReference<User> get _dbRoot => FirebaseFirestore.instance.collection(keyBase).withConverter<User>(
-      toFirestore: (User value, SetOptions? options) => value.toMap(),
-      fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) =>
-          User.fromJson(snapshot.reference));
+      toFirestore: (User value, _) => value.toMap(),
+      fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => User.fromJson(snapshot.reference));
 
   Completer<void> _complater = Completer<void>();
 
-  void get reload => _complater = Completer<void>();
+  void reload() => _complater = Completer<void>();
 
   Future<void> fetch() async {
     if (_complater.isCompleted) return;

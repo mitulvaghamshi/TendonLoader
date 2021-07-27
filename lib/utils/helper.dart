@@ -20,7 +20,6 @@ import 'package:tendon_loader/screens/device/connected_list.dart';
 import 'package:tendon_loader/screens/exercise/auto_exercise.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
-import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/screens/livedata/live_data.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
@@ -39,7 +38,6 @@ Future<void> _cleanup() async {
   await disconnectDevice();
   await firebaseLogout();
   await disposePlayer();
-  disposeSelectedItem();
   return Future<void>.delayed(const Duration(microseconds: 800));
 }
 
@@ -190,20 +188,18 @@ Future<void> confirmDelete(BuildContext context, VoidCallback onDelete) async {
     context: context,
     builder: (_) => CustomDialog(
       title: 'Delete export(s)?',
-      content: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-        TextButton(onPressed: context.pop, child: const Text('Cencel')),
-        CustomButton(
-          radius: 8,
-          color: colorRed900,
-          onPressed: () async {
-            onDelete();
-            context.view.refresh;
-            context.pop();
-          },
-          icon: const Icon(Icons.delete, color: colorWhite),
-          child: const Text('Permanently delete', style: TextStyle(color: colorWhite)),
-        ),
-      ]),
+      content: CustomButton(
+        onPressed: () {
+          onDelete();
+          context
+            ..view.refresh()
+            ..pop();
+        },
+        radius: 8,
+        color: colorRed900,
+        icon: const Icon(Icons.delete, color: colorWhite),
+        child: const Text('Permanently delete', style: TextStyle(color: colorWhite)),
+      ),
     ),
   );
 }

@@ -15,7 +15,7 @@ class AppStateWidget extends StatefulWidget {
 class AppStateWidgetState extends State<AppStateWidget> {
   final AppState _data = AppState();
 
-  void get refresh => setState(() {});
+  void refresh() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
