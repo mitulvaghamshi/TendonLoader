@@ -27,9 +27,9 @@ class DeviceList extends StatelessWidget {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               subtitle: const Text('Click to connect', style: TextStyle(fontSize: 12)),
               title: Text(_nameOf(device), style: const TextStyle(fontWeight: FontWeight.bold)),
-              leading: const CustomButton(radius: 25, color: colorRed400, icon: Icon(Icons.bluetooth, size: 30)),
+              leading: const CustomButton(radius: 25, color: colorRed400, left: Icon(Icons.bluetooth, size: 30)),
             ),
-            const CustomButton(icon: Icon(Icons.search), onPressed: startScan, child: Text('Scan')),
+            const CustomButton(left: Icon(Icons.search), onPressed: startScan, right: Text('Scan')),
           ]);
         },
       );

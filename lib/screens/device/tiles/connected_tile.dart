@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/utils/constant/descriptions.dart';
-import 'package:tendon_loader/utils/textstyles.dart';
+import 'package:tendon_loader/utils/descriptions.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/utils/themes.dart';
 
 class ConnectedTile extends StatelessWidget {
   const ConnectedTile({Key? key, required this.device}) : super(key: key);
@@ -31,7 +30,7 @@ class ConnectedTile extends StatelessWidget {
             leading: const CustomButton(
               radius: 25,
               color: colorGoogleGreen,
-              icon: Icon(Icons.bluetooth_connected, size: 30),
+              left: Icon(Icons.bluetooth_connected, size: 30),
             ),
           ),
           StreamBuilder<ChartData>(
@@ -46,8 +45,8 @@ class ConnectedTile extends StatelessWidget {
           ),
           CustomButton(
             onPressed: () async => tareProgressor().then(context.pop),
-            icon: const Icon(Icons.adjust),
-            child: const Text('Tare Progressor'),
+            left: const Icon(Icons.adjust),
+            right: const Text('Tare Progressor'),
           ),
         ]);
       },

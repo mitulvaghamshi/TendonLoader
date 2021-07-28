@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 class CustomDialog extends StatelessWidget {
-  const CustomDialog({Key? key, this.content, this.title, this.trieling}) : super(key: key);
+  const CustomDialog({Key? key, this.content, this.title, this.action}) : super(key: key);
 
   final String? title;
-  final Widget? trieling;
+  final Widget? action;
   final Widget? content;
 
   @override
@@ -19,15 +20,9 @@ class CustomDialog extends StatelessWidget {
       contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-        FittedBox(
-          child: Text(
-            title ?? 'Tendon Loader',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
-        ),
+        FittedBox(child: Text(title ?? 'Tendon Loader', style: ts20BFF)),
         const SizedBox(width: 5),
-        trieling ?? CustomButton(radius: 20, icon: const Icon(Icons.clear), onPressed: context.pop),
+        action ?? CustomButton(radius: 20, left: const Icon(Icons.clear), onPressed: context.pop),
       ]),
     );
   }

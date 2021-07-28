@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/login/login.dart';
@@ -10,6 +11,8 @@ import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 final ValueNotifier<Export?> clickNotifier = ValueNotifier<Export?>(null);
+
+enum PopupAction { download, delete, prescribe }
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,11 +28,10 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text(name), actions: <Widget>[
         CustomButton(
-          radius: 16,
-          reverce: true,
-          icon: const Icon(Icons.logout),
+          radius: 8,
+          left: const Text('Submit', style: tsG18BFF),
+          right: const Icon(Icons.arrow_forward, color: colorGoogleGreen),
           onPressed: () async => firebaseLogout().then((_) async => context.push(Login.route, replace: true)),
-          child: const Text('Logout', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
       ]),
       body: _isWide ? const _WideScreen() : const DataView(),
@@ -51,4 +53,24 @@ class _WideScreen extends StatelessWidget {
       Expanded(child: DataView()),
     ]);
   }
+}
+
+Future<void> confirmDelete(BuildContext context, VoidCallback onDelete) async {
+  return showDialog<void>(
+    context: context,
+    builder: (_) => CustomDialog(
+      title: 'Delete export(s)?',
+      content: CustomButton(
+        onPressed: () {
+          onDelete();
+          context.view.refresh();
+          context.pop();
+        },
+        radius: 8,
+        color: colorRed900,
+        left: const Icon(Icons.delete, color: colorWhite),
+        right: const Text('Permanently delete', style: TextStyle(color: colorWhite)),
+      ),
+    ),
+  );
 }

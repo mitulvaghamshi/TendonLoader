@@ -12,7 +12,7 @@ class AppLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomButton(
       radius: radius,
-      child: SvgPicture.asset(
+      right: SvgPicture.asset(
         'assets/images/app_logo.svg',
         color: Theme.of(context).accentColor,
         placeholderBuilder: (_) => const SizedBox(),

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/modal/user.dart';
-import 'package:tendon_loader/utils/enums.dart';
-import 'package:tendon_loader/utils/helper.dart';
-import 'package:tendon_loader/utils/textstyles.dart';
+import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class UserTile extends StatelessWidget {
@@ -19,7 +17,7 @@ class UserTile extends StatelessWidget {
       key: ValueKey<String>(user.id),
       subtitle: Text(user.childCount),
       title: Text(user.id, style: ts18BFF),
-      leading: CustomButton(child: Text(user.avatar)),
+      leading: CustomButton(right: Text(user.avatar)),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
       trailing: PopupMenuButton<PopupAction>(
         icon: const Icon(Icons.apps),
@@ -46,7 +44,7 @@ class UserTile extends StatelessWidget {
           } else if (action == PopupAction.prescribe) {
             await user.prescribe(context);
           } else if (action == PopupAction.delete) {
-            await confirmDelete(context, () async => user.deleteAll());
+            await confirmDelete(context, user.deleteAll);
           }
         },
       ),

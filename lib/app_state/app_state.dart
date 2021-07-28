@@ -8,7 +8,7 @@ import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/modal/user_state.dart';
-import 'package:tendon_loader/utils/constant/keys.dart';
+import 'package:tendon_loader/utils/keys.dart';
 
 class AppState {
   UserState? userState;

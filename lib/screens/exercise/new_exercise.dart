@@ -1,15 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/textstyles.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
+import 'package:tendon_loader/custom/custom_time_tile.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/user.dart';
+import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/handlers/validator.dart';
 
 class NewExercise extends StatefulWidget {
   const NewExercise({Key? key, this.user}) : super(key: key);
@@ -25,23 +25,20 @@ class _NewExerciseState extends State<NewExercise> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _ctrlSets = TextEditingController();
   final TextEditingController _ctrlReps = TextEditingController();
-  final TextEditingController _ctrlHoldTime = TextEditingController();
-  final TextEditingController _ctrlRestTime = TextEditingController();
-  final TextEditingController _ctrlSetRest = TextEditingController();
   final TextEditingController _ctrlTargetLoad = TextEditingController();
-  final TextEditingController _ctrlMVCDuration = TextEditingController();
   late final Prescription? _lastPre = context.model.settingsState!.lastPrescriptions;
   bool _useLastPrescription = false;
+
+  Duration _mvcTime = const Duration();
+  Duration _holdTime = const Duration();
+  Duration _restTime = const Duration();
+  Duration _setRestTime = const Duration(seconds: 90);
 
   @override
   void dispose() {
     _ctrlSets.dispose();
     _ctrlReps.dispose();
-    _ctrlSetRest.dispose();
-    _ctrlHoldTime.dispose();
-    _ctrlRestTime.dispose();
     _ctrlTargetLoad.dispose();
-    _ctrlMVCDuration.dispose();
     super.dispose();
   }
 
@@ -52,42 +49,39 @@ class _NewExerciseState extends State<NewExercise> {
   }
 
   Future<void> _init(Prescription _pre) async {
+    _ctrlTargetLoad.text = _pre.targetLoad.toString();
     _ctrlSets.text = _pre.sets.toString();
     _ctrlReps.text = _pre.reps.toString();
-    _ctrlSetRest.text = _pre.setRest.toString();
-    _ctrlHoldTime.text = _pre.holdTime.toString();
-    _ctrlRestTime.text = _pre.restTime.toString();
-    _ctrlTargetLoad.text = _pre.targetLoad.toString();
-    _ctrlMVCDuration.text = _pre.mvcDuration.toString();
+    _mvcTime = Duration(seconds: _pre.mvcDuration);
+    _holdTime = Duration(seconds: _pre.holdTime);
+    _restTime = Duration(seconds: _pre.restTime);
+    _setRestTime = Duration(seconds: _pre.setRest);
   }
 
   void _clearForm() {
     _ctrlSets.clear();
     _ctrlReps.clear();
-    _ctrlSetRest.clear();
-    _ctrlHoldTime.clear();
-    _ctrlRestTime.clear();
     _ctrlTargetLoad.clear();
-    _ctrlMVCDuration.clear();
+    _mvcTime = _holdTime = _restTime = const Duration();
+    _setRestTime = const Duration(seconds: 90);
   }
 
-  Future<void> _submit() async {
+  Future<void> _onSubmit() async {
     if (_formKey.currentState!.validate()) {
       final Prescription _pre = Prescription(
+        targetLoad: double.parse(_ctrlTargetLoad.text),
         sets: int.parse(_ctrlSets.text),
         reps: int.parse(_ctrlReps.text),
-        holdTime: int.parse(_ctrlHoldTime.text),
-        restTime: int.parse(_ctrlRestTime.text),
-        targetLoad: double.parse(_ctrlTargetLoad.text),
-        setRest: int.tryParse(_ctrlSetRest.text) ?? 90,
-        mvcDuration: int.tryParse(_ctrlMVCDuration.text) ?? 0,
+        holdTime: _holdTime.inSeconds,
+        restTime: _restTime.inSeconds,
+        setRest: _setRestTime.inSeconds,
+        mvcDuration: _mvcTime.inSeconds,
       );
       if (kIsWeb) {
         await widget.user!.prescriptionRef!.update(_pre.toMap()).then(context.pop);
       } else {
-        context.model
-          ..prescription = _pre
-          ..settingsState!.lastPrescriptions = _pre;
+        context.model.prescription = _pre;
+        context.model.settingsState!.lastPrescriptions = _pre;
         await context.model.settingsState!.save();
         await context.push(ExerciseMode.route, replace: true);
       }
@@ -108,7 +102,7 @@ class _NewExerciseState extends State<NewExercise> {
 
   Scaffold _buildScaffold() {
     return Scaffold(
-      appBar: AppBar(title: const Text('New Exercise', textAlign: TextAlign.center)),
+      appBar: AppBar(title: const Text('New Exercise')),
       body: SingleChildScrollView(child: AppFrame(child: _buildForm())),
     );
   }
@@ -117,7 +111,13 @@ class _NewExerciseState extends State<NewExercise> {
     return Form(
       key: _formKey,
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        if (!kIsWeb) ...<Widget>[
+        if (kIsWeb)
+          CustomTimeTile(
+            desc: 'MVC test duration',
+            time: _mvcTime,
+            onChanged: (Duration duration) => setState(() => _mvcTime = duration),
+          )
+        else ...<Widget>[
           const Text('Please enter your\nexercise prescriptions', style: tsG24BFF, textAlign: TextAlign.center),
           if (_lastPre != null)
             Padding(
@@ -128,60 +128,47 @@ class _NewExerciseState extends State<NewExercise> {
                 title: const Text('Use prescriptions from last exercise.'),
               ),
             ),
-        ] else
-          CustomTextField(
-            isPicker: true,
-            validator: validateNum,
-            label: 'MVC Test duration',
-            controller: _ctrlMVCDuration,
-          ),
+        ],
         CustomTextField(
           label: 'Target Load (Kg)',
           controller: _ctrlTargetLoad,
-          validator: validateNum,
-          pattern: r'^\d{1,2}(\.\d{0,2})?',
+          format: r'^\d{1,2}(\.\d{0,2})?',
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
         ),
-        CustomTextField(
-          isPicker: true,
-          label: 'Hold time (Sec)',
-          controller: _ctrlHoldTime,
-          validator: validateNum,
+        Row(children: <Widget>[
+          Expanded(child: CustomTextField(label: 'Sets (#)', format: r'^\d{1,2}', controller: _ctrlSets)),
+          const VerticalDivider(width: 5),
+          Expanded(child: CustomTextField(label: 'Reps (#)', format: r'^\d{1,2}', controller: _ctrlReps)),
+        ]),
+        CustomTimeTile(
+          desc: 'Hold time',
+          time: _holdTime,
+          onChanged: (Duration duration) => setState(() => _holdTime = duration),
         ),
-        CustomTextField(
-          isPicker: true,
-          label: 'Rest time (Sec)',
-          controller: _ctrlRestTime,
-          validator: validateNum,
+        const Divider(height: 0),
+        CustomTimeTile(
+          desc: 'Rest time',
+          time: _restTime,
+          onChanged: (Duration duration) => setState(() => _restTime = duration),
         ),
-        CustomTextField(
-          label: 'Sets (#)',
-          pattern: r'^\d{1,2}',
-          controller: _ctrlSets,
-          validator: validateNum,
+        const Divider(height: 0),
+        CustomTimeTile(
+          desc: 'Set rest time',
+          time: _setRestTime,
+          onChanged: (Duration duration) => setState(() => _setRestTime = duration),
         ),
-        CustomTextField(
-          label: 'Reps (#)',
-          pattern: r'^\d{1,2}',
-          controller: _ctrlReps,
-          validator: validateNum,
-        ),
-        CustomTextField(
-          isPicker: true,
-          controller: _ctrlSetRest,
-          label: 'Rest time b/w Sets (default: 90 Sec)',
-        ),
-        const SizedBox(height: 30),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
           CustomButton(
-            onPressed: _submit,
-            icon: const Icon(Icons.done_rounded, color: colorGoogleGreen),
-            child: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
+            radius: 8,
+            onPressed: _onSubmit,
+            left: const Icon(Icons.done_rounded),
+            right: const Text('Submit', style: TextStyle(color: colorGoogleGreen)),
           ),
           CustomButton(
+            radius: 8,
             onPressed: _clearForm,
-            icon: const Icon(Icons.clear_rounded),
-            child: const Text('Clear'),
+            left: const Icon(Icons.clear),
+            right: const Text('Clear'),
           ),
         ]),
       ]),

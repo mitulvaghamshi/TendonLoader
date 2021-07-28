@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/homepage.dart';
-import 'package:tendon_loader/utils/enums.dart';
-import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class ExportTile extends StatelessWidget {
@@ -17,7 +15,7 @@ class ExportTile extends StatelessWidget {
     return ListTile(
       minVerticalPadding: 24,
       key: ValueKey<String>(export.reference!.id),
-      leading: CustomButton(child: Text(export.isMVC ? 'MVC' : 'EXE')),
+      leading: CustomButton(right: Text(export.isMVC ? 'MVC' : 'EXE')),
       onTap: () => Future<void>.microtask(() => clickNotifier.value = export),
       title: Text(export.dateTime, style: TextStyle(color: export.isComplate! ? colorAGreen400 : colorRed400)),
       trailing: PopupMenuButton<PopupAction>(
@@ -39,7 +37,7 @@ class ExportTile extends StatelessWidget {
           if (action == PopupAction.download) {
             await Future<void>.microtask(export.download);
           } else if (action == PopupAction.delete) {
-            await confirmDelete(context, () async => onDelete());
+            await confirmDelete(context, onDelete);
           }
         },
       ),

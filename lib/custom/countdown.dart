@@ -17,19 +17,19 @@ class CountDown extends StatefulWidget {
 }
 
 class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
-  late final AnimationController ctrl =
+  late final AnimationController _ctrl =
       AnimationController(vsync: this, duration: widget.duration + const Duration(seconds: 1));
 
   @override
   void initState() {
     super.initState();
-    ctrl.reverse(from: ctrl.value == 0.0 ? 1.0 : ctrl.value);
-    ctrl.addStatusListener((_) => Navigator.pop<bool>(context, true));
+    _ctrl.reverse(from: _ctrl.value == 0.0 ? 1.0 : _ctrl.value);
+    _ctrl.addStatusListener((_) => context.pop(true));
   }
 
   @override
   void dispose() {
-    ctrl.dispose();
+    _ctrl.dispose();
     super.dispose();
   }
 
@@ -38,12 +38,12 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
     return AspectRatio(
       aspectRatio: 1,
       child: AnimatedBuilder(
-        animation: ctrl,
+        animation: _ctrl,
         builder: (_, Widget? child) => Stack(alignment: Alignment.center, children: <Widget>[
-          Positioned.fill(child: CustomPaint(painter: _Painter(ctrl))),
+          Positioned.fill(child: CustomPaint(painter: _Painter(_ctrl))),
           FittedBox(
             child: Text(
-              (ctrl.duration! * ctrl.value).inMilliseconds.toSec,
+              (_ctrl.duration! * _ctrl.value).inMilliseconds.toSec,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 150),
             ),
           ),

@@ -9,7 +9,7 @@ import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/handlers/validator.dart';
+import 'package:tendon_loader/utils/validator.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -114,8 +114,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
               child: FittedBox(
                 child: CustomButton(
                   onPressed: () => setState(() => _isNew = !_isNew),
-                  icon: Icon(_isNew ? Icons.check_rounded : Icons.add, color: colorGoogleGreen),
-                  child: Text(
+                  left: Icon(_isNew ? Icons.check_rounded : Icons.add, color: colorGoogleGreen),
+                  right: Text(
                     _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
                     style: const TextStyle(letterSpacing: 0.5, color: colorGoogleGreen),
                     textAlign: TextAlign.center,
@@ -128,7 +128,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
               child: RotationTransition(
                 turns: Tween<double>(begin: 0.0, end: 1.0).animate(_animCtrl),
                 child: CustomButton(
-                  icon: Icon(_isNew ? Icons.add : Icons.send_rounded),
+                  left: Icon(_isNew ? Icons.add : Icons.send_rounded),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) _animCtrl.forward();
                   },

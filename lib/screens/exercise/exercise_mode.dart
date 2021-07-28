@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/textstyles.dart';
+import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/screens/exercise/exercise_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
@@ -24,7 +24,7 @@ class _ExerciseModeState extends State<ExerciseMode> {
       appBar: AppBar(title: const Text(ExerciseMode.name)),
       body: CustomGraph(
         handler: _handler,
-        header: StreamBuilder<ChartData>(
+        progressbar: StreamBuilder<ChartData>(
           initialData: ChartData(),
           stream: GraphHandler.stream,
           builder: (_, AsyncSnapshot<ChartData> snapshot) {

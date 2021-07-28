@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:tendon_loader/utils/constant/keys.dart';
+import 'package:tendon_loader/utils/keys.dart';
 
 part 'prescription.g.dart';
 

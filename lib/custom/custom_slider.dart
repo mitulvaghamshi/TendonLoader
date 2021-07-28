@@ -1,41 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
-class CustomSlider extends StatefulWidget {
-  const CustomSlider({Key? key, required this.onChanged}) : super(key: key);
+class CustomSlider extends StatelessWidget {
+  const CustomSlider({Key? key, required this.value, required this.onChanged}) : super(key: key);
 
+  final double value;
   final ValueChanged<double> onChanged;
+  Color? get _trackColor => Color.lerp(colorAGreen400, colorRed400, value / 10);
 
-  @override
-  _CustomSliderState createState() => _CustomSliderState();
-}
-
-class _CustomSliderState extends State<CustomSlider> {
-  double _value = 0;
   @override
   Widget build(BuildContext context) {
     return SliderTheme(
-      data: SliderThemeData(
+      data: const SliderThemeData(
         trackHeight: 50,
-        thumbShape: const _CustomThumb(),
+        thumbShape: _CustomShape(),
+        valueIndicatorTextStyle: tsW24B900FF,
         showValueIndicator: ShowValueIndicator.never,
-        activeTrackColor: Color.lerp(colorAGreen400, colorRed400, _value / 10),
-        inactiveTrackColor: Color.lerp(colorAGreen400, colorRed400, _value / 10),
-        valueIndicatorTextStyle: const TextStyle(fontSize: 25, color: colorWhite, fontWeight: FontWeight.w900),
       ),
       child: Slider(
         max: 10,
-        value: _value,
+        value: value,
         divisions: 10,
-        label: _value.round().toString(),
-        onChanged: (double val) => setState(() => widget.onChanged(_value = val)),
+        onChanged: onChanged,
+        activeColor: _trackColor,
+        inactiveColor: _trackColor,
+        label: value.toStringAsFixed(0),
       ),
     );
   }
 }
 
-class _CustomThumb extends SliderComponentShape {
-  const _CustomThumb();
+class _CustomShape extends SliderComponentShape {
+  const _CustomShape();
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.zero;

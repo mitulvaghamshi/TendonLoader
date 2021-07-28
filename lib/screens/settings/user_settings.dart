@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/utils/textstyles.dart';
 import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/screens/device/scanner_list.dart';
-import 'package:tendon_loader/handlers/graph_handler.dart';
-import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
-import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/utils/helper.dart';
+import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/splash_handler.dart';
+import 'package:tendon_loader/screens/device/scanner_list.dart';
+import 'package:tendon_loader/screens/homescreen.dart';
+import 'package:tendon_loader/screens/login/login.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class UserSettings extends StatefulWidget {
@@ -35,8 +34,8 @@ class _UserSettingsState extends State<UserSettings> {
   }
 
   Future<void> _tryUpload() async {
-    if (boxExport.isNotEmpty) {
-      await tryUpload(context).then((_) => context.view.refresh);
+    if (await tryUpload(context) ?? true) {
+      context.view.refresh();
     } else {
       context.showSnackBar(const Text('No data available! or already submitted.'));
     }
@@ -91,8 +90,8 @@ class _UserSettingsState extends State<UserSettings> {
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: FittedBox(
                 child: CustomButton(
-                  icon: const Icon(Icons.person_rounded, size: 30),
-                  child: Text(
+                  left: const Icon(Icons.person_rounded, size: 30),
+                  right: Text(
                     context.model.currentUser!.id,
                     style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
@@ -128,7 +127,7 @@ class _UserSettingsState extends State<UserSettings> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: CustomTextField(
                 controller: _ctrlGraphSize,
-                pattern: r'^\d{1,3}(\.\d{0,2})?',
+                format: r'^\d{1,3}(\.\d{0,2})?',
                 label: 'Y-Axis Size (default: 30 Kg)',
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
               ),
@@ -137,16 +136,29 @@ class _UserSettingsState extends State<UserSettings> {
               title: const Text('Press the button to export locallly stored data'),
               trailing: CustomButton(
                 onPressed: _tryUpload,
-                child: Text(boxExport.length.toString(), style: tsG24BFF),
+                right: Text(boxExport.length.toString(), style: tsG24BFF),
               ),
             ),
             const Divider(thickness: 2),
-            ListTile(title: const Text('About'), onTap: () => about(context)),
+            ListTile(title: const Text('About'), onTap: _about),
             const Divider(thickness: 2),
             ListTile(onTap: _logout, title: const Text('Logout', style: TextStyle(color: colorRed400))),
           ]),
         ),
       ),
+    );
+  }
+
+  void _about() {
+    showAboutDialog(
+      context: context,
+      applicationVersion: 'v0.0.9',
+      applicationName: HomeScreen.name,
+      applicationIcon: const AppLogo(radius: 30),
+      // applicationLegalese: 'Add Application Legalese',
+      children: <Widget>[
+        const Text('Tendon Loader :Preview-v0.0.9', textAlign: TextAlign.center, style: tsG18BFF),
+      ],
     );
   }
 }

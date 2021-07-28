@@ -4,7 +4,7 @@ import 'package:tendon_loader/custom/custom_table.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/utils/textstyles.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 @immutable
 class DataList extends StatelessWidget {
@@ -25,18 +25,18 @@ class DataList extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   title: Text(value.progressorId!),
-                  leading: const CustomButton(radius: 25, icon: Icon(Icons.bluetooth)),
+                  leading: const CustomButton(radius: 25, left: Icon(Icons.bluetooth)),
                 ),
                 const Divider(),
                 ListTile(
                   title: const Text('Pain Score'),
-                  leading: CustomButton(radius: 25, child: Text(value.painScore?.toString() ?? '---')),
+                  leading: CustomButton(radius: 25, right: Text(value.painScore?.toString() ?? '---')),
                 ),
                 const Divider(),
                 ListTile(
                   title: const Text('Pain Tolerable?'),
                   leading:
-                      CustomButton(radius: 25, child: Text(value.isTolerable ?? '---', textAlign: TextAlign.center)),
+                      CustomButton(radius: 25, right: Text(value.isTolerable ?? '---', textAlign: TextAlign.center)),
                 ),
                 const Divider(),
                 if (value.isMVC)
@@ -44,7 +44,7 @@ class DataList extends StatelessWidget {
                     title: const Text('Max Force (kg)'),
                     leading: CustomButton(
                       radius: 25,
-                      child: Text(value.mvcValue.toString(), textAlign: TextAlign.center),
+                      right: Text(value.mvcValue.toString(), textAlign: TextAlign.center),
                     ),
                   )
                 else

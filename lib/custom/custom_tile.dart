@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/utils/textstyles.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 class CustomTile extends StatelessWidget {
   const CustomTile({Key? key, this.icon, this.color, this.onTap, this.endIcon, required this.name}) : super(key: key);
@@ -16,9 +16,9 @@ class CustomTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       trailing: endIcon,
-      title: Text(name, style: ts18BFF),
+      title: Text(name, style: ts22BFF),
       contentPadding: const EdgeInsets.all(16),
-      leading: CustomButton(icon: Icon(icon, size: 30), color: color),
+      leading: CustomButton(left: Icon(icon, size: 30), color: color),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     );
   }

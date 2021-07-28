@@ -1,8 +1,8 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/utils/constant/descriptions.dart';
-import 'package:tendon_loader/utils/constant/images.dart';
+import 'package:tendon_loader/utils/descriptions.dart';
+import 'package:tendon_loader/utils/images.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/screens/device/tiles/location_tile.dart';
@@ -25,8 +25,8 @@ class BluetoothTile extends StatelessWidget {
           ),
           CustomButton(
             onPressed: AppSettings.openBluetoothSettings,
-            icon: Icon(Icons.bluetooth),
-            child: Text('Open Settings'),
+            left: Icon(Icons.bluetooth),
+            right: Text('Open Settings'),
           ),
         ]);
       },

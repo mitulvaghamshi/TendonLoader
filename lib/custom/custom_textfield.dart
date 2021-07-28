@@ -1,83 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tendon_loader/utils/helper.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
-class CustomTextField extends StatefulWidget {
+class CustomTextField extends StatelessWidget {
   const CustomTextField({
     Key? key,
     this.label,
-    this.pattern,
+    this.suffix,
+    this.format,
     this.validator,
     this.controller,
-    this.isPicker = false,
+    this.keyboardType,
     this.isObscure = false,
-    this.keyboardType = TextInputType.number,
   }) : super(key: key);
 
   final String? label;
-  final bool isPicker;
+  final String? format;
   final bool isObscure;
-  final String? pattern;
-  final TextInputType keyboardType;
+  final IconButton? suffix;
+  final TextInputType? keyboardType;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
 
-  @override
-  _CustomTextFieldState createState() => _CustomTextFieldState();
-}
-
-class _CustomTextFieldState extends State<CustomTextField> {
-  late bool _isObscure = widget.isObscure;
-
-  Row _buildSuffixes() {
-    final List<IconButton> buttons = <IconButton>[];
-    if (widget.isPicker) {
-      buttons.add(
-        IconButton(
-          icon: const Icon(Icons.timer_rounded),
-          onPressed: () async {
-            final Duration? result = await selectTime(context);
-            if (result != null) widget.controller!.text = result.inSeconds.toString();
-          },
-        ),
-      );
-    } else if (widget.isObscure) {
-      buttons.add(IconButton(
-        onPressed: () => setState(() => _isObscure = !_isObscure),
-        icon: Icon(_isObscure ? Icons.visibility_rounded : Icons.visibility_off_rounded),
-      ));
+  String? _validateNum(String? value) {
+    if (value == null) return null;
+    if (value.isEmpty) {
+      return '* required';
+    } else if (double.tryParse(value)! < 0) {
+      return 'Value cannot be negative!!!';
     }
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: buttons
-        ..add(IconButton(
-          onPressed: widget.controller!.clear,
-          icon: const Icon(Icons.clear_rounded, color: colorRed400),
-        )),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: _isObscure,
-      readOnly: widget.isPicker,
-      validator: widget.validator,
-      controller: widget.controller,
-      keyboardType: widget.keyboardType,
+      style: ts18BFF,
+      controller: controller,
+      obscureText: isObscure,
+      keyboardType: keyboardType ?? TextInputType.number,
+      validator: validator ?? _validateNum,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: const TextStyle(fontSize: 20, fontFamily: 'Georgia'),
-      inputFormatters: <TextInputFormatter>[
-        if (widget.pattern != null) FilteringTextInputFormatter.allow(RegExp(widget.pattern!)),
-      ],
+      inputFormatters: <TextInputFormatter>[if (format != null) FilteringTextInputFormatter.allow(RegExp(format!))],
       decoration: InputDecoration(
         isDense: true,
-        suffix: _buildSuffixes(),
-        labelText: widget.label,
+        labelText: label,
         errorStyle: const TextStyle(color: colorRed400),
         labelStyle: TextStyle(color: Theme.of(context).accentColor),
+        suffix: suffix ?? IconButton(onPressed: controller!.clear, icon: const Icon(Icons.clear)),
         errorBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorRed400)),
         focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
         enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: Theme.of(context).accentColor)),

@@ -1,8 +1,8 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:tendon_loader/utils/constant/descriptions.dart';
-import 'package:tendon_loader/utils/constant/images.dart';
+import 'package:tendon_loader/utils/descriptions.dart';
+import 'package:tendon_loader/utils/images.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/screens/device/tiles/progressor_tile.dart';
@@ -30,8 +30,8 @@ class LocationTile extends StatelessWidget {
           ),
           CustomButton(
             onPressed: AppSettings.openLocationSettings,
-            icon: Icon(Icons.location_on_rounded),
-            child: Text('Open Settings'),
+            left: Icon(Icons.location_on_rounded),
+            right: Text('Open Settings'),
           ),
         ]);
       },

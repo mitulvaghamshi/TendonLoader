@@ -18,12 +18,3 @@ String? validatePassword(String? password) {
     return 'Password must be at least 6 characters long.';
   }
 }
-
-String? validateNum(String? value) {
-  if (value == null) return null;
-  if (value.isEmpty) {
-    return '* required.';
-  } else if (double.tryParse(value)! < 0) {
-    return 'Value cannot be negative!!!';
-  }
-}

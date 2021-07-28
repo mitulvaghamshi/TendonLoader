@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/textstyles.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
-import 'package:tendon_loader/screens/livedata/livedata_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/screens/livedata/livedata_handler.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 class LiveData extends StatefulWidget {
   const LiveData({Key? key}) : super(key: key);
@@ -24,7 +24,7 @@ class _LiveDataState extends State<LiveData> {
       appBar: AppBar(title: const Text(LiveData.name)),
       body: CustomGraph(
         handler: _handler,
-        header: StreamBuilder<ChartData>(
+        progressbar: StreamBuilder<ChartData>(
           initialData: ChartData(),
           stream: GraphHandler.stream,
           builder: (_, AsyncSnapshot<ChartData> snapshot) {
