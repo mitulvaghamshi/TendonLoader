@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/custom/app_logo.dart';
-import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/custom/custom_image.dart';
+ import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/utils/themes.dart';
@@ -63,7 +63,7 @@ class DataView extends StatelessWidget {
           ],
         );
       },
-      child: const Center(child: AppLogo(radius: 300)),
+      child: const Center(child: CustomImage()),
     );
   }
 }

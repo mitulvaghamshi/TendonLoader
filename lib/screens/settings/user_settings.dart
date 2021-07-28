@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
-import 'package:tendon_loader/handlers/splash_handler.dart';
-import 'package:tendon_loader/screens/device/scanner_list.dart';
+ import 'package:tendon_loader/screens/device/scanner_list.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/screens/login/login.dart';
+import 'package:tendon_loader/screens/login/splash.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
@@ -85,7 +85,7 @@ class _UserSettingsState extends State<UserSettings> {
             ),
             const SizedBox(height: 20),
             // testing only end -----------------------
-            const AppLogo(),
+            const CustomImage(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: FittedBox(
@@ -154,7 +154,7 @@ class _UserSettingsState extends State<UserSettings> {
       context: context,
       applicationVersion: 'v0.0.9',
       applicationName: HomeScreen.name,
-      applicationIcon: const AppLogo(radius: 30),
+      applicationIcon: const CustomImage(),
       // applicationLegalese: 'Add Application Legalese',
       children: <Widget>[
         const Text('Tendon Loader :Preview-v0.0.9', textAlign: TextAlign.center, style: tsG18BFF),

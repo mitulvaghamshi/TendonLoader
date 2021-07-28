@@ -3,23 +3,23 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/handlers/audio_handler.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
-import 'package:tendon_loader/handlers/splash_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/device/connected_list.dart';
 import 'package:tendon_loader/screens/exercise/auto_exercise.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
 import 'package:tendon_loader/screens/livedata/live_data.dart';
+import 'package:tendon_loader/screens/login/splash.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/screens/settings/user_settings.dart';
@@ -140,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: AppFrame(
           onExit: () async => await _onExit(context) ?? false,
           child: Column(children: <Widget>[
-            const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: AppLogo()),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: CustomImage()),
             CustomTile(
               name: LiveData.name,
               icon: Icons.show_chart_rounded,

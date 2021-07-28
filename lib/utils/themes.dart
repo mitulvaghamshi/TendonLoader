@@ -17,6 +17,8 @@ const Color colorDark1 = Color(0xff141414);
 const Color colorDark2 = Color(0xff262626);
 const Color colorDark3 = Color(0xff363636);
 
+const Color colorTransparent = Color(0x00000000);
+
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   cardColor: colorWhite,

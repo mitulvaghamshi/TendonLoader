@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/screens/homepage.dart';
@@ -31,6 +31,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   bool _isNew = false;
   bool _result = false;
   bool _keepSigned = true;
+  bool _isObscure = true;
 
   Future<void> _authenticate(AnimationStatus status) async {
     if (status == AnimationStatus.forward) {
@@ -77,17 +78,17 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         automaticallyImplyLeading: false,
         title: Text('Tendon Loader - ${_isNew ? 'Register' : 'Login'}'),
       ),
-      body: kIsWeb ? Center(child: SizedBox(width: 370, child: _buildLoginBody())) : _buildLoginBody(),
+      body: kIsWeb ? Center(child: SizedBox(width: 370, child: _buildForm())) : _buildForm(),
     );
   }
 
-  Widget _buildLoginBody() {
+  Widget _buildForm() {
     return SingleChildScrollView(
       child: AppFrame(
         child: Form(
           key: _formKey,
           child: Column(children: <Widget>[
-            const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: AppLogo()),
+            const CustomImage(),
             CustomTextField(
               label: 'Username',
               controller: _emailCtrl,
@@ -95,11 +96,15 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
               keyboardType: TextInputType.emailAddress,
             ),
             CustomTextField(
-              isObscure: true,
               label: 'Password',
+              isObscure: _isObscure,
               controller: _passwordCtrl,
               validator: validatePassword,
               keyboardType: TextInputType.visiblePassword,
+              suffix: IconButton(
+                onPressed: () => setState(() => _isObscure = !_isObscure),
+                icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
+              ),
             ),
             CheckboxListTile(
               value: _keepSigned,
@@ -114,11 +119,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
               child: FittedBox(
                 child: CustomButton(
                   onPressed: () => setState(() => _isNew = !_isNew),
-                  left: Icon(_isNew ? Icons.check_rounded : Icons.add, color: colorGoogleGreen),
+                  left: Icon(_isNew ? Icons.check : Icons.add),
                   right: Text(
                     _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
-                    style: const TextStyle(letterSpacing: 0.5, color: colorGoogleGreen),
-                    textAlign: TextAlign.center,
+                    style: const TextStyle(letterSpacing: 0.5),
                   ),
                 ),
               ),
@@ -128,7 +132,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
               child: RotationTransition(
                 turns: Tween<double>(begin: 0.0, end: 1.0).animate(_animCtrl),
                 child: CustomButton(
-                  left: Icon(_isNew ? Icons.add : Icons.send_rounded),
+                  rounded: true,
+                  
+                  left: Icon(_isNew ? Icons.add : Icons.send),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) _animCtrl.forward();
                   },
