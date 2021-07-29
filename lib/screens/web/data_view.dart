@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
- import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/utils/themes.dart';
@@ -15,7 +15,7 @@ class DataView extends StatelessWidget {
     return ValueListenableBuilder<Export?>(
       valueListenable: clickNotifier,
       builder: (BuildContext context, Export? value, Widget? child) {
-        if (value == null) return child!;
+        if (value == null || value.exportData!.isEmpty) return child!;
         final double _targetLine = value.isMVC ? value.mvcValue! : value.prescription!.targetLoad;
         return SfCartesianChart(
           plotAreaBorderWidth: 0,

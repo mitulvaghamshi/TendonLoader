@@ -5,6 +5,7 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/screens/exercise/exercise_handler.dart';
+import 'package:tendon_loader/screens/livedata/livedata_handler.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
@@ -22,8 +23,14 @@ class _CustomGraphState extends State<CustomGraph> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Title')),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+      floatingActionButton: CustomButton(
+        padding: const EdgeInsets.all(5),
+        left: const Icon(Icons.arrow_back),
+        onPressed: () => widget.handler.exit().then(context.pop),
+      ),
       body: AppFrame(
+        padding: const EdgeInsets.only(bottom: 16),
         onExit: widget.handler.exit,
         child: Column(children: <Widget>[
           StreamBuilder<ChartData>(
@@ -32,12 +39,14 @@ class _CustomGraphState extends State<CustomGraph> {
             builder: (BuildContext context, AsyncSnapshot<ChartData> snapshot) {
               widget.handler.graphData.insert(0, snapshot.data!);
               widget.handler.graphCtrl?.updateDataSource(updatedDataIndex: 0);
-              return FittedBox(child: widget.builder());
+              return Row(children: <Widget>[
+                Expanded(child: CustomButton(radius: 0, left: widget.builder(), color: widget.handler.feedColor)),
+              ]);
             },
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: SfCartesianChart(
                 plotAreaBorderWidth: 0,
                 primaryXAxis: widget.handler.lineData != null
@@ -46,18 +55,17 @@ class _CustomGraphState extends State<CustomGraph> {
                 primaryYAxis: NumericAxis(
                   labelFormat: '{value} kg',
                   axisLine: const AxisLine(width: 0),
+                  majorTickLines: const MajorTickLines(size: 0),
                   maximum: context.model.settingsState!.graphSize,
                   majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
                   labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 series: <ChartSeries<ChartData?, int>>[
                   ColumnSeries<ChartData?, int>(
-                    width: 0.9,
-                    borderWidth: 1,
+                    width: 1,
+                    color: colorBlue,
                     animationDuration: 0,
-                    color: colorGoogleGreen,
                     dataSource: widget.handler.graphData,
-                    onRendererCreated: (ChartSeriesController ctrl) => widget.handler.graphCtrl = ctrl,
                     dataLabelSettings: DataLabelSettings(
                       isVisible: true,
                       showZeroValue: false,
@@ -68,22 +76,20 @@ class _CustomGraphState extends State<CustomGraph> {
                         color: Theme.of(context).accentColor,
                       ),
                     ),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                    ),
                     xValueMapper: (ChartData? data, _) => 1,
                     yValueMapper: (ChartData? data, _) => data!.load,
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                    onRendererCreated: (ChartSeriesController ctrl) => widget.handler.graphCtrl = ctrl,
                   ),
-                  if (widget.handler.lineData != null)
+                  if (widget.handler is! LiveDataHandler)
                     LineSeries<ChartData, int>(
                       width: 5,
                       color: colorRed400,
                       animationDuration: 0,
                       dataSource: widget.handler.lineData!,
-                      onRendererCreated: (ChartSeriesController ctrl) => widget.handler.lineCtrl = ctrl,
                       yValueMapper: (ChartData data, _) => data.load,
                       xValueMapper: (ChartData data, _) => data.time.toInt(),
+                      onRendererCreated: (ChartSeriesController ctrl) => widget.handler.lineCtrl = ctrl,
                     ),
                 ],
               ),

@@ -75,7 +75,7 @@ class _UserSettingsState extends State<UserSettings> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: CustomTextField(
                 controller: _ctrlGraphSize,
-                format: r'^\d{1,3..}(\.\d{0,2})?',
+                format: r'^\d{1,2}(\.\d{0,2})?',
                 label: 'Y-Axis Size (default: 30 Kg)',
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
               ),

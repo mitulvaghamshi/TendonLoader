@@ -5,7 +5,6 @@ import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/utils/themes.dart';
 
 class ExerciseHandler extends GraphHandler {
   ExerciseHandler({required BuildContext context})
@@ -18,39 +17,37 @@ class ExerciseHandler extends GraphHandler {
   }
 
   int _minTime = 0;
-  bool _isHit = false;
 
   late int _set;
   late int _rep;
   late int _rest;
   late int _lapTime;
-  late bool isHold;
+  late bool isPush;
   late bool _isSetOver;
   final Prescription _pre;
 
-  String get lapTime => '${isHold ? 'Hold' : 'Rest'}: $_lapTime Sec';
+  String get lapTime => '${isPush ? 'Push' : 'Rest'}: $_lapTime Sec';
   String get counterValue => 'Set: $_set/${_pre.sets} • Rep: $_rep/${_pre.reps}';
-  Color get feedColor => _isHit ? colorGoogleGreen : colorGoogleYellow;
 
   void _clear() {
-    isHold = true;
+    isPush = true;
     _minTime = 0;
     _lapTime = _pre.holdTime;
     _set = _rep = _rest = 1;
-    _isSetOver = _isHit = false;
+    _isSetOver = isHit = false;
     GraphHandler.clear();
   }
 
   @override
   void update(ChartData data) {
     if (isRunning && !_isSetOver) {
-      _isHit = data.load > _pre.targetLoad;
+      isHit = data.load > _pre.targetLoad;
       final int _time = data.time.truncate();
       if (!isPause && _time > _minTime) {
         _minTime = _time;
         if (_lapTime-- == 0) {
-          if (isHold) {
-            isHold = false;
+          if (isPush) {
+            isPush = false;
             _rep++;
             _lapTime = _pre.restTime;
             if (_rep > _pre.reps && _rest > _pre.reps - 1) {
@@ -60,14 +57,14 @@ class ExerciseHandler extends GraphHandler {
                 stop();
               } else {
                 _rest = _rep = 1;
-                isHold = _isSetOver = true;
+                isPush = _isSetOver = true;
                 _lapTime = _pre.holdTime;
                 _setOver();
               }
             }
           } else {
             _rest++;
-            isHold = true;
+            isPush = true;
             _lapTime = _pre.holdTime;
           }
           HapticFeedback.heavyImpact();

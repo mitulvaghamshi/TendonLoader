@@ -4,9 +4,9 @@ import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/login/login.dart';
+import 'package:tendon_loader/screens/web/data_list.dart';
+import 'package:tendon_loader/screens/web/data_view.dart';
 import 'package:tendon_loader/screens/web/left_panel/user_list.dart';
-import 'package:tendon_loader/screens/web/right_panel/data_list.dart';
-import 'package:tendon_loader/screens/web/right_panel/data_view.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
@@ -26,14 +26,13 @@ class HomePage extends StatelessWidget {
     final bool _isWide = MediaQuery.of(context).size.width > 960;
 
     return Scaffold(
-      appBar: AppBar(title: const Text(name), actions: <Widget>[
-        CustomButton(
-          radius: 8,
-          right: const Icon(Icons.logout),
-          left: const Text('Logout', style: ts18BFF),
-          onPressed: () async => firebaseLogout().then((_) async => context.push(Login.route, replace: true)),
-        ),
-      ]),
+      floatingActionButton: CustomButton(
+        radius: 0,
+        left: const Text('Logout'),
+        right: const Icon(Icons.logout),
+        onPressed: () async => firebaseLogout().then((_) async => context.push(Login.route, replace: true)),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: _isWide ? const _WideScreen() : const DataView(),
       drawer: _isWide ? null : Container(width: 350, color: colorDark1, child: const UserList()),
     );
@@ -46,9 +45,9 @@ class _WideScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: const <Widget>[
-      SizedBox(width: 350, child: UserList()),
+      SizedBox(width: 340, child: UserList()),
       VerticalDivider(),
-      SizedBox(width: 250, child: DataList()),
+      SizedBox(width: 260, child: DataList()),
       VerticalDivider(),
       Expanded(child: DataView()),
     ]);
@@ -63,6 +62,7 @@ Future<void> confirmDelete(BuildContext context, VoidCallback onDelete) async {
       content: CustomButton(
         onPressed: () {
           onDelete();
+          clickNotifier.value = null;
           context.view.refresh();
           context.pop();
         },

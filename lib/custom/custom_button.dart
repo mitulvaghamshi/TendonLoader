@@ -25,7 +25,8 @@ class CustomButton extends StatelessWidget {
     return RawMaterialButton(
       elevation: 16,
       padding: padding,
-      onPressed: onPressed ?? () {},
+      onPressed: onPressed,
+      disabledElevation: 16,
       fillColor: color ?? Theme.of(context).buttonColor,
       shape: rounded ? const CircleBorder() : RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
       constraints:

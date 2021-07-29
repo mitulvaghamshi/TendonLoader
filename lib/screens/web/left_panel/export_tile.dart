@@ -16,10 +16,17 @@ class ExportTile extends StatelessWidget {
       minVerticalPadding: 24,
       key: ValueKey<String>(export.reference!.id),
       onTap: () => Future<void>.microtask(() => clickNotifier.value = export),
-      leading: CustomButton(rounded: true, left: Text(export.isMVC ? 'MVC' : 'EXE', style: ts18BFF)),
-      title: Text(export.dateTime, style: TextStyle(color: export.isComplate! ? colorAGreen400 : colorRed400)),
+      leading: CustomButton(
+        rounded: true,
+        left: Text(export.isMVC ? 'MVC' : 'EXE'),
+        color: export.isMVC ? colorOrange400 : colorGoogleGreen,
+      ),
+      title: Text(
+        export.dateTime,
+        style: TextStyle(color: export.isComplate! ? colorGoogleGreen : colorRed400),
+      ),
       trailing: PopupMenuButton<PopupAction>(
-        icon: const Icon(Icons.more_vert_rounded),
+        icon: const Icon(Icons.more_vert),
         itemBuilder: (_) => <PopupMenuItem<PopupAction>>[
           const PopupMenuItem<PopupAction>(
             value: PopupAction.download,
@@ -29,7 +36,7 @@ class ExportTile extends StatelessWidget {
             value: PopupAction.delete,
             child: ListTile(
               title: Text('Delete', style: TextStyle(color: colorRed400)),
-              leading: Icon(Icons.delete_rounded, color: colorRed400),
+              leading: Icon(Icons.delete, color: colorRed400),
             ),
           ),
         ],

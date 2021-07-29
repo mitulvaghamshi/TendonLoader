@@ -47,6 +47,8 @@ class GraphHandler {
     stream.listen(update);
   }
 
+  bool isHit = false;
+
   late bool hasData;
   final String userId;
   late bool isRunning;
@@ -68,6 +70,8 @@ class GraphHandler {
   static final BehaviorSubject<ChartData> _controller = BehaviorSubject<ChartData>.seeded(ChartData());
   static Stream<ChartData> get stream => _controller.stream;
   static Sink<ChartData> get sink => _controller.sink; // simulation
+
+  Color get feedColor => isHit ? colorGoogleGreen : colorWhite;
 
   static void clear() {
     _lastMillis = 0;
@@ -169,7 +173,7 @@ Future<bool?> startCountdown(BuildContext context, {String? title, Duration? dur
       title: title ?? 'Session start in...',
       content: Padding(
         padding: const EdgeInsets.all(5),
-        child: CountDown(duration: duration ?? const Duration(seconds: 5)),
+        child: CountDown(duration: duration ?? const Duration(seconds: 1)),
       ),
     ),
   );
