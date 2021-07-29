@@ -8,7 +8,6 @@ import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/utils/validator.dart';
 
 class Login extends StatefulWidget {
@@ -88,7 +87,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         child: Form(
           key: _formKey,
           child: Column(children: <Widget>[
-            const CustomImage(),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: CustomImage()),
             CustomTextField(
               label: 'Username',
               controller: _emailCtrl,
@@ -108,7 +107,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
             ),
             CheckboxListTile(
               value: _keepSigned,
-              activeColor: colorGoogleGreen,
+              activeColor: Colors.blue,
               contentPadding: EdgeInsets.zero,
               title: const Text('Keep me logged in.'),
               controlAffinity: ListTileControlAffinity.leading,
@@ -133,7 +132,6 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                 turns: Tween<double>(begin: 0.0, end: 1.0).animate(_animCtrl),
                 child: CustomButton(
                   rounded: true,
-                  
                   left: Icon(_isNew ? Icons.add : Icons.send),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) _animCtrl.forward();

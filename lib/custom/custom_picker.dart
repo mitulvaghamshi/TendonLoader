@@ -4,28 +4,32 @@ import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class CustomPicker extends StatelessWidget {
-  const CustomPicker({Key? key, required this.value, required this.onChanged}) : super(key: key);
+  const CustomPicker({Key? key, required this.label, required this.onChanged}) : super(key: key);
 
-  final int value;
+  final String label;
   final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 50,
-      height: 100,
-      child: Stack(alignment: Alignment.center, children: <Widget>[
-        const CustomButton(),
+      width: 120,
+      height: 150,
+      child: Stack(alignment: Alignment.centerRight, children: <Widget>[
+        CustomButton(
+          right: Text(label, style: ts20BFF),
+          left: const SizedBox(width: 45, height: 30),
+        ),
         ListWheelScrollView(
-          itemExtent: 40,
+          itemExtent: 30,
+          diameterRatio: 1,
+          magnification: 2,
           useMagnifier: true,
-          magnification: 1.5,
           onSelectedItemChanged: onChanged,
           physics: const FixedExtentScrollPhysics(),
           children: List<Widget>.generate(61, (int index) {
             return Container(
-              height: 40,
-              alignment: Alignment.center,
+              width: 35,
+              alignment: Alignment.centerLeft,
               child: Text(index.toString(), style: ts18BFF),
             );
           }),

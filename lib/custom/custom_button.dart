@@ -9,6 +9,7 @@ class CustomButton extends StatelessWidget {
     this.onPressed,
     this.radius = 30,
     this.rounded = false,
+    this.padding = const EdgeInsets.all(12),
   }) : super(key: key);
 
   final Color? color;
@@ -17,17 +18,18 @@ class CustomButton extends StatelessWidget {
   final Widget? left;
   final Widget? right;
   final VoidCallback? onPressed;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
       elevation: 16,
+      padding: padding,
       onPressed: onPressed ?? () {},
-      padding: const EdgeInsets.all(12),
       fillColor: color ?? Theme.of(context).buttonColor,
       shape: rounded ? const CircleBorder() : RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
       constraints:
-          rounded ? BoxConstraints.loose(Size.fromRadius(radius)) : const BoxConstraints(minWidth: 30, minHeight: 30),
+          rounded ? BoxConstraints.tight(Size.fromRadius(radius)) : const BoxConstraints(minWidth: 30, minHeight: 30),
       child: rounded || left == null || right == null
           ? left ?? right
           : Row(mainAxisSize: MainAxisSize.min, children: <Widget>[left!, const SizedBox(width: 5), right!]),

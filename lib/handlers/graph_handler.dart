@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
@@ -14,12 +15,29 @@ import 'package:tendon_loader/custom/custom_slider.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/handlers/audio_handler.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
- import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/login/splash.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/progressor.dart';
 import 'package:tendon_loader/utils/themes.dart';
+
+// Simuation block start
+late Timer? _timer;
+late bool isSumulation;
+
+void _fakeStart() {
+  double _fakeLoad = 0;
+  _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+    if (!isPause) {
+      final ChartData element = ChartData(load: _fakeLoad, time: timer.tick.toDouble());
+      GraphHandler.exportData.add(element);
+      GraphHandler.sink.add(element);
+      _fakeLoad = _fakeLoad > 15 ? 0 : _fakeLoad + .5;
+    }
+  });
+}
+// Simulation block end
 
 bool isPause = false;
 
@@ -143,23 +161,6 @@ class GraphHandler {
   }
 }
 
-// Simuation block start
-late Timer? _timer;
-late bool isSumulation;
-
-void _fakeStart() {
-  double _fakeLoad = 0;
-  _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-    if (!isPause) {
-      final ChartData element = ChartData(load: _fakeLoad, time: timer.tick.toDouble());
-      GraphHandler.exportData.add(element);
-      GraphHandler.sink.add(element);
-      _fakeLoad = _fakeLoad > 15 ? 0 : _fakeLoad + .5;
-    }
-  });
-}
-// Simulation block end
-
 Future<bool?> startCountdown(BuildContext context, {String? title, Duration? duration}) {
   return showDialog<bool>(
     context: context,
@@ -174,6 +175,22 @@ Future<bool?> startCountdown(BuildContext context, {String? title, Duration? dur
   );
 }
 
+Future<void> congratulate(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => CustomDialog(
+      title: 'Congratulations!',
+      action: CustomButton(
+        onPressed: context.pop,
+        left: const Text('Next'),
+        right: const Icon(Icons.arrow_forward),
+      ),
+      content: const Text('Exercise session completed.\nGreat work!!!', textAlign: TextAlign.center, style: tsG24BFF),
+    ),
+  );
+}
+
 Future<double?> _selectPain(BuildContext context) {
   double _value = 0;
   return showDialog<double>(
@@ -182,9 +199,9 @@ Future<double?> _selectPain(BuildContext context) {
     builder: (_) => CustomDialog(
       title: 'Pain score(0~10)',
       action: CustomButton(
-        radius: 20,
         onPressed: () => context.pop<double>(_value),
-        left: const Icon(Icons.done_rounded, color: colorGoogleGreen),
+        left: const Text('Next'),
+        right: const Icon(Icons.arrow_forward),
       ),
       content: Column(children: <Widget>[
         const Text('Please describe your pain during that session', style: ts18BFF, textAlign: TextAlign.center),
@@ -210,21 +227,41 @@ Future<double?> _selectPain(BuildContext context) {
 Text _buildPainText(String text, Color color) => Text(text,
     textAlign: TextAlign.center, style: TextStyle(color: color, fontWeight: FontWeight.w900, letterSpacing: 1.5));
 
-Future<void> congratulate(BuildContext context) async {
-  return showDialog<void>(
+Future<String?> _selectTolerance(BuildContext context) {
+  return showDialog<String>(
     context: context,
-    builder: (_) => const CustomDialog(
-      title: 'Congratulation!',
-      content: Text('Exercise session completed.\nGreat work!!!', textAlign: TextAlign.center, style: tsG24BFF),
+    barrierDismissible: false,
+    builder: (_) => CustomDialog(
+      title: 'Was tolerable?',
+      action: CustomButton(
+        left: const Text('No pain'),
+        right: const Icon(Icons.arrow_forward),
+        onPressed: () => context.pop('No pain'),
+      ),
+      content: Column(children: <Widget>[
+        const Text('Was the pain during that\ntolerable for you?', style: ts18BFF, textAlign: TextAlign.center),
+        const SizedBox(height: 16),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
+          CustomButton(
+            onPressed: () => context.pop('Yes'),
+            left: const Icon(Icons.check, color: colorGoogleGreen),
+            right: const Text('Yes', style: TextStyle(color: colorGoogleGreen)),
+          ),
+          const SizedBox(width: 5),
+          CustomButton(
+            onPressed: () => context.pop('No'),
+            left: const Icon(Icons.clear, color: colorRed400),
+            right: const Text('No', style: TextStyle(color: colorRed400)),
+          ),
+        ]),
+      ]),
     ),
   );
 }
 
-Future<bool> get _isNetworkOn async => (await Connectivity().checkConnectivity()) != ConnectivityResult.none;
-
 Future<bool?> _submitData(BuildContext context, Export export) async {
   return context.model.settingsState!.autoUpload!
-      ? await _isNetworkOn
+      ? await Connectivity().checkConnectivity() != ConnectivityResult.none
           ? export.upload(context)
           : Future<bool>.value(true)
       : _confirmSubmit(context, export);
@@ -234,62 +271,24 @@ Future<bool?> _confirmSubmit(BuildContext context, Export export) async {
   return showDialog<bool?>(
     context: context,
     barrierDismissible: false,
-    builder: (_) => FittedBox(
-      child: CustomDialog(
-        title: 'Submit data?',
-        content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          CustomTile(
-            name: 'Submit Now',
-            color: colorGoogleGreen,
-            icon: Icons.cloud_upload_rounded,
-            onTap: () => export.upload(context).then(context.pop),
-          ),
-          CustomTile(
-            name: 'Do it later',
-            color: colorYellow400,
-            icon: Icons.save_rounded,
-            onTap: () => context.pop(true),
-          ),
-          CustomTile(
-            name: 'Discard!',
-            color: colorRed400,
-            icon: Icons.clear_rounded,
-            onTap: () => export.delete().then((_) => context.pop(true)),
-          ),
-        ]),
-      ),
-    ),
-  );
-}
-
-Future<String?> _selectTolerance(BuildContext context) {
-  return showDialog<String>(
-    context: context,
-    barrierDismissible: false,
     builder: (_) => CustomDialog(
-      title: 'One more thing...',
-      content: Column(children: <Widget>[
-        const Text('Was the pain during that\ntolerable for you?', style: ts18BFF, textAlign: TextAlign.center),
-        const SizedBox(height: 16),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-          CustomButton(
-            onPressed: () => context.pop('Yes'),
-            left: const Icon(Icons.check, color: colorGoogleGreen),
-            right: const Text('Yes', style: TextStyle(color: colorGoogleGreen)),
-          ),
-          const SizedBox(width: 5),
-          CustomButton(
-            onPressed: () => context.pop('No pain'),
-            left: const Icon(Icons.remove, color: colorModerate),
-            right: const Text('No pain', style: TextStyle(color: colorModerate)),
-          ),
-          const SizedBox(width: 5),
-          CustomButton(
-            onPressed: () => context.pop('No'),
-            left: const Icon(Icons.clear, color: colorRed400),
-            right: const Text('No', style: TextStyle(color: colorRed400)),
-          ),
-        ]),
+      title: 'Submit data?',
+      action: CustomButton(
+        left: const Text('Discard'),
+        right: const Icon(Icons.clear, color: colorRed400),
+        onPressed: () => export.delete().then((_) => context.pop(true)),
+      ),
+      content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        CustomTile(
+          title: 'Submit Now',
+          left: const Icon(Icons.cloud_upload, color: colorGoogleGreen),
+          onTap: () => export.upload(context).then(context.pop),
+        ),
+        CustomTile(
+          title: 'Do it later',
+          left: const Icon(Icons.save, color: colorModerate),
+          onTap: () => context.pop(true),
+        ),
       ]),
     ),
   );

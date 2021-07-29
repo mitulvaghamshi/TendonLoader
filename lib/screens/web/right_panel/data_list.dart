@@ -25,27 +25,26 @@ class DataList extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   title: Text(value.progressorId!),
-                  leading: const CustomButton(radius: 25, left: Icon(Icons.bluetooth)),
+                  leading: const CustomButton(rounded: true,left: Icon(Icons.bluetooth)),
                 ),
                 const Divider(),
                 ListTile(
                   title: const Text('Pain Score'),
-                  leading: CustomButton(radius: 25, right: Text(value.painScore?.toString() ?? '---')),
+                  leading: CustomButton(rounded: true, left: Text(value.painScore?.toString() ?? '---')),
                 ),
                 const Divider(),
                 ListTile(
                   title: const Text('Pain Tolerable?'),
-                  leading:
-                      CustomButton(radius: 25, right: Text(value.isTolerable ?? '---', textAlign: TextAlign.center)),
+                  leading: CustomButton(
+                    rounded: true,
+                    left: Text(value.isTolerable ?? '---', textAlign: TextAlign.center),
+                  ),
                 ),
                 const Divider(),
                 if (value.isMVC)
                   ListTile(
                     title: const Text('Max Force (kg)'),
-                    leading: CustomButton(
-                      radius: 25,
-                      right: Text(value.mvcValue.toString(), textAlign: TextAlign.center),
-                    ),
+                    leading: CustomButton(rounded: true, left: Text(value.mvcValue.toString())),
                   )
                 else
                   CustomTable(columns: const <DataColumn>[

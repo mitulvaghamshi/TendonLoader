@@ -19,11 +19,18 @@ class CustomDialog extends StatelessWidget {
       titlePadding: const EdgeInsets.all(16),
       contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-        FittedBox(child: Text(title ?? 'Tendon Loader', style: ts20BFF)),
-        const SizedBox(width: 5),
-        action ?? CustomButton(radius: 20, left: const Icon(Icons.clear), onPressed: context.pop),
-      ]),
+      title: FittedBox(
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+          Text(title ?? 'Tendon Loader', style: ts20BFF),
+          const SizedBox(width: 5),
+          action ??
+              CustomButton(
+                onPressed: context.pop,
+                left: const Icon(Icons.clear),
+                padding: const EdgeInsets.all(8),
+              ),
+        ]),
+      ),
     );
   }
 }

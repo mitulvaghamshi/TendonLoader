@@ -25,17 +25,18 @@ class CustomTimeTile extends StatelessWidget {
     return showDialog<Duration?>(
       context: context,
       builder: (_) => CustomDialog(
-        title: 'Select Time (min:sec)',
+        title: 'Select Time',
         action: CustomButton(
-          radius: 25,
-          left: const Icon(Icons.done_rounded, color: colorGoogleGreen),
+          right: const Text('Ok'),
+          left: const Icon(Icons.done),
           onPressed: () => context.pop<Duration>(Duration(minutes: _min, seconds: _sec)),
         ),
-        content: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
-          CustomPicker(value: 0, onChanged: (int val) => _min = val),
-          const Text(':', style: ts22BFF),
-          CustomPicker(value: 0, onChanged: (int val) => _sec = val),
-        ]),
+        content: FittedBox(
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
+            CustomPicker(label: 'Min', onChanged: (int val) => _min = val),
+            CustomPicker(label: 'Sec', onChanged: (int val) => _sec = val),
+          ]),
+        ),
       ),
     );
   }
@@ -47,7 +48,7 @@ class CustomTimeTile extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Text(_timeString, style: time.inSeconds > 0 ? tsG18B : tsR18B),
       trailing: IconButton(
-        icon: const Icon(Icons.timer),
+        icon: const Icon(Icons.timer, color: colorBlue),
         onPressed: () async {
           final Duration? duration = await _selectTime(context);
           if (duration != null) onChanged(duration);

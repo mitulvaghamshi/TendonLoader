@@ -28,7 +28,6 @@ class ConnectedTile extends StatelessWidget {
             title: Text(deviceName, style: const TextStyle(fontWeight: FontWeight.bold)),
             subtitle: const Text('Long press to disconnect', style: TextStyle(fontSize: 12, color: colorRed400)),
             leading: const CustomButton(
-              radius: 25,
               color: colorGoogleGreen,
               left: Icon(Icons.bluetooth_connected, size: 30),
             ),

@@ -15,8 +15,8 @@ class ExportTile extends StatelessWidget {
     return ListTile(
       minVerticalPadding: 24,
       key: ValueKey<String>(export.reference!.id),
-      leading: CustomButton(right: Text(export.isMVC ? 'MVC' : 'EXE')),
       onTap: () => Future<void>.microtask(() => clickNotifier.value = export),
+      leading: CustomButton(rounded: true, left: Text(export.isMVC ? 'MVC' : 'EXE', style: ts18BFF)),
       title: Text(export.dateTime, style: TextStyle(color: export.isComplate! ? colorAGreen400 : colorRed400)),
       trailing: PopupMenuButton<PopupAction>(
         icon: const Icon(Icons.more_vert_rounded),

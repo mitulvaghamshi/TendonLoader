@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false, title: const Text(HomeScreen.name), actions: <Widget>[
-        IconButton(icon: const Icon(Icons.settings), onPressed: () async => context.push(UserSettings.route))
+        IconButton(icon: const Icon(Icons.settings), onPressed: () async => context.push(UserSettings.route)),
       ]),
       floatingActionButton: CustomButton(
         onPressed: () => _navigateTo(context),
@@ -140,20 +140,23 @@ class _HomeScreenState extends State<HomeScreen> {
         child: AppFrame(
           onExit: () async => await _onExit(context) ?? false,
           child: Column(children: <Widget>[
-            const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: CustomImage()),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: CustomImage()),
             CustomTile(
-              name: LiveData.name,
-              icon: Icons.show_chart_rounded,
+              title: LiveData.name,
+              right: const Icon(Icons.arrow_forward_ios),
+              left: const Icon(Icons.show_chart,color: colorBlue),
               onTap: () => _navigateTo(context, _RouteType.liveData),
             ),
             CustomTile(
-              name: MVCTesting.name,
-              icon: Icons.airline_seat_legroom_extra,
+              title: MVCTesting.name,
+              right: const Icon(Icons.arrow_forward_ios),
+              left: const Icon(Icons.airline_seat_legroom_extra,color: colorBlue),
               onTap: () => _navigateTo(context, _RouteType.mvcTest),
             ),
             CustomTile(
-              name: ExerciseMode.name,
-              icon: Icons.directions_run_rounded,
+              title: ExerciseMode.name,
+              right: const Icon(Icons.arrow_forward_ios),
+              left: const Icon(Icons.directions_run,color: colorBlue),
               onTap: () => _navigateTo(context, _RouteType.exerciseMode),
             ),
           ]),

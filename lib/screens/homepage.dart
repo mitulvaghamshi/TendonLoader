@@ -29,8 +29,8 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(title: const Text(name), actions: <Widget>[
         CustomButton(
           radius: 8,
-          left: const Text('Submit', style: tsG18BFF),
-          right: const Icon(Icons.arrow_forward, color: colorGoogleGreen),
+          right: const Icon(Icons.logout),
+          left: const Text('Logout', style: ts18BFF),
           onPressed: () async => firebaseLogout().then((_) async => context.push(Login.route, replace: true)),
         ),
       ]),

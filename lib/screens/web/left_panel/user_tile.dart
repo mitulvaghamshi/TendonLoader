@@ -17,8 +17,8 @@ class UserTile extends StatelessWidget {
       key: ValueKey<String>(user.id),
       subtitle: Text(user.childCount),
       title: Text(user.id, style: ts18BFF),
-      leading: CustomButton(right: Text(user.avatar)),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
+      leading: CustomButton(rounded: true, left: Text(user.avatar, style: ts18BFF)),
       trailing: PopupMenuButton<PopupAction>(
         icon: const Icon(Icons.apps),
         itemBuilder: (_) => <PopupMenuItem<PopupAction>>[

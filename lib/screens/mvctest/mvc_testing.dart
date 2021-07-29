@@ -1,44 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/custom/custom_graph.dart';
-import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_handler.dart';
-import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
-class MVCTesting extends StatefulWidget {
+class MVCTesting extends StatelessWidget {
   const MVCTesting({Key? key}) : super(key: key);
 
   static const String name = 'MVC Testing';
   static const String route = '/mvcTesting';
 
   @override
-  _MVCTestingState createState() => _MVCTestingState();
-}
-
-class _MVCTestingState extends State<MVCTesting> {
-  late final MVCHandler _handler = MVCHandler(context: context);
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text(MVCTesting.name)),
-      body: CustomGraph(
-        handler: _handler,
-        progressbar: StreamBuilder<ChartData>(
-          initialData: ChartData(),
-          stream: GraphHandler.stream,
-          builder: (_, AsyncSnapshot<ChartData> snapshot) {
-            _handler.graphData.insert(0, snapshot.data!);
-            _handler.graphCtrl?.updateDataSource(updatedDataIndex: 0);
-            return FittedBox(
-              child: Column(children: <Widget>[
-                Text(_handler.maxForceValue, style: tsG40B),
-                Text(_handler.timeDiffValue, style: tsR40B),
-              ]),
-            );
-          },
-        ),
-      ),
+    final MVCHandler _handler = MVCHandler(context: context);
+    return CustomGraph(
+      handler: _handler,
+      builder: () => Column(children: <Widget>[
+        Text(_handler.maxForceValue, style: tsG40B),
+        Text(_handler.timeDiffValue, style: tsR40B),
+      ]),
     );
   }
 }

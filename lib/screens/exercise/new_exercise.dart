@@ -113,8 +113,8 @@ class _NewExerciseState extends State<NewExercise> {
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         if (kIsWeb)
           CustomTimeTile(
-            desc: 'MVC test duration',
             time: _mvcTime,
+            desc: 'MVC test duration',
             onChanged: (Duration duration) => setState(() => _mvcTime = duration),
           )
         else ...<Widget>[
@@ -125,6 +125,7 @@ class _NewExerciseState extends State<NewExercise> {
               child: SwitchListTile.adaptive(
                 onChanged: _onChanged,
                 value: _useLastPrescription,
+                activeColor: colorGoogleGreen,
                 title: const Text('Use prescriptions from last exercise.'),
               ),
             ),
@@ -159,16 +160,14 @@ class _NewExerciseState extends State<NewExercise> {
         ),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
           CustomButton(
-            radius: 8,
             onPressed: _onSubmit,
             left: const Icon(Icons.done_rounded),
             right: const Text('Submit', style: TextStyle(color: colorGoogleGreen)),
           ),
           CustomButton(
-            radius: 8,
             onPressed: _clearForm,
-            left: const Icon(Icons.clear),
             right: const Text('Clear'),
+            left: const Icon(Icons.clear),
           ),
         ]),
       ]),

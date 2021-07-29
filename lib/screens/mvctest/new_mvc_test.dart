@@ -42,10 +42,9 @@ class _NewMVCTestState extends State<NewMVCTest> {
     return Scaffold(
       appBar: AppBar(title: const Text('New MVC Test'), actions: <Widget>[
         CustomButton(
-          radius: 8,
           onPressed: _onSubmit,
-          left: const Text('Submit', style: tsG18BFF),
-          right: const Icon(Icons.arrow_forward, color: colorGoogleGreen),
+          left: const Text('Go', style: ts18BFF),
+          right: const Icon(Icons.arrow_forward, color: colorBlue),
         ),
       ]),
       body: AppFrame(
@@ -57,11 +56,12 @@ class _NewMVCTestState extends State<NewMVCTest> {
               SwitchListTile.adaptive(
                 onChanged: _onChanged,
                 value: _useLastDuration,
+                activeColor: colorGoogleGreen,
                 title: const Text('Use duration from last test.'),
               ),
             CustomTimeTile(
-              desc: 'MVC test duration',
               time: _mvcTime,
+              desc: 'MVC test duration',
               onChanged: (Duration duration) => setState(() => _mvcTime = duration),
             ),
           ]),

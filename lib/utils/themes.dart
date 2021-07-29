@@ -12,6 +12,7 @@ const Color colorRed900 = Color(0xffb71c1c);
 
 const Color colorWhite = Color(0xffffffff);
 const Color colorBlack = Color(0xff000000);
+const Color colorBlue = Color(0xff2196f3);
 
 const Color colorDark1 = Color(0xff141414);
 const Color colorDark2 = Color(0xff262626);
@@ -27,7 +28,8 @@ final ThemeData lightTheme = ThemeData(
   accentColor: colorBlack,
   primaryColor: colorWhite,
   highlightColor: colorGoogleGreen,
-  dialogBackgroundColor: colorWhite,
+  dialogBackgroundColor: colorWhite,  
+  dividerTheme: const DividerThemeData(color: colorDark1),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: colorWhite,
     foregroundColor: colorBlack,
@@ -43,6 +45,7 @@ final ThemeData darkTheme = ThemeData(
   primaryColor: colorDark1,
   highlightColor: colorGoogleGreen,
   dialogBackgroundColor: colorDark2,
+  dividerTheme: const DividerThemeData(color: colorWhite),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: colorDark3,
     foregroundColor: colorWhite,

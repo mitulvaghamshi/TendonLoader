@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
- import 'package:tendon_loader/screens/device/scanner_list.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/screens/login/splash.dart';
@@ -51,114 +49,79 @@ class _UserSettingsState extends State<UserSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: const Text('Settings'), actions: <Widget>[
+        Switch.adaptive(
+          value: isSumulation,
+          activeColor: colorRed400,
+          onChanged: (bool value) => setState(() => isSumulation = value),
+        ),
+      ]),
       body: SingleChildScrollView(
         child: AppFrame(
           onExit: () => context.model.settingsState!.save().then((_) => true),
           child: Column(children: <Widget>[
-            // testing only ----------------------
-            SwitchListTile.adaptive(
-              value: isSumulation,
-              tileColor: Colors.red,
-              activeColor: colorGoogleGreen,
-              title: const Text('Use without progressor', style: TextStyle(color: Colors.white, fontSize: 20)),
-              onChanged: (bool value) => setState(() => isSumulation = value),
-              subtitle: const Text(
-                'Use app without the progressor, generate and submit fake data '
-                'for MVC and Exercise Mode, testing perpose only!',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            const SizedBox(height: 10),
-            ExpansionTile(
-              collapsedBackgroundColor: Colors.red,
-              title: const Text('Scan all devices.', style: TextStyle(color: Colors.white)),
-              subtitle: const Text('Click to start/stop scanning', style: TextStyle(color: Colors.white)),
-              onExpansionChanged: (bool isOpen) async {
-                if (isOpen) {
-                  await FlutterBlue.instance.startScan(timeout: const Duration(seconds: 5));
-                } else {
-                  await FlutterBlue.instance.stopScan();
-                }
-              },
-              children: const <Widget>[ScannerList()],
-            ),
-            const SizedBox(height: 20),
-            // testing only end -----------------------
-            const CustomImage(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: FittedBox(
-                child: CustomButton(
-                  left: const Icon(Icons.person_rounded, size: 30),
-                  right: Text(
-                    context.model.currentUser!.id,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: CustomImage()),
+            FittedBox(
+              child: CustomButton(
+                left: const Icon(Icons.person_rounded, size: 30),
+                right: Text(
+                  context.model.currentUser!.id,
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: CustomTextField(
+                controller: _ctrlGraphSize,
+                format: r'^\d{1,3..}(\.\d{0,2})?',
+                label: 'Y-Axis Size (default: 30 Kg)',
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              ),
+            ),
+            const Divider(),
             SwitchListTile.adaptive(
               activeColor: colorGoogleGreen,
               title: const Text('Automatic data upload'),
               value: context.model.settingsState!.autoUpload!,
+              subtitle: const Text('Automatically upload exercise and mvc test data on completion.'),
               onChanged: (bool value) => setState(() => context.model.settingsState!.autoUpload = value),
-              subtitle: const Text(
-                'If device is connected to the internet, '
-                'recorded data will be uploaded automatically.',
-              ),
             ),
-            const SizedBox(height: 20),
+            const Divider(),
             SwitchListTile.adaptive(
               activeColor: colorGoogleGreen,
-              title: const Text('Custom prescriptions'),
+              title: const Text('Use custom prescriptions'),
               value: context.model.settingsState!.customPrescriptions!,
               onChanged: (bool value) => setState(() {
                 context.model.settingsState!.customPrescriptions = value;
                 context.model.togglePrescription();
               }),
-              subtitle: const Text(
-                'Disable it to user prescriptions provided by your '
-                'clinician for MVC Test and Exercise Mode.',
-              ),
+              subtitle: const Text('Provide your own prescriptions for exercise and mvc test.'),
             ),
-            const Divider(thickness: 2),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: CustomTextField(
-                controller: _ctrlGraphSize,
-                format: r'^\d{1,3}(\.\d{0,2})?',
-                label: 'Y-Axis Size (default: 30 Kg)',
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              ),
-            ),
+            const Divider(),
             ListTile(
-              title: const Text('Press the button to export locallly stored data'),
+              title: const Text('Locally stored data'),
+              subtitle: const Text('Press button to upload any unsubmitted data.'),
               trailing: CustomButton(
+                rounded: true,
                 onPressed: _tryUpload,
-                right: Text(boxExport.length.toString(), style: tsG24BFF),
+                left: Text(boxExport.length.toString(), style: tsR18B),
               ),
             ),
-            const Divider(thickness: 2),
-            ListTile(title: const Text('About'), onTap: _about),
-            const Divider(thickness: 2),
+            const Divider(),
+            const AboutListTile(
+              applicationVersion: 'v0.0.9',
+              applicationName: 'Tendon Loader',
+              applicationIcon: SizedBox(height: 50, width: 50, child: CustomImage()),
+              aboutBoxChildren: <Widget>[Text('Tendon Loader :Preview', textAlign: TextAlign.center, style: tsG18BFF)],
+              child: Text('About'),
+            ),
+            const Divider(),
             ListTile(onTap: _logout, title: const Text('Logout', style: TextStyle(color: colorRed400))),
           ]),
         ),
       ),
-    );
-  }
-
-  void _about() {
-    showAboutDialog(
-      context: context,
-      applicationVersion: 'v0.0.9',
-      applicationName: HomeScreen.name,
-      applicationIcon: const CustomImage(),
-      // applicationLegalese: 'Add Application Legalese',
-      children: <Widget>[
-        const Text('Tendon Loader :Preview-v0.0.9', textAlign: TextAlign.center, style: tsG18BFF),
-      ],
     );
   }
 }
