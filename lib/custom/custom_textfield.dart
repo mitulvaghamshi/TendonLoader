@@ -34,7 +34,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: ts18BFF,
+      style: ts20B,
       controller: controller,
       obscureText: isObscure,
       keyboardType: keyboardType ?? TextInputType.number,

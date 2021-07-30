@@ -14,7 +14,7 @@ class CustomSlider extends StatelessWidget {
       data: const SliderThemeData(
         trackHeight: 50,
         thumbShape: _CustomShape(),
-        valueIndicatorTextStyle: tsW24B900FF,
+        valueIndicatorTextStyle: tsW24B,
         showValueIndicator: ShowValueIndicator.never,
       ),
       child: Slider(

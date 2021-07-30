@@ -6,7 +6,7 @@ part 'settings_state.g.dart';
 @HiveType(typeId: 5)
 class SettingsState extends HiveObject {
   SettingsState({
-    this.autoUpload = false,
+    this.autoUpload = true,
     this.graphSize = 30,
     this.customPrescriptions = true,
     this.lastDuration,

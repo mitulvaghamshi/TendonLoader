@@ -12,6 +12,10 @@ class LiveData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LiveDataHandler _handler = LiveDataHandler(context: context);
-    return CustomGraph(handler: _handler, builder: () => Text(_handler.elapsed, style: tsG40B));
+    return CustomGraph(
+      title: name,
+      handler: _handler,
+      builder: () => Text(_handler.elapsed, style: tsG40B),
+    );
   }
 }

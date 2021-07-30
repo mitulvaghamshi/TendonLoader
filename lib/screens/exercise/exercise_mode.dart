@@ -13,6 +13,7 @@ class ExerciseMode extends StatelessWidget {
   Widget build(BuildContext context) {
     final ExerciseHandler _handler = ExerciseHandler(context: context);
     return CustomGraph(
+      title: name,
       handler: _handler,
       builder: () => Column(children: <Widget>[
         Text(_handler.lapTime, style: _handler.isPush ? tsB40B : tsR40B),

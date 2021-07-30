@@ -8,7 +8,7 @@ import 'package:tendon_loader/handlers/download_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
-import 'package:tendon_loader/screens/web/left_panel/export_tile.dart';
+import 'package:tendon_loader/screens/web/export_tile.dart';
 import 'package:tendon_loader/utils/keys.dart';
 
 part 'user.g.dart';

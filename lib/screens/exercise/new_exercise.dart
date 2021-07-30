@@ -118,7 +118,7 @@ class _NewExerciseState extends State<NewExercise> {
             onChanged: (Duration duration) => setState(() => _mvcTime = duration),
           )
         else ...<Widget>[
-          const Text('Please enter your\nexercise prescriptions', style: tsG24BFF, textAlign: TextAlign.center),
+          const Text('Please enter your\nexercise prescriptions', style: tsG24B, textAlign: TextAlign.center),
           if (_lastPre != null)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -142,33 +142,25 @@ class _NewExerciseState extends State<NewExercise> {
           Expanded(child: CustomTextField(label: 'Reps (#)', format: r'^\d{1,2}', controller: _ctrlReps)),
         ]),
         CustomTimeTile(
-          desc: 'Hold time',
           time: _holdTime,
+          desc: 'Rep hold time',
           onChanged: (Duration duration) => setState(() => _holdTime = duration),
         ),
         const Divider(height: 0),
         CustomTimeTile(
-          desc: 'Rest time',
           time: _restTime,
+          desc: 'Rep rest time',
           onChanged: (Duration duration) => setState(() => _restTime = duration),
         ),
         const Divider(height: 0),
         CustomTimeTile(
-          desc: 'Set rest time',
           time: _setRestTime,
+          desc: 'Set rest time',
           onChanged: (Duration duration) => setState(() => _setRestTime = duration),
         ),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-          CustomButton(
-            onPressed: _onSubmit,
-            left: const Icon(Icons.done_rounded),
-            right: const Text('Submit', style: TextStyle(color: colorGoogleGreen)),
-          ),
-          CustomButton(
-            onPressed: _clearForm,
-            right: const Text('Clear'),
-            left: const Icon(Icons.clear),
-          ),
+          CustomButton(onPressed: _onSubmit, right: const Text('Submit'), left: const Icon(Icons.done)),
+          CustomButton(onPressed: _clearForm, right: const Text('Clear'), left: const Icon(Icons.clear)),
         ]),
       ]),
     );

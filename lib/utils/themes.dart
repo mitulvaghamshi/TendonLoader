@@ -28,7 +28,7 @@ final ThemeData lightTheme = ThemeData(
   accentColor: colorBlack,
   primaryColor: colorWhite,
   highlightColor: colorGoogleGreen,
-  dialogBackgroundColor: colorWhite,  
+  dialogBackgroundColor: colorWhite,
   dividerTheme: const DividerThemeData(color: colorDark1),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: colorWhite,
@@ -52,6 +52,22 @@ final ThemeData darkTheme = ThemeData(
   ),
 );
 
+const TextStyle ts18B = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
+const TextStyle ts20B = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+const TextStyle ts22B = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+
+const TextStyle tsG18B = TextStyle(color: colorGoogleGreen, fontSize: 18, fontWeight: FontWeight.bold);
+const TextStyle tsG20B = TextStyle(color: colorGoogleGreen, fontSize: 20, fontWeight: FontWeight.bold);
+const TextStyle tsG24B = TextStyle(color: colorGoogleGreen, fontSize: 24, fontWeight: FontWeight.bold);
+const TextStyle tsG40B = TextStyle(color: colorGoogleGreen, fontSize: 40, fontWeight: FontWeight.bold);
+
+const TextStyle tsR20B = TextStyle(color: colorRed400, fontSize: 20, fontWeight: FontWeight.bold);
+const TextStyle tsR40B = TextStyle(color: colorRed400, fontSize: 40, fontWeight: FontWeight.bold);
+
+const TextStyle tsW24B = TextStyle(color: colorWhite, fontSize: 24, fontWeight: FontWeight.bold);
+
+const TextStyle tsB40B = TextStyle(color: colorBlack, fontSize: 40, fontWeight: FontWeight.bold);
+
 /// Create a text style with bold face, custom green color and a size of 40fp.
 ///
 /// ```dart
@@ -67,20 +83,3 @@ final ThemeData darkTheme = ThemeData(
 /// ```dart
 /// Color(0xff3ddc85);
 /// ```
-const TextStyle tsR40B = TextStyle(color: colorRed400, fontSize: 40, fontWeight: FontWeight.bold);
-const TextStyle tsB40B = TextStyle(color: colorBlack, fontSize: 40, fontWeight: FontWeight.bold);
-const TextStyle tsG40B = TextStyle(color: colorGoogleGreen, fontSize: 40, fontWeight: FontWeight.bold);
-const TextStyle ts18BFF = TextStyle(fontFamily: 'Georgia', fontSize: 18, fontWeight: FontWeight.bold);
-const TextStyle ts20BFF = TextStyle(fontFamily: 'Georgia', fontSize: 20, fontWeight: FontWeight.bold);
-const TextStyle ts22BFF = TextStyle(fontFamily: 'Georgia', fontSize: 22, fontWeight: FontWeight.bold);
-const TextStyle tsW24B900FF =
-    TextStyle(fontSize: 24, color: colorWhite, fontFamily: 'Georgia', fontWeight: FontWeight.w900);
-const TextStyle tsG18BFF =
-    TextStyle(fontSize: 18, fontFamily: 'Georgia', color: colorGoogleGreen, fontWeight: FontWeight.bold);
-const TextStyle tsG24BFF =
-    TextStyle(fontSize: 24, fontFamily: 'Georgia', color: colorGoogleGreen, fontWeight: FontWeight.bold);
-
-const TextStyle tsR18B =
-    TextStyle(fontFamily: 'Georgia', color: colorRed400, fontSize: 18, fontWeight: FontWeight.bold);
-const TextStyle tsG18B =
-    TextStyle(fontFamily: 'Georgia', color: colorGoogleGreen, fontSize: 18, fontWeight: FontWeight.bold);

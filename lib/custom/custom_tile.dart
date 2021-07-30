@@ -15,7 +15,7 @@ class CustomTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       trailing: right,
-      title: Text(title, style: ts20BFF),
+      title: Text(title, style: ts20B),
       contentPadding: const EdgeInsets.all(10),
       leading: CustomButton(left: left, rounded: true),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

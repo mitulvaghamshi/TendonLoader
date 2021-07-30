@@ -43,7 +43,7 @@ class _NewMVCTestState extends State<NewMVCTest> {
       appBar: AppBar(title: const Text('New MVC Test'), actions: <Widget>[
         CustomButton(
           onPressed: _onSubmit,
-          left: const Text('Go', style: ts18BFF),
+          left: const Text('Go', style: ts18B),
           right: const Icon(Icons.arrow_forward, color: colorBlue),
         ),
       ]),
@@ -51,7 +51,7 @@ class _NewMVCTestState extends State<NewMVCTest> {
         child: Form(
           key: _formKey,
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            const Text('MVC Test duration.', style: tsG24BFF, textAlign: TextAlign.center),
+            const Text('MVC Test duration.', style: tsG24B, textAlign: TextAlign.center),
             if (_lastDuration != null)
               SwitchListTile.adaptive(
                 onChanged: _onChanged,

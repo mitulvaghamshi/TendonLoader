@@ -46,7 +46,7 @@ class CustomTimeTile extends StatelessWidget {
     return ListTile(
       subtitle: Text(desc),
       contentPadding: EdgeInsets.zero,
-      title: Text(_timeString, style: time.inSeconds > 0 ? tsG18B : tsR18B),
+      title: Text(_timeString, style: time.inSeconds > 0 ? tsG20B : tsR20B),
       trailing: IconButton(
         icon: const Icon(Icons.timer, color: colorBlue),
         onPressed: () async {

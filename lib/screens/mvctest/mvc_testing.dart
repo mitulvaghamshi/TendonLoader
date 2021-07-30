@@ -13,6 +13,7 @@ class MVCTesting extends StatelessWidget {
   Widget build(BuildContext context) {
     final MVCHandler _handler = MVCHandler(context: context);
     return CustomGraph(
+      title: name,
       handler: _handler,
       builder: () => Column(children: <Widget>[
         Text(_handler.maxForceValue, style: tsG40B),

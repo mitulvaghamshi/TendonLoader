@@ -10,8 +10,14 @@ import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class CustomGraph extends StatefulWidget {
-  const CustomGraph({Key? key, required this.builder, required this.handler}) : super(key: key);
+  const CustomGraph({
+    Key? key,
+    required this.title,
+    required this.handler,
+    required this.builder,
+  }) : super(key: key);
 
+  final String title;
   final GraphHandler handler;
   final Widget Function() builder;
 
@@ -23,12 +29,7 @@ class _CustomGraphState extends State<CustomGraph> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      floatingActionButton: CustomButton(
-        padding: const EdgeInsets.all(5),
-        left: const Icon(Icons.arrow_back),
-        onPressed: () => widget.handler.exit().then(context.pop),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: AppFrame(
         padding: const EdgeInsets.only(bottom: 16),
         onExit: widget.handler.exit,

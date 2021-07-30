@@ -21,14 +21,9 @@ class CustomDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: FittedBox(
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-          Text(title ?? 'Tendon Loader', style: ts20BFF),
+          Text(title ?? 'Tendon Loader', style: ts20B),
           const SizedBox(width: 5),
-          action ??
-              CustomButton(
-                onPressed: context.pop,
-                left: const Icon(Icons.clear),
-                padding: const EdgeInsets.all(8),
-              ),
+          action ?? CustomButton(onPressed: context.pop, right: const Text('Close'), left: const Icon(Icons.clear)),
         ]),
       ),
     );

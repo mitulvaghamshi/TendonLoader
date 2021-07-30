@@ -171,9 +171,10 @@ Future<bool?> startCountdown(BuildContext context, {String? title, Duration? dur
     barrierDismissible: false,
     builder: (_) => CustomDialog(
       title: title ?? 'Session start in...',
+      action: CustomButton(onPressed: context.pop, left: const Text('Stop'), right: const Icon(Icons.clear)),
       content: Padding(
         padding: const EdgeInsets.all(5),
-        child: CountDown(duration: duration ?? const Duration(seconds: 1)),
+        child: CountDown(duration: duration ?? const Duration(seconds: 5)),
       ),
     ),
   );
@@ -190,7 +191,7 @@ Future<void> congratulate(BuildContext context) async {
         left: const Text('Next'),
         right: const Icon(Icons.arrow_forward),
       ),
-      content: const Text('Exercise session completed.\nGreat work!!!', textAlign: TextAlign.center, style: tsG24BFF),
+      content: const Text('Exercise session completed.\nGreat work!!!', textAlign: TextAlign.center, style: tsG24B),
     ),
   );
 }
@@ -201,14 +202,14 @@ Future<double?> _selectPain(BuildContext context) {
     context: context,
     barrierDismissible: false,
     builder: (_) => CustomDialog(
-      title: 'Pain score(0~10)',
+      title: 'Pain score (0 - 10)',
       action: CustomButton(
         onPressed: () => context.pop<double>(_value),
         left: const Text('Next'),
         right: const Icon(Icons.arrow_forward),
       ),
       content: Column(children: <Widget>[
-        const Text('Please describe your pain during that session', style: ts18BFF, textAlign: TextAlign.center),
+        const Text('Please describe your pain during that session', style: ts18B, textAlign: TextAlign.center),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: StatefulBuilder(
@@ -243,7 +244,7 @@ Future<String?> _selectTolerance(BuildContext context) {
         onPressed: () => context.pop('No pain'),
       ),
       content: Column(children: <Widget>[
-        const Text('Was the pain during that\ntolerable for you?', style: ts18BFF, textAlign: TextAlign.center),
+        const Text('Was the pain during that session tolerable for you?', style: ts18B, textAlign: TextAlign.center),
         const SizedBox(height: 16),
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
           CustomButton(
@@ -285,13 +286,13 @@ Future<bool?> _confirmSubmit(BuildContext context, Export export) async {
       content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         CustomTile(
           title: 'Submit Now',
-          left: const Icon(Icons.cloud_upload, color: colorGoogleGreen),
           onTap: () => export.upload(context).then(context.pop),
+          left: const Icon(Icons.cloud_upload, color: colorGoogleGreen),
         ),
         CustomTile(
           title: 'Do it later',
-          left: const Icon(Icons.save, color: colorModerate),
           onTap: () => context.pop(true),
+          left: const Icon(Icons.save, color: colorYellow400),
         ),
       ]),
     ),

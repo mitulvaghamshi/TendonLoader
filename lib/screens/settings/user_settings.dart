@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
@@ -101,20 +103,17 @@ class _UserSettingsState extends State<UserSettings> {
             ),
             const Divider(),
             ListTile(
+              onTap: _tryUpload,
               title: const Text('Locally stored data'),
-              subtitle: const Text('Press button to upload any unsubmitted data.'),
-              trailing: CustomButton(
-                rounded: true,
-                onPressed: _tryUpload,
-                left: Text(boxExport.length.toString(), style: tsR18B),
-              ),
+              subtitle: const Text('Click here to submit locally stored data to the clinician.'),
+              trailing: CustomButton(rounded: true, left: Text(boxExport.length.toString(), style: tsG24B)),
             ),
             const Divider(),
             const AboutListTile(
               applicationVersion: 'v0.0.9',
               applicationName: 'Tendon Loader',
               applicationIcon: SizedBox(height: 50, width: 50, child: CustomImage()),
-              aboutBoxChildren: <Widget>[Text('Tendon Loader :Preview', textAlign: TextAlign.center, style: tsG18BFF)],
+              aboutBoxChildren: <Widget>[Text('Tendon Loader :Preview', textAlign: TextAlign.center, style: tsG18B)],
               child: Text('About'),
             ),
             const Divider(),

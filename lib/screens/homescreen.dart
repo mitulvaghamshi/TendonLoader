@@ -177,7 +177,7 @@ Future<bool?> tryUpload(BuildContext context) async {
       context: context,
       builder: (_) => CustomDialog(
         title: 'Upload success',
-        content: Text('$count file(s) submitted', textAlign: TextAlign.center, style: tsG24BFF),
+        content: Text('$count file(s) submitted', textAlign: TextAlign.center, style: tsG24B),
       ),
     );
   }

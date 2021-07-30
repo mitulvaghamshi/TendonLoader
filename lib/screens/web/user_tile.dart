@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/screens/homepage.dart';
+import 'package:tendon_loader/screens/web/popup_menu.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class UserTile extends StatelessWidget {
@@ -13,31 +14,15 @@ class UserTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExpansionTile(
       maintainState: true,
-      iconColor: colorAGreen400,
+      iconColor: colorGoogleGreen,
       key: ValueKey<String>(user.id),
       subtitle: Text(user.childCount),
-      title: Text(user.id, style: ts18BFF),
+      title: Text(user.id, style: ts20B),
+      tilePadding: const EdgeInsets.all(5),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      leading: CustomButton(color: colorBlue, rounded: true, left: Text(user.avatar, style: ts18BFF)),
-      trailing: PopupMenuButton<PopupAction>(
-        icon: const Icon(Icons.settings),
-        itemBuilder: (_) => <PopupMenuItem<PopupAction>>[
-          const PopupMenuItem<PopupAction>(
-            value: PopupAction.prescribe,
-            child: ListTile(title: Text('Prescriptions'), leading: Icon(Icons.edit)),
-          ),
-          const PopupMenuItem<PopupAction>(
-            value: PopupAction.download,
-            child: ListTile(title: Text('Download all'), leading: Icon(Icons.file_download)),
-          ),
-          const PopupMenuItem<PopupAction>(
-            value: PopupAction.delete,
-            child: ListTile(
-              leading: Icon(Icons.delete_forever, color: colorRed400),
-              title: Text('Delete all', style: TextStyle(color: colorRed400)),
-            ),
-          ),
-        ],
+      leading: CustomButton(rounded: true, left: Text(user.avatar, style: ts20B)),
+      trailing: PopupMenu(
+        isUser: true,
         onSelected: (PopupAction action) async {
           if (action == PopupAction.download) {
             await Future<void>.microtask(user.download);

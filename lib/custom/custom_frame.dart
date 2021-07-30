@@ -5,10 +5,12 @@ class AppFrame extends StatelessWidget {
     Key? key,
     this.child,
     this.onExit,
+    this.margin = const EdgeInsets.all(16),
     this.padding = const EdgeInsets.all(16),
   }) : super(key: key);
 
   final Widget? child;
+  final EdgeInsetsGeometry margin;
   final EdgeInsetsGeometry padding;
   final Future<bool> Function()? onExit;
 
@@ -18,8 +20,8 @@ class AppFrame extends StatelessWidget {
       onWillPop: onExit ?? () async => true,
       child: Card(
         elevation: 16,
+        margin: margin,
         clipBehavior: Clip.hardEdge,
-        margin: const EdgeInsets.fromLTRB(16, 40, 16, 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(padding: padding, child: child),
       ),

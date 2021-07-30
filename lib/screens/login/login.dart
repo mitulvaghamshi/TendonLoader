@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
@@ -14,7 +16,8 @@ class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   static const String route = '/login';
-  static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
+  // static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
+  static const String homeRoute = HomePage.route;
 
   @override
   _LoginState createState() => _LoginState();

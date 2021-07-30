@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
@@ -12,58 +13,62 @@ class DataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Export?>(
-      valueListenable: clickNotifier,
-      builder: (BuildContext context, Export? value, Widget? child) {
-        if (value == null || value.exportData!.isEmpty) return child!;
-        final double _targetLine = value.isMVC ? value.mvcValue! : value.prescription!.targetLoad;
-        return SfCartesianChart(
-          plotAreaBorderWidth: 0,
-          tooltipBehavior: TooltipBehavior(enable: true, header: value.isMVC ? 'MVC' : 'Measurement'),
-          primaryXAxis: NumericAxis(
-            interval: 1,
-            labelFormat: '{value} s',
-            enableAutoIntervalOnZooming: true,
-            edgeLabelPlacement: EdgeLabelPlacement.shift,
-            majorGridLines: const MajorGridLines(width: 0),
-          ),
-          primaryYAxis: NumericAxis(
-            interval: 1,
-            labelFormat: '{value} kg',
-            enableAutoIntervalOnZooming: true,
-            majorTickLines: const MajorTickLines(size: 0),
-            majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
-          ),
-          zoomPanBehavior: ZoomPanBehavior(
-            enablePanning: true,
-            maximumZoomLevel: 0.1,
-            enableSelectionZooming: true,
-            enableMouseWheelZooming: true,
-          ),
-          series: <ChartSeries<ChartData, double>>[
-            LineSeries<ChartData, double>(
-              width: 2,
-              color: colorGoogleGreen,
-              animationDuration: 5000,
-              dataSource: value.exportData!,
-              xValueMapper: (ChartData data, _) => data.time,
-              yValueMapper: (ChartData data, _) => data.load,
+    return AppFrame(
+      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.fromLTRB(8, 16, 16, 16),
+      child: ValueListenableBuilder<Export?>(
+        valueListenable: clickNotifier,
+        builder: (BuildContext context, Export? value, Widget? child) {
+          if (value == null || value.exportData!.isEmpty) return child!;
+          final double _targetLine = value.isMVC ? value.mvcValue! : value.prescription!.targetLoad;
+          return SfCartesianChart(
+            plotAreaBorderWidth: 0,
+            tooltipBehavior: TooltipBehavior(enable: true, header: value.isMVC ? 'MVC' : 'Measurement'),
+            primaryXAxis: NumericAxis(
+              interval: 1,
+              labelFormat: '{value} s',
+              enableAutoIntervalOnZooming: true,
+              edgeLabelPlacement: EdgeLabelPlacement.shift,
+              majorGridLines: const MajorGridLines(width: 0),
             ),
-            LineSeries<ChartData, double>(
-              width: 2,
-              color: colorRed400,
-              animationDuration: 2000,
-              xValueMapper: (ChartData data, _) => data.time,
-              yValueMapper: (ChartData data, _) => data.load,
-              dataSource: <ChartData>[
-                ChartData(load: _targetLine),
-                ChartData(time: value.exportData!.last.time, load: _targetLine),
-              ],
+            primaryYAxis: NumericAxis(
+              interval: 1,
+              labelFormat: '{value} kg',
+              enableAutoIntervalOnZooming: true,
+              majorTickLines: const MajorTickLines(size: 0),
+              majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
             ),
-          ],
-        );
-      },
-      child: const Center(child: CustomImage()),
+            zoomPanBehavior: ZoomPanBehavior(
+              enablePanning: true,
+              maximumZoomLevel: 0.1,
+              enableSelectionZooming: true,
+              enableMouseWheelZooming: true,
+            ),
+            series: <ChartSeries<ChartData, double>>[
+              LineSeries<ChartData, double>(
+                width: 2,
+                color: colorGoogleGreen,
+                animationDuration: 5000,
+                dataSource: value.exportData!,
+                xValueMapper: (ChartData data, _) => data.time,
+                yValueMapper: (ChartData data, _) => data.load,
+              ),
+              LineSeries<ChartData, double>(
+                width: 2,
+                color: colorRed400,
+                animationDuration: 2000,
+                xValueMapper: (ChartData data, _) => data.time,
+                yValueMapper: (ChartData data, _) => data.load,
+                dataSource: <ChartData>[
+                  ChartData(load: _targetLine),
+                  ChartData(time: value.exportData!.last.time, load: _targetLine),
+                ],
+              ),
+            ],
+          );
+        },
+        child: const Center(child: CustomImage()),
+      ),
     );
   }
 }
