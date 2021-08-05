@@ -8,28 +8,33 @@ import 'package:tendon_loader/utils/themes.dart';
 class CustomTimeTile extends StatelessWidget {
   const CustomTimeTile({
     Key? key,
-    required this.desc,
     required this.time,
+    required this.desc,
+    required this.title,
     required this.onChanged,
   }) : super(key: key);
 
+  final int time;
   final String desc;
-  final Duration time;
-  final ValueChanged<Duration> onChanged;
+  final String title;
+  final ValueChanged<int> onChanged;
 
-  String get _timeString => '${time.inMinutes} Min : ${time.inSeconds % 60} Sec';
+  String get _timeString {
+    final Duration _time = Duration(seconds: time);
+    return '${_time.inMinutes} Min : ${_time.inSeconds % 60} Sec';
+  }
 
-  Future<Duration?> _selectTime(BuildContext context) {
+  Future<int?> _selectTime(BuildContext context) {
     int _min = 0;
     int _sec = 0;
-    return showDialog<Duration?>(
+    return showDialog<int?>(
       context: context,
       builder: (_) => CustomDialog(
-        title: 'Select Time',
+        title: title,
         action: CustomButton(
           right: const Text('Ok'),
           left: const Icon(Icons.done),
-          onPressed: () => context.pop<Duration>(Duration(minutes: _min, seconds: _sec)),
+          onPressed: () => context.pop<int>(Duration(minutes: _min, seconds: _sec).inSeconds),
         ),
         content: FittedBox(
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
@@ -46,11 +51,12 @@ class CustomTimeTile extends StatelessWidget {
     return ListTile(
       subtitle: Text(desc),
       contentPadding: EdgeInsets.zero,
-      title: Text(_timeString, style: time.inSeconds > 0 ? tsG20B : tsR20B),
-      trailing: IconButton(
-        icon: const Icon(Icons.timer, color: colorBlue),
+      title: Text(_timeString, style: ts20B),
+      trailing: CustomButton(
+        rounded: true,
+        left: const Icon(Icons.timer, color: colorBlue),
         onPressed: () async {
-          final Duration? duration = await _selectTime(context);
+          final int? duration = await _selectTime(context);
           if (duration != null) onChanged(duration);
         },
       ),

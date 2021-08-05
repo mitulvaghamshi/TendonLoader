@@ -113,7 +113,7 @@
 			{
 				"label": "Connect Redmi",
 				"type": "shell",
-				"command": "adb connect 10.0.0.172"
+				"command": "adb connect 192.168.0.54"
 			}
 		]
 	}

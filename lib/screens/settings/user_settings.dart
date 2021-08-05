@@ -23,13 +23,16 @@ class UserSettings extends StatefulWidget {
 }
 
 class _UserSettingsState extends State<UserSettings> {
-  late final TextEditingController _ctrlGraphSize = TextEditingController()
+  late final TextEditingController _ctrlGraphScale = TextEditingController()
     ..text = context.model.settingsState!.graphSize.toString()
-    ..addListener(() => context.model.settingsState!.graphSize = double.tryParse(_ctrlGraphSize.text) ?? 30);
+    ..addListener(() {
+      final double? scale = double.tryParse(_ctrlGraphScale.text);
+      if (scale != null && scale > 0) context.model.settingsState!.graphSize = scale;
+    });
 
   @override
   void dispose() {
-    _ctrlGraphSize.dispose();
+    _ctrlGraphScale.dispose();
     super.dispose();
   }
 
@@ -75,16 +78,20 @@ class _UserSettingsState extends State<UserSettings> {
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: CustomTextField(
-                controller: _ctrlGraphSize,
-                format: r'^\d{1,2}(\.\d{0,2})?',
-                label: 'Y-Axis Size (default: 30 Kg)',
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              ),
+              child: Column(children: <Widget>[
+                CustomTextField(
+                  controller: _ctrlGraphScale,
+                  format: r'^\d{1,2}(\.\d{0,2})?',
+                  label: 'Y-Axis Scale (default: 30 Kg)',
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                ),
+                const SizedBox(height: 5),
+                const Text('Consult your clinician before modifying the axis scale value.'),
+              ]),
             ),
             const Divider(),
             SwitchListTile.adaptive(
-              activeColor: colorGoogleGreen,
+              activeColor: colorBlue,
               title: const Text('Automatic data upload'),
               value: context.model.settingsState!.autoUpload!,
               subtitle: const Text('Automatically upload exercise and mvc test data on completion.'),
@@ -92,21 +99,20 @@ class _UserSettingsState extends State<UserSettings> {
             ),
             const Divider(),
             SwitchListTile.adaptive(
-              activeColor: colorGoogleGreen,
+              activeColor: colorBlue,
               title: const Text('Use custom prescriptions'),
               value: context.model.settingsState!.customPrescriptions!,
-              onChanged: (bool value) => setState(() {
-                context.model.settingsState!.customPrescriptions = value;
-                context.model.togglePrescription();
-              }),
               subtitle: const Text('Provide your own prescriptions for exercise and mvc test.'),
+              onChanged: (bool value) => setState(() {
+                context.model.settingsState!.toggleCustom(value, context.model.currentUser!);
+              }),
             ),
             const Divider(),
             ListTile(
               onTap: _tryUpload,
               title: const Text('Locally stored data'),
-              subtitle: const Text('Click here to submit locally stored data to the clinician.'),
-              trailing: CustomButton(rounded: true, left: Text(boxExport.length.toString(), style: tsG24B)),
+              subtitle: const Text('Click here to submit locally stored data to clinician.'),
+              trailing: CustomButton(rounded: true, left: Text(boxExport.length.toString(), style: ts22B)),
             ),
             const Divider(),
             const AboutListTile(

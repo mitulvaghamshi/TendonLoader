@@ -14,7 +14,6 @@ import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/timestamp.dart';
 import 'package:tendon_loader/modal/user_state.dart';
 import 'package:tendon_loader/screens/login/login.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/keys.dart';
 
 late final Box<Export> boxExport;
@@ -41,7 +40,6 @@ Future<void> _init(BuildContext context) async {
         await SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
       }
       boxUserState = await Hive.openBox<UserState>(keyUserStateBox);
-      context.model.userState = boxUserState.get(keyUserStateBoxItem, defaultValue: UserState());
     }
   } finally {
     await Future<void>.delayed(const Duration(seconds: 1)).then(_completer!.complete);

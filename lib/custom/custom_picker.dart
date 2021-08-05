@@ -12,16 +12,15 @@ class CustomPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 120,
+      width: 125,
       height: 150,
       child: Stack(alignment: Alignment.centerRight, children: <Widget>[
         CustomButton(
-          right: Text(label, style: ts20B),
+          right: Text(label, style: ts18B),
           left: const SizedBox(width: 45, height: 30),
         ),
         ListWheelScrollView(
           itemExtent: 30,
-          diameterRatio: 1,
           magnification: 2,
           useMagnifier: true,
           onSelectedItemChanged: onChanged,
@@ -30,7 +29,7 @@ class CustomPicker extends StatelessWidget {
             return Container(
               width: 35,
               alignment: Alignment.centerLeft,
-              child: Text(index.toString(), style: ts18B),
+              child: Text('$index'.padLeft(2), style: ts18B),
             );
           }),
         ),

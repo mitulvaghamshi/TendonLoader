@@ -16,8 +16,16 @@ class ExerciseMode extends StatelessWidget {
       title: name,
       handler: _handler,
       builder: () => Column(children: <Widget>[
-        Text(_handler.lapTime, style: _handler.isPush ? tsB40B : tsR40B),
-        Text(_handler.counterValue, style: tsB40B),
+        Text(_handler.timeCounter, style: _handler.timeStyle),
+        const Divider(),
+        Row(children: const <Widget>[
+          Expanded(child: Text('Rep:', style: TextStyle(color: colorBlack, fontWeight: FontWeight.w500))),
+          Expanded(child: Text('Set:', style: TextStyle(color: colorBlack, fontWeight: FontWeight.w500))),
+        ]),
+        Row(children: <Widget>[
+          Expanded(child: Text(_handler.repCounter, textAlign: TextAlign.center, style: tsB40B)),
+          Expanded(child: Text(_handler.setCounter, textAlign: TextAlign.center, style: tsB40B)),
+        ]),
       ]),
     );
   }

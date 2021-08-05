@@ -16,7 +16,7 @@ class CustomTile extends StatelessWidget {
       onTap: onTap,
       trailing: right,
       title: Text(title, style: ts20B),
-      contentPadding: const EdgeInsets.all(10),
+      contentPadding: const EdgeInsets.all(16),
       leading: CustomButton(left: left, rounded: true),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     );

@@ -5,8 +5,8 @@ import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 
-class ProgressorTile extends StatelessWidget {
-  const ProgressorTile({Key? key}) : super(key: key);
+class StartScanTile extends StatelessWidget {
+  const StartScanTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

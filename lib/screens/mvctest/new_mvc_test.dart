@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/custom/custom_divider.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_time_tile.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
@@ -17,23 +18,22 @@ class NewMVCTest extends StatefulWidget {
 }
 
 class _NewMVCTestState extends State<NewMVCTest> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late final int? _lastDuration = context.model.settingsState!.lastDuration;
-  Duration _mvcTime = const Duration();
+  late final int? _lastDuration = context.model.settingsState!.mvcDuration;
   bool _useLastDuration = false;
+  int _duration = 0;
 
   Future<void> _onSubmit() async {
-    if (_formKey.currentState!.validate()) {
-      final int _duration = _mvcTime.inSeconds;
-      context.model.mvcDuration = _duration;
-      context.model.settingsState!.lastDuration = _duration;
+    if (_duration > 0) {
+      context.model.settingsState!.mvcDuration = _duration;
       await context.model.settingsState!.save();
       await context.push(MVCTesting.route, replace: true);
+    } else {
+      context.showSnackBar(const Text('Please select test duration.'));
     }
   }
 
   void _onChanged(bool value) {
-    _mvcTime = Duration(seconds: value ? _lastDuration! : 0);
+    _duration = value ? _lastDuration! : 0;
     setState(() => _useLastDuration = value);
   }
 
@@ -44,28 +44,28 @@ class _NewMVCTestState extends State<NewMVCTest> {
         CustomButton(
           onPressed: _onSubmit,
           left: const Text('Go', style: ts18B),
-          right: const Icon(Icons.arrow_forward, color: colorBlue),
+          right: const Icon(Icons.arrow_forward, color: colorGoogleGreen),
         ),
       ]),
       body: AppFrame(
-        child: Form(
-          key: _formKey,
-          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            const Text('MVC Test duration.', style: tsG24B, textAlign: TextAlign.center),
-            if (_lastDuration != null)
-              SwitchListTile.adaptive(
-                onChanged: _onChanged,
-                value: _useLastDuration,
-                activeColor: colorGoogleGreen,
-                title: const Text('Use duration from last test.'),
-              ),
-            CustomTimeTile(
-              time: _mvcTime,
-              desc: 'MVC test duration',
-              onChanged: (Duration duration) => setState(() => _mvcTime = duration),
+        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          const Text('MVC Test duration', style: tsG24B),
+          if (_lastDuration != null)
+            SwitchListTile.adaptive(
+              onChanged: _onChanged,
+              value: _useLastDuration,
+              activeColor: colorGoogleGreen,
+              title: const Text('Use duration from last test.'),
             ),
-          ]),
-        ),
+          const SizedBox(height: 10),
+          CustomTimeTile(
+            time: _duration,
+            desc: 'MVC test duration',
+            title: 'Select test duration',
+            onChanged: (int duration) => setState(() => _duration = duration),
+          ),
+          CustomDivider(value: _duration),
+        ]),
       ),
     );
   }

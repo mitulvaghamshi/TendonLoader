@@ -1,11 +1,11 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:tendon_loader/utils/descriptions.dart';
-import 'package:tendon_loader/utils/images.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
-import 'package:tendon_loader/screens/device/tiles/progressor_tile.dart';
+import 'package:tendon_loader/screens/device/tiles/start_scan_tile.dart';
+import 'package:tendon_loader/utils/descriptions.dart';
+import 'package:tendon_loader/utils/images.dart';
 
 class LocationTile extends StatelessWidget {
   const LocationTile({Key? key}) : super(key: key);
@@ -13,9 +13,11 @@ class LocationTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool?>(
-      stream: Stream<bool?>.periodic(const Duration(seconds: 1)).asyncMap((_) => Location.instance.serviceEnabled()),
+      stream: Stream<bool?>.periodic(const Duration(milliseconds: 500)).asyncMap((_) async {
+        return Location.instance.serviceEnabled();
+      }),
       builder: (_, AsyncSnapshot<bool?> snapshot) {
-        if (snapshot.hasData && snapshot.data!) return const ProgressorTile();
+        if (snapshot.hasData && snapshot.data!) return const StartScanTile();
         return Column(mainAxisSize: MainAxisSize.min, children: const <Widget>[
           CustomImage(name: imgEnableLocation),
           Text(

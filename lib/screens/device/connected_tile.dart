@@ -27,15 +27,13 @@ class ConnectedTile extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: Text(deviceName, style: const TextStyle(fontWeight: FontWeight.bold)),
             subtitle: const Text('Long press to disconnect', style: TextStyle(fontSize: 12, color: colorRed400)),
-            leading: const CustomButton(
-              color: colorGoogleGreen,
-              left: Icon(Icons.bluetooth_connected, size: 30),
-            ),
+            leading: const CustomButton(color: colorGoogleGreen, left: Icon(Icons.bluetooth_connected, size: 30)),
           ),
           StreamBuilder<ChartData>(
             initialData: ChartData(),
             stream: GraphHandler.stream,
-            builder: (_, AsyncSnapshot<ChartData> snapshot) => Text('${snapshot.data!.load.toStringAsFixed(1)} Kg.', style: tsG40B),
+            builder: (_, AsyncSnapshot<ChartData> snapshot) =>
+                Text('${snapshot.data!.load.toStringAsFixed(1)} Kg.', style: tsG40B),
           ),
           const Text(
             descTareProgressor,
@@ -43,9 +41,9 @@ class ConnectedTile extends StatelessWidget {
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
           CustomButton(
-            onPressed: () async => tareProgressor().then(context.pop),
             left: const Icon(Icons.adjust),
             right: const Text('Tare Progressor'),
+            onPressed: () async => tareProgressor().then(context.pop),
           ),
         ]);
       },

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tendon_loader/handlers/dialogs_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 class ExerciseHandler extends GraphHandler {
   ExerciseHandler({required BuildContext context})
-      : _pre = context.model.prescription!,
+      : _pre = context.model.settingsState!.prescription!,
         super(context: context, lineData: <ChartData>[
-          ChartData(load: context.model.prescription!.targetLoad),
-          ChartData(time: 2, load: context.model.prescription!.targetLoad),
+          ChartData(load: context.model.settingsState!.prescription!.targetLoad),
+          ChartData(time: 2, load: context.model.settingsState!.prescription!.targetLoad),
         ]) {
     _clear();
   }
@@ -22,15 +24,17 @@ class ExerciseHandler extends GraphHandler {
   late int _rep;
   late int _rest;
   late int _lapTime;
-  late bool isPush;
+  late bool _isPush;
   late bool _isSetOver;
   final Prescription _pre;
 
-  String get lapTime => '${isPush ? 'Push' : 'Rest'}: $_lapTime Sec';
-  String get counterValue => 'Set: $_set/${_pre.sets} • Rep: $_rep/${_pre.reps}';
+  String get repCounter => '$_rep of ${_pre.reps}';
+  String get setCounter => '$_set of ${_pre.sets}';
+  String get timeCounter => '${_isPush ? 'Push' : 'Rest'}: $_lapTime Sec';
+  TextStyle get timeStyle => _isPush ? tsB40B : tsR40B;
 
   void _clear() {
-    isPush = true;
+    _isPush = true;
     _minTime = 0;
     _lapTime = _pre.holdTime;
     _set = _rep = _rest = 1;
@@ -46,8 +50,8 @@ class ExerciseHandler extends GraphHandler {
       if (!isPause && _time > _minTime) {
         _minTime = _time;
         if (_lapTime-- == 0) {
-          if (isPush) {
-            isPush = false;
+          if (_isPush) {
+            _isPush = false;
             _rep++;
             _lapTime = _pre.restTime;
             if (_rep > _pre.reps && _rest > _pre.reps - 1) {
@@ -57,14 +61,14 @@ class ExerciseHandler extends GraphHandler {
                 stop();
               } else {
                 _rest = _rep = 1;
-                isPush = _isSetOver = true;
+                _isPush = _isSetOver = true;
                 _lapTime = _pre.holdTime;
                 _setOver();
               }
             }
           } else {
             _rest++;
-            isPush = true;
+            _isPush = true;
             _lapTime = _pre.holdTime;
           }
           HapticFeedback.heavyImpact();

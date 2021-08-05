@@ -24,9 +24,9 @@ class BluetoothTile extends StatelessWidget {
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
           CustomButton(
-            onPressed: AppSettings.openBluetoothSettings,
             left: Icon(Icons.bluetooth),
             right: Text('Open Settings'),
+            onPressed: AppSettings.openBluetoothSettings,
           ),
         ]);
       },

@@ -42,7 +42,7 @@ Future<bool> authenticate(BuildContext context, bool isNew, String email, String
 }
 
 Future<void> _useEmulator() async {
-  const String host = '10.0.0.110';
+  const String host = '192.168.0.57';
   await FirebaseAuth.instance.useAuthEmulator(host, 10001);
   FirebaseFirestore.instance.useFirestoreEmulator(host, 10002);
 }

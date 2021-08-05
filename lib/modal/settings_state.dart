@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:tendon_loader/modal/prescription.dart';
+import 'package:tendon_loader/modal/user.dart';
 
 part 'settings_state.g.dart';
 
@@ -9,8 +10,8 @@ class SettingsState extends HiveObject {
     this.autoUpload = true,
     this.graphSize = 30,
     this.customPrescriptions = true,
-    this.lastDuration,
-    this.lastPrescriptions,
+    this.mvcDuration,
+    this.prescription,
   });
 
   @HiveField(0)
@@ -20,7 +21,15 @@ class SettingsState extends HiveObject {
   @HiveField(2)
   bool? customPrescriptions;
   @HiveField(3)
-  int? lastDuration;
+  int? mvcDuration;
   @HiveField(4)
-  Prescription? lastPrescriptions;
+  Prescription? prescription;
+
+  void toggleCustom(bool value, User user) {
+    customPrescriptions = value;
+    if (!customPrescriptions!) {
+      if (user.prescription!.targetLoad > 0) prescription = user.prescription;
+      if (user.prescription!.mvcDuration > 0) mvcDuration = user.prescription!.mvcDuration;
+    }
+  }
 }

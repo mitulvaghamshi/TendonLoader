@@ -65,7 +65,7 @@ class _Painter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
       ..strokeWidth = 25
-      ..color = colorBlue
+      ..color = colorGoogleGreen
       ..style = PaintingStyle.stroke;
     canvas.drawCircle(size.center(Offset.zero), size.width / 2, paint);
     canvas.drawArc(Offset.zero & size, pi * 1.5, ctrl!.value * 2 * pi, false, paint..color = colorWhite);

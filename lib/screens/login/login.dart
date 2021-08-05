@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
@@ -7,17 +6,24 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
+import 'package:tendon_loader/modal/prescription.dart';
+import 'package:tendon_loader/modal/settings_state.dart';
+import 'package:tendon_loader/modal/user.dart';
+import 'package:tendon_loader/modal/user_state.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
+import 'package:tendon_loader/screens/login/splash.dart';
+import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/keys.dart';
 import 'package:tendon_loader/utils/validator.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   static const String route = '/login';
-  // static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
-  static const String homeRoute = HomePage.route;
+  static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
+  // static const String homeRoute = HomePage.route;
 
   @override
   _LoginState createState() => _LoginState();
@@ -30,6 +36,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   late final AnimationController _animCtrl = AnimationController(vsync: this, duration: const Duration(seconds: 1))
     ..addStatusListener(_authenticate);
 
+  late final UserState? _userState;
+
   bool _isNew = false;
   bool _result = false;
   bool _keepSigned = true;
@@ -38,13 +46,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   Future<void> _authenticate(AnimationStatus status) async {
     if (status == AnimationStatus.forward) {
       _result = await authenticate(context, _isNew, _emailCtrl.text, _passwordCtrl.text);
-      if (_result) {
-        context.model.userState!
-          ..keepSigned = _keepSigned
-          ..userName = _emailCtrl.text
-          ..passWord = _passwordCtrl.text;
-        await context.model.initAppUser();
-      }
+      if (_result) await _initUser();
     } else if (status == AnimationStatus.completed) {
       if (_result) {
         await context.push(Login.homeRoute, replace: true);
@@ -54,12 +56,47 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
     }
   }
 
+  Future<void> _initUser() async {
+    _userState!
+      ..keepSigned = _keepSigned
+      ..userName = _emailCtrl.text
+      ..passWord = _passwordCtrl.text;
+
+    if (_userState!.isInBox) {
+      await _userState!.save();
+    } else {
+      await boxUserState.put(keyUserStateBoxItem, _userState!);
+    }
+
+    // app only
+    late final SettingsState _settingsState;
+    if (!kIsWeb) {
+      if (boxSettingsState.containsKey(_emailCtrl.text.hashCode)) {
+        _settingsState = boxSettingsState.get(_emailCtrl.text.hashCode)!;
+      } else {
+        await boxSettingsState.put(_emailCtrl.text.hashCode, _settingsState = SettingsState());
+        await dbRoot.doc(_emailCtrl.text).get().then<void>((DocumentSnapshot<User> value) async {
+          if (value.get(keyHoldTime) == null) {
+            await dbRoot.doc(_emailCtrl.text).set(User(prescription: Prescription.empty()));
+          }
+        });
+      }
+      final User _user = await User.of(_emailCtrl.text).fetch();
+      _settingsState.toggleCustom(_settingsState.customPrescriptions!, _user);
+
+      context.model.currentUser = _user;
+      context.model.userState = _userState;
+      context.model.settingsState = _settingsState;
+    }
+  }
+
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (context.model.userState != null && (_keepSigned = context.model.userState!.keepSigned!)) {
-      _emailCtrl.text = context.model.userState!.userName!;
-      _passwordCtrl.text = context.model.userState!.passWord!;
+  void initState() {
+    super.initState();
+    _userState = boxUserState.get(keyUserStateBoxItem, defaultValue: UserState());
+    if (_userState != null && (_keepSigned = _userState!.keepSigned!)) {
+      _emailCtrl.text = _userState!.userName!;
+      _passwordCtrl.text = _userState!.passWord!;
     } else {
       _keepSigned = true;
     }

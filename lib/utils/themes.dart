@@ -29,6 +29,7 @@ final ThemeData lightTheme = ThemeData(
   primaryColor: colorWhite,
   highlightColor: colorGoogleGreen,
   dialogBackgroundColor: colorWhite,
+  iconTheme: const IconThemeData(color: colorGoogleGreen),
   dividerTheme: const DividerThemeData(color: colorDark1),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: colorWhite,
@@ -45,6 +46,7 @@ final ThemeData darkTheme = ThemeData(
   primaryColor: colorDark1,
   highlightColor: colorGoogleGreen,
   dialogBackgroundColor: colorDark2,
+  iconTheme: const IconThemeData(color: colorGoogleGreen),
   dividerTheme: const DividerThemeData(color: colorWhite),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: colorDark3,

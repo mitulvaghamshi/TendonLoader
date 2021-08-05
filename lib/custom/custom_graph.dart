@@ -63,7 +63,7 @@ class _CustomGraphState extends State<CustomGraph> {
                 ),
                 series: <ChartSeries<ChartData?, int>>[
                   ColumnSeries<ChartData?, int>(
-                    width: 1,
+                    width: 0.9,
                     color: colorBlue,
                     animationDuration: 0,
                     dataSource: widget.handler.graphData,

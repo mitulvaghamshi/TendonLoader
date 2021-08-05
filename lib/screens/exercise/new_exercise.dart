@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/custom/custom_divider.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/custom/custom_time_tile.dart';
@@ -26,13 +27,13 @@ class _NewExerciseState extends State<NewExercise> {
   final TextEditingController _ctrlSets = TextEditingController();
   final TextEditingController _ctrlReps = TextEditingController();
   final TextEditingController _ctrlTargetLoad = TextEditingController();
-  late final Prescription? _lastPre = context.model.settingsState!.lastPrescriptions;
+  late final Prescription? _lastPre = context.model.settingsState!.prescription;
   bool _useLastPrescription = false;
 
-  Duration _mvcTime = const Duration();
-  Duration _holdTime = const Duration();
-  Duration _restTime = const Duration();
-  Duration _setRestTime = const Duration(seconds: 90);
+  int _mvcDuration = 0;
+  int _holdTime = 0;
+  int _restTime = 0;
+  int _setRestTime = 90;
 
   @override
   void dispose() {
@@ -45,25 +46,25 @@ class _NewExerciseState extends State<NewExercise> {
   @override
   void initState() {
     super.initState();
-    if (kIsWeb) _init(widget.user!.prescription!);
+    if (kIsWeb) _initWith(widget.user!.prescription!);
   }
 
-  Future<void> _init(Prescription _pre) async {
+  Future<void> _initWith(Prescription _pre) async {
     _ctrlTargetLoad.text = _pre.targetLoad.toString();
     _ctrlSets.text = _pre.sets.toString();
     _ctrlReps.text = _pre.reps.toString();
-    _mvcTime = Duration(seconds: _pre.mvcDuration);
-    _holdTime = Duration(seconds: _pre.holdTime);
-    _restTime = Duration(seconds: _pre.restTime);
-    _setRestTime = Duration(seconds: _pre.setRest);
+    _holdTime = _pre.holdTime;
+    _restTime = _pre.restTime;
+    _setRestTime = _pre.setRest;
+    _mvcDuration = _pre.mvcDuration;
   }
 
   void _clearForm() {
     _ctrlSets.clear();
     _ctrlReps.clear();
     _ctrlTargetLoad.clear();
-    _mvcTime = _holdTime = _restTime = const Duration();
-    _setRestTime = const Duration(seconds: 90);
+    _setRestTime = 90;
+    _mvcDuration = _holdTime = _restTime = 0;
   }
 
   Future<void> _onSubmit() async {
@@ -72,25 +73,26 @@ class _NewExerciseState extends State<NewExercise> {
         targetLoad: double.parse(_ctrlTargetLoad.text),
         sets: int.parse(_ctrlSets.text),
         reps: int.parse(_ctrlReps.text),
-        holdTime: _holdTime.inSeconds,
-        restTime: _restTime.inSeconds,
-        setRest: _setRestTime.inSeconds,
-        mvcDuration: _mvcTime.inSeconds,
+        holdTime: _holdTime,
+        restTime: _restTime,
+        setRest: _setRestTime,
+        mvcDuration: _mvcDuration,
       );
       if (kIsWeb) {
         await widget.user!.prescriptionRef!.update(_pre.toMap()).then(context.pop);
-      } else {
-        context.model.prescription = _pre;
-        context.model.settingsState!.lastPrescriptions = _pre;
+      } else if (_holdTime > 0 && _restTime > 0 && _setRestTime > 0) {
+        context.model.settingsState!.prescription = _pre;
         await context.model.settingsState!.save();
         await context.push(ExerciseMode.route, replace: true);
+      } else {
+        context.showSnackBar(const Text('Please select time values.'));
       }
     }
   }
 
   Future<void> _onChanged(bool value) async {
     if (value) {
-      await _init(context.model.settingsState!.lastPrescriptions!);
+      await _initWith(context.model.settingsState!.prescription!);
     } else {
       _clearForm();
     }
@@ -113,9 +115,10 @@ class _NewExerciseState extends State<NewExercise> {
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         if (kIsWeb)
           CustomTimeTile(
-            time: _mvcTime,
+            time: _mvcDuration,
             desc: 'MVC test duration',
-            onChanged: (Duration duration) => setState(() => _mvcTime = duration),
+            title: 'Select test duration',
+            onChanged: (int duration) => setState(() => _mvcDuration = duration),
           )
         else ...<Widget>[
           const Text('Please enter your\nexercise prescriptions', style: tsG24B, textAlign: TextAlign.center),
@@ -141,23 +144,29 @@ class _NewExerciseState extends State<NewExercise> {
           const VerticalDivider(width: 5),
           Expanded(child: CustomTextField(label: 'Reps (#)', format: r'^\d{1,2}', controller: _ctrlReps)),
         ]),
+        const SizedBox(height: 10),
         CustomTimeTile(
           time: _holdTime,
           desc: 'Rep hold time',
-          onChanged: (Duration duration) => setState(() => _holdTime = duration),
+          title: 'Select rep hold time',
+          onChanged: (int duration) => setState(() => _holdTime = duration),
         ),
-        const Divider(height: 0),
+        CustomDivider(value: _holdTime),
         CustomTimeTile(
           time: _restTime,
           desc: 'Rep rest time',
-          onChanged: (Duration duration) => setState(() => _restTime = duration),
+          title: 'Select rep rest time',
+          onChanged: (int duration) => setState(() => _restTime = duration),
         ),
-        const Divider(height: 0),
+        CustomDivider(value: _restTime),
         CustomTimeTile(
           time: _setRestTime,
-          desc: 'Set rest time',
-          onChanged: (Duration duration) => setState(() => _setRestTime = duration),
+          desc: 'Set rest time (default: 90 sec)',
+          title: 'Select set rest time',
+          onChanged: (int duration) => setState(() => _setRestTime = duration),
         ),
+        CustomDivider(value: _setRestTime),
+        const SizedBox(height: 30),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
           CustomButton(onPressed: _onSubmit, right: const Text('Submit'), left: const Icon(Icons.done)),
           CustomButton(onPressed: _clearForm, right: const Text('Clear'), left: const Icon(Icons.clear)),

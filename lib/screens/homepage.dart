@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // if (currentUser == null) context.push(Login.route, replace: true);
     final bool _isWide = MediaQuery.of(context).size.width > 1080;
-    final bool _isMedium = MediaQuery.of(context).size.width > 760;
+    // final bool _isMedium = MediaQuery.of(context).size.width > 760;
 
     return Scaffold(
       appBar: AppBar(title: const Text(name), actions: <Widget>[

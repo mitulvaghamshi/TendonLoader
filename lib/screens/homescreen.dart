@@ -14,7 +14,7 @@ import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/screens/device/connected_list.dart';
+import 'package:tendon_loader/screens/device/lists/connected_list.dart';
 import 'package:tendon_loader/screens/exercise/auto_exercise.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
       } else if (type == _RouteType.mvcTest) {
         if (isCustom) {
           context.push(NewMVCTest.route);
-        } else if (context.model.mvcDuration != null) {
+        } else if (context.model.settingsState!.mvcDuration != null) {
           context.push(MVCTesting.route);
         } else {
           context.showSnackBar(const Text(descNoMvcAvailable));
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
       } else if (type == _RouteType.exerciseMode) {
         if (isCustom) {
           context.push(NewExercise.route);
-        } else if (context.model.prescription != null) {
+        } else if (context.model.settingsState!.prescription != null) {
           _startAutoExercise(context);
         } else {
           context.showSnackBar(const Text(descNoExerciseAvailable));
@@ -115,11 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
         action: CustomButton(
           left: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
           right: const Icon(Icons.arrow_forward_rounded, color: colorGoogleGreen),
-          onPressed: () async {
-            context.model.settingsState!.lastPrescriptions = context.model.prescription;
-            await context.model.settingsState!.save();
-            await context.push(ExerciseMode.route, replace: true);
-          },
+          onPressed: () async => context.push(ExerciseMode.route, replace: true),
         ),
       ),
     );
@@ -143,20 +139,20 @@ class _HomeScreenState extends State<HomeScreen> {
             const Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: CustomImage()),
             CustomTile(
               title: LiveData.name,
-              right: const Icon(Icons.arrow_forward_ios),
-              left: const Icon(Icons.show_chart,color: colorBlue),
+              left: const Icon(Icons.show_chart, color: colorBlue),
+              right: const Icon(Icons.keyboard_arrow_right),
               onTap: () => _navigateTo(context, _RouteType.liveData),
             ),
             CustomTile(
               title: MVCTesting.name,
-              right: const Icon(Icons.arrow_forward_ios),
-              left: const Icon(Icons.airline_seat_legroom_extra,color: colorBlue),
+              left: const Icon(Icons.airline_seat_legroom_extra, color: colorBlue),
+              right: const Icon(Icons.keyboard_arrow_right),
               onTap: () => _navigateTo(context, _RouteType.mvcTest),
             ),
             CustomTile(
               title: ExerciseMode.name,
-              right: const Icon(Icons.arrow_forward_ios),
-              left: const Icon(Icons.directions_run,color: colorBlue),
+              left: const Icon(Icons.directions_run, color: colorBlue),
+              right: const Icon(Icons.keyboard_arrow_right),
               onTap: () => _navigateTo(context, _RouteType.exerciseMode),
             ),
           ]),
@@ -176,8 +172,8 @@ Future<bool?> tryUpload(BuildContext context) async {
     await showDialog<void>(
       context: context,
       builder: (_) => CustomDialog(
-        title: 'Upload success',
-        content: Text('$count file(s) submitted', textAlign: TextAlign.center, style: tsG24B),
+        title: 'Upload success!!!',
+        content: Text('$count file(s) submitted successfully!', textAlign: TextAlign.center, style: tsG24B),
       ),
     );
   }
