@@ -42,8 +42,12 @@ class User extends HiveObject {
   String get avatar => id[0].toUpperCase();
   String get childCount => '${exports?.length} export${exports?.length == 1 ? '' : 's'} found.';
 
-  Iterable<Widget> exportTiles() => exports!.map((Export export) => ExportTile(
-      export: export, onDelete: () async => export.reference!.delete().then((_) => exports!.remove(export))));
+  Iterable<Widget> exportTiles(String? filter) {
+    Iterable<Export>? filtered;
+    if (filter != null) filtered = exports!.where((Export export) => export.fileName.toLowerCase().contains(filter));
+    return (filtered ?? exports)!.map((Export export) => ExportTile(
+        export: export, onDelete: () async => export.reference!.delete().then((_) => exports!.remove(export))));
+  }
 
   static CollectionReference<Export> _exportsRef(DocumentReference<Map<String, dynamic>> ref) =>
       ref.collection(keyExports).withConverter<Export>(

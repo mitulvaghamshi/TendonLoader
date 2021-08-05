@@ -37,6 +37,7 @@ class CustomTextField extends StatelessWidget {
       style: ts20B,
       controller: controller,
       obscureText: isObscure,
+      onFieldSubmitted: (_) => TextInputAction.go,
       validator: validator ?? _validateNum,
       keyboardType: keyboardType ?? TextInputType.number,
       autovalidateMode: AutovalidateMode.onUserInteraction,

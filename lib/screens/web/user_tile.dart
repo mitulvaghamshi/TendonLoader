@@ -3,19 +3,22 @@ import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/web/popup_menu.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class UserTile extends StatelessWidget {
-  const UserTile({Key? key, required this.user}) : super(key: key);
+  const UserTile({Key? key, required this.id, this.filter}) : super(key: key);
 
-  final User user;
+  final String id;
+  final String? filter;
 
   @override
   Widget build(BuildContext context) {
+    final User user = context.model.getUserById(id);
     return ExpansionTile(
       maintainState: true,
+      key: ValueKey<String>(id),
       iconColor: colorGoogleGreen,
-      key: ValueKey<String>(user.id),
       subtitle: Text(user.childCount),
       title: Text(user.id, style: ts20B),
       tilePadding: const EdgeInsets.all(5),
@@ -33,7 +36,7 @@ class UserTile extends StatelessWidget {
           }
         },
       ),
-      children: ListTile.divideTiles(context: context, tiles: user.exportTiles()).toList(),
+      children: ListTile.divideTiles(context: context, tiles: user.exportTiles(filter)).toList(),
     );
   }
 }

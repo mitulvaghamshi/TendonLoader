@@ -23,13 +23,20 @@ late bool isSumulation = false;
 
 void _fakeStart() {
   double _fakeLoad = 0;
+  double _fakeTime = 0;
+  bool _up = true;
   _timer = Timer.periodic(const Duration(milliseconds: 100), (Timer timer) {
     if (!isPause) {
-      if (timer.tick % 10 == 0) {
-        _fakeLoad = _fakeLoad > 8 ? 0 : _fakeLoad + 1;
-        final ChartData element = ChartData(load: _fakeLoad, time: timer.tick / 10);
-        GraphHandler.exportData.add(element);
-        GraphHandler.sink.add(element);
+      final ChartData element = ChartData(load: _fakeLoad.abs(), time: _fakeTime);
+      GraphHandler.exportData.add(element);
+      GraphHandler.sink.add(element);
+      if (timer.tick % 10 == 0) _fakeTime = timer.tick / 10;
+      if (_up) {
+        _fakeLoad += .100;
+        if (_fakeLoad >= 8) _up = false;
+      } else {
+        _fakeLoad -= .100;
+        if (_fakeLoad <= 0) _up = true;
       }
     }
   });
