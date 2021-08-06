@@ -9,7 +9,7 @@ import 'package:tendon_loader/utils/themes.dart';
 class UserTile extends StatelessWidget {
   const UserTile({Key? key, required this.id, this.filter}) : super(key: key);
 
-  final String id;
+  final int id;
   final String? filter;
 
   @override
@@ -17,13 +17,13 @@ class UserTile extends StatelessWidget {
     final User user = context.model.getUserById(id);
     return ExpansionTile(
       maintainState: true,
-      key: ValueKey<String>(id),
-      iconColor: colorGoogleGreen,
+      textColor: colorBlue,
+      key: ValueKey<int>(id),
       subtitle: Text(user.childCount),
-      title: Text(user.id, style: ts20B),
+      title: Text(user.id, style: ts18B),
       tilePadding: const EdgeInsets.all(5),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      leading: CustomButton(rounded: true, left: Text(user.avatar, style: ts20B)),
+      leading: CustomButton(rounded: true, left: Text(user.avatar, style: ts18B)),
       trailing: PopupMenu(
         isUser: true,
         onSelected: (PopupAction action) async {

@@ -22,8 +22,8 @@ class SessionInfo extends StatelessWidget {
           title: Text(value.userId!, style: ts18B),
           children: <Widget>[
             CustomTable(columns: const <DataColumn>[
-              DataColumn(label: Text('Session')),
-              DataColumn(label: Text('info')),
+              DataColumn(label: Text('Prescription', style: ts18B)),
+              DataColumn(label: Text('Detail', style: ts18B)),
             ], rows: <DataRow>[
               DataRow(cells: <DataCell>[value.progressorId!.toCell, ''.toCell]),
               DataRow(cells: <DataCell>['Pain score'.toCell, '${value.painScore ?? '---'}'.toCell]),
