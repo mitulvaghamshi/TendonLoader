@@ -22,8 +22,8 @@ class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   static const String route = '/login';
-  // static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
-  static const String homeRoute = HomePage.route;
+  static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
+  // static const String homeRoute = HomePage.route;
 
   @override
   _LoginState createState() => _LoginState();
@@ -33,8 +33,11 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
-  late final AnimationController _animCtrl = AnimationController(vsync: this, duration: const Duration(seconds: 1))
-    ..addStatusListener(_authenticate);
+
+  late final AnimationController _animCtrl = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1500),
+  )..addStatusListener(_authenticate);
 
   late final UserState? _userState;
 

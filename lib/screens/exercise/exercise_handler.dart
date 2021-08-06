@@ -39,7 +39,6 @@ class ExerciseHandler extends GraphHandler {
     _lapTime = _pre.holdTime;
     _set = _rep = _rest = 1;
     _isSetOver = isHit = false;
-    GraphHandler.clear();
   }
 
   @override

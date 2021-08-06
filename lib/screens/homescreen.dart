@@ -60,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return showDialog<bool>(
       context: context,
       builder: (_) => CustomDialog(
+        title: 'Just a moment...',
         content: FutureBuilder<void>(
           future: _cleanup(),
           builder: (_, AsyncSnapshot<void> snapshot) {

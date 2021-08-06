@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/modal/user_state.dart';
@@ -26,7 +28,15 @@ class AppState {
     return _complater.future;
   }
 
-  User getUserById(int id) => _users[id]!;
+  Future<Map<String, Prescription>> getPrescriptionHistoryOf(int id) async {
+    final Map<String, Prescription> _allPrescriptions = <String, Prescription>{};
+    for (final Export export in _users[id]!.exports!) {
+      if (!export.isMVC) _allPrescriptions[export.dateTime] = export.prescription!;
+    }
+    return _allPrescriptions;
+  }
+
+  User getUserWith(int id) => _users[id]!;
 
   Iterable<int> getUserList() => _users.keys;
 

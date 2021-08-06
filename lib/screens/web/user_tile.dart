@@ -14,7 +14,7 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User user = context.model.getUserById(id);
+    final User user = context.model.getUserWith(id);
     return ExpansionTile(
       maintainState: true,
       textColor: colorBlue,
@@ -27,10 +27,12 @@ class UserTile extends StatelessWidget {
       trailing: PopupMenu(
         isUser: true,
         onSelected: (PopupAction action) async {
-          if (action == PopupAction.download) {
-            await Future<void>.microtask(user.download);
+          if (action == PopupAction.history) {
+            await showHistory(context, id);
           } else if (action == PopupAction.prescribe) {
             await user.prescribe(context);
+          } else if (action == PopupAction.download) {
+            await Future<void>.microtask(user.download);
           } else if (action == PopupAction.delete) {
             await confirmDelete(context, user.deleteAll);
           }

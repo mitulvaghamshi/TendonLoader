@@ -6,6 +6,7 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
+import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/screens/login/login.dart';
@@ -24,11 +25,7 @@ class UserSettings extends StatefulWidget {
 
 class _UserSettingsState extends State<UserSettings> {
   late final TextEditingController _ctrlGraphScale = TextEditingController()
-    ..text = context.model.settingsState!.graphSize.toString()
-    ..addListener(() {
-      final double? scale = double.tryParse(_ctrlGraphScale.text);
-      if (scale != null && scale > 0) context.model.settingsState!.graphSize = scale;
-    });
+    ..text = context.model.settingsState!.graphSize.toString();
 
   @override
   void dispose() {
@@ -51,6 +48,12 @@ class _UserSettingsState extends State<UserSettings> {
     await firebaseLogout().then((_) => context.push(Login.route, replace: true));
   }
 
+  Future<bool> _onExit() async {
+    final double? scale = double.tryParse(_ctrlGraphScale.text);
+    if (scale != null && scale > 0) context.model.settingsState!.graphSize = scale;
+    return context.model.settingsState!.save().then((_) => true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +66,7 @@ class _UserSettingsState extends State<UserSettings> {
       ]),
       body: SingleChildScrollView(
         child: AppFrame(
-          onExit: () => context.model.settingsState!.save().then((_) => true),
+          onExit: _onExit,
           child: Column(children: <Widget>[
             const Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: CustomImage()),
             FittedBox(
@@ -114,6 +117,13 @@ class _UserSettingsState extends State<UserSettings> {
               subtitle: const Text('Click here to submit locally stored data to clinician.'),
               trailing: CustomButton(rounded: true, left: Text(boxExport.length.toString(), style: ts22B)),
             ),
+            if (progressor != null) ...<Widget>[
+              const Divider(),
+              ListTile(
+                title: Text('Disconnect ($deviceName)'),
+                onTap: () => disconnectDevice().then((_) => setState(() {})),
+              ),
+            ],
             const Divider(),
             const AboutListTile(
               applicationVersion: 'v0.0.9',

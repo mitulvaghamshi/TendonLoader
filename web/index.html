@@ -91,36 +91,35 @@
     }
   </script>
 
-  <![if false]>
-      <script defer src="/__/firebase/8.6.1/firebase-app.js"></script>
-      <script defer src="/__/firebase/8.6.1/firebase-auth.js"></script>
-      <script defer src="/__/firebase/8.6.1/firebase-firestore.js"></script>
-      <script defer src="/__/firebase/8.6.1/firebase-analytics.js"></script>
-      
-      <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+  <![if true]>
+  <script defer src="/__/firebase/8.6.1/firebase-app.js"></script>
+  <script defer src="/__/firebase/8.6.1/firebase-auth.js"></script>
+  <script defer src="/__/firebase/8.6.1/firebase-firestore.js"></script>
+  <script defer src="/__/firebase/8.6.1/firebase-analytics.js"></script>
+
+  <script defer src="/__/firebase/init.js"></script>
+  <!-- <script defer src="/__/firebase/init.js?useEmulator=true"></script> -->
   <![endif]>
 
-  <!-- <script defer src="/__/firebase/init.js"></script> -->
+  <![if false]>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
 
-  <![if true]>
-    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
-    
-    <script type="text/javascript">
-      firebase.initializeApp({
-        projectId: "tendon-loader",
-        measurementId: "G-0CWKSVKJGS",
-        messagingSenderId: "534221336745",
-        storageBucket: "tendon-loader.appspot.com",
-        authDomain: "tendon-loader.firebaseapp.com",
-        apiKey: "AIzaSyDDyoyhwZtACT9Y6yzeNFl1Ch6mU1SZ-pc",
-        appId: "1:534221336745:web:8893c7f4e44b9e959639b8",
-        databaseURL: "https://tendon-loader-default-rtdb.firebaseio.com",
-      });
-      firebase.analytics();
-    </script>
+  <script type="text/javascript">
+    firebase.initializeApp({
+      projectId: "tendon-loader",
+      measurementId: "G-0CWKSVKJGS",
+      messagingSenderId: "534221336745",
+      storageBucket: "tendon-loader.appspot.com",
+      authDomain: "tendon-loader.firebaseapp.com",
+      apiKey: "AIzaSyDDyoyhwZtACT9Y6yzeNFl1Ch6mU1SZ-pc",
+      appId: "1:534221336745:web:8893c7f4e44b9e959639b8",
+      databaseURL: "https://tendon-loader-default-rtdb.firebaseio.com",
+    });
+    firebase.analytics();
+  </script>
   <![endif]>
 </body>
 

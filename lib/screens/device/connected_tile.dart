@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/utils/descriptions.dart';
-import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/utils/descriptions.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 class ConnectedTile extends StatelessWidget {
   const ConnectedTile({Key? key, required this.device}) : super(key: key);
@@ -27,13 +27,17 @@ class ConnectedTile extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: Text(deviceName, style: const TextStyle(fontWeight: FontWeight.bold)),
             subtitle: const Text('Long press to disconnect', style: TextStyle(fontSize: 12, color: colorRed400)),
-            leading: const CustomButton(color: colorGoogleGreen, left: Icon(Icons.bluetooth_connected, size: 30)),
+            leading: const CustomButton(
+              color: colorGoogleGreen,
+              left: Icon(Icons.bluetooth_connected, color: colorWhite, size: 30),
+            ),
           ),
           StreamBuilder<ChartData>(
             initialData: ChartData(),
             stream: GraphHandler.stream,
-            builder: (_, AsyncSnapshot<ChartData> snapshot) =>
-                Text('${snapshot.data!.load.toStringAsFixed(1)} Kg.', style: tsG40B),
+            builder: (_, AsyncSnapshot<ChartData> snapshot) {
+              return Text('${snapshot.data!.load.toStringAsFixed(1)} Kg.', style: tsG40B);
+            },
           ),
           const Text(
             descTareProgressor,

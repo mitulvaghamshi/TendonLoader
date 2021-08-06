@@ -14,11 +14,16 @@ class PopupMenu extends StatelessWidget {
       onSelected: onSelected,
       icon: Icon(isUser! ? Icons.settings : Icons.more_vert),
       itemBuilder: (_) => <PopupMenuItem<PopupAction>>[
-        if (isUser!)
+        if (isUser!) ...<PopupMenuItem<PopupAction>>[
+          const PopupMenuItem<PopupAction>(
+            value: PopupAction.history,
+            child: ListTile(title: Text('History'), leading: Icon(Icons.history)),
+          ),
           const PopupMenuItem<PopupAction>(
             value: PopupAction.prescribe,
             child: ListTile(title: Text('Prescriptions'), leading: Icon(Icons.edit)),
           ),
+        ],
         const PopupMenuItem<PopupAction>(
           value: PopupAction.download,
           child: ListTile(title: Text('Download'), leading: Icon(Icons.file_download)),

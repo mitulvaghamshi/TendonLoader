@@ -17,7 +17,6 @@ class SessionInfo extends StatelessWidget {
         if (value == null) return child!;
         return ExpansionTile(
           maintainState: true,
-          initiallyExpanded: true,
           subtitle: Text(value.dateTime),
           title: Text(value.userId!, style: ts18B),
           children: <Widget>[

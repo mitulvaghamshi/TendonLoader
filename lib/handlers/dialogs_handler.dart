@@ -41,7 +41,7 @@ Future<void> congratulate(BuildContext context) async {
       content: const Text(
         'Exercise session completed.\nGreat work!!!',
         textAlign: TextAlign.center,
-        style: tsG24B,
+        style: tsG20B,
       ),
     ),
   );
@@ -147,7 +147,7 @@ Future<bool?> confirmSubmit(BuildContext context, Export export) async {
         CustomTile(
           title: 'Do it later',
           onTap: () => context.pop(true),
-          left: const Icon(Icons.save, color: colorYellow400),
+          left: const Icon(Icons.save, color: colorOrange400),
         ),
       ]),
     ),

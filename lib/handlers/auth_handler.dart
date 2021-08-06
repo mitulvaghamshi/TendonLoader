@@ -17,7 +17,7 @@ final Map<String, String> _errors = <String, String>{
 
 Future<void> initFirebase() async {
   await Firebase.initializeApp();
-  await _useEmulator();
+  // await _useEmulator();
 }
 
 User? get currentUser => FirebaseAuth.instance.currentUser;

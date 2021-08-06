@@ -7,6 +7,7 @@ import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/screens/web/data_list.dart';
 import 'package:tendon_loader/screens/web/data_view.dart';
+import 'package:tendon_loader/screens/web/prescription_history.dart';
 import 'package:tendon_loader/screens/web/session_info.dart';
 import 'package:tendon_loader/screens/web/user_list.dart';
 import 'package:tendon_loader/utils/extension.dart';
@@ -14,7 +15,7 @@ import 'package:tendon_loader/utils/themes.dart';
 
 final ValueNotifier<Export?> clickNotifier = ValueNotifier<Export?>(null);
 
-enum PopupAction { download, delete, prescribe }
+enum PopupAction { download, delete, prescribe, history }
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -79,6 +80,13 @@ Future<void> sessionInfo(BuildContext context) async {
   return showDialog<void>(
     context: context,
     builder: (_) => const CustomDialog(title: 'Session Info', content: SessionInfo()),
+  );
+}
+
+Future<void> showHistory(BuildContext context, int id) async {
+  return showDialog<void>(
+    context: context,
+    builder: (_) => CustomDialog(title: 'Prescription history', content: PrescriptionHistory(id: id)),
   );
 }
 
