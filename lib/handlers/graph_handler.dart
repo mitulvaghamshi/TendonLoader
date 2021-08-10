@@ -10,9 +10,9 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/handlers/audio_handler.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/dialogs_handler.dart';
+import 'package:tendon_loader/main.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/screens/login/splash.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/progressor.dart';
 import 'package:tendon_loader/utils/themes.dart';
@@ -49,6 +49,7 @@ class GraphHandler {
   GraphHandler({required this.context, this.lineData}) : userId = context.model.currentUser!.id {
     isRunning = isComplete = hasData = false;
     stream.listen(update);
+    clear();
   }
 
   bool isHit = false;
@@ -165,6 +166,7 @@ class GraphHandler {
       hasData = false;
       export = null;
     }
+    isPause = false;
     return result;
   }
 }

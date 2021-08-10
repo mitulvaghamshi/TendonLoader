@@ -16,7 +16,7 @@ class MVCHandler extends GraphHandler {
   double maxForce = 0;
   double timeDiff;
 
-  String get maxForceValue => 'MVC: $maxForce Kg';
+  String get maxForceValue => 'MVC: ${maxForce.toStringAsFixed(2)} Kg';
   String get timeDiffValue => '🕒 ${timeDiff.abs().toStringAsFixed(1)} Sec';
 
   void _updateLine() {

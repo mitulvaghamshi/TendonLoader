@@ -21,6 +21,7 @@ class LiveDataHandler extends GraphHandler {
       isRunning = hasData = false;
       await super.stop();
       time = 0;
+      GraphHandler.clear();
     }
   }
 

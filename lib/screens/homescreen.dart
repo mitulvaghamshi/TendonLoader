@@ -13,13 +13,13 @@ import 'package:tendon_loader/handlers/audio_handler.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
+import 'package:tendon_loader/main.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/device/lists/connected_list.dart';
 import 'package:tendon_loader/screens/exercise/auto_exercise.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
 import 'package:tendon_loader/screens/livedata/live_data.dart';
-import 'package:tendon_loader/screens/login/splash.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/screens/settings/user_settings.dart';
@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       barrierDismissible: false,
       builder: (_) => const CustomDialog(title: 'Connect Progressor', content: ConnectedList()),
-    ).then((_) async => stopWeightMeas());
+    ).then((_) async => stopWeightMeas().then((_) => GraphHandler.clear()));
   }
 
   Future<void> _startAutoExercise(BuildContext context) async {
@@ -137,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: AppFrame(
           onExit: () async => await _onExit(context) ?? false,
           child: Column(children: <Widget>[
-            const Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: CustomImage()),
+            const CustomImage(),
             CustomTile(
               title: LiveData.name,
               left: const Icon(Icons.show_chart, color: colorBlue),

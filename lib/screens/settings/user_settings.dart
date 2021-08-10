@@ -8,9 +8,9 @@ import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
 import 'package:tendon_loader/handlers/device_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
+import 'package:tendon_loader/main.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/screens/login/login.dart';
-import 'package:tendon_loader/screens/login/splash.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
@@ -126,7 +126,7 @@ class _UserSettingsState extends State<UserSettings> {
             ],
             const Divider(),
             const AboutListTile(
-              applicationVersion: 'v0.0.9',
+              applicationVersion: 'v0.0.11',
               applicationName: 'Tendon Loader',
               applicationIcon: SizedBox(height: 50, width: 50, child: CustomImage()),
               aboutBoxChildren: <Widget>[Text('Tendon Loader :Preview', textAlign: TextAlign.center, style: tsG18B)],
