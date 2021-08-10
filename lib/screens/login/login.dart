@@ -6,13 +6,13 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/handlers/auth_handler.dart';
+import 'package:tendon_loader/main.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/modal/user_state.dart';
 import 'package:tendon_loader/screens/homepage.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
-import 'package:tendon_loader/screens/login/splash.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/keys.dart';
@@ -21,7 +21,7 @@ import 'package:tendon_loader/utils/validator.dart';
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
-  static const String route = '/login';
+  static const String route = Navigator.defaultRouteName;
   static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
   // static const String homeRoute = HomePage.route;
 
@@ -43,8 +43,8 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
 
   bool _isNew = false;
   bool _result = false;
-  bool _keepSigned = true;
   bool _isObscure = true;
+  bool _keepSigned = true;
 
   Future<void> _authenticate(AnimationStatus status) async {
     if (status == AnimationStatus.forward) {
@@ -64,14 +64,11 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
       ..keepSigned = _keepSigned
       ..userName = _emailCtrl.text
       ..passWord = _passwordCtrl.text;
-
     if (_userState!.isInBox) {
       await _userState!.save();
     } else {
       await boxUserState.put(keyUserStateBoxItem, _userState!);
     }
-
-    // app only
     late final SettingsState _settingsState;
     if (!kIsWeb) {
       if (boxSettingsState.containsKey(_emailCtrl.text.hashCode)) {
@@ -86,10 +83,10 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
       }
       final User _user = await User.of(_emailCtrl.text).fetch();
       _settingsState.toggleCustom(_settingsState.customPrescriptions!, _user);
-
-      context.model.currentUser = _user;
-      context.model.userState = _userState;
-      context.model.settingsState = _settingsState;
+      context.model
+        ..currentUser = _user
+        ..userState = _userState
+        ..settingsState = _settingsState;
     }
   }
 
@@ -130,7 +127,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
         child: Form(
           key: _formKey,
           child: Column(children: <Widget>[
-            const Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: CustomImage()),
+            const CustomImage(),
             CustomTextField(
               label: 'Username',
               controller: _emailCtrl,

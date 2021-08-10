@@ -35,3 +35,4 @@ firestore.indexes.json
 local.properties
 
 lib/**/*.g.dart
+.DS_Store

@@ -54,6 +54,8 @@ final ThemeData darkTheme = ThemeData(
   ),
 );
 
+const TextStyle tsBW500 = TextStyle(color: colorBlack, fontWeight: FontWeight.w500);
+
 const TextStyle ts18B = TextStyle(fontSize: 18, fontWeight: FontWeight.w900);
 const TextStyle ts20B = TextStyle(fontSize: 20, fontWeight: FontWeight.w900);
 const TextStyle ts22B = TextStyle(fontSize: 22, fontWeight: FontWeight.w900);

@@ -116,5 +116,7 @@
 				"command": "adb connect 192.168.0.54"
 			}
 		]
+	},
+	"settings": {
 	}
 }

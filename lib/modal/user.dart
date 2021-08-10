@@ -65,7 +65,7 @@ class User extends HiveObject {
 
   Future<User> fetch() async {
     final DocumentSnapshot<Prescription> _prescription = await prescriptionRef!.get();
-    final QuerySnapshot<Export> _exports = await exportRef!.get();
+    final QuerySnapshot<Export> _exports = await exportRef!.orderBy(keyTimeStamp).get();
     final List<Export> _list = _exports.docs.map((QueryDocumentSnapshot<Export> e) => e.data()).toList();
     return User(
       exports: _list,

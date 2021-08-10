@@ -39,6 +39,7 @@ class ExerciseHandler extends GraphHandler {
     _lapTime = _pre.holdTime;
     _set = _rep = _rest = 1;
     _isSetOver = isHit = false;
+    GraphHandler.clear();
   }
 
   @override
@@ -110,9 +111,9 @@ class ExerciseHandler extends GraphHandler {
     if (isRunning) {
       isRunning = false;
       await super.stop();
-      _clear();
       if (isComplete) await congratulate(context);
       await exit();
+      _clear();
     }
   }
 

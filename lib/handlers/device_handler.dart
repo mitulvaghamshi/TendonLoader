@@ -27,7 +27,7 @@ Future<void> tareProgressor() async {
     _isRunning = false;
     await _controlChar!.write(<int>[cmdTareScale]);
     await _controlChar!.write(<int>[cmdStartWeightMeas]);
-    await _controlChar!.write(<int>[cmdStopWeightMeas]).then((_) => GraphHandler.clear());
+    await _controlChar!.write(<int>[cmdStopWeightMeas]);
   }
 }
 
@@ -41,7 +41,7 @@ Future<void> startWeightMeas() async {
 Future<void> stopWeightMeas() async {
   if (_isRunning) {
     _isRunning = false;
-    await _controlChar!.write(<int>[cmdStopWeightMeas]).then((_) => GraphHandler.clear());
+    await _controlChar!.write(<int>[cmdStopWeightMeas]);
   }
 }
 
