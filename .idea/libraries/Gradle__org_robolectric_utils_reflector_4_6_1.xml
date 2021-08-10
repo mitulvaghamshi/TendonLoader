@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: org.robolectric:utils-reflector:4.6.1" type="AndroidModuleLibraryType">
-    <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.robolectric/utils-reflector/4.6.1/409d6c0557f8f2a59782483a5813ac50b75bde54/utils-reflector-4.6.1.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
