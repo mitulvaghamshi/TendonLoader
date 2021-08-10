@@ -36,3 +36,5 @@ local.properties
 
 lib/**/*.g.dart
 .DS_Store
+
+.idea/
