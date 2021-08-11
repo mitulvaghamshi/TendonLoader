@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
-import 'package:tendon_loader/handlers/download_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/prescription.dart';
-import 'package:tendon_loader/utils/keys.dart';
+import 'package:tendon_loader/utils/common.dart';
+import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/extension.dart';
 
 part 'export.g.dart';
@@ -88,7 +88,9 @@ class Export extends HiveObject {
 
   Future<bool> upload(BuildContext context) async {
     try {
-      return context.model.currentUser!.exportRef!.doc().set(this).then((_) => delete()).then((_) => true);
+      await context.patient.exportRef!.doc().set(this);
+      await delete();
+      return true;
     } on FirebaseException {
       return false;
     }
@@ -96,12 +98,10 @@ class Export extends HiveObject {
 
   // long task
   Future<void> download() async {
-    await Downloader(
-      bytes: ZipEncoder().encode(Archive()..addFile(zipExcel())),
-    ).download(name: '$fileName.zip');
+    await saveExcel(name: '$fileName.zip', bytes: ZipEncoder().encode(Archive()..addFile(toArchivedExcel())));
   }
 
-  ArchiveFile zipExcel() {
+  ArchiveFile toArchivedExcel() {
     final Workbook _book = Workbook();
     final Worksheet _sheet = _book.worksheets[0];
 

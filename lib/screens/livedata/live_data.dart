@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/custom/custom_graph.dart';
+import 'package:tendon_loader/screens/graph/custom_graph.dart';
 import 'package:tendon_loader/screens/livedata/livedata_handler.dart';
 import 'package:tendon_loader/utils/themes.dart';
 

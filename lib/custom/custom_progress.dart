@@ -10,9 +10,9 @@ class CustomProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       minVerticalPadding: 24,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 40),
-      leading: const CircularProgressIndicator(color: colorGoogleGreen),
-      title: Text(text, style: const TextStyle(fontSize: 20, fontFamily: 'Georgia')),
+      title: Text(text, style: ts20B),
+      leading: const CircularProgressIndicator.adaptive(),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 56),
     );
   }
 }

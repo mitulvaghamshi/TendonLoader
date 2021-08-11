@@ -35,6 +35,13 @@ final ThemeData lightTheme = ThemeData(
     backgroundColor: colorWhite,
     foregroundColor: colorBlack,
   ),
+  inputDecorationTheme: const InputDecorationTheme(
+    isDense: true,
+    labelStyle: TextStyle(color: colorBlack),
+    errorBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorRed400)),
+    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorBlue)),
+    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
+  ),
 );
 
 final ThemeData darkTheme = ThemeData(
@@ -51,6 +58,13 @@ final ThemeData darkTheme = ThemeData(
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: colorDark3,
     foregroundColor: colorWhite,
+  ),
+  inputDecorationTheme: const InputDecorationTheme(
+    isDense: true,
+    labelStyle: TextStyle(color: colorWhite),
+    errorBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorRed400)),
+    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorBlue)),
+    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
   ),
 );
 

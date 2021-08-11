@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
-import 'package:tendon_loader/utils/keys.dart';
+import 'package:tendon_loader/utils/constants.dart';
 
 part 'chartdata.g.dart';
 

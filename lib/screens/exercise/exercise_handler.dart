@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tendon_loader/handlers/dialogs_handler.dart';
-import 'package:tendon_loader/handlers/graph_handler.dart';
+import 'package:tendon_loader/screens/graph/dialogs_handler.dart';
+import 'package:tendon_loader/screens/graph/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
@@ -10,10 +10,10 @@ import 'package:tendon_loader/utils/themes.dart';
 
 class ExerciseHandler extends GraphHandler {
   ExerciseHandler({required BuildContext context})
-      : _pre = context.model.settingsState!.prescription!,
+      : _pre = context.settingsState.prescription!,
         super(context: context, lineData: <ChartData>[
-          ChartData(load: context.model.settingsState!.prescription!.targetLoad),
-          ChartData(time: 2, load: context.model.settingsState!.prescription!.targetLoad),
+          ChartData(load: context.settingsState.prescription!.targetLoad),
+          ChartData(time: 2, load: context.settingsState.prescription!.targetLoad),
         ]) {
     _clear();
   }

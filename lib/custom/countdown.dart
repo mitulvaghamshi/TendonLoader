@@ -20,6 +20,11 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
   late final AnimationController _ctrl =
       AnimationController(vsync: this, duration: widget.duration + const Duration(seconds: 1));
 
+  String get _getTime {
+    final int _millies = (_ctrl.duration! * _ctrl.value).inMilliseconds;
+    return _millies < 1000 ? 'GO!' : (_millies / 1000).truncate().toString();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -40,26 +45,21 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
       child: AnimatedBuilder(
         animation: _ctrl,
         builder: (_, Widget? child) => Stack(alignment: Alignment.center, children: <Widget>[
-          Positioned.fill(child: CustomPaint(painter: _Painter(_ctrl))),
-          FittedBox(
-            child: Text(
-              (_ctrl.duration! * _ctrl.value).inMilliseconds.toSec,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 150),
-            ),
-          ),
+          Positioned.fill(child: CustomPaint(painter: _TimePainter(_ctrl))),
+          FittedBox(child: Text(_getTime, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 130))),
         ]),
       ),
     );
   }
 }
 
-class _Painter extends CustomPainter {
-  const _Painter(this.ctrl) : super(repaint: ctrl);
+class _TimePainter extends CustomPainter {
+  const _TimePainter(this.ctrl) : super(repaint: ctrl);
 
-  final Animation<double>? ctrl;
+  final Animation<double> ctrl;
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(_) => false;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -68,6 +68,6 @@ class _Painter extends CustomPainter {
       ..color = colorGoogleGreen
       ..style = PaintingStyle.stroke;
     canvas.drawCircle(size.center(Offset.zero), size.width / 2, paint);
-    canvas.drawArc(Offset.zero & size, pi * 1.5, ctrl!.value * 2 * pi, false, paint..color = colorWhite);
+    canvas.drawArc(Offset.zero & size, pi * 1.5, ctrl.value * 2 * pi, false, paint..color = colorWhite);
   }
 }

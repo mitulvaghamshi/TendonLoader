@@ -43,13 +43,8 @@ class CustomTextField extends StatelessWidget {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       inputFormatters: <TextInputFormatter>[if (format != null) FilteringTextInputFormatter.allow(RegExp(format!))],
       decoration: InputDecoration(
-        isDense: true,
         labelText: label,
-        labelStyle: TextStyle(color: Theme.of(context).accentColor),
         suffix: suffix ?? IconButton(onPressed: controller!.clear, icon: const Icon(Icons.clear)),
-        errorBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorRed400)),
-        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorBlue)),
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
       ),
     );
   }

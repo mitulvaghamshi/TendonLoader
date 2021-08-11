@@ -6,8 +6,8 @@ import 'package:tendon_loader/custom/custom_divider.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/custom/custom_time_tile.dart';
+import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/modal/prescription.dart';
-import 'package:tendon_loader/modal/user.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
@@ -15,7 +15,7 @@ import 'package:tendon_loader/utils/themes.dart';
 class NewExercise extends StatefulWidget {
   const NewExercise({Key? key, this.user}) : super(key: key);
 
-  final User? user;
+  final Patient? user;
   static const String route = '/newExercise';
 
   @override
@@ -27,7 +27,7 @@ class _NewExerciseState extends State<NewExercise> {
   final TextEditingController _ctrlSets = TextEditingController();
   final TextEditingController _ctrlReps = TextEditingController();
   final TextEditingController _ctrlTargetLoad = TextEditingController();
-  late final Prescription? _lastPre = context.model.settingsState!.prescription;
+  late final Prescription? _lastPre = context.settingsState.prescription;
   bool _useLastPrescription = false;
 
   int _mvcDuration = 0;
@@ -81,9 +81,9 @@ class _NewExerciseState extends State<NewExercise> {
       if (kIsWeb) {
         await widget.user!.prescriptionRef!.update(_pre.toMap()).then(context.pop);
       } else if (_holdTime > 0 && _restTime > 0 && _setRestTime > 0) {
-        context.model.settingsState!.prescription = _pre;
-        await context.model.settingsState!.save();
-        await context.push(ExerciseMode.route, replace: true);
+        context.settingsState.prescription = _pre;
+        await context.settingsState.save();
+        await context.replace(ExerciseMode.route);
       } else {
         context.showSnackBar(const Text('Please select time values.'));
       }
@@ -92,7 +92,7 @@ class _NewExerciseState extends State<NewExercise> {
 
   Future<void> _onChanged(bool value) async {
     if (value) {
-      await _initWith(context.model.settingsState!.prescription!);
+      await _initWith(context.settingsState.prescription!);
     } else {
       _clearForm();
     }

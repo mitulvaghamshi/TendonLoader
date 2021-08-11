@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tendon_loader/handlers/dialogs_handler.dart';
-import 'package:tendon_loader/handlers/graph_handler.dart';
+import 'package:tendon_loader/screens/graph/dialogs_handler.dart';
+import 'package:tendon_loader/screens/graph/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';
 
 class MVCHandler extends GraphHandler {
   MVCHandler({required BuildContext context})
-      : mvcDuration = context.model.settingsState!.mvcDuration!,
-        timeDiff = context.model.settingsState!.mvcDuration!.toDouble(),
+      : mvcDuration = context.settingsState.mvcDuration!,
+        timeDiff = context.settingsState.mvcDuration!.toDouble(),
         super(context: context, lineData: <ChartData>[ChartData(), ChartData(time: 2)]);
 
   final int mvcDuration;

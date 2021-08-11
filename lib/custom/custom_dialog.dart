@@ -11,6 +11,14 @@ class CustomDialog extends StatelessWidget {
   final Widget? action;
   final Widget? content;
 
+  static Future<T?> show<T>(BuildContext context, {required String title, Widget? action, Widget? content}) async {
+    return showDialog<T?>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => CustomDialog(title: title, action: action, content: content),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -22,7 +30,16 @@ class CustomDialog extends StatelessWidget {
       title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
         FittedBox(child: Text(title, style: ts20B)),
         const SizedBox(width: 5),
-        FittedBox(child: action ?? CustomButton(onPressed: context.pop, left: const Icon(Icons.clear))),
+        FittedBox(
+          child: action ??
+              CustomButton(
+                radius: 16,
+                rounded: true,
+                onPressed: context.pop,
+                padding: EdgeInsets.zero,
+                left: const Icon(Icons.clear, color: colorRed400),
+              ),
+        ),
       ]),
     );
   }

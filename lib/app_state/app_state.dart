@@ -4,23 +4,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
-import 'package:tendon_loader/modal/user.dart';
+import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/modal/user_state.dart';
-import 'package:tendon_loader/utils/constants.dart';
+import 'package:tendon_loader/utils/common.dart';
 
 class AppState {
-  User? currentUser;
+  Patient? currentUser;
   UserState? userState;
   SettingsState? settingsState;
 
-  final Map<int, User> _users = <int, User>{};
+  final Map<int, Patient> _users = <int, Patient>{};
 
   Completer<void> _complater = Completer<void>();
+
   void reload() => _complater = Completer<void>();
 
   Future<void> fetch() async {
     if (_complater.isCompleted) return;
-    final QuerySnapshot<User> _snapshot = await dbRoot.get();
+    final QuerySnapshot<Patient> _snapshot = await dataStore.get();
     for (int i = 0; i < _snapshot.size; i++) {
       _users[i] = await _snapshot.docs[i].data().fetch();
     }
@@ -36,7 +37,7 @@ class AppState {
     return _allPrescriptions;
   }
 
-  User getUserWith(int id) => _users[id]!;
+  Patient getUserWith(int id) => _users[id]!;
 
   Iterable<int> getUserList() => _users.keys;
 

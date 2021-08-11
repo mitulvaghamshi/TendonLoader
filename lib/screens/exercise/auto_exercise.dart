@@ -9,7 +9,7 @@ class AutoExercise extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Prescription _pre = context.model.settingsState!.prescription!;
+    final Prescription _pre = context.settingsState.prescription!;
     return CustomTable(columns: const <DataColumn>[
       DataColumn(label: Text('Prescription', style: ts18B)),
       DataColumn(label: Text('Detail', style: ts18B)),

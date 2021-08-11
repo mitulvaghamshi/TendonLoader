@@ -18,15 +18,15 @@ class NewMVCTest extends StatefulWidget {
 }
 
 class _NewMVCTestState extends State<NewMVCTest> {
-  late final int? _lastDuration = context.model.settingsState!.mvcDuration;
+  late final int? _lastDuration = context.settingsState.mvcDuration;
   bool _useLastDuration = false;
   int _duration = 0;
 
   Future<void> _onSubmit() async {
     if (_duration > 0) {
-      context.model.settingsState!.mvcDuration = _duration;
-      await context.model.settingsState!.save();
-      await context.push(MVCTesting.route, replace: true);
+      context.settingsState.mvcDuration = _duration;
+      await context.settingsState.save();
+      await context.replace(MVCTesting.route);
     } else {
       context.showSnackBar(const Text('Please select test duration.'));
     }

@@ -1,7 +1,97 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tendon_loader/modal/user.dart';
-import 'package:tendon_loader/utils/keys.dart';
+// datetime
+const String keyDateTimeFormat = 'y-MM-dd hh:mm:ss a';
 
-final CollectionReference<User> dbRoot = FirebaseFirestore.instance.collection(keyBase).withConverter<User>(
-    toFirestore: (User value, _) => value.toMap(),
-    fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => User.fromJson(snapshot.reference));
+// sound clips
+const String startClip = 'start.mpeg';
+const String stopClip = 'stop.mpeg';
+
+// chart
+const String keyChartX = 'time';
+const String keyChartY = 'load';
+
+// firestore
+const String keyBase = 'TendonLoader';
+const String keyExports = 'exports';
+
+// boxes
+const String keyExportBox = 'user_exports_box';
+const String keyUserStateBox = 'box_user_state';
+const String keySettingsStateBox = 'box_settings_state';
+const String keyUserStateBoxItem = 'box_user_state_item';
+
+// prescription
+const String keySets = 'sets';
+const String keyReps = 'reps';
+const String keySetRest = 'setRest';
+const String keyHoldTime = 'holdTime';
+const String keyRestTime = 'restTime';
+const String keyTargetLoad = 'targetLoad';
+const String keyMvcDuration = 'mvcDuration';
+
+// export
+const String keyUserId = 'userId';
+const String keyMvcValue = 'mvcValue';
+const String keyPainScore = 'painScore';
+const String keyIsTolerable = 'isTolerable';
+const String keyTimeStamp = 'timeStamp';
+const String keyExportData = 'exportData';
+const String keyIsComplate = 'isComplate';
+const String keyProgressorId = 'progressorId';
+const String keyPrescription = 'prescription';
+
+// assets
+const String audioRoot = 'assets/audio/';
+const String imgRoot = 'assets/images/';
+const String imgAppLogo = imgRoot + 'app_logo.svg';
+const String imgEnableDevice = imgRoot + 'enable_device.png';
+const String imgEnableLocation = imgRoot + 'enable_location.png';
+const String imgEnableBluetooth = imgRoot + 'enable_bluetooth.png';
+
+// progressor responses
+const int resCommandResponse = 0;
+const int resWeightMeasurement = 1;
+const int resRFDPeak = 2;
+const int resRFDPeakSeries = 3;
+const int resLowPowerWarning = 4;
+
+// progressor commands
+const int cmdTareScale = 100;
+const int cmdStartWeightMeas = 101;
+const int cmdStopWeightMeas = 102;
+const int cmdStartPeakRFDMeasurement = 103;
+const int cmdStartPeakRFDSeriesMeasurement = 104;
+const int cmdAddCalibrationPoint = 105;
+const int cmdSaveCalibration = 106;
+const int cmdGetAppVersion = 107; // CMD RES
+const int cmdGetErrorInformation = 108; // CMD RES
+const int cmdClearErrorInformation = 109;
+const int cmdEnterSleep = 110;
+const int cmdGetBatteryVoltage = 111; // CMD RES
+
+// progressor UUIDs
+const String uuidService = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // main service
+const String uuidControl = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // send commands
+const String uuidData = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57'; // receive data
+
+// long descriptions
+const String descEnableDevice = '\nActivate your device by pressing the button, then press scan to find the device\n';
+
+const String descTareProgressor = '\nPlease tare your progressor before use\n';
+
+const String descEnableBluetooth =
+    '\nThis app needs Bluetooth to communicate with your Progressor.\nPlease enable Bluetooth on your device\n';
+
+const String descLocationLine1 =
+    '\nScanning for the Progressor requires location services. We\'re only using this permission to scan for your Progressor';
+
+const String descLocationLine3 = '\nWe\'ll never collect your physical location\n';
+
+const String descNoMvcAvailable =
+    'No MVC test available, please contact your clinician or turn on custom prescriptions in settings.';
+
+const String descNoExerciseAvailable =
+    'No exercise prescription available, please contact your clinician or turn on custom prescriptions in settings.';
+
+// email regex pattern
+const String emailRegEx =
+    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
