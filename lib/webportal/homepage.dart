@@ -66,7 +66,7 @@ class CenterPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppFrame(
       padding: const EdgeInsets.all(0),
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      margin: const EdgeInsets.symmetric(vertical: 16),
       child: SizedBox(
         width: 260,
         child: Column(children: const <Widget>[SessionInfo(), Expanded(child: DataList())]),

@@ -13,9 +13,20 @@ class Prescription extends HiveObject {
     required this.restTime,
     required this.targetLoad,
     required this.mvcDuration,
+    this.isAdmin,
   });
 
-  Prescription.empty() : this(sets: 0, reps: 0, setRest: 90, holdTime: 0, restTime: 0, targetLoad: 0, mvcDuration: 0);
+  Prescription.empty()
+      : this(
+          sets: 0,
+          reps: 0,
+          setRest: 90,
+          holdTime: 0,
+          restTime: 0,
+          targetLoad: 0,
+          mvcDuration: 0,
+          isAdmin: false,
+        );
 
   Prescription.fromJson(Map<String, dynamic> map)
       : this(
@@ -25,7 +36,8 @@ class Prescription extends HiveObject {
             restTime: int.parse(map[keyRestTime].toString()),
             holdTime: int.parse(map[keyHoldTime].toString()),
             targetLoad: double.parse(map[keyTargetLoad].toString()),
-            mvcDuration: int.parse(map[keyMvcDuration].toString()));
+            mvcDuration: int.parse(map[keyMvcDuration].toString()),
+            isAdmin: map[keyIsAdmin] as bool? ?? false);
 
   @HiveField(0)
   final int sets;
@@ -41,9 +53,11 @@ class Prescription extends HiveObject {
   final int mvcDuration;
   @HiveField(6)
   final double targetLoad;
+  @HiveField(7)
+  bool? isAdmin;
 
-  Map<String, num> toMap() {
-    return <String, num>{
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
       keySets: sets,
       keyReps: reps,
       keySetRest: setRest,
@@ -51,6 +65,7 @@ class Prescription extends HiveObject {
       keyRestTime: restTime,
       keyTargetLoad: targetLoad,
       keyMvcDuration: mvcDuration,
+      keyIsAdmin: isAdmin,
     };
   }
 }

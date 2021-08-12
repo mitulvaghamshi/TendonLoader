@@ -53,8 +53,8 @@ class _NewMVCTestState extends State<NewMVCTest> {
           if (_lastDuration != null)
             SwitchListTile.adaptive(
               onChanged: _onChanged,
+              activeColor: colorBlue,
               value: _useLastDuration,
-              activeColor: colorGoogleGreen,
               title: const Text('Use duration from last test.'),
             ),
           const SizedBox(height: 10),

@@ -20,6 +20,7 @@ const String keySettingsStateBox = 'box_settings_state';
 const String keyUserStateBoxItem = 'box_user_state_item';
 
 // prescription
+const String keyIsAdmin = 'isAdmin';
 const String keySets = 'sets';
 const String keyReps = 'reps';
 const String keySetRest = 'setRest';

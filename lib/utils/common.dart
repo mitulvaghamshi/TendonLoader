@@ -41,16 +41,16 @@ Future<void> initializeApp() async {
   await useEmulator();
   await Hive.initFlutter();
   Hive.registerAdapter(UserStateAdapter());
-  if (!kIsWeb) {
-    Hive.registerAdapter(ExportAdapter());
-    Hive.registerAdapter(ChartDataAdapter());
-    Hive.registerAdapter(TimestampAdapter());
-    Hive.registerAdapter(PrescriptionAdapter());
-    Hive.registerAdapter(SettingsStateAdapter());
-    boxExport = await Hive.openBox<Export>(keyExportBox);
-    boxSettingsState = await Hive.openBox<SettingsState>(keySettingsStateBox);
-    await SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
-  }
+  // if (!kIsWeb) {
+  Hive.registerAdapter(ExportAdapter());
+  Hive.registerAdapter(ChartDataAdapter());
+  Hive.registerAdapter(TimestampAdapter());
+  Hive.registerAdapter(PrescriptionAdapter());
+  Hive.registerAdapter(SettingsStateAdapter());
+  boxExport = await Hive.openBox<Export>(keyExportBox);
+  boxSettingsState = await Hive.openBox<SettingsState>(keySettingsStateBox);
+  // await SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
+  // }
   boxUserState = await Hive.openBox<UserState>(keyUserStateBox);
 }
 

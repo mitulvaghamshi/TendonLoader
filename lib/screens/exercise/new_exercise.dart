@@ -127,8 +127,8 @@ class _NewExerciseState extends State<NewExercise> {
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: SwitchListTile.adaptive(
                 onChanged: _onChanged,
+                activeColor: colorBlue,
                 value: _useLastPrescription,
-                activeColor: colorGoogleGreen,
                 title: const Text('Use prescriptions from last exercise.'),
               ),
             ),

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +47,7 @@ class _LoginState extends State<Login> {
   bool _isNew = false;
   bool _isObscure = true;
   bool _keepSigned = true;
+  bool _isAdmin = false;
 
   Future<void> _authenticate() async {
     if (!_isBusy && _formKey.currentState!.validate()) {
@@ -60,8 +60,15 @@ class _LoginState extends State<Login> {
           password: _passwordCtrl.text,
         );
         if (_credential.user != null && await _initUser()) {
-          await Future<void>.delayed(const Duration(seconds: 1));
+          await Future<void>.delayed(const Duration(seconds: 2));
           await context.replace(Login.homeRoute);
+        } else if (kIsWeb) {
+          setState(() => _isBusy = false);
+          if (_isNew && !_isAdmin) {
+            context.showSnackBar(const Text('User created successfully!!!'));
+          } else {
+            context.showSnackBar(const Text('Access denied...', style: tsR20B));
+          }
         }
       } on FirebaseAuthException catch (e) {
         setState(() => _isBusy = false);
@@ -84,26 +91,22 @@ class _LoginState extends State<Login> {
       } else {
         await boxUserState.put(keyUserStateBoxItem, _userState!);
       }
-      if (!kIsWeb) {
-        late final SettingsState _settingsState;
-        if (boxSettingsState.containsKey(_emailCtrl.text.hashCode)) {
-          _settingsState = boxSettingsState.get(_emailCtrl.text.hashCode)!;
-        } else {
-          await boxSettingsState.put(_emailCtrl.text.hashCode, _settingsState = SettingsState());
-          await dataStore.doc(_emailCtrl.text).get().then<void>((DocumentSnapshot<Patient> value) async {
-            if (value.get(keyHoldTime) == null) {
-              await dataStore.doc(_emailCtrl.text).set(Patient(prescription: Prescription.empty()));
-            }
-          });
-        }
-        final Patient _patient = await Patient.of(_emailCtrl.text).fetch();
-        _settingsState.toggleCustom(_settingsState.customPrescriptions!, _patient);
-        context
-          ..patient = _patient
-          ..userState = _userState
-          ..settingsState = _settingsState;
+      // if (!kIsWeb) {
+      late final SettingsState _settingsState;
+      if (boxSettingsState.containsKey(_emailCtrl.text.hashCode)) {
+        _settingsState = boxSettingsState.get(_emailCtrl.text.hashCode)!;
+      } else {
+        await boxSettingsState.put(_emailCtrl.text.hashCode, _settingsState = SettingsState());
+        await dataStore.doc(_emailCtrl.text).set(Patient(prescription: Prescription.empty()..isAdmin = _isAdmin));
       }
-      return true;
+      final Patient _patient = await Patient.of(_emailCtrl.text).fetch();
+      _settingsState.toggleCustom(_settingsState.customPrescriptions!, _patient);
+      context
+        ..patient = _patient
+        ..userState = _userState
+        ..settingsState = _settingsState;
+      // }
+      return !kIsWeb || _isAdmin;
     } on Exception {
       return false;
     }
@@ -177,14 +180,28 @@ class _LoginState extends State<Login> {
                 icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
               ),
             ),
-            CheckboxListTile(
-              value: _keepSigned,
-              activeColor: Colors.blue,
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Keep me logged in.'),
-              controlAffinity: ListTileControlAffinity.leading,
-              onChanged: (_) => setState(() => _keepSigned = !_keepSigned),
-            ),
+            const SizedBox(height: 10),
+            if (kIsWeb && _isNew)
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: SwitchListTile.adaptive(
+                  value: _isAdmin,
+                  activeColor: colorBlue,
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Mark as clinician'),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  onChanged: (_) => setState(() => _isAdmin = !_isAdmin),
+                ),
+              )
+            else
+              CheckboxListTile(
+                value: _keepSigned,
+                activeColor: colorBlue,
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Keep me logged in.'),
+                controlAffinity: ListTileControlAffinity.leading,
+                onChanged: (_) => setState(() => _keepSigned = !_keepSigned),
+              ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: FittedBox(
