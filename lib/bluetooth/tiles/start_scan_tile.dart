@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/constants.dart';
+import 'package:tendon_loader/bluetooth/device_handler.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
-import 'package:tendon_loader/bluetooth/device_handler.dart';
+import 'package:tendon_loader/utils/constants.dart';
 
 class StartScanTile extends StatelessWidget {
   const StartScanTile({Key? key}) : super(key: key);

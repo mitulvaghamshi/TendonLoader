@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -7,8 +8,6 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/emulator.dart';
-import 'package:tendon_loader/main.dart';
-import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
@@ -68,14 +67,11 @@ class _AppSettingsState extends State<AppSettings> {
         child: AppFrame(
           onExit: _onExit,
           child: Column(children: <Widget>[
-            const Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: CustomImage()),
+            const CustomImage(),
             FittedBox(
               child: CustomButton(
-                left: const Icon(Icons.person_rounded, size: 30),
-                right: Text(
-                  context.patient.id,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
+                left: const Icon(Icons.person, size: 30),
+                right: Text(context.patient.id, style: ts22B),
               ),
             ),
             const SizedBox(height: 20),
@@ -95,8 +91,8 @@ class _AppSettingsState extends State<AppSettings> {
             const Divider(),
             SwitchListTile.adaptive(
               activeColor: colorBlue,
-              title: const Text('Automatic data upload'),
               value: context.settingsState.autoUpload!,
+              title: const Text('Automatic data upload'),
               subtitle: const Text('Automatically upload exercise and mvc test data on completion.'),
               onChanged: (bool value) => setState(() => context.settingsState.autoUpload = value),
             ),
@@ -121,6 +117,8 @@ class _AppSettingsState extends State<AppSettings> {
               const Divider(),
               ListTile(
                 title: Text('Disconnect ($deviceName)'),
+                subtitle: const Text('Long pres to sleep progressor'),
+                onLongPress: () => disconnectDevice().then((_) => setState(() {})),
                 onTap: () => disconnectDevice().then((_) => setState(() {})),
               ),
             ],

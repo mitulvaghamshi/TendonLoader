@@ -45,10 +45,13 @@ Future<void> stopWeightMeas() async {
   }
 }
 
-Future<void> disconnectDevice() async {
+Future<void> disconnectDevice([bool sleep = false]) async {
   if (_device != null) {
-    // await _controlChar!.write(<int>[cmdEnterSleep]);
-    await _device!.disconnect();
+    if (sleep) {
+      await _controlChar!.write(<int>[cmdEnterSleep]);
+    } else {
+      await _device!.disconnect();
+    }
     _isRunning = false;
     _device = _dataChar = _controlChar = _completer = null;
   }

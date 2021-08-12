@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:tendon_loader/bluetooth/lists/device_list.dart';
+import 'package:tendon_loader/bluetooth/tiles/scanning_tile.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
-import 'package:tendon_loader/bluetooth/progressor/device_list.dart';
-import 'package:tendon_loader/bluetooth/progressor/scanner_tile.dart';
 
 class ConnectedList extends StatelessWidget {
   const ConnectedList({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class ConnectedList extends StatelessWidget {
         if (!snapshot.hasData) {
           return const CustomProgress();
         } else if (snapshot.data!.isEmpty) {
-          return const ScannerTile();
+          return const ScanningTile();
         } else {
           return DeviceList(devices: snapshot.data!);
         }

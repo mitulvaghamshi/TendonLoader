@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/custom/custom_tile.dart';
 
 class CustomProgress extends StatelessWidget {
   const CustomProgress({Key? key, this.text = 'Please wait...'}) : super(key: key);
@@ -8,11 +8,6 @@ class CustomProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      minVerticalPadding: 24,
-      title: Text(text, style: ts20B),
-      leading: const CircularProgressIndicator.adaptive(),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 56),
-    );
+    return CustomTile(title: text, left: const CircularProgressIndicator.adaptive());
   }
 }

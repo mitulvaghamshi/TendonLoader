@@ -1,7 +1,7 @@
 import 'package:app_settings/app_settings.dart' as ast;
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:tendon_loader/bluetooth/progressor/start_scan_tile.dart';
+import 'package:tendon_loader/bluetooth/tiles/start_scan_tile.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/utils/constants.dart';

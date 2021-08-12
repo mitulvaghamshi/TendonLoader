@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/bluetooth/device_handler.dart';
-import 'package:tendon_loader/bluetooth/progressor/connected_list.dart';
+import 'package:tendon_loader/bluetooth/lists/connected_list.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';

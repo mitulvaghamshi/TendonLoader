@@ -1,7 +1,7 @@
 import 'package:app_settings/app_settings.dart' as ast;
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:tendon_loader/bluetooth/progressor/location_tile.dart';
+import 'package:tendon_loader/bluetooth/tiles/location_tile.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/utils/constants.dart';

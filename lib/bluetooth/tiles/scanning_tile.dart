@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:tendon_loader/bluetooth/lists/scanner_list.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
-import 'package:tendon_loader/bluetooth/progressor/scanner_list.dart';
 
-class ScannerTile extends StatelessWidget {
-  const ScannerTile({Key? key}) : super(key: key);
+class ScanningTile extends StatelessWidget {
+  const ScanningTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
