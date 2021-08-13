@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -33,7 +32,7 @@ class _AppSettingsState extends State<AppSettings> {
 
   Future<void> _tryUpload() async {
     if (await tryUpload(context) ?? true) {
-      context.refresh();
+      setState(() {});
     } else {
       context.showSnackBar(const Text('No data available! or already submitted.'));
     }

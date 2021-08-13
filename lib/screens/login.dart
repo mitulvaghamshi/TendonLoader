@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,7 @@ class _LoginState extends State<Login> {
           if (_isNew && !_isAdmin) {
             context.showSnackBar(const Text('User created successfully!!!'));
           } else {
-            context.showSnackBar(const Text('Access denied...', style: tsR20B));
+            context.showSnackBar(const Text('Access denied! are you a clinician?'));
           }
         }
       } on FirebaseAuthException catch (e) {
@@ -91,13 +92,16 @@ class _LoginState extends State<Login> {
       } else {
         await boxUserState.put(keyUserStateBoxItem, _userState!);
       }
-      // if (!kIsWeb) {
       late final SettingsState _settingsState;
       if (boxSettingsState.containsKey(_emailCtrl.text.hashCode)) {
         _settingsState = boxSettingsState.get(_emailCtrl.text.hashCode)!;
       } else {
         await boxSettingsState.put(_emailCtrl.text.hashCode, _settingsState = SettingsState());
-        await dataStore.doc(_emailCtrl.text).set(Patient(prescription: Prescription.empty()..isAdmin = _isAdmin));
+        await dataStore.doc(_emailCtrl.text).get().then((DocumentSnapshot<Patient> patient) async {
+          if (!patient.exists) {
+            await dataStore.doc(_emailCtrl.text).set(Patient(prescription: Prescription.empty()..isAdmin = _isAdmin));
+          }
+        });
       }
       final Patient _patient = await Patient.of(_emailCtrl.text).fetch();
       _settingsState.toggleCustom(_settingsState.customPrescriptions!, _patient);
@@ -105,8 +109,7 @@ class _LoginState extends State<Login> {
         ..patient = _patient
         ..userState = _userState
         ..settingsState = _settingsState;
-      // }
-      return !kIsWeb || _isAdmin;
+      return !kIsWeb || _patient.prescription!.isAdmin!;
     } on Exception {
       return false;
     }
@@ -180,7 +183,6 @@ class _LoginState extends State<Login> {
                 icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
               ),
             ),
-            const SizedBox(height: 10),
             if (kIsWeb && _isNew)
               Align(
                 alignment: Alignment.bottomLeft,
@@ -202,19 +204,18 @@ class _LoginState extends State<Login> {
                 controlAffinity: ListTileControlAffinity.leading,
                 onChanged: (_) => setState(() => _keepSigned = !_keepSigned),
               ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: FittedBox(
-                child: CustomButton(
-                  onPressed: () => setState(() => _isNew = !_isNew),
-                  left: Icon(_isNew ? Icons.check : Icons.add),
-                  right: Text(
-                    _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
-                    style: const TextStyle(letterSpacing: 0.5),
-                  ),
+            const SizedBox(height: 10),
+            FittedBox(
+              child: CustomButton(
+                onPressed: () => setState(() => _isNew = !_isNew),
+                left: Icon(_isNew ? Icons.check : Icons.add),
+                right: Text(
+                  _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
+                  style: const TextStyle(letterSpacing: 0.5),
                 ),
               ),
             ),
+            const SizedBox(height: 10),
             Align(
               alignment: Alignment.bottomRight,
               child: CustomButton(

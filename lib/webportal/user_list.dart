@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
-import 'package:tendon_loader/webportal/user_tile.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/webportal/user_tile.dart';
 
 class UserList extends StatefulWidget {
   const UserList({Key? key}) : super(key: key);
@@ -15,11 +16,11 @@ class UserList extends StatefulWidget {
 class _UserListState extends State<UserList> {
   final TextEditingController _userCtrl = TextEditingController();
   final TextEditingController _exportCtrl = TextEditingController();
-  late Iterable<int> _userList = context.data.getUserList();
+  late Iterable<int> _userList = context.view.userList;
 
-  void _handleUserSearch() {
-    _userList = context.data.filter(filter: _userCtrl.text);
-    setState(() {});
+  void _onSearch() {
+    final Iterable<int> _filter = context.view.filter(filter: _userCtrl.text);
+    setState(() => _userList = _filter);
   }
 
   @override
@@ -40,11 +41,11 @@ class _UserListState extends State<UserList> {
             Expanded(
               child: TextField(
                 controller: _userCtrl,
-                onSubmitted: (_) => _handleUserSearch(),
+                onSubmitted: (_) => _onSearch(),
                 decoration: InputDecoration(
                   hintText: 'Search user',
                   prefixIcon: IconButton(
-                    onPressed: _handleUserSearch,
+                    onPressed: _onSearch,
                     icon: const Icon(Icons.search),
                   ),
                 ),
@@ -53,7 +54,7 @@ class _UserListState extends State<UserList> {
             Expanded(
               child: TextField(
                 controller: _exportCtrl,
-                onSubmitted: (_) => _handleUserSearch(),
+                onSubmitted: (_) => _onSearch(),
                 decoration: InputDecoration(
                   hintText: 'Search export',
                   suffixIcon: IconButton(
@@ -71,11 +72,9 @@ class _UserListState extends State<UserList> {
           Expanded(
             child: RefreshIndicator(
               color: colorGoogleGreen,
-              onRefresh: () async => context
-                ..data.reload()
-                ..refresh(),
+              onRefresh: () async => setState(() => context.view.setRefetch()),
               child: FutureBuilder<void>(
-                future: context.data.fetch(),
+                future: context.view.fetch(),
                 builder: (_, AsyncSnapshot<void> snapshot) {
                   if (snapshot.connectionState != ConnectionState.done) return const CustomProgress();
                   return ListView.separated(

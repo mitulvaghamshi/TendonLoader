@@ -5,7 +5,7 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/webportal/data_list.dart';
 import 'package:tendon_loader/webportal/data_view.dart';
-import 'package:tendon_loader/webportal/prescription_history.dart';
+import 'package:tendon_loader/webportal/exercise_history.dart';
 import 'package:tendon_loader/webportal/session_info.dart';
 import 'package:tendon_loader/webportal/user_list.dart';
 import 'package:tendon_loader/utils/extension.dart';
@@ -14,7 +14,7 @@ import 'package:tendon_loader/utils/themes.dart';
 
 final ValueNotifier<Export?> clickNotifier = ValueNotifier<Export?>(null);
 
-enum PopupAction { download, delete, prescribe, history }
+enum PopupAction { isClinician, download, delete, prescribe, history }
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -85,7 +85,7 @@ Future<void> sessionInfo(BuildContext context) async {
 Future<void> showHistory(BuildContext context, int id) async {
   return showDialog<void>(
     context: context,
-    builder: (_) => CustomDialog(title: 'Prescription history', content: PrescriptionHistory(id: id)),
+    builder: (_) => CustomDialog(title: 'Prescription history', content: ExerciseHistory(id: id)),
   );
 }
 
@@ -97,9 +97,8 @@ Future<void> confirmDelete(BuildContext context, VoidCallback onDelete) async {
       content: CustomButton(
         onPressed: () {
           onDelete();
-          clickNotifier.value = null;
-          context.refresh();
           context.pop();
+          clickNotifier.value = null;
         },
         radius: 8,
         color: colorRed900,

@@ -25,7 +25,6 @@ class Prescription extends HiveObject {
           restTime: 0,
           targetLoad: 0,
           mvcDuration: 0,
-          isAdmin: false,
         );
 
   Prescription.fromJson(Map<String, dynamic> map)

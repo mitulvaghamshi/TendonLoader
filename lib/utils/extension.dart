@@ -8,21 +8,20 @@ import 'package:tendon_loader/modal/user_state.dart';
 import 'package:tendon_loader/screens/login.dart';
 import 'package:tendon_loader/utils/common.dart';
 
-extension ExCell on String {
+extension ExString on String {
   DataCell get toCell => DataCell(Text(this, style: const TextStyle(fontSize: 16)));
 }
 
-extension ExAppState on BuildContext {
+extension ExContext on BuildContext {
   Patient get patient => data.currentUser!;
   UserState get userState => data.userState!;
   SettingsState get settingsState => data.settingsState!;
   AppState get data => dependOnInheritedWidgetOfExactType<AppStateScope>()!.data;
+  AppStateWidgetState get view => findAncestorStateOfType<AppStateWidgetState>()!;
 
   set patient(Patient? patient) => data.currentUser = patient;
   set userState(UserState? userState) => data.userState = userState;
   set settingsState(SettingsState? settings) => data.settingsState = settings;
-
-  void refresh() => findAncestorStateOfType<AppStateWidgetState>()!.refresh();
 
   void showSnackBar(Widget content) => ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: content));
 
