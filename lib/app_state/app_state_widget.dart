@@ -22,11 +22,14 @@ class AppStateWidgetState extends State<AppStateWidget> {
 
   Completer<void> _complater = Completer<void>();
 
+  void refresh() => setState(() {});
+
   void setRefetch() => _complater = Completer<void>();
 
   Future<void> fetch() async {
     if (_complater.isCompleted) return;
     final QuerySnapshot<Patient> _snapshot = await dataStore.get();
+    if (_snapshot.size > 0) _data.users.clear();
     for (int i = 0; i < _snapshot.size; i++) {
       _data.users[i] = await _snapshot.docs[i].data().fetch();
     }

@@ -38,19 +38,6 @@ class Patient extends HiveObject {
   @HiveField(4)
   final DocumentReference<Map<String, dynamic>>? userRef;
 
-  String get id => userRef!.id;
-  String get avatar => id[0].toUpperCase();
-  String get childCount => 'Submitted total: ${exports?.length} export${exports?.length == 1 ? '' : 's'}';
-
-  Iterable<Widget> exportTiles(String? filter) {
-    Iterable<Export>? filtered;
-    if (filter != null) {
-      filtered = exports!.where((Export export) => export.fileName.toLowerCase().contains(filter.toLowerCase()));
-    }
-    return (filtered ?? exports)!.map((Export export) => ExportTile(
-        export: export, onDelete: () async => export.reference!.delete().then((_) => exports!.remove(export))));
-  }
-
   static CollectionReference<Export> _exportsRef(DocumentReference<Map<String, dynamic>> ref) =>
       ref.collection(keyExports).withConverter<Export>(
           toFirestore: (Export value, SetOptions? options) => value.toMap(),
@@ -63,9 +50,28 @@ class Patient extends HiveObject {
               Prescription.fromJson(snapshot.data()!),
           toFirestore: (Prescription value, _) => value.toMap());
 
+  String get id => userRef!.id;
+  String get avatar => id[0].toUpperCase();
+  String get childCount => 'Total ${exports?.length} item${exports?.length == 1 ? '' : 's'} submitted';
+
+  Iterable<Widget> exportTiles({String? filter, required Future<void> Function(VoidCallback) onDelete}) {
+    Iterable<Export>? filtered;
+    if (filter != null) {
+      filtered = exports!.where((Export export) => export.fileName.toLowerCase().contains(filter.toLowerCase()));
+    }
+    return (filtered ?? exports)!.map((Export export) {
+      return ExportTile(
+        export: export,
+        onDelete: () async => onDelete(() async {
+          return export.reference!.delete().then((_) => exports!.remove(export));
+        }),
+      );
+    });
+  }
+
   Future<Patient> fetch() async {
     final DocumentSnapshot<Prescription> _prescription = await prescriptionRef!.get();
-    final QuerySnapshot<Export> _exports = await exportRef!.orderBy(keyTimeStamp).get();
+    final QuerySnapshot<Export> _exports = await exportRef!.orderBy(keyTimeStamp, descending: true).get();
     final List<Export> _list = _exports.docs.map((QueryDocumentSnapshot<Export> e) => e.data()).toList();
     return Patient(
       exports: _list,

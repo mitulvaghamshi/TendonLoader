@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/webportal/homepage.dart';
 import 'package:tendon_loader/webportal/user_tile.dart';
 
 class UserList extends StatefulWidget {
@@ -21,6 +24,27 @@ class _UserListState extends State<UserList> {
   void _onSearch() {
     final Iterable<int> _filter = context.view.filter(filter: _userCtrl.text);
     setState(() => _userList = _filter);
+  }
+
+  Future<void> _onDelete(VoidCallback onDelete) async {
+    return showDialog<void>(
+      context: context,
+      builder: (_) => CustomDialog(
+        title: 'Delete export(s)?',
+        content: CustomButton(
+          onPressed: () {
+            onDelete();
+            context.pop();
+            clickNotifier.value = null;
+            setState(() => _userList = context.view.userList);
+          },
+          radius: 16,
+          color: colorRed900,
+          left: const Icon(Icons.delete, color: colorWhite),
+          right: const Text('Permanently delete', style: TextStyle(color: colorWhite)),
+        ),
+      ),
+    );
   }
 
   @override
@@ -83,6 +107,7 @@ class _UserListState extends State<UserList> {
                     itemBuilder: (_, int index) => UserTile(
                       id: _userList.elementAt(index),
                       filter: _exportCtrl.text,
+                      onDelete: _onDelete,
                     ),
                   );
                 },

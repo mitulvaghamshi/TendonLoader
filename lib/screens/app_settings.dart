@@ -38,14 +38,6 @@ class _AppSettingsState extends State<AppSettings> {
     }
   }
 
-  Future<void> _logout() async {
-    context.userState.keepSigned = false;
-    await context.userState.save();
-    await context.settingsState.save();
-    await signout();
-    await context.logout();
-  }
-
   Future<bool> _onExit() async {
     final double? scale = double.tryParse(_ctrlGraphScale.text);
     if (scale != null && scale > 0) context.settingsState.graphSize = scale;
@@ -117,8 +109,8 @@ class _AppSettingsState extends State<AppSettings> {
               ListTile(
                 title: Text('Disconnect ($deviceName)'),
                 subtitle: const Text('Long pres to sleep progressor'),
-                onLongPress: () => disconnectDevice().then((_) => setState(() {})),
                 onTap: () => disconnectDevice().then((_) => setState(() {})),
+                onLongPress: () => disconnectDevice(true).then((_) => setState(() {})),
               ),
             ],
             const Divider(),
@@ -130,7 +122,10 @@ class _AppSettingsState extends State<AppSettings> {
               child: Text('About'),
             ),
             const Divider(),
-            ListTile(onTap: _logout, title: const Text('Logout', style: TextStyle(color: colorRed400))),
+            ListTile(
+              onTap: () async => logout(context),
+              title: const Text('Logout', style: TextStyle(color: colorRed400)),
+            ),
           ]),
         ),
       ),

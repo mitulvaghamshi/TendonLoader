@@ -46,7 +46,7 @@ class ExportTile extends StatelessWidget {
           if (action == PopupAction.download) {
             await Future<void>.microtask(export.download);
           } else if (action == PopupAction.delete) {
-            await confirmDelete(context, onDelete);
+            onDelete();
           }
         },
       ),

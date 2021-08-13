@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tendon_loader/screens/graph/dialogs_handler.dart';
-import 'package:tendon_loader/screens/graph/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
+import 'package:tendon_loader/screens/graph/dialogs_handler.dart';
+import 'package:tendon_loader/screens/graph/graph_handler.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
@@ -111,9 +111,9 @@ class ExerciseHandler extends GraphHandler {
     if (isRunning) {
       isRunning = false;
       await super.stop();
+      _clear();
       if (isComplete) await congratulate(context);
       await exit();
-      _clear();
     }
   }
 

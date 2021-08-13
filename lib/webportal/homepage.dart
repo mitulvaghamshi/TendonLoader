@@ -3,14 +3,11 @@ import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/webportal/data_list.dart';
 import 'package:tendon_loader/webportal/data_view.dart';
-import 'package:tendon_loader/webportal/exercise_history.dart';
 import 'package:tendon_loader/webportal/session_info.dart';
 import 'package:tendon_loader/webportal/user_list.dart';
-import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/utils/common.dart';
-import 'package:tendon_loader/utils/themes.dart';
 
 final ValueNotifier<Export?> clickNotifier = ValueNotifier<Export?>(null);
 
@@ -21,6 +18,13 @@ class HomePage extends StatelessWidget {
 
   static const String route = '/homePage';
   static const String name = 'Tendon Loader - Clinician';
+
+  Future<void> _sessionInfo(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (_) => const CustomDialog(title: 'Session Info', content: SessionInfo()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +38,14 @@ class HomePage extends StatelessWidget {
           CustomButton(
             left: const Icon(Icons.info),
             right: const Text('Session Info'),
-            onPressed: () => sessionInfo(context),
+            onPressed: () => _sessionInfo(context),
           ),
         const SizedBox(width: 5),
         CustomButton(
-          radius: 8,
+          radius: 16,
           left: const Text('Logout'),
           right: const Icon(Icons.logout),
-          onPressed: () async => signout().then((_) async => context.logout()),
+          onPressed: () async => logout(context),
         ),
       ]),
       body: _isWide ? const _WideScreen() : const DataView(),
@@ -73,38 +77,4 @@ class CenterPanel extends StatelessWidget {
       ),
     );
   }
-}
-
-Future<void> sessionInfo(BuildContext context) async {
-  return showDialog<void>(
-    context: context,
-    builder: (_) => const CustomDialog(title: 'Session Info', content: SessionInfo()),
-  );
-}
-
-Future<void> showHistory(BuildContext context, int id) async {
-  return showDialog<void>(
-    context: context,
-    builder: (_) => CustomDialog(title: 'Prescription history', content: ExerciseHistory(id: id)),
-  );
-}
-
-Future<void> confirmDelete(BuildContext context, VoidCallback onDelete) async {
-  return showDialog<void>(
-    context: context,
-    builder: (_) => CustomDialog(
-      title: 'Delete export(s)?',
-      content: CustomButton(
-        onPressed: () {
-          onDelete();
-          context.pop();
-          clickNotifier.value = null;
-        },
-        radius: 8,
-        color: colorRed900,
-        left: const Icon(Icons.delete, color: colorWhite),
-        right: const Text('Permanently delete', style: TextStyle(color: colorWhite)),
-      ),
-    ),
-  );
 }

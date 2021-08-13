@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
@@ -28,6 +29,7 @@ import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/webportal/homepage.dart';
 
@@ -37,19 +39,17 @@ late final Box<SettingsState> boxSettingsState; // app only
 
 Future<void> initializeApp() async {
   await Firebase.initializeApp();
-  await useEmulator();
+  // await useEmulator();
   await Hive.initFlutter();
-  Hive.registerAdapter(UserStateAdapter());
-  // if (!kIsWeb) {
   Hive.registerAdapter(ExportAdapter());
+  Hive.registerAdapter(UserStateAdapter());
   Hive.registerAdapter(ChartDataAdapter());
   Hive.registerAdapter(TimestampAdapter());
   Hive.registerAdapter(PrescriptionAdapter());
   Hive.registerAdapter(SettingsStateAdapter());
   boxExport = await Hive.openBox<Export>(keyExportBox);
   boxSettingsState = await Hive.openBox<SettingsState>(keySettingsStateBox);
-  // await SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
-  // }
+  if (kIsWeb) await SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
   boxUserState = await Hive.openBox<UserState>(keyUserStateBox);
 }
 
@@ -82,7 +82,18 @@ Route<T> buildRoute<T>(String routeName) {
   );
 }
 
-Future<void> signout() async {
+Future<void> logout(BuildContext context) async {
+  try {
+    context.userState.keepSigned = false;
+    await context.userState.save();
+    await context.settingsState.save();
+    await signOut();
+  } finally {
+    await Navigator.pushAndRemoveUntil<void>(context, buildRoute(Login.route), (_) => false);
+  }
+}
+
+Future<void> signOut() async {
   try {
     await FirebaseAuth.instance.signOut();
   } finally {}

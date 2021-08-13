@@ -5,7 +5,6 @@ import 'package:tendon_loader/app_state/app_state_widget.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/user_state.dart';
-import 'package:tendon_loader/screens/login.dart';
 import 'package:tendon_loader/utils/common.dart';
 
 extension ExString on String {
@@ -23,9 +22,9 @@ extension ExContext on BuildContext {
   set userState(UserState? userState) => data.userState = userState;
   set settingsState(SettingsState? settings) => data.settingsState = settings;
 
-  void showSnackBar(Widget content) => ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: content));
+  void refresh() => findAncestorStateOfType<AppStateWidgetState>()!.refresh();
 
-  Future<void> logout() async => Navigator.pushAndRemoveUntil<void>(this, buildRoute(Login.route), (_) => false);
+  void showSnackBar(Widget content) => ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: content));
 
   void pop<T extends Object?>([T? result]) => Navigator.pop<T>(this, result);
 

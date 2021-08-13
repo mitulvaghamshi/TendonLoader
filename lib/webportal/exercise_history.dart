@@ -12,7 +12,9 @@ class ExerciseHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(children: _buildItems(context.view.getUserBy(id).exports!).toList());
+    return SingleChildScrollView(
+      child: Column(children: _buildItems(context.view.getUserBy(id).exports!).toList()),
+    );
   }
 
   Iterable<Widget> _buildItems(List<Export> exports) sync* {

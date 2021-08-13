@@ -11,11 +11,11 @@ import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/emulator.dart';
-import 'package:tendon_loader/screens/graph/graph_handler.dart';
 import 'package:tendon_loader/screens/app_settings.dart';
 import 'package:tendon_loader/screens/exercise/auto_exercise.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
+import 'package:tendon_loader/screens/graph/graph_handler.dart';
 import 'package:tendon_loader/screens/livedata/live_data.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await disconnectDevice();
     await Wakelock.disable();
     await disposePlayer();
-    await signout();
+    await signOut();
     return Future<void>.delayed(const Duration(milliseconds: 500));
   }
 
