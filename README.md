@@ -1,11 +1,10 @@
 > # Tendon Loader
 ## Getting Started Guide
-#
 ## Introduction
-> **Tendon Loader** is a project designned to measure and help overcome with **Achills Tendon Problems**. for detail see [App development - v1.pdf](resources/docs/App Development – V1.pdf)
+> **Tendon Loader** is a project designned to measure and help overcome with **Achills Tendon Problems**. for detail see (resources/docs/App Development – V1.pdf)
 ![Achills Tendon Problems](resources/images/achills-tendon-problems.png)
 ## Framework used
-> This project containing **three** platforms **([Android](https://flutter.dev/docs/get-started/flutter-for/android-devs), [iOS](https://flutter.dev/docs/get-started/flutter-for/ios-devs) and [Web](https://flutter.dev/docs/get-started/flutter-for/web-devs))** buit using [Flutter](https://flutter.dev/) and [Firebase](https://console.firebase.google.com/project/tendon-loader/overview).
+> This project containing **three** platforms **([Android](https://flutter.dev/docs/get-started/flutter-for/android-devs), [iOS](https://flutter.dev/docs/get-started/flutter-for/ios-devs) and [Web](https://flutter.dev/docs/get-started/flutter-for/web-devs))** built using [Flutter](https://flutter.dev/) with [Firebase](https://console.firebase.google.com/project/tendon-loader/overview).
 ## Project modules
 1. > **Android**: Contains skeleton for basic Android container app, and [configuration](https://console.firebase.google.com/project/tendon-loader/settings/general/android:ca.ubc.tendon_loader) for the Firebase connectivity.
 2. > **iOS**: Same as Android it contains all the resources to build an iOS container app, and [configuretion](https://console.firebase.google.com/project/tendon-loader/settings/general/ios:ca.ubc.tendonLoader) for the Firebase connectivity.
@@ -32,7 +31,7 @@
 * > System: Windows 10 or higher, or macOS Bug Sur 11 or higher (also works with new Apple Silicon SoC).
 * > RAM: at least 8GB. (16GB recommanded for smooth performance).
 * > Tools and SDKs:
-   * > [Flutter](https://flutter.dev/): **First thing First!** Download the latest stable version of the [Flutter SDK](https://flutter.dev/docs/get-started/install) from [here](https://flutter.dev/docs/get-started/install) and extract to desired folder. Please follow the official guide on Flutter to successfully install Flutter SDK. (last tested with Flutter v2.2.3-stable and Dart v2.13.0-stable).
+   * > [Flutter](https://flutter.dev/): **First thing First!** Download the latest stable version of the [Flutter SDK](https://flutter.dev/docs/get-started/install) and extract to desired folder. Please follow the official guide on Flutter to successfully install Flutter SDK. (last tested with Flutter v2.2.3-stable and Dart v2.13.0-stable).
    * > [Android Studio](https://developer.android.com/studio): **Required to work with Android!** Download the stable version from the official sile (last tested with Arctic Fox v2020.3.1-stable, Android 12-preview, and Gradle v7.0.2). Follow the basic installation steps to get started.  Android build system require to provide keystore information (not available in this repo) to be available at location (android/keystore.properties) and (android/tendonloaderkey.jks) please [get it](mailto:mitulvaghmashi@gmail.com) and paste in root Android folder to successfully build the app, *.gitignore* is already configured to not commit those files to version control, make sure to follow this to prevent any missuse. **Alternative**: For the testing perpose (will make anable to create release build) comment out following code lines in app level [build.gradle](android/app/build.gradle) file and rebuild the project:
     ```Gradle
         // Comment out below lines.
@@ -40,13 +39,11 @@
         30 def keystoreProperties = new Properties()
         31 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
-        // Comment these lines in signingConfig section.
-        53 release {
-        54    keyAlias keystoreProperties['keyAlias']
-        55    keyPassword keystoreProperties['keyPassword']
-        56    storeFile file(keystoreProperties['storeFile'])
-        57    storePassword keystoreProperties['storePassword']
-        60 }
+        // Comment these lines in signingConfigs's release section.
+        54 keyAlias keystoreProperties['keyAlias']
+        55 keyPassword keystoreProperties['keyPassword']
+        56 storeFile file(keystoreProperties['storeFile'])
+        57 storePassword keystoreProperties['storePassword']
     ```
    * > [XCode](https://apps.apple.com/us/app/xcode/id497799835?mt=12): **Required to work with iOS!** Download XCode (use App Store) to test with iOS devices. (last tested with XCOde v12-stable, and iOS 14.5). No further modification required, project uses **New Build System** and XCode-12 code compativility, please adjust in XCode preferences. Also requires **Development License** please create one for testing or use existing one if you alredy have Apple Developer account.
    * > [Visual Studio Code](https://code.visualstudio.com/): **Recommanded!** Download the VS Code to eleminate basic everyday terminal task. Project contains all the required terminal scripts in form of VS Code tasks (can be accessed from Terminal > Run Task... menu item in VS Code when project opened as a workspace (recommanded)). Please see the [workspace file](tendon-loader.code-workspace) for more information about all the available scripts.
@@ -75,4 +72,4 @@
     ### **Method-2 (Automatic)**:
     * > Use the VS Code to do everything for you, open project in VSCode as a workspace, then Select Run Task... from the Terminal menu and click on **Project: rebuild** tendon-loader.code-workspace item from the list and wait for all the tasks to finish. Use other available items from the list to  perform other tasks, *edit and modify path in this file if required*.
 
-*Found mistake in this guide? please report or create new issue.
+*Found mistake in this guide? or any suggestion please report or create new issue.
