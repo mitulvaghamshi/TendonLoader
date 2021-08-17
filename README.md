@@ -1,38 +1,37 @@
 > # Tendon Loader
 ## Getting Started Guide
 ## Introduction
-> **Tendon Loader** is a project designned to measure and help overcome with **Achills Tendon Problems**. for detail see (resources/docs/App Development – V1.pdf)
+> **Tendon Loader** is a project designned to measure and help overcome with **Achills Tendon Problems**. for more detail see (resources/docs/App Development – V1.pdf) and other documents. 
 ![Achills Tendon Problems](resources/images/achills-tendon-problems.png)
 ## Framework used
 > This project containing **three** platforms **([Android](https://flutter.dev/docs/get-started/flutter-for/android-devs), [iOS](https://flutter.dev/docs/get-started/flutter-for/ios-devs) and [Web](https://flutter.dev/docs/get-started/flutter-for/web-devs))** built using [Flutter](https://flutter.dev/) with [Firebase](https://console.firebase.google.com/project/tendon-loader/overview).
 ## Project modules
 1. > **Android**: Contains skeleton for basic Android container app, and [configuration](https://console.firebase.google.com/project/tendon-loader/settings/general/android:ca.ubc.tendon_loader) for the Firebase connectivity.
 2. > **iOS**: Same as Android it contains all the resources to build an iOS container app, and [configuretion](https://console.firebase.google.com/project/tendon-loader/settings/general/ios:ca.ubc.tendonLoader) for the Firebase connectivity.
-3. > **Web portal**: The web module uses [automatic configuration](https://firebase.google.com/docs/hosting/reserved-urls?authuser=0) to connect with the Firebase.
-4. > **Firebase**: Firebase is currently registered using [Spark](https://firebase.google.com/pricing?authuser=0) plan. which is free with limited access and suitable for development cycle. Project uses three services from the Firebase as:
-    1. > **Authentication**: Uses the (based email only) method to allow user (patient) and admin (clinician) to login and/or register to the app or web portal.
+3. > **Web**: The web module uses [automatic configuration](https://firebase.google.com/docs/hosting/reserved-urls?authuser=0) to connect with the Firebase.
+4. > **Firebase**: Firebase is currently registered using [Spark](https://firebase.google.com/pricing?authuser=0) plan. which is free with limited read/write access and suitable for development phase. Project uses three services from the Firebase:
+    1. > **Authentication**: Uses the (email only) method to allow user(as a patient) and admin(as a clinician) to login and/or register to the app or web portal.
        > * User can login/register through the app (Android/iOS) only, and does not have access to the web portal.
        > * User can only generate the data and submit it to the clinician (web-portal), and does not allowed to view, alter or delete it leter.
-       > * Admin can login/register to both (App/Web) using same credentials, can create new users (Admin/Non-Admin) from the web portal, and can toggle web portal access for existing users.
+       > * Admin can login/register to both (App/Web) using same credentials, can create new users (admin/non-admin) from the web portal, and can toggle web portal access for existing users.
        > * No implementation for deleting extisting users (except deleting actual database and auth records from the Firebase).
        > * New users/admins are created using **email and password** method, and does not contain email verification and allowed to use (non-existing) dummy email addresses.
-       > * All new users(patients) are probably created and assigned by the clinician, to follow unique email/user-id formation.
+       > * All new users(patients) are, to follow unique email/user-id formation, might be created and assigned by the clinician.
     2. > **Firestore Database**: It contains data for both the user and admin.
        > * Every new user and/or admin occupies some on-demand increasing space in this database, and will be used and altered using only the app and/or web throughout the life-cycle of that user/admin.
        > * Database and it's strcture creation is fully managed by the app/web itslef, and does not require prior creation of any component including authentication. It's a plug and play based system.
-       > * **Altering or removing** any existing field from this database might **crash** the app or web portal.
-
-    3. > **Hosting**: The web-app for web only module is [hosted](https://console.firebase.google.com/project/tendon-loader/hosting/sites) in [preview channel] during testing period. The official url's registered for the live version are:
-       > * [https://tendon-loader.web.app/] and
+       > * **Altering or Removing** any existing field from this database might **crash** the app or web portal.
+    3. > **Hosting**: The web-app for web module is [hosted](https://console.firebase.google.com/project/tendon-loader/hosting/sites) in [preview channel] during testing period. The official URLs registered for the live channel are:
+       > * [https://tendon-loader.web.app/](cors enabled) and
        > * [https://tendon-loader.firebaseapp.com/]
-       > * See the (resources/cors.json) file to view/update cross origin resources access.
+       > * See the (resources/cors.json) file to manage cross origin resources access.
 ## How to begin?
 ### To start working with this project requires following setup:
 * > System: Windows 10 or higher, or macOS Bug Sur 11 or higher (also works with new Apple Silicon SoC).
 * > RAM: at least 8GB. (16GB recommanded for smooth performance).
 * > Tools and SDKs:
    * > [Flutter](https://flutter.dev/): **First thing First!** Download the latest stable version of the [Flutter SDK](https://flutter.dev/docs/get-started/install) and extract to desired folder. Please follow the official guide on Flutter to successfully install Flutter SDK. (last tested with Flutter v2.2.3-stable and Dart v2.13.0-stable).
-   * > [Android Studio](https://developer.android.com/studio): **Required to work with Android!** Download the stable version from the official sile (last tested with Arctic Fox v2020.3.1-stable, Android 12-preview, and Gradle v7.0.2). Follow the basic installation steps to get started.  Android build system require to provide keystore information (not available in this repo) to be available at location (android/keystore.properties) and (android/tendonloaderkey.jks) please [get it](mailto:mitulvaghmashi@gmail.com) and paste in root Android folder to successfully build the app, *.gitignore* is already configured to not commit those files to version control, make sure to follow this to prevent any missuse. **Alternative**: For the testing perpose (will make anable to create release build) comment out following code lines in app level [build.gradle](android/app/build.gradle) file and rebuild the project:
+   * > [Android Studio](https://developer.android.com/studio): **Required to work with Android!** Download the stable version from the official sile (last tested with Arctic Fox v2020.3.1-stable, Android 12-preview, and Gradle v7.0.2). Follow the basic installation steps to get started. Android build system require to provide keystore information (two files) (that not available in this repo) to be available at this location (android/keystore.properties) and (android/tendonloaderkey.jks) please [get it](mailto:mitulvaghmashi@gmail.com) and paste in root Android folder to successfully build the app and create release versions, *.gitignore* is already configured to not commit those files to version control, make sure to follow this to prevent any missuse. **Alternative**: For the testing perpose (will make unable to create release build) comment out following code lines in app level [build.gradle](android/app/build.gradle) file and rebuild the project:
     ```Gradle
         // Comment out below lines.
         29 def keystorePropertiesFile = rootProject.file("keystore.properties")
