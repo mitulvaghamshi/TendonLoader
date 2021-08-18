@@ -9,12 +9,20 @@ part 'chartdata.g.dart';
 class ChartData extends HiveObject {
   ChartData({this.time = 0, this.load = 0});
 
-  ChartData.fromJson(String data) : this.fromMap(jsonDecode(data) as Map<String, dynamic>);
+  ChartData.fromJson(String data)
+      : this.fromMap(jsonDecode(data) as Map<String, dynamic>);
 
-  ChartData.fromMap(Map<String, dynamic> map) : this(time: map[keyChartX] as double, load: map[keyChartY] as double);
+  ChartData.fromMap(Map<String, dynamic> map)
+      : this(
+          time: map[keyChartX] as double,
+          load: map[keyChartY] as double,
+        );
 
   ChartData.fromEntry(MapEntry<String, dynamic> entry)
-      : this(time: double.parse(entry.key), load: double.parse(entry.value.toString()));
+      : this(
+          time: double.parse(entry.key),
+          load: double.parse(entry.value.toString()),
+        );
 
   Map<String, double> toMap() => <String, double>{'$time': load};
 

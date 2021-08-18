@@ -11,9 +11,15 @@ class CustomImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (name != null) {
-      return Image.asset(name!, frameBuilder: (_, Widget child, int? frame, ___) {
-        return AnimatedOpacity(duration: const Duration(seconds: 1), opacity: frame == null ? 0 : 1, child: child);
-      }, fit: BoxFit.contain);
+      return Image.asset(
+        name!,
+        fit: BoxFit.contain,
+        frameBuilder: (_, Widget child, int? frame, ___) => AnimatedOpacity(
+          duration: const Duration(seconds: 1),
+          opacity: frame == null ? 0 : 1,
+          child: child,
+        ),
+      );
     }
     return FittedBox(
       child: Padding(
@@ -21,7 +27,10 @@ class CustomImage extends StatelessWidget {
         child: CircleAvatar(
           minRadius: 10,
           backgroundColor: colorTransparent,
-          child: SvgPicture.asset(imgAppLogo, color: Theme.of(context).accentColor),
+          child: SvgPicture.asset(
+            imgAppLogo,
+            color: Theme.of(context).accentColor,
+          ),
         ),
       ),
     );

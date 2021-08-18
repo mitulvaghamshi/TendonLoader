@@ -22,7 +22,8 @@ final Map<String, String> _errors = <String, String>{
   'invalid-email': 'Invalid email.',
   'weak-password': 'The password is too weak.',
   'wrong-password': 'Invalid password.',
-  'user-not-found': 'No user found for that email. Make sure you enter right credentials.',
+  'user-not-found': 'No user found for that email. '
+      'Make sure you enter right credentials.',
   'user-disabled': 'This account is disabled.',
   'operation-not-allowed': 'This account is disabled.',
 };
@@ -32,7 +33,6 @@ class Login extends StatefulWidget {
 
   static const String route = Navigator.defaultRouteName;
   static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
-  // static const String homeRoute = HomePage.route;
 
   @override
   _LoginState createState() => _LoginState();
@@ -68,7 +68,9 @@ class _LoginState extends State<Login> {
           if (_isNew && !_isAdmin) {
             context.showSnackBar(const Text('User created successfully!!!'));
           } else {
-            context.showSnackBar(const Text('Access denied! are you a clinician?'));
+            context.showSnackBar(
+              const Text('Access denied! are you a clinician?'),
+            );
           }
         }
       } on FirebaseAuthException catch (e) {
@@ -96,15 +98,21 @@ class _LoginState extends State<Login> {
       if (boxSettingsState.containsKey(_emailCtrl.text.hashCode)) {
         _settingsState = boxSettingsState.get(_emailCtrl.text.hashCode)!;
       } else {
-        await boxSettingsState.put(_emailCtrl.text.hashCode, _settingsState = SettingsState());
-        await dataStore.doc(_emailCtrl.text).get().then((DocumentSnapshot<Patient> patient) async {
+        await boxSettingsState.put(
+            _emailCtrl.text.hashCode, _settingsState = SettingsState());
+        await dbRoot
+            .doc(_emailCtrl.text)
+            .get()
+            .then((DocumentSnapshot<Patient> patient) async {
           if (!patient.exists) {
-            await dataStore.doc(_emailCtrl.text).set(Patient(prescription: Prescription.empty()..isAdmin = _isAdmin));
+            await dbRoot.doc(_emailCtrl.text).set(Patient(
+                prescription: Prescription.empty()..isAdmin = _isAdmin));
           }
         });
       }
       final Patient _patient = await Patient.of(_emailCtrl.text).fetch();
-      _settingsState.toggleCustom(_settingsState.customPrescriptions!, _patient);
+      _settingsState.toggleCustom(
+          _settingsState.customPrescriptions!, _patient);
       context
         ..patient = _patient
         ..userState = _userState
@@ -118,7 +126,8 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    _userState = boxUserState.get(keyUserStateBoxItem, defaultValue: UserState());
+    _userState =
+        boxUserState.get(keyUserStateBoxItem, defaultValue: UserState());
     if (_userState != null && (_keepSigned = _userState!.keepSigned!)) {
       _emailCtrl.text = _userState!.userName!;
       _passwordCtrl.text = _userState!.passWord!;
@@ -141,7 +150,9 @@ class _LoginState extends State<Login> {
         automaticallyImplyLeading: false,
         title: Text('Tendon Loader - ${_isNew ? 'Register' : 'Login'}'),
       ),
-      body: kIsWeb ? Center(child: SizedBox(width: 350, child: _buildForm())) : _buildForm(),
+      body: kIsWeb
+          ? Center(child: SizedBox(width: 350, child: _buildForm()))
+          : _buildForm(),
     );
   }
 
@@ -155,6 +166,7 @@ class _LoginState extends State<Login> {
             CustomTextField(
               label: 'Username',
               controller: _emailCtrl,
+              keyboardType: TextInputType.emailAddress,
               validator: (String? email) {
                 if (email == null) return null;
                 if (email.isEmpty) {
@@ -163,12 +175,12 @@ class _LoginState extends State<Login> {
                   return 'Enter a correct email address.';
                 }
               },
-              keyboardType: TextInputType.emailAddress,
             ),
             CustomTextField(
               label: 'Password',
               isObscure: _isObscure,
               controller: _passwordCtrl,
+              keyboardType: TextInputType.visiblePassword,
               validator: (String? password) {
                 if (password == null) return null;
                 if (password.isEmpty) {
@@ -177,10 +189,11 @@ class _LoginState extends State<Login> {
                   return 'Password must be at least 6 characters long.';
                 }
               },
-              keyboardType: TextInputType.visiblePassword,
               suffix: IconButton(
                 onPressed: () => setState(() => _isObscure = !_isObscure),
-                icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
+                icon: Icon(
+                  _isObscure ? Icons.visibility : Icons.visibility_off,
+                ),
               ),
             ),
             if (kIsWeb && _isNew)
@@ -210,7 +223,9 @@ class _LoginState extends State<Login> {
                 onPressed: () => setState(() => _isNew = !_isNew),
                 left: Icon(_isNew ? Icons.check : Icons.add),
                 right: Text(
-                  _isNew ? 'Already have an account? Sign in.' : 'Don\'t have an account? Sign up.',
+                  _isNew
+                      ? 'Already have an account? Sign in.'
+                      : 'Don\'t have an account? Sign up.',
                   style: const TextStyle(letterSpacing: 0.5),
                 ),
               ),
@@ -221,7 +236,9 @@ class _LoginState extends State<Login> {
               child: CustomButton(
                 rounded: true,
                 onPressed: () => Future<void>.microtask(_authenticate),
-                left: _isBusy ? const CircularProgressIndicator.adaptive() : Icon(_isNew ? Icons.add : Icons.send),
+                left: _isBusy
+                    ? const CircularProgressIndicator.adaptive()
+                    : Icon(_isNew ? Icons.add : Icons.send),
               ),
             ),
           ]),

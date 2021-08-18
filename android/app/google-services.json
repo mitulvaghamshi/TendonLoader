@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "534221336745-2peccj42jr1dt1hdu786hga4gh8qul2b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.ubc.tendon_loader",
+            "certificate_hash": "2fe9b7d0cb4a57b8f26650694c1bced4e0c14b27"
+          }
+        },
+        {
+          "client_id": "534221336745-8coq0emecl1k3urmhdr38h9bhn3m9h51.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.ubc.tendon_loader",
+            "certificate_hash": "e843638143afd975cafac0c72ff099cab9cce8b2"
+          }
+        },
+        {
           "client_id": "534221336745-adu54q04r51nqpeovbg0k0c2jeflbu39.apps.googleusercontent.com",
           "client_type": 3
         }

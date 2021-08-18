@@ -10,9 +10,7 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
-import 'package:tendon_loader/emulator.dart';
 import 'package:tendon_loader/screens/app_settings.dart';
-import 'package:tendon_loader/screens/exercise/auto_exercise.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
 import 'package:tendon_loader/screens/graph/graph_handler.dart';
@@ -40,7 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Wakelock.enable();
-    Future<void>.delayed(const Duration(seconds: 1), () => tryUpload(context));
+    Future<void>.delayed(const Duration(seconds: 1), () async {
+      await tryUpload(context);
+    });
   }
 
   Future<void> _cleanup() async {
@@ -58,7 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
       content: FutureBuilder<void>(
         future: _cleanup(),
         builder: (_, AsyncSnapshot<void> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) context.pop(true);
+          if (snapshot.connectionState == ConnectionState.done) {
+            context.pop(true);
+          }
           return const CustomProgress();
         },
       ),
@@ -66,18 +68,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _connectProgressor() async {
-    return CustomDialog.show<void>(
+    await CustomDialog.show<void>(
       context,
       title: 'Connect Progressor',
       content: const ConnectedList(),
-    ).then((_) async => stopWeightMeas().then((_) => GraphHandler.clear()));
+    ).then((_) async {
+      await stopWeightMeas().then((_) => GraphHandler.clear());
+    });
   }
 
   Future<void> _startAutoExercise() async {
     return CustomDialog.show<void>(
       context,
       title: 'Start Exercise',
-      content: const FittedBox(child: AutoExercise()),
+      content: FittedBox(child: Builder(builder: (BuildContext context) {
+        return context.settingsState.prescription!.toTable();
+      })),
       action: CustomButton(
         left: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
         right: const Icon(Icons.arrow_forward, color: colorGoogleGreen),
@@ -86,8 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _navigateTo([String? route]) {
-    if (route == null || progressor == null && !isSumulation) {
+  void _navigateTo(String route) {
+    if (progressor == null) {
       _connectProgressor();
     } else {
       final bool _isCustom = context.settingsState.customPrescriptions!;
@@ -120,11 +126,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: false, title: const Text(HomeScreen.name), actions: <Widget>[
-        IconButton(icon: const Icon(Icons.settings), onPressed: () async => context.push(AppSettings.route)),
-      ]),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text(HomeScreen.name),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () async => context.push(AppSettings.route),
+          ),
+        ],
+      ),
       floatingActionButton: CustomButton(
-        onPressed: _navigateTo,
+        onPressed: _connectProgressor,
         left: const Icon(Icons.bluetooth),
         right: const Text('Connect Device'),
       ),
@@ -141,7 +154,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             CustomTile(
               title: MVCTesting.name,
-              left: const Icon(Icons.airline_seat_legroom_extra, color: colorBlue),
+              left: const Icon(Icons.airline_seat_legroom_extra,
+                  color: colorBlue),
               right: const Icon(Icons.keyboard_arrow_right),
               onTap: () => _navigateTo(MVCTesting.route),
             ),

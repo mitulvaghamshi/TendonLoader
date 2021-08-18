@@ -41,7 +41,10 @@ class _UserListState extends State<UserList> {
           radius: 16,
           color: colorRed900,
           left: const Icon(Icons.delete, color: colorWhite),
-          right: const Text('Permanently delete', style: TextStyle(color: colorWhite)),
+          right: const Text(
+            'Permanently delete',
+            style: TextStyle(color: colorWhite),
+          ),
         ),
       ),
     );
@@ -96,11 +99,15 @@ class _UserListState extends State<UserList> {
           Expanded(
             child: RefreshIndicator(
               color: colorGoogleGreen,
-              onRefresh: () async => setState(() => context.view.setRefetch()),
+              onRefresh: () async => setState(() {
+                context.view.setRefetch();
+              }),
               child: FutureBuilder<void>(
                 future: context.view.fetch(),
                 builder: (_, AsyncSnapshot<void> snapshot) {
-                  if (snapshot.connectionState != ConnectionState.done) return const CustomProgress();
+                  if (snapshot.connectionState != ConnectionState.done) {
+                    return const CustomProgress();
+                  }
                   return ListView.separated(
                     itemCount: _userList.length,
                     separatorBuilder: (_, __) => const Divider(height: 0),

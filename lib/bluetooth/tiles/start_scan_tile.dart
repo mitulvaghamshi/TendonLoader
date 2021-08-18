@@ -16,7 +16,11 @@ class StartScanTile extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
       ),
-      CustomButton(left: Icon(Icons.search), onPressed: startScan, right: Text('Scan')),
+      CustomButton(
+        left: Icon(Icons.search),
+        onPressed: startScan,
+        right: Text('Scan'),
+      ),
     ]);
   }
 }

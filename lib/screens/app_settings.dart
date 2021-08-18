@@ -6,7 +6,6 @@ import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/emulator.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
@@ -34,7 +33,9 @@ class _AppSettingsState extends State<AppSettings> {
     if (await tryUpload(context) ?? true) {
       setState(() {});
     } else {
-      context.showSnackBar(const Text('No data available! or already submitted.'));
+      context.showSnackBar(
+        const Text('No data available! or already submitted.'),
+      );
     }
   }
 
@@ -47,13 +48,7 @@ class _AppSettingsState extends State<AppSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings'), actions: <Widget>[
-        Switch.adaptive(
-          value: isSumulation,
-          activeColor: colorRed400,
-          onChanged: (bool value) => setState(() => isSumulation = value),
-        ),
-      ]),
+      appBar: AppBar(title: const Text('Settings')),
       body: SingleChildScrollView(
         child: AppFrame(
           onExit: _onExit,
@@ -73,10 +68,15 @@ class _AppSettingsState extends State<AppSettings> {
                   controller: _ctrlGraphScale,
                   format: r'^\d{1,2}(\.\d{0,2})?',
                   label: 'Y-Axis Scale (default: 30 Kg)',
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                 ),
                 const SizedBox(height: 5),
-                const Text('Consult your clinician before modifying the axis scale value.'),
+                const Text(
+                  'Consult your clinician before '
+                  'modifying the axis scale value.',
+                ),
               ]),
             ),
             const Divider(),
@@ -84,15 +84,23 @@ class _AppSettingsState extends State<AppSettings> {
               activeColor: colorBlue,
               value: context.settingsState.autoUpload!,
               title: const Text('Automatic data upload'),
-              subtitle: const Text('Automatically upload exercise and mvc test data on completion.'),
-              onChanged: (bool value) => setState(() => context.settingsState.autoUpload = value),
+              subtitle: const Text(
+                'Automatically upload exercise '
+                'and mvc test data on completion.',
+              ),
+              onChanged: (bool value) {
+                setState(() => context.settingsState.autoUpload = value);
+              },
             ),
             const Divider(),
             SwitchListTile.adaptive(
               activeColor: colorBlue,
               title: const Text('Use custom prescriptions'),
               value: context.settingsState.customPrescriptions!,
-              subtitle: const Text('Provide your own prescriptions for exercise and mvc test.'),
+              subtitle: const Text(
+                'Provide your own prescriptions '
+                'for exercise and mvc test.',
+              ),
               onChanged: (bool value) => setState(() {
                 context.settingsState.toggleCustom(value, context.patient);
               }),
@@ -101,30 +109,55 @@ class _AppSettingsState extends State<AppSettings> {
             ListTile(
               onTap: _tryUpload,
               title: const Text('Locally stored data'),
-              subtitle: const Text('Click here to submit locally stored data to clinician.'),
-              trailing: CustomButton(rounded: true, left: Text(boxExport.length.toString(), style: ts22B)),
+              subtitle: const Text(
+                'Click here to submit locally '
+                'stored data to clinician.',
+              ),
+              trailing: CustomButton(
+                rounded: true,
+                left: Text(boxExport.length.toString(), style: ts22B),
+              ),
             ),
             if (progressor != null) ...<Widget>[
               const Divider(),
               ListTile(
                 title: Text('Disconnect ($deviceName)'),
                 subtitle: const Text('Long pres to sleep progressor'),
-                onTap: () => disconnectDevice().then((_) => setState(() {})),
-                onLongPress: () => disconnectDevice(true).then((_) => setState(() {})),
+                onTap: () async {
+                  await disconnectDevice().then((_) => setState(() {}));
+                },
+                onLongPress: () async {
+                  await disconnectDevice(sleep: true).then((_) {
+                    setState(() {});
+                  });
+                },
               ),
             ],
             const Divider(),
             const AboutListTile(
               applicationVersion: 'v0.0.11',
               applicationName: 'Tendon Loader',
-              applicationIcon: SizedBox(height: 50, width: 50, child: CustomImage()),
-              aboutBoxChildren: <Widget>[Text('Tendon Loader :Preview', textAlign: TextAlign.center, style: tsG18B)],
+              applicationIcon: SizedBox(
+                width: 50,
+                height: 50,
+                child: CustomImage(),
+              ),
+              aboutBoxChildren: <Widget>[
+                Text(
+                  'Tendon Loader :Preview',
+                  textAlign: TextAlign.center,
+                  style: tsG18B,
+                ),
+              ],
               child: Text('About'),
             ),
             const Divider(),
             ListTile(
               onTap: () async => logout(context),
-              title: const Text('Logout', style: TextStyle(color: colorRed400)),
+              title: const Text(
+                'Logout',
+                style: TextStyle(color: colorRed400),
+              ),
             ),
           ]),
         ),

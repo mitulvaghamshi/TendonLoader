@@ -13,7 +13,10 @@ class ExerciseHandler extends GraphHandler {
       : _pre = context.settingsState.prescription!,
         super(context: context, lineData: <ChartData>[
           ChartData(load: context.settingsState.prescription!.targetLoad),
-          ChartData(time: 2, load: context.settingsState.prescription!.targetLoad),
+          ChartData(
+            time: 2,
+            load: context.settingsState.prescription!.targetLoad,
+          ),
         ]) {
     _clear();
   }

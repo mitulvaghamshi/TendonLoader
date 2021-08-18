@@ -29,23 +29,28 @@ class Export extends HiveObject {
 
   Export.fromJson(DocumentSnapshot<Map<String, dynamic>> snapshot)
       : this(
-            reference: snapshot.reference,
-            userId: snapshot.data()![keyUserId] as String,
-            isComplate: snapshot.data()![keyIsComplate] as bool,
-            isTolerable:
-                snapshot.data()!.containsKey(keyIsTolerable) ? snapshot.data()![keyIsTolerable] as String? : '---',
-            timestamp: snapshot.data()![keyTimeStamp] as Timestamp,
-            progressorId: snapshot.data()![keyProgressorId] as String,
-            mvcValue: double.tryParse(snapshot.data()![keyMvcValue].toString()),
-            painScore: snapshot.data()!.containsKey(keyPainScore)
-                ? double.tryParse(snapshot.data()![keyPainScore].toString())
-                : 0,
-            prescription: snapshot.data()!.containsKey(keyPrescription)
-                ? Prescription.fromJson(snapshot.data()![keyPrescription] as Map<String, dynamic>)
-                : null,
-            exportData: List<Map<String, dynamic>>.from(snapshot.data()![keyExportData] as List<dynamic>)
-                .map((Map<String, dynamic> map) => ChartData.fromEntry(map.entries.first))
-                .toList());
+          reference: snapshot.reference,
+          userId: snapshot.data()![keyUserId] as String,
+          isComplate: snapshot.data()![keyIsComplate] as bool,
+          isTolerable: snapshot.data()!.containsKey(keyIsTolerable)
+              ? snapshot.data()![keyIsTolerable] as String?
+              : '---',
+          timestamp: snapshot.data()![keyTimeStamp] as Timestamp,
+          progressorId: snapshot.data()![keyProgressorId] as String,
+          mvcValue: double.tryParse(snapshot.data()![keyMvcValue].toString()),
+          painScore: snapshot.data()!.containsKey(keyPainScore)
+              ? double.tryParse(snapshot.data()![keyPainScore].toString())
+              : 0,
+          prescription: snapshot.data()!.containsKey(keyPrescription)
+              ? Prescription.fromJson(
+                  snapshot.data()![keyPrescription] as Map<String, dynamic>)
+              : null,
+          exportData: List<Map<String, dynamic>>.from(
+                  snapshot.data()![keyExportData] as List<dynamic>)
+              .map((Map<String, dynamic> map) {
+            return ChartData.fromEntry(map.entries.first);
+          }).toList(),
+        );
 
   @HiveField(0)
   String? userId;
@@ -69,8 +74,15 @@ class Export extends HiveObject {
   DocumentReference<Map<String, dynamic>>? reference;
 
   bool get isMVC => mvcValue != null && prescription == null;
-  String get dateTime => DateFormat(keyDateTimeFormat).format(timestamp!.toDate());
-  String get fileName => '$dateTime $userId ${isMVC ? 'MVCTest' : 'Exercise'}.xlsx'.replaceAll(RegExp(r'[\s:]'), '_');
+
+  String get dateTime {
+    return DateFormat(keyDateTimeFormat).format(timestamp!.toDate());
+  }
+
+  String get fileName {
+    return '$dateTime $userId ${isMVC ? 'MVCTest' : 'Exercise'}.xlsx'
+        .replaceAll(RegExp(r'[\s:]'), '_');
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -98,7 +110,10 @@ class Export extends HiveObject {
 
   // long task
   Future<void> download() async {
-    await saveExcel(name: '$fileName.zip', bytes: ZipEncoder().encode(Archive()..addFile(toArchivedExcel())));
+    await saveExcel(
+      name: '$fileName.zip',
+      bytes: ZipEncoder().encode(Archive()..addFile(toArchivedExcel())),
+    );
   }
 
   ArchiveFile toArchivedExcel() {
@@ -149,7 +164,8 @@ class Export extends HiveObject {
     }
 
     final InputStream _stream = InputStream(_book.saveAsStream());
-    final ArchiveFile _file = ArchiveFile.stream(fileName, _stream.length, _stream);
+    final ArchiveFile _file =
+        ArchiveFile.stream(fileName, _stream.length, _stream);
     _book.dispose();
 
     return _file;

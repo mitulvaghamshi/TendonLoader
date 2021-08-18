@@ -28,7 +28,7 @@ class AppStateWidgetState extends State<AppStateWidget> {
 
   Future<void> fetch() async {
     if (_complater.isCompleted) return;
-    final QuerySnapshot<Patient> _snapshot = await dataStore.get();
+    final QuerySnapshot<Patient> _snapshot = await dbRoot.get();
     if (_snapshot.size > 0) _data.users.clear();
     for (int i = 0; i < _snapshot.size; i++) {
       _data.users[i] = await _snapshot.docs[i].data().fetch();
@@ -45,11 +45,15 @@ class AppStateWidgetState extends State<AppStateWidget> {
     if (filter == null) return userList;
     final List<int> _ids = <int>[];
     for (final MapEntry<int, Patient> user in _data.users.entries) {
-      if (user.value.id.toLowerCase().contains(filter.toLowerCase())) _ids.add(user.key);
+      if (user.value.id.toLowerCase().contains(filter.toLowerCase())) {
+        _ids.add(user.key);
+      }
     }
     return _ids;
   }
 
   @override
-  Widget build(BuildContext context) => AppStateScope(data: _data, child: widget.child);
+  Widget build(BuildContext context) {
+    return AppStateScope(data: _data, child: widget.child);
+  }
 }

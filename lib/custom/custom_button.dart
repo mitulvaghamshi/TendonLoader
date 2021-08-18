@@ -28,12 +28,18 @@ class CustomButton extends StatelessWidget {
       onPressed: onPressed,
       disabledElevation: 16,
       fillColor: color ?? Theme.of(context).buttonColor,
-      shape: rounded ? const CircleBorder() : RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
-      constraints:
-          rounded ? BoxConstraints.tight(Size.fromRadius(radius)) : const BoxConstraints(minWidth: 30, minHeight: 30),
+      shape: rounded
+          ? const CircleBorder()
+          : RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+      constraints: rounded
+          ? BoxConstraints.tight(Size.fromRadius(radius))
+          : const BoxConstraints(minWidth: 30, minHeight: 30),
       child: rounded || left == null || right == null
           ? left ?? right
-          : Row(mainAxisSize: MainAxisSize.min, children: <Widget>[left!, const SizedBox(width: 5), right!]),
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[left!, const SizedBox(width: 5), right!],
+            ),
     );
   }
 }

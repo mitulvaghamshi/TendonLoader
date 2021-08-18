@@ -7,44 +7,42 @@
 	"launch": {
 		"version": "0.2.0",
 		"configurations": [
+			/* Debug in any selected device */
 			{
-				"name": "Any",
+				"name": "Any Device",
 				"request": "launch",
 				"type": "dart",
 			},
+			/* Debug in chrome */
 			{
-				"name": "Web",
+				"name": "Web(Chrome)",
 				"request": "launch",
 				"type": "dart",
 				"deviceId": "Chrome",
 			},
+			/* Debug in Android emulator */
 			{
-				"name": "Android",
+				"name": "Android(Emulator)",
 				"request": "launch",
 				"type": "dart",
 				"deviceId": "sdk gphone64",
 			},
+			/* Debug in iOS simulator */
 			{
-				"name": "Redmi Note 7 Pro",
-				"request": "launch",
-				"type": "dart",
-				"deviceId": "Redmi Note 7 Pro",
-			},
-			{
-				"name": "iPhone",
+				"name": "iPhone(Simulator)",
 				"request": "launch",
 				"type": "dart",
 				"deviceId": "iphone",
-			},
+			}
 		],
+		/* Debug app in all connected devices togather */
 		"compounds": [
 			{
 				"name": "All Devices",
 				"configurations": [
-					"Redmi Note 7 Pro",
-					"Android",
-					"iPhone",
-					"Web",
+					"Web(Chrome)",
+					"Android(Emulator)",
+					"iPhone(Simulator)",
 				],
 			}
 		]
@@ -52,71 +50,87 @@
 	"tasks": {
 		"version": "2.0.0",
 		"tasks": [
+			/* Clean the flutter project */
 			{
-				"label": "Flutter: clean",
 				"type": "shell",
+				"label": "Flutter: clean",
 				"command": "flutter clean"
 			},
+			/* Get pub dependencies */
 			{
-				"label": "Flutter: pub get",
 				"type": "shell",
+				"label": "Flutter: pub get",
 				"command": "flutter pub get"
 			},
+			/* Install iOS pods */
 			{
-				"label": "iOS: pod install",
 				"type": "shell",
+				"label": "iOS: pod install",
 				"command": "pod install",
 				"options": {
 					"cwd": "${workspaceFolder}/ios"
 				}
 			},
+			/* Generate adapter classes for Hive, deleting any existing one */
 			{
-				"label": "BuildRunner: build",
 				"type": "shell",
+				"label": "Build Runner: build",
 				"command": "flutter pub run build_runner build --delete-conflicting-outputs",
 				"problemMatcher": [
 					"$dart-build_runner"
 				]
 			},
+			/* This will rebuilds the project.
+				tasks include:
+				1. Clean flutter project (flutter build, android build, ios workspace)
+				2. Get pub dependencies
+				3. Install iOS pods
+				4. Generate (Hive) adapters classes (build_runner: override existing)
+			 */
 			{
-				"label": "Project: rebuild",
 				"type": "shell",
+				"label": "Project: full rebuild",
 				"dependsOrder": "sequence",
 				"dependsOn": [
 					"Flutter: clean",
 					"Flutter: pub get",
 					"iOS: pod install",
-					"BuildRunner: build"
+					"Build Runner: build"
 				]
 			},
+			/* Generate android appbundle, require keystore information */
 			{
-				"label": "Android: build appbundle",
 				"type": "shell",
+				"label": "Android: generate appbundle(release)",
 				"command": "flutter build appbundle --no-track-widget-creation --obfuscate --split-debug-info=build/app/outputs/bundle/release/map/"
 			},
+			/* Generate release apk (path: build/output/..) require keystore information */
 			{
-				"label": "Android: build apk",
 				"type": "shell",
+				"label": "Android: generate apk(release)",
 				"command": "flutter build apk --no-track-widget-creation --obfuscate --split-debug-info=build/app/outputs/bundle/release/map/",
-				"problemMatcher": []
 			},
+			/* Create a release version of web app (path: /build/web) */
 			{
-				"label": "Web: build",
 				"type": "shell",
+				"label": "Web: build(release)",
 				"command": "flutter build web"
 			},
+			/* This command will start all confugured firebase emulators and populate
+			   and backup data from given import and export path (relative to project's parent dir),
+			   adjust path if required. All required emulators must be configured before starting. */
 			{
-				"label": "Firebase: start emulators",
 				"type": "shell",
+				"label": "Firebase: start emulators",
 				"command": "firebase emulators:start --export-on-exit=../emulator-backup --import=../emulator-backup"
 			},
+			/* This command will connect physical android device over wifi using ADB Shell utility,
+			   Requre adb to be in environment path, must set tcpip before running this command */
 			{
-				"label": "Connect Redmi",
 				"type": "shell",
+				"label": "Connect device",
 				"command": "adb connect 192.168.0.54"
 			}
 		]
 	},
-	"settings": {
-	}
 }

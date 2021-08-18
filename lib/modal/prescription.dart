@@ -1,5 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:tendon_loader/custom/custom_table.dart';
 import 'package:tendon_loader/utils/constants.dart';
+import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/themes.dart';
 
 part 'prescription.g.dart';
 
@@ -29,14 +33,15 @@ class Prescription extends HiveObject {
 
   Prescription.fromJson(Map<String, dynamic> map)
       : this(
-            sets: int.parse(map[keySets].toString()),
-            reps: int.parse(map[keyReps].toString()),
-            setRest: int.parse(map[keySetRest].toString()),
-            restTime: int.parse(map[keyRestTime].toString()),
-            holdTime: int.parse(map[keyHoldTime].toString()),
-            targetLoad: double.parse(map[keyTargetLoad].toString()),
-            mvcDuration: int.parse(map[keyMvcDuration].toString()),
-            isAdmin: map[keyIsAdmin] as bool? ?? false);
+          sets: int.parse(map[keySets].toString()),
+          reps: int.parse(map[keyReps].toString()),
+          setRest: int.parse(map[keySetRest].toString()),
+          restTime: int.parse(map[keyRestTime].toString()),
+          holdTime: int.parse(map[keyHoldTime].toString()),
+          targetLoad: double.parse(map[keyTargetLoad].toString()),
+          mvcDuration: int.parse(map[keyMvcDuration].toString()),
+          isAdmin: map[keyIsAdmin] as bool? ?? false,
+        );
 
   @HiveField(0)
   final int sets;
@@ -66,5 +71,19 @@ class Prescription extends HiveObject {
       keyMvcDuration: mvcDuration,
       keyIsAdmin: isAdmin,
     };
+  }
+
+  CustomTable toTable() {
+    return CustomTable(columns: const <DataColumn>[
+      DataColumn(label: Text('Prescription', style: ts18B)),
+      DataColumn(label: Text('Detail', style: ts18B)),
+    ], rows: <DataRow>[
+      DataRow(cells: <DataCell>['Target load'.toCell, '$targetLoad Kg'.toCell]),
+      DataRow(cells: <DataCell>['Sets #'.toCell, '$sets'.toCell]),
+      DataRow(cells: <DataCell>['Reps #'.toCell, '$reps'.toCell]),
+      DataRow(cells: <DataCell>['Hold time'.toCell, '$holdTime Sec'.toCell]),
+      DataRow(cells: <DataCell>['Rest time'.toCell, '$restTime Sec'.toCell]),
+      DataRow(cells: <DataCell>['Set rest time'.toCell, '$setRest Sec'.toCell]),
+    ]);
   }
 }

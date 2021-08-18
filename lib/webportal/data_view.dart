@@ -19,10 +19,14 @@ class DataView extends StatelessWidget {
         valueListenable: clickNotifier,
         builder: (BuildContext context, Export? value, Widget? child) {
           if (value == null || value.exportData!.isEmpty) return child!;
-          final double _targetLine = value.isMVC ? value.mvcValue! : value.prescription!.targetLoad;
+          final double _targetLine =
+              value.isMVC ? value.mvcValue! : value.prescription!.targetLoad;
           return SfCartesianChart(
             plotAreaBorderWidth: 0,
-            tooltipBehavior: TooltipBehavior(enable: true, header: value.isMVC ? 'MVC' : 'Measurement'),
+            tooltipBehavior: TooltipBehavior(
+              enable: true,
+              header: value.isMVC ? 'MVC' : 'Measurement',
+            ),
             primaryXAxis: NumericAxis(
               interval: 1,
               labelFormat: '{value} s',
@@ -35,7 +39,9 @@ class DataView extends StatelessWidget {
               labelFormat: '{value} kg',
               enableAutoIntervalOnZooming: true,
               majorTickLines: const MajorTickLines(size: 0),
-              majorGridLines: MajorGridLines(color: Theme.of(context).accentColor),
+              majorGridLines: MajorGridLines(
+                color: Theme.of(context).accentColor,
+              ),
             ),
             zoomPanBehavior: ZoomPanBehavior(
               enablePanning: true,
@@ -60,7 +66,10 @@ class DataView extends StatelessWidget {
                 yValueMapper: (ChartData data, _) => data.load,
                 dataSource: <ChartData>[
                   ChartData(load: _targetLine),
-                  ChartData(time: value.exportData!.last.time, load: _targetLine),
+                  ChartData(
+                    time: value.exportData!.last.time,
+                    load: _targetLine,
+                  ),
                 ],
               ),
             ],

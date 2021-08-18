@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/bluetooth/device_handler.dart';
-import 'package:tendon_loader/emulator.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/graph/dialogs_handler.dart';
@@ -20,20 +19,29 @@ import 'package:tendon_loader/utils/themes.dart';
 
 extension on List<int> {
   ByteData get _bytes => Uint8List.fromList(this).buffer.asByteData();
-  double get toTime => double.parse((_bytes.getUint32(0, Endian.little) / 1000000.0).toStringAsFixed(1));
-  double get toWeight => double.parse((_bytes.getFloat32(0, Endian.little).abs()).toStringAsFixed(2));
+
+  double get toTime => double.parse(
+      (_bytes.getUint32(0, Endian.little) / 1000000.0).toStringAsFixed(1));
+
+  double get toWeight => double.parse(
+      (_bytes.getFloat32(0, Endian.little).abs()).toStringAsFixed(2));
 }
 
 final AudioPlayer _player = AudioPlayer(playerId: 'FeedbackClipPlayer');
-final AudioCache _playerCache = AudioCache(respectSilence: true, prefix: audioRoot, fixedPlayer: _player)
-  ..loadAll(<String>[startClip, stopClip]);
+
+final AudioCache _playerCache = AudioCache(
+  respectSilence: true,
+  prefix: audioRoot,
+  fixedPlayer: _player,
+)..loadAll(<String>[startClip, stopClip]);
 
 Future<void> disposePlayer() async => _player.dispose();
 
 bool isPause = false;
 
 class GraphHandler {
-  GraphHandler({required this.context, this.lineData}) : userId = context.data.currentUser!.id {
+  GraphHandler({required this.context, this.lineData})
+      : userId = context.data.currentUser!.id {
     isRunning = isComplete = hasData = false;
     stream.listen(update);
     clear();
@@ -59,10 +67,12 @@ class GraphHandler {
   @protected
   static final List<ChartData> exportData = <ChartData>[];
 
-  static final BehaviorSubject<ChartData> _controller = BehaviorSubject<ChartData>.seeded(ChartData());
+  static final BehaviorSubject<ChartData> _controller =
+      BehaviorSubject<ChartData>.seeded(ChartData());
+
   static Stream<ChartData> get stream => _controller.stream;
 
-  static Sink<ChartData> get sink => _controller.sink; // simulation
+  static double _lastMillis = 0;
 
   Color get feedColor => isHit ? colorGoogleGreen : colorWhite;
 
@@ -75,7 +85,6 @@ class GraphHandler {
     if (!_controller.isClosed) _controller.close();
   }
 
-  static double _lastMillis = 0;
   static void onData(List<int> data) {
     if (!isPause && data.isNotEmpty && data[0] == resWeightMeasurement) {
       for (int x = 2; x < data.length; x += 8) {
@@ -99,13 +108,7 @@ class GraphHandler {
       isComplete = false;
       exportData.clear();
       timestamp = Timestamp.now();
-      //
-      if (isSumulation) {
-        fakeStart();
-      } else {
-        await startWeightMeas();
-      }
-      //
+      await startWeightMeas();
       await _playerCache.play(startClip);
     }
   }
@@ -116,13 +119,7 @@ class GraphHandler {
 
   @mustCallSuper
   Future<void> stop() async {
-    //
-    if (isSumulation) {
-      fakeStop();
-    } else {
-      await stopWeightMeas();
-    }
-    //
+    await stopWeightMeas();
     await _playerCache.play(stopClip);
   }
 
@@ -144,7 +141,9 @@ class GraphHandler {
     export!.isTolerable ??= await selectTolerance(context);
     await export!.save();
 
-    if (export!.painScore == null || export!.isTolerable == null) return false;
+    if (export!.painScore == null || export!.isTolerable == null) {
+      return false;
+    }
 
     final bool? result = await submitData(context, export!);
     if (result == null) {

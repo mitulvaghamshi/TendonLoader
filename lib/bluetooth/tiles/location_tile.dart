@@ -12,9 +12,8 @@ class LocationTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool?>(
-      stream: Stream<bool?>.periodic(const Duration(milliseconds: 500)).asyncMap((_) async {
-        return Location.instance.serviceEnabled();
-      }),
+      stream: Stream<bool?>.periodic(const Duration(milliseconds: 500))
+          .asyncMap((_) async => Location.instance.serviceEnabled()),
       builder: (_, AsyncSnapshot<bool?> snapshot) {
         if (snapshot.hasData && snapshot.data!) return const StartScanTile();
         return Column(mainAxisSize: MainAxisSize.min, children: const <Widget>[

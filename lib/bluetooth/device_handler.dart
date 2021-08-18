@@ -20,7 +20,9 @@ String get deviceName => _device == null
         ? _device!.id.id
         : _device!.name;
 
-Future<void> startScan() async => FlutterBlue.instance.startScan(timeout: const Duration(seconds: 2));
+Future<void> startScan() async {
+  await FlutterBlue.instance.startScan(timeout: const Duration(seconds: 2));
+}
 
 Future<void> tareProgressor() async {
   if (_isRunning) {
@@ -45,7 +47,7 @@ Future<void> stopWeightMeas() async {
   }
 }
 
-Future<void> disconnectDevice([bool sleep = false]) async {
+Future<void> disconnectDevice({bool sleep = false}) async {
   if (_device != null) {
     if (sleep) {
       await _controlChar!.write(<int>[cmdEnterSleep]);
@@ -59,7 +61,10 @@ Future<void> disconnectDevice([bool sleep = false]) async {
 
 Future<bool> getProps(BluetoothDevice device) async {
   if (_device != null && _dataChar != null && _controlChar != null) {
-    return Future<void>.delayed(const Duration(milliseconds: 800), startWeightMeas).then((_) => true);
+    return Future<void>.delayed(
+      const Duration(milliseconds: 800),
+      startWeightMeas,
+    ).then((_) => true);
   } else if (_completer == null) {
     _completer = Completer<bool>();
     for (final BluetoothService s in await device.discoverServices()) {
@@ -71,13 +76,15 @@ Future<bool> getProps(BluetoothDevice device) async {
         }
       }
     }
-    await _dataChar!.setNotifyValue(true);
-    if (Platform.isAndroid) await device.requestMtu(120);
     if (_dataChar != null && _controlChar != null) {
+      await _dataChar!.setNotifyValue(true);
+      if (Platform.isAndroid) await device.requestMtu(120);
       _dataChar!.value.listen(GraphHandler.onData);
       _device = device;
-      await Future<void>.delayed(const Duration(milliseconds: 800), startWeightMeas)
-          .then((_) => _completer!.complete(true));
+      await Future<void>.delayed(
+        const Duration(milliseconds: 800),
+        startWeightMeas,
+      ).then((_) => _completer!.complete(true));
     }
   }
   return _completer!.future;

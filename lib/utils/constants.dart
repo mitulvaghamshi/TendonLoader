@@ -70,28 +70,37 @@ const int cmdEnterSleep = 110;
 const int cmdGetBatteryVoltage = 111; // CMD RES
 
 // progressor UUIDs
-const String uuidService = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // main service
-const String uuidControl = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // send commands
+const String uuidService =
+    '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // main service
+const String uuidControl =
+    '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // send commands
 const String uuidData = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57'; // receive data
 
 // long descriptions
-const String descEnableDevice = '\nActivate your device by pressing the button, then press scan to find the device\n';
+const String descEnableDevice =
+    '\nActivate your device by pressing the button, '
+    'then press scan to find the device\n';
 
 const String descTareProgressor = '\nPlease tare your progressor before use\n';
 
-const String descEnableBluetooth =
-    '\nThis app needs Bluetooth to communicate with your Progressor.\nPlease enable Bluetooth on your device\n';
+const String descEnableBluetooth = '\nThis app needs Bluetooth to communicate '
+    'with your Progressor.\nPlease '
+    'enable Bluetooth on your device\n';
 
 const String descLocationLine1 =
-    '\nScanning for the Progressor requires location services. We\'re only using this permission to scan for your Progressor';
+    '\nScanning for the Progressor requires location services. '
+    'We\'re only using this permission to scan for your Progressor';
 
-const String descLocationLine3 = '\nWe\'ll never collect your physical location\n';
+const String descLocationLine3 =
+    '\nWe\'ll never collect your physical location\n';
 
-const String descNoMvcAvailable =
-    'No MVC test available, please contact your clinician or turn on custom prescriptions in settings.';
+const String descNoMvcAvailable = 'No MVC test available, please contact your '
+    'clinician or turn on custom prescriptions in settings.';
 
 const String descNoExerciseAvailable =
-    'No exercise prescription available, please contact your clinician or turn on custom prescriptions in settings.';
+    'No exercise prescription available, please '
+    'contact your clinician or turn on '
+    'custom prescriptions in settings.';
 
 // email regex pattern
 const String emailRegEx =

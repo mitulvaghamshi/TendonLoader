@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/screens/graph/graph_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
+import 'package:tendon_loader/screens/graph/graph_handler.dart';
 
 class LiveDataHandler extends GraphHandler {
   LiveDataHandler({required BuildContext context}) : super(context: context);
 
   double _time = 0;
 
-  String get elapsed => '🕒 ${_time ~/ 60}:${(_time % 60).toStringAsFixed(0).padLeft(2, '0')} Sec';
+  String get elapsed {
+    return '🕒 ${_time ~/ 60}:${(_time % 60).toStringAsFixed(0).padLeft(2, '0')} Sec';
+  }
 
   @override
   Future<void> start() async {

@@ -38,3 +38,6 @@ lib/**/*.g.dart
 .DS_Store
 
 .idea/
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+tendon_loader.iml
