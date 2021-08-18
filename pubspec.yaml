@@ -36,8 +36,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/audio/stop.mpeg
-    - assets/audio/start.mpeg
+    - assets/audio/stop.ogg
+    - assets/audio/start.ogg
     - assets/images/app_logo.svg
     - assets/images/enable_device.png
     - assets/images/enable_location.png

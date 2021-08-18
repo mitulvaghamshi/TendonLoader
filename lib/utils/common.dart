@@ -11,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
-import 'package:tendon_loader/emulator.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/patient.dart';
@@ -33,9 +32,9 @@ import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/webportal/homepage.dart';
 
-late final Box<Export> boxExport; // app only
-late final Box<UserState> boxUserState; // web and app
-late final Box<SettingsState> boxSettingsState; // app only
+late final Box<Export> boxExport;
+late final Box<UserState> boxUserState;
+late final Box<SettingsState> boxSettingsState;
 
 Future<void> initializeApp() async {
   await Firebase.initializeApp();
@@ -53,9 +52,7 @@ Future<void> initializeApp() async {
   boxUserState = await Hive.openBox<UserState>(keyUserStateBox);
 }
 
-Map<String, WidgetBuilder> get routes => _routes;
-
-final Map<String, WidgetBuilder> _routes = <String, WidgetBuilder>{
+final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   Login.route: (_) => const Login(),
   LiveData.route: (_) => const LiveData(),
   HomePage.route: (_) => const HomePage(),
@@ -69,7 +66,7 @@ final Map<String, WidgetBuilder> _routes = <String, WidgetBuilder>{
 
 Route<T> buildRoute<T>(String routeName) {
   return PageRouteBuilder<T>(
-    pageBuilder: (BuildContext context, __, ___) => _routes[routeName]!(context),
+    pageBuilder: (BuildContext context, __, ___) => routes[routeName]!(context),
     transitionsBuilder: (_, Animation<double> animation, ___, Widget child) {
       return SlideTransition(
         position: animation.drive(Tween<Offset>(

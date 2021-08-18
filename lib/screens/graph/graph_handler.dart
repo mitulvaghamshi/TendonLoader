@@ -25,7 +25,7 @@ extension on List<int> {
 }
 
 final AudioPlayer _player = AudioPlayer(playerId: 'FeedbackClipPlayer');
-final AudioCache _playerCache = AudioCache(respectSilence: true, prefix: 'assets/audio/', fixedPlayer: _player)
+final AudioCache _playerCache = AudioCache(respectSilence: true, prefix: audioRoot, fixedPlayer: _player)
   ..loadAll(<String>[startClip, stopClip]);
 
 Future<void> disposePlayer() async => _player.dispose();

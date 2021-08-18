@@ -1,8 +1,8 @@
 > # Tendon Loader
 ## Getting Started Guide
 ## Introduction
-> **Tendon Loader** is a project designned to measure and help overcome with **Achills Tendon Problems**. for more detail see (resources/docs/App Development – V1.pdf) and other documents. 
-![Achills Tendon Problems](resources/images/achills-tendon-problems.png)
+> **Tendon Loader** is a project designned to measure and help overcome with **Achills Tendon Problems**. for more detail see (res/docs/App Development – V1.pdf) and other documents.
+![Achills Tendon Problems](res/images/achills-tendon-problems.png)
 ## Framework used
 > This project containing **three** platforms **([Android](https://flutter.dev/docs/get-started/flutter-for/android-devs), [iOS](https://flutter.dev/docs/get-started/flutter-for/ios-devs) and [Web](https://flutter.dev/docs/get-started/flutter-for/web-devs))** built using [Flutter](https://flutter.dev/) with [Firebase](https://console.firebase.google.com/project/tendon-loader/overview).
 ## Project modules
@@ -24,7 +24,7 @@
     3. > **Hosting**: The web-app for web module is [hosted](https://console.firebase.google.com/project/tendon-loader/hosting/sites) in [preview channel] during testing period. The official URLs registered for the live channel are:
        > * [https://tendon-loader.web.app/](cors enabled) and
        > * [https://tendon-loader.firebaseapp.com/]
-       > * See the (resources/cors.json) file to manage cross origin resources access.
+       > * See the (res/cors.json) file to manage cross origin resources access.
 ## How to begin?
 ### To start working with this project requires following setup:
 * > System: Windows 10 or higher, or macOS Bug Sur 11 or higher (also works with new Apple Silicon SoC).

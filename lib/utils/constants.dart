@@ -2,8 +2,8 @@
 const String keyDateTimeFormat = 'y-MM-dd hh:mm:ss a';
 
 // sound clips
-const String startClip = 'start.mpeg';
-const String stopClip = 'stop.mpeg';
+const String startClip = 'start.ogg';
+const String stopClip = 'stop.ogg';
 
 // chart
 const String keyChartX = 'time';
