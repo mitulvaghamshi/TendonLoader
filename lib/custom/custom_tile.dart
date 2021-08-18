@@ -3,7 +3,13 @@ import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class CustomTile extends StatelessWidget {
-  const CustomTile({Key? key, this.onTap, this.right, required this.left, required this.title}) : super(key: key);
+  const CustomTile(
+      {Key? key,
+      this.onTap,
+      this.right,
+      required this.left,
+      required this.title})
+      : super(key: key);
 
   final String title;
   final Widget left;

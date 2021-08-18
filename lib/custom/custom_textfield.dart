@@ -37,14 +37,19 @@ class CustomTextField extends StatelessWidget {
       style: ts20B,
       controller: controller,
       obscureText: isObscure,
-      onFieldSubmitted: (_) => TextInputAction.go,
       validator: validator ?? _validateNum,
       keyboardType: keyboardType ?? TextInputType.number,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      inputFormatters: <TextInputFormatter>[if (format != null) FilteringTextInputFormatter.allow(RegExp(format!))],
+      inputFormatters: <TextInputFormatter>[
+        if (format != null) FilteringTextInputFormatter.allow(RegExp(format!)),
+      ],
       decoration: InputDecoration(
         labelText: label,
-        suffix: suffix ?? IconButton(onPressed: controller!.clear, icon: const Icon(Icons.clear)),
+        suffix: suffix ??
+            IconButton(
+              onPressed: controller!.clear,
+              icon: const Icon(Icons.clear),
+            ),
       ),
     );
   }

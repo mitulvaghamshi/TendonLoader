@@ -14,7 +14,8 @@ class ExerciseMode extends StatefulWidget {
   _ExerciseModeState createState() => _ExerciseModeState();
 }
 
-class _ExerciseModeState extends State<ExerciseMode> with WidgetsBindingObserver {
+class _ExerciseModeState extends State<ExerciseMode>
+    with WidgetsBindingObserver {
   late final ExerciseHandler _handler = ExerciseHandler(context: context);
 
   @override
@@ -55,8 +56,20 @@ class _ExerciseModeState extends State<ExerciseMode> with WidgetsBindingObserver
           Expanded(child: Text('Set:', style: tsBW500)),
         ]),
         Row(children: <Widget>[
-          Expanded(child: Text(_handler.repCounter, textAlign: TextAlign.center, style: tsB40B)),
-          Expanded(child: Text(_handler.setCounter, textAlign: TextAlign.center, style: tsB40B)),
+          Expanded(
+            child: Text(
+              _handler.repCounter,
+              textAlign: TextAlign.center,
+              style: tsB40B,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              _handler.setCounter,
+              textAlign: TextAlign.center,
+              style: tsB40B,
+            ),
+          ),
         ]),
       ]),
     );

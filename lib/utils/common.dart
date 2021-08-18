@@ -27,7 +27,8 @@ import 'package:tendon_loader/screens/login.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/utils/empty.dart' if (dart.library.html) 'dart:html' show AnchorElement;
+import 'package:tendon_loader/utils/empty.dart'
+    if (dart.library.html) 'dart:html' show AnchorElement;
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/webportal/homepage.dart';
@@ -48,7 +49,9 @@ Future<void> initializeApp() async {
   Hive.registerAdapter(SettingsStateAdapter());
   boxExport = await Hive.openBox<Export>(keyExportBox);
   boxSettingsState = await Hive.openBox<SettingsState>(keySettingsStateBox);
-  if (kIsWeb) await SystemChrome.setPreferredOrientations(<DeviceOrientation>[DeviceOrientation.portraitUp]);
+  if (kIsWeb)
+    await SystemChrome.setPreferredOrientations(
+        <DeviceOrientation>[DeviceOrientation.portraitUp]);
   boxUserState = await Hive.openBox<UserState>(keyUserStateBox);
 }
 
@@ -86,7 +89,8 @@ Future<void> logout(BuildContext context) async {
     await context.settingsState.save();
     await signOut();
   } finally {
-    await Navigator.pushAndRemoveUntil<void>(context, buildRoute(Login.route), (_) => false);
+    await Navigator.pushAndRemoveUntil<void>(
+        context, buildRoute(Login.route), (_) => false);
   }
 }
 
@@ -114,11 +118,14 @@ Future<bool?> tryUpload(BuildContext context) async {
     await CustomDialog.show<void>(
       context,
       title: 'Upload success!!!',
-      content: Text('$count file(s) submitted successfully!', textAlign: TextAlign.center, style: tsG18B),
+      content: Text('$count file(s) submitted successfully!',
+          textAlign: TextAlign.center, style: tsG18B),
     );
   }
 }
 
-CollectionReference<Patient> get dataStore => FirebaseFirestore.instance.collection(keyBase).withConverter<Patient>(
-    toFirestore: (Patient value, _) => value.toMap(),
-    fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) => Patient.fromJson(snapshot.reference));
+CollectionReference<Patient> get dataStore =>
+    FirebaseFirestore.instance.collection(keyBase).withConverter<Patient>(
+        toFirestore: (Patient value, _) => value.toMap(),
+        fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) =>
+            Patient.fromJson(snapshot.reference));

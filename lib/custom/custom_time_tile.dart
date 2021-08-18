@@ -27,20 +27,24 @@ class CustomTimeTile extends StatelessWidget {
   Future<int?> _selectTime(BuildContext context) {
     int _min = 0;
     int _sec = 0;
-    return showDialog<int?>(
-      context: context,
-      builder: (_) => CustomDialog(
-        title: title,
-        action: CustomButton(
-          right: const Text('Ok'),
-          left: const Icon(Icons.done),
-          onPressed: () => context.pop<int>(Duration(minutes: _min, seconds: _sec).inSeconds),
+
+    return CustomDialog.show<int?>(
+      context,
+      title: title,
+      action: CustomButton(
+        right: const Text('Ok'),
+        left: const Icon(Icons.done),
+        onPressed: () => context.pop<int>(
+          Duration(minutes: _min, seconds: _sec).inSeconds,
         ),
-        content: FittedBox(
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
+      ),
+      content: FittedBox(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
             CustomPicker(label: 'Min', onChanged: (int val) => _min = val),
             CustomPicker(label: 'Sec', onChanged: (int val) => _sec = val),
-          ]),
+          ],
         ),
       ),
     );
@@ -49,6 +53,12 @@ class CustomTimeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      shape: UnderlineInputBorder(
+        borderSide: BorderSide(
+          width: 2,
+          color: time > 0 ? colorGoogleGreen : colorRed400,
+        ),
+      ),
       subtitle: Text(desc),
       contentPadding: EdgeInsets.zero,
       title: Text(_timeString, style: ts20B),

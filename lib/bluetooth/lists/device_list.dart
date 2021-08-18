@@ -8,7 +8,9 @@ import 'package:tendon_loader/utils/themes.dart';
 
 class DeviceList extends StatelessWidget {
   DeviceList({Key? key, required Iterable<BluetoothDevice> devices})
-      : _devices = devices.where((BluetoothDevice device) => device.name.contains('Progressor')),
+      : _devices = devices.where((BluetoothDevice device) {
+          return device.name.contains('Progressor');
+        }),
         super(key: key);
 
   final Iterable<BluetoothDevice> _devices;
@@ -16,7 +18,10 @@ class DeviceList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (_devices.isEmpty) return const StartScanTile();
-    return Column(mainAxisSize: MainAxisSize.min, children: _buildDeviceItem().toList());
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: _buildDeviceItem().toList(),
+    );
   }
 
   Iterable<Widget> _buildDeviceItem() sync* {
@@ -30,15 +35,22 @@ class DeviceList extends StatelessWidget {
     if (_isNotEmpty) yield _buildDevicetile(_device, isLast: true);
   }
 
-  StreamBuilder<BluetoothDeviceState> _buildDevicetile(BluetoothDevice device, {bool isLast = false}) {
+  StreamBuilder<BluetoothDeviceState> _buildDevicetile(BluetoothDevice device,
+      {bool isLast = false}) {
     return StreamBuilder<BluetoothDeviceState>(
       stream: device.state,
       builder: (_, AsyncSnapshot<BluetoothDeviceState> snapshot) {
-        if (snapshot.data == BluetoothDeviceState.connected) return ConnectedTile(device: device);
+        if (snapshot.data == BluetoothDeviceState.connected) {
+          return ConnectedTile(device: device);
+        }
         if (isLast) {
           return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
             _buildDisconnectedTile(device),
-            const CustomButton(left: Icon(Icons.search), right: Text('Scan'), onPressed: startScan),
+            const CustomButton(
+              left: Icon(Icons.search),
+              right: Text('Scan'),
+              onPressed: startScan,
+            ),
           ]);
         }
         return _buildDisconnectedTile(device);

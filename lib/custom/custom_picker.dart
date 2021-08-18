@@ -4,7 +4,11 @@ import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class CustomPicker extends StatelessWidget {
-  const CustomPicker({Key? key, required this.label, required this.onChanged}) : super(key: key);
+  const CustomPicker({
+    Key? key,
+    required this.label,
+    required this.onChanged,
+  }) : super(key: key);
 
   final String label;
   final ValueChanged<int> onChanged;

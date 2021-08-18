@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/screens/login.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/webportal/data_list.dart';
 import 'package:tendon_loader/webportal/data_view.dart';
@@ -20,15 +22,22 @@ class HomePage extends StatelessWidget {
   static const String name = 'Tendon Loader - Clinician';
 
   Future<void> _sessionInfo(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      builder: (_) => const CustomDialog(title: 'Session Info', content: SessionInfo()),
+    return CustomDialog.show<void>(
+      context,
+      title: 'Session Info',
+      content: const SessionInfo(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // if (currentUser == null) context.push(Login.route, replace: true);
+    if (FirebaseAuth.instance.currentUser == null) {
+      Navigator.pushAndRemoveUntil<void>(
+        context,
+        buildRoute(Login.route),
+        (_) => false,
+      );
+    }
     final bool _isWide = MediaQuery.of(context).size.width > 1080;
     // final bool _isMedium = MediaQuery.of(context).size.width > 760;
 
@@ -59,7 +68,11 @@ class _WideScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: const <Widget>[UserList(), CenterPanel(), Expanded(child: DataView())]);
+    return Row(children: const <Widget>[
+      UserList(),
+      CenterPanel(),
+      Expanded(child: DataView())
+    ]);
   }
 }
 
@@ -73,7 +86,10 @@ class CenterPanel extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 16),
       child: SizedBox(
         width: 260,
-        child: Column(children: const <Widget>[SessionInfo(), Expanded(child: DataList())]),
+        child: Column(children: const <Widget>[
+          SessionInfo(),
+          Expanded(child: DataList())
+        ]),
       ),
     );
   }

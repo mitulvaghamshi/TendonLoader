@@ -5,7 +5,11 @@ import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/webportal/homepage.dart';
 
 class ExportTile extends StatelessWidget {
-  const ExportTile({Key? key, required this.export, required this.onDelete}) : super(key: key);
+  const ExportTile({
+    Key? key,
+    required this.export,
+    required this.onDelete,
+  }) : super(key: key);
 
   final Export export;
   final VoidCallback onDelete;
@@ -16,11 +20,18 @@ class ExportTile extends StatelessWidget {
       title: Text(export.dateTime),
       contentPadding: const EdgeInsets.all(5),
       key: ValueKey<String>(export.reference!.id),
-      onTap: () => Future<void>.microtask(() => clickNotifier.value = export),
-      leading: CustomButton(rounded: true, left: Text(export.isMVC ? 'MVC' : 'EXE')),
+      onTap: () => Future<void>.microtask(() {
+        clickNotifier.value = export;
+      }),
+      leading: CustomButton(
+        rounded: true,
+        left: Text(export.isMVC ? 'MVC' : 'EXE'),
+      ),
       subtitle: Text(
         export.isComplate! ? 'Complete' : 'Incomplete',
-        style: TextStyle(color: export.isComplate! ? colorGoogleGreen : colorRed400),
+        style: TextStyle(
+          color: export.isComplate! ? colorGoogleGreen : colorRed400,
+        ),
       ),
       trailing: PopupMenuButton<PopupAction>(
         icon: const Icon(Icons.more_vert),

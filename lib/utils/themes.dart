@@ -38,9 +38,12 @@ final ThemeData lightTheme = ThemeData(
   inputDecorationTheme: const InputDecorationTheme(
     isDense: true,
     labelStyle: TextStyle(color: colorBlack),
-    errorBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorRed400)),
-    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorBlue)),
-    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
+    errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(width: 2, color: colorRed400)),
+    focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(width: 2, color: colorBlue)),
+    enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
   ),
 );
 
@@ -62,38 +65,50 @@ final ThemeData darkTheme = ThemeData(
   inputDecorationTheme: const InputDecorationTheme(
     isDense: true,
     labelStyle: TextStyle(color: colorWhite),
-    errorBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorRed400)),
-    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorBlue)),
-    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
+    errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(width: 2, color: colorRed400)),
+    focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(width: 2, color: colorBlue)),
+    enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
   ),
 );
 
-const TextStyle tsBW500 = TextStyle(color: colorBlack, fontWeight: FontWeight.w500);
+const TextStyle tsBW500 =
+    TextStyle(color: colorBlack, fontWeight: FontWeight.w500);
 
-const TextStyle ts18B = TextStyle(fontSize: 18, fontWeight: FontWeight.w900);
-const TextStyle ts20B = TextStyle(fontSize: 20, fontWeight: FontWeight.w900);
-const TextStyle ts22B = TextStyle(fontSize: 22, fontWeight: FontWeight.w900);
+const TextStyle ts18B = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
+const TextStyle ts20B = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+const TextStyle ts22B = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
-const TextStyle tsG18B = TextStyle(color: colorGoogleGreen, fontSize: 18, fontWeight: FontWeight.w900);
-const TextStyle tsG20B = TextStyle(color: colorGoogleGreen, fontSize: 20, fontWeight: FontWeight.w900);
-const TextStyle tsG24B = TextStyle(color: colorGoogleGreen, fontSize: 24, fontWeight: FontWeight.w900);
-const TextStyle tsG40B = TextStyle(color: colorGoogleGreen, fontSize: 40, fontWeight: FontWeight.w900);
+const TextStyle tsG18B = TextStyle(
+    color: colorGoogleGreen, fontSize: 18, fontWeight: FontWeight.bold);
+const TextStyle tsG20B = TextStyle(
+    color: colorGoogleGreen, fontSize: 20, fontWeight: FontWeight.bold);
+const TextStyle tsG24B = TextStyle(
+    color: colorGoogleGreen, fontSize: 24, fontWeight: FontWeight.bold);
+const TextStyle tsG40B = TextStyle(
+    color: colorGoogleGreen, fontSize: 40, fontWeight: FontWeight.bold);
 
-const TextStyle tsR20B = TextStyle(color: colorRed400, fontSize: 20, fontWeight: FontWeight.w900);
-const TextStyle tsR40B = TextStyle(color: colorRed400, fontSize: 40, fontWeight: FontWeight.w900);
+const TextStyle tsR20B =
+    TextStyle(color: colorRed400, fontSize: 20, fontWeight: FontWeight.bold);
+const TextStyle tsR40B =
+    TextStyle(color: colorRed400, fontSize: 40, fontWeight: FontWeight.bold);
 
-const TextStyle tsW24B = TextStyle(color: colorWhite, fontSize: 24, fontWeight: FontWeight.w900);
+const TextStyle tsW24B =
+    TextStyle(color: colorWhite, fontSize: 24, fontWeight: FontWeight.bold);
 
-const TextStyle tsB40B = TextStyle(color: colorBlack, fontSize: 40, fontWeight: FontWeight.w900);
+const TextStyle tsB40B =
+    TextStyle(color: colorBlack, fontSize: 40, fontWeight: FontWeight.bold);
 
-/// Create a text style with w900 face, custom green color and a size of 40fp.
+/// Create a text style with bold face, custom green color and a size of 40fp.
 ///
 /// ```dart
 /// Text('40 sized green text'
 ///   TextStyle(
 ///     fontSize: 40,
 ///     color: colorGoogleGreen,
-///     fontWeight: FontWeight.w900,
+///     fontWeight: FontWeight.bold,
 ///   ),
 /// );
 /// ```

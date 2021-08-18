@@ -8,15 +8,18 @@ import 'package:tendon_loader/modal/user_state.dart';
 import 'package:tendon_loader/utils/common.dart';
 
 extension ExString on String {
-  DataCell get toCell => DataCell(Text(this, style: const TextStyle(fontSize: 16)));
+  DataCell get toCell =>
+      DataCell(Text(this, style: const TextStyle(fontSize: 16)));
 }
 
 extension ExContext on BuildContext {
   Patient get patient => data.currentUser!;
   UserState get userState => data.userState!;
   SettingsState get settingsState => data.settingsState!;
-  AppState get data => dependOnInheritedWidgetOfExactType<AppStateScope>()!.data;
-  AppStateWidgetState get view => findAncestorStateOfType<AppStateWidgetState>()!;
+  AppState get data =>
+      dependOnInheritedWidgetOfExactType<AppStateScope>()!.data;
+  AppStateWidgetState get view =>
+      findAncestorStateOfType<AppStateWidgetState>()!;
 
   set patient(Patient? patient) => data.currentUser = patient;
   set userState(UserState? userState) => data.userState = userState;
@@ -24,7 +27,8 @@ extension ExContext on BuildContext {
 
   void refresh() => findAncestorStateOfType<AppStateWidgetState>()!.refresh();
 
-  void showSnackBar(Widget content) => ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: content));
+  void showSnackBar(Widget content) =>
+      ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: content));
 
   void pop<T extends Object?>([T? result]) => Navigator.pop<T>(this, result);
 

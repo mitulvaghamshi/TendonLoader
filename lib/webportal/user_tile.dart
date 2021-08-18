@@ -9,16 +9,22 @@ import 'package:tendon_loader/webportal/exercise_history.dart';
 import 'package:tendon_loader/webportal/homepage.dart';
 
 class UserTile extends StatelessWidget {
-  const UserTile({Key? key, required this.id, required this.onDelete, this.filter}) : super(key: key);
+  const UserTile({
+    Key? key,
+    required this.id,
+    required this.onDelete,
+    this.filter,
+  }) : super(key: key);
 
   final int id;
   final String? filter;
   final Future<void> Function(VoidCallback) onDelete;
 
   Future<void> _exerciseHistory(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      builder: (_) => CustomDialog(title: 'Exercise History', content: ExerciseHistory(id: id)),
+    return CustomDialog.show<void>(
+      context,
+      title: 'Exercise History',
+      content: ExerciseHistory(id: id),
     );
   }
 
@@ -32,35 +38,48 @@ class UserTile extends StatelessWidget {
       tilePadding: const EdgeInsets.all(5),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
       title: Text(_user.id, style: ts18B, maxLines: 1),
-      leading: CustomButton(rounded: true, left: Text(_user.avatar, style: ts18B)),
+      leading: CustomButton(
+        rounded: true,
+        left: Text(_user.avatar, style: ts18B),
+      ),
       trailing: PopupMenuButton<PopupAction>(
         icon: const Icon(Icons.settings),
         itemBuilder: (_) => <PopupMenuItem<PopupAction>>[
           PopupMenuItem<PopupAction>(
             value: PopupAction.isClinician,
-            child: StatefulBuilder(builder: (_, void Function(void Function()) setState) {
-              return CheckboxListTile(
-                activeColor: colorBlue,
-                value: _user.prescription!.isAdmin,
-                title: const Text('Set as Clinician?'),
-                controlAffinity: ListTileControlAffinity.leading,
-                subtitle: const Text('Can access web portal.'),
-                onChanged: (bool? value) async {
-                  setState(() => _user.prescription!.isAdmin = value);
-                  await Future<void>.microtask(() async {
-                    await _user.prescriptionRef!.update(<String, bool>{keyIsAdmin: _user.prescription!.isAdmin!});
-                  });
-                },
-              );
-            }),
+            child: StatefulBuilder(
+              builder: (_, void Function(void Function()) setState) {
+                return CheckboxListTile(
+                  activeColor: colorBlue,
+                  value: _user.prescription!.isAdmin,
+                  title: const Text('Set as Clinician?'),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  subtitle: const Text('Can access web portal.'),
+                  onChanged: (bool? value) async {
+                    setState(() => _user.prescription!.isAdmin = value);
+                    await Future<void>.microtask(() async {
+                      await _user.prescriptionRef!.update(<String, bool>{
+                        keyIsAdmin: _user.prescription!.isAdmin!
+                      });
+                    });
+                  },
+                );
+              },
+            ),
           ),
           const PopupMenuItem<PopupAction>(
             value: PopupAction.history,
-            child: ListTile(title: Text('Exercise History'), leading: Icon(Icons.history)),
+            child: ListTile(
+              title: Text('Exercise History'),
+              leading: Icon(Icons.history),
+            ),
           ),
           const PopupMenuItem<PopupAction>(
             value: PopupAction.prescribe,
-            child: ListTile(title: Text('Edit Prescriptions'), leading: Icon(Icons.edit)),
+            child: ListTile(
+              title: Text('Edit Prescriptions'),
+              leading: Icon(Icons.edit),
+            ),
           ),
           const PopupMenuItem<PopupAction>(
             value: PopupAction.download,
@@ -75,7 +94,10 @@ class UserTile extends StatelessWidget {
             child: ListTile(
               subtitle: Text('Cannot be restored!'),
               leading: Icon(Icons.delete_forever, color: colorRed400),
-              title: Text('Delete All', style: TextStyle(color: colorRed400)),
+              title: Text(
+                'Delete All',
+                style: TextStyle(color: colorRed400),
+              ),
             ),
           ),
         ],

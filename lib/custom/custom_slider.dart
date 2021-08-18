@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class CustomSlider extends StatelessWidget {
-  const CustomSlider({Key? key, required this.value, required this.onChanged}) : super(key: key);
+  const CustomSlider({
+    Key? key,
+    required this.value,
+    required this.onChanged,
+  }) : super(key: key);
 
   final double value;
   final ValueChanged<double> onChanged;
@@ -48,11 +52,22 @@ class _CustomShape extends SliderComponentShape {
       required double value,
       required double textScaleFactor,
       required Size sizeWithOverflow}) {
-    context.canvas.drawCircle(center, sliderTheme.trackHeight! / 2 + 5, Paint()..color = colorWhite);
-    context.canvas.drawCircle(center, sliderTheme.trackHeight! / 2, Paint());
+    context.canvas.drawCircle(
+      center,
+      sliderTheme.trackHeight! / 2 + 5,
+      Paint()..color = colorWhite,
+    );
+    context.canvas.drawCircle(
+      center,
+      sliderTheme.trackHeight! / 2,
+      Paint(),
+    );
     labelPainter.paint(
       context.canvas,
-      Offset(center.dx - (labelPainter.width / 2), center.dy - (labelPainter.height / 2)),
+      Offset(
+        center.dx - (labelPainter.width / 2),
+        center.dy - (labelPainter.height / 2),
+      ),
     );
   }
 }

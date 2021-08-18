@@ -1,36 +1,36 @@
 name: tendon_loader
-description: A bluetooth based tendon injury monitoring application.
-publish_to: "none"
-version: 0.0.11+11 #
+description: Tendon Loader is a project designned to measure and help overcome with Achills Tendon Problems.
+publish_to: 'none'
+version: 0.0.12+12 #
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
-  app_settings: ^4.1.0
-  archive: ^3.1.2
-  audioplayers: ^0.19.0
-  cloud_firestore: ^2.3.0
-  connectivity: ^3.0.3
-  cupertino_icons: ^1.0.0
-  firebase_auth: ^3.0.1
   flutter:
     sdk: flutter
+  cupertino_icons: ^1.0.0
+  cloud_firestore: ^2.3.0
+  firebase_auth: ^3.0.1
   flutter_blue: ^0.8.0
+  connectivity: ^3.0.3
+  location: ^4.1.1
+  archive: ^3.1.2
+  audioplayers: ^0.19.0
+  app_settings: ^4.1.0
   flutter_svg: ^0.22.0
+  rxdart: ^0.26.0
+  wakelock: ^0.5.2
   hive: ^2.0.2
   hive_flutter: ^1.0.0
-  location: ^4.1.1
-  rxdart: ^0.26.0
   syncfusion_flutter_charts: ^19.2.47
   syncfusion_flutter_xlsio: ^19.2.47-beta
-  wakelock: ^0.5.2
 
 dev_dependencies:
-  build_runner: ^2.0.5
   flutter_test:
     sdk: flutter
   hive_generator: ^1.1.0
+  build_runner: ^2.0.5
   pedantic: ^1.11.0
 
 flutter:

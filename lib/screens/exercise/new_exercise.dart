@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_divider.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/custom/custom_time_tile.dart';
@@ -79,7 +78,9 @@ class _NewExerciseState extends State<NewExercise> {
         mvcDuration: _mvcDuration,
       );
       if (kIsWeb) {
-        await widget.user!.prescriptionRef!.update(_pre.toMap()).then(context.pop);
+        await widget.user!.prescriptionRef!
+            .update(_pre.toMap())
+            .then(context.pop);
       } else if (_holdTime > 0 && _restTime > 0 && _setRestTime > 0) {
         context.settingsState.prescription = _pre;
         await context.settingsState.save();
@@ -100,7 +101,8 @@ class _NewExerciseState extends State<NewExercise> {
   }
 
   @override
-  Widget build(BuildContext context) => kIsWeb ? _buildForm() : _buildScaffold();
+  Widget build(BuildContext context) =>
+      kIsWeb ? _buildForm() : _buildScaffold();
 
   Scaffold _buildScaffold() {
     return Scaffold(
@@ -118,10 +120,16 @@ class _NewExerciseState extends State<NewExercise> {
             time: _mvcDuration,
             desc: 'MVC test duration',
             title: 'Select test duration',
-            onChanged: (int duration) => setState(() => _mvcDuration = duration),
+            onChanged: (int duration) {
+              setState(() => _mvcDuration = duration);
+            },
           )
         else ...<Widget>[
-          const Text('Please enter your\nexercise prescriptions', style: tsG24B, textAlign: TextAlign.center),
+          const Text(
+            'Please enter your\nexercise prescriptions',
+            textAlign: TextAlign.center,
+            style: tsG24B,
+          ),
           if (_lastPre != null)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -140,37 +148,63 @@ class _NewExerciseState extends State<NewExercise> {
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
         ),
         Row(children: <Widget>[
-          Expanded(child: CustomTextField(label: 'Sets (#)', format: r'^\d{1,2}', controller: _ctrlSets)),
+          Expanded(
+            child: CustomTextField(
+              label: 'Sets (#)',
+              format: r'^\d{1,2}',
+              controller: _ctrlSets,
+            ),
+          ),
           const VerticalDivider(width: 5),
-          Expanded(child: CustomTextField(label: 'Reps (#)', format: r'^\d{1,2}', controller: _ctrlReps)),
+          Expanded(
+            child: CustomTextField(
+              label: 'Reps (#)',
+              format: r'^\d{1,2}',
+              controller: _ctrlReps,
+            ),
+          ),
         ]),
         const SizedBox(height: 10),
         CustomTimeTile(
           time: _holdTime,
           desc: 'Rep hold time',
           title: 'Select rep hold time',
-          onChanged: (int duration) => setState(() => _holdTime = duration),
+          onChanged: (int duration) {
+            setState(() => _holdTime = duration);
+          },
         ),
-        CustomDivider(value: _holdTime),
         CustomTimeTile(
           time: _restTime,
           desc: 'Rep rest time',
           title: 'Select rep rest time',
-          onChanged: (int duration) => setState(() => _restTime = duration),
+          onChanged: (int duration) {
+            setState(() => _restTime = duration);
+          },
         ),
-        CustomDivider(value: _restTime),
         CustomTimeTile(
           time: _setRestTime,
           desc: 'Set rest time (default: 90 sec)',
           title: 'Select set rest time',
-          onChanged: (int duration) => setState(() => _setRestTime = duration),
+          onChanged: (int duration) {
+            setState(() => _setRestTime = duration);
+          },
         ),
-        CustomDivider(value: _setRestTime),
         const SizedBox(height: 30),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-          CustomButton(onPressed: _onSubmit, right: const Text('Submit'), left: const Icon(Icons.done)),
-          CustomButton(onPressed: _clearForm, right: const Text('Clear'), left: const Icon(Icons.clear)),
-        ]),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            CustomButton(
+              onPressed: _onSubmit,
+              right: const Text('Submit'),
+              left: const Icon(Icons.done),
+            ),
+            CustomButton(
+              onPressed: _clearForm,
+              right: const Text('Clear'),
+              left: const Icon(Icons.clear),
+            ),
+          ],
+        ),
       ]),
     );
   }

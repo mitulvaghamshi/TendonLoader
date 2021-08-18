@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/patient.dart';
+import 'package:tendon_loader/modal/prescription.dart';
 
 part 'settings_state.g.dart';
 
@@ -28,8 +28,12 @@ class SettingsState extends HiveObject {
   void toggleCustom(bool value, Patient user) {
     customPrescriptions = value;
     if (!customPrescriptions!) {
-      if (user.prescription!.targetLoad > 0) prescription = user.prescription;
-      if (user.prescription!.mvcDuration > 0) mvcDuration = user.prescription!.mvcDuration;
+      if (user.prescription!.targetLoad > 0) {
+        prescription = user.prescription;
+      }
+      if (user.prescription!.mvcDuration > 0) {
+        mvcDuration = user.prescription!.mvcDuration;
+      }
     }
   }
 }

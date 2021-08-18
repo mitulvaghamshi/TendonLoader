@@ -12,11 +12,19 @@ import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
-Future<bool?> startCountdown(BuildContext context, {String? title, Duration? duration}) {
+Future<bool?> startCountdown(
+  BuildContext context, {
+  String? title,
+  Duration? duration,
+}) {
   return CustomDialog.show<bool>(
     context,
     title: title ?? 'Session start in...',
-    action: CustomButton(onPressed: context.pop, left: const Text('Stop'), right: const Icon(Icons.clear)),
+    action: CustomButton(
+      onPressed: context.pop,
+      left: const Text('Stop'),
+      right: const Icon(Icons.clear),
+    ),
     content: Padding(
       padding: const EdgeInsets.all(5),
       child: CountDown(duration: duration ?? const Duration(seconds: 5)),
@@ -52,27 +60,47 @@ Future<double?> selectPain(BuildContext context) {
       onPressed: () => context.pop<double>(_value),
     ),
     content: Column(children: <Widget>[
-      const Text('Please describe your pain during that session', style: ts18B, textAlign: TextAlign.center),
+      const Text(
+        'Please describe your pain during that session',
+        textAlign: TextAlign.center,
+        style: ts18B,
+      ),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: StatefulBuilder(
-          builder: (_, void Function(void Function()) setState) => CustomSlider(
-            value: _value,
-            onChanged: (double value) => setState(() => _value = value),
-          ),
+          builder: (_, void Function(void Function()) setState) {
+            return CustomSlider(
+              value: _value,
+              onChanged: (double value) {
+                setState(() => _value = value);
+              },
+            );
+          },
         ),
       ),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-        _buildPainText('0\n\nNo\npain', colorAGreen400),
-        _buildPainText('5\n\nModerate\npain', colorModerate),
-        _buildPainText('10\n\nWorst\npain', colorRed400),
-      ]),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          _buildPainText('0\n\nNo\npain', colorAGreen400),
+          _buildPainText('5\n\nModerate\npain', colorModerate),
+          _buildPainText('10\n\nWorst\npain', colorRed400),
+        ],
+      ),
     ]),
   );
 }
 
-Text _buildPainText(String text, Color color) => Text(text,
-    textAlign: TextAlign.center, style: TextStyle(color: color, fontWeight: FontWeight.w500, letterSpacing: 1));
+Text _buildPainText(String text, Color color) {
+  return Text(
+    text,
+    textAlign: TextAlign.center,
+    style: TextStyle(
+      color: color,
+      letterSpacing: 1,
+      fontWeight: FontWeight.w500,
+    ),
+  );
+}
 
 Future<String?> selectTolerance(BuildContext context) {
   return CustomDialog.show<String>(
@@ -80,28 +108,38 @@ Future<String?> selectTolerance(BuildContext context) {
     title: 'Pain Tolerance',
     action: const SizedBox(width: 1, height: 1),
     content: Column(children: <Widget>[
-      const Text('Was the pain during that session tolerable for you?', style: ts18B, textAlign: TextAlign.center),
+      const Text(
+        'Was the pain during that session tolerable for you?',
+        textAlign: TextAlign.center,
+        style: ts18B,
+      ),
       const SizedBox(height: 16),
       FittedBox(
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-          CustomButton(
-            onPressed: () => context.pop('Yes'),
-            left: const Icon(Icons.check, color: colorGoogleGreen),
-            right: const Text('Yes', style: TextStyle(color: colorGoogleGreen)),
-          ),
-          const SizedBox(width: 5),
-          CustomButton(
-            onPressed: () => context.pop('No'),
-            left: const Icon(Icons.clear, color: colorRed400),
-            right: const Text('No', style: TextStyle(color: colorRed400)),
-          ),
-          const SizedBox(width: 5),
-          CustomButton(
-            left: const Text('No pain'),
-            right: const Icon(Icons.arrow_forward),
-            onPressed: () => context.pop('No pain'),
-          ),
-        ]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            CustomButton(
+              onPressed: () => context.pop('Yes'),
+              left: const Icon(Icons.check, color: colorGoogleGreen),
+              right: const Text(
+                'Yes',
+                style: TextStyle(color: colorGoogleGreen),
+              ),
+            ),
+            const SizedBox(width: 5),
+            CustomButton(
+              onPressed: () => context.pop('No'),
+              left: const Icon(Icons.clear, color: colorRed400),
+              right: const Text('No', style: TextStyle(color: colorRed400)),
+            ),
+            const SizedBox(width: 5),
+            CustomButton(
+              left: const Text('No pain'),
+              right: const Icon(Icons.arrow_forward),
+              onPressed: () => context.pop('No pain'),
+            ),
+          ],
+        ),
       ),
     ]),
   );

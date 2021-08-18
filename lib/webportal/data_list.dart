@@ -28,11 +28,16 @@ class DataList extends StatelessWidget {
   Iterable<DataRow> _buildRows(Export value) sync* {
     final List<ChartData> _list = value.exportData!;
     for (int i = 0; i < _list.length; i++) {
-      yield DataRow(cells: <DataCell>[
-        DataCell(Text('${i + 1}.')),
-        DataCell(Text(_list[i].time.toStringAsFixed(1))),
-        DataCell(Text(_list[i].load.toStringAsFixed(2))),
-      ], color: i.isOdd ? MaterialStateProperty.all<Color?>(Colors.grey.withOpacity(0.3)) : null);
+      yield DataRow(
+        cells: <DataCell>[
+          DataCell(Text('${i + 1}.')),
+          DataCell(Text(_list[i].time.toStringAsFixed(1))),
+          DataCell(Text(_list[i].load.toStringAsFixed(2))),
+        ],
+        color: i.isOdd
+            ? MaterialStateProperty.all<Color?>(Colors.grey.withOpacity(0.3))
+            : null,
+      );
     }
   }
 }

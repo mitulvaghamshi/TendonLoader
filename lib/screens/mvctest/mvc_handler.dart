@@ -10,7 +10,10 @@ class MVCHandler extends GraphHandler {
   MVCHandler({required BuildContext context})
       : mvcDuration = context.settingsState.mvcDuration!,
         timeDiff = context.settingsState.mvcDuration!.toDouble(),
-        super(context: context, lineData: <ChartData>[ChartData(), ChartData(time: 2)]);
+        super(
+          context: context,
+          lineData: <ChartData>[ChartData(), ChartData(time: 2)],
+        );
 
   final int mvcDuration;
   double maxForce = 0;

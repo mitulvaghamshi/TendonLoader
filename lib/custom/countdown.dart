@@ -17,8 +17,10 @@ class CountDown extends StatefulWidget {
 }
 
 class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
-  late final AnimationController _ctrl =
-      AnimationController(vsync: this, duration: widget.duration + const Duration(seconds: 1));
+  late final AnimationController _ctrl = AnimationController(
+    vsync: this,
+    duration: widget.duration + const Duration(seconds: 1),
+  );
 
   String get _getTime {
     final int _millies = (_ctrl.duration! * _ctrl.value).inMilliseconds;
@@ -44,17 +46,29 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
       aspectRatio: 1,
       child: AnimatedBuilder(
         animation: _ctrl,
-        builder: (_, Widget? child) => Stack(alignment: Alignment.center, children: <Widget>[
-          Positioned.fill(child: CustomPaint(painter: _TimePainter(_ctrl))),
-          FittedBox(child: Text(_getTime, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 130))),
-        ]),
+        builder: (_, Widget? child) {
+          return Stack(alignment: Alignment.center, children: <Widget>[
+            Positioned.fill(
+              child: CustomPaint(painter: _ProgrssPainter(_ctrl)),
+            ),
+            FittedBox(
+              child: Text(
+                _getTime,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 130,
+                ),
+              ),
+            ),
+          ]);
+        },
       ),
     );
   }
 }
 
-class _TimePainter extends CustomPainter {
-  const _TimePainter(this.ctrl) : super(repaint: ctrl);
+class _ProgrssPainter extends CustomPainter {
+  const _ProgrssPainter(this.ctrl) : super(repaint: ctrl);
 
   final Animation<double> ctrl;
 
@@ -67,7 +81,17 @@ class _TimePainter extends CustomPainter {
       ..strokeWidth = 25
       ..color = colorGoogleGreen
       ..style = PaintingStyle.stroke;
-    canvas.drawCircle(size.center(Offset.zero), size.width / 2, paint);
-    canvas.drawArc(Offset.zero & size, pi * 1.5, ctrl.value * 2 * pi, false, paint..color = colorWhite);
+    canvas.drawCircle(
+      size.center(Offset.zero),
+      size.width / 2,
+      paint,
+    );
+    canvas.drawArc(
+      Offset.zero & size,
+      pi * 1.5,
+      ctrl.value * 2 * pi,
+      false,
+      paint..color = colorWhite,
+    );
   }
 }

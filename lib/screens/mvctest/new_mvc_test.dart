@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_divider.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_time_tile.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
@@ -62,9 +61,10 @@ class _NewMVCTestState extends State<NewMVCTest> {
             time: _duration,
             desc: 'MVC test duration',
             title: 'Select test duration',
-            onChanged: (int duration) => setState(() => _duration = duration),
+            onChanged: (int duration) {
+              setState(() => _duration = duration);
+            },
           ),
-          CustomDivider(value: _duration),
         ]),
       ),
     );

@@ -45,11 +45,15 @@ class AppStateWidgetState extends State<AppStateWidget> {
     if (filter == null) return userList;
     final List<int> _ids = <int>[];
     for (final MapEntry<int, Patient> user in _data.users.entries) {
-      if (user.value.id.toLowerCase().contains(filter.toLowerCase())) _ids.add(user.key);
+      if (user.value.id.toLowerCase().contains(filter.toLowerCase())) {
+        _ids.add(user.key);
+      }
     }
     return _ids;
   }
 
   @override
-  Widget build(BuildContext context) => AppStateScope(data: _data, child: widget.child);
+  Widget build(BuildContext context) {
+    return AppStateScope(data: _data, child: widget.child);
+  }
 }

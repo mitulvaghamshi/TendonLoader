@@ -33,7 +33,6 @@ target 'Runner' do
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
   pod 'Firebase/Analytics'
-  
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 

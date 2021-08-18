@@ -22,10 +22,15 @@ class Patient extends HiveObject {
     this.prescriptionRef,
   });
 
-  Patient.of(String id) : this.fromJson(FirebaseFirestore.instance.doc('/$keyBase/$id'));
+  Patient.of(String id)
+      : this.fromJson(FirebaseFirestore.instance.doc('/$keyBase/$id'));
 
   Patient.fromJson(DocumentReference<Map<String, dynamic>> ref)
-      : this(userRef: ref, exportRef: _exportsRef(ref), prescriptionRef: _prescriptionRef(ref));
+      : this(
+          userRef: ref,
+          exportRef: _exportsRef(ref),
+          prescriptionRef: _prescriptionRef(ref),
+        );
 
   @HiveField(0)
   final List<Export>? exports;
@@ -38,41 +43,67 @@ class Patient extends HiveObject {
   @HiveField(4)
   final DocumentReference<Map<String, dynamic>>? userRef;
 
-  static CollectionReference<Export> _exportsRef(DocumentReference<Map<String, dynamic>> ref) =>
-      ref.collection(keyExports).withConverter<Export>(
-          toFirestore: (Export value, SetOptions? options) => value.toMap(),
-          fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options) =>
-              Export.fromJson(snapshot));
+  static CollectionReference<Export> _exportsRef(
+      DocumentReference<Map<String, dynamic>> ref) {
+    return ref.collection(keyExports).withConverter<Export>(
+        toFirestore: (Export value, _) {
+      return value.toMap();
+    }, fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) {
+      return Export.fromJson(snapshot);
+    });
+  }
 
-  static DocumentReference<Prescription> _prescriptionRef(DocumentReference<Map<String, dynamic>> ref) =>
-      ref.withConverter<Prescription>(
-          fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) =>
-              Prescription.fromJson(snapshot.data()!),
-          toFirestore: (Prescription value, _) => value.toMap());
+  static DocumentReference<Prescription> _prescriptionRef(
+      DocumentReference<Map<String, dynamic>> ref) {
+    return ref.withConverter<Prescription>(
+        fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) {
+      return Prescription.fromJson(snapshot.data()!);
+    }, toFirestore: (Prescription value, _) {
+      return value.toMap();
+    });
+  }
 
   String get id => userRef!.id;
-  String get avatar => id[0].toUpperCase();
-  String get childCount => 'Total ${exports?.length} item${exports?.length == 1 ? '' : 's'} submitted';
 
-  Iterable<Widget> exportTiles({String? filter, required Future<void> Function(VoidCallback) onDelete}) {
+  String get avatar => id[0].toUpperCase();
+
+  String get childCount => 'Total ${exports?.length} '
+      'item${exports?.length == 1 ? '' : 's'} submitted';
+
+  Iterable<Widget> exportTiles({
+    String? filter,
+    required Future<void> Function(VoidCallback) onDelete,
+  }) {
     Iterable<Export>? filtered;
+
     if (filter != null) {
-      filtered = exports!.where((Export export) => export.fileName.toLowerCase().contains(filter.toLowerCase()));
+      filtered = exports!.where((Export export) {
+        return export.fileName.toLowerCase().contains(filter.toLowerCase());
+      });
     }
     return (filtered ?? exports)!.map((Export export) {
       return ExportTile(
         export: export,
-        onDelete: () async => onDelete(() async {
-          return export.reference!.delete().then((_) => exports!.remove(export));
-        }),
+        onDelete: () async => onDelete(
+          () async => export.reference!.delete().then((_) {
+            exports!.remove(export);
+          }),
+        ),
       );
     });
   }
 
   Future<Patient> fetch() async {
-    final DocumentSnapshot<Prescription> _prescription = await prescriptionRef!.get();
-    final QuerySnapshot<Export> _exports = await exportRef!.orderBy(keyTimeStamp, descending: true).get();
-    final List<Export> _list = _exports.docs.map((QueryDocumentSnapshot<Export> e) => e.data()).toList();
+    final DocumentSnapshot<Prescription> _prescription =
+        await prescriptionRef!.get();
+
+    final QuerySnapshot<Export> _exports =
+        await exportRef!.orderBy(keyTimeStamp, descending: true).get();
+
+    final List<Export> _list = _exports.docs
+        .map((QueryDocumentSnapshot<Export> e) => e.data())
+        .toList();
+
     return Patient(
       exports: _list,
       userRef: userRef,

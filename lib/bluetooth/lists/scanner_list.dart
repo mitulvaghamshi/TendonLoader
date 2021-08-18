@@ -10,11 +10,15 @@ class ScannerList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Iterable<BluetoothDevice>>(
-        stream: FlutterBlue.instance.scanResults.asyncMap((List<ScanResult> results) {
-      return results.map((ScanResult result) => result.device);
-    }), builder: (_, AsyncSnapshot<Iterable<BluetoothDevice>> snapshot) {
-      if (!snapshot.hasData) return const CustomProgress();
-      return snapshot.data!.isEmpty ? const BluetoothTile() : DeviceList(devices: snapshot.data!);
-    });
+      stream: FlutterBlue.instance.scanResults.asyncMap(
+          (List<ScanResult> results) =>
+              results.map((ScanResult result) => result.device)),
+      builder: (_, AsyncSnapshot<Iterable<BluetoothDevice>> snapshot) {
+        if (!snapshot.hasData) return const CustomProgress();
+        return snapshot.data!.isEmpty
+            ? const BluetoothTile()
+            : DeviceList(devices: snapshot.data!);
+      },
+    );
   }
 }
