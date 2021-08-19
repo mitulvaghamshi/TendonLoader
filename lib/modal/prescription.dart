@@ -76,7 +76,7 @@ class Prescription extends HiveObject {
   CustomTable toTable() {
     return CustomTable(columns: const <DataColumn>[
       DataColumn(label: Text('Prescription', style: ts18B)),
-      DataColumn(label: Text('Detail', style: ts18B)),
+      DataColumn(label: Text('Value', style: ts18B)),
     ], rows: <DataRow>[
       DataRow(cells: <DataCell>['Target load'.toCell, '$targetLoad Kg'.toCell]),
       DataRow(cells: <DataCell>['Sets #'.toCell, '$sets'.toCell]),

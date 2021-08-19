@@ -83,11 +83,33 @@
       loadMainDartJs();
     }
   </script>
-  <script defer src="/__/firebase/8.6.1/firebase-app.js"></script>
+  <!-- <script defer src="/__/firebase/8.6.1/firebase-app.js"></script>
   <script defer src="/__/firebase/8.6.1/firebase-auth.js"></script>
   <script defer src="/__/firebase/8.6.1/firebase-firestore.js"></script>
   <script defer src="/__/firebase/8.6.1/firebase-analytics.js"></script>
-  <script defer src="/__/firebase/init.js"></script>
+  <script defer src="/__/firebase/init.js"></script> -->
+
+  <!-- <script defer src="/__/firebase/init.js?useEmulator=true"></script> -->
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyDDyoyhwZtACT9Y6yzeNFl1Ch6mU1SZ-pc",
+      authDomain: "tendon-loader.firebaseapp.com",
+      databaseURL: "https://tendon-loader-default-rtdb.firebaseio.com",
+      projectId: "tendon-loader",
+      storageBucket: "tendon-loader.appspot.com",
+      messagingSenderId: "534221336745",
+      appId: "1:534221336745:web:8893c7f4e44b9e959639b8",
+      measurementId: "G-0CWKSVKJGS"
+    };
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
 </body>
 
 </html>

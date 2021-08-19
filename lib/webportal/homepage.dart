@@ -4,8 +4,10 @@ import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/screens/app_settings.dart';
 import 'package:tendon_loader/screens/login.dart';
 import 'package:tendon_loader/utils/common.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/webportal/data_list.dart';
 import 'package:tendon_loader/webportal/data_view.dart';
 import 'package:tendon_loader/webportal/session_info.dart';
@@ -13,7 +15,16 @@ import 'package:tendon_loader/webportal/user_list.dart';
 
 final ValueNotifier<Export?> clickNotifier = ValueNotifier<Export?>(null);
 
-enum PopupAction { isClinician, download, delete, prescribe, history }
+enum PopupAction {
+  isClinician,
+  download,
+  delete,
+  prescribe,
+  history,
+  darkMode,
+  logout,
+  settings,
+}
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -51,10 +62,10 @@ class HomePage extends StatelessWidget {
           ),
         const SizedBox(width: 5),
         CustomButton(
-          radius: 16,
-          left: const Text('Logout'),
-          right: const Icon(Icons.logout),
-          onPressed: () async => logout(context),
+          radius: 8,
+          left: const Text('Settings'),
+          right: const Icon(Icons.settings),
+          onPressed: () async => context.push(AppSettings.route),
         ),
       ]),
       body: _isWide ? const _WideScreen() : const DataView(),
@@ -82,10 +93,9 @@ class CenterPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      padding: const EdgeInsets.all(0),
       margin: const EdgeInsets.symmetric(vertical: 16),
       child: SizedBox(
-        width: 260,
+        width: 250,
         child: Column(children: const <Widget>[
           SessionInfo(),
           Expanded(child: DataList())

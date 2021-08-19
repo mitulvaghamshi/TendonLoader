@@ -40,6 +40,12 @@ Box<UserState> get boxUserState => Hive.box<UserState>(keyUserStateBox);
 Box<SettingsState> get boxSettingsState =>
     Hive.box<SettingsState>(keySettingsStateBox);
 
+Future<void> _useEmulator() async {
+  const String host = '192.168.0.18';
+  await FirebaseAuth.instance.useAuthEmulator(host, 10001);
+  FirebaseFirestore.instance.useFirestoreEmulator(host, 10002);
+}
+
 Future<void> initializeApp() async {
   await Firebase.initializeApp();
   await Hive.initFlutter();
@@ -54,6 +60,7 @@ Future<void> initializeApp() async {
       <DeviceOrientation>[DeviceOrientation.portraitUp],
     );
   }
+  await _useEmulator();
 }
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
