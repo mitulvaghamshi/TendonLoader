@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,9 +34,17 @@ import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/webportal/homepage.dart';
 
-late final Box<Export> boxExport;
-late final Box<UserState> boxUserState;
-late final Box<SettingsState> boxSettingsState;
+Box<bool> get boxDarkMode => Hive.box<bool>(keyDarkModeBox);
+Box<Export> get boxExport => Hive.box<Export>(keyExportBox);
+Box<UserState> get boxUserState => Hive.box<UserState>(keyUserStateBox);
+Box<SettingsState> get boxSettingsState =>
+    Hive.box<SettingsState>(keySettingsStateBox);
+
+Future<void> _useEmulator() async {
+  const String host = '192.168.0.18';
+  await FirebaseAuth.instance.useAuthEmulator(host, 10001);
+  FirebaseFirestore.instance.useFirestoreEmulator(host, 10002);
+}
 
 Future<void> initializeApp() async {
   await Firebase.initializeApp();
@@ -46,14 +55,12 @@ Future<void> initializeApp() async {
   Hive.registerAdapter(TimestampAdapter());
   Hive.registerAdapter(PrescriptionAdapter());
   Hive.registerAdapter(SettingsStateAdapter());
-  boxExport = await Hive.openBox<Export>(keyExportBox);
-  boxUserState = await Hive.openBox<UserState>(keyUserStateBox);
-  boxSettingsState = await Hive.openBox<SettingsState>(keySettingsStateBox);
-  if (kIsWeb) {
+  if (!kIsWeb) {
     await SystemChrome.setPreferredOrientations(
       <DeviceOrientation>[DeviceOrientation.portraitUp],
     );
   }
+  await _useEmulator();
 }
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{

@@ -38,7 +38,7 @@ class _UserListState extends State<UserList> {
             clickNotifier.value = null;
             setState(() => _userList = context.view.userList);
           },
-          radius: 16,
+          radius: 8,
           color: colorRed900,
           left: const Icon(Icons.delete, color: colorWhite),
           right: const Text(

@@ -14,6 +14,7 @@ const String keyBase = 'TendonLoader';
 const String keyExports = 'exports';
 
 // boxes
+const String keyDarkModeBox = 'dark_mode_box';
 const String keyExportBox = 'user_exports_box';
 const String keyUserStateBox = 'box_user_state';
 const String keySettingsStateBox = 'box_settings_state';
@@ -102,6 +103,6 @@ const String descNoExerciseAvailable =
     'contact your clinician or turn on '
     'custom prescriptions in settings.';
 
-// email regex pattern
+// email regex pattern (do not modify at all)
 const String emailRegEx =
     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';

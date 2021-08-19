@@ -49,7 +49,7 @@ class CustomDialog extends StatelessWidget {
           FittedBox(
             child: action ??
                 CustomButton(
-                  radius: 16,
+                  radius: 20,
                   rounded: true,
                   onPressed: context.pop,
                   padding: EdgeInsets.zero,
