@@ -1,12 +1,12 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/bluetooth/device_handler.dart';
+import 'package:tendon_loader/custom/about_tile.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/utils/common.dart';
+import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
@@ -106,6 +106,17 @@ class _AppSettingsState extends State<AppSettings> {
               }),
             ),
             const Divider(),
+            SwitchListTile.adaptive(
+              activeColor: colorBlue,
+              title: const Text('Use dark mode'),
+              subtitle: const Text('Use dark theme (restart required).'),
+              value: boxDarkMode.get(keyDarkModeBox, defaultValue: false)!,
+              onChanged: (bool value) async {
+                await boxDarkMode.put(keyDarkModeBox, value);
+                setState(() {});
+              },
+            ),
+            const Divider(),
             ListTile(
               onTap: _tryUpload,
               title: const Text('Locally stored data'),
@@ -134,23 +145,7 @@ class _AppSettingsState extends State<AppSettings> {
               ),
             ],
             const Divider(),
-            const AboutListTile(
-              applicationVersion: 'v0.0.11',
-              applicationName: 'Tendon Loader',
-              applicationIcon: SizedBox(
-                width: 50,
-                height: 50,
-                child: CustomImage(),
-              ),
-              aboutBoxChildren: <Widget>[
-                Text(
-                  'Tendon Loader :Preview',
-                  textAlign: TextAlign.center,
-                  style: tsG18B,
-                ),
-              ],
-              child: Text('About'),
-            ),
+            const AboutTile(),
             const Divider(),
             ListTile(
               onTap: () async => logout(context),

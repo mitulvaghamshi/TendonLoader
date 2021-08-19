@@ -68,9 +68,10 @@ class _LoginState extends State<Login> {
           if (_isNew && !_isAdmin) {
             context.showSnackBar(const Text('User created successfully!!!'));
           } else {
-            context.showSnackBar(
-              const Text('Access denied! are you a clinician?'),
-            );
+            context.showSnackBar(const Text(
+              'Access denied! are you a clinician?',
+              style: TextStyle(color: colorRed400),
+            ));
           }
         }
       } on FirebaseAuthException catch (e) {
@@ -99,7 +100,9 @@ class _LoginState extends State<Login> {
         _settingsState = boxSettingsState.get(_emailCtrl.text.hashCode)!;
       } else {
         await boxSettingsState.put(
-            _emailCtrl.text.hashCode, _settingsState = SettingsState());
+          _emailCtrl.text.hashCode,
+          _settingsState = SettingsState(),
+        );
         await dbRoot
             .doc(_emailCtrl.text)
             .get()
@@ -112,7 +115,9 @@ class _LoginState extends State<Login> {
       }
       final Patient _patient = await Patient.of(_emailCtrl.text).fetch();
       _settingsState.toggleCustom(
-          _settingsState.customPrescriptions!, _patient);
+        _settingsState.customPrescriptions!,
+        _patient,
+      );
       context
         ..patient = _patient
         ..userState = _userState
@@ -126,8 +131,10 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    _userState =
-        boxUserState.get(keyUserStateBoxItem, defaultValue: UserState());
+    _userState = boxUserState.get(
+      keyUserStateBoxItem,
+      defaultValue: UserState(),
+    );
     if (_userState != null && (_keepSigned = _userState!.keepSigned!)) {
       _emailCtrl.text = _userState!.userName!;
       _passwordCtrl.text = _userState!.passWord!;

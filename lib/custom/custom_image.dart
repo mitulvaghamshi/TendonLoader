@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:tendon_loader/utils/constants.dart';
+import 'package:tendon_loader/custom/app_logo.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class CustomImage extends StatelessWidget {
@@ -21,16 +20,13 @@ class CustomImage extends StatelessWidget {
         ),
       );
     }
-    return FittedBox(
+    return const FittedBox(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: CircleAvatar(
-          minRadius: 10,
           backgroundColor: colorTransparent,
-          child: SvgPicture.asset(
-            imgAppLogo,
-            color: Theme.of(context).accentColor,
-          ),
+          minRadius: 10,
+          child: AppLogo(),
         ),
       ),
     );

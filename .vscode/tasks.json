@@ -1,0 +1,61 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "project: clean",
+			"command": "flutter clean",
+		},
+		{
+			"type": "shell",
+			"label": "project: pub get",
+			"command": "flutter pub get",
+		},
+		{
+			"type": "shell",
+			"label": "project: pod install",
+			"command": "pod install",
+			"options": {
+				"cwd": "${workspaceFolder}/ios"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "project: rebuild",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"project: clean",
+				"project: pub get",
+				"project: pod install",
+			],
+		},
+		{
+			"type": "shell",
+			"command": "flutter",
+			"args": [
+				"build",
+				"apk",
+				"--obfuscate",
+				"--no-track-widget-creation",
+				"--split-debug-info=build/app/outputs/bundle/release/map/"
+			],
+			"group": "build",
+			"problemMatcher": [],
+			"label": "release: apk"
+		},
+		{
+			"type": "shell",
+			"command": "flutter",
+			"args": [
+				"build",
+				"appbundle",
+				"--obfuscate",
+				"--no-track-widget-creation",
+				"--split-debug-info=build/app/outputs/bundle/release/map/"
+			],
+			"group": "build",
+			"problemMatcher": [],
+			"label": "release: appbundle"
+		},
+	],
+}
