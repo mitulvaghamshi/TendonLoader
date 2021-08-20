@@ -48,11 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
     await Wakelock.disable();
     await disposePlayer();
     await signOut();
-    return Future<void>.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(const Duration(milliseconds: 500));
   }
 
   Future<bool?> _onExit() async {
-    return CustomDialog.show(
+    return CustomDialog.show<bool>(
       context,
       title: 'Just a moment...',
       content: FutureBuilder<void>(

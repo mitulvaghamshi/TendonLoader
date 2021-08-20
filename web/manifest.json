@@ -9,7 +9,7 @@
     "orientation": "portrait-primary",
     "icons": [
         {
-            "src": "assets/images/app_logo.svg",
+            "src": "app_logo.svg",
             "type": "image/svg+xml"
         }
     ]
