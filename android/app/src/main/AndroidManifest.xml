@@ -3,8 +3,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:allowBackup="true"
-        android:fullBackupContent="@xml/backup_content"
+        android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"

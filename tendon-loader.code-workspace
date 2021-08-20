@@ -47,22 +47,23 @@
 		"tasks": [
 			{
 				"type": "shell",
-				"label": "project: start firebase emulators",
+				"label": "firebase: start emulators",
 				"command": "firebase",
 				"args": [
 					"emulators:start",
 					"--import=../emulator-backup",
-					"--export-on-exit=../emulator-backup",
-				],
+					"--export-on-exit=../emulator-backup"
+				]
 			},
 			{
 				"type": "shell",
-				"label": "project: adb connect",
+				"label": "adb: connect device",
 				"command": "adb",
 				"args": [
 					"connect",
-					"192.168.0.14",
+					"192.168.0.33"
 				],
+				"problemMatcher": []
 			}
 		],
 	},
