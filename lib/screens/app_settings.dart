@@ -113,17 +113,17 @@ class _AppSettingsState extends State<AppSettings> {
               context.settingsState.toggleCustom(value, context.patient);
             }),
           ),
-          // const Divider(),
-          // SwitchListTile.adaptive(
-          //   activeColor: colorBlue,
-          //   title: const Text('Use dark mode'),
-          //   subtitle: const Text('Use dark theme (restart required).'),
-          //   value: boxDarkMode.get(keyDarkModeBox, defaultValue: false)!,
-          //   onChanged: (bool value) async {
-          //     await boxDarkMode.put(keyDarkModeBox, value);
-          //     setState(() {});
-          //   },
-          // ),
+          const Divider(),
+          SwitchListTile.adaptive(
+            activeColor: colorBlue,
+            title: const Text('Use dark mode'),
+            subtitle: const Text('Use dark theme (restart required).'),
+            value: boxDarkMode.get(keyDarkModeBox, defaultValue: false)!,
+            onChanged: (bool value) async {
+              await boxDarkMode.put(keyDarkModeBox, value);
+              setState(() {});
+            },
+          ),
           const Divider(),
           ListTile(
             onTap: _tryUpload,
@@ -134,7 +134,7 @@ class _AppSettingsState extends State<AppSettings> {
             ),
             trailing: CustomButton(
               rounded: true,
-              left: Text(context.boxExport.length.toString(), style: ts22B),
+              left: Text(boxExport.length.toString(), style: ts22B),
             ),
           ),
           if (progressor != null) ...<Widget>[

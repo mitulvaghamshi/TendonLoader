@@ -4,12 +4,21 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
+import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/patient.dart';
+import 'package:tendon_loader/modal/prescription.dart';
+import 'package:tendon_loader/modal/settings_state.dart';
+import 'package:tendon_loader/modal/timestamp.dart';
+import 'package:tendon_loader/modal/user_state.dart';
 import 'package:tendon_loader/screens/app_settings.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
@@ -18,7 +27,6 @@ import 'package:tendon_loader/screens/livedata/live_data.dart';
 import 'package:tendon_loader/screens/login.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
-import 'package:tendon_loader/screens/splash.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/empty.dart'
     if (dart.library.html) 'dart:html' show AnchorElement;
@@ -32,8 +40,33 @@ Future<void> useEmulator() async {
   FirebaseFirestore.instance.useFirestoreEmulator(host, 10002);
 }
 
+late final Box<bool> boxDarkMode;
+late final Box<Export> boxExport;
+late final Box<UserState> boxUserState;
+late final Box<SettingsState> boxSettingsState;
+
+Future<void> initApp() async {
+  await Hive.initFlutter();
+  await Firebase.initializeApp();
+  Hive.registerAdapter(ExportAdapter());
+  Hive.registerAdapter(UserStateAdapter());
+  Hive.registerAdapter(ChartDataAdapter());
+  Hive.registerAdapter(TimestampAdapter());
+  Hive.registerAdapter(PrescriptionAdapter());
+  Hive.registerAdapter(SettingsStateAdapter());
+  boxExport = await Hive.openBox<Export>(keyExportBox);
+  boxDarkMode = await Hive.openBox<bool>(keyDarkModeBox);
+  boxUserState = await Hive.openBox<UserState>(keyUserStateBox);
+  boxSettingsState = await Hive.openBox<SettingsState>(keySettingsStateBox);
+  if (!kIsWeb) {
+    await SystemChrome.setPreferredOrientations(
+      <DeviceOrientation>[DeviceOrientation.portraitUp],
+    );
+  }
+  // await useEmulator();
+}
+
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
-  Splash.route: (_) => const Splash(),
   Login.route: (_) => const Login(),
   LiveData.route: (_) => const LiveData(),
   HomePage.route: (_) => const HomePage(),
@@ -89,10 +122,10 @@ Future<void> saveExcel({List<int>? bytes, required String name}) async {
 }
 
 Future<bool?> tryUpload(BuildContext context) async {
-  if (context.boxExport.isEmpty) return false;
+  if (boxExport.isEmpty) return false;
   if ((await Connectivity().checkConnectivity()) != ConnectivityResult.none) {
     int count = 0;
-    for (final Export export in context.boxExport.values) {
+    for (final Export export in boxExport.values) {
       if (await export.upload(context)) count++;
     }
     await CustomDialog.show<void>(
