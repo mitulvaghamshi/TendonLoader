@@ -12,6 +12,7 @@ import 'package:tendon_loader/bluetooth/device_handler.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/graph/dialogs_handler.dart';
+import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
@@ -132,7 +133,7 @@ class GraphHandler {
         ..isComplate = isComplete
         ..progressorId = deviceName
         ..exportData = exportData;
-      await context.boxExport.add(export!);
+      await boxExport.add(export!);
     }
     if (isRunning) await stop();
 

@@ -1,0 +1,14 @@
+[
+  {
+    "origin": [
+      "https://tendon-loader.web.app/"
+    ],
+    "method": [
+      "GET"
+    ],
+    "responseHeader": [
+      "Content-Type"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]

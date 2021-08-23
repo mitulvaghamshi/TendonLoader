@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:tendon_loader/app_state/app_state.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/app_state/app_state_widget.dart';
-import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/user_state.dart';
@@ -19,11 +17,6 @@ extension ExContext on BuildContext {
   Patient get patient => data.currentUser!;
   UserState get userState => data.userState!;
   SettingsState get settingsState => data.settingsState!;
-
-  Box<Export> get boxExport => data.boxExport!;
-  Box<bool> get boxDarkMode => data.boxDarkMode!;
-  Box<UserState> get boxUserState => data.boxUserState!;
-  Box<SettingsState> get boxSettingsState => data.boxSettingsState!;
 
   AppState get data {
     return dependOnInheritedWidgetOfExactType<AppStateScope>()!.data;

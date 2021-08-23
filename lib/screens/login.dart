@@ -31,7 +31,7 @@ final Map<String, String> _errors = <String, String>{
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
-  static const String route = '/login';
+  static const String route = Navigator.defaultRouteName;
   static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
 
   @override
@@ -93,14 +93,13 @@ class _LoginState extends State<Login> {
       if (_userState!.isInBox) {
         await _userState!.save();
       } else {
-        await context.boxUserState.put(keyUserStateBoxItem, _userState!);
+        await boxUserState.put(keyUserStateBoxItem, _userState!);
       }
       late final SettingsState _settingsState;
-      if (context.boxSettingsState.containsKey(_emailCtrl.text.hashCode)) {
-        _settingsState =
-            context.boxSettingsState.get(_emailCtrl.text.hashCode)!;
+      if (boxSettingsState.containsKey(_emailCtrl.text.hashCode)) {
+        _settingsState = boxSettingsState.get(_emailCtrl.text.hashCode)!;
       } else {
-        await context.boxSettingsState.put(
+        await boxSettingsState.put(
           _emailCtrl.text.hashCode,
           _settingsState = SettingsState(),
         );
@@ -131,9 +130,9 @@ class _LoginState extends State<Login> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _userState = context.boxUserState.get(
+  void initState() {
+    super.initState();
+    _userState = boxUserState.get(
       keyUserStateBoxItem,
       defaultValue: UserState(),
     );
