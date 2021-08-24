@@ -62,9 +62,8 @@ class CustomTimeTile extends StatelessWidget {
       subtitle: Text(desc),
       contentPadding: EdgeInsets.zero,
       title: Text(_timeString, style: ts20B),
-      trailing: CustomButton(
-        rounded: true,
-        left: const Icon(Icons.timer, color: colorBlue),
+      trailing: IconButton(
+        icon: const Icon(Icons.timer, color: colorBlue),
         onPressed: () async {
           final int? duration = await _selectTime(context);
           if (duration != null) onChanged(duration);

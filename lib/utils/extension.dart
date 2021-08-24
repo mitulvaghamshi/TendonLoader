@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/app_state/app_state_widget.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
 import 'package:tendon_loader/modal/user_state.dart';
@@ -15,22 +14,17 @@ extension ExString on String {
 
 extension ExContext on BuildContext {
   Patient get patient => data.currentUser!;
+  set patient(Patient? patient) => data.currentUser = patient;
+
   UserState get userState => data.userState!;
+  set userState(UserState? userState) => data.userState = userState;
+
   SettingsState get settingsState => data.settingsState!;
+  set settingsState(SettingsState? settings) => data.settingsState = settings;
 
   AppState get data {
     return dependOnInheritedWidgetOfExactType<AppStateScope>()!.data;
   }
-
-  AppStateWidgetState get view {
-    return findAncestorStateOfType<AppStateWidgetState>()!;
-  }
-
-  set patient(Patient? patient) => data.currentUser = patient;
-  set userState(UserState? userState) => data.userState = userState;
-  set settingsState(SettingsState? settings) => data.settingsState = settings;
-
-  void refresh() => findAncestorStateOfType<AppStateWidgetState>()!.refresh();
 
   void showSnackBar(Widget content) {
     ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: content));

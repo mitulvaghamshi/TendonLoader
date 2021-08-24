@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app_state/app_state_widget.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_progress.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/webportal/homepage.dart';
-import 'package:tendon_loader/webportal/user_tile.dart';
+import 'package:tendon_loader/web/common.dart';
+import 'package:tendon_loader/web/user_tile.dart';
 
 class UserList extends StatefulWidget {
   const UserList({Key? key}) : super(key: key);
@@ -19,10 +20,12 @@ class UserList extends StatefulWidget {
 class _UserListState extends State<UserList> {
   final TextEditingController _userCtrl = TextEditingController();
   final TextEditingController _exportCtrl = TextEditingController();
-  late Iterable<int> _userList = context.view.userList;
+  late Iterable<int> _userList = AppStateWidget.of(context).userList;
 
   void _onSearch() {
-    final Iterable<int> _filter = context.view.filter(filter: _userCtrl.text);
+    final Iterable<int> _filter = AppStateWidget.of(context).filter(
+      filter: _userCtrl.text,
+    );
     setState(() => _userList = _filter);
   }
 
@@ -36,7 +39,7 @@ class _UserListState extends State<UserList> {
             onDelete();
             context.pop();
             clickNotifier.value = null;
-            setState(() => _userList = context.view.userList);
+            setState(() => _userList = AppStateWidget.of(context).userList);
           },
           radius: 8,
           color: colorRed900,
@@ -100,10 +103,10 @@ class _UserListState extends State<UserList> {
             child: RefreshIndicator(
               color: colorGoogleGreen,
               onRefresh: () async => setState(() {
-                context.view.setRefetch();
+                AppStateWidget.of(context).setRefetch();
               }),
               child: FutureBuilder<void>(
-                future: context.view.fetch(),
+                future: AppStateWidget.of(context).fetch(),
                 builder: (_, AsyncSnapshot<void> snapshot) {
                   if (snapshot.connectionState != ConnectionState.done) {
                     return const CustomProgress();

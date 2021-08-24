@@ -201,7 +201,7 @@ class _NewExerciseState extends State<NewExercise> {
             CustomButton(
               onPressed: _clearForm,
               right: const Text('Clear'),
-              left: const Icon(Icons.clear),
+              left: const Icon(Icons.clear, color: colorRed400),
             ),
           ],
         ),

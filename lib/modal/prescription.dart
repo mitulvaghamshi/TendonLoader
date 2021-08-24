@@ -17,7 +17,6 @@ class Prescription extends HiveObject {
     required this.restTime,
     required this.targetLoad,
     required this.mvcDuration,
-    this.isAdmin,
   });
 
   Prescription.empty()
@@ -40,7 +39,6 @@ class Prescription extends HiveObject {
           holdTime: int.parse(map[keyHoldTime].toString()),
           targetLoad: double.parse(map[keyTargetLoad].toString()),
           mvcDuration: int.parse(map[keyMvcDuration].toString()),
-          isAdmin: map[keyIsAdmin] as bool? ?? false,
         );
 
   @HiveField(0)
@@ -57,8 +55,6 @@ class Prescription extends HiveObject {
   final int mvcDuration;
   @HiveField(6)
   final double targetLoad;
-  @HiveField(7)
-  bool? isAdmin;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -69,7 +65,6 @@ class Prescription extends HiveObject {
       keyRestTime: restTime,
       keyTargetLoad: targetLoad,
       keyMvcDuration: mvcDuration,
-      keyIsAdmin: isAdmin,
     };
   }
 

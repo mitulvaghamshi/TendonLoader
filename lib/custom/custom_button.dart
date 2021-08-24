@@ -9,7 +9,7 @@ class CustomButton extends StatelessWidget {
     this.onPressed,
     this.radius = 30,
     this.rounded = false,
-    this.padding = const EdgeInsets.all(12),
+    this.padding = const EdgeInsets.all(16),
   }) : super(key: key);
 
   final Color? color;

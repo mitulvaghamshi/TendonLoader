@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_table.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/webportal/homepage.dart';
+import 'package:tendon_loader/web/common.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 @immutable
