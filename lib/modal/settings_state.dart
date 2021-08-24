@@ -25,14 +25,14 @@ class SettingsState extends HiveObject {
   @HiveField(4)
   Prescription? prescription;
 
-  void toggleCustom(bool value, Patient user) {
-    customPrescriptions = value;
+  void toggle(bool isCustom, Prescription pre) {
+    customPrescriptions = isCustom;
     if (!customPrescriptions!) {
-      if (user.prescription!.targetLoad > 0) {
-        prescription = user.prescription;
+      if (pre.targetLoad > 0) {
+        prescription = pre;
       }
-      if (user.prescription!.mvcDuration > 0) {
-        mvcDuration = user.prescription!.mvcDuration;
+      if (pre.mvcDuration > 0) {
+        mvcDuration = pre.mvcDuration;
       }
     }
   }

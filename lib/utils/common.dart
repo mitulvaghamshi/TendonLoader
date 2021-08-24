@@ -24,7 +24,7 @@ import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/screens/livedata/live_data.dart';
-import 'package:tendon_loader/screens/login.dart';
+import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/utils/constants.dart';
@@ -32,7 +32,8 @@ import 'package:tendon_loader/utils/empty.dart'
     if (dart.library.html) 'dart:html' show AnchorElement;
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/webportal/homepage.dart';
+import 'package:tendon_loader/web/homepage.dart';
+import 'package:tendon_loader/web/web_settings.dart';
 
 Future<void> useEmulator() async {
   const String host = '192.168.0.18';
@@ -63,8 +64,20 @@ Future<void> initApp() async {
       <DeviceOrientation>[DeviceOrientation.portraitUp],
     );
   }
-  // await useEmulator();
+  await useEmulator();
 }
+
+
+final Map<String, String> firebaseErrors = <String, String>{
+  'email-already-in-use': 'The account already exists for that email.',
+  'invalid-email': 'Invalid email.',
+  'weak-password': 'The password is too weak.',
+  'wrong-password': 'Invalid password.',
+  'user-not-found': 'No user found for that email. '
+      'Make sure you enter right credentials.',
+  'user-disabled': 'This account is disabled.',
+  'operation-not-allowed': 'This account is disabled.',
+};
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   Login.route: (_) => const Login(),
@@ -74,6 +87,7 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   NewMVCTest.route: (_) => const NewMVCTest(),
   MVCTesting.route: (_) => const MVCTesting(),
   AppSettings.route: (_) => const AppSettings(),
+  WebSettings.route: (_) => const WebSettings(),
   NewExercise.route: (_) => const NewExercise(),
   ExerciseMode.route: (_) => const ExerciseMode(),
 };

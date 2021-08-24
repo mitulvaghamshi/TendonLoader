@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app_state/app_state_widget.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/webportal/exercise_history.dart';
-import 'package:tendon_loader/webportal/homepage.dart';
-
+import 'package:tendon_loader/web/common.dart';
+import 'package:tendon_loader/web/exercise_history.dart';
 class UserTile extends StatelessWidget {
   const UserTile({
     Key? key,
+    this.onDelete,
     required this.id,
-    required this.onDelete,
     this.filter,
   }) : super(key: key);
 
   final int id;
   final String? filter;
-  final Future<void> Function(VoidCallback) onDelete;
+  final Future<void> Function(VoidCallback)? onDelete;
 
   Future<void> _exerciseHistory(BuildContext context) async {
     return CustomDialog.show<void>(
@@ -30,7 +29,7 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Patient _user = context.view.getUserBy(id);
+    final Patient _user = AppStateWidget.of(context).getUserBy(id);
     return ExpansionTile(
       maintainState: true,
       key: ValueKey<int>(id),
@@ -45,28 +44,28 @@ class UserTile extends StatelessWidget {
       trailing: PopupMenuButton<PopupAction>(
         icon: const Icon(Icons.settings),
         itemBuilder: (_) => <PopupMenuItem<PopupAction>>[
-          PopupMenuItem<PopupAction>(
-            value: PopupAction.isClinician,
-            child: StatefulBuilder(
-              builder: (_, void Function(void Function()) setState) {
-                return CheckboxListTile(
-                  activeColor: colorBlue,
-                  value: _user.prescription!.isAdmin,
-                  title: const Text('Set as Clinician?'),
-                  controlAffinity: ListTileControlAffinity.leading,
-                  subtitle: const Text('Can access web portal.'),
-                  onChanged: (bool? value) async {
-                    setState(() => _user.prescription!.isAdmin = value);
-                    await Future<void>.microtask(() async {
-                      await _user.prescriptionRef!.update(<String, bool>{
-                        keyIsAdmin: _user.prescription!.isAdmin!
-                      });
-                    });
-                  },
-                );
-              },
-            ),
-          ),
+          // PopupMenuItem<PopupAction>(
+          //   value: PopupAction.isClinician,
+          //   child: StatefulBuilder(
+          //     builder: (_, void Function(void Function()) setState) {
+          //       return CheckboxListTile(
+          //         activeColor: colorBlue,
+          //         value: _user.prescription!.isAdmin,
+          //         title: const Text('Set as Clinician?'),
+          //         controlAffinity: ListTileControlAffinity.leading,
+          //         subtitle: const Text('Can access web portal.'),
+          //         onChanged: (bool? value) async {
+          //           setState(() => _user.prescription!.isAdmin = value);
+          //           await Future<void>.microtask(() async {
+          //             await _user.prescriptionRef!.update(<String, bool>{
+          //               keyIsAdmin: _user.prescription!.isAdmin!
+          //             });
+          //           });
+          //         },
+          //       );
+          //     },
+          //   ),
+          // ),
           const PopupMenuItem<PopupAction>(
             value: PopupAction.history,
             child: ListTile(
@@ -111,13 +110,13 @@ class UserTile extends StatelessWidget {
           } else if (action == PopupAction.download) {
             await Future<void>.microtask(_user.download);
           } else if (action == PopupAction.delete) {
-            await onDelete(_user.deleteAll);
+            await onDelete!(_user.deleteAll);
           }
         },
       ),
       children: ListTile.divideTiles(
         context: context,
-        tiles: _user.exportTiles(filter: filter, onDelete: onDelete),
+        tiles: _user.exportTiles(filter: filter, onDelete: onDelete!),
       ).toList(),
     );
   }

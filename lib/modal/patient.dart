@@ -8,7 +8,7 @@ import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/webportal/export_tile.dart';
+import 'package:tendon_loader/web/export_tile.dart';
 
 part 'patient.g.dart';
 
@@ -25,11 +25,11 @@ class Patient extends HiveObject {
   Patient.of(String id)
       : this.fromJson(FirebaseFirestore.instance.doc('/$keyBase/$id'));
 
-  Patient.fromJson(DocumentReference<Map<String, dynamic>> ref)
+  Patient.fromJson(DocumentReference<Map<String, dynamic>> reference)
       : this(
-          userRef: ref,
-          exportRef: _exportsRef(ref),
-          prescriptionRef: _prescriptionRef(ref),
+          userRef: reference,
+          exportRef: _exportsRef(reference),
+          prescriptionRef: _prescriptionRef(reference),
         );
 
   @HiveField(0)
@@ -93,16 +93,18 @@ class Patient extends HiveObject {
     });
   }
 
-  Future<Patient> fetch() async {
+  Future<Patient> fetch({bool? withExports = false}) async {
     final DocumentSnapshot<Prescription> _prescription =
         await prescriptionRef!.get();
 
-    final QuerySnapshot<Export> _exports =
-        await exportRef!.orderBy(keyTimeStamp, descending: true).get();
-
-    final List<Export> _list = _exports.docs
-        .map((QueryDocumentSnapshot<Export> e) => e.data())
-        .toList();
+    List<Export>? _list;
+    if (withExports!) {
+      final QuerySnapshot<Export> _exports =
+          await exportRef!.orderBy(keyTimeStamp, descending: true).get();
+      _list = _exports.docs
+          .map((QueryDocumentSnapshot<Export> e) => e.data())
+          .toList();
+    }
 
     return Patient(
       exports: _list,

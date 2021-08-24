@@ -3,28 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
-import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/screens/app_settings.dart';
-import 'package:tendon_loader/screens/login.dart';
+import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/webportal/data_list.dart';
-import 'package:tendon_loader/webportal/data_view.dart';
-import 'package:tendon_loader/webportal/session_info.dart';
-import 'package:tendon_loader/webportal/user_list.dart';
+import 'package:tendon_loader/web/common.dart';
+import 'package:tendon_loader/web/data_list.dart';
+import 'package:tendon_loader/web/data_view.dart';
+import 'package:tendon_loader/web/session_info.dart';
+import 'package:tendon_loader/web/user_list.dart';
+import 'package:tendon_loader/web/web_settings.dart';
 
-final ValueNotifier<Export?> clickNotifier = ValueNotifier<Export?>(null);
 
-enum PopupAction {
-  isClinician,
-  download,
-  delete,
-  prescribe,
-  history,
-  darkMode,
-  logout,
-  settings,
-}
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -65,7 +54,7 @@ class HomePage extends StatelessWidget {
           radius: 8,
           left: const Text('Settings'),
           right: const Icon(Icons.settings),
-          onPressed: () async => context.push(AppSettings.route),
+          onPressed: () async => context.push(WebSettings.route),
         ),
       ]),
       body: _isWide ? const _WideScreen() : const DataView(),

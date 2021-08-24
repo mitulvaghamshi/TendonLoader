@@ -13,6 +13,10 @@ class AppStateWidget extends StatefulWidget {
 
   final Widget child;
 
+  static AppStateWidgetState of(BuildContext context) {
+    return context.findAncestorStateOfType<AppStateWidgetState>()!;
+  }
+
   @override
   AppStateWidgetState createState() => AppStateWidgetState();
 }
@@ -31,7 +35,7 @@ class AppStateWidgetState extends State<AppStateWidget> {
     final QuerySnapshot<Patient> _snapshot = await dbRoot.get();
     if (_snapshot.size > 0) _data.users.clear();
     for (int i = 0; i < _snapshot.size; i++) {
-      _data.users[i] = await _snapshot.docs[i].data().fetch();
+      _data.users[i] = await _snapshot.docs[i].data().fetch(withExports: true);
     }
     _complater.complete();
     return _complater.future;

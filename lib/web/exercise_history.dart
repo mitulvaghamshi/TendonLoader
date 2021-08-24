@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app_state/app_state_widget.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/utils/extension.dart';
 
 @immutable
 class ExerciseHistory extends StatelessWidget {
@@ -12,7 +12,9 @@ class ExerciseHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        children: _buildItems(context.view.getUserBy(id).exports!).toList(),
+        children: _buildItems(
+          AppStateWidget.of(context).getUserBy(id).exports!,
+        ).toList(),
       ),
     );
   }

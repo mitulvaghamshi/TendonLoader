@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/utils/validator.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
@@ -22,22 +23,13 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
 
-  String? _validateNum(String? value) {
-    if (value == null) return null;
-    if (value.isEmpty) {
-      return '* required';
-    } else if (double.tryParse(value)! < 0) {
-      return 'Value cannot be negative!!!';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       style: ts20B,
       controller: controller,
       obscureText: isObscure,
-      validator: validator ?? _validateNum,
+      validator: validator ?? validateNum,
       keyboardType: keyboardType ?? TextInputType.number,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       inputFormatters: <TextInputFormatter>[
@@ -48,7 +40,7 @@ class CustomTextField extends StatelessWidget {
         suffix: suffix ??
             IconButton(
               onPressed: controller!.clear,
-              icon: const Icon(Icons.clear),
+              icon: const Icon(Icons.clear, color: colorRed400),
             ),
       ),
     );
