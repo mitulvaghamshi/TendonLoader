@@ -33,7 +33,6 @@ import 'package:tendon_loader/utils/empty.dart'
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/web/homepage.dart';
-import 'package:tendon_loader/web/web_settings.dart';
 
 Future<void> useEmulator() async {
   const String host = '192.168.0.18';
@@ -45,6 +44,21 @@ late final Box<bool> boxDarkMode;
 late final Box<Export> boxExport;
 late final Box<UserState> boxUserState;
 late final Box<SettingsState> boxSettingsState;
+
+enum PopupAction {
+  isClinician,
+  download,
+  delete,
+  prescribe,
+  history,
+  darkMode,
+  logout,
+  settings,
+}
+
+final ValueNotifier<int?> userClick = ValueNotifier<int?>(null);
+
+final ValueNotifier<Export?> exportClick = ValueNotifier<Export?>(null);
 
 Future<void> initApp() async {
   await Hive.initFlutter();
@@ -67,7 +81,6 @@ Future<void> initApp() async {
   await useEmulator();
 }
 
-
 final Map<String, String> firebaseErrors = <String, String>{
   'email-already-in-use': 'The account already exists for that email.',
   'invalid-email': 'Invalid email.',
@@ -87,13 +100,13 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   NewMVCTest.route: (_) => const NewMVCTest(),
   MVCTesting.route: (_) => const MVCTesting(),
   AppSettings.route: (_) => const AppSettings(),
-  WebSettings.route: (_) => const WebSettings(),
   NewExercise.route: (_) => const NewExercise(),
   ExerciseMode.route: (_) => const ExerciseMode(),
 };
 
-Route<T> buildRoute<T>(String routeName) {
+Route<T> buildRoute<T>(String routeName, [bool? fullscreen = false]) {
   return PageRouteBuilder<T>(
+    fullscreenDialog: fullscreen!,
     pageBuilder: (BuildContext context, __, ___) {
       return routes[routeName]!(context);
     },

@@ -63,43 +63,43 @@ class _AppSettingsState extends State<AppSettings> {
               left: const Icon(Icons.person, color: colorBlue),
             ),
             const Divider(),
-            SwitchListTile.adaptive(
-              activeColor: colorBlue,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
+            if (!kIsWeb) ...<Widget>[
+              SwitchListTile.adaptive(
+                activeColor: colorBlue,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                value: context.settingsState.autoUpload!,
+                title: const Text('Automatic data upload'),
+                subtitle: const Text(
+                  'Automatically upload exercise '
+                  'and mvc test data on completion.',
+                ),
+                onChanged: (bool value) => setState(() {
+                  context.settingsState.autoUpload = value;
+                }),
               ),
-              value: context.settingsState.autoUpload!,
-              title: const Text('Automatic data upload'),
-              subtitle: const Text(
-                'Automatically upload exercise '
-                'and mvc test data on completion.',
+              SwitchListTile.adaptive(
+                activeColor: colorBlue,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                title: const Text('Use custom prescriptions'),
+                value: context.settingsState.customPrescriptions!,
+                subtitle: const Text(
+                  'Provide your own prescriptions '
+                  'for exercise and mvc test.',
+                ),
+                onChanged: (bool value) => setState(() {
+                  context.settingsState.toggle(
+                    value,
+                    context.patient.prescription!,
+                  );
+                }),
               ),
-              onChanged: (bool value) => setState(() {
-                context.settingsState.autoUpload = value;
-              }),
-            ),
-            // const Divider(),
-            SwitchListTile.adaptive(
-              activeColor: colorBlue,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-              title: const Text('Use custom prescriptions'),
-              value: context.settingsState.customPrescriptions!,
-              subtitle: const Text(
-                'Provide your own prescriptions '
-                'for exercise and mvc test.',
-              ),
-              onChanged: (bool value) => setState(() {
-                context.settingsState.toggle(
-                  value,
-                  context.patient.prescription!,
-                );
-              }),
-            ),
-            // const Divider(),
+            ],
             SwitchListTile.adaptive(
               activeColor: colorBlue,
               contentPadding: const EdgeInsets.symmetric(
@@ -117,73 +117,70 @@ class _AppSettingsState extends State<AppSettings> {
                 setState(() {});
               },
             ),
-            // const Divider(),
-            ListTile(
-              onTap: _tryUpload,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-              title: const Text('Locally stored data'),
-              subtitle: const Text(
-                'Click here to submit locally '
-                'stored data to clinician.',
-              ),
-              trailing: CustomButton(
-                rounded: true,
-                left: Text(boxExport.length.toString(), style: ts22B),
-              ),
-            ),
-            // const Divider(),
-            ListTile(
-              title: const Text('Y-axis scale (default: 30kg)'),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-              subtitle: const Text(
-                'Consult your clinician before '
-                'changing this value.',
-              ),
-              trailing: SizedBox(
-                width: 60,
-                child: TextField(
-                  style: ts20B,
-                  controller: _ctrlGraphScale,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'^\d{1,2}(\.\d{0,2})?'),
-                    ),
-                  ],
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                ),
-              ),
-            ),
-            if (progressor != null) ...<Widget>[
-              // const Divider(),
+            if (!kIsWeb) ...<Widget>[
               ListTile(
-                title: Text(
-                  'Disconnect ($deviceName)',
-                  style: const TextStyle(color: colorRed400),
-                ),
+                onTap: _tryUpload,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 10,
                 ),
-                subtitle: const Text('Long press to sleep the progressor'),
-                onTap: () async {
-                  await disconnectDevice().then((_) => setState(() {}));
-                },
-                onLongPress: () async => disconnectDevice(sleep: true).then(
-                  (_) => setState(() {}),
+                title: const Text('Locally stored data'),
+                subtitle: const Text(
+                  'Click here to submit locally '
+                  'stored data to clinician.',
+                ),
+                trailing: CustomButton(
+                  rounded: true,
+                  left: Text(boxExport.length.toString(), style: ts22B),
                 ),
               ),
+              ListTile(
+                title: const Text('Y-axis scale (default: 30kg)'),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                subtitle: const Text(
+                  'Consult your clinician before '
+                  'changing this value.',
+                ),
+                trailing: SizedBox(
+                  width: 60,
+                  child: TextField(
+                    style: ts18w5,
+                    controller: _ctrlGraphScale,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d{1,2}(\.\d{0,2})?'),
+                      ),
+                    ],
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                  ),
+                ),
+              ),
+              if (progressor != null) ...<Widget>[
+                ListTile(
+                  title: Text(
+                    'Disconnect ($deviceName)',
+                    style: const TextStyle(color: colorRed400),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  subtitle: const Text('Long press to sleep the progressor'),
+                  onTap: () async {
+                    await disconnectDevice().then((_) => setState(() {}));
+                  },
+                  onLongPress: () async => disconnectDevice(sleep: true).then(
+                    (_) => setState(() {}),
+                  ),
+                ),
+              ],
             ],
-            // const Divider(),
             const AboutTile(),
-            // const Divider(),
             ListTile(
               onTap: () async => logout(context),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16),

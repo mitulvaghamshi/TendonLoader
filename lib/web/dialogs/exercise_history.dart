@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state_widget.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/modal/patient.dart';
 
 @immutable
 class ExerciseHistory extends StatelessWidget {
-  const ExerciseHistory({Key? key, required this.id}) : super(key: key);
+  const ExerciseHistory({Key? key, required this.patient}) : super(key: key);
 
-  final int id;
+  final Patient patient;
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: _buildItems(
-          AppStateWidget.of(context).getUserBy(id).exports!,
-        ).toList(),
+    return Scaffold(
+      appBar: AppBar(title: Text(patient.id)),
+      body: AppFrame(
+        child: SingleChildScrollView(
+          child: Column(children: _buildItems(patient.exports!).toList()),
+        ),
       ),
     );
   }

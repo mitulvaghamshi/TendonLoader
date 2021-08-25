@@ -36,14 +36,16 @@ final ThemeData lightTheme = ThemeData(
     foregroundColor: colorBlack,
   ),
   inputDecorationTheme: const InputDecorationTheme(
-    isDense: true,
     labelStyle: TextStyle(color: colorBlack),
     errorBorder: UnderlineInputBorder(
-        borderSide: BorderSide(width: 2, color: colorRed400)),
+      borderSide: BorderSide(color: colorRed400),
+    ),
     focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(width: 2, color: colorBlue)),
+      borderSide: BorderSide(color: colorBlue),
+    ),
     enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
+      borderSide: BorderSide(color: colorGoogleGreen),
+    ),
   ),
 );
 
@@ -63,22 +65,23 @@ final ThemeData darkTheme = ThemeData(
     foregroundColor: colorWhite,
   ),
   inputDecorationTheme: const InputDecorationTheme(
-    isDense: true,
     labelStyle: TextStyle(color: colorWhite),
     errorBorder: UnderlineInputBorder(
-        borderSide: BorderSide(width: 2, color: colorRed400)),
+      borderSide: BorderSide(color: colorRed400),
+    ),
     focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(width: 2, color: colorBlue)),
+      borderSide: BorderSide(color: colorBlue),
+    ),
     enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(width: 2, color: colorGoogleGreen)),
+      borderSide: BorderSide(color: colorGoogleGreen),
+    ),
   ),
 );
 
 const TextStyle tsBW500 =
     TextStyle(color: colorBlack, fontWeight: FontWeight.w500);
 
-const TextStyle ts18B = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
-const TextStyle ts20B = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+const TextStyle ts18w5 = TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
 const TextStyle ts22B = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
 const TextStyle tsG18B = TextStyle(

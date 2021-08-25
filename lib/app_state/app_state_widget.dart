@@ -43,7 +43,7 @@ class AppStateWidgetState extends State<AppStateWidget> {
 
   Iterable<int> get userList => _data.users.keys;
 
-  Patient getUserBy(int id) => _data.users[id]!;
+  Patient getUser(int id) => _data.users[id]!;
 
   Iterable<int> filter({String? filter}) {
     if (filter == null) return userList;

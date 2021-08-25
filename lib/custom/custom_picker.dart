@@ -20,7 +20,7 @@ class CustomPicker extends StatelessWidget {
       height: 150,
       child: Stack(alignment: Alignment.centerRight, children: <Widget>[
         CustomButton(
-          right: Text(label, style: ts18B),
+          right: Text(label, style: ts18w5),
           left: const SizedBox(width: 45, height: 30),
         ),
         ListWheelScrollView(
@@ -33,7 +33,7 @@ class CustomPicker extends StatelessWidget {
             return Container(
               width: 35,
               alignment: Alignment.centerLeft,
-              child: Text('$index'.padLeft(2), style: ts18B),
+              child: Text('$index'.padLeft(2), style: ts18w5),
             );
           }),
         ),

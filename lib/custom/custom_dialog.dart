@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/utils/extension.dart';
@@ -7,18 +8,18 @@ import 'package:tendon_loader/utils/themes.dart';
 class CustomDialog extends StatelessWidget {
   const CustomDialog({
     Key? key,
-    required this.title,
+    this.title,
     this.action,
     this.content,
   }) : super(key: key);
 
-  final String title;
+  final String? title;
   final Widget? action;
   final Widget? content;
 
   static Future<T?> show<T>(
     BuildContext context, {
-    required String title,
+    String? title,
     Widget? action,
     Widget? content,
   }) async {
@@ -35,6 +36,14 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return Center(
+        child: SizedBox.fromSize(
+          size: const Size(400, 700),
+          child: content,
+        ),
+      );
+    }
     return AlertDialog(
       scrollable: true,
       content: content,
@@ -44,7 +53,7 @@ class CustomDialog extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          FittedBox(child: Text(title, style: ts20B)),
+          FittedBox(child: Text(title ?? '', style: ts18w5)),
           const SizedBox(width: 5),
           FittedBox(
             child: action ??

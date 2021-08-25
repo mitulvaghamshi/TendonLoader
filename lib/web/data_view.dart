@@ -4,7 +4,7 @@ import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/web/common.dart';
+import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 @immutable
@@ -16,7 +16,7 @@ class DataView extends StatelessWidget {
     return AppFrame(
       padding: const EdgeInsets.all(8),
       child: ValueListenableBuilder<Export?>(
-        valueListenable: clickNotifier,
+        valueListenable: exportClick,
         builder: (BuildContext context, Export? value, Widget? child) {
           if (value == null || value.exportData!.isEmpty) return child!;
           final double _targetLine =
