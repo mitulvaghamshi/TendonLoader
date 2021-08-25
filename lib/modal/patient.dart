@@ -1,14 +1,10 @@
 import 'package:archive/archive_io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
-import 'package:tendon_loader/screens/exercise/new_exercise.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/web/export_tile.dart';
 
 part 'patient.g.dart';
 
@@ -64,39 +60,13 @@ class Patient extends HiveObject {
   }
 
   String get id => userRef!.id;
-
   String get avatar => id[0].toUpperCase();
-
-  String get childCount => 'Total ${exports?.length} '
+  String get exportCount => 'Total ${exports?.length} '
       'item${exports?.length == 1 ? '' : 's'} submitted';
-
-  Iterable<Widget> exportTiles({
-    String? filter,
-    required Future<void> Function(VoidCallback) onDelete,
-  }) {
-    Iterable<Export>? filtered;
-
-    if (filter != null) {
-      filtered = exports!.where((Export export) {
-        return export.fileName.toLowerCase().contains(filter.toLowerCase());
-      });
-    }
-    return (filtered ?? exports)!.map((Export export) {
-      return ExportTile(
-        export: export,
-        onDelete: () async => onDelete(
-          () async => export.reference!.delete().then((_) {
-            exports!.remove(export);
-          }),
-        ),
-      );
-    });
-  }
 
   Future<Patient> fetch({bool? withExports = false}) async {
     final DocumentSnapshot<Prescription> _prescription =
         await prescriptionRef!.get();
-
     List<Export>? _list;
     if (withExports!) {
       final QuerySnapshot<Export> _exports =
@@ -105,7 +75,6 @@ class Patient extends HiveObject {
           .map((QueryDocumentSnapshot<Export> e) => e.data())
           .toList();
     }
-
     return Patient(
       exports: _list,
       userRef: userRef,
@@ -131,12 +100,5 @@ class Patient extends HiveObject {
       await export.reference!.delete();
     }
     exports!.clear();
-  }
-
-  Future<void> prescribe(BuildContext context) async {
-    await showDialog<void>(
-      context: context,
-      builder: (_) => CustomDialog(title: id, content: NewExercise(user: this)),
-    );
   }
 }

@@ -19,8 +19,9 @@ import 'package:tendon_loader/utils/validator.dart';
 import 'package:tendon_loader/web/homepage.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({Key? key, this.isRegister = false}) : super(key: key);
 
+  final bool isRegister;
   static const String route = Navigator.defaultRouteName;
   static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
 
@@ -37,13 +38,14 @@ class _LoginState extends State<Login> {
   bool _isBusy = false;
   bool _isObscure = true;
   bool _keepSigned = true;
+  bool _isAdmin = false;
   bool _isRegister = false;
 
   Future<void> _authenticate() async {
     setState(() => _isBusy = true);
     try {
       late final UserCredential _credential;
-      if (_isRegister) {
+      if (_isRegister || (kIsWeb && widget.isRegister)) {
         _credential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: _emailCtrl.text, password: _passwordCtrl.text);
@@ -51,45 +53,53 @@ class _LoginState extends State<Login> {
         _credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: _emailCtrl.text, password: _passwordCtrl.text);
       }
-      if (_credential.user != null) {
-        _userState!
-          ..keepSigned = _keepSigned
-          ..userName = _emailCtrl.text
-          ..passWord = _passwordCtrl.text;
-        if (_userState!.isInBox) {
-          await _userState!.save();
-        } else {
-          await boxUserState.put(keyUserStateBoxItem, _userState!);
+      if (widget.isRegister) {
+        if (_credential.user != null) await _createUserEntry();
+        setState(() => _isBusy = false);
+        context.showSnackBar(const Text('User created successfully!'));
+        _emailCtrl.clear();
+        _passwordCtrl.clear();
+      } else {
+        if (_credential.user != null) {
+          _userState!
+            ..keepSigned = _keepSigned
+            ..userName = _emailCtrl.text
+            ..passWord = _passwordCtrl.text;
+          if (_userState!.isInBox) {
+            await _userState!.save();
+          } else {
+            await boxUserState.put(keyUserStateBoxItem, _userState!);
+          }
+          final SettingsState _settingsState = boxSettingsState
+              .get(_emailCtrl.text, defaultValue: SettingsState())!;
+          if (!_settingsState.isInBox) {
+            await boxSettingsState.put(_emailCtrl.text, _settingsState);
+            await _createUserEntry();
+          }
+          final Patient _patientAsUser =
+              await Patient.of(_emailCtrl.text).fetch();
+          if (!kIsWeb) {
+            _settingsState.toggle(
+              _settingsState.customPrescriptions!,
+              _patientAsUser.prescription!,
+            );
+          }
+          if (kIsWeb && !_patientAsUser.prescription!.isAdmin!) {
+            setState(() => _isBusy = false);
+            context.showSnackBar(const Text(
+              'Are you a clinician?',
+              style: TextStyle(color: colorRed400),
+            ));
+          } else {
+            context
+              ..patient = _patientAsUser
+              ..userState = _userState
+              ..settingsState = _settingsState;
+            await Future<void>.delayed(const Duration(seconds: 2), () async {
+              await context.replace(Login.homeRoute);
+            });
+          }
         }
-        final SettingsState _settingsState = boxSettingsState
-            .get(_emailCtrl.text, defaultValue: SettingsState())!;
-        if (!_settingsState.isInBox) {
-          await boxSettingsState.put(_emailCtrl.text, _settingsState);
-          await dbRoot.doc(_emailCtrl.text).get().then(
-            (DocumentSnapshot<Patient> patient) async {
-              if (!patient.exists) {
-                await dbRoot
-                    .doc(_emailCtrl.text)
-                    .set(Patient(prescription: Prescription.empty()));
-              }
-            },
-          );
-        }
-        Patient? _patientAsUser = Patient.of(_emailCtrl.text);
-        if (!kIsWeb) {
-          _patientAsUser = await _patientAsUser.fetch();
-          _settingsState.toggle(
-            _settingsState.customPrescriptions!,
-            _patientAsUser.prescription!,
-          );
-        }
-        context
-          ..patient = _patientAsUser
-          ..userState = _userState
-          ..settingsState = _settingsState;
-        await Future<void>.delayed(const Duration(seconds: 2), () async {
-          await context.replace(Login.homeRoute);
-        });
       }
     } on FirebaseAuthException catch (e) {
       setState(() => _isBusy = false);
@@ -100,18 +110,34 @@ class _LoginState extends State<Login> {
     }
   }
 
+  Future<void> _createUserEntry() async {
+    await dbRoot.doc(_emailCtrl.text).get().then(
+      (DocumentSnapshot<Patient> patient) async {
+        if (!patient.exists) {
+          await dbRoot.doc(_emailCtrl.text).set(Patient(
+                prescription: Prescription.empty()..isAdmin = _isAdmin,
+              ));
+        }
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    _userState = boxUserState.get(
-      keyUserStateBoxItem,
-      defaultValue: UserState(),
-    );
-    if (_userState != null && (_keepSigned = _userState!.keepSigned!)) {
-      _emailCtrl.text = _userState!.userName!;
-      _passwordCtrl.text = _userState!.passWord!;
+    if (!widget.isRegister) {
+      _userState = boxUserState.get(
+        keyUserStateBoxItem,
+        defaultValue: UserState(),
+      );
+      if (_userState != null && (_keepSigned = _userState!.keepSigned!)) {
+        _emailCtrl.text = _userState!.userName!;
+        _passwordCtrl.text = _userState!.passWord!;
+      } else {
+        _keepSigned = true;
+      }
     } else {
-      _keepSigned = true;
+      _userState = UserState();
     }
   }
 
@@ -125,57 +151,57 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Tendon Loader'),
-      ),
-      body: kIsWeb
-          ? Center(child: SizedBox(width: 350, child: _buildBody()))
-          : _buildBody(),
-    );
-  }
-
-  Widget _buildBody() {
-    return SingleChildScrollView(
-      child: AppFrame(
-        child: Form(
-          key: _formKey,
-          child: Column(children: <Widget>[
-            const CustomImage(),
-            CustomTextField(
-              label: 'Username',
-              controller: _emailCtrl,
-              validator: validateEmail,
-              keyboardType: TextInputType.emailAddress,
-            ),
-            CustomTextField(
-              label: 'Password',
-              isObscure: _isObscure,
-              validator: validatePass,
-              controller: _passwordCtrl,
-              keyboardType: TextInputType.visiblePassword,
-              suffix: IconButton(
-                onPressed: () => setState(() => _isObscure = !_isObscure),
-                icon: Icon(
-                  _isObscure ? Icons.visibility : Icons.visibility_off,
+      appBar: AppBar(title: const Text('Tendon Loader')),
+      body: SingleChildScrollView(
+        child: AppFrame(
+          child: Form(
+            key: _formKey,
+            child: Column(children: <Widget>[
+              const CustomImage(),
+              CustomTextField(
+                label: 'Username',
+                controller: _emailCtrl,
+                validator: validateEmail,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              CustomTextField(
+                label: 'Password',
+                isObscure: _isObscure,
+                validator: validatePass,
+                controller: _passwordCtrl,
+                keyboardType: TextInputType.visiblePassword,
+                suffix: IconButton(
+                  onPressed: () => setState(() => _isObscure = !_isObscure),
+                  icon: Icon(
+                    _isObscure ? Icons.visibility : Icons.visibility_off,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            CheckboxListTile(
-              value: _keepSigned,
-              activeColor: colorBlue,
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Keep me logged in.'),
-              controlAffinity: ListTileControlAffinity.leading,
-              onChanged: (_) => setState(() => _keepSigned = !_keepSigned),
-            ),
-            if (!kIsWeb)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: FittedBox(
+              const SizedBox(height: 10),
+              if (widget.isRegister)
+                SwitchListTile.adaptive(
+                  value: _isAdmin,
+                  activeColor: colorBlue,
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Allow web portal access'),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  onChanged: (_) => setState(() => _isAdmin = !_isAdmin),
+                )
+              else
+                CheckboxListTile(
+                  value: _keepSigned,
+                  activeColor: colorBlue,
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Keep me signed in.'),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  onChanged: (_) => setState(() => _keepSigned = !_keepSigned),
+                ),
+              if (!kIsWeb)
+                FittedBox(
                   child: CustomButton(
-                    onPressed: () => setState(() => _isRegister = !_isRegister),
+                    onPressed: () => setState(() {
+                      _isRegister = !_isRegister;
+                    }),
                     left: Icon(_isRegister ? Icons.check : Icons.add),
                     right: Text(
                       _isRegister
@@ -185,21 +211,22 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-              ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: CustomButton(
-                rounded: true,
-                onPressed: _authenticate,
-                left: AnimatedSwitcher(
-                  duration: const Duration(seconds: 1),
-                  child: _isBusy
-                      ? const CircularProgressIndicator.adaptive()
-                      : Icon(_isRegister ? Icons.add : Icons.send),
+              const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: CustomButton(
+                  rounded: true,
+                  onPressed: _authenticate,
+                  left: AnimatedSwitcher(
+                    duration: const Duration(seconds: 1),
+                    child: _isBusy
+                        ? const CircularProgressIndicator.adaptive()
+                        : Icon(_isRegister ? Icons.add : Icons.send),
+                  ),
                 ),
               ),
-            ),
-          ]),
+            ]),
+          ),
         ),
       ),
     );

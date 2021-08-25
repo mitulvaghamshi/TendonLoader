@@ -39,4 +39,12 @@ extension ExContext on BuildContext {
   Future<T?> replace<T extends Object?>(String routeName) {
     return Navigator.pushReplacement<T, T>(this, buildRoute<T>(routeName));
   }
+
+  Future<T?> popup<T extends Object?>(
+    String routeName, {
+    bool? isFullScreen = true,
+    Object? arguments,
+  }) {
+    return Navigator.push<T>(this, buildRoute<T>(routeName, isFullScreen));
+  }
 }

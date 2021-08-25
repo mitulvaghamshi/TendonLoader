@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/modal/export.dart';
+import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/web/common.dart';
+import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/web/lists/user_list.dart';
 
 class ExportTile extends StatelessWidget {
-  const ExportTile({
-    Key? key,
-    required this.export,
-    required this.onDelete,
-  }) : super(key: key);
+  const ExportTile({Key? key, required this.export}) : super(key: key);
 
   final Export export;
-  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +19,11 @@ class ExportTile extends StatelessWidget {
       contentPadding: const EdgeInsets.all(5),
       key: ValueKey<String>(export.reference!.id),
       onTap: () => Future<void>.microtask(() {
-        clickNotifier.value = export;
+        exportClick.value = export;
       }),
       leading: CustomButton(
         rounded: true,
+        padding: EdgeInsets.zero,
         left: Text(export.isMVC ? 'MVC' : 'EXE'),
       ),
       subtitle: Text(
@@ -41,13 +40,11 @@ class ExportTile extends StatelessWidget {
             child: ListTile(
               title: Text('Download'),
               leading: Icon(Icons.file_download),
-              subtitle: Text('Save as Excel (zip).'),
             ),
           ),
           const PopupMenuItem<PopupAction>(
             value: PopupAction.delete,
             child: ListTile(
-              subtitle: Text('Cannot be restored!'),
               leading: Icon(Icons.delete_forever, color: colorRed400),
               title: Text('Delete', style: TextStyle(color: colorRed400)),
             ),
@@ -57,7 +54,34 @@ class ExportTile extends StatelessWidget {
           if (action == PopupAction.download) {
             await Future<void>.microtask(export.download);
           } else if (action == PopupAction.delete) {
-            onDelete();
+            await CustomDialog.show<void>(
+              context,
+              content: Scaffold(
+                appBar: AppBar(
+                  title: const Text('Delete this export?'),
+                ),
+                body: Center(
+                  child: CustomButton(
+                    radius: 8,
+                    color: colorRed900,
+                    left: const Icon(
+                      Icons.delete,
+                      color: colorWhite,
+                    ),
+                    right: const Text(
+                      'Permanently delete',
+                      style: TextStyle(color: colorWhite),
+                    ),
+                    onPressed: () {
+                      context.pop();
+                      userClick.value = null;
+                      export.reference!.delete();
+                      UserList.of(context).refresh();
+                    },
+                  ),
+                ),
+              ),
+            );
           }
         },
       ),

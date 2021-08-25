@@ -42,7 +42,7 @@ class _NewMVCTestState extends State<NewMVCTest> {
       appBar: AppBar(title: const Text('New MVC Test'), actions: <Widget>[
         CustomButton(
           onPressed: _onSubmit,
-          left: const Text('Go', style: ts18B),
+          left: const Text('Go', style: ts18w5),
           right: const Icon(Icons.arrow_forward, color: colorGoogleGreen),
         ),
       ]),

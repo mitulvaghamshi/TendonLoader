@@ -55,13 +55,12 @@ class CustomTimeTile extends StatelessWidget {
     return ListTile(
       shape: UnderlineInputBorder(
         borderSide: BorderSide(
-          width: 2,
           color: time > 0 ? colorGoogleGreen : colorRed400,
         ),
       ),
       subtitle: Text(desc),
       contentPadding: EdgeInsets.zero,
-      title: Text(_timeString, style: ts20B),
+      title: Text(_timeString, style: ts18w5),
       trailing: IconButton(
         icon: const Icon(Icons.timer, color: colorBlue),
         onPressed: () async {

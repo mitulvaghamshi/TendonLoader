@@ -63,7 +63,7 @@ Future<double?> selectPain(BuildContext context) {
       const Text(
         'Please describe your pain during that session',
         textAlign: TextAlign.center,
-        style: ts18B,
+        style: ts18w5,
       ),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -111,7 +111,7 @@ Future<String?> selectTolerance(BuildContext context) {
       const Text(
         'Was the pain during that session tolerable for you?',
         textAlign: TextAlign.center,
-        style: ts18B,
+        style: ts18w5,
       ),
       const SizedBox(height: 16),
       FittedBox(
