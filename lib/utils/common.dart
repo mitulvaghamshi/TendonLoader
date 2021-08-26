@@ -40,6 +40,10 @@ Future<void> useEmulator() async {
   FirebaseFirestore.instance.useFirestoreEmulator(host, 10002);
 }
 
+Patient? currentUser;
+UserState? userState;
+SettingsState? settingsState;
+
 late final Box<bool> boxDarkMode;
 late final Box<Export> boxExport;
 late final Box<UserState> boxUserState;

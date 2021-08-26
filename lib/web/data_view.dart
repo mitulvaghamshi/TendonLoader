@@ -53,7 +53,7 @@ class DataView extends StatelessWidget {
               LineSeries<ChartData, double>(
                 width: 2,
                 color: colorGoogleGreen,
-                animationDuration: 5000,
+                animationDuration: 7000,
                 dataSource: value.exportData!,
                 xValueMapper: (ChartData data, _) => data.time,
                 yValueMapper: (ChartData data, _) => data.load,
