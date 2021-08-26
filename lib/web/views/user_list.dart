@@ -41,7 +41,8 @@ class _UserListState extends State<UserList> {
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      padding: EdgeInsets.zero,
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      margin: const EdgeInsets.fromLTRB(16, 16, 8, 16),
       child: SizedBox(
         width: 350,
         child: Column(children: <Widget>[

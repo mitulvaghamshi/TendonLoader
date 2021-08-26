@@ -31,8 +31,8 @@ class _ExportListState extends State<ExportList> {
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      padding: EdgeInsets.zero,
-      margin: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       child: SizedBox(
         width: 350,
         child: Column(children: <Widget>[

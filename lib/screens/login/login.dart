@@ -68,7 +68,7 @@ class _LoginState extends State<Login> {
           if (_userState!.isInBox) {
             await _userState!.save();
           } else {
-            await boxUserState.put(keyUserStateBoxItem, _userState!);
+            await boxUserState.put(keyUserStateBox, _userState!);
           }
           final SettingsState _settingsState = boxSettingsState
               .get(_emailCtrl.text, defaultValue: SettingsState())!;
@@ -126,7 +126,7 @@ class _LoginState extends State<Login> {
     super.initState();
     if (!widget.isRegister) {
       _userState = boxUserState.get(
-        keyUserStateBoxItem,
+        keyUserStateBox,
         defaultValue: UserState(),
       );
       if (_userState != null && (_keepSigned = _userState!.keepSigned!)) {
@@ -149,85 +149,134 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    return widget.isRegister ? _buildBody() : _buildScaffold();
+  }
+
+  Scaffold _buildScaffold() {
     return Scaffold(
       appBar: AppBar(title: const Text('Tendon Loader')),
-      body: SingleChildScrollView(
-        child: AppFrame(
-          child: Form(
-            key: _formKey,
-            child: Column(children: <Widget>[
-              const CustomImage(),
-              CustomTextField(
-                label: 'Username',
-                controller: _emailCtrl,
-                validator: validateEmail,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              CustomTextField(
-                label: 'Password',
-                isObscure: _isObscure,
-                validator: validatePass,
-                controller: _passwordCtrl,
-                keyboardType: TextInputType.visiblePassword,
-                suffix: IconButton(
-                  onPressed: () => setState(() => _isObscure = !_isObscure),
-                  icon: Icon(
-                    _isObscure ? Icons.visibility : Icons.visibility_off,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              if (widget.isRegister)
-                SwitchListTile.adaptive(
-                  value: _isAdmin,
-                  activeColor: colorBlue,
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text('Allow web portal access'),
-                  controlAffinity: ListTileControlAffinity.leading,
-                  onChanged: (_) => setState(() => _isAdmin = !_isAdmin),
-                )
-              else
-                CheckboxListTile(
-                  value: _keepSigned,
-                  activeColor: colorBlue,
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text('Keep me signed in.'),
-                  controlAffinity: ListTileControlAffinity.leading,
-                  onChanged: (_) => setState(() => _keepSigned = !_keepSigned),
-                ),
-              if (!kIsWeb)
-                FittedBox(
-                  child: CustomButton(
-                    onPressed: () => setState(() {
-                      _isRegister = !_isRegister;
-                    }),
-                    left: Icon(_isRegister ? Icons.check : Icons.add),
-                    right: Text(
-                      _isRegister
-                          ? 'Already have an account? Sign in.'
-                          : 'Don\'t have an account? Sign up.',
-                      style: const TextStyle(letterSpacing: 0.5),
-                    ),
-                  ),
-                ),
-              const SizedBox(height: 10),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: CustomButton(
-                  rounded: true,
-                  onPressed: _authenticate,
-                  left: AnimatedSwitcher(
-                    duration: const Duration(seconds: 1),
-                    child: _isBusy
-                        ? const CircularProgressIndicator.adaptive()
-                        : Icon(_isRegister ? Icons.add : Icons.send),
-                  ),
-                ),
-              ),
-            ]),
+      body: _buildBody(),
+    );
+  }
+
+  SingleChildScrollView _buildBody() {
+    return SingleChildScrollView(
+      child: AppFrame(
+        child: Form(
+          key: _formKey,
+          child: LayoutBuilder(
+            builder: (_, BoxConstraints constraints) {
+              return constraints.isSatisfiedBy(const Size(900, 1000))
+                  ? _buildHorizontalLayout()
+                  : _buildVerticalLayout();
+            },
           ),
         ),
       ),
     );
+  }
+
+  Column _buildVerticalLayout() {
+    return Column(children: <Widget>[
+      const CustomImage(),
+      ..._buildFormItems(),
+    ]);
+  }
+
+  Row _buildHorizontalLayout() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        SizedBox(
+          height: MediaQuery.of(context).size.longestSide * 0.4,
+          child: const AspectRatio(
+            aspectRatio: 1,
+            child: CustomImage(),
+          ),
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.longestSide * 0.3,
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: _buildFormItems(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<Widget> _buildFormItems() {
+    return <Widget>[
+      CustomTextField(
+        label: 'Username',
+        controller: _emailCtrl,
+        validator: validateEmail,
+        keyboardType: TextInputType.emailAddress,
+      ),
+      CustomTextField(
+        label: 'Password',
+        isObscure: _isObscure,
+        validator: validatePass,
+        controller: _passwordCtrl,
+        keyboardType: TextInputType.visiblePassword,
+        suffix: IconButton(
+          onPressed: () => setState(() => _isObscure = !_isObscure),
+          icon: Icon(
+            _isObscure ? Icons.visibility : Icons.visibility_off,
+          ),
+        ),
+      ),
+      const SizedBox(height: 10),
+      if (widget.isRegister)
+        SwitchListTile.adaptive(
+          value: _isAdmin,
+          activeColor: colorBlue,
+          contentPadding: EdgeInsets.zero,
+          title: const Text('Allow web portal access'),
+          controlAffinity: ListTileControlAffinity.leading,
+          onChanged: (_) => setState(() => _isAdmin = !_isAdmin),
+        )
+      else
+        CheckboxListTile(
+          value: _keepSigned,
+          activeColor: colorBlue,
+          contentPadding: EdgeInsets.zero,
+          title: const Text('Keep me signed in.'),
+          controlAffinity: ListTileControlAffinity.leading,
+          onChanged: (_) => setState(() => _keepSigned = !_keepSigned),
+        ),
+      if (!kIsWeb)
+        FittedBox(
+          child: CustomButton(
+            onPressed: () => setState(() {
+              _isRegister = !_isRegister;
+            }),
+            left: Icon(_isRegister ? Icons.check : Icons.add),
+            right: Text(
+              _isRegister
+                  ? 'Already have an account? Sign in.'
+                  : 'Don\'t have an account? Sign up.',
+              style: const TextStyle(letterSpacing: 0.5),
+            ),
+          ),
+        ),
+      const SizedBox(height: 10),
+      Align(
+        alignment: Alignment.bottomRight,
+        child: CustomButton(
+          rounded: true,
+          onPressed: _authenticate,
+          left: AnimatedSwitcher(
+            duration: const Duration(seconds: 1),
+            child: _isBusy
+                ? const CircularProgressIndicator.adaptive()
+                : Icon(_isRegister ? Icons.add : Icons.send),
+          ),
+        ),
+      ),
+    ];
   }
 }

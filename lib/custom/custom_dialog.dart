@@ -2,23 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
+import 'package:tendon_loader/custom/custom_frame.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class CustomDialog extends StatelessWidget {
   const CustomDialog({
     Key? key,
+    this.size,
     this.title,
     this.action,
     this.content,
   }) : super(key: key);
 
+  final Size? size;
   final String? title;
   final Widget? action;
   final Widget? content;
 
   static Future<T?> show<T>(
     BuildContext context, {
+    Size? size,
     String? title,
     Widget? action,
     Widget? content,
@@ -27,6 +31,7 @@ class CustomDialog extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       builder: (_) => CustomDialog(
+        size: size ?? const Size(350, 700),
         title: title,
         action: action,
         content: content,
@@ -36,11 +41,30 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final CustomButton _defaultAction = CustomButton(
+      radius: 20,
+      rounded: true,
+      onPressed: context.pop,
+      padding: EdgeInsets.zero,
+      left: const Icon(Icons.clear, color: colorRed400),
+    );
     if (kIsWeb) {
       return Center(
-        child: SizedBox.fromSize(
-          size: const Size(400, 700),
-          child: content,
+        child: AppFrame(
+          padding: EdgeInsets.zero,
+          child: SizedBox.fromSize(
+            size: size,
+            child: Scaffold(
+              appBar: AppBar(
+                leading: action,
+                title: Text(title ?? 'Tendon Loader'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              body: Align(alignment: Alignment.topCenter, child: content),
+            ),
+          ),
         ),
       );
     }
@@ -55,16 +79,7 @@ class CustomDialog extends StatelessWidget {
         children: <Widget>[
           FittedBox(child: Text(title ?? '', style: ts18w5)),
           const SizedBox(width: 5),
-          FittedBox(
-            child: action ??
-                CustomButton(
-                  radius: 20,
-                  rounded: true,
-                  onPressed: context.pop,
-                  padding: EdgeInsets.zero,
-                  left: const Icon(Icons.clear, color: colorRed400),
-                ),
-          ),
+          FittedBox(child: action ?? _defaultAction),
         ],
       ),
     );

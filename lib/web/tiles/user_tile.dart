@@ -9,7 +9,7 @@ import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/web/dialogs/exercise_history.dart';
-import 'package:tendon_loader/web/lists/user_list.dart';
+import 'package:tendon_loader/web/views/user_list.dart';
 
 class UserTile extends StatelessWidget {
   const UserTile({Key? key, required this.id}) : super(key: key);
@@ -88,6 +88,7 @@ class UserTile extends StatelessWidget {
             case PopupAction.history:
               await CustomDialog.show<void>(
                 context,
+                title: _user.id,
                 content: ExerciseHistory(patient: _user),
               );
               break;
@@ -101,33 +102,15 @@ class UserTile extends StatelessWidget {
               await Future<void>.microtask(_user.download);
               break;
             case PopupAction.delete:
-              await CustomDialog.show<void>(
+              await confirmDelete(
                 context,
-                content: Scaffold(
-                  appBar: AppBar(
-                    title: const Text('Delete all exports?'),
-                  ),
-                  body: Center(
-                    child: CustomButton(
-                      radius: 8,
-                      color: colorRed900,
-                      left: const Icon(
-                        Icons.delete,
-                        color: colorWhite,
-                      ),
-                      right: const Text(
-                        'Permanently delete',
-                        style: TextStyle(color: colorWhite),
-                      ),
-                      onPressed: () {
-                        context.pop();
-                        userClick.value = null;
-                        _user.deleteAll();
-                        UserList.of(context).refresh();
-                      },
-                    ),
-                  ),
-                ),
+                title: 'Delete this export?',
+                action: () {
+                  context.pop();
+                  userClick.value = null;
+                  _user.deleteAll();
+                  UserList.of(context).refresh();
+                },
               );
               break;
             default:

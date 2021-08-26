@@ -32,7 +32,7 @@ final AudioCache _playerCache = AudioCache(
   respectSilence: true,
   prefix: audioRoot,
   fixedPlayer: _player,
-)..loadAll(<String>[startClip, stopClip]);
+)..loadAll(<String>[keyStartClip, keyStopClip]);
 
 Future<void> disposePlayer() async => _player.dispose();
 
@@ -107,7 +107,7 @@ class GraphHandler {
       exportData.clear();
       timestamp = Timestamp.now();
       await startWeightMeas();
-      await _playerCache.play(startClip);
+      await _playerCache.play(keyStartClip);
     }
   }
 
@@ -118,7 +118,7 @@ class GraphHandler {
   @mustCallSuper
   Future<void> stop() async {
     await stopWeightMeas();
-    await _playerCache.play(stopClip);
+    await _playerCache.play(keyStopClip);
   }
 
   @mustCallSuper

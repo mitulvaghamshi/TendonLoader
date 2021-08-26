@@ -3,9 +3,11 @@ import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/common.dart';
-import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/web/lists/user_list.dart';
+import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/web/dialogs/data_list.dart';
+import 'package:tendon_loader/web/dialogs/session_info.dart';
+import 'package:tendon_loader/web/views/user_list.dart';
 
 class ExportTile extends StatelessWidget {
   const ExportTile({Key? key, required this.export}) : super(key: key);
@@ -36,6 +38,20 @@ class ExportTile extends StatelessWidget {
         icon: const Icon(Icons.more_vert),
         itemBuilder: (_) => <PopupMenuItem<PopupAction>>[
           const PopupMenuItem<PopupAction>(
+            value: PopupAction.sesssionInfo,
+            child: ListTile(
+              title: Text('Session info'),
+              leading: Icon(Icons.info),
+            ),
+          ),
+          const PopupMenuItem<PopupAction>(
+            value: PopupAction.dataList,
+            child: ListTile(
+              title: Text('Show as list'),
+              leading: Icon(Icons.list),
+            ),
+          ),
+          const PopupMenuItem<PopupAction>(
             value: PopupAction.download,
             child: ListTile(
               title: Text('Download'),
@@ -51,37 +67,40 @@ class ExportTile extends StatelessWidget {
           ),
         ],
         onSelected: (PopupAction action) async {
-          if (action == PopupAction.download) {
-            await Future<void>.microtask(export.download);
-          } else if (action == PopupAction.delete) {
-            await CustomDialog.show<void>(
-              context,
-              content: Scaffold(
-                appBar: AppBar(
-                  title: const Text('Delete this export?'),
-                ),
-                body: Center(
-                  child: CustomButton(
-                    radius: 8,
-                    color: colorRed900,
-                    left: const Icon(
-                      Icons.delete,
-                      color: colorWhite,
-                    ),
-                    right: const Text(
-                      'Permanently delete',
-                      style: TextStyle(color: colorWhite),
-                    ),
-                    onPressed: () {
-                      context.pop();
-                      userClick.value = null;
-                      export.reference!.delete();
-                      UserList.of(context).refresh();
-                    },
-                  ),
-                ),
-              ),
-            );
+          switch (action) {
+            case PopupAction.download:
+              await Future<void>.microtask(export.download);
+              break;
+            case PopupAction.delete:
+              await confirmDelete(
+                context,
+                title: 'Delete this export?',
+                action: () {
+                  userClick.value = null;
+                  export.reference!.delete();
+                  context.pop();
+                  UserList.of(context).refresh();
+                },
+              );
+              break;
+            case PopupAction.sesssionInfo:
+              await CustomDialog.show<void>(
+                context,
+                size: const Size(350, 500),
+                content: const SessionInfo(),
+                title: '${export.userId}\n${export.dateTime}',
+              );
+              break;
+            case PopupAction.dataList:
+              await CustomDialog.show<void>(
+                context,
+                size: const Size(300, 700),
+                content: const DataList(),
+                title: '${export.userId}\n${export.dateTime}',
+              );
+              break;
+            default:
+              break;
           }
         },
       ),
