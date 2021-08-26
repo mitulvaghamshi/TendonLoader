@@ -10,6 +10,7 @@ import 'package:tendon_loader/custom/custom_slider.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 Future<bool?> startCountdown(
@@ -146,9 +147,9 @@ Future<String?> selectTolerance(BuildContext context) {
 }
 
 Future<bool?> submitData(BuildContext context, Export export) async {
-  return context.settingsState.autoUpload!
+  return settingsState.autoUpload!
       ? await Connectivity().checkConnectivity() != ConnectivityResult.none
-          ? export.upload(context)
+          ? export.upload()
           : Future<bool>.value(true)
       : confirmSubmit(context, export);
 }
@@ -165,7 +166,7 @@ Future<bool?> confirmSubmit(BuildContext context, Export export) async {
     content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
       CustomTile(
         title: 'Submit Now',
-        onTap: () => export.upload(context).then(context.pop),
+        onTap: () => export.upload().then(context.pop),
         left: const Icon(Icons.cloud_upload, color: colorGoogleGreen),
       ),
       CustomTile(

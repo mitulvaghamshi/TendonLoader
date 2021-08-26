@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       title: 'Start Exercise',
       content: FittedBox(child: Builder(builder: (BuildContext context) {
-        return context.settingsState.prescription!.toTable();
+        return  settingsState.prescription!.toTable();
       })),
       action: CustomButton(
         left: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (progressor == null) {
       _connectProgressor();
     } else {
-      final bool _isCustom = context.settingsState.customPrescriptions!;
+      final bool _isCustom = settingsState.customPrescriptions!;
       switch (route) {
         case LiveData.route:
           context.push(LiveData.route);
@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
         case MVCTesting.route:
           if (_isCustom) {
             context.push(NewMVCTest.route);
-          } else if (context.settingsState.mvcDuration != null) {
+          } else if ( settingsState.mvcDuration != null) {
             context.push(MVCTesting.route);
           } else {
             context.showSnackBar(const Text(descNoMvcAvailable));
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
         case ExerciseMode.route:
           if (_isCustom) {
             context.push(NewExercise.route);
-          } else if (context.settingsState.prescription != null) {
+          } else if ( settingsState.prescription != null) {
             _startAutoExercise();
           } else {
             context.showSnackBar(const Text(descNoExerciseAvailable));

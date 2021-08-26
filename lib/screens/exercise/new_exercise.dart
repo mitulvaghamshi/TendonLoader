@@ -8,6 +8,7 @@ import 'package:tendon_loader/custom/custom_time_tile.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
+import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
@@ -26,7 +27,7 @@ class _NewExerciseState extends State<NewExercise> {
   final TextEditingController _ctrlSets = TextEditingController();
   final TextEditingController _ctrlReps = TextEditingController();
   final TextEditingController _ctrlTargetLoad = TextEditingController();
-  late final Prescription? _lastPre = context.settingsState.prescription;
+  late final Prescription? _lastPre = settingsState.prescription;
   bool _useLastPrescription = false;
 
   int _mvcDuration = 0;
@@ -82,8 +83,8 @@ class _NewExerciseState extends State<NewExercise> {
             .update(_pre.toMap())
             .then(context.pop);
       } else if (_holdTime > 0 && _restTime > 0 && _setRestTime > 0) {
-        context.settingsState.prescription = _pre;
-        await context.settingsState.save();
+        settingsState.prescription = _pre;
+        await settingsState.save();
         await context.replace(ExerciseMode.route);
       } else {
         context.showSnackBar(const Text('Please select time values.'));
@@ -93,7 +94,7 @@ class _NewExerciseState extends State<NewExercise> {
 
   Future<void> _onChanged(bool value) async {
     if (value) {
-      await _initWith(context.settingsState.prescription!);
+      await _initWith(settingsState.prescription!);
     } else {
       _clearForm();
     }

@@ -5,7 +5,6 @@ import 'package:tendon_loader/bluetooth/device_handler.dart';
 import 'package:tendon_loader/custom/about_tile.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_frame.dart';
-import 'package:tendon_loader/custom/custom_textfield.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/constants.dart';
@@ -23,7 +22,7 @@ class AppSettings extends StatefulWidget {
 
 class _AppSettingsState extends State<AppSettings> {
   late final TextEditingController _ctrlGraphScale = TextEditingController()
-    ..text = context.settingsState.graphSize.toString();
+    ..text = settingsState.graphSize.toString();
 
   @override
   void dispose() {
@@ -44,9 +43,9 @@ class _AppSettingsState extends State<AppSettings> {
   Future<bool> _onExit() async {
     final double? _scale = double.tryParse(_ctrlGraphScale.text);
     if (_scale != null && _scale > 0) {
-      context.settingsState.graphSize = _scale;
+      settingsState.graphSize = _scale;
     }
-    await context.settingsState.save();
+    await settingsState.save();
     return true;
   }
 
@@ -59,7 +58,7 @@ class _AppSettingsState extends State<AppSettings> {
           onExit: _onExit,
           child: Column(children: <Widget>[
             CustomTile(
-              title: context.patient.id,
+              title: patient.id,
               left: const Icon(Icons.person, color: colorBlue),
             ),
             const Divider(),
@@ -70,14 +69,14 @@ class _AppSettingsState extends State<AppSettings> {
                   horizontal: 16,
                   vertical: 10,
                 ),
-                value: context.settingsState.autoUpload!,
+                value: settingsState.autoUpload!,
                 title: const Text('Automatic data upload'),
                 subtitle: const Text(
                   'Automatically upload exercise '
                   'and mvc test data on completion.',
                 ),
                 onChanged: (bool value) => setState(() {
-                  context.settingsState.autoUpload = value;
+                  settingsState.autoUpload = value;
                 }),
               ),
               SwitchListTile.adaptive(
@@ -87,15 +86,15 @@ class _AppSettingsState extends State<AppSettings> {
                   vertical: 10,
                 ),
                 title: const Text('Use custom prescriptions'),
-                value: context.settingsState.customPrescriptions!,
+                value: settingsState.customPrescriptions!,
                 subtitle: const Text(
                   'Provide your own prescriptions '
                   'for exercise and mvc test.',
                 ),
                 onChanged: (bool value) => setState(() {
-                  context.settingsState.toggle(
+                  settingsState.toggle(
                     value,
-                    context.patient.prescription!,
+                    patient.prescription!,
                   );
                 }),
               ),

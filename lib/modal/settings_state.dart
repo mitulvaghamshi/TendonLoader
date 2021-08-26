@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 
 part 'settings_state.g.dart';

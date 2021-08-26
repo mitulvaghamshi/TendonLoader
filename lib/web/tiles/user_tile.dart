@@ -40,7 +40,7 @@ class UserTile extends StatelessWidget {
                 return CheckboxListTile(
                   activeColor: colorBlue,
                   value: _user.prescription!.isAdmin,
-                  title: const Text('Allow web portal access?'),
+                  title: const Text('Allow web access?'),
                   controlAffinity: ListTileControlAffinity.leading,
                   onChanged: (bool? value) async {
                     setState(() => _user.prescription!.isAdmin = value);
