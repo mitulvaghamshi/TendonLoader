@@ -6,7 +6,7 @@ import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/screens/exercise/exercise_handler.dart';
 import 'package:tendon_loader/screens/graph/graph_handler.dart';
 import 'package:tendon_loader/screens/livedata/livedata_handler.dart';
-import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class CustomGraph extends StatefulWidget {
@@ -62,7 +62,7 @@ class _CustomGraphState extends State<CustomGraph> {
                 primaryYAxis: NumericAxis(
                   labelFormat: '{value} kg',
                   axisLine: const AxisLine(width: 0),
-                  maximum: context.settingsState.graphSize,
+                  maximum:  settingsState.graphSize,
                   majorTickLines: const MajorTickLines(size: 0),
                   majorGridLines: MajorGridLines(
                     color: Theme.of(context).accentColor,

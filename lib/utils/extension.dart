@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/modal/patient.dart';
-import 'package:tendon_loader/modal/settings_state.dart';
-import 'package:tendon_loader/modal/user_state.dart';
 import 'package:tendon_loader/utils/common.dart';
 
 extension ExString on String {

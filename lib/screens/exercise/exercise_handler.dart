@@ -5,17 +5,17 @@ import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/screens/graph/dialogs_handler.dart';
 import 'package:tendon_loader/screens/graph/graph_handler.dart';
-import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class ExerciseHandler extends GraphHandler {
   ExerciseHandler({required BuildContext context})
-      : _pre = context.settingsState.prescription!,
+      : _pre = settingsState.prescription!,
         super(context: context, lineData: <ChartData>[
-          ChartData(load: context.settingsState.prescription!.targetLoad),
+          ChartData(load: settingsState.prescription!.targetLoad),
           ChartData(
             time: 2,
-            load: context.settingsState.prescription!.targetLoad,
+            load: settingsState.prescription!.targetLoad,
           ),
         ]) {
     _clear();

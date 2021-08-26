@@ -14,7 +14,6 @@ import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/screens/graph/dialogs_handler.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 extension on List<int> {
@@ -40,8 +39,7 @@ Future<void> disposePlayer() async => _player.dispose();
 bool isPause = false;
 
 class GraphHandler {
-  GraphHandler({required this.context, this.lineData})
-      : userId = context.data.currentUser!.id {
+  GraphHandler({required this.context, this.lineData}) : userId = patient.id {
     isRunning = isComplete = hasData = false;
     stream.listen(update);
     clear();

@@ -30,7 +30,6 @@ import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/empty.dart'
     if (dart.library.html) 'dart:html' show AnchorElement;
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/web/homepage.dart';
 
@@ -40,9 +39,17 @@ Future<void> useEmulator() async {
   FirebaseFirestore.instance.useFirestoreEmulator(host, 10002);
 }
 
-Patient? currentUser;
-UserState? userState;
-SettingsState? settingsState;
+Patient? _currentUser;
+Patient get patient => _currentUser!;
+set patient(Patient? patient) => _currentUser = patient;
+
+UserState? _userState;
+UserState get userState => _userState!;
+set userState(UserState? userState) => _userState = userState;
+
+SettingsState? _settingsState;
+SettingsState get settingsState => _settingsState!;
+set settingsState(SettingsState? settings) => _settingsState = settings;
 
 late final Box<bool> boxDarkMode;
 late final Box<Export> boxExport;
@@ -128,9 +135,9 @@ Route<T> buildRoute<T>(String routeName, [bool? fullscreen = false]) {
 
 Future<void> logout(BuildContext context) async {
   try {
-    context.userState.keepSigned = false;
-    await context.userState.save();
-    await context.settingsState.save();
+    userState.keepSigned = false;
+    await userState.save();
+    await settingsState.save();
     await signOut();
   } finally {
     await Navigator.pushAndRemoveUntil<void>(
@@ -157,7 +164,7 @@ Future<bool?> tryUpload(BuildContext context) async {
   if ((await Connectivity().checkConnectivity()) != ConnectivityResult.none) {
     int count = 0;
     for (final Export export in boxExport.values) {
-      if (await export.upload(context)) count++;
+      if (await export.upload()) count++;
     }
     await CustomDialog.show<void>(
       context,

@@ -91,10 +91,9 @@ class _LoginState extends State<Login> {
               style: TextStyle(color: colorRed400),
             ));
           } else {
-            context
-              ..patient = _patientAsUser
-              ..userState = _userState
-              ..settingsState = _settingsState;
+            patient = _patientAsUser;
+            userState = _userState;
+            settingsState = _settingsState;
             await Future<void>.delayed(const Duration(seconds: 2), () async {
               await context.replace(Login.homeRoute);
             });

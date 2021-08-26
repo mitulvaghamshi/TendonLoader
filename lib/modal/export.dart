@@ -1,6 +1,5 @@
 import 'package:archive/archive_io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
@@ -8,7 +7,6 @@ import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/utils/extension.dart';
 
 part 'export.g.dart';
 
@@ -98,9 +96,9 @@ class Export extends HiveObject {
     };
   }
 
-  Future<bool> upload(BuildContext context) async {
+  Future<bool> upload() async {
     try {
-      await context.patient.exportRef!.doc().set(this);
+      await patient.exportRef!.doc().set(this);
       await delete();
       return true;
     } on FirebaseException {
