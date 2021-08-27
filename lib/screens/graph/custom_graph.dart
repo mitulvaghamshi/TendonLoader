@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/screens/exercise/exercise_handler.dart';
 import 'package:tendon_loader/screens/graph/graph_handler.dart';
@@ -75,7 +75,7 @@ class _CustomGraphState extends State<CustomGraph> {
                 series: <ChartSeries<ChartData?, int>>[
                   ColumnSeries<ChartData?, int>(
                     width: 0.9,
-                    color: colorBlue,
+                    color: colorIconBlue,
                     animationDuration: 0,
                     dataSource: widget.handler.graphData,
                     dataLabelSettings: DataLabelSettings(
@@ -100,7 +100,7 @@ class _CustomGraphState extends State<CustomGraph> {
                   if (widget.handler is! LiveDataHandler)
                     LineSeries<ChartData, int>(
                       width: 5,
-                      color: colorRed400,
+                      color: colorErrorRed,
                       animationDuration: 0,
                       dataSource: widget.handler.lineData!,
                       yValueMapper: (ChartData data, _) => data.load,

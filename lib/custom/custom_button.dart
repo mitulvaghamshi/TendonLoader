@@ -9,6 +9,7 @@ class CustomButton extends StatelessWidget {
     this.onPressed,
     this.radius = 30,
     this.rounded = false,
+    this.elevation = 16,
     this.padding = const EdgeInsets.all(16),
   }) : super(key: key);
 
@@ -17,16 +18,17 @@ class CustomButton extends StatelessWidget {
   final double radius;
   final Widget? left;
   final Widget? right;
+  final double? elevation;
   final VoidCallback? onPressed;
   final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
-      elevation: 16,
       padding: padding,
+      elevation: elevation!,
       onPressed: onPressed,
-      disabledElevation: 16,
+      disabledElevation: elevation!,
       fillColor: color ?? Theme.of(context).buttonColor,
       shape: rounded
           ? const CircleBorder()

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/bluetooth/device_handler.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_progress.dart';
+import 'package:tendon_loader/custom/progress_tile.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/screens/graph/graph_handler.dart';
 import 'package:tendon_loader/utils/constants.dart';
@@ -33,13 +33,13 @@ class ConnectedTile extends StatelessWidget {
             ),
             subtitle: const Text(
               'Long press to disconnect',
-              style: TextStyle(fontSize: 12, color: colorRed400),
+              style: TextStyle(fontSize: 12, color: colorErrorRed),
             ),
             leading: const CustomButton(
-              color: colorGoogleGreen,
+              color: colorMidGreen,
               left: Icon(
                 Icons.bluetooth_connected,
-                color: colorWhite,
+                color: colorPrimaryWhite,
                 size: 30,
               ),
             ),

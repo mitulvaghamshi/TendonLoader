@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
-import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/custom/custom_time_tile.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
+import 'package:tendon_loader/custom/form_text_field.dart';
+import 'package:tendon_loader/custom/time_picker_tile.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
@@ -122,7 +122,7 @@ class _NewExerciseState extends State<NewExercise> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               if (kIsWeb)
-                CustomTimeTile(
+                TimePickerTile(
                   time: _mvcDuration,
                   desc: 'MVC test duration',
                   title: 'Select test duration',
@@ -141,7 +141,7 @@ class _NewExerciseState extends State<NewExercise> {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: SwitchListTile.adaptive(
                       onChanged: _onChanged,
-                      activeColor: colorBlue,
+                      activeColor: colorIconBlue,
                       value: _useLastPrescription,
                       title: const Text(
                         'Use prescriptions '
@@ -150,7 +150,7 @@ class _NewExerciseState extends State<NewExercise> {
                     ),
                   ),
               ],
-              CustomTextField(
+              FormTextField(
                 label: 'Target Load (Kg)',
                 controller: _ctrlTargetLoad,
                 format: r'^\d{1,2}(\.\d{0,2})?',
@@ -160,7 +160,7 @@ class _NewExerciseState extends State<NewExercise> {
               ),
               Row(children: <Widget>[
                 Expanded(
-                  child: CustomTextField(
+                  child: FormTextField(
                     label: 'Sets (#)',
                     format: r'^\d{1,2}',
                     controller: _ctrlSets,
@@ -168,7 +168,7 @@ class _NewExerciseState extends State<NewExercise> {
                 ),
                 const VerticalDivider(width: 5),
                 Expanded(
-                  child: CustomTextField(
+                  child: FormTextField(
                     label: 'Reps (#)',
                     format: r'^\d{1,2}',
                     controller: _ctrlReps,
@@ -176,7 +176,7 @@ class _NewExerciseState extends State<NewExercise> {
                 ),
               ]),
               const SizedBox(height: 10),
-              CustomTimeTile(
+              TimePickerTile(
                 time: _holdTime,
                 desc: 'Rep hold time',
                 title: 'Select rep hold time',
@@ -184,7 +184,7 @@ class _NewExerciseState extends State<NewExercise> {
                   setState(() => _holdTime = duration);
                 },
               ),
-              CustomTimeTile(
+              TimePickerTile(
                 time: _restTime,
                 desc: 'Rep rest time',
                 title: 'Select rep rest time',
@@ -192,7 +192,7 @@ class _NewExerciseState extends State<NewExercise> {
                   setState(() => _restTime = duration);
                 },
               ),
-              CustomTimeTile(
+              TimePickerTile(
                 time: _setRestTime,
                 desc: 'Set rest time (default: 90 sec)',
                 title: 'Select set rest time',
@@ -212,7 +212,7 @@ class _NewExerciseState extends State<NewExercise> {
                   CustomButton(
                     onPressed: _clearForm,
                     right: const Text('Clear'),
-                    left: const Icon(Icons.clear, color: colorRed400),
+                    left: const Icon(Icons.clear, color: colorErrorRed),
                   ),
                 ],
               ),

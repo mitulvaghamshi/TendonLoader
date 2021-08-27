@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
@@ -64,11 +65,7 @@ enum PopupAction {
   delete,
   prescribe,
   history,
-  darkMode,
-  logout,
-  settings,
   sesssionInfo,
-  dataList,
 }
 
 final ValueNotifier<int?> userClick = ValueNotifier<int?>(null);
@@ -189,26 +186,29 @@ Future<void> confirmDelete(
   await CustomDialog.show<void>(
     context,
     title: title,
-    size: const Size(350, 250),
-    content: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const SizedBox(height: 16),
-        const Text('Do you really wanty to delete?', style: ts22B),
-        const SizedBox(height: 10),
-        const Text('This action cannot be undone!', style: ts18w5),
-        const SizedBox(height: 20),
-        CustomButton(
-          radius: 8,
-          onPressed: action,
-          color: colorRed900,
-          left: const Icon(Icons.delete, color: colorWhite),
-          right: const Text(
-            'Permanently delete',
-            style: TextStyle(color: colorWhite),
+    size: const Size(350, 300),
+    content: AppFrame(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const Text('Do you really want to delete?', style: ts18w5),
+          const SizedBox(height: 10),
+          const Text('This action cannot be undone!'),
+          const SizedBox(height: 10),
+          const Text('Prefer downloading a copy...'),
+          const SizedBox(height: 20),
+          CustomButton(
+            radius: 8,
+            onPressed: action,
+            color: colorDarkRed,
+            left: const Icon(Icons.delete, color: colorPrimaryWhite),
+            right: const Text(
+              'Permanently delete',
+              style: TextStyle(color: colorPrimaryWhite),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }

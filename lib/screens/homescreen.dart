@@ -6,9 +6,9 @@ import 'package:tendon_loader/bluetooth/device_handler.dart';
 import 'package:tendon_loader/bluetooth/lists/connected_list.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
-import 'package:tendon_loader/custom/custom_progress.dart';
+import 'package:tendon_loader/custom/progress_tile.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/screens/app_settings.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
@@ -85,8 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return  settingsState.prescription!.toTable();
       })),
       action: CustomButton(
-        left: const Text('Go', style: TextStyle(color: colorGoogleGreen)),
-        right: const Icon(Icons.arrow_forward, color: colorGoogleGreen),
+        left: const Text('Go', style: TextStyle(color: colorMidGreen)),
+        right: const Icon(Icons.arrow_forward, color: colorMidGreen),
         onPressed: () async => context.replace(ExerciseMode.route),
       ),
     );
@@ -148,20 +148,20 @@ class _HomeScreenState extends State<HomeScreen> {
             const CustomImage(),
             CustomTile(
               title: LiveData.name,
-              left: const Icon(Icons.show_chart, color: colorBlue),
+              left: const Icon(Icons.show_chart, color: colorIconBlue),
               right: const Icon(Icons.keyboard_arrow_right),
               onTap: () => _navigateTo(LiveData.route),
             ),
             CustomTile(
               title: MVCTesting.name,
               left: const Icon(Icons.airline_seat_legroom_extra,
-                  color: colorBlue),
+                  color: colorIconBlue),
               right: const Icon(Icons.keyboard_arrow_right),
               onTap: () => _navigateTo(MVCTesting.route),
             ),
             CustomTile(
               title: ExerciseMode.name,
-              left: const Icon(Icons.directions_run, color: colorBlue),
+              left: const Icon(Icons.directions_run, color: colorIconBlue),
               right: const Icon(Icons.keyboard_arrow_right),
               onTap: () => _navigateTo(ExerciseMode.route),
             ),

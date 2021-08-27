@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/utils/validator.dart';
 
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
+class FormTextField extends StatelessWidget {
+  const FormTextField({
     Key? key,
     this.label,
     this.suffix,
@@ -40,7 +40,7 @@ class CustomTextField extends StatelessWidget {
         suffix: suffix ??
             IconButton(
               onPressed: controller!.clear,
-              icon: const Icon(Icons.clear, color: colorRed400),
+              icon: const Icon(Icons.clear, color: colorErrorRed),
             ),
       ),
     );

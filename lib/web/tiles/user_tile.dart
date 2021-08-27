@@ -9,7 +9,6 @@ import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/web/dialogs/exercise_history.dart';
-import 'package:tendon_loader/web/views/user_list.dart';
 
 class UserTile extends StatelessWidget {
   const UserTile({Key? key, required this.id}) : super(key: key);
@@ -20,9 +19,14 @@ class UserTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final Patient _user = AppStateWidget.of(context).getUser(id);
     return ListTile(
-      key: ValueKey<int>(id),
+      horizontalTitleGap: 5,
+      selected: id == userClick.value,
+      key: ValueKey<Patient>(_user),
       subtitle: Text(_user.exportCount),
-      onTap: () => userClick.value = id,
+      onTap: () {
+        exportClick.value = null;
+        userClick.value = id;
+      },
       contentPadding: const EdgeInsets.all(5),
       title: Text(_user.id, style: ts18w5, maxLines: 1),
       leading: CustomButton(
@@ -38,7 +42,7 @@ class UserTile extends StatelessWidget {
             child: StatefulBuilder(
               builder: (_, void Function(void Function()) setState) {
                 return CheckboxListTile(
-                  activeColor: colorBlue,
+                  activeColor: colorIconBlue,
                   value: _user.prescription!.isAdmin,
                   title: const Text('Allow web access?'),
                   controlAffinity: ListTileControlAffinity.leading,
@@ -78,38 +82,39 @@ class UserTile extends StatelessWidget {
           const PopupMenuItem<PopupAction>(
             value: PopupAction.delete,
             child: ListTile(
-              leading: Icon(Icons.delete_forever, color: colorRed400),
-              title: Text('Delete All', style: TextStyle(color: colorRed400)),
+              leading: Icon(Icons.delete_forever, color: colorErrorRed),
+              title: Text('Delete All', style: TextStyle(color: colorErrorRed)),
             ),
           ),
         ],
         onSelected: (PopupAction action) async {
           switch (action) {
+            case PopupAction.download:
+              await Future<void>.microtask(_user.download);
+              break;
             case PopupAction.history:
               await CustomDialog.show<void>(
                 context,
                 title: _user.id,
-                content: ExerciseHistory(patient: _user),
+                content: ExerciseHistory(user: _user),
               );
               break;
             case PopupAction.prescribe:
               await CustomDialog.show<void>(
                 context,
+                title: _user.id,
                 content: NewExercise(user: _user),
               );
-              break;
-            case PopupAction.download:
-              await Future<void>.microtask(_user.download);
               break;
             case PopupAction.delete:
               await confirmDelete(
                 context,
-                title: 'Delete this export?',
-                action: () {
-                  context.pop();
+                title: 'Delete all export?\nfor: ${_user.id}',
+                action: () async {
+                  exportClick.value = null;
                   userClick.value = null;
-                  _user.deleteAll();
-                  UserList.of(context).refresh();
+                  await _user.deleteAll();
+                  context.pop();
                 },
               );
               break;

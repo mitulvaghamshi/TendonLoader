@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
@@ -53,7 +53,7 @@ class DataView extends StatelessWidget {
             series: <ChartSeries<ChartData, double>>[
               LineSeries<ChartData, double>(
                 width: 2,
-                color: colorGoogleGreen,
+                color: colorMidGreen,
                 animationDuration: 5000,
                 dataSource: value.exportData!,
                 xValueMapper: (ChartData data, _) => data.time,
@@ -61,7 +61,7 @@ class DataView extends StatelessWidget {
               ),
               LineSeries<ChartData, double>(
                 width: 2,
-                color: colorRed400,
+                color: colorErrorRed,
                 animationDuration: 0,
                 xValueMapper: (ChartData data, _) => data.time,
                 yValueMapper: (ChartData data, _) => data.load,

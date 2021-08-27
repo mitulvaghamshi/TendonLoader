@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
-import 'package:tendon_loader/custom/custom_textfield.dart';
+import 'package:tendon_loader/custom/form_text_field.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/modal/settings_state.dart';
@@ -88,7 +88,7 @@ class _LoginState extends State<Login> {
             setState(() => _isBusy = false);
             context.showSnackBar(const Text(
               'Are you a clinician?',
-              style: TextStyle(color: colorRed400),
+              style: TextStyle(color: colorErrorRed),
             ));
           } else {
             patient = _patientAsUser;
@@ -104,7 +104,7 @@ class _LoginState extends State<Login> {
       setState(() => _isBusy = false);
       context.showSnackBar(Text(
         firebaseErrors[e.code] ?? 'Unable to reach the internet.',
-        style: const TextStyle(color: colorRed400),
+        style: const TextStyle(color: colorErrorRed),
       ));
     }
   }
@@ -210,13 +210,13 @@ class _LoginState extends State<Login> {
 
   List<Widget> _buildFormItems() {
     return <Widget>[
-      CustomTextField(
+      FormTextField(
         label: 'Username',
         controller: _emailCtrl,
         validator: validateEmail,
         keyboardType: TextInputType.emailAddress,
       ),
-      CustomTextField(
+      FormTextField(
         label: 'Password',
         isObscure: _isObscure,
         validator: validatePass,
@@ -233,7 +233,7 @@ class _LoginState extends State<Login> {
       if (widget.isRegister)
         SwitchListTile.adaptive(
           value: _isAdmin,
-          activeColor: colorBlue,
+          activeColor: colorIconBlue,
           contentPadding: EdgeInsets.zero,
           title: const Text('Allow web portal access'),
           controlAffinity: ListTileControlAffinity.leading,
@@ -242,7 +242,7 @@ class _LoginState extends State<Login> {
       else
         CheckboxListTile(
           value: _keepSigned,
-          activeColor: colorBlue,
+          activeColor: colorIconBlue,
           contentPadding: EdgeInsets.zero,
           title: const Text('Keep me signed in.'),
           controlAffinity: ListTileControlAffinity.leading,

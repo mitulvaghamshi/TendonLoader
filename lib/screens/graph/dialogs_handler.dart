@@ -82,9 +82,9 @@ Future<double?> selectPain(BuildContext context) {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          _buildPainText('0\n\nNo\npain', colorAGreen400),
+          _buildPainText('0\n\nNo\npain', colorDarkGreen),
           _buildPainText('5\n\nModerate\npain', colorModerate),
-          _buildPainText('10\n\nWorst\npain', colorRed400),
+          _buildPainText('10\n\nWorst\npain', colorErrorRed),
         ],
       ),
     ]),
@@ -121,17 +121,17 @@ Future<String?> selectTolerance(BuildContext context) {
           children: <Widget>[
             CustomButton(
               onPressed: () => context.pop('Yes'),
-              left: const Icon(Icons.check, color: colorGoogleGreen),
+              left: const Icon(Icons.check, color: colorMidGreen),
               right: const Text(
                 'Yes',
-                style: TextStyle(color: colorGoogleGreen),
+                style: TextStyle(color: colorMidGreen),
               ),
             ),
             const SizedBox(width: 5),
             CustomButton(
               onPressed: () => context.pop('No'),
-              left: const Icon(Icons.clear, color: colorRed400),
-              right: const Text('No', style: TextStyle(color: colorRed400)),
+              left: const Icon(Icons.clear, color: colorErrorRed),
+              right: const Text('No', style: TextStyle(color: colorErrorRed)),
             ),
             const SizedBox(width: 5),
             CustomButton(
@@ -160,19 +160,19 @@ Future<bool?> confirmSubmit(BuildContext context, Export export) async {
     title: 'Submit data?',
     action: CustomButton(
       left: const Text('Discard'),
-      right: const Icon(Icons.clear, color: colorRed400),
+      right: const Icon(Icons.clear, color: colorErrorRed),
       onPressed: () => export.delete().then((_) => context.pop(true)),
     ),
     content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
       CustomTile(
         title: 'Submit Now',
         onTap: () => export.upload().then(context.pop),
-        left: const Icon(Icons.cloud_upload, color: colorGoogleGreen),
+        left: const Icon(Icons.cloud_upload, color: colorMidGreen),
       ),
       CustomTile(
         title: 'Do it later',
         onTap: () => context.pop(true),
-        left: const Icon(Icons.save, color: colorOrange400),
+        left: const Icon(Icons.save, color: colorMidOrange),
       ),
     ]),
   );

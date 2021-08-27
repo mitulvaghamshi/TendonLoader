@@ -72,7 +72,7 @@ class GraphHandler {
 
   static double _lastMillis = 0;
 
-  Color get feedColor => isHit ? colorGoogleGreen : colorWhite;
+  Color get feedColor => isHit ? colorMidGreen : colorPrimaryWhite;
 
   static void clear() {
     _lastMillis = 0;

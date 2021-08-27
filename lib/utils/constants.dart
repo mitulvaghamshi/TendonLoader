@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 const String keyDateTimeFormat = 'y-MM-dd hh:mm:ss a';
 
 // display sizes
-const Size sizeWideScreen = Size(1280, 410);
-const Size sizeMediumScreen = Size(840, 410);
-const Size sizeSmallScreen = Size(320, 410);
+const Size sizeWideScreen = Size(1440, 410);
+const Size sizeMediumScreen = Size(1080, 410);
+const Size sizeSmallScreen = Size(720, 410);
+const Size sizeTinyScreen = Size(320, 410);
 
 // sound clips
 const String keyStartClip = 'start.ogg';

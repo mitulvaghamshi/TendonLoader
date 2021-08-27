@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
-import 'package:tendon_loader/custom/custom_time_tile.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
+import 'package:tendon_loader/custom/time_picker_tile.dart';
 import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/extension.dart';
@@ -44,7 +44,7 @@ class _NewMVCTestState extends State<NewMVCTest> {
         CustomButton(
           onPressed: _onSubmit,
           left: const Text('Go', style: ts18w5),
-          right: const Icon(Icons.arrow_forward, color: colorGoogleGreen),
+          right: const Icon(Icons.arrow_forward, color: colorMidGreen),
         ),
       ]),
       body: AppFrame(
@@ -53,12 +53,12 @@ class _NewMVCTestState extends State<NewMVCTest> {
           if (_lastDuration != null)
             SwitchListTile.adaptive(
               onChanged: _onChanged,
-              activeColor: colorBlue,
+              activeColor: colorIconBlue,
               value: _useLastDuration,
               title: const Text('Use duration from last test.'),
             ),
           const SizedBox(height: 10),
-          CustomTimeTile(
+          TimePickerTile(
             time: _duration,
             desc: 'MVC test duration',
             title: 'Select test duration',

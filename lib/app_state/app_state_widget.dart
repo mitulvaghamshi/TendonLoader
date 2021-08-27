@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app_state/app_state.dart';
 import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/utils/common.dart';
 
@@ -26,9 +27,9 @@ class AppStateWidgetState extends State<AppStateWidget> {
 
   Completer<void> _complater = Completer<void>();
 
-  void refresh() => setState(() {});
-
   void setRefetch() => _complater = Completer<void>();
+
+  Patient getUser(int id) => _data.users[id]!;
 
   Future<void> fetch() async {
     if (_complater.isCompleted) return;
@@ -41,20 +42,40 @@ class AppStateWidgetState extends State<AppStateWidget> {
     return _complater.future;
   }
 
-  Iterable<int> get userList => _data.users.keys;
-
-  Patient getUser(int id) => _data.users[id]!;
-
-  Iterable<int> filter({String? filter}) {
-    if (filter == null) return userList;
-    final List<int> _ids = <int>[];
-    for (final MapEntry<int, Patient> user in _data.users.entries) {
-      if (user.value.id.toLowerCase().contains(filter.toLowerCase())) {
-        _ids.add(user.key);
+  Iterable<int> filterUsers(String? filter) {
+    userClick.value = null;
+    exportClick.value = null;
+    if (filter == null) {
+      // setState(() => _data.userList = _data.users.keys);
+      return _data.users.keys;
+    } else {
+      final List<int> _filtered = <int>[];
+      for (final MapEntry<int, Patient> user in _data.users.entries) {
+        if (user.value.id.toLowerCase().contains(filter.toLowerCase())) {
+          _filtered.add(user.key);
+        }
       }
+      // setState(() => _data.userList = _filtered);
+      return _filtered;
     }
-    return _ids;
   }
+
+  Iterable<Export>? filterExports(String? filter) {
+    exportClick.value = null;
+    final Iterable<Export>? _exports = _data.users[userClick.value]?.exports;
+    if (filter == null) {
+      // setState(() => _data.exportList = _exports);
+      return _exports;
+    } else {
+      final Iterable<Export>? _filtered = _exports?.where((Export export) {
+        return export.fileName.toLowerCase().contains(filter.toLowerCase());
+      });
+      // setState(() => _data.exportList = _filtered);
+      return _filtered;
+    }
+  }
+
+  void removeExport(Export export) {}
 
   @override
   Widget build(BuildContext context) {

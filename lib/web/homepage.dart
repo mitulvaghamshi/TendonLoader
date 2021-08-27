@@ -8,6 +8,7 @@ import 'package:tendon_loader/screens/homescreen.dart';
 import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/web/dialogs/data_list.dart';
 import 'package:tendon_loader/web/views/data_view.dart';
 import 'package:tendon_loader/web/views/export_list.dart';
 import 'package:tendon_loader/web/views/user_list.dart';
@@ -28,6 +29,8 @@ class HomePage extends StatelessWidget {
         return const _MediumLayout();
       } else if (constraints.smallest >= sizeSmallScreen) {
         return const _SmallLayout();
+      } else if (constraints.smallest >= sizeTinyScreen) {
+        return const _TinyLayout();
       } else {
         return const Center(child: CustomImage());
       }
@@ -45,6 +48,7 @@ class _WideLayout extends StatelessWidget {
       body: Row(children: const <Widget>[
         UserList(),
         ExportList(),
+        DataList(),
         Expanded(child: DataView()),
       ]),
     );
@@ -60,6 +64,7 @@ class _MediumLayout extends StatelessWidget {
       appBar: const _AppBar(),
       body: Row(children: const <Widget>[
         _DrawerLayout(),
+        DataList(),
         Expanded(child: DataView()),
       ]),
     );
@@ -71,10 +76,29 @@ class _SmallLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: _AppBar(withText: false),
-      drawer: _DrawerLayout(),
-      body: DataView(),
+    return Scaffold(
+      appBar: const _AppBar(withText: false),
+      drawer: const _DrawerLayout(),
+      body: Row(children: const <Widget>[
+        DataList(),
+        Expanded(child: DataView()),
+      ]),
+    );
+  }
+}
+
+class _TinyLayout extends StatelessWidget {
+  const _TinyLayout({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const _AppBar(withText: false),
+      drawer: const _DrawerLayout(),
+      body: Column(children: const <Widget>[
+        Expanded(child: DataList()),
+        Expanded(child: DataView()),
+      ]),
     );
   }
 }

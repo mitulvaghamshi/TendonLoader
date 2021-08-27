@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:tendon_loader/bluetooth/device_handler.dart';
 import 'package:tendon_loader/custom/about_tile.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/constants.dart';
@@ -68,12 +68,12 @@ class _AppSettingsState extends State<AppSettings> {
         child: Column(children: <Widget>[
           CustomTile(
             title: patient.id,
-            left: const Icon(Icons.person, color: colorBlue),
+            left: const Icon(Icons.person, color: colorIconBlue),
           ),
           const Divider(),
           if (!kIsWeb) ...<Widget>[
             SwitchListTile.adaptive(
-              activeColor: colorBlue,
+              activeColor: colorIconBlue,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 10,
@@ -89,7 +89,7 @@ class _AppSettingsState extends State<AppSettings> {
               }),
             ),
             SwitchListTile.adaptive(
-              activeColor: colorBlue,
+              activeColor: colorIconBlue,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 10,
@@ -109,7 +109,7 @@ class _AppSettingsState extends State<AppSettings> {
             ),
           ],
           SwitchListTile.adaptive(
-            activeColor: colorBlue,
+            activeColor: colorIconBlue,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 10,
@@ -172,7 +172,7 @@ class _AppSettingsState extends State<AppSettings> {
               ListTile(
                 title: Text(
                   'Disconnect ($deviceName)',
-                  style: const TextStyle(color: colorRed400),
+                  style: const TextStyle(color: colorErrorRed),
                 ),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -194,7 +194,7 @@ class _AppSettingsState extends State<AppSettings> {
             contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             title: const Text(
               'Logout',
-              style: TextStyle(color: colorRed400),
+              style: TextStyle(color: colorErrorRed),
             ),
           ),
         ]),

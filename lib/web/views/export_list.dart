@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/app_state/app_state_widget.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
+import 'package:tendon_loader/custom/search_text_field.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/web/tiles/export_tile.dart';
@@ -15,57 +18,49 @@ class ExportList extends StatefulWidget {
 
 class _ExportListState extends State<ExportList> {
   final TextEditingController _searchCtrl = TextEditingController();
+  late Iterable<Export>? _exportList = AppStateScope.of(context).exportList;
 
-  void _onSearch([String? value]) {
-    final Iterable<int> _filter = AppStateWidget.of(context).filter(
-      filter: _searchCtrl.text,
-    );
+  void _onSearch() {
+    final Iterable<Export>? _filterExports =
+        AppStateWidget.of(context).filterExports(_searchCtrl.text);
+    setState(() => _exportList = _filterExports);
   }
 
   @override
   void dispose() {
     super.dispose();
     _searchCtrl.dispose();
+    userClick.removeListener(_onSearch);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    userClick.addListener(_onSearch);
   }
 
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: EdgeInsets.zero,
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       child: SizedBox(
         width: 350,
         child: Column(children: <Widget>[
-          TextField(
-            onSubmitted: _onSearch,
+          SearchTextField(
+            onSearch: _onSearch,
             controller: _searchCtrl,
-            decoration: InputDecoration(
-              hintText: 'Search export',
-              prefixIcon: IconButton(
-                onPressed: _onSearch,
-                icon: const Icon(Icons.search),
-              ),
-              suffixIcon: IconButton(
-                onPressed: _searchCtrl.clear,
-                icon: const Icon(Icons.clear),
-              ),
-            ),
+            hint: 'Search exports...',
           ),
           Expanded(
-            child: ValueListenableBuilder<int?>(
-              valueListenable: userClick,
-              builder: (_, int? value, Widget? child) {
-                if (value == null) return const SizedBox();
-                final List<Export>? _exports =
-                    AppStateWidget.of(context).getUser(value).exports;
-                return ListView.builder(
-                  itemCount: _exports!.length,
-                  itemBuilder: (_, int index) => ExportTile(
-                    export: _exports[index],
+            child: _exportList == null
+                ? const Center(child: Text('It\'s Empty!'))
+                : ListView.builder(
+                    itemCount: _exportList!.length,
+                    itemBuilder: (_, int index) => ExportTile(
+                      export: _exportList!.elementAt(index),
+                    ),
                   ),
-                );
-              },
-            ),
           ),
         ]),
       ),

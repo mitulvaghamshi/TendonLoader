@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
@@ -46,7 +46,7 @@ class CustomDialog extends StatelessWidget {
       rounded: true,
       onPressed: context.pop,
       padding: EdgeInsets.zero,
-      left: const Icon(Icons.clear, color: colorRed400),
+      left: const Icon(Icons.clear, color: colorErrorRed),
     );
     if (kIsWeb) {
       return Center(

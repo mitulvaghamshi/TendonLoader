@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
-import 'package:tendon_loader/custom/custom_picker.dart';
+import 'package:tendon_loader/custom/time_picker.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
-class CustomTimeTile extends StatelessWidget {
-  const CustomTimeTile({
+class TimePickerTile extends StatelessWidget {
+  const TimePickerTile({
     Key? key,
     required this.time,
     required this.desc,
@@ -42,8 +42,8 @@ class CustomTimeTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            CustomPicker(label: 'Min', onChanged: (int val) => _min = val),
-            CustomPicker(label: 'Sec', onChanged: (int val) => _sec = val),
+            TimePicker(label: 'Min', onChanged: (int val) => _min = val),
+            TimePicker(label: 'Sec', onChanged: (int val) => _sec = val),
           ],
         ),
       ),
@@ -55,14 +55,14 @@ class CustomTimeTile extends StatelessWidget {
     return ListTile(
       shape: UnderlineInputBorder(
         borderSide: BorderSide(
-          color: time > 0 ? colorGoogleGreen : colorRed400,
+          color: time > 0 ? colorMidGreen : colorErrorRed,
         ),
       ),
       subtitle: Text(desc),
       contentPadding: EdgeInsets.zero,
       title: Text(_timeString, style: ts18w5),
       trailing: IconButton(
-        icon: const Icon(Icons.timer, color: colorBlue),
+        icon: const Icon(Icons.timer, color: colorIconBlue),
         onPressed: () async {
           final int? duration = await _selectTime(context);
           if (duration != null) onChanged(duration);

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app_state/app_state_widget.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
-import 'package:tendon_loader/web/dialogs/data_list.dart';
 import 'package:tendon_loader/web/dialogs/session_info.dart';
-import 'package:tendon_loader/web/views/user_list.dart';
 
 class ExportTile extends StatelessWidget {
   const ExportTile({Key? key, required this.export}) : super(key: key);
@@ -17,12 +16,12 @@ class ExportTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      horizontalTitleGap: 5,
+      selected: export == exportClick.value,
       title: Text(export.dateTime),
       contentPadding: const EdgeInsets.all(5),
       key: ValueKey<String>(export.reference!.id),
-      onTap: () => Future<void>.microtask(() {
-        exportClick.value = export;
-      }),
+      onTap: () => exportClick.value = export,
       leading: CustomButton(
         rounded: true,
         padding: EdgeInsets.zero,
@@ -31,7 +30,7 @@ class ExportTile extends StatelessWidget {
       subtitle: Text(
         export.isComplate! ? 'Complete' : 'Incomplete',
         style: TextStyle(
-          color: export.isComplate! ? colorGoogleGreen : colorRed400,
+          color: export.isComplate! ? colorMidGreen : colorErrorRed,
         ),
       ),
       trailing: PopupMenuButton<PopupAction>(
@@ -45,13 +44,6 @@ class ExportTile extends StatelessWidget {
             ),
           ),
           const PopupMenuItem<PopupAction>(
-            value: PopupAction.dataList,
-            child: ListTile(
-              title: Text('Show as list'),
-              leading: Icon(Icons.list),
-            ),
-          ),
-          const PopupMenuItem<PopupAction>(
             value: PopupAction.download,
             child: ListTile(
               title: Text('Download'),
@@ -61,8 +53,8 @@ class ExportTile extends StatelessWidget {
           const PopupMenuItem<PopupAction>(
             value: PopupAction.delete,
             child: ListTile(
-              leading: Icon(Icons.delete_forever, color: colorRed400),
-              title: Text('Delete', style: TextStyle(color: colorRed400)),
+              leading: Icon(Icons.delete_forever, color: colorErrorRed),
+              title: Text('Delete', style: TextStyle(color: colorErrorRed)),
             ),
           ),
         ],
@@ -70,18 +62,6 @@ class ExportTile extends StatelessWidget {
           switch (action) {
             case PopupAction.download:
               await Future<void>.microtask(export.download);
-              break;
-            case PopupAction.delete:
-              await confirmDelete(
-                context,
-                title: 'Delete this export?',
-                action: () {
-                  userClick.value = null;
-                  export.reference!.delete();
-                  context.pop();
-                  UserList.of(context).refresh();
-                },
-              );
               break;
             case PopupAction.sesssionInfo:
               await CustomDialog.show<void>(
@@ -91,12 +71,16 @@ class ExportTile extends StatelessWidget {
                 title: '${export.userId}\n${export.dateTime}',
               );
               break;
-            case PopupAction.dataList:
-              await CustomDialog.show<void>(
+            case PopupAction.delete:
+              await confirmDelete(
                 context,
-                size: const Size(300, 700),
-                content: const DataList(),
-                title: '${export.userId}\n${export.dateTime}',
+                title: 'Delete this export?\nfor: ${export.userId}',
+                action: () {
+                  exportClick.value = null;
+                  // export.reference!.delete();
+                  context.pop();
+                  AppStateWidget.of(context).removeExport(export);
+                },
               );
               break;
             default:

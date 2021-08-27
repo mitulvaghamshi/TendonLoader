@@ -1,108 +1,112 @@
 import 'package:flutter/material.dart';
 
-const Color colorGoogleYellow = Color(0xffeff7cf);
-const Color colorGoogleGreen = Color(0xff3ddc85);
-const Color colorAccentGreen = Color(0xff69f0ae);
-const Color colorAGreen400 = Color(0xff00e676);
-const Color colorYellow400 = Color(0xfffdf061);
-const Color colorOrange400 = Color(0xffe18f3c);
-const Color colorModerate = Color(0xff7f9c61);
-const Color colorRed400 = Color(0xffff534d);
-const Color colorRed900 = Color(0xffb71c1c);
-
-const Color colorWhite = Color(0xffffffff);
-const Color colorBlack = Color(0xff000000);
-const Color colorBlue = Color(0xff2196f3);
-
-const Color colorDark1 = Color(0xff141414);
-const Color colorDark2 = Color(0xff262626);
-const Color colorDark3 = Color(0xff404040);
-
 const Color colorTransparent = Color(0x00000000);
+
+const Color colorLightYellow = Color(0xffeff7cf);
+const Color colorMidYellow = Color(0xfffdf061);
+
+const Color colorAccentGreen = Color(0xff69f0ae);
+const Color colorMidGreen = Color(0xff3ddc85);
+const Color colorDarkGreen = Color(0xff00e676);
+
+const Color colorPrimaryWhite = Color(0xffffffff);
+const Color colorAccentBlack = Color(0xff000000);
+const Color colorIconBlue = Color(0xff2196f3);
+
+const Color colorPrimaryDark = Color(0xff141414);
+const Color colorBackgroundDark = Color(0xff262626);
+const Color colorButtonDark = Color(0xff404040);
+
+const Color colorModerate = Color(0xff7f9c61);
+const Color colorMidOrange = Color(0xffe18f3c);
+const Color colorErrorRed = Color(0xffff534d);
+const Color colorDarkRed = Color(0xffb71c1c);
 
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  cardColor: colorWhite,
-  buttonColor: colorWhite,
-  canvasColor: colorWhite,
-  accentColor: colorBlack,
-  primaryColor: colorWhite,
-  highlightColor: colorGoogleGreen,
-  dialogBackgroundColor: colorWhite,
-  iconTheme: const IconThemeData(color: colorGoogleGreen),
-  dividerTheme: const DividerThemeData(color: colorDark1),
+  cardColor: colorPrimaryWhite,
+  buttonColor: colorPrimaryWhite,
+  canvasColor: colorPrimaryWhite,
+  accentColor: colorAccentBlack,
+  primaryColor: colorPrimaryWhite,
+  highlightColor: colorMidGreen,
+  dialogBackgroundColor: colorPrimaryWhite,
+  iconTheme: const IconThemeData(color: colorMidGreen),
+  dividerTheme: const DividerThemeData(color: colorPrimaryDark),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: colorWhite,
-    foregroundColor: colorBlack,
+    backgroundColor: colorPrimaryWhite,
+    foregroundColor: colorAccentBlack,
   ),
   inputDecorationTheme: const InputDecorationTheme(
-    labelStyle: TextStyle(color: colorBlack),
+    labelStyle: TextStyle(color: colorAccentBlack),
     errorBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: colorRed400),
+      borderSide: BorderSide(color: colorErrorRed),
     ),
     focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: colorBlue),
+      borderSide: BorderSide(color: colorIconBlue),
     ),
     enabledBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: colorGoogleGreen),
+      borderSide: BorderSide(color: colorMidGreen),
     ),
   ),
 );
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  cardColor: colorDark2,
-  buttonColor: colorDark3,
-  canvasColor: colorDark1,
-  accentColor: colorWhite,
-  primaryColor: colorDark1,
-  highlightColor: colorGoogleGreen,
-  dialogBackgroundColor: colorDark2,
-  iconTheme: const IconThemeData(color: colorGoogleGreen),
-  dividerTheme: const DividerThemeData(color: colorWhite),
+  cardColor: colorBackgroundDark,
+  buttonColor: colorButtonDark,
+  canvasColor: colorPrimaryDark,
+  accentColor: colorPrimaryWhite,
+  primaryColor: colorPrimaryDark,
+  highlightColor: colorMidGreen,
+  dialogBackgroundColor: colorBackgroundDark,
+  iconTheme: const IconThemeData(color: colorMidGreen),
+  dividerTheme: const DividerThemeData(color: colorPrimaryWhite),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: colorDark3,
-    foregroundColor: colorWhite,
+    backgroundColor: colorButtonDark,
+    foregroundColor: colorPrimaryWhite,
   ),
   inputDecorationTheme: const InputDecorationTheme(
-    labelStyle: TextStyle(color: colorWhite),
+    labelStyle: TextStyle(color: colorPrimaryWhite),
     errorBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: colorRed400),
+      borderSide: BorderSide(color: colorErrorRed),
     ),
     focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: colorBlue),
+      borderSide: BorderSide(color: colorIconBlue),
     ),
     enabledBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: colorGoogleGreen),
+      borderSide: BorderSide(color: colorMidGreen),
     ),
   ),
 );
 
+const TextStyle tsW = TextStyle(color: colorPrimaryWhite);
+
 const TextStyle tsBW500 =
-    TextStyle(color: colorBlack, fontWeight: FontWeight.w500);
+    TextStyle(color: colorAccentBlack, fontWeight: FontWeight.w500);
 
 const TextStyle ts18w5 = TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
 const TextStyle ts22B = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
-const TextStyle tsG18B = TextStyle(
-    color: colorGoogleGreen, fontSize: 18, fontWeight: FontWeight.bold);
-const TextStyle tsG20B = TextStyle(
-    color: colorGoogleGreen, fontSize: 20, fontWeight: FontWeight.bold);
-const TextStyle tsG24B = TextStyle(
-    color: colorGoogleGreen, fontSize: 24, fontWeight: FontWeight.bold);
-const TextStyle tsG40B = TextStyle(
-    color: colorGoogleGreen, fontSize: 40, fontWeight: FontWeight.bold);
+const TextStyle tsG18B =
+    TextStyle(color: colorMidGreen, fontSize: 18, fontWeight: FontWeight.bold);
+const TextStyle tsG20B =
+    TextStyle(color: colorMidGreen, fontSize: 20, fontWeight: FontWeight.bold);
+const TextStyle tsG24B =
+    TextStyle(color: colorMidGreen, fontSize: 24, fontWeight: FontWeight.bold);
+const TextStyle tsG40B =
+    TextStyle(color: colorMidGreen, fontSize: 40, fontWeight: FontWeight.bold);
 
 const TextStyle tsR20B =
-    TextStyle(color: colorRed400, fontSize: 20, fontWeight: FontWeight.bold);
+    TextStyle(color: colorErrorRed, fontSize: 20, fontWeight: FontWeight.bold);
 const TextStyle tsR40B =
-    TextStyle(color: colorRed400, fontSize: 40, fontWeight: FontWeight.bold);
+    TextStyle(color: colorErrorRed, fontSize: 40, fontWeight: FontWeight.bold);
 
-const TextStyle tsW24B =
-    TextStyle(color: colorWhite, fontSize: 24, fontWeight: FontWeight.bold);
+const TextStyle tsW24B = TextStyle(
+    color: colorPrimaryWhite, fontSize: 24, fontWeight: FontWeight.bold);
 
-const TextStyle tsB40B =
-    TextStyle(color: colorBlack, fontSize: 40, fontWeight: FontWeight.bold);
+const TextStyle tsB40B = TextStyle(
+    color: colorAccentBlack, fontSize: 40, fontWeight: FontWeight.bold);
 
 /// Create a text style with bold face, custom green color and a size of 40fp.
 ///

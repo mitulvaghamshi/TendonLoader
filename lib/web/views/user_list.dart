@@ -1,17 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/app_state/app_state_scope.dart';
 import 'package:tendon_loader/app_state/app_state_widget.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
-import 'package:tendon_loader/custom/custom_progress.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
+import 'package:tendon_loader/custom/progress_tile.dart';
+import 'package:tendon_loader/custom/search_text_field.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/web/tiles/user_tile.dart';
 
 class UserList extends StatefulWidget {
   const UserList({Key? key}) : super(key: key);
-
-  static _UserListState of(BuildContext context) {
-    return context.findAncestorStateOfType<_UserListState>()!;
-  }
 
   @override
   _UserListState createState() => _UserListState();
@@ -19,17 +16,12 @@ class UserList extends StatefulWidget {
 
 class _UserListState extends State<UserList> {
   final TextEditingController _searchCtrl = TextEditingController();
-  late Iterable<int> _userList = AppStateWidget.of(context).userList;
+  late Iterable<int> _userList = AppStateScope.of(context).userList;
 
-  void _onSearch([String? value]) {
-    final Iterable<int> _filterList = AppStateWidget.of(context).filter(
-      filter: _searchCtrl.text,
-    );
-    setState(() => _userList = _filterList);
-  }
-
-  void refresh() {
-    setState(() => _userList = AppStateWidget.of(context).userList);
+  void _onSearch() {
+    final Iterable<int> _filterUsers =
+        AppStateWidget.of(context).filterUsers(_searchCtrl.text);
+    setState(() => _userList = _filterUsers);
   }
 
   @override
@@ -41,44 +33,34 @@ class _UserListState extends State<UserList> {
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: EdgeInsets.zero,
       margin: const EdgeInsets.fromLTRB(16, 16, 8, 16),
       child: SizedBox(
         width: 350,
         child: Column(children: <Widget>[
-          TextField(
+          SearchTextField(
+            onSearch: _onSearch,
             controller: _searchCtrl,
-            onSubmitted: _onSearch,
-            decoration: InputDecoration(
-              hintText: 'Search user',
-              prefixIcon: IconButton(
-                onPressed: _onSearch,
-                icon: const Icon(Icons.search),
-              ),
-              suffixIcon: IconButton(
-                onPressed: _searchCtrl.clear,
-                icon: const Icon(Icons.clear),
-              ),
-            ),
+            hint: 'Search user...',
           ),
           Expanded(
             child: RefreshIndicator(
-              color: colorGoogleGreen,
+              color: colorMidGreen,
               onRefresh: () async => setState(() {
                 AppStateWidget.of(context).setRefetch();
               }),
               child: FutureBuilder<void>(
                 future: AppStateWidget.of(context).fetch(),
                 builder: (_, AsyncSnapshot<void> snapshot) {
-                  if (snapshot.connectionState != ConnectionState.done) {
-                    return const CustomProgress();
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return ListView.builder(
+                      itemCount: _userList.length,
+                      itemBuilder: (_, int index) => UserTile(
+                        id: _userList.elementAt(index),
+                      ),
+                    );
                   }
-                  return ListView.builder(
-                    itemCount: _userList.length,
-                    itemBuilder: (_, int index) => UserTile(
-                      id: _userList.elementAt(index),
-                    ),
-                  );
+                  return const CustomProgress();
                 },
               ),
             ),
