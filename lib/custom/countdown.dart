@@ -79,7 +79,7 @@ class _ProgrssPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
       ..strokeWidth = 25
-      ..color = colorGoogleGreen
+      ..color = colorMidGreen
       ..style = PaintingStyle.stroke;
     canvas.drawCircle(
       size.center(Offset.zero),
@@ -91,7 +91,7 @@ class _ProgrssPainter extends CustomPainter {
       pi * 1.5,
       ctrl.value * 2 * pi,
       false,
-      paint..color = colorWhite,
+      paint..color = colorPrimaryWhite,
     );
   }
 }

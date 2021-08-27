@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/screens/login/login.dart';
 import 'package:tendon_loader/utils/common.dart';
 
 extension ExString on String {
@@ -8,30 +9,20 @@ extension ExString on String {
 }
 
 extension ExContext on BuildContext {
-  // Patient get patient => currentUser!;
-  // set patient(Patient? patient) => currentUser = patient;
-
-  // UserState get userState => userState;
-  // set userState(UserState? userState) => userState = userState;
-
-  // SettingsState get settingsState => settingsState;
-  // set settingsState(SettingsState? settings) => settingsState = settings;
-
-
-
   void showSnackBar(Widget content) {
     ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: content));
   }
 
   void pop<T extends Object?>([T? result]) => Navigator.pop<T>(this, result);
 
-  Future<T?> push<T extends Object?>(String routeName, {Object? arguments}) {
-    return Navigator.push<T>(this, buildRoute<T>(routeName));
-  }
+  Future<T?> push<T extends Object?>(String routeName, {Object? arguments}) =>
+      Navigator.push<T>(this, buildRoute<T>(routeName));
 
-  Future<T?> replace<T extends Object?>(String routeName) {
-    return Navigator.pushReplacement<T, T>(this, buildRoute<T>(routeName));
-  }
+  Future<T?> replace<T extends Object?>(String routeName) =>
+      Navigator.pushReplacement<T, T>(this, buildRoute<T>(routeName));
+
+  Future<void> logout() => Navigator.pushAndRemoveUntil<void>(
+      this, buildRoute(Login.route), (_) => false);
 
   Future<T?> popup<T extends Object?>(
     String routeName, {

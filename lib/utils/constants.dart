@@ -1,9 +1,17 @@
 // datetime
+import 'package:flutter/material.dart';
+
 const String keyDateTimeFormat = 'y-MM-dd hh:mm:ss a';
 
+// display sizes
+const Size sizeWideScreen = Size(1440, 410);
+const Size sizeMediumScreen = Size(1080, 410);
+const Size sizeSmallScreen = Size(720, 410);
+const Size sizeTinyScreen = Size(320, 410);
+
 // sound clips
-const String startClip = 'start.ogg';
-const String stopClip = 'stop.ogg';
+const String keyStartClip = 'start.ogg';
+const String keyStopClip = 'stop.ogg';
 
 // chart
 const String keyChartX = 'time';
@@ -14,11 +22,10 @@ const String keyBase = 'TendonLoader';
 const String keyExports = 'exports';
 
 // boxes
-const String keyDarkModeBox = 'dark_mode_box';
-const String keyExportBox = 'user_exports_box';
+const String keyDarkModeBox = 'box_dark_mode';
+const String keyExportBox = 'box_user_exports';
 const String keyUserStateBox = 'box_user_state';
 const String keySettingsStateBox = 'box_settings_state';
-const String keyUserStateBoxItem = 'box_user_state_item';
 
 // prescription
 const String keyIsAdmin = 'isAdmin';

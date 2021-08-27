@@ -67,8 +67,8 @@ class DeviceList extends StatelessWidget {
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       leading: const CustomButton(
-        color: colorRed400,
-        left: Icon(Icons.bluetooth, color: colorWhite, size: 30),
+        color: colorErrorRed,
+        left: Icon(Icons.bluetooth, color: colorPrimaryWhite, size: 30),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       subtitle: const Text('Click to connect', style: TextStyle(fontSize: 12)),

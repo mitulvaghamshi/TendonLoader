@@ -77,13 +77,17 @@ class Prescription extends HiveObject {
     return CustomTable(columns: const <DataColumn>[
       DataColumn(label: Text('Prescription', style: ts18w5)),
       DataColumn(label: Text('Value', style: ts18w5)),
-    ], rows: <DataRow>[
+    ], rows: detailRows);
+  }
+
+  List<DataRow> get detailRows {
+    return <DataRow>[
       DataRow(cells: <DataCell>['Target load'.toCell, '$targetLoad Kg'.toCell]),
       DataRow(cells: <DataCell>['Sets #'.toCell, '$sets'.toCell]),
       DataRow(cells: <DataCell>['Reps #'.toCell, '$reps'.toCell]),
       DataRow(cells: <DataCell>['Hold time'.toCell, '$holdTime Sec'.toCell]),
       DataRow(cells: <DataCell>['Rest time'.toCell, '$restTime Sec'.toCell]),
       DataRow(cells: <DataCell>['Set rest time'.toCell, '$setRest Sec'.toCell]),
-    ]);
+    ];
   }
 }

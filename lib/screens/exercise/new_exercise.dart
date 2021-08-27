@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
-import 'package:tendon_loader/custom/custom_textfield.dart';
-import 'package:tendon_loader/custom/custom_time_tile.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
+import 'package:tendon_loader/custom/form_text_field.dart';
+import 'package:tendon_loader/custom/time_picker_tile.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
@@ -103,112 +103,120 @@ class _NewExerciseState extends State<NewExercise> {
 
   @override
   Widget build(BuildContext context) {
+    return kIsWeb ? _buildBody() : _buildScaffold();
+  }
+
+  Scaffold _buildScaffold() {
     return Scaffold(
       appBar: AppBar(title: const Text('New Exercise')),
-      body: SingleChildScrollView(
-        child: AppFrame(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                if (kIsWeb)
-                  CustomTimeTile(
-                    time: _mvcDuration,
-                    desc: 'MVC test duration',
-                    title: 'Select test duration',
-                    onChanged: (int duration) {
-                      setState(() => _mvcDuration = duration);
-                    },
-                  )
-                else ...<Widget>[
-                  const Text(
-                    'Please enter your\nexercise prescriptions',
-                    textAlign: TextAlign.center,
-                    style: tsG24B,
-                  ),
-                  if (_lastPre != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: SwitchListTile.adaptive(
-                        onChanged: _onChanged,
-                        activeColor: colorBlue,
-                        value: _useLastPrescription,
-                        title: const Text(
-                          'Use prescriptions '
-                          'from last exercise.',
-                        ),
+      body: _buildBody(),
+    );
+  }
+
+  SingleChildScrollView _buildBody() {
+    return SingleChildScrollView(
+      child: AppFrame(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              if (kIsWeb)
+                TimePickerTile(
+                  time: _mvcDuration,
+                  desc: 'MVC test duration',
+                  title: 'Select test duration',
+                  onChanged: (int duration) {
+                    setState(() => _mvcDuration = duration);
+                  },
+                )
+              else ...<Widget>[
+                const Text(
+                  'Please enter your\nexercise prescriptions',
+                  textAlign: TextAlign.center,
+                  style: tsG24B,
+                ),
+                if (_lastPre != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: SwitchListTile.adaptive(
+                      onChanged: _onChanged,
+                      activeColor: colorIconBlue,
+                      value: _useLastPrescription,
+                      title: const Text(
+                        'Use prescriptions '
+                        'from last exercise.',
                       ),
                     ),
-                ],
-                CustomTextField(
-                  label: 'Target Load (Kg)',
-                  controller: _ctrlTargetLoad,
-                  format: r'^\d{1,2}(\.\d{0,2})?',
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
                   ),
-                ),
-                Row(children: <Widget>[
-                  Expanded(
-                    child: CustomTextField(
-                      label: 'Sets (#)',
-                      format: r'^\d{1,2}',
-                      controller: _ctrlSets,
-                    ),
-                  ),
-                  const VerticalDivider(width: 5),
-                  Expanded(
-                    child: CustomTextField(
-                      label: 'Reps (#)',
-                      format: r'^\d{1,2}',
-                      controller: _ctrlReps,
-                    ),
-                  ),
-                ]),
-                const SizedBox(height: 10),
-                CustomTimeTile(
-                  time: _holdTime,
-                  desc: 'Rep hold time',
-                  title: 'Select rep hold time',
-                  onChanged: (int duration) {
-                    setState(() => _holdTime = duration);
-                  },
-                ),
-                CustomTimeTile(
-                  time: _restTime,
-                  desc: 'Rep rest time',
-                  title: 'Select rep rest time',
-                  onChanged: (int duration) {
-                    setState(() => _restTime = duration);
-                  },
-                ),
-                CustomTimeTile(
-                  time: _setRestTime,
-                  desc: 'Set rest time (default: 90 sec)',
-                  title: 'Select set rest time',
-                  onChanged: (int duration) {
-                    setState(() => _setRestTime = duration);
-                  },
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    CustomButton(
-                      onPressed: _onSubmit,
-                      right: const Text('Submit'),
-                      left: const Icon(Icons.done),
-                    ),
-                    CustomButton(
-                      onPressed: _clearForm,
-                      right: const Text('Clear'),
-                      left: const Icon(Icons.clear, color: colorRed400),
-                    ),
-                  ],
-                ),
               ],
-            ),
+              FormTextField(
+                label: 'Target Load (Kg)',
+                controller: _ctrlTargetLoad,
+                format: r'^\d{1,2}(\.\d{0,2})?',
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+              ),
+              Row(children: <Widget>[
+                Expanded(
+                  child: FormTextField(
+                    label: 'Sets (#)',
+                    format: r'^\d{1,2}',
+                    controller: _ctrlSets,
+                  ),
+                ),
+                const VerticalDivider(width: 5),
+                Expanded(
+                  child: FormTextField(
+                    label: 'Reps (#)',
+                    format: r'^\d{1,2}',
+                    controller: _ctrlReps,
+                  ),
+                ),
+              ]),
+              const SizedBox(height: 10),
+              TimePickerTile(
+                time: _holdTime,
+                desc: 'Rep hold time',
+                title: 'Select rep hold time',
+                onChanged: (int duration) {
+                  setState(() => _holdTime = duration);
+                },
+              ),
+              TimePickerTile(
+                time: _restTime,
+                desc: 'Rep rest time',
+                title: 'Select rep rest time',
+                onChanged: (int duration) {
+                  setState(() => _restTime = duration);
+                },
+              ),
+              TimePickerTile(
+                time: _setRestTime,
+                desc: 'Set rest time (default: 90 sec)',
+                title: 'Select set rest time',
+                onChanged: (int duration) {
+                  setState(() => _setRestTime = duration);
+                },
+              ),
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  CustomButton(
+                    onPressed: _onSubmit,
+                    right: const Text('Submit'),
+                    left: const Icon(Icons.done),
+                  ),
+                  CustomButton(
+                    onPressed: _clearForm,
+                    right: const Text('Clear'),
+                    left: const Icon(Icons.clear, color: colorErrorRed),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

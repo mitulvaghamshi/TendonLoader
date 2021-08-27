@@ -10,7 +10,7 @@ class CustomSlider extends StatelessWidget {
 
   final double value;
   final ValueChanged<double> onChanged;
-  Color? get _trackColor => Color.lerp(colorAGreen400, colorRed400, value / 10);
+  Color? get _trackColor => Color.lerp(colorDarkGreen, colorErrorRed, value / 10);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _CustomShape extends SliderComponentShape {
     context.canvas.drawCircle(
       center,
       sliderTheme.trackHeight! / 2 + 5,
-      Paint()..color = colorWhite,
+      Paint()..color = colorPrimaryWhite,
     );
     context.canvas.drawCircle(
       center,

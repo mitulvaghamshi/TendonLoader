@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
-class CustomPicker extends StatelessWidget {
-  const CustomPicker({
+class TimePicker extends StatelessWidget {
+  const TimePicker({
     Key? key,
     required this.label,
     required this.onChanged,

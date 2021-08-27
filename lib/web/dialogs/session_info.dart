@@ -15,37 +15,34 @@ class SessionInfo extends StatelessWidget {
       valueListenable: exportClick,
       builder: (_, Export? export, Widget? child) {
         if (export == null) return child!;
-        return ExpansionTile(
-          maintainState: true,
-          subtitle: Text(export.dateTime),
-          title: Text(export.userId!, style: ts18w5),
-          children: <Widget>[
-            CustomTable(columns: const <DataColumn>[
-              DataColumn(label: Text('Session', style: ts18w5)),
-              DataColumn(label: Text('Detail', style: ts18w5)),
-            ], rows: <DataRow>[
-              DataRow(
-                cells: <DataCell>[export.progressorId!.toCell, ''.toCell],
-              ),
-              DataRow(cells: <DataCell>[
-                'Pain score'.toCell,
-                '${export.painScore ?? '---'}'.toCell
-              ]),
-              DataRow(cells: <DataCell>[
-                'Pain tolerable?'.toCell,
-                (export.isTolerable ?? '---').toCell
-              ]),
-              if (export.isMVC)
-                DataRow(cells: <DataCell>[
-                  'Max force'.toCell,
-                  '${export.mvcValue} Kg'.toCell
-                ])
+        return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          const SizedBox(height: 10),
+          CustomTable(columns: const <DataColumn>[
+            DataColumn(label: Text('Session', style: ts18w5)),
+            DataColumn(label: Text('Detail', style: ts18w5)),
+          ], rows: <DataRow>[
+            DataRow(cells: <DataCell>[
+              'Device'.toCell,
+              export.progressorId!.toCell,
             ]),
-            if (!export.isMVC) export.prescription!.toTable(),
-          ],
-        );
+            DataRow(cells: <DataCell>[
+              'Pain score'.toCell,
+              '${export.painScore ?? 'Unknown'}'.toCell
+            ]),
+            DataRow(cells: <DataCell>[
+              'Pain tolerable?'.toCell,
+              (export.isTolerable ?? 'Unknown').toCell
+            ]),
+            if (export.isMVC)
+              DataRow(cells: <DataCell>[
+                'Max force'.toCell,
+                '${export.mvcValue} Kg'.toCell
+              ]),
+            if (!export.isMVC) ...export.prescription!.detailRows,
+          ]),
+        ]);
       },
-      child: const SizedBox(),
+      child: const Center(child: Text('It\'s Empty!')),
     );
   }
 }

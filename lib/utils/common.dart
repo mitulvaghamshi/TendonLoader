@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
@@ -30,6 +32,7 @@ import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/empty.dart'
     if (dart.library.html) 'dart:html' show AnchorElement;
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:tendon_loader/web/homepage.dart';
 
@@ -62,9 +65,7 @@ enum PopupAction {
   delete,
   prescribe,
   history,
-  darkMode,
-  logout,
-  settings,
+  sesssionInfo,
 }
 
 final ValueNotifier<int?> userClick = ValueNotifier<int?>(null);
@@ -140,8 +141,7 @@ Future<void> logout(BuildContext context) async {
     await settingsState.save();
     await signOut();
   } finally {
-    await Navigator.pushAndRemoveUntil<void>(
-        context, buildRoute(Login.route), (_) => false);
+    await context.logout();
   }
 }
 
@@ -176,6 +176,41 @@ Future<bool?> tryUpload(BuildContext context) async {
       ),
     );
   }
+}
+
+Future<void> confirmDelete(
+  BuildContext context, {
+  required String title,
+  required VoidCallback action,
+}) async {
+  await CustomDialog.show<void>(
+    context,
+    title: title,
+    size: const Size(350, 300),
+    content: AppFrame(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const Text('Do you really want to delete?', style: ts18w5),
+          const SizedBox(height: 10),
+          const Text('This action cannot be undone!'),
+          const SizedBox(height: 10),
+          const Text('Prefer downloading a copy...'),
+          const SizedBox(height: 20),
+          CustomButton(
+            radius: 8,
+            onPressed: action,
+            color: colorDarkRed,
+            left: const Icon(Icons.delete, color: colorPrimaryWhite),
+            right: const Text(
+              'Permanently delete',
+              style: TextStyle(color: colorPrimaryWhite),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 CollectionReference<Patient> get dbRoot {

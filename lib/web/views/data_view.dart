@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/custom/custom_frame.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
@@ -14,7 +14,8 @@ class DataView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppFrame(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      margin: const EdgeInsets.fromLTRB(8, 16, 16, 16),
       child: ValueListenableBuilder<Export?>(
         valueListenable: exportClick,
         builder: (BuildContext context, Export? value, Widget? child) {
@@ -52,16 +53,16 @@ class DataView extends StatelessWidget {
             series: <ChartSeries<ChartData, double>>[
               LineSeries<ChartData, double>(
                 width: 2,
-                color: colorGoogleGreen,
-                animationDuration: 7000,
+                color: colorMidGreen,
+                animationDuration: 5000,
                 dataSource: value.exportData!,
                 xValueMapper: (ChartData data, _) => data.time,
                 yValueMapper: (ChartData data, _) => data.load,
               ),
               LineSeries<ChartData, double>(
                 width: 2,
-                color: colorRed400,
-                animationDuration: 2000,
+                color: colorErrorRed,
+                animationDuration: 0,
                 xValueMapper: (ChartData data, _) => data.time,
                 yValueMapper: (ChartData data, _) => data.load,
                 dataSource: <ChartData>[
