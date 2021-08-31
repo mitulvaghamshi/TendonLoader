@@ -113,3 +113,14 @@ const String descNoExerciseAvailable =
 // email regex pattern (do not modify at all)
 const String emailRegEx =
     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+final Map<String, String> firebaseErrors = <String, String>{
+  'email-already-in-use': 'The account already exists for that email.',
+  'invalid-email': 'Invalid email.',
+  'weak-password': 'The password is too weak.',
+  'wrong-password': 'Invalid password.',
+  'user-not-found': 'No user found for that email. '
+      'Make sure you enter right credentials.',
+  'user-disabled': 'This account is disabled.',
+  'operation-not-allowed': 'This account is disabled.',
+};

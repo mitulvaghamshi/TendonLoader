@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tendon_loader/bluetooth/device_handler.dart';
 import 'package:tendon_loader/custom/about_tile.dart';
-import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/app_frame.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/routes.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 class AppSettings extends StatefulWidget {

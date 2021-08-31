@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/app_frame.dart';
+import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/custom/form_text_field.dart';
 import 'package:tendon_loader/modal/patient.dart';
@@ -76,27 +76,35 @@ class _LoginState extends State<Login> {
             await boxSettingsState.put(_emailCtrl.text, _settingsState);
             await _createUserEntry();
           }
-          final Patient _patientAsUser =
-              await Patient.of(_emailCtrl.text).fetch();
-          if (!kIsWeb) {
-            _settingsState.toggle(
-              _settingsState.customPrescriptions!,
-              _patientAsUser.prescription!,
-            );
-          }
-          if (kIsWeb && !_patientAsUser.prescription!.isAdmin!) {
+          try {
+            final Patient _patientAsUser =
+                await Patient.of(_emailCtrl.text).fetch();
+            if (!kIsWeb) {
+              _settingsState.toggle(
+                _settingsState.customPrescriptions!,
+                _patientAsUser.prescription!,
+              );
+            }
+            if (kIsWeb && !_patientAsUser.prescription!.isAdmin!) {
+              setState(() => _isBusy = false);
+              context.showSnackBar(const Text(
+                'Are you a clinician?',
+                style: TextStyle(color: colorErrorRed),
+              ));
+            } else {
+              patient = _patientAsUser;
+              userState = _userState;
+              settingsState = _settingsState;
+              await Future<void>.delayed(const Duration(seconds: 2), () async {
+                await context.replace(Login.homeRoute);
+              });
+            }
+          } on Exception {
             setState(() => _isBusy = false);
             context.showSnackBar(const Text(
-              'Are you a clinician?',
+              'Opps! Something want wrong, please contact your developer...',
               style: TextStyle(color: colorErrorRed),
             ));
-          } else {
-            patient = _patientAsUser;
-            userState = _userState;
-            settingsState = _settingsState;
-            await Future<void>.delayed(const Duration(seconds: 2), () async {
-              await context.replace(Login.homeRoute);
-            });
           }
         }
       }

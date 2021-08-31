@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/screens/login/login.dart';
-import 'package:tendon_loader/utils/common.dart';
+import 'package:tendon_loader/screens/login.dart';
+import 'package:tendon_loader/utils/routes.dart';
 
 extension ExString on String {
   DataCell get toCell {

@@ -34,6 +34,18 @@
 			"command": "flutter",
 			"args": [
 				"build",
+				"web",
+				"--target=lib/web/main.dart",
+			],
+			"group": "build",
+			"problemMatcher": [],
+			"label": "release: web"
+		},
+		{
+			"type": "shell",
+			"command": "flutter",
+			"args": [
+				"build",
 				"apk",
 				"--obfuscate",
 				"--no-track-widget-creation",
@@ -71,7 +83,7 @@
 				"$dart-build_runner"
 			],
 			"group": "build",
-			"label": "build_runner: build -d"
+			"label": "build_runner: build --delete"
 		}
 	],
 }

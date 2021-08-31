@@ -3,8 +3,8 @@ import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/custom/data_table_row.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/web/common.dart';
 
 @immutable
 class DataList extends StatelessWidget {

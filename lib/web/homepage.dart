@@ -1,17 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/screens/app_settings.dart';
 import 'package:tendon_loader/screens/homescreen.dart';
-import 'package:tendon_loader/screens/login/login.dart';
+import 'package:tendon_loader/screens/login.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/web/dialogs/data_list.dart';
-import 'package:tendon_loader/web/views/data_view.dart';
-import 'package:tendon_loader/web/views/export_list.dart';
-import 'package:tendon_loader/web/views/user_list.dart';
+import 'package:tendon_loader/web/panels/data_list.dart';
+import 'package:tendon_loader/web/panels/data_view.dart';
+import 'package:tendon_loader/web/panels/export_list.dart';
+import 'package:tendon_loader/web/panels/user_list.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);

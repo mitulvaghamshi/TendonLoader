@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/web/app_state/app_state.dart';
+import 'package:tendon_loader/web/app_state/app_state_scope.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/utils/common.dart';
+import 'package:tendon_loader/web/common.dart';
 
 @immutable
 class AppStateWidget extends StatefulWidget {
