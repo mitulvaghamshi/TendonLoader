@@ -25,7 +25,7 @@ import 'package:tendon_loader/utils/empty.dart'
 import 'package:tendon_loader/utils/themes.dart';
 
 Future<void> useEmulator() async {
-  const String host = '192.168.0.18';
+  const String host = 'device-ip-here';
   await FirebaseAuth.instance.useAuthEmulator(host, 10001);
   FirebaseFirestore.instance.useFirestoreEmulator(host, 10002);
 }
