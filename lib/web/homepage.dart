@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser == null) context.logout();
+    // if (FirebaseAuth.instance.currentUser == null) context.logout();
     return LayoutBuilder(builder: (_, BoxConstraints constraints) {
       if (constraints.smallest >= sizeWideScreen) {
         return const _WideLayout();

@@ -17,18 +17,18 @@ class ExportTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       horizontalTitleGap: 5,
-      selected: export == exportClick.value,
+      selected: export == exportNotifier.value,
       title: Text(export.dateTime),
       contentPadding: const EdgeInsets.all(5),
       key: ValueKey<String>(export.reference!.id),
-      onTap: () => exportClick.value = export,
+      onTap: () => exportNotifier.value = export,
       leading: CustomButton(
         rounded: true,
         padding: EdgeInsets.zero,
         left: Text(export.isMVC ? 'MVC' : 'EXE'),
       ),
       subtitle: Text(
-        export.isComplate! ? 'Complete' : 'Incomplete',
+        'Session ${export.isComplate! ? 'complete' : 'incomplete'}',
         style: TextStyle(
           color: export.isComplate! ? colorMidGreen : colorErrorRed,
         ),
@@ -39,6 +39,7 @@ class ExportTile extends StatelessWidget {
           const PopupMenuItem<PopupAction>(
             value: PopupAction.sesssionInfo,
             child: ListTile(
+              horizontalTitleGap: 5,
               title: Text('Session info'),
               leading: Icon(Icons.info),
             ),
@@ -46,6 +47,7 @@ class ExportTile extends StatelessWidget {
           const PopupMenuItem<PopupAction>(
             value: PopupAction.download,
             child: ListTile(
+              horizontalTitleGap: 5,
               title: Text('Download'),
               leading: Icon(Icons.file_download),
             ),
@@ -53,6 +55,7 @@ class ExportTile extends StatelessWidget {
           const PopupMenuItem<PopupAction>(
             value: PopupAction.delete,
             child: ListTile(
+              horizontalTitleGap: 5,
               leading: Icon(Icons.delete_forever, color: colorErrorRed),
               title: Text('Delete', style: TextStyle(color: colorErrorRed)),
             ),
@@ -74,13 +77,10 @@ class ExportTile extends StatelessWidget {
             case PopupAction.delete:
               await confirmDelete(
                 context,
-                title: 'Delete this export?\nfor: ${export.userId}',
-                action: () {
-                  exportClick.value = null;
-                  // export.reference!.delete();
-                  context.pop();
-                  AppStateWidget.of(context).removeExport(export);
-                },
+                title: 'Delete this export?\nfor ${export.userId}',
+                action: () async => AppStateWidget.of(context)
+                    .removeExport(export)
+                    .then(context.pop),
               );
               break;
             default:

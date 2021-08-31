@@ -68,9 +68,9 @@ enum PopupAction {
   sesssionInfo,
 }
 
-final ValueNotifier<int?> userClick = ValueNotifier<int?>(null);
+final ValueNotifier<int?> userNotifier = ValueNotifier<int?>(null);
 
-final ValueNotifier<Export?> exportClick = ValueNotifier<Export?>(null);
+final ValueNotifier<Export?> exportNotifier = ValueNotifier<Export?>(null);
 
 Future<void> initApp() async {
   await Hive.initFlutter();
@@ -90,7 +90,7 @@ Future<void> initApp() async {
       <DeviceOrientation>[DeviceOrientation.portraitUp],
     );
   }
-  await useEmulator();
+  // await useEmulator();
 }
 
 final Map<String, String> firebaseErrors = <String, String>{
@@ -186,29 +186,28 @@ Future<void> confirmDelete(
   await CustomDialog.show<void>(
     context,
     title: title,
-    size: const Size(350, 300),
-    content: AppFrame(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const Text('Do you really want to delete?', style: ts18w5),
-          const SizedBox(height: 10),
-          const Text('This action cannot be undone!'),
-          const SizedBox(height: 10),
-          const Text('Prefer downloading a copy...'),
-          const SizedBox(height: 20),
-          CustomButton(
-            radius: 8,
-            onPressed: action,
-            color: colorDarkRed,
-            left: const Icon(Icons.delete, color: colorPrimaryWhite),
-            right: const Text(
-              'Permanently delete',
-              style: TextStyle(color: colorPrimaryWhite),
-            ),
+    size: const Size(300, 250),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        const SizedBox(height: 20),
+        const Text('Do you really want to delete?', style: ts18w5),
+        const SizedBox(height: 10),
+        const Text('This action cannot be undone!'),
+        const SizedBox(height: 10),
+        const Text('Prefer downloading a copy...'),
+        const SizedBox(height: 20),
+        CustomButton(
+          radius: 8,
+          onPressed: action,
+          color: colorDarkRed,
+          left: const Icon(Icons.delete, color: colorPrimaryWhite),
+          right: const Text(
+            'Permanently delete',
+            style: TextStyle(color: colorPrimaryWhite),
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }

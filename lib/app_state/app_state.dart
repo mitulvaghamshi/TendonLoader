@@ -8,5 +8,5 @@ class AppState {
   final Map<int, Patient> users = HashMap<int, Patient>();
 
   late Iterable<int> userList = users.keys;
-  late Iterable<Export>? exportList = users[userClick.value]?.exports;
+  late Iterable<Export>? exportList = users[userNotifier.value]?.exports;
 }

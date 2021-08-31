@@ -12,6 +12,7 @@ class ExerciseHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppFrame(
+      padding: EdgeInsets.zero,
       child: SingleChildScrollView(
         child: Column(children: _buildItems(user.exports!).toList()),
       ),

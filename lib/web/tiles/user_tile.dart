@@ -20,12 +20,11 @@ class UserTile extends StatelessWidget {
     final Patient _user = AppStateWidget.of(context).getUser(id);
     return ListTile(
       horizontalTitleGap: 5,
-      selected: id == userClick.value,
       key: ValueKey<Patient>(_user),
       subtitle: Text(_user.exportCount),
       onTap: () {
-        exportClick.value = null;
-        userClick.value = id;
+        exportNotifier.value = null;
+        userNotifier.value = id;
       },
       contentPadding: const EdgeInsets.all(5),
       title: Text(_user.id, style: ts18w5, maxLines: 1),
@@ -61,6 +60,7 @@ class UserTile extends StatelessWidget {
           const PopupMenuItem<PopupAction>(
             value: PopupAction.history,
             child: ListTile(
+              horizontalTitleGap: 5,
               title: Text('Exercise History'),
               leading: Icon(Icons.history),
             ),
@@ -68,6 +68,7 @@ class UserTile extends StatelessWidget {
           const PopupMenuItem<PopupAction>(
             value: PopupAction.prescribe,
             child: ListTile(
+              horizontalTitleGap: 5,
               title: Text('Edit Prescriptions'),
               leading: Icon(Icons.edit),
             ),
@@ -75,6 +76,7 @@ class UserTile extends StatelessWidget {
           const PopupMenuItem<PopupAction>(
             value: PopupAction.download,
             child: ListTile(
+              horizontalTitleGap: 5,
               title: Text('Download All'),
               leading: Icon(Icons.file_download),
             ),
@@ -82,6 +84,7 @@ class UserTile extends StatelessWidget {
           const PopupMenuItem<PopupAction>(
             value: PopupAction.delete,
             child: ListTile(
+              horizontalTitleGap: 5,
               leading: Icon(Icons.delete_forever, color: colorErrorRed),
               title: Text('Delete All', style: TextStyle(color: colorErrorRed)),
             ),
@@ -109,13 +112,10 @@ class UserTile extends StatelessWidget {
             case PopupAction.delete:
               await confirmDelete(
                 context,
-                title: 'Delete all export?\nfor: ${_user.id}',
-                action: () async {
-                  exportClick.value = null;
-                  userClick.value = null;
-                  await _user.deleteAll();
-                  context.pop();
-                },
+                title: 'Delete all export?\nfor ${_user.id}',
+                action: () async => AppStateWidget.of(context)
+                    .removeAllExports(id)
+                    .then<void>(context.pop),
               );
               break;
             default:

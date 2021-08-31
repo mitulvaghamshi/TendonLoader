@@ -30,13 +30,13 @@ class _ExportListState extends State<ExportList> {
   void dispose() {
     super.dispose();
     _searchCtrl.dispose();
-    userClick.removeListener(_onSearch);
+    userNotifier.removeListener(_onSearch);
   }
 
   @override
   void initState() {
     super.initState();
-    userClick.addListener(_onSearch);
+    userNotifier.addListener(_onSearch);
   }
 
   @override
@@ -54,7 +54,7 @@ class _ExportListState extends State<ExportList> {
           ),
           Expanded(
             child: _exportList == null
-                ? const Center(child: Text('It\'s Empty!'))
+                ? const SizedBox()
                 : ListView.builder(
                     itemCount: _exportList!.length,
                     itemBuilder: (_, int index) => ExportTile(

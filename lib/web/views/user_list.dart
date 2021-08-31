@@ -41,7 +41,7 @@ class _UserListState extends State<UserList> {
           SearchTextField(
             onSearch: _onSearch,
             controller: _searchCtrl,
-            hint: 'Search user...',
+            hint: 'Search patient...',
           ),
           Expanded(
             child: RefreshIndicator(
@@ -60,7 +60,7 @@ class _UserListState extends State<UserList> {
                       ),
                     );
                   }
-                  return const CustomProgress();
+                  return const Center(child: CustomProgress());
                 },
               ),
             ),

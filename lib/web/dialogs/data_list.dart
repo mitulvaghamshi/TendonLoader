@@ -18,7 +18,7 @@ class DataList extends StatelessWidget {
       child: SizedBox(
         width: 300,
         child: ValueListenableBuilder<Export?>(
-          valueListenable: exportClick,
+          valueListenable: exportNotifier,
           builder: (_, Export? export, Widget? child) {
             final List<ChartData>? _list = export?.exportData;
             return Column(children: <Widget>[

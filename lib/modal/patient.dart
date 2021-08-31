@@ -62,7 +62,7 @@ class Patient extends HiveObject {
   String get id => userRef!.id;
   String get avatar => id[0].toUpperCase();
   String get exportCount => 'Total ${exports?.length} '
-      'item${exports?.length == 1 ? '' : 's'} submitted';
+      'item${exports?.length == 1 ? '' : 's'} found';
 
   Future<Patient> fetch({bool? withExports = false}) async {
     final DocumentSnapshot<Prescription> _prescription =
@@ -99,6 +99,5 @@ class Patient extends HiveObject {
     for (final Export export in exports!) {
       await export.reference!.delete();
     }
-    exports!.clear();
   }
 }

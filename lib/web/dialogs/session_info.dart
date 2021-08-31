@@ -12,7 +12,7 @@ class SessionInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Export?>(
-      valueListenable: exportClick,
+      valueListenable: exportNotifier,
       builder: (_, Export? export, Widget? child) {
         if (export == null) return child!;
         return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
