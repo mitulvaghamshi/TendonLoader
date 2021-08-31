@@ -73,6 +73,8 @@ class Export extends HiveObject {
 
   bool get isMVC => mvcValue != null && prescription == null;
 
+  String get status => isComplate! ? 'Complete' : 'Incomplete';
+
   String get dateTime {
     return DateFormat(keyDateTimeFormat).format(timestamp!.toDate());
   }

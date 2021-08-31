@@ -4,8 +4,8 @@ import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/web/common.dart';
 
 @immutable
 class DataView extends StatelessWidget {
@@ -17,7 +17,7 @@ class DataView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16),
       margin: const EdgeInsets.fromLTRB(8, 16, 16, 16),
       child: ValueListenableBuilder<Export?>(
-        valueListenable: exportClick,
+        valueListenable: exportNotifier,
         builder: (BuildContext context, Export? value, Widget? child) {
           if (value == null || value.exportData!.isEmpty) return child!;
           final double _targetLine =
@@ -54,7 +54,7 @@ class DataView extends StatelessWidget {
               LineSeries<ChartData, double>(
                 width: 2,
                 color: colorMidGreen,
-                animationDuration: 5000,
+                animationDuration: 7000,
                 dataSource: value.exportData!,
                 xValueMapper: (ChartData data, _) => data.time,
                 yValueMapper: (ChartData data, _) => data.load,

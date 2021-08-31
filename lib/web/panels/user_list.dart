@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
-import 'package:tendon_loader/app_state/app_state_widget.dart';
+import 'package:tendon_loader/web/app_state/app_state_scope.dart';
+import 'package:tendon_loader/web/app_state/app_state_widget.dart';
 import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/custom/progress_tile.dart';
 import 'package:tendon_loader/custom/search_text_field.dart';
@@ -41,7 +41,7 @@ class _UserListState extends State<UserList> {
           SearchTextField(
             onSearch: _onSearch,
             controller: _searchCtrl,
-            hint: 'Search user...',
+            hint: 'Search patient...',
           ),
           Expanded(
             child: RefreshIndicator(
@@ -60,7 +60,7 @@ class _UserListState extends State<UserList> {
                       ),
                     );
                   }
-                  return const CustomProgress();
+                  return const Center(child: CustomProgress());
                 },
               ),
             ),

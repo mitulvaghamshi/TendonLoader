@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state.dart';
+import 'package:tendon_loader/web/app_state/app_state.dart';
 
 @immutable
 class AppStateScope extends InheritedWidget {

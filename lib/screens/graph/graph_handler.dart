@@ -105,6 +105,7 @@ class GraphHandler {
       isRunning = true;
       isComplete = false;
       exportData.clear();
+      exportData.add(ChartData());
       timestamp = Timestamp.now();
       await startWeightMeas();
       await _playerCache.play(keyStartClip);

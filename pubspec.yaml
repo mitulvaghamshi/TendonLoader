@@ -1,7 +1,7 @@
 name: tendon_loader
 description: Tendon Loader is a project designed to measure and help overcome the Achilles Tendon Problems.
 publish_to: 'none'
-version: 0.0.12+12 #
+version: 0.1.0+13
 
 environment:
   sdk: ">=2.13.0 <3.0.0"

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state_widget.dart';
+import 'package:tendon_loader/web/app_state/app_state_widget.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/web/common.dart';
 import 'package:tendon_loader/web/dialogs/session_info.dart';
 
 class ExportTile extends StatelessWidget {
@@ -17,18 +17,18 @@ class ExportTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       horizontalTitleGap: 5,
-      selected: export == exportClick.value,
+      selected: export == exportNotifier.value,
       title: Text(export.dateTime),
       contentPadding: const EdgeInsets.all(5),
       key: ValueKey<String>(export.reference!.id),
-      onTap: () => exportClick.value = export,
+      onTap: () => exportNotifier.value = export,
       leading: CustomButton(
         rounded: true,
         padding: EdgeInsets.zero,
         left: Text(export.isMVC ? 'MVC' : 'EXE'),
       ),
       subtitle: Text(
-        export.isComplate! ? 'Complete' : 'Incomplete',
+        export.status,
         style: TextStyle(
           color: export.isComplate! ? colorMidGreen : colorErrorRed,
         ),
@@ -66,21 +66,18 @@ class ExportTile extends StatelessWidget {
             case PopupAction.sesssionInfo:
               await CustomDialog.show<void>(
                 context,
-                size: const Size(350, 500),
-                content: const SessionInfo(),
-                title: '${export.userId}\n${export.dateTime}',
+                title: 'Session info',
+                size: const Size(370, 700),
+                content: SessionInfo(export: export),
               );
               break;
             case PopupAction.delete:
               await confirmDelete(
                 context,
-                title: 'Delete this export?\nfor: ${export.userId}',
-                action: () {
-                  exportClick.value = null;
-                  // export.reference!.delete();
-                  context.pop();
-                  AppStateWidget.of(context).removeExport(export);
-                },
+                title: 'Delete this export?',
+                action: () async => AppStateWidget.of(context)
+                    .removeExport(export)
+                    .then(context.pop),
               );
               break;
             default:

@@ -61,10 +61,9 @@
 				"command": "adb",
 				"args": [
 					"connect",
-					"192.168.0.33"
-				],
-				"problemMatcher": []
+					"android-device-ip"
+				]
 			}
-		],
-	},
+		]
+	}
 }

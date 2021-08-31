@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state.dart';
-import 'package:tendon_loader/app_state/app_state_scope.dart';
+import 'package:tendon_loader/web/app_state/app_state.dart';
+import 'package:tendon_loader/web/app_state/app_state_scope.dart';
 import 'package:tendon_loader/modal/export.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/utils/common.dart';
+import 'package:tendon_loader/web/common.dart';
 
 @immutable
 class AppStateWidget extends StatefulWidget {
@@ -34,7 +35,11 @@ class AppStateWidgetState extends State<AppStateWidget> {
   Future<void> fetch() async {
     if (_complater.isCompleted) return;
     final QuerySnapshot<Patient> _snapshot = await dbRoot.get();
-    if (_snapshot.size > 0) _data.users.clear();
+    if (_snapshot.size > 0) {
+      _data.users.clear();
+      userNotifier.value = null;
+      exportNotifier.value = null;
+    }
     for (int i = 0; i < _snapshot.size; i++) {
       _data.users[i] = await _snapshot.docs[i].data().fetch(withExports: true);
     }
@@ -43,10 +48,9 @@ class AppStateWidgetState extends State<AppStateWidget> {
   }
 
   Iterable<int> filterUsers(String? filter) {
-    userClick.value = null;
-    exportClick.value = null;
+    userNotifier.value = null;
+    exportNotifier.value = null;
     if (filter == null) {
-      // setState(() => _data.userList = _data.users.keys);
       return _data.users.keys;
     } else {
       final List<int> _filtered = <int>[];
@@ -55,27 +59,40 @@ class AppStateWidgetState extends State<AppStateWidget> {
           _filtered.add(user.key);
         }
       }
-      // setState(() => _data.userList = _filtered);
       return _filtered;
     }
   }
 
   Iterable<Export>? filterExports(String? filter) {
-    exportClick.value = null;
-    final Iterable<Export>? _exports = _data.users[userClick.value]?.exports;
+    exportNotifier.value = null;
+    final Iterable<Export>? _exports = _data.users[userNotifier.value]?.exports;
     if (filter == null) {
-      // setState(() => _data.exportList = _exports);
       return _exports;
     } else {
       final Iterable<Export>? _filtered = _exports?.where((Export export) {
         return export.fileName.toLowerCase().contains(filter.toLowerCase());
       });
-      // setState(() => _data.exportList = _filtered);
       return _filtered;
     }
   }
 
-  void removeExport(Export export) {}
+  Future<void> removeExport(Export export) async {
+    final int _id = userNotifier.value!;
+    final Patient _user = getUser(_id);
+    _user.exports!.remove(export);
+    setState(() => _data.users[_id] = _user);
+    exportNotifier.value = null;
+    await export.reference!.delete();
+  }
+
+  Future<void> removeAllExports(int id) async {
+    final Patient _user = getUser(id);
+    _user.exports!.clear();
+    setState(() => _data.users[id] = _user);
+    exportNotifier.value = null;
+    userNotifier.value = null;
+    await _user.deleteAll();
+  }
 
   @override
   Widget build(BuildContext context) {

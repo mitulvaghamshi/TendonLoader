@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/bluetooth/device_handler.dart';
 import 'package:tendon_loader/bluetooth/lists/connected_list.dart';
+import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
-import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/custom/custom_image.dart';
-import 'package:tendon_loader/custom/progress_tile.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
+import 'package:tendon_loader/custom/progress_tile.dart';
 import 'package:tendon_loader/screens/app_settings.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
@@ -20,6 +20,7 @@ import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/extension.dart';
+import 'package:tendon_loader/utils/routes.dart';
 import 'package:tendon_loader/utils/themes.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -82,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       title: 'Start Exercise',
       content: FittedBox(child: Builder(builder: (BuildContext context) {
-        return  settingsState.prescription!.toTable();
+        return settingsState.prescription!.toTable();
       })),
       action: CustomButton(
         left: const Text('Go', style: TextStyle(color: colorMidGreen)),
@@ -104,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
         case MVCTesting.route:
           if (_isCustom) {
             context.push(NewMVCTest.route);
-          } else if ( settingsState.mvcDuration != null) {
+          } else if (settingsState.mvcDuration != null) {
             context.push(MVCTesting.route);
           } else {
             context.showSnackBar(const Text(descNoMvcAvailable));
@@ -113,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
         case ExerciseMode.route:
           if (_isCustom) {
             context.push(NewExercise.route);
-          } else if ( settingsState.prescription != null) {
+          } else if (settingsState.prescription != null) {
             _startAutoExercise();
           } else {
             context.showSnackBar(const Text(descNoExerciseAvailable));

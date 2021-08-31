@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app_state/app_state_widget.dart';
+import 'package:tendon_loader/web/app_state/app_state_widget.dart';
 import 'package:tendon_loader/custom/custom_button.dart';
 import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/modal/patient.dart';
 import 'package:tendon_loader/screens/exercise/new_exercise.dart';
-import 'package:tendon_loader/utils/common.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/web/common.dart';
 import 'package:tendon_loader/web/dialogs/exercise_history.dart';
 
 class UserTile extends StatelessWidget {
@@ -20,12 +20,11 @@ class UserTile extends StatelessWidget {
     final Patient _user = AppStateWidget.of(context).getUser(id);
     return ListTile(
       horizontalTitleGap: 5,
-      selected: id == userClick.value,
       key: ValueKey<Patient>(_user),
       subtitle: Text(_user.exportCount),
       onTap: () {
-        exportClick.value = null;
-        userClick.value = id;
+        exportNotifier.value = null;
+        userNotifier.value = id;
       },
       contentPadding: const EdgeInsets.all(5),
       title: Text(_user.id, style: ts18w5, maxLines: 1),
@@ -96,6 +95,7 @@ class UserTile extends StatelessWidget {
               await CustomDialog.show<void>(
                 context,
                 title: _user.id,
+                size: const Size(300, 700),
                 content: ExerciseHistory(user: _user),
               );
               break;
@@ -109,13 +109,10 @@ class UserTile extends StatelessWidget {
             case PopupAction.delete:
               await confirmDelete(
                 context,
-                title: 'Delete all export?\nfor: ${_user.id}',
-                action: () async {
-                  exportClick.value = null;
-                  userClick.value = null;
-                  await _user.deleteAll();
-                  context.pop();
-                },
+                title: 'Delete all export?',
+                action: () async => AppStateWidget.of(context)
+                    .removeAllExports(id)
+                    .then<void>(context.pop),
               );
               break;
             default:
