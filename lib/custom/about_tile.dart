@@ -8,10 +8,10 @@ class AboutTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const AboutListTile(
-      applicationVersion: 'v0.0.12',
+      applicationVersion: 'v0.1.0',
       applicationName: 'Tendon Loader',
-      applicationLegalese: 'Please see the "tendon_loader" '
-          'license for copyright notice.',
+      applicationLegalese: 'Please see the tendon_loader'
+          ' license for copyright notice.',
       applicationIcon: SizedBox(
         width: 50,
         height: 50,
@@ -33,8 +33,8 @@ class AboutTile extends StatelessWidget {
         SizedBox(height: 10),
         Text(
           'Contact us:\n'
-          'alex.scott@ubc.ca\n'
-          'kohlemerry@gmail.com',
+          'kohlemerry@gmail.com\n'
+          'mitulvaghmashi@gmail.com',
           style: TextStyle(fontSize: 12),
         ),
       ],
