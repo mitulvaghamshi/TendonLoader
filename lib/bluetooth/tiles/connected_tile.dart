@@ -36,11 +36,11 @@ class ConnectedTile extends StatelessWidget {
               style: TextStyle(fontSize: 12, color: colorErrorRed),
             ),
             leading: const CustomButton(
+              rounded: true,
               color: colorMidGreen,
               left: Icon(
                 Icons.bluetooth_connected,
                 color: colorPrimaryWhite,
-                size: 30,
               ),
             ),
           ),
