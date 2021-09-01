@@ -1,13 +1,13 @@
 > # Tendon Loader
 ## Getting Started Guide
 ## Introduction
-> **Tendon Loader** is a project designned to measure and help overcome with **Achills Tendon Problems**. for more detail see (res/docs/App Development – V1.pdf) and other documents.
-![Achills Tendon Problems](res/images/achills-tendon-problems.png)
+> **Tendon Loader** is a project designned to measure and help overcome with **Achills Tendon Problems**. for more detail see (App Development – V1.pdf) and other documents availale in google drive account for this project.
+![Achills Tendon Problems](tendon-problems.png)
 ## Framework used
 > This project containing **three** platforms **([Android](https://flutter.dev/docs/get-started/flutter-for/android-devs), [iOS](https://flutter.dev/docs/get-started/flutter-for/ios-devs) and [Web](https://flutter.dev/docs/get-started/flutter-for/web-devs))** built using [Flutter](https://flutter.dev/) with [Firebase](https://console.firebase.google.com/project/tendon-loader/overview).
 ## Project modules
-1. > **Android**: Contains skeleton for basic Android container app, and [configuration](https://console.firebase.google.com/project/tendon-loader/settings/general/android:ca.ubc.tendon_loader) for the Firebase connectivity.
-2. > **iOS**: Same as Android it contains all the resources to build an iOS container app, and [configuretion](https://console.firebase.google.com/project/tendon-loader/settings/general/ios:ca.ubc.tendonLoader) for the Firebase connectivity.
+1. > **Android**: Contains skeleton for basic Android container app, and [configuration](https://console.firebase.google.com/project/tendon-loader/settings/general/android:ca.ubc.tendon_loader) (please download from the firebase console) for the Firebase connectivity.
+2. > **iOS**: Same as Android it contains all the resources to build an iOS container app, and [configuretion](https://console.firebase.google.com/project/tendon-loader/settings/general/ios:ca.ubc.tendonLoader) (please download from the firebase console) for the Firebase connectivity.
 3. > **Web**: The web module uses [automatic configuration](https://firebase.google.com/docs/hosting/reserved-urls?authuser=0) to connect with the Firebase.
 4. > **Firebase**: Firebase is currently registered using [Spark](https://firebase.google.com/pricing?authuser=0) plan. which is free with limited read/write access and suitable for development phase. Project uses three services from the Firebase:
     1. > **Authentication**: Uses the (email only) method to allow user(as a patient) and admin(as a clinician) to login and/or register to the app or web portal.
