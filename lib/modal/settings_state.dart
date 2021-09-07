@@ -1,3 +1,6 @@
+/// Author: Mitul Vaghamshi
+/// Email: mitulvaghmashi@gmail.com
+
 import 'package:hive/hive.dart';
 import 'package:tendon_loader/modal/prescription.dart';
 

@@ -1,3 +1,6 @@
+/// Author: Mitul Vaghamshi
+/// Email: mitulvaghmashi@gmail.com
+
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/custom/app_frame.dart';
 import 'package:tendon_loader/modal/export.dart';

@@ -1,3 +1,6 @@
+/// Author: Mitul Vaghamshi
+/// Email: mitulvaghmashi@gmail.com
+
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/bluetooth/device_handler.dart';
 import 'package:tendon_loader/custom/custom_button.dart';

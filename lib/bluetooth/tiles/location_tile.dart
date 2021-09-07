@@ -1,3 +1,6 @@
+/// Author: Mitul Vaghamshi
+/// Email: mitulvaghmashi@gmail.com
+
 import 'package:app_settings/app_settings.dart' as ast;
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';

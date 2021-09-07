@@ -1,3 +1,6 @@
+/// Author: Mitul Vaghamshi
+/// Email: mitulvaghmashi@gmail.com
+
 import 'package:tendon_loader/utils/constants.dart';
 
 String? validateNum(String? value) {

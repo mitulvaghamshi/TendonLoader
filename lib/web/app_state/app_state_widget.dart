@@ -1,3 +1,6 @@
+/// Author: Mitul Vaghamshi
+/// Email: mitulvaghmashi@gmail.com
+
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';

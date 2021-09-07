@@ -1,3 +1,6 @@
+/// Author: Mitul Vaghamshi
+/// Email: mitulvaghmashi@gmail.com
+
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/web/app_state/app_state_scope.dart';
 import 'package:tendon_loader/web/app_state/app_state_widget.dart';

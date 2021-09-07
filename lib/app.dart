@@ -1,4 +1,3 @@
-/// File: app.dart
 /// Author: Mitul Vaghamshi
 /// Email: mitulvaghmashi@gmail.com
 

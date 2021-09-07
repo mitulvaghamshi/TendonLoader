@@ -1,3 +1,6 @@
+/// Author: Mitul Vaghamshi
+/// Email: mitulvaghmashi@gmail.com
+
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/modal/chartdata.dart';
 import 'package:tendon_loader/screens/graph/graph_handler.dart';
