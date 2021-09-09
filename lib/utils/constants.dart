@@ -1,30 +1,30 @@
 /// Author: Mitul Vaghamshi
 /// Email: mitulvaghmashi@gmail.com
 
-// datetime
 import 'package:flutter/material.dart';
 
+/// Datetime format
 const String keyDateTimeFormat = 'y-MM-dd hh:mm:ss a';
 
-// display sizes
+/// Display sizes for responsive web layout.
 const Size sizeWideScreen = Size(1440, 410);
 const Size sizeMediumScreen = Size(1080, 410);
 const Size sizeSmallScreen = Size(720, 410);
 const Size sizeTinyScreen = Size(320, 410);
 
-// sound clips
+/// Sound clip names.
 const String keyStartClip = 'start.ogg';
 const String keyStopClip = 'stop.ogg';
 
-// chart
+/// Database field names, X, Y coordinate.
 const String keyChartX = 'time';
 const String keyChartY = 'load';
 
-// firestore
+/// Firestore collection names.  
 const String keyBase = 'TendonLoader';
 const String keyExports = 'exports';
 
-// boxes
+/// 
 const String keyDarkModeBox = 'box_dark_mode';
 const String keyExportBox = 'box_user_exports';
 const String keyUserStateBox = 'box_user_state';
