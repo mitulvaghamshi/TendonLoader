@@ -27,12 +27,19 @@ import 'package:tendon_loader/utils/empty.dart'
     if (dart.library.html) 'dart:html' show AnchorElement;
 import 'package:tendon_loader/utils/themes.dart';
 
+/// [Firebase Emulators Suite] only.
+/// Use this method to direct app to connect to local emulators suite.
+/// Visit: [https://firebase.google.com/docs/emulator-suite] to learn more 
+/// about initializing and running local emulators.
 Future<void> useEmulator() async {
-  const String host = 'device-ip-here';
+  const String host = 'host-ip-as-a-string'; // i.e '192.168.0.100'
   await FirebaseAuth.instance.useAuthEmulator(host, 10001);
   FirebaseFirestore.instance.useFirestoreEmulator(host, 10002);
 }
 
+/// This represents the [User] that is currently logged in to the app or web.
+/// It is specifically required to read new MVC or Exercise 
+/// prescriptions from the backend assigned by the Clinician.  
 Patient? _currentUser;
 Patient get patient => _currentUser!;
 set patient(Patient? patient) => _currentUser = patient;
