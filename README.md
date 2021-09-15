@@ -1,5 +1,12 @@
-> # Tendon Loader
-## Getting Started Guide
+# Tendon Loader
+
+This project is licensed under the MIT license
+
+[![MIT License][license-badge]][license-link]
+
+[license-badge]: https://img.shields.io/github/license/mitulvaghamshi/tendon_loader?logo=%20&style=for-the-badge
+[license-link]: https://github.com/mitulvaghamshi/tendon_loader/blob/main/LICENSE
+
 ## Introduction
 > **Tendon Loader** is a project designned to measure and help overcome with **Achills Tendon Problems**. for more detail see (App Development – V1.pdf) and other documents availale in google drive account for this project.
 ![Achills Tendon Problems](tendon-problems.png)
@@ -52,7 +59,7 @@
   ## Next Step
   ### After installing all the required tools and components use either method to setup project.
     ### **Method-1 (Manually)**:
-    * > Open **tendon_loader** folder in your favorite shell and execute following commands in sequence:
+    > Open **tendon_loader** folder in your favorite shell and execute following commands in sequence:
         ```Shell
         tendon_loader $> flutter create .
         /// this will create any missing components if required.
@@ -69,6 +76,10 @@
         /// this will generate all the required adapter classes
         ```
     ### **Method-2 (Automatic)**:
-    * > Use the VS Code to do everything for you, open project in VSCode as a workspace, then Select Run Task... from the Terminal menu and click on **Project: rebuild** tendon-loader.code-workspace item from the list and wait for all the tasks to finish. Use other available items from the list to  perform other tasks, *edit and modify path in this file if required*.
+    > Use the VS Code to do everything for you, open project in VSCode as a workspace, then Select Run Task... from the Terminal menu and click on **Project: rebuild** tendon-loader.code-workspace item from the list and wait for all the tasks to finish. Use other available items from the list to  perform other tasks, *edit and modify path in this file if required*.
 
-*Found mistake in this guide? or any suggestion please report or create new issue.
+```markdown
+> We're still work'n...
+
+> *Found any mistake in this guide? or any suggestion please report or create new issue.
+```
