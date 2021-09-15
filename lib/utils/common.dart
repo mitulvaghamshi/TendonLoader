@@ -1,3 +1,25 @@
+/// MIT License
+/// 
+/// Copyright (c) 2021 Mitul Vaghamshi
+/// 
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+/// 
+/// The above copyright notice and this permission notice shall be included in all
+/// copies or substantial portions of the Software.
+/// 
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+/// SOFTWARE.
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -24,12 +46,19 @@ import 'package:tendon_loader/utils/empty.dart'
     if (dart.library.html) 'dart:html' show AnchorElement;
 import 'package:tendon_loader/utils/themes.dart';
 
+/// [Firebase Emulators Suite] only.
+/// Use this method to direct app to connect to local emulators suite.
+/// Visit: [https://firebase.google.com/docs/emulator-suite] to learn more 
+/// about initializing and running local emulators.
 Future<void> useEmulator() async {
-  const String host = 'device-ip-here';
+  const String host = 'host-ip-as-a-string'; // i.e '192.168.0.100'
   await FirebaseAuth.instance.useAuthEmulator(host, 10001);
   FirebaseFirestore.instance.useFirestoreEmulator(host, 10002);
 }
 
+/// This represents the [User] that is currently logged in to the app or web.
+/// It is specifically required to read new MVC or Exercise 
+/// prescriptions from the backend assigned by the Clinician.  
 Patient? _currentUser;
 Patient get patient => _currentUser!;
 set patient(Patient? patient) => _currentUser = patient;
