@@ -104,17 +104,17 @@ const int cmdGetBatteryVoltage = 111; // CMD RES
 
 /// UUIDs used by the Progressor for diferent services.
 
-/// The [Service] uuid is the main service that used by the app
+/// The Service uuid is the main service that used by the app
 /// to connect and communicate throughout the connection.
 const String uuidService =
     '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // main service
 
-/// The [Control] uuid is the service listening for commands issued by the 
+/// The Control uuid is the service listening for commands issued by the 
 /// connected application, all control commands are send to this uuid.
 const String uuidControl =
     '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // send commands
 
-/// The [Data] uuid where the Progressor can transmit it's measured data,
+/// The Data uuid where the Progressor can transmit it's measured data,
 /// An app must subscribe to this uuid to retrieve a stream of data.
 /// Refer to project resources to learn more about data and how convert it 
 /// into a meaningful information.

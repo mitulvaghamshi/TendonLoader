@@ -41,11 +41,11 @@ import 'package:tendon_loader/web/homepage.dart';
 /// and uses only named route base navigation between screens.
 ///
 /// below map contains widget builders for each screen used by
-/// the [Navigator.pashNamed] method.
+/// the Navigator.pashNamed method.
 ///
 /// Web portal only depends on the [Login], [HomePage] and [NewExercise] screen.
 ///
-/// All route names must start with a forward slash [/], 
+/// All route names must start with a forward slash (/), 
 /// this will allow to build URLs for web-based navigation.
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   Login.route: (_) => const Login(),

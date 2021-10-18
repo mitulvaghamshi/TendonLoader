@@ -35,7 +35,7 @@ import 'package:tendon_loader/utils/themes.dart';
 /// but also allows app to adapt some iOS styles such as text, color, icons, etc.
 /// rather forcing app to use Android (Material) styles.
 /// 
-/// The app provided with two themes [Light] and [Dark] varients with custom colors
+/// The app provided with two themes Light and Dark varients with custom colors
 /// and shapes for basic components like list-items and buttons.
 /// see [lib/utils/themes.dart] for the implementation.
 ///
@@ -45,10 +45,10 @@ import 'package:tendon_loader/utils/themes.dart';
 ///
 /// App is constructed using combination of material and cupertino design systems.
 ///
-/// App is initially (first-launch) started with [Light] theme and allow user to toggle
-/// with [Dark] varient using app settings see [lib/screens/app_settings.dart].
+/// App is initially (first-launch) started with Light theme and allow user to toggle
+/// with Dark varient using app settings see [lib/screens/app_settings.dart].
 /// The choice of the selected theme is stored in hive-db (a file based storage system),
-/// app is highly depended on [Hive] for storing different user generated data and settings.
+/// app is highly depended on Hive for storing different user generated data and settings.
 /// 
 /// The app forces user to choose either theme manually and not depend on system defaults
 /// this will prevent app to be restarted by the system when it changes it's default theme,

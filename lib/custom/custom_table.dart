@@ -45,7 +45,7 @@ class CustomTable extends StatelessWidget {
         horizontalMargin: 16,
         headingTextStyle: TextStyle(color: Theme.of(context).primaryColor),
         headingRowColor: MaterialStateProperty.all<Color>(
-          Theme.of(context).accentColor,
+          Theme.of(context).colorScheme.secondary,
         ),
       ),
     );

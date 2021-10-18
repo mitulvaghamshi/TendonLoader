@@ -22,7 +22,7 @@
 
 import 'package:flutter/material.dart';
 
-/// A mock [AnchoElement] class of [dart:html] library.
+/// A mock AnchoElement class of [dart:html] library.
 ///
 /// Analyzer warns for using web libraries [dart:html] in flutter app,
 /// The [AnchorElement] used (only) in Web portal to download a exported data.

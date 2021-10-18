@@ -63,7 +63,7 @@ class DataView extends StatelessWidget {
               enableAutoIntervalOnZooming: true,
               majorTickLines: const MajorTickLines(size: 0),
               majorGridLines: MajorGridLines(
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
               ),
             ),
             zoomPanBehavior: ZoomPanBehavior(

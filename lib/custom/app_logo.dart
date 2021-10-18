@@ -29,6 +29,6 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset(imgAppLogo, color: Theme.of(context).accentColor);
+    return SvgPicture.asset(imgAppLogo, color: Theme.of(context).colorScheme.secondary);
   }
 }

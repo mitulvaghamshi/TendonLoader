@@ -86,7 +86,7 @@ class _CustomGraphState extends State<CustomGraph> {
                   maximum:  settingsState.graphSize,
                   majorTickLines: const MajorTickLines(size: 0),
                   majorGridLines: MajorGridLines(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   labelStyle: const TextStyle(
                     fontSize: 16,
@@ -106,7 +106,7 @@ class _CustomGraphState extends State<CustomGraph> {
                       textStyle: TextStyle(
                         fontSize: 56,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                     xValueMapper: (ChartData? data, _) => 1,
