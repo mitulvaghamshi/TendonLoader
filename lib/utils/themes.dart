@@ -61,9 +61,7 @@ const Color colorDarkRed = Color(0xffb71c1c);
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   cardColor: colorPrimaryWhite,
-  buttonColor: colorPrimaryWhite,
   canvasColor: colorPrimaryWhite,
-  accentColor: colorAccentBlack,
   primaryColor: colorPrimaryWhite,
   highlightColor: colorMidGreen,
   dialogBackgroundColor: colorPrimaryWhite,
@@ -84,16 +82,14 @@ final ThemeData lightTheme = ThemeData(
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(color: colorMidGreen),
     ),
-  ),
+  ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: colorAccentBlack),
 );
 
 /// Dark Theme data.
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   cardColor: colorBackgroundDark,
-  buttonColor: colorButtonDark,
   canvasColor: colorPrimaryDark,
-  accentColor: colorPrimaryWhite,
   primaryColor: colorPrimaryDark,
   highlightColor: colorMidGreen,
   dialogBackgroundColor: colorBackgroundDark,
@@ -114,7 +110,7 @@ final ThemeData darkTheme = ThemeData(
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(color: colorMidGreen),
     ),
-  ),
+  ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: colorPrimaryWhite),
 );
 
 /// Below are the different colored and sized text style used,

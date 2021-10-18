@@ -19,7 +19,6 @@
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 /// SOFTWARE.
-
 import 'dart:async';
 import 'dart:ui';
 
@@ -31,8 +30,8 @@ import 'package:tendon_loader/custom/custom_dialog.dart';
 import 'package:tendon_loader/custom/custom_slider.dart';
 import 'package:tendon_loader/custom/custom_tile.dart';
 import 'package:tendon_loader/modal/export.dart';
-import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/common.dart';
+import 'package:tendon_loader/utils/extension.dart';
 import 'package:tendon_loader/utils/themes.dart';
 
 Future<bool?> startCountdown(
