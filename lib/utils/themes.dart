@@ -59,7 +59,7 @@ const Color colorDarkRed = Color(0xffb71c1c);
 
 /// Light Theme data,
 final ThemeData lightTheme = ThemeData(
-  brightness: Brightness.light,
+  // brightness: Brightness.light,
   cardColor: colorPrimaryWhite,
   canvasColor: colorPrimaryWhite,
   primaryColor: colorPrimaryWhite,
@@ -87,7 +87,7 @@ final ThemeData lightTheme = ThemeData(
 
 /// Dark Theme data.
 final ThemeData darkTheme = ThemeData(
-  brightness: Brightness.dark,
+  // brightness: Brightness.dark,
   cardColor: colorBackgroundDark,
   canvasColor: colorPrimaryDark,
   primaryColor: colorPrimaryDark,
