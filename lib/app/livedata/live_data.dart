@@ -6,7 +6,7 @@ class LiveData extends StatefulWidget {
   const LiveData({Key? key}) : super(key: key);
 
   static const String name = 'Live Data';
-  static const String route = '/liveData';
+  static const String route = '/livedata';
 
   @override
   _LiveDataState createState() => _LiveDataState();

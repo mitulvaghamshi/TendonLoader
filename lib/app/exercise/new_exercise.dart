@@ -14,7 +14,8 @@ class NewExercise extends StatefulWidget {
   const NewExercise({Key? key, this.user}) : super(key: key);
 
   final Patient? user;
-  static const String route = '/newExercise';
+
+  static const String route = '/newexercise';
 
   @override
   _NewExerciseState createState() => _NewExerciseState();

@@ -7,9 +7,8 @@ class LiveDataHandler extends GraphHandler {
 
   double _time = 0;
 
-  String get elapsed {
-    return '🕒 ${_time ~/ 60}:${(_time % 60).toStringAsFixed(0).padLeft(2, '0')} Sec';
-  }
+  String get elapsed =>
+      '🕒 ${_time ~/ 60}:${(_time % 60).toStringAsFixed(0).padLeft(2, '0')} Sec';
 
   @override
   Future<void> start() async {

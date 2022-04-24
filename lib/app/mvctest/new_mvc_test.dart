@@ -10,7 +10,7 @@ class NewMVCTest extends StatefulWidget {
   const NewMVCTest({Key? key}) : super(key: key);
 
   static const String name = MVCTesting.name;
-  static const String route = '/newMVCTest';
+  static const String route = '/newmvctest';
 
   @override
   _NewMVCTestState createState() => _NewMVCTestState();

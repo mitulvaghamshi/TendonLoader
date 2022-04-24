@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:tendon_loader/firebase_options.dart';
 import 'package:tendon_loader/shared/models/chartdata.dart';
 import 'package:tendon_loader/shared/models/export.dart';
 import 'package:tendon_loader/shared/models/patient.dart';
@@ -22,19 +21,7 @@ import 'package:tendon_loader/shared/utils/empty.dart'
     if (dart.library.html) 'dart:html' show AnchorElement;
 import 'package:tendon_loader/shared/widgets/alert_widget.dart';
 
-/// [Firebase Emulators Suite] only.
-/// Use this method to direct app to connect to local emulators suite.
-/// Visit: [https://firebase.google.com/docs/emulator-suite] to learn more
-/// about initializing and running local emulators.
-Future<void> useEmulator() async {
-  const String host = '192.168.0.56'; // i.e '192.168.0.100'
-  await FirebaseAuth.instance.useAuthEmulator(host, 9099);
-  FirebaseFirestore.instance.useFirestoreEmulator(host, 8080);
-}
-
-/// This represents the [User] that is currently logged in to the app or web.
-/// It is specifically required to read new MVC or Exercise
-/// prescriptions from the backend assigned by the Clinician.
+/// The user that is currently logged in to the app or web.
 Patient? _currentUser;
 Patient get patient => _currentUser!;
 set patient(Patient? patient) => _currentUser = patient;
@@ -54,7 +41,7 @@ late final Box<SettingsState> boxSettingsState;
 
 Future<void> initApp() async {
   await Hive.initFlutter();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: _getOptions());
   Hive.registerAdapter(ExportAdapter());
   Hive.registerAdapter(UserStateAdapter());
   Hive.registerAdapter(ChartDataAdapter());
@@ -70,7 +57,7 @@ Future<void> initApp() async {
       <DeviceOrientation>[DeviceOrientation.portraitUp],
     );
   }
-  await useEmulator();
+  await _useEmulator();
 }
 
 Future<void> saveExcel({List<int>? bytes, required String name}) async {
@@ -112,4 +99,57 @@ CollectionReference<Patient> get dbRoot {
   }, fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) {
     return Patient.fromJson(snapshot.reference);
   });
+}
+
+/// Development only, for Firebase Emulators.
+/// Direct app to connect to local firebase emulator suite.
+/// Learn more about initializing and running local emulators
+/// at: [https://firebase.google.com/docs/emulator-suite]
+Future<void> _useEmulator() async {
+  const String host = '192.168.0.56'; // i.e '192.168.0.100'
+  await FirebaseAuth.instance.useAuthEmulator(host, 9099);
+  FirebaseFirestore.instance.useFirestoreEmulator(host, 8080);
+}
+
+/// Default [FirebaseOptions] for use with your Firebase apps.
+///
+/// Example:
+/// ```dart
+/// await Firebase.initializeApp(options: _getOptions());
+/// ```
+FirebaseOptions _getOptions() {
+  if (kIsWeb) {
+    return const FirebaseOptions(
+      apiKey: 'AIzaSyDwPG54_nK89jQ8y2smdDkfx4e9YlMOKzk',
+      appId: '1:771464923209:web:d01140e155eeaee5615798',
+      messagingSenderId: '771464923209',
+      projectId: 'testflutterfirebaseapp',
+      authDomain: 'testflutterfirebaseapp.firebaseapp.com',
+      storageBucket: 'testflutterfirebaseapp.appspot.com',
+    );
+  }
+
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.iOS:
+      return const FirebaseOptions(
+        apiKey: 'AIzaSyCVjcuo1wWxab_MFNOFYoDakN_iKUra5l4',
+        appId: '1:771464923209:ios:27092ccc6d2daf6e615798',
+        messagingSenderId: '771464923209',
+        projectId: 'testflutterfirebaseapp',
+        storageBucket: 'testflutterfirebaseapp.appspot.com',
+        iosClientId:
+            '771464923209-9vkhte6vcq905h9mdbu4mk1rctefk44c.apps.googleusercontent.com',
+        iosBundleId: 'me.mitul.tendonLoader',
+      );
+    case TargetPlatform.android:
+      throw UnsupportedError('FirebaseOptions not configured for android');
+    case TargetPlatform.macOS:
+      throw UnsupportedError('FirebaseOptions not configured for macOS');
+    case TargetPlatform.fuchsia:
+      throw UnsupportedError('FirebaseOptions not configured for fuchsia');
+    case TargetPlatform.linux:
+      throw UnsupportedError('FirebaseOptions not configured for linux');
+    case TargetPlatform.windows:
+      throw UnsupportedError('FirebaseOptions not configured for windows');
+  }
 }

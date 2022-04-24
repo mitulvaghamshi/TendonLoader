@@ -24,7 +24,7 @@ import 'package:tendon_loader/shared/widgets/frame_widget.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  static const String route = '/homeScreen';
+  static const String route = '/homescreen';
 
   @override
   _HomeScreenState createState() => _HomeScreenState();

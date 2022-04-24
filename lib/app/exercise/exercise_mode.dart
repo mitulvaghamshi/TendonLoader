@@ -10,7 +10,7 @@ class ExerciseMode extends StatefulWidget {
   const ExerciseMode({Key? key}) : super(key: key);
 
   static const String name = 'Exercise Mode';
-  static const String route = '/exerciseMode';
+  static const String route = '/exercisemode';
 
   @override
   _ExerciseModeState createState() => _ExerciseModeState();

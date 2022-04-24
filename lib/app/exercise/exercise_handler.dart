@@ -32,7 +32,7 @@ class ExerciseHandler extends GraphHandler {
   String get repCounter => '$_rep of ${_pre.reps}';
   String get setCounter => '$_set of ${_pre.sets}';
   String get timeCounter => '${_isPush ? 'Push' : 'Rest'}: $_lapTime Sec';
-  
+
   TextStyle get timeStyle => _isPush
       ? const TextStyle(
           fontSize: 40,

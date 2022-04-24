@@ -13,7 +13,7 @@ import 'package:tendon_loader/shared/widgets/frame_widget.dart';
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
-  static const String route = '/userAppSettings';
+  static const String route = '/settings';
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
