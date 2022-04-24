@@ -2,50 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/shared/login_screen.dart';
 import 'package:tendon_loader/shared/utils/routes.dart';
 
-/// String to DataTable cell.
-///
-/// This extension method on [String] object will return
-/// a [DataCell] containig a Text widget with this string as value,
-/// used by the [DataTable] widgets.
+/// String to DataTable cell. This extension method on [String] object
+/// will return a [DataCell] containig a Text widget with this string
+/// as a text value, used by the [DataTable] widgets.
 extension ExString on String {
-  DataCell get toCell {
-    return DataCell(Text(this, style: const TextStyle(fontSize: 16)));
-  }
+  DataCell get toCell =>
+      DataCell(Text(this, style: const TextStyle(fontSize: 16)));
 }
 
-/// Create convenient navigator methods.
-///
-/// Extension methods on this [BuildContext] class will
-/// help reduce long navigator methods with named route.
+/// Create navigator methods. Extension methods on the [BuildContext] class
+/// shorten the long navigator methods with named route.
 extension ExContext on BuildContext {
-  /// Display a [SnackBar],
-  /// Can be customized to create identical look throughout the app.
-  void showSnackBar(Widget content) {
-    ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: content));
-  }
+  /// Display a [SnackBar] with given widget content.
+  void showSnackBar(Widget content) =>
+      ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: content));
 
-  /// [Navigator.pop] with returned result.
+  /// Pop with returned result.
   void pop<T extends Object?>([T? result]) => Navigator.pop<T>(this, result);
 
-  /// [Navigator.push] with arguments and returned result type.
-  /// Allow back navigation.
-  Future<T?> push<T extends Object?>(String routeName, {Object? arguments}) =>
-      Navigator.push<T>(this, buildRoute<T>(routeName));
+  /// Push with arguments and returned result type.
+  Future<T?> push<T extends Object?>(String route, {Object? args}) =>
+      Navigator.push<T>(this, buildRoute<T>(route));
 
-  /// [Navigator.push] removing immidiate one level back history.
-  Future<T?> replace<T extends Object?>(String routeName) =>
-      Navigator.pushReplacement<T, T>(this, buildRoute<T>(routeName));
+  /// Push removing immidiate one level back history, Replace!
+  Future<T?> replace<T extends Object?>(String route) =>
+      Navigator.pushReplacement<T, T>(this, buildRoute<T>(route));
 
-  /// [Navigator.push] removing all the previous route history.
+  /// Push removing all the previous route history. Clear route history!
   Future<void> logout() => Navigator.pushAndRemoveUntil<void>(
       this, buildRoute(LoginScreen.route), (_) => false);
-
-  /// Display any screen as a dialog, useful in web layout.
-  Future<T?> popup<T extends Object?>(
-    String routeName, {
-    bool? isFullScreen = true,
-    Object? arguments,
-  }) {
-    return Navigator.push<T>(this, buildRoute<T>(routeName, isFullScreen));
-  }
 }

@@ -67,11 +67,13 @@ class _CustomShape extends SliderComponentShape {
       sliderTheme.trackHeight! / 2 + 5,
       Paint()..color = const Color(0xffffffff),
     );
+
     context.canvas.drawCircle(
       center,
       sliderTheme.trackHeight! / 2,
       Paint(),
     );
+
     labelPainter.paint(
       context.canvas,
       Offset(

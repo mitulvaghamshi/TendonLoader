@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 
-/// Datetime format
+// Datetime format
 const String keyDateTimeFormat = 'y-MM-dd hh:mm:ss a';
 
-/// Display sizes for responsive web layout.
+// Display sizes for web layout.
 const Size sizeWideScreen = Size(1440, 410);
 const Size sizeMediumScreen = Size(1080, 410);
 const Size sizeSmallScreen = Size(720, 410);
 const Size sizeTinyScreen = Size(320, 410);
 
-/// Database field names, X, Y coordinate.
+// Database fields, for (x,y) coordinate.
 const String keyChartX = 'time';
 const String keyChartY = 'load';
 
-/// Firestore collection names.
+// Firestore root collection.
 const String keyBase = 'TendonLoader';
 const String keyExports = 'exports';
 
-/// Box names (keys) to be used by Hive to store app data.
+// Hive boxes for local app and user data storage.
 const String keyDarkModeBox = 'box_dark_mode';
 const String keyExportBox = 'box_user_exports';
 const String keyUserStateBox = 'box_user_state';
 const String keySettingsStateBox = 'box_settings_state';
 
-/// Names (keys) of fields for the exercise and mvc session and firestore.
+// Exercise and MVC session data fields.
 const String keySets = 'sets';
 const String keyReps = 'reps';
 const String keySetRest = 'setRest';
@@ -32,7 +32,7 @@ const String keyRestTime = 'restTime';
 const String keyTargetLoad = 'targetLoad';
 const String keyMvcDuration = 'mvcDuration';
 
-/// Names (keys) of fields for a session data performed by the patient.
+// User (exercise/mvc) session data fields.
 const String keyIsAdmin = 'isAdmin';
 const String keyUserId = 'userId';
 const String keyMvcValue = 'mvcValue';
@@ -44,24 +44,23 @@ const String keyIsComplate = 'isComplate';
 const String keyProgressorId = 'progressorId';
 const String keyPrescription = 'prescription';
 
-/// Names of the local assets and it's path used by the app and the web.
+// local image assets.
 const String imgRoot = 'assets/images/';
 const String imgAppLogo = imgRoot + 'app_logo.svg';
 const String imgEnableDevice = imgRoot + 'enable_device.png';
 const String imgEnableLocation = imgRoot + 'enable_location.png';
 const String imgEnableBluetooth = imgRoot + 'enable_bluetooth.png';
 
-/// Data response codes of Progressor.
-/// Match this code with data to determine the type of data received.
+// Progressor response code. Match this code with data
+// to check the type of data received.
 const int resCommandResponse = 0;
 const int resWeightMeasurement = 1;
 const int resRFDPeak = 2;
 const int resRFDPeakSeries = 3;
 const int resLowPowerWarning = 4;
 
-/// Commands to be issued on the Progressor to perform respective action.
-/// 'CMD RES' below are the commands that returns one time reponse,
-/// Use response codes to determine type of data returned.
+// Progressor instruction codes. device can return a one time
+// or streamed responce, use this codes to check type of response.
 const int cmdTareScale = 100;
 const int cmdStartWeightMeas = 101;
 const int cmdStopWeightMeas = 102;
@@ -69,77 +68,67 @@ const int cmdStartPeakRFDMeasurement = 103;
 const int cmdStartPeakRFDSeriesMeasurement = 104;
 const int cmdAddCalibrationPoint = 105;
 const int cmdSaveCalibration = 106;
-const int cmdGetAppVersion = 107; // CMD RES
-const int cmdGetErrorInformation = 108; // CMD RES
+const int cmdGetAppVersion = 107; // one time
+const int cmdGetErrorInformation = 108; // one time
 const int cmdClearErrorInformation = 109;
 const int cmdEnterSleep = 110;
-const int cmdGetBatteryVoltage = 111; // CMD RES
+const int cmdGetBatteryVoltage = 111; // one time
 
-/// UUIDs used by the Progressor for diferent services.
+// Service UUID, a main service provides the base connction with receiver.
+const String uuidService = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57';
 
-/// The Service uuid is the main service that used by the app
-/// to connect and communicate throughout the connection.
-const String uuidService =
-    '7e4e1701-1ea6-40c9-9dcc-13d34ffead57'; // main service
+// Control UUID, control instructions can be issued to this uuid.
+const String uuidControl = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57';
 
-/// The Control uuid is the service listening for commands issued by the
-/// connected application, all control commands are send to this uuid.
-const String uuidControl =
-    '7e4e1703-1ea6-40c9-9dcc-13d34ffead57'; // send commands
+// Data UUID, progressor can send stream of data over this uuid.
+// Subscribe to this uuid to retrieve a stream of encoded data.
+// Data requires conversion to specific format before the actual use.
+const String uuidData = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57';
 
-/// The Data uuid where the Progressor can transmit it's measured data,
-/// An app must subscribe to this uuid to retrieve a stream of data.
-/// Refer to project resources to learn more about data and how convert it
-/// into a meaningful information.
-const String uuidData = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57'; // receive data
-
-/// Text descriptions used by the app to guide user to take certain actions.
-
-/// Tell user to power on the Progressor.
+// Ask user to power on the Progressor.
 const String descEnableDevice =
-    '\nActivate your device by pressing the button, '
-    'then press scan to find the device\n';
+    '\nActivate your device by pressing the button, then press scan to find the device\n';
 
-/// Ask user to tare (zero-ing) the Progressor before use.
+// Ask user to tare the Progressor before use. With time, due to mechanical
+// design, progressor may record and return data even when its idle. So,
+// zero-ing (taring) is required for accurate measurements.
 const String descTareProgressor = '\nPlease tare your progressor before use\n';
 
-/// Tell user to turn on Bluetooth.
-const String descEnableBluetooth = '\nThis app needs Bluetooth to communicate '
-    'with your Progressor.\nPlease '
-    'enable Bluetooth on your device\n';
+// Ask user to turn on Bluetooth.
+const String descEnableBluetooth =
+    '\nThis app needs Bluetooth to communicate with your Progressor.\nPlease enable Bluetooth on your device\n';
 
-/// Tell why location is required.
+// Inform user that location is required to locate the progressor.
 const String descLocationLine1 =
     '\nScanning for the Progressor requires location services. '
     'We\'re only using this permission to scan for your Progressor';
 
-/// User privacy statement.
+// Assure user that no physical location is collected and stored.
 const String descLocationLine3 =
     '\nWe\'ll never collect your physical location\n';
 
-/// When there is no new MVC Test created by the Clinician for the user.
+// If there is no new MVC Test available to perform.
 const String descNoMvcAvailable = 'No MVC test available, please contact your '
     'clinician or turn on custom prescriptions in settings.';
 
-/// When there is no new Exercise created by the Clinician for the user.
+// If there is no new Exercise available to perform.
 const String descNoExerciseAvailable =
     'No exercise prescription available, please '
     'contact your clinician or turn on '
     'custom prescriptions in settings.';
 
-/// Regex pattern for emain address (do not modify).
+// Regex pattern for emain address (do not modify). Source: dart-docs.
 const String emailRegEx =
     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
-/// Possible errors catched by the Firebase Authentication proccess.
-/// Keys for this map are the (error) codes produced by the Firebase.
+// Firebase Authentication errors.
+// This maps the firebase error codes to simple descriptions.
 final Map<String, String> firebaseErrors = <String, String>{
-  'email-already-in-use': 'The account already exists for that email.',
-  'invalid-email': 'Invalid email.',
-  'weak-password': 'The password is too weak.',
   'wrong-password': 'Invalid password.',
-  'user-not-found': 'No user found for that email. '
-      'Make sure you enter right credentials.',
+  'invalid-email': 'Invalid email address.',
+  'weak-password': 'The password is too weak.',
   'user-disabled': 'This account is disabled.',
-  'operation-not-allowed': 'This account is disabled.',
+  'user-not-found': 'No account found for this email address.',
+  'email-already-in-use': 'The account already exists for that email.',
+  'operation-not-allowed': 'You are no allowed the access (or disabled).',
 };

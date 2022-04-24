@@ -15,26 +15,29 @@ class CountdownWidget extends StatefulWidget {
 
 class _CountdownWidgetState extends State<CountdownWidget>
     with TickerProviderStateMixin {
-  late final AnimationController _ctrl = AnimationController(
+  late final AnimationController _controller = AnimationController(
     vsync: this,
     duration: widget.duration + const Duration(seconds: 1),
   );
 
-  String get _getTime {
-    final int _millies = (_ctrl.duration! * _ctrl.value).inMilliseconds;
+  String get _remainingTime {
+    final int _millies =
+        (_controller.duration! * _controller.value).inMilliseconds;
     return _millies < 1000 ? 'GO!' : (_millies / 1000).truncate().toString();
   }
 
   @override
   void initState() {
     super.initState();
-    _ctrl.reverse(from: _ctrl.value == 0.0 ? 1.0 : _ctrl.value);
-    _ctrl.addStatusListener((_) => context.pop(true));
+    _controller.reverse(
+      from: _controller.value == 0.0 ? 1.0 : _controller.value,
+    );
+    _controller.addStatusListener((_) => context.pop(true));
   }
 
   @override
   void dispose() {
-    _ctrl.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -43,15 +46,15 @@ class _CountdownWidgetState extends State<CountdownWidget>
     return AspectRatio(
       aspectRatio: 1,
       child: AnimatedBuilder(
-        animation: _ctrl,
+        animation: _controller,
         builder: (_, Widget? child) {
           return Stack(alignment: Alignment.center, children: <Widget>[
             Positioned.fill(
-              child: CustomPaint(painter: _ProgrssPainter(_ctrl)),
+              child: CustomPaint(painter: _ProgressPainter(_controller)),
             ),
             FittedBox(
               child: Text(
-                _getTime,
+                _remainingTime,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 130,
@@ -65,10 +68,10 @@ class _CountdownWidgetState extends State<CountdownWidget>
   }
 }
 
-class _ProgrssPainter extends CustomPainter {
-  const _ProgrssPainter(this.ctrl) : super(repaint: ctrl);
+class _ProgressPainter extends CustomPainter {
+  const _ProgressPainter(this.controller) : super(repaint: controller);
 
-  final Animation<double> ctrl;
+  final Animation<double> controller;
 
   @override
   bool shouldRepaint(_) => false;
@@ -77,17 +80,15 @@ class _ProgrssPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
       ..strokeWidth = 25
-      ..color = const Color(0xff3ddc85)
-      ..style = PaintingStyle.stroke;
-    canvas.drawCircle(
-      size.center(Offset.zero),
-      size.width / 2,
-      paint,
-    );
+      ..style = PaintingStyle.stroke
+      ..color = const Color(0xff3ddc85);
+
+    canvas.drawCircle(size.center(Offset.zero), size.width / 2, paint);
+
     canvas.drawArc(
       Offset.zero & size,
       pi * 1.5,
-      ctrl.value * 2 * pi,
+      controller.value * 2 * pi,
       false,
       paint..color = const Color(0xffffffff),
     );

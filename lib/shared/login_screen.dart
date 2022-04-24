@@ -18,6 +18,7 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key, this.isRegister = false}) : super(key: key);
 
   final bool isRegister;
+
   static const String route = Navigator.defaultRouteName;
   static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
 

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app/exercise/exercise_mode.dart';
 import 'package:tendon_loader/app/exercise/new_exercise.dart';
@@ -15,46 +16,28 @@ import 'package:tendon_loader/shared/utils/common.dart';
 import 'package:tendon_loader/shared/utils/extension.dart';
 import 'package:tendon_loader/web/homepage.dart';
 
-/// A full application(+web) made up of 9 different screens,
-/// and uses only named route base navigation between screens.
-///
-/// below map contains widget builders for each screen used by
-/// the Navigator.pashNamed method.
-///
-/// Web portal only depends on the [LoginScreen], [HomePage] and [NewExercise] screen.
-///
-/// All route names must start with a forward slash (/),
-/// this will allow to build URLs for web-based navigation.
+// TODO(mitul): implement deep-link.
+/// App made up of 9 different screens, and uses named-route navigation.
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   LoginScreen.route: (_) => const LoginScreen(),
-  LiveData.route: (_) => const LiveData(),
   HomePage.route: (_) => const HomePage(),
   HomeScreen.route: (_) => const HomeScreen(),
+  SettingsScreen.route: (_) => const SettingsScreen(),
+  LiveData.route: (_) => const LiveData(),
   NewMVCTest.route: (_) => const NewMVCTest(),
   MVCTesting.route: (_) => const MVCTesting(),
-  SettingsScreen.route: (_) => const SettingsScreen(),
   NewExercise.route: (_) => const NewExercise(),
   ExerciseMode.route: (_) => const ExerciseMode(),
 };
 
-/// Build and navigate with slide transition.
-///
+/// Build and navigate with slide transition on mobile.
 /// This method overrides default navigation transition and
 /// adds horizontal sliding effect while transitioning back and forth.
-///
-/// Accepts required route name and returns a generic Route instance,
-/// an optional return value type [T] can be supplied in case a widget
-/// returns any value.
-///
-/// All the screens (widgets) contains a static route string
-/// to navigate to. i.e. [LoginScreen.route] which is "/login".
-Route<T> buildRoute<T>(String routeName, [bool? fullscreen = false]) {
+Route<T> buildRoute<T>(String route) {
   return PageRouteBuilder<T>(
-    fullscreenDialog: fullscreen!,
-    pageBuilder: (BuildContext context, __, ___) {
-      return routes[routeName]!(context);
-    },
+    pageBuilder: (BuildContext context, __, ___) => routes[route]!(context),
     transitionsBuilder: (_, Animation<double> animation, ___, Widget child) {
+      if (kIsWeb) return child;
       return SlideTransition(
         position: animation.drive(Tween<Offset>(
           begin: const Offset(1.0, 0.0),
@@ -67,13 +50,9 @@ Route<T> buildRoute<T>(String routeName, [bool? fullscreen = false]) {
 }
 
 /// Logout a user from both app and Firebase.
-///
-/// A convenient method allows app to save any modified
-/// app settings or generated data before logging out any user
-///
-/// A handy [logout] extension method on [BuildContext] class navigate
-/// user to the [LoginScreen] screen removing any previous
-/// route from the route-history to prevent backward navigation.
+/// Allows app to save any settings or data before logging out user.
+/// A [logout] extension method on [BuildContext] class navigates user to the
+/// [LoginScreen] screen removing any previous route from the route-history.
 Future<void> logout(BuildContext context) async {
   try {
     userState.keepSigned = false;

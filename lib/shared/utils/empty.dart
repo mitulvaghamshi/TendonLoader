@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 
-/// A mock AnchorElement class of [dart:html] library.
-///
+/// An empty defination of [AnchorElement] class from [dart:html] library.
 /// Analyzer warns for using web libraries [dart:html] in flutter app,
-/// The [AnchorElement] used (only) in Web portal to download an exported data.
-/// Web build uses [dart:html] while mobile builds
-/// uses this class which does nothing.
-///
-/// This class can be provided with a functionality allowing
-/// mobile (or desktop) app to download export files on local storage.
+/// the [AnchorElement] used in Web app to download generated excel file.
+/// Web build uses class from [dart:html] lib, while mobile builds uses this
+/// empty class.
 @immutable
 class AnchorElement {
   const AnchorElement({this.href});
+
+  // Link with excel data embaded, on click triggers download on browsers.
   final String? href;
+
   void click() {
-    /// Can download and open it using
-    /// any supported application (like MS-Office).
+    // TODO(mitul): implement platform specific code to
+    // allow download on mobile and desktop devices.
   }
+
+  /// @param attr - a download attribute on web links.
+  /// @param value - name of the file.
   void setAttribute(String attr, String value) {
-    /// May create a file using platform specific implementation.
-    /// All platforms require their own implementation.
-    /// A plugin can be created for this purpose.
+    // TODO(mitul): Create and prepare a File to download
+    // on mobile or desktop device. May require platform specific
+    // implementation for different devices/OS.
   }
 }
