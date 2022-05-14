@@ -58,9 +58,9 @@ class ExerciseHandler extends GraphHandler {
   void update(ChartData data) {
     if (isRunning && !_isSetOver) {
       isHit = data.load > _pre.targetLoad;
-      final int _time = data.time.truncate();
-      if (!isPause && _time > _minTime) {
-        _minTime = _time;
+      final int time = data.time.truncate();
+      if (!isPause && time > _minTime) {
+        _minTime = time;
         if (_lapTime-- == 0) {
           if (_isPush) {
             _isPush = false;

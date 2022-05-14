@@ -42,7 +42,7 @@ class DataView extends StatelessWidget {
         valueListenable: exportNotifier,
         builder: (BuildContext context, Export? value, Widget? child) {
           if (value == null || value.exportData!.isEmpty) return child!;
-          final double _targetLine =
+          final double kTargetLine =
               value.isMVC ? value.mvcValue! : value.prescription!.targetLoad;
           return SfCartesianChart(
             plotAreaBorderWidth: 0,
@@ -88,10 +88,10 @@ class DataView extends StatelessWidget {
                 xValueMapper: (ChartData data, _) => data.time,
                 yValueMapper: (ChartData data, _) => data.load,
                 dataSource: <ChartData>[
-                  ChartData(load: _targetLine),
+                  ChartData(load: kTargetLine),
                   ChartData(
                     time: value.exportData!.last.time,
-                    load: _targetLine,
+                    load: kTargetLine,
                   ),
                 ],
               ),

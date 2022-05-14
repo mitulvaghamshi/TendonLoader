@@ -27,16 +27,16 @@ class HomeScreen extends StatefulWidget {
   static const String route = '/homescreen';
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future<void>.delayed(const Duration(seconds: 1), () async {
-      await tryUpload(context);
-    });
+    if (boxExport.isNotEmpty) {
+      Future<void>.delayed(const Duration(seconds: 1), tryUpload);
+    }
   }
 
   Future<void> _cleanup() async {
@@ -84,7 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
       action: ButtonWidget(
         left: const Text('Go', style: TextStyle(color: Color(0xff3ddc85))),
         right: const Icon(Icons.arrow_forward, color: Color(0xff3ddc85)),
-        onPressed: () async => context.replace(ExerciseMode.route),
+        onPressed: () async => Navigator.pushReplacement(
+            context, buildRoute<void>(ExerciseMode.route)),
       ),
     );
   }
@@ -93,13 +94,13 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!isSumulation && progressor == null) {
       _connectProgressor();
     } else {
-      final bool _isCustom = settingsState.customPrescriptions!;
+      final bool isCustom = settingsState.customPrescriptions!;
       switch (route) {
         case LiveData.route:
           context.push(LiveData.route);
           break;
         case MVCTesting.route:
-          if (_isCustom) {
+          if (isCustom) {
             context.push(NewMVCTest.route);
           } else if (settingsState.mvcDuration != null) {
             context.push(MVCTesting.route);
@@ -108,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           break;
         case ExerciseMode.route:
-          if (_isCustom) {
+          if (isCustom) {
             context.push(NewExercise.route);
           } else if (settingsState.prescription != null) {
             _startAutoExercise();

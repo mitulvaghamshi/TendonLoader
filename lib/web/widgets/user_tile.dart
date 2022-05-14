@@ -16,21 +16,21 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Patient _user = AppStateWidget.of(context).getUser(id);
+    final Patient kUser = AppStateWidget.of(context).getUser(id);
     return ListTile(
       horizontalTitleGap: 5,
-      key: ValueKey<Patient>(_user),
-      subtitle: Text(_user.exportCount),
+      key: ValueKey<Patient>(kUser),
+      subtitle: Text(kUser.exportCount),
       contentPadding: const EdgeInsets.all(5),
       title: Text(
-        _user.id,
+        kUser.id,
         maxLines: 1,
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
       ),
-      trailing: _MenuButton(user: _user, id: id),
+      trailing: _MenuButton(user: kUser, id: id),
       leading: ButtonWidget(
         left: Text(
-          _user.avatar,
+          kUser.avatar,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
       ),

@@ -191,14 +191,14 @@ class GraphHandler {
   }
 
   Future<double?> _selectPain() {
-    double _value = 0;
+    double value = 0;
     return AlertWidget.show<double>(
       context,
       title: 'Pain score (0 - 10)',
       action: ButtonWidget(
         left: const Text('Next'),
         right: const Icon(Icons.arrow_forward),
-        onPressed: () => context.pop<double>(_value),
+        onPressed: () => context.pop<double>(value),
       ),
       content: Padding(
         padding: const EdgeInsets.all(16),
@@ -213,8 +213,9 @@ class GraphHandler {
             child: StatefulBuilder(
               builder: (_, void Function(void Function()) setState) {
                 return SliderWidget(
-                  value: _value,
-                  onChanged: (double value) => setState(() => _value = value),
+                  value: value,
+                  onChanged: (double newValue) =>
+                      setState(() => value = newValue),
                 );
               },
             ),

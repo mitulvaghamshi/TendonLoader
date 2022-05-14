@@ -9,10 +9,10 @@ class MVCTesting extends StatefulWidget {
   static const String route = '/mvctesting';
 
   @override
-  _MVCTestingState createState() => _MVCTestingState();
+  MVCTestingState createState() => MVCTestingState();
 }
 
-class _MVCTestingState extends State<MVCTesting> {
+class MVCTestingState extends State<MVCTesting> {
   late final MVCHandler _handler = MVCHandler(context: context);
 
   @override

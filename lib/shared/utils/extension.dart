@@ -24,10 +24,6 @@ extension ExContext on BuildContext {
   Future<T?> push<T extends Object?>(String route, {Object? args}) =>
       Navigator.push<T>(this, buildRoute<T>(route));
 
-  /// Push removing immidiate one level back history, Replace!
-  Future<T?> replace<T extends Object?>(String route) =>
-      Navigator.pushReplacement<T, T>(this, buildRoute<T>(route));
-
   /// Push removing all the previous route history. Clear route history!
   Future<void> logout() => Navigator.pushAndRemoveUntil<void>(
       this, buildRoute(LoginScreen.route), (_) => false);

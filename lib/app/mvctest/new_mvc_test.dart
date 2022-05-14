@@ -3,6 +3,7 @@ import 'package:tendon_loader/app/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/app/widgets/time_picker_tile.dart';
 import 'package:tendon_loader/shared/utils/common.dart';
 import 'package:tendon_loader/shared/utils/extension.dart';
+import 'package:tendon_loader/shared/utils/routes.dart';
 import 'package:tendon_loader/shared/widgets/button_widget.dart';
 import 'package:tendon_loader/shared/widgets/frame_widget.dart';
 
@@ -13,10 +14,10 @@ class NewMVCTest extends StatefulWidget {
   static const String route = '/newmvctest';
 
   @override
-  _NewMVCTestState createState() => _NewMVCTestState();
+  NewMVCTestState createState() => NewMVCTestState();
 }
 
-class _NewMVCTestState extends State<NewMVCTest> {
+class NewMVCTestState extends State<NewMVCTest> {
   late final int? _lastDuration = settingsState.mvcDuration;
   bool _useLastDuration = false;
   int _duration = 0;
@@ -25,7 +26,9 @@ class _NewMVCTestState extends State<NewMVCTest> {
     if (_duration > 0) {
       settingsState.mvcDuration = _duration;
       await settingsState.save();
-      await context.replace(MVCTesting.route);
+      if (!mounted) return;
+      await Navigator.pushReplacement(
+          context, buildRoute<void>(MVCTesting.route));
     } else {
       context.showSnackBar(const Text('Please select test duration.'));
     }

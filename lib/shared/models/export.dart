@@ -112,16 +112,16 @@ class Export extends HiveObject {
   Future<void> download() async {
     await saveExcel(
       name: '$fileName.zip',
-      bytes: ZipEncoder().encode(Archive()..addFile(toArchivedExcel())),
+      bytes: ZipEncoder().encode(Archive()..addFile(toExcelSheet())),
     );
   }
 
-  ArchiveFile toArchivedExcel() {
-    final Workbook _book = Workbook();
-    final Worksheet _sheet = _book.worksheets[0];
+  ArchiveFile toExcelSheet() {
+    final Workbook book = Workbook();
+    final Worksheet sheet = book.worksheets[0];
 
     const int c4 = 4, c5 = 5;
-    _sheet
+    sheet
       ..getRangeByIndex(1, 1).setText('TIME [s]')
       ..getRangeByIndex(1, 2).setText('LOAD [Kg]')
       ..getRangeByIndex(1, c4).text = 'Date:'
@@ -142,7 +142,7 @@ class Export extends HiveObject {
       ..autoFitColumn(c5);
 
     if (!isMVC) {
-      _sheet
+      sheet
         ..getRangeByIndex(9, c4).text = 'Exercise Info'
         ..getRangeByIndex(10, c4).text = 'Target Load [Kg]'
         ..getRangeByIndex(10, c5).number = prescription!.targetLoad
@@ -158,16 +158,16 @@ class Export extends HiveObject {
 
     int i = 1;
     for (final ChartData chartData in exportData!) {
-      _sheet
+      sheet
         ..getRangeByIndex(++i, 1).number = chartData.time
         ..getRangeByIndex(i, 2).number = chartData.load;
     }
 
-    final InputStream _stream = InputStream(_book.saveAsStream());
-    final ArchiveFile _file =
-        ArchiveFile.stream(fileName, _stream.length, _stream);
-    _book.dispose();
+    final InputStream stream = InputStream(book.saveAsStream());
+    final ArchiveFile file =
+        ArchiveFile.stream(fileName, stream.length, stream);
+    book.dispose();
 
-    return _file;
+    return file;
   }
 }

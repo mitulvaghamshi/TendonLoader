@@ -9,10 +9,10 @@ class LiveData extends StatefulWidget {
   static const String route = '/livedata';
 
   @override
-  _LiveDataState createState() => _LiveDataState();
+  LiveDataState createState() => LiveDataState();
 }
 
-class _LiveDataState extends State<LiveData> {
+class LiveDataState extends State<LiveData> {
   late final LiveDataHandler _handler = LiveDataHandler(context: context);
 
   @override

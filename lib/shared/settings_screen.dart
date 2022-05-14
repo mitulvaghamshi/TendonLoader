@@ -5,8 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:tendon_loader/app/bluetooth/bluetooth_handler.dart';
 import 'package:tendon_loader/shared/utils/common.dart';
 import 'package:tendon_loader/shared/utils/constants.dart';
-import 'package:tendon_loader/shared/utils/extension.dart';
 import 'package:tendon_loader/shared/utils/routes.dart';
+import 'package:tendon_loader/shared/widgets/alert_widget.dart';
 import 'package:tendon_loader/shared/widgets/button_widget.dart';
 import 'package:tendon_loader/shared/widgets/frame_widget.dart';
 
@@ -16,10 +16,10 @@ class SettingsScreen extends StatefulWidget {
   static const String route = '/settings';
 
   @override
-  _SettingsScreenState createState() => _SettingsScreenState();
+  SettingsScreenState createState() => SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class SettingsScreenState extends State<SettingsScreen> {
   late final TextEditingController _ctrlGraphScale = TextEditingController()
     ..text = settingsState.graphSize.toString();
 
@@ -30,19 +30,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _tryUpload() async {
-    if (await tryUpload(context) ?? true) {
-      setState(() {});
-    } else {
-      context.showSnackBar(
-        const Text('No data available! or already submitted.'),
-      );
-    }
+    if (await tryUpload() == 0) return;
+    setState(() {});
+    await AlertWidget.show<void>(
+      context,
+      title: 'Upload success!!!',
+      content: const Text(
+        'Data submitted successfully!',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 18,
+          color: Color(0xff3ddc85),
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 
   Future<bool> _onExit() async {
-    final double? _scale = double.tryParse(_ctrlGraphScale.text);
-    if (_scale != null && _scale > 0) {
-      settingsState.graphSize = _scale;
+    final double? scale = double.tryParse(_ctrlGraphScale.text);
+    if (scale != null && scale > 0) {
+      settingsState.graphSize = scale;
     }
     await settingsState.save();
     return true;
@@ -131,6 +139,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           if (!kIsWeb) ...<Widget>[
             ListTile(
               onTap: _tryUpload,
+              enabled: boxExport.isNotEmpty,
               title: const Text('Locally stored data'),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,

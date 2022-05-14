@@ -13,23 +13,23 @@ class ExerciseMode extends StatefulWidget {
   static const String route = '/exercisemode';
 
   @override
-  _ExerciseModeState createState() => _ExerciseModeState();
+  ExerciseModeState createState() => ExerciseModeState();
 }
 
-class _ExerciseModeState extends State<ExerciseMode>
+class ExerciseModeState extends State<ExerciseMode>
     with WidgetsBindingObserver {
   late final ExerciseHandler _handler = ExerciseHandler(context: context);
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   /// The execution of 10 minutes never tested on real device!
