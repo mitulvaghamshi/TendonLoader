@@ -18,13 +18,13 @@ class TimePickerTile extends StatelessWidget {
   final ValueChanged<int> onChanged;
 
   String get _timeString {
-    final Duration _time = Duration(seconds: time);
-    return '${_time.inMinutes} Min : ${_time.inSeconds % 60} Sec';
+    final Duration duration = Duration(seconds: time);
+    return '${duration.inMinutes} Min : ${duration.inSeconds % 60} Sec';
   }
 
   Future<int?> _selectTime(BuildContext context) {
-    int _min = 0;
-    int _sec = 0;
+    int min = 0;
+    int sec = 0;
 
     return AlertWidget.show<int?>(
       context,
@@ -33,7 +33,7 @@ class TimePickerTile extends StatelessWidget {
         right: const Text('Ok'),
         left: const Icon(Icons.done, color: Color(0xFF007AFF)),
         onPressed: () => context.pop<int>(
-          Duration(minutes: _min, seconds: _sec).inSeconds,
+          Duration(minutes: min, seconds: sec).inSeconds,
         ),
       ),
       content: FittedBox(
@@ -43,12 +43,12 @@ class TimePickerTile extends StatelessWidget {
             _NumberPicker(
               count: 60,
               label: 'Min',
-              onChanged: (int val) => _min = val,
+              onChanged: (int val) => min = val,
             ),
             _NumberPicker(
               count: 60,
               label: 'Sec',
-              onChanged: (int val) => _sec = val,
+              onChanged: (int val) => sec = val,
             ),
           ],
         ),

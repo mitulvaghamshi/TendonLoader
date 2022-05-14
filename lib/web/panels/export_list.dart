@@ -34,17 +34,17 @@ class ExportList extends StatefulWidget {
   const ExportList({Key? key}) : super(key: key);
 
   @override
-  _ExportListState createState() => _ExportListState();
+  ExportListState createState() => ExportListState();
 }
 
-class _ExportListState extends State<ExportList> {
+class ExportListState extends State<ExportList> {
   final TextEditingController _searchCtrl = TextEditingController();
   late Iterable<Export>? _exportList = AppStateScope.of(context).exportList;
 
   void _onSearch() {
-    final Iterable<Export>? _filterExports =
+    final Iterable<Export>? searchResult =
         AppStateWidget.of(context).filterExports(_searchCtrl.text);
-    setState(() => _exportList = _filterExports);
+    setState(() => _exportList = searchResult);
   }
 
   @override

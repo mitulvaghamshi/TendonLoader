@@ -32,17 +32,17 @@ class UserList extends StatefulWidget {
   const UserList({Key? key}) : super(key: key);
 
   @override
-  _UserListState createState() => _UserListState();
+  UserListState createState() => UserListState();
 }
 
-class _UserListState extends State<UserList> {
+class UserListState extends State<UserList> {
   final TextEditingController _searchCtrl = TextEditingController();
   late Iterable<int> _userList = AppStateScope.of(context).userList;
 
   void _onSearch() {
-    final Iterable<int> _filterUsers =
+    final Iterable<int> searchResult =
         AppStateWidget.of(context).filterUsers(_searchCtrl.text);
-    setState(() => _userList = _filterUsers);
+    setState(() => _userList = searchResult);
   }
 
   @override

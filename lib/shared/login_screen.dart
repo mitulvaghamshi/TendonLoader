@@ -10,6 +10,7 @@ import 'package:tendon_loader/shared/models/user_state.dart';
 import 'package:tendon_loader/shared/utils/common.dart';
 import 'package:tendon_loader/shared/utils/constants.dart';
 import 'package:tendon_loader/shared/utils/extension.dart';
+import 'package:tendon_loader/shared/utils/routes.dart';
 import 'package:tendon_loader/shared/widgets/app_logo.dart';
 import 'package:tendon_loader/shared/widgets/button_widget.dart';
 import 'package:tendon_loader/web/homepage.dart';
@@ -23,10 +24,10 @@ class LoginScreen extends StatefulWidget {
   static const String homeRoute = kIsWeb ? HomePage.route : HomeScreen.route;
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
@@ -41,23 +42,23 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _authenticate() async {
     setState(() => _isBusy = true);
     try {
-      late final UserCredential _credential;
+      late final UserCredential credential;
       if (_isRegister || (kIsWeb && widget.isRegister)) {
-        _credential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: _emailCtrl.text, password: _passwordCtrl.text);
+        credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: _emailCtrl.text, password: _passwordCtrl.text);
       } else {
-        _credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: _emailCtrl.text, password: _passwordCtrl.text);
       }
       if (widget.isRegister) {
-        if (_credential.user != null) await _createUserEntry();
+        if (credential.user != null) await _createUserEntry();
         setState(() => _isBusy = false);
+        if (!mounted) return;
         context.showSnackBar(const Text('User created successfully!'));
         _emailCtrl.clear();
         _passwordCtrl.clear();
       } else {
-        if (_credential.user != null) {
+        if (credential.user != null) {
           _userState!
             ..keepSigned = _keepSigned
             ..userName = _emailCtrl.text
@@ -67,37 +68,40 @@ class _LoginScreenState extends State<LoginScreen> {
           } else {
             await boxUserState.put(keyUserStateBox, _userState!);
           }
-          final SettingsState _settingsState = boxSettingsState
+          final SettingsState kSettingState = boxSettingsState
               .get(_emailCtrl.text, defaultValue: SettingsState())!;
-          if (!_settingsState.isInBox) {
-            await boxSettingsState.put(_emailCtrl.text, _settingsState);
+          if (!kSettingState.isInBox) {
+            await boxSettingsState.put(_emailCtrl.text, kSettingState);
             await _createUserEntry();
           }
           try {
-            final Patient _patientAsUser =
+            final Patient kPatientAsUser =
                 await Patient.of(_emailCtrl.text).fetch();
             if (!kIsWeb) {
-              _settingsState.toggle(
-                _settingsState.customPrescriptions!,
-                _patientAsUser.prescription!,
+              kSettingState.toggle(
+                kSettingState.customPrescriptions!,
+                kPatientAsUser.prescription!,
               );
             }
-            if (kIsWeb && !_patientAsUser.prescription!.isAdmin!) {
+            if (kIsWeb && !kPatientAsUser.prescription!.isAdmin!) {
               setState(() => _isBusy = false);
+              if (!mounted) return;
               context.showSnackBar(const Text(
                 'Are you a clinician?',
                 style: TextStyle(color: Color(0xffff534d)),
               ));
             } else {
-              patient = _patientAsUser;
+              patient = kPatientAsUser;
               userState = _userState;
-              settingsState = _settingsState;
+              settingsState = kSettingState;
               await Future<void>.delayed(const Duration(seconds: 2), () async {
-                await context.replace(LoginScreen.homeRoute);
+                await Navigator.pushReplacement(
+                    context, buildRoute<void>(LoginScreen.homeRoute));
               });
             }
           } on Exception {
             setState(() => _isBusy = false);
+            if (!mounted) return;
             context.showSnackBar(const Text(
               'Opps! Something want wrong, please contact your developer...',
               style: TextStyle(color: Color(0xffff534d)),

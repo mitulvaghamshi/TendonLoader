@@ -31,15 +31,15 @@ class DeviceList extends StatelessWidget {
   }
 
   Iterable<Widget> _buildDeviceItem() sync* {
-    final Iterator<BluetoothDevice> _iterator = _devices.iterator;
-    final bool _isNotEmpty = _iterator.moveNext();
-    BluetoothDevice _device = _iterator.current;
-    while (_iterator.moveNext()) {
-      yield _DeviceTile(device: _device);
-      _device = _iterator.current;
+    final Iterator<BluetoothDevice> iterator = _devices.iterator;
+    final bool isNotEmpty = iterator.moveNext();
+    BluetoothDevice device = iterator.current;
+    while (iterator.moveNext()) {
+      yield _DeviceTile(device: device);
+      device = iterator.current;
     }
-    if (_isNotEmpty) {
-      yield _DeviceTile(device: _device, isLast: true);
+    if (isNotEmpty) {
+      yield _DeviceTile(device: device, isLast: true);
     }
   }
 }

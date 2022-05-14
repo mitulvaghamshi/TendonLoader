@@ -10,10 +10,10 @@ class CountdownWidget extends StatefulWidget {
   final Duration duration;
 
   @override
-  _CountdownWidgetState createState() => _CountdownWidgetState();
+  CountdownWidgetState createState() => CountdownWidgetState();
 }
 
-class _CountdownWidgetState extends State<CountdownWidget>
+class CountdownWidgetState extends State<CountdownWidget>
     with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
@@ -21,9 +21,9 @@ class _CountdownWidgetState extends State<CountdownWidget>
   );
 
   String get _remainingTime {
-    final int _millies =
+    final int milli =
         (_controller.duration! * _controller.value).inMilliseconds;
-    return _millies < 1000 ? 'GO!' : (_millies / 1000).truncate().toString();
+    return milli < 1000 ? 'GO!' : (milli / 1000).truncate().toString();
   }
 
   @override

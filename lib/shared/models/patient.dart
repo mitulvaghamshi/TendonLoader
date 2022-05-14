@@ -65,22 +65,22 @@ class Patient extends HiveObject {
       'item${exports?.length == 1 ? '' : 's'} found';
 
   Future<Patient> fetch({bool? withExports = false}) async {
-    final DocumentSnapshot<Prescription> _prescription =
+    final DocumentSnapshot<Prescription> kPrescription =
         await prescriptionRef!.get();
-    List<Export>? _list;
+    List<Export>? kList;
     if (withExports!) {
-      final QuerySnapshot<Export> _exports =
+      final QuerySnapshot<Export> kExports =
           await exportRef!.orderBy(keyTimeStamp, descending: true).get();
-      _list = _exports.docs
+      kList = kExports.docs
           .map((QueryDocumentSnapshot<Export> e) => e.data())
           .toList();
     }
     return Patient(
-      exports: _list,
+      exports: kList,
       userRef: userRef,
       exportRef: exportRef,
       prescriptionRef: prescriptionRef,
-      prescription: _prescription.data(),
+      prescription: kPrescription.data(),
     );
   }
 
@@ -88,11 +88,11 @@ class Patient extends HiveObject {
 
   // long task
   Future<void> download() async {
-    final Archive _archive = Archive();
+    final Archive kArchive = Archive();
     for (final Export export in exports!) {
-      _archive.addFile(export.toArchivedExcel());
+      kArchive.addFile(export.toExcelSheet());
     }
-    await saveExcel(name: '$id.zip', bytes: ZipEncoder().encode(_archive));
+    await saveExcel(name: '$id.zip', bytes: ZipEncoder().encode(kArchive));
   }
 
   Future<void> deleteAll() async {

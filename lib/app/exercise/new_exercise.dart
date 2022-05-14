@@ -7,6 +7,7 @@ import 'package:tendon_loader/shared/models/patient.dart';
 import 'package:tendon_loader/shared/models/prescription.dart';
 import 'package:tendon_loader/shared/utils/common.dart';
 import 'package:tendon_loader/shared/utils/extension.dart';
+import 'package:tendon_loader/shared/utils/routes.dart';
 import 'package:tendon_loader/shared/widgets/button_widget.dart';
 import 'package:tendon_loader/shared/widgets/frame_widget.dart';
 
@@ -18,10 +19,10 @@ class NewExercise extends StatefulWidget {
   static const String route = '/newexercise';
 
   @override
-  _NewExerciseState createState() => _NewExerciseState();
+  NewExerciseState createState() => NewExerciseState();
 }
 
-class _NewExerciseState extends State<NewExercise> {
+class NewExerciseState extends State<NewExercise> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _ctrlSets = TextEditingController();
   final TextEditingController _ctrlReps = TextEditingController();
@@ -48,14 +49,14 @@ class _NewExerciseState extends State<NewExercise> {
     if (kIsWeb) _initWith(widget.user!.prescription!);
   }
 
-  Future<void> _initWith(Prescription _pre) async {
-    _ctrlTargetLoad.text = _pre.targetLoad.toString();
-    _ctrlSets.text = _pre.sets.toString();
-    _ctrlReps.text = _pre.reps.toString();
-    _holdTime = _pre.holdTime;
-    _restTime = _pre.restTime;
-    _setRestTime = _pre.setRest;
-    _mvcDuration = _pre.mvcDuration;
+  Future<void> _initWith(Prescription pre) async {
+    _ctrlTargetLoad.text = pre.targetLoad.toString();
+    _ctrlSets.text = pre.sets.toString();
+    _ctrlReps.text = pre.reps.toString();
+    _holdTime = pre.holdTime;
+    _restTime = pre.restTime;
+    _setRestTime = pre.setRest;
+    _mvcDuration = pre.mvcDuration;
   }
 
   void _clearForm() {
@@ -68,7 +69,7 @@ class _NewExerciseState extends State<NewExercise> {
 
   Future<void> _onSubmit() async {
     if (_formKey.currentState!.validate()) {
-      final Prescription _pre = Prescription(
+      final Prescription pre = Prescription(
         targetLoad: double.parse(_ctrlTargetLoad.text),
         sets: int.parse(_ctrlSets.text),
         reps: int.parse(_ctrlReps.text),
@@ -79,12 +80,14 @@ class _NewExerciseState extends State<NewExercise> {
       );
       if (kIsWeb) {
         await widget.user!.prescriptionRef!
-            .update(_pre.toMap())
+            .update(pre.toMap())
             .then(context.pop);
       } else if (_holdTime > 0 && _restTime > 0 && _setRestTime > 0) {
-        settingsState.prescription = _pre;
+        settingsState.prescription = pre;
         await settingsState.save();
-        await context.replace(ExerciseMode.route);
+        if (!mounted) return;
+        await Navigator.pushReplacement(
+            context, buildRoute<void>(ExerciseMode.route));
       } else {
         context.showSnackBar(const Text('Please select time values.'));
       }

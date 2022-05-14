@@ -36,14 +36,14 @@ class AppStateWidgetState extends State<AppStateWidget> {
 
   Future<void> fetch() async {
     if (_complater.isCompleted) return;
-    final QuerySnapshot<Patient> _snapshot = await dbRoot.get();
-    if (_snapshot.size > 0) {
+    final QuerySnapshot<Patient> result = await dbRoot.get();
+    if (result.size > 0) {
       _data.users.clear();
       userNotifier.value = null;
       exportNotifier.value = null;
     }
-    for (int i = 0; i < _snapshot.size; i++) {
-      _data.users[i] = await _snapshot.docs[i].data().fetch(withExports: true);
+    for (int i = 0; i < result.size; i++) {
+      _data.users[i] = await result.docs[i].data().fetch(withExports: true);
     }
     _complater.complete();
     return _complater.future;
@@ -55,45 +55,46 @@ class AppStateWidgetState extends State<AppStateWidget> {
     if (filter == null) {
       return _data.users.keys;
     } else {
-      final List<int> _filtered = <int>[];
+      final List<int> result = <int>[];
       for (final MapEntry<int, Patient> user in _data.users.entries) {
         if (user.value.id.toLowerCase().contains(filter.toLowerCase())) {
-          _filtered.add(user.key);
+          result.add(user.key);
         }
       }
-      return _filtered;
+      return result;
     }
   }
 
   Iterable<Export>? filterExports(String? filter) {
     exportNotifier.value = null;
-    final Iterable<Export>? _exports = _data.users[userNotifier.value]?.exports;
+    final Iterable<Export>? exportList =
+        _data.users[userNotifier.value]?.exports;
     if (filter == null) {
-      return _exports;
+      return exportList;
     } else {
-      final Iterable<Export>? _filtered = _exports?.where((Export export) {
+      final Iterable<Export>? filtered = exportList?.where((Export export) {
         return export.fileName.toLowerCase().contains(filter.toLowerCase());
       });
-      return _filtered;
+      return filtered;
     }
   }
 
   Future<void> removeExport(Export export) async {
-    final int _id = userNotifier.value!;
-    final Patient _user = getUser(_id);
-    _user.exports!.remove(export);
-    setState(() => _data.users[_id] = _user);
+    final int id = userNotifier.value!;
+    final Patient user = getUser(id);
+    user.exports!.remove(export);
+    setState(() => _data.users[id] = user);
     exportNotifier.value = null;
     await export.reference!.delete();
   }
 
   Future<void> removeAllExports(int id) async {
-    final Patient _user = getUser(id);
-    _user.exports!.clear();
-    setState(() => _data.users[id] = _user);
+    final Patient user = getUser(id);
+    user.exports!.clear();
+    setState(() => _data.users[id] = user);
     exportNotifier.value = null;
     userNotifier.value = null;
-    await _user.deleteAll();
+    await user.deleteAll();
   }
 
   @override
