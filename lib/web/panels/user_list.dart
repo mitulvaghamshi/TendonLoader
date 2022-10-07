@@ -29,7 +29,7 @@ import 'package:tendon_loader/web/app_state/app_state_widget.dart';
 import 'package:tendon_loader/web/tiles/user_tile.dart';
 
 class UserList extends StatefulWidget {
-  const UserList({Key? key}) : super(key: key);
+  const UserList({super.key});
 
   @override
   UserListState createState() => UserListState();

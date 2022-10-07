@@ -7,7 +7,7 @@ import 'package:tendon_loader/shared/utils/constants.dart';
 import 'package:tendon_loader/shared/widgets/button_widget.dart';
 
 class LocationTile extends StatelessWidget {
-  const LocationTile({Key? key}) : super(key: key);
+  const LocationTile({super.key});
 
   @override
   Widget build(BuildContext context) {

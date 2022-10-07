@@ -4,9 +4,8 @@ import 'package:tendon_loader/shared/models/patient.dart';
 
 @immutable
 class ExerciseHistory extends StatelessWidget {
-  ExerciseHistory({Key? key, required this.user})
-      : _exerciseList = user.exports!.where((Export e) => !e.isMVC),
-        super(key: key);
+  ExerciseHistory({super.key, required this.user})
+      : _exerciseList = user.exports!.where((Export e) => !e.isMVC);
 
   final Patient user;
   final Iterable<Export> _exerciseList;

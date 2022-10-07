@@ -12,7 +12,7 @@ import 'package:tendon_loader/app/widgets/custom_tile.dart';
 /// Here, using this widget to check if there is any device alredy connected
 /// and avaiable to use without searching for a new device.
 class ConnectedList extends StatelessWidget {
-  const ConnectedList({Key? key}) : super(key: key);
+  const ConnectedList({super.key});
 
   @override
   Widget build(BuildContext context) {

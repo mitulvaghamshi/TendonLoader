@@ -11,7 +11,7 @@ import 'package:tendon_loader/shared/widgets/button_widget.dart';
 import 'package:tendon_loader/shared/widgets/frame_widget.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   static const String route = '/settings';
 
@@ -35,13 +35,16 @@ class SettingsScreenState extends State<SettingsScreen> {
     await AlertWidget.show<void>(
       context,
       title: 'Upload success!!!',
-      content: const Text(
-        'Data submitted successfully!',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 18,
-          color: Color(0xff3ddc85),
-          fontWeight: FontWeight.bold,
+      content: const Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+          'Data submitted successfully!',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 18,
+            color: Color(0xff3ddc85),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
@@ -63,10 +66,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   Scaffold _buildScaffold() {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(elevation: 0, title: const Text('Settings')),
       body: _buildBody(),
     );
   }

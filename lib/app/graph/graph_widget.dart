@@ -10,11 +10,11 @@ import 'package:tendon_loader/shared/widgets/frame_widget.dart';
 
 class GraphWidget extends StatelessWidget {
   const GraphWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.handler,
     required this.builder,
-  }) : super(key: key);
+  });
 
   final String title;
   final GraphHandler handler;
@@ -40,11 +40,7 @@ class GraphWidget extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({
-    Key? key,
-    required this.handler,
-    required this.builder,
-  }) : super(key: key);
+  const _Header({required this.handler, required this.builder});
 
   final GraphHandler handler;
   final Widget Function() builder;
@@ -67,7 +63,7 @@ class _Header extends StatelessWidget {
 }
 
 class _BarGraph extends StatelessWidget {
-  const _BarGraph({Key? key, required this.handler}) : super(key: key);
+  const _BarGraph({required this.handler});
 
   final GraphHandler handler;
 
@@ -136,7 +132,7 @@ class _BarGraph extends StatelessWidget {
 }
 
 class _ButtonBar extends StatelessWidget {
-  const _ButtonBar({Key? key, required this.handler}) : super(key: key);
+  const _ButtonBar({required this.handler});
 
   final GraphHandler handler;
 

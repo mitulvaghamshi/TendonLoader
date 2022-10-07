@@ -3,7 +3,7 @@ import 'package:tendon_loader/app/graph/graph_widget.dart';
 import 'package:tendon_loader/app/mvctest/mvc_handler.dart';
 
 class MVCTesting extends StatefulWidget {
-  const MVCTesting({Key? key}) : super(key: key);
+  const MVCTesting({super.key});
 
   static const String name = 'MVC Testing';
   static const String route = '/mvctesting';

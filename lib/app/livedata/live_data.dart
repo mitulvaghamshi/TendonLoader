@@ -3,7 +3,7 @@ import 'package:tendon_loader/app/graph/graph_widget.dart';
 import 'package:tendon_loader/app/livedata/livedata_handler.dart';
 
 class LiveData extends StatefulWidget {
-  const LiveData({Key? key}) : super(key: key);
+  const LiveData({super.key});
 
   static const String name = 'Live Data';
   static const String route = '/livedata';

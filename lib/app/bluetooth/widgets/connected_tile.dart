@@ -9,7 +9,7 @@ import 'package:tendon_loader/shared/utils/extension.dart';
 import 'package:tendon_loader/shared/widgets/button_widget.dart';
 
 class ConnectedTile extends StatelessWidget {
-  const ConnectedTile({Key? key, required this.device}) : super(key: key);
+  const ConnectedTile({super.key, required this.device});
 
   final BluetoothDevice device;
 

@@ -31,7 +31,7 @@ import 'package:tendon_loader/web/common.dart';
 
 @immutable
 class DataView extends StatelessWidget {
-  const DataView({Key? key}) : super(key: key);
+  const DataView({super.key});
 
   @override
   Widget build(BuildContext context) {

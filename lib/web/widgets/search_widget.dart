@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class SearchWidget extends StatelessWidget {
   const SearchWidget({
-    Key? key,
+    super.key,
     this.hint,
     required this.onSearch,
     required this.controller,
-  }) : super(key: key);
+  });
 
   final String? hint;
   final VoidCallback onSearch;

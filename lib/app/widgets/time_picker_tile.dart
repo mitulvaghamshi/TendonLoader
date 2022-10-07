@@ -5,12 +5,12 @@ import 'package:tendon_loader/shared/widgets/button_widget.dart';
 
 class TimePickerTile extends StatelessWidget {
   const TimePickerTile({
-    Key? key,
+    super.key,
     required this.time,
     required this.desc,
     required this.title,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   final int time;
   final String desc;
@@ -83,11 +83,10 @@ class TimePickerTile extends StatelessWidget {
 
 class _NumberPicker extends StatelessWidget {
   const _NumberPicker({
-    Key? key,
     required this.count,
     required this.label,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   final int? count;
   final String label;

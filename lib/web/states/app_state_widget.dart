@@ -10,7 +10,7 @@ import 'package:tendon_loader/web/states/app_state_scope.dart';
 
 @immutable
 class AppStateWidget extends StatefulWidget {
-  const AppStateWidget({Key? key, required this.child}) : super(key: key);
+  const AppStateWidget({super.key, required this.child});
 
   final Widget child;
 

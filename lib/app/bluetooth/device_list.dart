@@ -12,9 +12,8 @@ Iterable<BluetoothDevice> _filterList(Iterable<BluetoothDevice> devices) {
 }
 
 class DeviceList extends StatelessWidget {
-  DeviceList({Key? key, required Iterable<BluetoothDevice> devices})
-      : _devices = _filterList(devices),
-        super(key: key);
+  DeviceList({super.key, required Iterable<BluetoothDevice> devices})
+      : _devices = _filterList(devices);
 
   final Iterable<BluetoothDevice> _devices;
 
@@ -45,11 +44,7 @@ class DeviceList extends StatelessWidget {
 }
 
 class _DeviceTile extends StatelessWidget {
-  const _DeviceTile({
-    Key? key,
-    required this.device,
-    this.isLast = false,
-  }) : super(key: key);
+  const _DeviceTile({required this.device, this.isLast = false});
 
   final BluetoothDevice device;
   final bool isLast;
@@ -79,7 +74,7 @@ class _DeviceTile extends StatelessWidget {
 }
 
 class _DisconnectedTile extends StatelessWidget {
-  const _DisconnectedTile({Key? key, required this.device}) : super(key: key);
+  const _DisconnectedTile({required this.device});
 
   final BluetoothDevice device;
 

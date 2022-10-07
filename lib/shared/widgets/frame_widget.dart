@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class FrameWidget extends StatelessWidget {
   const FrameWidget({
-    Key? key,
+    super.key,
     this.child,
     this.onExit,
     this.margin = const EdgeInsets.all(16),
-  }) : super(key: key);
+  });
 
   final Widget? child;
   final EdgeInsetsGeometry margin;

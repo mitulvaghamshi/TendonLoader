@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class SliderWidget extends StatelessWidget {
   const SliderWidget({
-    Key? key,
+    super.key,
     required this.value,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   final double value;
   final ValueChanged<double> onChanged;

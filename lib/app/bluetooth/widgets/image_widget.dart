@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:tendon_loader/shared/utils/constants.dart';
 
 class ImageWidget extends StatelessWidget {
-  const ImageWidget({Key? key, this.name}) : super(key: key);
+  const ImageWidget({super.key, this.name});
 
   final String? name;
 

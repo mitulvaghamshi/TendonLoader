@@ -5,11 +5,7 @@ import 'package:tendon_loader/shared/models/patient.dart';
 
 @immutable
 class AppStateScope extends InheritedWidget {
-  const AppStateScope({
-    Key? key,
-    required this.data,
-    required Widget child,
-  }) : super(key: key, child: child);
+  const AppStateScope({super.key, required this.data, required super.child});
 
   final AppState data;
 
