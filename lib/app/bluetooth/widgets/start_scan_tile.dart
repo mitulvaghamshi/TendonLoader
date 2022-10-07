@@ -5,7 +5,7 @@ import 'package:tendon_loader/shared/utils/constants.dart';
 import 'package:tendon_loader/shared/widgets/button_widget.dart';
 
 class StartScanTile extends StatelessWidget {
-  const StartScanTile({Key? key}) : super(key: key);
+  const StartScanTile({super.key});
 
   @override
   Widget build(BuildContext context) {

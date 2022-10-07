@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class ButtonWidget extends StatelessWidget {
   const ButtonWidget({
-    Key? key,
+    super.key,
     this.left,
     this.right,
     this.color,
     this.onPressed,
     this.size = MainAxisSize.min,
     this.padding = const EdgeInsets.all(16),
-  }) : super(key: key);
+  });
 
   final Color? color;
   final Widget? left;

@@ -7,7 +7,7 @@ const TextStyle _headerStyle =
     TextStyle(color: Color(0xff000000), fontWeight: FontWeight.w500);
 
 class ExerciseMode extends StatefulWidget {
-  const ExerciseMode({Key? key}) : super(key: key);
+  const ExerciseMode({super.key});
 
   static const String name = 'Exercise Mode';
   static const String route = '/exercisemode';

@@ -91,7 +91,7 @@ CollectionReference<Patient> get dbRoot {
 /// Learn more about initializing and running local emulators
 /// at: [https://firebase.google.com/docs/emulator-suite]
 Future<void> _useEmulator() async {
-  const String host = '192.168.0.56'; // i.e '192.168.0.100'
+  const String host = '192.168.0.111'; // i.e '192.168.0.100'
   await FirebaseAuth.instance.useAuthEmulator(host, 9099);
   FirebaseFirestore.instance.useFirestoreEmulator(host, 8080);
 }

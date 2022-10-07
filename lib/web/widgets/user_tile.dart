@@ -10,7 +10,7 @@ import 'package:tendon_loader/web/states/app_state_widget.dart';
 import 'package:tendon_loader/web/widgets/exercise_history.dart';
 
 class UserTile extends StatelessWidget {
-  const UserTile({Key? key, required this.id}) : super(key: key);
+  const UserTile({super.key, required this.id});
 
   final int id;
 
@@ -43,11 +43,7 @@ class UserTile extends StatelessWidget {
 }
 
 class _MenuButton extends StatelessWidget {
-  const _MenuButton({
-    Key? key,
-    required this.user,
-    required this.id,
-  }) : super(key: key);
+  const _MenuButton({required this.user, required this.id});
 
   final Patient user;
   final int id;

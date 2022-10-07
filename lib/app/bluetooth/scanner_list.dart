@@ -5,7 +5,7 @@ import 'package:tendon_loader/app/bluetooth/widgets/bluetooth_tile.dart';
 import 'package:tendon_loader/app/widgets/custom_tile.dart';
 
 class ScannerList extends StatelessWidget {
-  const ScannerList({Key? key}) : super(key: key);
+  const ScannerList({super.key});
 
   Stream<Iterable<BluetoothDevice>> _getScanResults() {
     return FlutterBlue.instance.scanResults

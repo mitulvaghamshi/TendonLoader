@@ -5,12 +5,12 @@ import 'package:tendon_loader/shared/widgets/button_widget.dart';
 
 class AlertWidget extends StatelessWidget {
   const AlertWidget({
-    Key? key,
+    super.key,
     this.size,
     this.title,
     this.action,
     this.content,
-  }) : super(key: key);
+  });
 
   final Size? size;
   final String? title;

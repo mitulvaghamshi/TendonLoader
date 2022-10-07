@@ -7,7 +7,7 @@ import 'package:tendon_loader/shared/utils/constants.dart';
 import 'package:tendon_loader/shared/widgets/button_widget.dart';
 
 class BluetoothTile extends StatelessWidget {
-  const BluetoothTile({Key? key}) : super(key: key);
+  const BluetoothTile({super.key});
 
   @override
   Widget build(BuildContext context) {

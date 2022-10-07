@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class TableWidget extends StatelessWidget {
   const TableWidget({
-    Key? key,
+    super.key,
     required this.rows,
     required this.columns,
-  }) : super(key: key);
+  });
 
   final List<DataRow> rows;
   final List<DataColumn> columns;

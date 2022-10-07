@@ -31,7 +31,7 @@ import 'package:tendon_loader/web/common.dart';
 import 'package:tendon_loader/web/tiles/export_tile.dart';
 
 class ExportList extends StatefulWidget {
-  const ExportList({Key? key}) : super(key: key);
+  const ExportList({super.key});
 
   @override
   ExportListState createState() => ExportListState();

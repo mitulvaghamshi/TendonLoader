@@ -5,7 +5,7 @@ import 'package:tendon_loader/shared/utils/extension.dart';
 
 @immutable
 class CountdownWidget extends StatefulWidget {
-  const CountdownWidget({Key? key, required this.duration}) : super(key: key);
+  const CountdownWidget({super.key, required this.duration});
 
   final Duration duration;
 

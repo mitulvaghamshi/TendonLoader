@@ -22,7 +22,7 @@ import 'package:tendon_loader/shared/widgets/button_widget.dart';
 import 'package:tendon_loader/shared/widgets/frame_widget.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   static const String route = '/homescreen';
 

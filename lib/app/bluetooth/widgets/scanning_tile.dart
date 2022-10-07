@@ -4,7 +4,7 @@ import 'package:tendon_loader/app/bluetooth/scanner_list.dart';
 import 'package:tendon_loader/app/widgets/custom_tile.dart';
 
 class ScanningTile extends StatelessWidget {
-  const ScanningTile({Key? key}) : super(key: key);
+  const ScanningTile({super.key});
 
   @override
   Widget build(BuildContext context) {

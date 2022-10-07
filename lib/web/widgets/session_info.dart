@@ -5,7 +5,7 @@ import 'package:tendon_loader/shared/widgets/table_widget.dart';
 
 @immutable
 class SessionInfo extends StatelessWidget {
-  const SessionInfo({Key? key, required this.export}) : super(key: key);
+  const SessionInfo({super.key, required this.export});
 
   final Export export;
 

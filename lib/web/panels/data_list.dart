@@ -30,7 +30,7 @@ import 'package:tendon_loader/web/common.dart';
 
 @immutable
 class DataList extends StatelessWidget {
-  const DataList({Key? key}) : super(key: key);
+  const DataList({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -16,7 +16,7 @@ import 'package:tendon_loader/shared/widgets/button_widget.dart';
 import 'package:tendon_loader/web/homepage.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key, this.isRegister = false}) : super(key: key);
+  const LoginScreen({super.key, this.isRegister = false});
 
   final bool isRegister;
 

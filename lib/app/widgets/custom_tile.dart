@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class CustomTile extends StatelessWidget {
   const CustomTile({
-    Key? key,
+    super.key,
     this.onTap,
     this.right,
     this.left,
     required this.title,
-  }) : super(key: key);
+  });
 
   final String title;
   final Widget? left;

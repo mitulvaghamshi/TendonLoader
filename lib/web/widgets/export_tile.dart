@@ -8,7 +8,7 @@ import 'package:tendon_loader/web/states/app_state_widget.dart';
 import 'package:tendon_loader/web/widgets/session_info.dart';
 
 class ExportTile extends StatelessWidget {
-  const ExportTile({Key? key, required this.export}) : super(key: key);
+  const ExportTile({super.key, required this.export});
 
   final Export export;
 
@@ -36,7 +36,7 @@ class ExportTile extends StatelessWidget {
 }
 
 class _MenuButton extends StatelessWidget {
-  const _MenuButton({Key? key, required this.export}) : super(key: key);
+  const _MenuButton({required this.export});
 
   final Export export;
 

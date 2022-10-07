@@ -12,7 +12,7 @@ import 'package:tendon_loader/shared/widgets/button_widget.dart';
 import 'package:tendon_loader/shared/widgets/frame_widget.dart';
 
 class NewExercise extends StatefulWidget {
-  const NewExercise({Key? key, this.user}) : super(key: key);
+  const NewExercise({super.key, this.user});
 
   final Patient? user;
 
@@ -240,12 +240,11 @@ class NewExerciseState extends State<NewExercise> {
 
 class _InputWidget extends StatelessWidget {
   const _InputWidget({
-    Key? key,
     this.label,
     this.format,
     this.controller,
     this.keyboardType,
-  }) : super(key: key);
+  });
 
   final String? label;
   final String? format;
