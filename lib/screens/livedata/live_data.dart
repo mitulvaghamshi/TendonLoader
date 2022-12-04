@@ -1,49 +1,26 @@
-/// MIT License
-/// 
-/// Copyright (c) 2021 Mitul Vaghamshi
-/// 
-/// Permission is hereby granted, free of charge, to any person obtaining a copy
-/// of this software and associated documentation files (the "Software"), to deal
-/// in the Software without restriction, including without limitation the rights
-/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-/// copies of the Software, and to permit persons to whom the Software is
-/// furnished to do so, subject to the following conditions:
-/// 
-/// The above copyright notice and this permission notice shall be included in all
-/// copies or substantial portions of the Software.
-/// 
-/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-/// SOFTWARE.
-
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/screens/graph/custom_graph.dart';
-import 'package:tendon_loader/screens/livedata/livedata_handler.dart';
-import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/common/constants.dart';
+import 'package:tendon_loader/screens/graph/graph_widget.dart';
+import 'package:tendon_loader/screens/livedata/models/livedata_handler.dart';
 
-class LiveData extends StatefulWidget {
-  const LiveData({Key? key}) : super(key: key);
+class LiveData extends StatelessWidget {
+  const LiveData({super.key, required this.handler});
+
+  final LiveDataHandler handler;
 
   static const String name = 'Live Data';
-  static const String route = '/liveData';
-
-  @override
-  _LiveDataState createState() => _LiveDataState();
-}
-
-class _LiveDataState extends State<LiveData> {
-  late final LiveDataHandler _handler = LiveDataHandler(context: context);
 
   @override
   Widget build(BuildContext context) {
-    return CustomGraph(
-      handler: _handler,
+    return GraphWidget(
+      onExit: (String _) => true,
+      handler: handler,
       title: LiveData.name,
-      builder: () => Text(_handler.elapsed, style: tsG40B),
+      builder: () => Text(
+        handler.timeElapsed,
+        textAlign: TextAlign.center,
+        style: Styles.headerText,
+      ),
     );
   }
 }

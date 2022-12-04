@@ -1,94 +1,100 @@
-/// MIT License
-/// 
-/// Copyright (c) 2021 Mitul Vaghamshi
-/// 
-/// Permission is hereby granted, free of charge, to any person obtaining a copy
-/// of this software and associated documentation files (the "Software"), to deal
-/// in the Software without restriction, including without limitation the rights
-/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-/// copies of the Software, and to permit persons to whom the Software is
-/// furnished to do so, subject to the following conditions:
-/// 
-/// The above copyright notice and this permission notice shall be included in all
-/// copies or substantial portions of the Software.
-/// 
-/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-/// SOFTWARE.
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/custom/app_frame.dart';
-import 'package:tendon_loader/custom/custom_button.dart';
-import 'package:tendon_loader/custom/time_picker_tile.dart';
-import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
-import 'package:tendon_loader/utils/common.dart';
-import 'package:tendon_loader/utils/extension.dart';
-import 'package:tendon_loader/utils/themes.dart';
+import 'package:tendon_loader/common/constants.dart';
+import 'package:tendon_loader/common/models/prescription.dart';
+import 'package:tendon_loader/common/router/router.dart';
+import 'package:tendon_loader/common/widgets/custom_widget.dart';
+import 'package:tendon_loader/screens/mvctest/widgets/time_picker_tile.dart';
+import 'package:tendon_loader/screens/settings/models/app_state.dart';
+import 'package:tendon_loader/screens/settings/models/settings.dart';
 
 class NewMVCTest extends StatefulWidget {
-  const NewMVCTest({Key? key}) : super(key: key);
+  const NewMVCTest({super.key, required this.duration});
 
-  static const String name = MVCTesting.name;
-  static const String route = '/newMVCTest';
+  final int duration;
 
   @override
-  _NewMVCTestState createState() => _NewMVCTestState();
+  NewMVCTestState createState() => NewMVCTestState();
 }
 
-class _NewMVCTestState extends State<NewMVCTest> {
-  late final int? _lastDuration = settingsState.mvcDuration;
+class NewMVCTestState extends State<NewMVCTest> {
   bool _useLastDuration = false;
-  int _duration = 0;
+  late int _duration;
 
-  Future<void> _onSubmit() async {
-    if (_duration > 0) {
-      settingsState.mvcDuration = _duration;
-      await settingsState.save();
-      await context.replace(MVCTesting.route);
-    } else {
-      context.showSnackBar(const Text('Please select test duration.'));
-    }
-  }
-
-  void _onChanged(bool value) {
-    _duration = value ? _lastDuration! : 0;
-    setState(() => _useLastDuration = value);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _initFields();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('New MVC Test'), actions: <Widget>[
-        CustomButton(
-          onPressed: _onSubmit,
-          left: const Text('Go', style: ts18w5),
-          right: const Icon(Icons.arrow_forward, color: colorMidGreen),
-        ),
-      ]),
-      body: AppFrame(
-        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          const Text('MVC Test duration', style: tsG24B),
-          if (_lastDuration != null)
-            SwitchListTile.adaptive(
-              onChanged: _onChanged,
-              activeColor: colorIconBlue,
-              value: _useLastDuration,
-              title: const Text('Use duration from last test.'),
-            ),
-          const SizedBox(height: 10),
-          TimePickerTile(
-            time: _duration,
-            desc: 'MVC test duration',
-            title: 'Select test duration',
-            onChanged: (int duration) {
-              setState(() => _duration = duration);
-            },
+      appBar: AppBar(
+        elevation: 0,
+        title: const Text('New MVC Test'),
+        actions: <Widget>[
+          CustomWidget.two(
+            left: const Text('OK', style: Styles.titleStyle),
+            right: const Icon(Icons.arrow_forward),
+            onPressed: _onSubmit,
           ),
-        ]),
+        ],
+      ),
+      body: IgnorePointer(
+        ignoring: !AppState.of(context).isCustomPrescriptions(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const ListTile(
+              leading: Icon(Icons.timer),
+              title: Text(
+                'MVC Test Duration',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Color(0xff3ddc85),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SwitchListTile(
+              value: _useLastDuration,
+              contentPadding: Styles.tilePadding,
+              title: const Text('Use previous duration.'),
+              onChanged: (bool value) => setState(() {
+                _useLastDuration = value;
+                _initFields();
+              }),
+            ),
+            TimePickerTile(
+              time: _duration,
+              desc: 'MVC test duration',
+              onSelected: (int duration) =>
+                  setState(() => _duration = duration),
+            ),
+          ],
+        ),
       ),
     );
+  }
+}
+
+extension on NewMVCTestState {
+  void _initFields() {
+    _duration = _useLastDuration
+        ? AppState.of(context).getLastMvcDuration()
+        : widget.duration;
+  }
+
+  void _onSubmit() {
+    if (_duration > 0) {
+      AppState.of(context).settings((Settings settings) {
+        settings.prescription =
+            settings.prescription.copyWith(mvcDuration: _duration);
+      });
+      if (mounted) const MVCTestingRoute().go(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select test duration.')));
+    }
   }
 }
