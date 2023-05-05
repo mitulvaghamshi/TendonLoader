@@ -1,0 +1,94 @@
+{
+  "kind": "identitytoolkit#DownloadAccountResponse",
+  "users": [
+    {
+      "localId": "ICT8m2vfgPIwjxqLalxK7rNnd8NL",
+      "createdAt": "1623349165645",
+      "lastLoginAt": "1623349165643",
+      "displayName": "",
+      "photoUrl": "",
+      "passwordHash": "fakeHash:salt=fakeSaltoNVe9Wh34wM6DDfLnacI:password=123456",
+      "salt": "fakeSaltoNVe9Wh34wM6DDfLnacI",
+      "passwordUpdatedAt": 1630415102033,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "xuser@emu.com",
+          "federatedId": "xuser@emu.com",
+          "rawId": "xuser@emu.com",
+          "displayName": "",
+          "photoUrl": ""
+        }
+      ],
+      "validSince": "1630415102",
+      "email": "xuser@emu.com",
+      "emailVerified": false,
+      "disabled": false,
+      "lastRefreshAt": "2021-08-31T13:09:06.811Z"
+    },
+    {
+      "localId": "XDxGYtMcIAhDqJyBspC6iV2vNve9",
+      "createdAt": "1623347494631",
+      "lastLoginAt": "1623347494630",
+      "displayName": "",
+      "photoUrl": "",
+      "passwordHash": "fakeHash:salt=fakeSalt6dAIedclwweSwoTBsbaq:password=123456",
+      "salt": "fakeSalt6dAIedclwweSwoTBsbaq",
+      "passwordUpdatedAt": 1630415102033,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "mitul@gmail.com",
+          "federatedId": "mitul@gmail.com",
+          "rawId": "mitul@gmail.com",
+          "displayName": "",
+          "photoUrl": ""
+        }
+      ],
+      "validSince": "1630415102",
+      "email": "mitul@gmail.com",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "poTmkqZUnpYPnEboQK3N4QO3aBKu",
+      "createdAt": "1629923614089",
+      "lastLoginAt": "1629923614089",
+      "passwordHash": "fakeHash:salt=fakeSalt7h9Xragv6GaAKAnnOBbZ:password=123456",
+      "salt": "fakeSalt7h9Xragv6GaAKAnnOBbZ",
+      "passwordUpdatedAt": 1630415102033,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "user@emu.com",
+          "federatedId": "user@emu.com",
+          "rawId": "user@emu.com"
+        }
+      ],
+      "validSince": "1630415102",
+      "email": "user@emu.com",
+      "emailVerified": false,
+      "disabled": false
+    },
+    {
+      "localId": "ytgltEPK4TGFBz0jnNl8xsiEOprr",
+      "createdAt": "1629923551822",
+      "lastLoginAt": "1629923551822",
+      "passwordHash": "fakeHash:salt=fakeSaltgvoCHSSXUSak8M83Jxuf:password=123456",
+      "salt": "fakeSaltgvoCHSSXUSak8M83Jxuf",
+      "passwordUpdatedAt": 1630415102033,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "admin@emu.com",
+          "federatedId": "admin@emu.com",
+          "rawId": "admin@emu.com"
+        }
+      ],
+      "validSince": "1630415102",
+      "email": "admin@emu.com",
+      "emailVerified": false,
+      "disabled": false
+    }
+  ]
+}

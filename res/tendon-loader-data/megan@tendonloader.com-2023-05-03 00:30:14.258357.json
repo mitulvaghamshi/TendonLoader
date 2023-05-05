@@ -1,0 +1,31 @@
+{
+  "userId": "megan@tendonloader.com",
+  "painScore": "9.0",
+  "timeStamp": "Timestamp(seconds=1627583697, nanoseconds=957305000)",
+  "isTolerable": "Yes",
+  "isComplate": "false",
+  "progressorId": "Not connected!",
+  "prescription": {
+    "sets": "6",
+    "reps": "7",
+    "setRest": "90",
+    "holdTime": "11",
+    "restTime": "15",
+    "targetLoad": "5.0",
+    "mvcDuration": "11",
+    "isAdmin": "null"
+  },
+  "exportData": [
+    { "1.0": "0.0" },
+    { "2.0": "0.5" },
+    { "3.0": "1.0" },
+    { "4.0": "1.5" },
+    { "5.0": "2.0" },
+    { "6.0": "2.5" },
+    { "7.0": "3.0" },
+    { "8.0": "3.5" },
+    { "9.0": "4.0" },
+    { "10.0": "4.5" },
+    { "11.0": "5.0" }
+  ]
+}

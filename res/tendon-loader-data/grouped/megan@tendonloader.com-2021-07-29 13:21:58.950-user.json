@@ -1,0 +1,18 @@
+{
+  "userId": "megan@tendonloader.com",
+  "painScore": "4.0",
+  "timeStamp": "Jul 29, 2021 01:21 PM",
+  "isTolerable": "Yes",
+  "isComplate": "false",
+  "progressorId": "Progressor_3773",
+  "prescription": {
+    "sets": "3",
+    "reps": "3",
+    "setRest": "90",
+    "holdTime": "5",
+    "restTime": "3",
+    "targetLoad": "4.0",
+    "mvcDuration": "0",
+    "isAdmin": "null"
+  }
+}

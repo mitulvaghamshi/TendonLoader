@@ -1,0 +1,18 @@
+{
+  "userId": "kohlemerry@tendonloader.com",
+  "painScore": "2.0",
+  "timeStamp": "Aug 09, 2021 04:42 PM",
+  "isTolerable": "Yes",
+  "isComplate": "true",
+  "progressorId": "Not connected!",
+  "prescription": {
+    "sets": "2",
+    "reps": "2",
+    "setRest": "20",
+    "holdTime": "2",
+    "restTime": "2",
+    "targetLoad": "2.0",
+    "mvcDuration": "2",
+    "isAdmin": "null"
+  }
+}

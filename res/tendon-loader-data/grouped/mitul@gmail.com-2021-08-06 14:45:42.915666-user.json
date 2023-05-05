@@ -1,0 +1,18 @@
+{
+  "userId": "mitul@gmail.com",
+  "painScore": "2.0",
+  "timeStamp": "Aug 06, 2021 02:45 PM",
+  "isTolerable": "Yes",
+  "isComplate": "true",
+  "progressorId": "Progressor_3582",
+  "prescription": {
+    "sets": "2",
+    "reps": "3",
+    "setRest": "7",
+    "holdTime": "5",
+    "restTime": "5",
+    "targetLoad": "5.0",
+    "mvcDuration": "0",
+    "isAdmin": "null"
+  }
+}
