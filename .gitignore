@@ -56,3 +56,5 @@ ios/Runner/GoogleService-Info.plist
 macos/Runner/GoogleService-Info.plist
 android/tendonloader.jks
 android/keystore.properties
+.pub-cache/
+DerivedData/
