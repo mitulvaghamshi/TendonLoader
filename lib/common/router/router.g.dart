@@ -6,11 +6,11 @@ part of 'router.dart';
 // GoRouterGenerator
 // **************************************************************************
 
-List<GoRoute> get $appRoutes => [
+List<RouteBase> get $appRoutes => [
       $tendonLoaderRoute,
     ];
 
-GoRoute get $tendonLoaderRoute => GoRouteData.$route(
+RouteBase get $tendonLoaderRoute => GoRouteData.$route(
       path: '/',
       factory: $TendonLoaderRouteExtension._fromState,
       routes: [
@@ -81,9 +81,12 @@ extension $TendonLoaderRouteExtension on TendonLoaderRoute {
         '/',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $HomeScreenRouteExtension on HomeScreenRoute {
@@ -94,9 +97,12 @@ extension $HomeScreenRouteExtension on HomeScreenRoute {
         '/app',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $LiveDataRouteExtension on LiveDataRoute {
@@ -106,9 +112,12 @@ extension $LiveDataRouteExtension on LiveDataRoute {
         '/app/live-data',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $MVCTestingRouteExtension on MVCTestingRoute {
@@ -119,9 +128,12 @@ extension $MVCTestingRouteExtension on MVCTestingRoute {
         '/app/mvc-testing',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $NewMVCTestRouteExtension on NewMVCTestRoute {
@@ -132,9 +144,12 @@ extension $NewMVCTestRouteExtension on NewMVCTestRoute {
         '/app/new-mvc-test',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $ExerciseModeRouteExtension on ExerciseModeRoute {
@@ -145,38 +160,47 @@ extension $ExerciseModeRouteExtension on ExerciseModeRoute {
         '/app/exercise-mode',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $NewExerciseRouteExtension on NewExerciseRoute {
   static NewExerciseRoute _fromState(GoRouterState state) => NewExerciseRoute(
-        userId: state.params['userId']!,
-        readOnly: _$boolConverter(state.params['readOnly']!),
+        userId: state.pathParameters['userId']!,
+        readOnly: _$boolConverter(state.pathParameters['readOnly']!),
       );
 
   String get location => GoRouteData.$location(
         '/app/new-exercise/${Uri.encodeComponent(userId)}/${Uri.encodeComponent(readOnly.toString())}',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $PromptScreenRouteExtension on PromptScreenRoute {
   static PromptScreenRoute _fromState(GoRouterState state) => PromptScreenRoute(
-        key: state.params['key']!,
+        key: state.pathParameters['key']!,
       );
 
   String get location => GoRouteData.$location(
         '/app/prompt-screen/${Uri.encodeComponent(key)}',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $HomePageRouteExtension on HomePageRoute {
@@ -186,23 +210,29 @@ extension $HomePageRouteExtension on HomePageRoute {
         '/web',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $ExportListRouteExtension on ExportListRoute {
   static ExportListRoute _fromState(GoRouterState state) => ExportListRoute(
-        userId: state.params['userId']!,
+        userId: state.pathParameters['userId']!,
       );
 
   String get location => GoRouteData.$location(
         '/web/exports/${Uri.encodeComponent(userId)}',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $ExportViewRouteExtension on ExportViewRoute {
@@ -213,9 +243,12 @@ extension $ExportViewRouteExtension on ExportViewRoute {
         '/web/export-view',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $SessionInfoRouteExtension on SessionInfoRoute {
@@ -226,24 +259,30 @@ extension $SessionInfoRouteExtension on SessionInfoRoute {
         '/web/session-info',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $ExerciseHistoryRouteExtension on ExerciseHistoryRoute {
   static ExerciseHistoryRoute _fromState(GoRouterState state) =>
       ExerciseHistoryRoute(
-        userId: state.params['userId']!,
+        userId: state.pathParameters['userId']!,
       );
 
   String get location => GoRouteData.$location(
         '/web/exercise-history/${Uri.encodeComponent(userId)}',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 extension $SettingScreenRouteExtension on SettingScreenRoute {
@@ -254,9 +293,12 @@ extension $SettingScreenRouteExtension on SettingScreenRoute {
         '/settings',
       );
 
-  void go(BuildContext context) => context.go(location, extra: this);
+  void go(BuildContext context) => context.go(location);
 
-  void push(BuildContext context) => context.push(location, extra: this);
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
 }
 
 bool _$boolConverter(String value) {
