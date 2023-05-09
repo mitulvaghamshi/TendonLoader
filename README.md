@@ -1,5 +1,7 @@
 # Tendon Loader
 
+[![MIT License][license-badge]][license-link]
+
 ## Introduction
 
 - **Tendon Loader** is designed to measure and help cure **Achille's
@@ -17,7 +19,7 @@
 - **The Achilles tendon** is a strong fibrous cord that connects the muscles in
   the back of your calf to your heel bone.
 
-![Achille's Tendon Problems](tendon-problems.webp)
+![Achille's Tendon Problems](res/tendon-problems.webp)
 
 ## The Project
 
@@ -62,7 +64,7 @@ with [Firebase][firebase-console].
 - The web-app is [hosted][web-hosting] URLs registered for the live channel are:
   https://tendon-loader.web.app and https://tendon-loader.firebaseapp.com
 
-## Getting Started (Development)
+## Setup
 
 - This Guide assumes you have installed **Flutter**, **Android Studio**, **Xcode
   (macOS)**, and **Google Chrome**
@@ -71,6 +73,18 @@ with [Firebase][firebase-console].
   (`android/tendonloaderkey.jks`).
 - During development, comment out following lines in app level
   [build.gradle](android/app/build.gradle) file and rebuild the project:
+
+```console
+sudo npm install -g firebase-tools
+
+firebase login
+firebase init
+
+dart pub global activate flutterfire_cli
+flutterfire configure
+
+firebase emulators:start --import=<path> --export-on-exit=<path>
+```
 
 ```Gradle
 // Comment out below 3 lines
@@ -120,7 +134,8 @@ flutter pub run build_runner build --delete-conflicting-outputs
   - Open project in Android Studio,
   - From the `Project` side panel expand `Gradle Scripts`,
   - Look for module level `gradle.build (Module :flutter_blue)`,
-  - Location (macOS): (`/Users/<username>/.pub-cache/hosted/pub.dev/flutter_blue-<version>/android/build.gradle`)
+  - Location (macOS):
+    (`/Users/<username>/.pub-cache/hosted/pub.dev/flutter_blue-<version>/android/build.gradle`)
   - Open the file and make following changes:
 
 <details>
@@ -182,9 +197,39 @@ dependencies {
 }
 ```
 
-[Chekout Bluetooth Connection Flow](./Connection%20Flow.pdf)
+## Flutter run key commands.
 
-[![MIT License][license-badge]][license-link]
+- **r** - Hot **reload**. 🔥🔥🔥
+- **R** - Hot **restart**. ♻️♻️♻️
+- **c** - **Clear** the screen.
+- **v** - Open Flutter **DevTools**.
+- **h** - Repeat this **help** message.
+- **g** - Run source **code generators**.
+- **d** - Detach (terminate `flutter run` but leave application running).
+- **q** - Quit (terminate the application on the device).
+- **w** - Dump **widget hierarchy** to the console. (`debugDumpApp`)
+- **t** - Dump **rendering tree** to the console. (`debugDumpRenderTree`)
+- **L** - Dump **layer tree** to the console. (`debugDumpLayerTree`)
+- **S** - Dump **accessibility tree** in **traversal** order.
+  (`debugDumpSemantics`)
+- **U** - Dump **accessibility tree** in **inverse hit test** order.
+- **j** - Dump frame **raster stats** for the current frame. (Unsupported for
+  web)
+- **M** - Write **SkSL shaders** to a unique file in the project directory.
+- **p** - Toggle the display of **construction lines**.
+  (`debugPaintSizeEnabled`)
+- **i** - Toggle **widget inspector**.
+  (`WidgetsApp.showWidgetInspectorOverride`)
+- **P** - Toggle **performance overlay**. (`WidgetsApp.showPerformanceOverlay`)
+- **a** - Toggle **timeline events** for all widget build methods.
+  (`debugProfileWidgetBuilds`)
+- **I** - Toggle **oversized image** inversion. (`debugInvertOversizedImages`)
+- **b** - Toggle platform **brightness** (dark and light mode).
+  (`debugBrightnessOverride`)
+- **o** - Simulate different **operating systems**. (`defaultTargetPlatform`)
+
+
+[Chekout Bluetooth Connection Flow](./Connection%20Flow.pdf)
 
 [license-badge]: https://img.shields.io/github/license/mitulvaghamshi/tendon_loader?logo=%20&style=for-the-badge
 [license-link]: https://github.com/mitulvaghamshi/tendon_loader/blob/main/LICENSE

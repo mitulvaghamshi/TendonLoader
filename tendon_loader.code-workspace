@@ -4,24 +4,159 @@
       "path": "."
     }
   ],
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "dart",
+        "name": "run",
+        "request": "launch",
+      },
+      {
+        "type": "dart",
+        "name": "web",
+        "request": "launch",
+        "deviceId": "Chrome",
+      },
+      {
+        "type": "dart",
+        "name": "android",
+        "request": "launch",
+        "deviceId": "sdk gphone64",
+      },
+      {
+        "type": "dart",
+        "name": "iphone",
+        "request": "launch",
+        "deviceId": "iphone",
+      },
+      {
+        "type": "dart",
+        "name": "macos",
+        "request": "launch",
+        "deviceId": "macos",
+      }
+    ],
+    "compounds": [
+      {
+        "name": "start all",
+        "configurations": [
+          "web",
+          "android",
+          "iphone",
+          "macos"
+        ],
+      }
+    ]
+  },
   "tasks": {
     "version": "2.0.0",
     "tasks": [
       {
-        // Run build runner (overwrite)
         "type": "shell",
-        "label": "Build Runner: Build",
-        "command": "flutter pub run build_runner build --delete-conflicting-outputs",
-        "problemMatcher": [
-          "$dart-build_runner"
+        "label": "flutter: clean",
+        "command": "flutter clean",
+      },
+      {
+        "type": "shell",
+        "label": "flutter: pub get",
+        "command": "flutter pub get",
+      },
+      {
+        "type": "shell",
+        "label": "ios: pod install",
+        "command": "pod install",
+        "options": {
+          "cwd": "${workspaceFolder}/ios",
+        },
+        "dependsOn": [
+          "flutter: pub get",
+        ],
+      },
+      {
+        "type": "shell",
+        "label": "macos: pod install",
+        "command": "pod install",
+        "options": {
+          "cwd": "${workspaceFolder}/macos",
+        },
+        "dependsOn": [
+          "flutter: pub get",
         ]
       },
       {
-        // Firebase emulators (backup)
         "type": "shell",
-        "label": "Firebase Emulators: Start",
-        "command": "firebase emulators:start --import=$HOME/.developer/tendon-loader.bak --export-on-exit=$HOME/.developer/tendon-loader.bak"
+        "label": "project: rebuild",
+        "dependsOrder": "sequence",
+        "dependsOn": [
+          "flutter: clean",
+          "flutter: pub get",
+          "ios: pod install",
+          "macos: pod install",
+        ],
+      },
+      {
+        "type": "shell",
+        "group": "build",
+        "label": "release: web",
+        "command": "flutter build web",
+      },
+      {
+        "type": "shell",
+        "group": "build",
+        "label": "release: apk",
+        "command": "flutter",
+        "args": [
+          "build",
+          "apk",
+          "--obfuscate",
+          "--no-track-widget-creation",
+          "--split-debug-info=build/app/outputs/bundle/release/map/",
+        ],
+      },
+      {
+        "type": "shell",
+        "group": "build",
+        "command": "flutter",
+        "label": "release: appbundle",
+        "args": [
+          "build",
+          "appbundle",
+          "--obfuscate",
+          "--no-track-widget-creation",
+          "--split-debug-info=build/app/outputs/bundle/release/map/",
+        ],
+      },
+      {
+        // Run build runner (overwrite)
+        "type": "shell",
+        "label": "Build Runner: Build -overwrite",
+        "command": "flutter pub run build_runner build --delete-conflicting-outputs",
+        "problemMatcher": [
+          "$dart-build_runner",
+        ],
+      },
+      {
+        // Firebase emulators (with backup)
+        "type": "shell",
+        "label": "Firebase Emulators: Start -with backup",
+        "command": "firebase emulators:start",
+        "args": [
+          "--import=${input:backupPath}",
+          "--export-on-exit=${input:backupPath}",
+        ],
+        "dependsOn": [
+          "Set emmulator backup path",
+        ],
+      },
+    ],
+    "inputs": [
+      {
+        "id": "backupPath",
+        "type": "promptString",
+        "description": "Enter firebase emulator backup location?",
+        "default": "${workspaceFolder}/backup/"
       }
     ]
-  }
+  },
 }

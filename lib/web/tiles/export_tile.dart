@@ -1,17 +1,17 @@
 /// MIT License
-/// 
+///
 /// Copyright (c) 2021 Mitul Vaghamshi
-/// 
+///
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in all
 /// copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -58,7 +58,7 @@ class ExportTile extends StatelessWidget {
         icon: const Icon(Icons.more_vert),
         itemBuilder: (_) => <PopupMenuItem<PopupAction>>[
           const PopupMenuItem<PopupAction>(
-            value: PopupAction.sesssionInfo,
+            value: PopupAction.sessionInfo,
             child: ListTile(
               title: Text('Session info'),
               leading: Icon(Icons.info),
@@ -84,7 +84,7 @@ class ExportTile extends StatelessWidget {
             case PopupAction.download:
               await Future<void>.microtask(export.download);
               break;
-            case PopupAction.sesssionInfo:
+            case PopupAction.sessionInfo:
               await CustomDialog.show<void>(
                 context,
                 title: 'Session info',

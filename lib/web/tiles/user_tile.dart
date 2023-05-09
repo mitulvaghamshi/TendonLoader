@@ -1,17 +1,17 @@
 /// MIT License
-/// 
+///
 /// Copyright (c) 2021 Mitul Vaghamshi
-/// 
+///
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in all
 /// copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -38,21 +38,21 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Patient _user = AppStateWidget.of(context).getUser(id);
+    final Patient user = AppStateWidget.of(context).getUser(id);
     return ListTile(
       horizontalTitleGap: 5,
-      key: ValueKey<Patient>(_user),
-      subtitle: Text(_user.exportCount),
+      key: ValueKey<Patient>(user),
+      subtitle: Text(user.exportCount),
       onTap: () {
         exportNotifier.value = null;
         userNotifier.value = id;
       },
       contentPadding: const EdgeInsets.all(5),
-      title: Text(_user.id, style: ts18w5, maxLines: 1),
+      title: Text(user.id, style: ts18w5, maxLines: 1),
       leading: CustomButton(
         rounded: true,
         padding: EdgeInsets.zero,
-        left: Text(_user.avatar, style: ts18w5),
+        left: Text(user.avatar, style: ts18w5),
       ),
       trailing: PopupMenuButton<PopupAction>(
         icon: const Icon(Icons.more_vert),
@@ -63,14 +63,14 @@ class UserTile extends StatelessWidget {
               builder: (_, void Function(void Function()) setState) {
                 return CheckboxListTile(
                   activeColor: colorIconBlue,
-                  value: _user.prescription!.isAdmin,
+                  value: user.prescription!.isAdmin,
                   title: const Text('Allow web access?'),
                   controlAffinity: ListTileControlAffinity.leading,
                   onChanged: (bool? value) async {
-                    setState(() => _user.prescription!.isAdmin = value);
+                    setState(() => user.prescription!.isAdmin = value);
                     await Future<void>.microtask(() async {
-                      await _user.prescriptionRef!.update(<String, bool>{
-                        keyIsAdmin: _user.prescription!.isAdmin!
+                      await user.prescriptionRef!.update(<String, bool>{
+                        keyIsAdmin: user.prescription!.isAdmin!
                       });
                     });
                   },
@@ -110,21 +110,21 @@ class UserTile extends StatelessWidget {
         onSelected: (PopupAction action) async {
           switch (action) {
             case PopupAction.download:
-              await Future<void>.microtask(_user.download);
+              await Future<void>.microtask(user.download);
               break;
             case PopupAction.history:
               await CustomDialog.show<void>(
                 context,
-                title: _user.id,
+                title: user.id,
                 size: const Size(300, 700),
-                content: ExerciseHistory(user: _user),
+                content: ExerciseHistory(user: user),
               );
               break;
             case PopupAction.prescribe:
               await CustomDialog.show<void>(
                 context,
-                title: _user.id,
-                content: NewExercise(user: _user),
+                title: user.id,
+                content: NewExercise(user: user),
               );
               break;
             case PopupAction.delete:
