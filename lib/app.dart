@@ -11,10 +11,25 @@ class TendonLoader extends StatelessWidget {
 
   final AppState model;
 
+  static final GoRouter _router =
+      GoRouter(initialLocation: '/', routes: $appRoutes);
+
+  static ThemeData themeData =
+      ThemeData(pageTransitionsTheme: _transitionsTheme);
+
+  static ThemeData darkThemeData = ThemeData(
+      pageTransitionsTheme: _transitionsTheme, brightness: Brightness.dark);
+
+  static final PageTransitionsTheme _transitionsTheme =
+      PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
+    defaultTargetPlatform: const _FadePageTransitionsBuilder(),
+    TargetPlatform.android: const ZoomPageTransitionsBuilder(),
+    TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
+  });
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
       title: 'Tendon Loader',
       routerConfig: _router,
       theme: themeData,
@@ -28,28 +43,6 @@ class TendonLoader extends StatelessWidget {
       ),
     );
   }
-}
-
-extension on TendonLoader {
-  GoRouter get _router => GoRouter(initialLocation: '/', routes: $appRoutes);
-
-  ThemeData get themeData => ThemeData(
-      useMaterial3: true,
-      colorSchemeSeed: Colors.green,
-      pageTransitionsTheme: _transitionsTheme);
-
-  ThemeData get darkThemeData => ThemeData(
-      useMaterial3: true,
-      colorSchemeSeed: Colors.lightGreen,
-      pageTransitionsTheme: _transitionsTheme,
-      brightness: Brightness.dark);
-
-  PageTransitionsTheme get _transitionsTheme =>
-      PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
-        defaultTargetPlatform: const _FadePageTransitionsBuilder(),
-        TargetPlatform.android: const ZoomPageTransitionsBuilder(),
-        TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
-      });
 }
 
 class _FadePageTransitionsBuilder extends PageTransitionsBuilder {

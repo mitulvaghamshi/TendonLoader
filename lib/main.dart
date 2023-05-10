@@ -40,7 +40,7 @@ Future<void> _initApp() async {
 /// Learn more about initializing and running local emulators
 /// at: [https://firebase.google.com/docs/emulator-suite]
 Future<void> _useEmulator() async {
-  const String host = '192.168.0.111';
+  const String host = '127.0.0.1';
   await FirebaseAuth.instance.useAuthEmulator(host, 9099);
   FirebaseFirestore.instance.useFirestoreEmulator(host, 8080);
 }

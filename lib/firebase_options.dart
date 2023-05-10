@@ -21,9 +21,15 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
@@ -44,41 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA6gUnC93r_Y0d0Gvrj31MTnzlhHq03aFM',
-    appId: '1:1041327389562:web:f96869c1dcde7d09a874c3',
-    messagingSenderId: '1041327389562',
-    projectId: 'tendonloader-dev',
-    authDomain: 'tendonloader-dev.firebaseapp.com',
-    storageBucket: 'tendonloader-dev.appspot.com',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBLnRwANgTL301eif3lksZdVl49vOdSV3I',
-    appId: '1:1041327389562:android:a489747d04e99cc7a874c3',
-    messagingSenderId: '1041327389562',
-    projectId: 'tendonloader-dev',
-    storageBucket: 'tendonloader-dev.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyADd7_LxhOnxD9Tpgf1YBSaFw7mpeEgSG0',
-    appId: '1:1041327389562:ios:6972799363ae77a4a874c3',
-    messagingSenderId: '1041327389562',
-    projectId: 'tendonloader-dev',
-    storageBucket: 'tendonloader-dev.appspot.com',
-    iosClientId:
-        '1041327389562-fvn3rpf7spvb1oammmdluf1oth7gs732.apps.googleusercontent.com',
-    iosBundleId: 'me.mitul.tendonLoader',
+    apiKey: 'AIzaSyD-sJwQtulTZbTN8-5qjEN4FtOHkJ3aBnc',
+    appId: '1:382210630513:web:aa041889d4b83cf8e58cd0',
+    messagingSenderId: '382210630513',
+    projectId: 'tendonloaderdev',
+    authDomain: 'tendonloaderdev.firebaseapp.com',
+    storageBucket: 'tendonloaderdev.appspot.com',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyADd7_LxhOnxD9Tpgf1YBSaFw7mpeEgSG0',
-    appId: '1:1041327389562:ios:6972799363ae77a4a874c3',
-    messagingSenderId: '1041327389562',
-    projectId: 'tendonloader-dev',
-    storageBucket: 'tendonloader-dev.appspot.com',
-    iosClientId:
-        '1041327389562-fvn3rpf7spvb1oammmdluf1oth7gs732.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDEBwbkp7TVvW_P2Mxx7DE8UH5w_W8XJ-0',
+    appId: '1:382210630513:ios:d72b48ac73b79d09e58cd0',
+    messagingSenderId: '382210630513',
+    projectId: 'tendonloaderdev',
+    storageBucket: 'tendonloaderdev.appspot.com',
+    iosClientId: '382210630513-n8vmifa9kerulcjq8hk2u4uc8lmtdg17.apps.googleusercontent.com',
     iosBundleId: 'me.mitul.tendonLoader',
   );
 }

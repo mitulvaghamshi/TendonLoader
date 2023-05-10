@@ -145,16 +145,8 @@
       {
         // Firebase emulators (with backup)
         "type": "shell",
-        "group": "none",
         "label": "Firebase emulators: start",
-        "command": "firebase emulators:start",
-        "args": [
-          "--import=${input:backupPath}",
-          "--export-on-exit=${input:backupPath}",
-        ],
-        "dependsOn": [
-          "Set emmulator backup path",
-        ],
+        "command": "firebase emulators:start --import=${input:backupPath} --export-on-exit=${input:backupPath}",
       },
     ],
     "inputs": [
@@ -162,8 +154,7 @@
         "id": "backupPath",
         "type": "promptString",
         "description": "Enter firebase emulator backup location?",
-        "default": "${workspaceFolder}/backup/"
-      }
-    ]
+      },
+    ],
   },
 }
