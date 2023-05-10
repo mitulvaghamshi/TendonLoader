@@ -4,23 +4,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-final query = FirebaseFirestore.instance
+final CollectionReference<Patient> query = FirebaseFirestore.instance
     .collection('TendonLoader')
     .withConverter<Patient>(
-        fromFirestore: (snapshot, _) => Patient.fromJson(snapshot.reference),
-        toFirestore: (patient, _) => {});
+        fromFirestore: (DocumentSnapshot<Map<String, dynamic>> snapshot, _) =>
+            Patient.fromJson(snapshot.reference),
+        toFirestore: (Patient patient, _) => <String, dynamic>{});
 
 @immutable
 class Patient {
   const Patient({this.userRef, this.exportRef, this.prescriptionRef});
 
-  factory Patient.fromJson(reference) {
-    final exportRef = reference.collection(keyExports).withConverter<Export>(
-          fromFirestore: Export.fromJson,
-          toFirestore: (Export value, _) => value.toMap(),
-        );
+  factory Patient.fromJson(DocumentReference<Map<String, dynamic>> reference) {
+    final CollectionReference<Export> exportRef =
+        reference.collection(keyExports).withConverter<Export>(
+              fromFirestore: Export.fromJson,
+              toFirestore: (Export value, _) => value.toMap(),
+            );
 
-    final prescriptionRef = reference.withConverter<Prescription>(
+    final DocumentReference<Prescription> prescriptionRef =
+        reference.withConverter<Prescription>(
       fromFirestore: Prescription.fromJson,
       toFirestore: (Prescription value, _) => value.toMap(),
     );
@@ -49,10 +52,11 @@ class Prescription {
     this.isAdmin,
   });
 
-  factory Prescription.fromJson(snapshot, _) =>
+  factory Prescription.fromJson(DocumentSnapshot<Map<String, dynamic>> snapshot,
+          SnapshotOptions? _) =>
       Prescription.fromMap(snapshot.data()!);
 
-  factory Prescription.fromMap(data) => Prescription(
+  factory Prescription.fromMap(Map<String, dynamic> data) => Prescription(
       sets: int.parse(data[keySets].toString()),
       reps: int.parse(data[keyReps].toString()),
       setRest: int.parse(data[keySetRest].toString()),
@@ -71,7 +75,7 @@ class Prescription {
   final double targetLoad;
   bool? isAdmin;
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => <String, String>{
         '"$keySets"': '"$sets"',
         '"$keyReps"': '"$reps"',
         '"$keySetRest"': '"$setRest"',
@@ -97,22 +101,23 @@ class Export {
     this.progressorId,
   });
 
-  factory Export.fromJson(snapshot, _) {
-    final data = snapshot.data()!;
+  factory Export.fromJson(
+      DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? _) {
+    final Map<String, dynamic> data = snapshot.data()!;
 
-    final isTolerable = data.containsKey(keyIsTolerable)
+    final String? isTolerable = data.containsKey(keyIsTolerable)
         ? data[keyIsTolerable] as String?
         : '---';
 
-    final painScore = data.containsKey(keyPainScore)
+    final double? painScore = data.containsKey(keyPainScore)
         ? double.tryParse(data[keyPainScore].toString())
         : 0.0;
 
-    final prescription = data.containsKey(keyPrescription)
+    final Prescription? prescription = data.containsKey(keyPrescription)
         ? Prescription.fromMap(data[keyPrescription] as Map<String, dynamic>)
         : null;
 
-    final exportData =
+    final List<ChartData> exportData =
         List<Map<String, dynamic>>.from(data[keyExportData] as List<dynamic>)
             .map(ChartData.fromEntry)
             .toList();
@@ -158,23 +163,24 @@ class Export {
   DocumentReference<Map<String, dynamic>>? reference;
 
   bool get isMVC => mvcValue != null && prescription == null;
-  Map<String, String> _converter(data) => {'"${data.time}"': '"${data.load}"'};
+  Map<String, String> _converter(ChartData data) =>
+      <String, String>{'"${data.time}"': '"${data.load}"'};
 }
 
 @immutable
 class ChartData {
   const ChartData({this.time = 0, this.load = 0});
 
-  factory ChartData.fromJson(data) =>
+  factory ChartData.fromJson(String data) =>
       ChartData.fromMap(jsonDecode(data) as Map<String, dynamic>);
 
-  factory ChartData.fromMap(map) => ChartData(
+  factory ChartData.fromMap(Map<String, dynamic> map) => ChartData(
         time: map[keyChartX] as double,
         load: map[keyChartY] as double,
       );
 
-  factory ChartData.fromEntry(map) {
-    final entry = map.entries.first;
+  factory ChartData.fromEntry(Map<String, dynamic> map) {
+    final MapEntry<String, dynamic> entry = map.entries.first;
     return ChartData(
       time: double.parse(entry.key),
       load: double.parse(entry.value.toString()),

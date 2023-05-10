@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'dart:html' show AnchorElement;
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterfire_ui/firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:tendon_loader/experimentutils.dart';
+import 'package:tendon_loader/experiments/utils.dart';
 
 @immutable
 class DetailWidget extends StatelessWidget {
@@ -21,8 +22,8 @@ class DetailWidget extends StatelessWidget {
       appBar: AppBar(title: const Text('Patient details')),
       body: FirestoreListView<Export>(
         query: item.exportRef!,
-        itemBuilder: (_, snapshot) {
-          var export = snapshot.data();
+        itemBuilder: (_, QueryDocumentSnapshot<Export> snapshot) {
+          final Export export = snapshot.data();
           return ListTile(
             onTap: () async => _saveAsJson(export),
             leading: CircleAvatar(child: Text(export.isMVC ? 'MVC' : 'EXE')),
@@ -36,10 +37,11 @@ class DetailWidget extends StatelessWidget {
   }
 
   Future<void> _saveAsJson(Export export) async {
-    var user = '${export.userId}-${export.timestamp?.millisecondsSinceEpoch}'
-        .replaceAll('@', '');
-    var map = export.toMap();
-    var data = map.remove('"$keyExportData"').toString();
+    final String user =
+        '${export.userId}-${export.timestamp?.millisecondsSinceEpoch}'
+            .replaceAll('@', '');
+    final Map<String, dynamic> map = export.toMap();
+    final String data = map.remove('"$keyExportData"').toString();
 
     if (kIsWeb) {
       AnchorElement(href: _encode(map.toString()))
@@ -57,8 +59,8 @@ class DetailWidget extends StatelessWidget {
   }
 
   String _encode(String value) {
-    var bytes = utf8.encode(value);
-    var base64 = base64Encode(bytes);
+    final List<int> bytes = utf8.encode(value);
+    final String base64 = base64Encode(bytes);
     return 'data:application/zip;base64,$base64';
   }
 }

@@ -228,7 +228,6 @@ dependencies {
   (`debugBrightnessOverride`)
 - **o** - Simulate different **operating systems**. (`defaultTargetPlatform`)
 
-
 [Chekout Bluetooth Connection Flow](./Connection%20Flow.pdf)
 
 [license-badge]: https://img.shields.io/github/license/mitulvaghamshi/tendon_loader?logo=%20&style=for-the-badge

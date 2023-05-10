@@ -54,57 +54,62 @@
     "tasks": [
       {
         "type": "shell",
-        "label": "flutter: clean",
+        "group": "none",
+        "label": "Project: clean",
         "command": "flutter clean",
       },
       {
         "type": "shell",
-        "label": "flutter: pub get",
+        "group": "none",
+        "label": "Project: pub get",
         "command": "flutter pub get",
       },
       {
         "type": "shell",
-        "label": "ios: pod install",
+        "group": "none",
+        "label": "Project: ios pods",
         "command": "pod install",
         "options": {
           "cwd": "${workspaceFolder}/ios",
         },
         "dependsOn": [
-          "flutter: pub get",
+          "Project: pub get",
         ],
       },
       {
         "type": "shell",
-        "label": "macos: pod install",
+        "group": "none",
+        "label": "Project: macos pods",
         "command": "pod install",
         "options": {
           "cwd": "${workspaceFolder}/macos",
         },
         "dependsOn": [
-          "flutter: pub get",
+          "Project: pub get",
         ]
       },
       {
         "type": "shell",
+        "group": "none",
         "label": "project: rebuild",
         "dependsOrder": "sequence",
         "dependsOn": [
-          "flutter: clean",
-          "flutter: pub get",
-          "ios: pod install",
-          "macos: pod install",
+          "Project: clean",
+          "Project: pub get",
+          "Project: ios pods",
+          "Project: macos pods",
         ],
       },
       {
         "type": "shell",
         "group": "build",
-        "label": "release: web",
+        "label": "Release: web",
         "command": "flutter build web",
       },
       {
         "type": "shell",
         "group": "build",
-        "label": "release: apk",
+        "label": "Release: apk",
         "command": "flutter",
         "args": [
           "build",
@@ -118,7 +123,7 @@
         "type": "shell",
         "group": "build",
         "command": "flutter",
-        "label": "release: appbundle",
+        "label": "Release: appbundle",
         "args": [
           "build",
           "appbundle",
@@ -130,6 +135,7 @@
       {
         // Run build runner (overwrite)
         "type": "shell",
+        "group": "build",
         "label": "Build Runner: Build -overwrite",
         "command": "flutter pub run build_runner build --delete-conflicting-outputs",
         "problemMatcher": [
@@ -139,7 +145,8 @@
       {
         // Firebase emulators (with backup)
         "type": "shell",
-        "label": "Firebase Emulators: Start -with backup",
+        "group": "none",
+        "label": "Firebase emulators: start",
         "command": "firebase emulators:start",
         "args": [
           "--import=${input:backupPath}",
