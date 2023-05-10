@@ -1,0 +1,5 @@
+- See below for the bluetooth load cell we will be building the app to interface with.
+- We've also included the app distributed by the company that supplies the bluetooth load cell (Tindeq) which is built for rock climbing training as opposed to clinical applications like we are proposing.
+- Tindeq has provided us with the API as well as a short document on how to interface with the progressor (see rest of files in this folder).
+- [Tindeq Progressor](https://tindeq.com/product/progressor/) (Bluetooth enabled tensile load cell).
+- Default Progressor [App](https://play.google.com/store/apps/details?id=com.progressor&hl=en_CA&gl=US) (distributed by Tindeq).

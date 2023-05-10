@@ -51,10 +51,11 @@ firebase.json
 firestore.indexes.json
 firestore.rules
 
+.pub-cache/
+DerivedData/
+firebase_app_id_file.json
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
 macos/Runner/GoogleService-Info.plist
-android/tendonloader.jks
 android/keystore.properties
-.pub-cache/
-DerivedData/
+android/tendonloader.jks

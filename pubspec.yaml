@@ -1,7 +1,7 @@
 name: tendon_loader
 description: Tendon Loader is designed to measure and help cure Achille's (uh-KILL-eez) Tendon Problems.
 publish_to: 'none'
-version: 1.0.0+14
+version: 1.0.0+15
 
 environment:
   sdk: ">=2.19.0 <3.0.0"
