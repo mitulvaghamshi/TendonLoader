@@ -12,7 +12,7 @@
 
 ## Background
 
-- [**Tendon rupture**][tendon-repture] is an injury that affects the back of
+- [**Tendon rupture**][tendon-rapture] is an injury that affects the back of
   your lower leg.
 - It mainly occurs in people playing recreational sports, but it can happen to
   anyone.
@@ -23,20 +23,18 @@
 
 ## The Project
 
-This project contains three platforms ([Android][flutter-android],
+- This project contains three platforms ([Android][flutter-android],
 [iOS][flutter-ios] and [Web][flutter-web]) built using [Flutter][flutter-dev]
 with [Firebase][firebase-console].
 
 ## Firebase:
 
-- Firebase is currently registered using **Spark** plan. Which is free with
-  limited read/write access and suitable for development.
+- ~~Firebase is currently registered using **Spark** plan. Which is free with
+  limited read/write access and suitable for development.~~
 - Firebase setup and initialization is managed using
   [flutterfire][flutterfire-cli] command-line tool.
 
-## Project uses three services from the Firebase:
-
-### 1. Authentication
+## 1. Authentication
 
 - Uses the (email only) method to allow the User (Patient) and Admin(Clinician)
   to login and/or register to the app or web portal.
@@ -51,7 +49,7 @@ with [Firebase][firebase-console].
   contain email verification and allowed to use (non-existing) dummy email
   addresses.
 
-### 2. Firestore Database
+## 2. Firestore Database
 
 - Data storage for both the user and admin.
 - Database and its structure formation is fully managed by the application
@@ -59,16 +57,16 @@ with [Firebase][firebase-console].
   authentication.
 - Altering database structure may result in **App Crash**.
 
-### 3. Hosting
+## 3. Hosting
 
-- The web-app is [hosted][web-hosting] URLs registered for the live channel are:
-  https://tendon-loader.web.app and https://tendon-loader.firebaseapp.com
+- ~~The web-app is [hosted][web-hosting] URLs registered for the live channel are:
+  https://tendon-loader.web.app and https://tendon-loader.firebaseapp.com~~
 
 ## Setup
 
-- This Guide assumes you have installed **Flutter**, **Android Studio**, **Xcode
+- This Guide assumes you have installed **Flutter SDK**, **Android Studio**, **Xcode
   (macOS)**, and **Google Chrome**
-- **Android Build** requires keystore information files to successfully build
+- **Android build** requires keystore information files to successfully build
   the app (even debug mode): (`android/keystore.properties`) and
   (`android/tendonloaderkey.jks`).
 - During development, comment out following lines in app level
@@ -115,7 +113,7 @@ signingConfigs {
 
 ## Code Generation (build_runner)
 
-Run following command to generate sources in project root
+- Run following command to generate sources in project root
 
 ```
 flutter pub run build_runner build --delete-conflicting-outputs
@@ -228,7 +226,28 @@ dependencies {
   (`debugBrightnessOverride`)
 - **o** - Simulate different **operating systems**. (`defaultTargetPlatform`)
 
-[Chekout Bluetooth Connection Flow](./Connection%20Flow.pdf)
+[Checkout Bluetooth Connection Flow](res/Connection%20Flow.pdf)
+
+## Screenshots
+
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-13-30-438_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-15-14-551_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-15-27-760_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-15-39-736_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-15-49-058_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-17-06-520_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-17-43-191_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-18-06-269_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-18-13-910_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-18-25-853_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-18-51-639_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-19-02-872_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-19-32-174_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-19-56-481_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-20-09-295_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-20-52-519_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-21-12-197_ca.ubc.tendon_loader.webp)
+![](res/screenshots-v0.0.6/Screenshot_2021-06-25-23-21-21-526_ca.ubc.tendon_loader.webp)
 
 [license-badge]: https://img.shields.io/github/license/mitulvaghamshi/tendon_loader?logo=%20&style=for-the-badge
 [license-link]: https://github.com/mitulvaghamshi/tendon_loader/blob/main/LICENSE

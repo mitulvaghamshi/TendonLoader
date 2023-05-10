@@ -8,24 +8,25 @@ environment:
 
 dependencies:
   app_settings: ^4.2.0
-  archive: ^3.3.6
+  archive: ^3.3.7
   cloud_firestore: ^4.6.0
+  connectivity_plus: ^4.0.0
   cupertino_icons: ^1.0.5
   firebase_auth: ^4.5.0
   firebase_core: ^2.11.0
-  firebase_ui_auth: ^1.1.14
+  firebase_ui_auth: ^1.3.0
   firebase_ui_firestore: ^1.4.0
   flutter:
     sdk: flutter
   flutter_blue: ^0.8.0
-  flutter_svg: ^2.0.1
+  flutter_svg: ^1.1.6
   go_router: ^7.0.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   intl: ^0.17.0
-  location: ^5.0.0-dev.8
+  location: ^4.4.0
   rxdart: ^0.26.0
-  syncfusion_flutter_charts: ^21.2.3
+  syncfusion_flutter_charts: ^21.2.4
   syncfusion_flutter_xlsio: ^21.2.3
 
 dev_dependencies:
@@ -40,6 +41,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/app_logo.svg
-    - assets/enable_device.png
-    - assets/enable_location.png
-    - assets/enable_bluetooth.png
+    - assets/enable_device.webp
+    - assets/enable_location.webp
+    - assets/enable_bluetooth.webp

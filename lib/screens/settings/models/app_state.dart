@@ -1,6 +1,6 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:location/location.dart' as loc;
 import 'package:tendon_loader/common/models/export.dart';
 import 'package:tendon_loader/common/models/prescription.dart';
 import 'package:tendon_loader/screens/settings/models/app_scope.dart';
@@ -50,8 +50,8 @@ class AppState {
   }
 
   Future<int> uploadExports() async {
-    final bool isEnabled = await loc.isNetworkEnabled();
-    if (!isEnabled) return -1;
+    if (!((await Connectivity().checkConnectivity()) !=
+        ConnectivityResult.none)) return -1;
     int count = 0;
     for (final Export export in _exportBox.values) {
       if (await export.upload()) count++;

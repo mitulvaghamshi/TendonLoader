@@ -1,6 +1,6 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:location/location.dart' as loc;
 import 'package:tendon_loader/common/constants.dart';
 import 'package:tendon_loader/common/models/export.dart';
 import 'package:tendon_loader/common/models/prescription.dart';
@@ -258,7 +258,8 @@ extension on PromptScreenState {
     await export.save();
 
     if (_autoUpload) {
-      if (await loc.isNetworkEnabled()) await export.upload();
+      if (!((await Connectivity().checkConnectivity()) !=
+          ConnectivityResult.none)) await export.upload();
     } else {
       switch (submitDecision) {
         case Submission.now:

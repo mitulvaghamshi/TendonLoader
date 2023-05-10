@@ -62,9 +62,9 @@ class SettingsKeys {
 class Images {
   // Asset image resources
   static const String appLogo = 'assets/app_logo.svg';
-  static const String enableDevice = 'assets/enable_device.png';
-  static const String enableLocation = 'assets/enable_location.png';
-  static const String enableBluetooth = 'assets/enable_bluetooth.png';
+  static const String enableDevice = 'assets/enable_device.webp';
+  static const String enableLocation = 'assets/enable_location.webp';
+  static const String enableBluetooth = 'assets/enable_bluetooth.webp';
 }
 
 class Responses {
@@ -78,7 +78,7 @@ class Responses {
 
 class Commands {
   // Progressor instruction codes
-  // device can return a one time or streamed responce
+  // device can return a one time or streamed response
   static const int tareScale = 100;
   static const int startWeightMeas = 101;
   static const int stopWeightMeas = 102;
@@ -94,13 +94,13 @@ class Commands {
 }
 
 class DeviceUUID {
-  // Service UUID, a main service provides the base connction with receiver
+  // Service UUID, a main service provides the base connection with receiver
   static const String service = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57';
 
   // Control UUID, control instructions can be issued to this uuid
   static const String controller = '7e4e1703-1ea6-40c9-9dcc-13d34ffead57';
 
-  // Data UUID, progressor can send stream of data over this uuid
+  // Data UUID, Progressor can send stream of data over this uuid
   // Subscribe to this uuid to retrieve a stream of encoded data
   static const String data = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57';
 }
@@ -116,7 +116,7 @@ class Strings {
       '\nThis app needs Bluetooth to communicate with your Progressor.'
       '\nPlease enable Bluetooth on your device\n';
 
-  // Inform user that location is required to locate the progressor.
+  // Inform user that location is required to locate the Progressor.
   static const String locationLine1 =
       '\nScanning for the Progressor requires location services. '
       'We\'re only using this permission to scan for your Progressor';
@@ -137,12 +137,8 @@ class Strings {
       'custom prescriptions in settings.';
 
   // Ask user to tare the Progressor before use. With time, due to mechanical
-  // design, progressor may record and return data even when its idle. So,
+  // design, Progressor may record and return data even when its idle. So,
   // zero-ing (taring) is required for accurate measurements.
   static const String tareProgressor =
-      '\nPlease tare your progressor before use\n';
-
-  // Regex pattern for emain address (do not modify).
-  static const String emailRegex =
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      '\nPlease tare your Progressor before use\n';
 }
