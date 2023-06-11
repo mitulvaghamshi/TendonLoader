@@ -18,19 +18,23 @@ class CountdownWidgetState extends State<CountdownWidget>
   late final AnimationController _controller = AnimationController(
       vsync: this, duration: widget.duration + const Duration(seconds: 1));
 
+  void _onFinish(_) {
+    if (mounted) GoRouter.of(context).pop(true);
+  }
+
   @override
   void initState() {
     super.initState();
-    _controller.reverse(
-        from: _controller.value == 0.0 ? 1.0 : _controller.value);
-    _controller.addStatusListener((_) {
-      if (mounted) GoRouter.of(context).pop(true);
-    });
+    _controller
+      ..reverse(from: _controller.value == 0.0 ? 1.0 : _controller.value)
+      ..addStatusListener(_onFinish);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller
+      ..removeStatusListener(_onFinish)
+      ..dispose();
     super.dispose();
   }
 
@@ -43,7 +47,7 @@ class CountdownWidgetState extends State<CountdownWidget>
       ),
       AnimatedBuilder(
         animation: _controller,
-        builder: (_, Widget? child) => Text(
+        builder: (_, child) => Text(
           _getRemainingTime(),
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -80,13 +84,14 @@ class _CirclePainter extends CustomPainter {
     final Offset center = size.center(Offset.zero);
     final double radius = size.width / 2.5;
 
-    canvas.drawCircle(center, radius, paint);
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      pi * 1.5,
-      controller.value * pi * 2,
-      false,
-      paint..color = const Color(0xffffffff),
-    );
+    canvas
+      ..drawCircle(center, radius, paint)
+      ..drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        pi * 1.5,
+        controller.value * pi * 2,
+        false,
+        paint..color = const Color(0xffffffff),
+      );
   }
 }

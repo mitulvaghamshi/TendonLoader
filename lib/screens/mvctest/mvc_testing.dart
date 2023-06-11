@@ -14,7 +14,7 @@ class MVCTesting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GraphWidget(
-      onExit: (String key) {
+      onExit: (key) {
         PromptScreenRoute(key: key).go(context);
         return true;
       },

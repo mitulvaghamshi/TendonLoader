@@ -30,7 +30,7 @@ class _PainSelectorState extends State<PainSelector> {
         inactiveColor: _trackColor,
         label: painScore.toStringAsFixed(1),
         onChangeEnd: widget.onSelect,
-        onChanged: (double value) => setState(() => painScore = value),
+        onChanged: (value) => setState(() => painScore = value),
       ),
     );
   }

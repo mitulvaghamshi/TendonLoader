@@ -15,7 +15,7 @@ class SignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.hasData) {
           final User? user = snapshot.data;
           if (user == null) throw 'Unable to identify user!';
@@ -23,7 +23,7 @@ class SignIn extends StatelessWidget {
           if (email == null) throw 'Cannot find valid user id!';
           return FutureBuilder<void>(
             future: AppState.of(context).initWith(email),
-            builder: (BuildContext context, AsyncSnapshot<Object?> snapshot) {
+            builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return builder(context, user);
               }
@@ -36,8 +36,7 @@ class SignIn extends StatelessWidget {
           showAuthActionSwitch: true,
           sideBuilder: (_, __) => const ImageWidget(),
           headerBuilder: (_, __, ___) => const ImageWidget(),
-          subtitleBuilder: (_, AuthAction __) =>
-              const Text('Welcome to Tendon Loader'),
+          subtitleBuilder: (_, __) => const Text('Welcome to Tendon Loader'),
           footerBuilder: (_, __) => const Padding(
             padding: EdgeInsets.only(top: 16),
             child: Text(

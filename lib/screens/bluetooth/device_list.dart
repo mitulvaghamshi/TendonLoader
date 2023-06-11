@@ -50,7 +50,7 @@ extension on DeviceList {
 /// named in "Progressor_xxxx" pattern, where, "xxxx" is the four digit
 /// unique (serial) number.
 Iterable<BluetoothDevice> _filterList(Iterable<BluetoothDevice> devices) {
-  return devices.where((BluetoothDevice device) {
+  return devices.where((device) {
     return device.name.contains('Progressor');
   });
 }

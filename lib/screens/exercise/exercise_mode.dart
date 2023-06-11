@@ -46,7 +46,7 @@ class ExerciseModeState extends State<ExerciseMode>
   @override
   Widget build(BuildContext context) {
     return GraphWidget(
-      onExit: (String key) {
+      onExit: (key) {
         PromptScreenRoute(key: key).go(context);
         return true;
       },
@@ -55,7 +55,7 @@ class ExerciseModeState extends State<ExerciseMode>
       builder: () => Column(children: <Widget>[
         Text(widget.handler.timeCounter, style: widget.handler.timeStyle),
         const Divider(),
-        Row(children: const <Widget>[
+        const Row(children: <Widget>[
           Expanded(child: Text('Rep:', style: Styles.headerLabel)),
           Expanded(child: Text('Set:', style: Styles.headerLabel)),
         ]),

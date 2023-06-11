@@ -7,7 +7,7 @@ import 'package:tendon_loader/common/router/router.dart';
 import 'package:tendon_loader/common/widgets/loading_widget.dart';
 import 'package:tendon_loader/screens/web/utils/popup_action.dart';
 import 'package:tendon_loader/screens/web/widgets/dismissable_tile.dart';
-import 'package:tendon_loader/screens/web/widgets/search_bar.dart';
+import 'package:tendon_loader/screens/web/widgets/search_field.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.searchList});
@@ -45,9 +45,10 @@ class _HomePageState extends State<HomePage> {
             top: false,
             minimum: const EdgeInsets.all(8),
             sliver: SliverList(
-              delegate: SliverChildBuilderDelegate((_, int index) {
+              delegate: SliverChildBuilderDelegate((_, index) {
                 if (index == 0) {
-                  return SearchBar(onSearch: _search, controller: _searchCtrl);
+                  return SearchField(
+                      onSearch: _search, controller: _searchCtrl);
                 } else if (index < searchList.length) {
                   final Patient patient = searchList.elementAt(index);
                   return DismissableTile(
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     subTitle: Text(patient.id),
                     trailing: _PopupMenu(patient: patient),
-                    handler: (PopupAction action) => _handler(action, patient),
+                    handler: (action) => _handler(action, patient),
                   );
                 }
                 return null;
@@ -80,7 +81,7 @@ extension on _HomePageState {
     final String query = _searchCtrl.text.toLowerCase();
     Iterable<Patient> filterList = widget.searchList;
     if (query.isNotEmpty) {
-      filterList = widget.searchList.where((Patient e) {
+      filterList = widget.searchList.where((e) {
         return e.id.toLowerCase().contains(query);
       });
     }
@@ -88,7 +89,7 @@ extension on _HomePageState {
   }
 
   Future<void> _handler(PopupAction action, Patient patient) async {
-    PopupAction.values.where((PopupAction element) => element == action);
+    PopupAction.values.where((element) => element == action);
     switch (action) {
       case PopupAction.itemTap:
         ExportListRoute(userId: patient.id).go(context);
@@ -114,13 +115,12 @@ class _PopupMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot<Prescription>>(
       future: patient.prescriptionRef!.get(),
-      builder: (_, AsyncSnapshot<DocumentSnapshot<Prescription>> snapshot) {
+      builder: (_, snapshot) {
         if (!snapshot.hasData) return const LoadingWidget();
         patient.prescription = snapshot.data!.data();
         return PopupMenuButton<PopupAction>(
-          onSelected: (PopupAction action) =>
-              _onSelected(context, action, patient),
-          itemBuilder: (BuildContext context) {
+          onSelected: (action) => _onSelected(context, action, patient),
+          itemBuilder: (context) {
             return <PopupMenuItem<PopupAction>>[
               if (patient.prescription!.isAdmin)
                 const PopupMenuItem<PopupAction>(

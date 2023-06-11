@@ -19,7 +19,7 @@ class BluetoothTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<BluetoothState>(
       stream: FlutterBlue.instance.state,
-      builder: (_, AsyncSnapshot<BluetoothState> snapshot) {
+      builder: (_, snapshot) {
         // If the Bluetooth is "ON", check if Location is enabled...
         if (snapshot.hasData && snapshot.data == BluetoothState.on) {
           return const LocationTile();

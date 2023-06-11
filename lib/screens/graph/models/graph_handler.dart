@@ -81,12 +81,13 @@ abstract class GraphHandler with Progressor {
       duration: const Duration(seconds: 5),
     );
     if (result ?? false) {
+      timestamp = Timestamp.now();
       hasData = true;
       isRunning = true;
       isComplete = false;
-      exportData.clear();
-      exportData.add(ChartData());
-      timestamp = Timestamp.now();
+      exportData
+        ..clear()
+        ..add(ChartData());
       await startProgresssor();
     }
   }
@@ -160,5 +161,5 @@ extension on List<int> {
       (_bytes.getUint32(0, Endian.little) / 1000000.0).toStringAsFixed(1));
 
   double get toWeight => double.parse(
-      (_bytes.getFloat32(0, Endian.little).abs()).toStringAsFixed(2));
+      _bytes.getFloat32(0, Endian.little).abs().toStringAsFixed(2));
 }

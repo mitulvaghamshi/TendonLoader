@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-class SearchBar extends StatelessWidget {
-  const SearchBar({
+class SearchField extends StatelessWidget {
+  const SearchField({
     super.key,
     required this.onSearch,
     required this.controller,
@@ -17,7 +17,7 @@ class SearchBar extends StatelessWidget {
       child: CupertinoTextField(
         controller: controller,
         placeholder: 'Search...',
-        onSubmitted: (String value) => onSearch(),
+        onSubmitted: (value) => onSearch(),
         prefix: const Icon(CupertinoIcons.search),
         clearButtonMode: OverlayVisibilityMode.editing,
       ),

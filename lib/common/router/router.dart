@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -68,7 +67,7 @@ class TendonLoaderRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) {
     return Scaffold(
       body: SignIn(
-        builder: (BuildContext context, User user) => Column(
+        builder: (context, user) => Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             const ImageWidget(maxSize: 200),
@@ -94,7 +93,7 @@ class TendonLoaderRoute extends GoRouteData {
               backgroundColor: Colors.indigo,
               icon: const Icon(Icons.settings),
               label: const Text('Settings'),
-              onPressed: () => const SettingScreenRoute().go(context),
+              onPressed: () => const SettingScreenRoute().push<void>(context),
             ),
           ],
         ),
@@ -142,7 +141,7 @@ class NewMVCTestRoute extends GoRouteData {
     if (reference == null) throw 'Prescription reference is null';
     return FutureBuilder<DocumentSnapshot<Prescription>>(
       future: reference.get(),
-      builder: (_, AsyncSnapshot<DocumentSnapshot<Prescription>> snapshot) {
+      builder: (_, snapshot) {
         if (!snapshot.hasData) return const Center(child: LoadingWidget());
         final Prescription? prescription = snapshot.data!.data();
         if (prescription == null) throw 'Prescription is null';
@@ -181,14 +180,14 @@ class NewExerciseRoute extends GoRouteData {
     if (reference == null) throw 'Prescription reference is null';
     return FutureBuilder<DocumentSnapshot<Prescription>>(
       future: reference.get(),
-      builder: (_, AsyncSnapshot<DocumentSnapshot<Prescription>> snapshot) {
+      builder: (_, snapshot) {
         if (!snapshot.hasData) return const Center(child: LoadingWidget());
         final Prescription? prescription = snapshot.data!.data();
         if (prescription == null) throw 'Prescription is null';
         return NewExercise(
           readOnly: readOnly,
           prescription: prescription,
-          onSubmit: (Prescription prescription) {
+          onSubmit: (prescription) {
             if (readOnly) {
               reference.update(prescription.toMap());
               context.pop();
@@ -237,10 +236,9 @@ class HomePageRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) {
     return FutureBuilder<QuerySnapshot<Patient>>(
       future: _dataStore.where(FieldPath.documentId).get(),
-      builder: (_, AsyncSnapshot<QuerySnapshot<Patient>> snapshot) {
+      builder: (_, snapshot) {
         if (!snapshot.hasData) return const Center(child: LoadingWidget());
-        final Iterable<Patient> data = snapshot.data!.docs
-            .map((QueryDocumentSnapshot<Patient> e) => e.data());
+        final Iterable<Patient> data = snapshot.data!.docs.map((e) => e.data());
         return HomePage(searchList: data);
       },
     );
@@ -257,11 +255,10 @@ class ExerciseHistoryRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) {
     return FutureBuilder<QuerySnapshot<Export>>(
       future: Patient.of(userId).exportRef!.get(),
-      builder: (_, AsyncSnapshot<QuerySnapshot<Export>> snapshot) {
+      builder: (_, snapshot) {
         if (!snapshot.hasData) return const Center(child: LoadingWidget());
-        final Iterable<Export> data = snapshot.data!.docs
-            .map((QueryDocumentSnapshot<Export> e) => e.data());
-        final Iterable<Export> list = data.where((Export e) => !e.isMVC);
+        final Iterable<Export> data = snapshot.data!.docs.map((e) => e.data());
+        final Iterable<Export> list = data.where((e) => !e.isMVC);
         if (list.isEmpty) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(middle: Text(userId)),
@@ -284,10 +281,9 @@ class ExportListRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) {
     return FutureBuilder<QuerySnapshot<Export>>(
       future: Patient.of(userId).exportRef!.get(),
-      builder: (_, AsyncSnapshot<QuerySnapshot<Export>> snapshot) {
+      builder: (_, snapshot) {
         if (!snapshot.hasData) return const Center(child: LoadingWidget());
-        final Iterable<Export> data = snapshot.data!.docs
-            .map((QueryDocumentSnapshot<Export> e) => e.data());
+        final Iterable<Export> data = snapshot.data!.docs.map((e) => e.data());
         return ExportList(title: userId, searchList: data);
       },
     );
@@ -315,4 +311,4 @@ CollectionReference<Patient> get _dataStore => FirebaseFirestore.instance
     .collection(DataKeys.rootCollection)
     .withConverter<Patient>(
         fromFirestore: Patient.fromJson,
-        toFirestore: (Patient value, _) => value.toMap());
+        toFirestore: (value, _) => value.toMap());

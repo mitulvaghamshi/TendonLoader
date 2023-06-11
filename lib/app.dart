@@ -35,7 +35,7 @@ class TendonLoader extends StatelessWidget {
       theme: themeData,
       darkTheme: darkThemeData,
       themeMode: model.isDarkMode() ? ThemeMode.dark : ThemeMode.light,
-      builder: (_, Widget? child) => CupertinoTheme(
+      builder: (_, child) => CupertinoTheme(
         data: CupertinoThemeData(
           brightness: model.isDarkMode() ? Brightness.dark : Brightness.light,
         ),

@@ -24,7 +24,7 @@ class ConnectedTile extends StatelessWidget with Progressor {
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
       future: initializeWith(device),
-      builder: (_, AsyncSnapshot<bool> snapshot) {
+      builder: (_, snapshot) {
         if (!snapshot.hasData || !snapshot.data!) return const LoadingWidget();
         return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
           ListTile(
@@ -49,7 +49,7 @@ class ConnectedTile extends StatelessWidget with Progressor {
           StreamBuilder<ChartData>(
             initialData: ChartData(),
             stream: GraphHandler.stream,
-            builder: (_, AsyncSnapshot<ChartData> snapshot) => Text(
+            builder: (_, snapshot) => Text(
               '${snapshot.data!.load.toStringAsFixed(1)} Kg.',
               style: const TextStyle(
                 fontSize: 40,

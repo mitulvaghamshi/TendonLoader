@@ -1,63 +1,32 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
-
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
-
 analyzer:
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
   errors:
-    # treat missing required parameters as a warning (not a hint)
-    missing_required_param: warning
-    # treat missing returns as a warning (not a hint)
-    missing_return: warning
-    # allow having TODOs in the code
-    todo: ignore
-    # allow self-reference to deprecated members (we do this because otherwise we have
-    # to annotate every member in every test, assert, etc, when we deprecate something)
-    deprecated_member_use_from_same_package: ignore
-    # Ignore analyzer hints for updating pubspecs when using Future or
-    # Stream and not importing dart:async
-    # Please see https://github.com/flutter/flutter/pull/24528 for details.
-    sdk_version_async_exported_from_core: ignore
-    # Turned off until null-safe rollout is complete.
-    # unnecessary_null_comparison: ignore
-    omit_local_variable_types: ignore
+    missing_required_param: error
   exclude:
-    - "bin/cache/**"
-    - "lib/**/*.g.dart"
+    - "*.g.dart"
+    - "res/**"
 
 linter:
   rules:
-    # these rules are documented on and in the same order as
-    # the Dart Lint rules page to make maintenance easier
-    # https://github.com/dart-lang/linter/blob/master/example/all.yaml
     # - always_put_control_body_on_new_line
     # - always_put_required_named_parameters_first # we prefer having parameters in the same order as fields https://github.com/flutter/flutter/issues/10219
-    - always_specify_types
+    # - always_specify_types
     - always_use_package_imports # we do this commonly
     # - avoid_annotating_with_dynamic # conflicts with always_specify_types
     - avoid_bool_literals_in_conditional_expressions
-    # - avoid_catches_without_on_clauses # we do this commonly
+    - avoid_catches_without_on_clauses # we do this commonly
     # - avoid_catching_errors # we do this commonly
     - avoid_classes_with_only_static_members
     # - avoid_double_and_int_checks # only useful when targeting JS runtime
     - avoid_dynamic_calls # not yet tested
     - avoid_empty_else
     - avoid_equals_and_hash_code_on_mutable_classes
-    # - avoid_escaping_inner_quotes # not yet tested
+    - avoid_escaping_inner_quotes # not yet tested
     - avoid_field_initializers_in_const_classes
     - avoid_function_literals_in_foreach_calls
-    # - avoid_implementing_value_types # not yet tested
+    - avoid_implementing_value_types # not yet tested
     # - avoid_js_rounded_ints # only useful when targeting JS runtime
-    # - avoid_positional_boolean_parameters # not yet tested
+    - avoid_positional_boolean_parameters # not yet tested
     - avoid_print # not yet tested
     - avoid_private_typedef_functions # we prefer having typedef (discussion in https://github.com/flutter/flutter/pull/16356)
     - avoid_redundant_argument_values # not yet tested
@@ -69,14 +38,14 @@ linter:
     # - avoid_setters_without_getters # not yet tested
     - avoid_slow_async_io
     - avoid_type_to_string
-    # - avoid_types_on_closure_parameters # conflicts with always_specify_types
+    - avoid_types_on_closure_parameters # conflicts with always_specify_types
     - avoid_unnecessary_containers
     - avoid_unused_constructor_parameters
     - avoid_void_async
     - avoid_web_libraries_in_flutter # not yet tested
     - camel_case_types
     - cancel_subscriptions
-    # - cascade_invocations # not yet tested
+    - cascade_invocations # not yet tested
     - cast_nullable_to_non_nullable
     - close_sinks # not reliable enough
     - comment_references # blocked on https://github.com/dart-lang/linter/issues/1142
@@ -94,9 +63,9 @@ linter:
     - implementation_imports
     # - invariant_booleans # too many false positives: https://github.com/dart-lang/linter/issues/811
     - iterable_contains_unrelated_type
-    # - join_return_with_assignment # not required by flutter style
+    - join_return_with_assignment # not required by flutter style
     - leading_newlines_in_multiline_strings
-    # - lines_longer_than_80_chars # not required by flutter style
+    - lines_longer_than_80_chars # not required by flutter style
     - list_remove_unrelated_type
     # - literal_only_boolean_expressions # too many false positives: https://github.com/dart-lang/sdk/issues/34181
     - missing_whitespace_between_adjacent_strings
@@ -112,9 +81,9 @@ linter:
     - package_api_docs
     - package_names
     - package_prefixed_library_names
-    # - parameter_assignments # we do this commonly
+    - parameter_assignments # we do this commonly
     - prefer_asserts_in_initializer_lists
-    # - prefer_asserts_with_message # not required by flutter style
+    - prefer_asserts_with_message # not required by flutter style
     - prefer_const_constructors
     - prefer_const_constructors_in_immutables
     - prefer_const_declarations
@@ -140,7 +109,7 @@ linter:
     # - public_member_api_docs # enabled on a case-by-case basis; see e.g. packages/analysis_options.yaml
     - sized_box_for_whitespace
     - sort_constructors_first
-    # - sort_pub_dependencies # prevents separating pinned transitive dependencies
+    - sort_pub_dependencies # prevents separating pinned transitive dependencies
     - sort_unnamed_constructors_first
     - test_types_in_equals
     - throw_in_finally
@@ -165,7 +134,7 @@ linter:
     - use_late_for_private_fields_and_variables
     # - use_named_constants # not yet tested
     - use_raw_strings
-    # - use_setters_to_change_properties # not yet tested
+    - use_setters_to_change_properties # not yet tested
     # - use_string_buffers # has false positives: https://github.com/dart-lang/sdk/issues/34182
     # - use_to_and_as_if_applicable # has false positives, so we prefer to catch this by code-review
     - void_checks

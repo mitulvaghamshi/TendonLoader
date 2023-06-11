@@ -22,8 +22,9 @@ class AppState {
         await Hive.openBox<Settings>('$userId-settings.dat');
     _settings = settingsBox.get(userId, defaultValue: Settings.empty())!;
     if (!_settings.isInBox) await settingsBox.put(userId, _settings);
-    _settings.userId = userId;
-    _settings.save();
+    _settings
+      ..userId = userId
+      ..save();
   }
 
   // Start: export box
@@ -68,7 +69,7 @@ class AppState {
     return _selectedExport!;
   }
 
-  void setSelectedExport(Export export) => _selectedExport = export;
+  set selectedExport(Export export) => _selectedExport = export;
   // End ExportList: item tap
 
   // Start: Settings
@@ -83,7 +84,7 @@ class AppState {
   bool isDarkMode() {
     try {
       return _settings.darkMode;
-    } catch (e) {
+    } catch (_) {
       return true;
     }
   }

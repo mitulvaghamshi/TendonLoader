@@ -119,11 +119,11 @@ class Strings {
   // Inform user that location is required to locate the Progressor.
   static const String locationLine1 =
       '\nScanning for the Progressor requires location services. '
-      'We\'re only using this permission to scan for your Progressor';
+      "We're only using this permission to scan for your Progressor";
 
   // Assure user that no physical location is collected and stored.
   static const String locationLine2 =
-      '\nWe\'ll never collect your physical location\n';
+      "\nWe'll never collect your physical location\n";
 
   // If there is no new MVC Test available to perform.
   static const String noMVCAvailable =

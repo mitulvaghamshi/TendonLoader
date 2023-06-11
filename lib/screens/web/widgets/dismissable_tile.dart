@@ -39,8 +39,7 @@ class DismissableTile extends StatelessWidget {
         color: const Color(0xFFDC3D3D),
         child: const Text('Delete', style: textStyle),
       ),
-      confirmDismiss: (DismissDirection direction) =>
-          _onDismiss(context, direction),
+      confirmDismiss: (direction) => _onDismiss(context, direction),
       child: ListTile(
         minLeadingWidth: 10,
         onTap: () => handler(PopupAction.itemTap),

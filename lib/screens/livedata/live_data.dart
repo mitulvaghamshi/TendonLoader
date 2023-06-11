@@ -13,7 +13,7 @@ class LiveData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GraphWidget(
-      onExit: (String _) => true,
+      onExit: (_) => true,
       handler: handler,
       title: LiveData.name,
       builder: () => Text(

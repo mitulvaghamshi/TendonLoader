@@ -20,7 +20,7 @@ class LocationTile extends StatelessWidget {
     return StreamBuilder<bool>(
       stream: Stream<bool>.periodic(const Duration(milliseconds: 300))
           .asyncMap((_) async => loc.Location().serviceEnabled()),
-      builder: (_, AsyncSnapshot<bool> snapshot) {
+      builder: (_, snapshot) {
         // If the location access is allowed,
         // check if "The Progressor" is powered on...
         if (snapshot.hasData && snapshot.data!) return const StartScanTile();

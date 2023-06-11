@@ -28,11 +28,12 @@ Future<void> _initApp() async {
       <AuthProvider<AuthListener, AuthCredential>>[EmailAuthProvider()]);
   if (kDebugMode) await _useEmulator();
   await Hive.initFlutter();
-  Hive.registerAdapter(SettingsAdapter());
-  Hive.registerAdapter(PrescriptionAdapter());
-  Hive.registerAdapter(ExportAdapter());
-  Hive.registerAdapter(ChartDataAdapter());
-  Hive.registerAdapter(TimestampAdapter());
+  Hive
+    ..registerAdapter(SettingsAdapter())
+    ..registerAdapter(PrescriptionAdapter())
+    ..registerAdapter(ExportAdapter())
+    ..registerAdapter(ChartDataAdapter())
+    ..registerAdapter(TimestampAdapter());
 }
 
 /// Development only, for Firebase Emulators.

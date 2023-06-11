@@ -5,7 +5,6 @@ import 'package:tendon_loader/common/router/router.dart';
 import 'package:tendon_loader/common/widgets/custom_widget.dart';
 import 'package:tendon_loader/screens/mvctest/widgets/time_picker_tile.dart';
 import 'package:tendon_loader/screens/settings/models/app_state.dart';
-import 'package:tendon_loader/screens/settings/models/settings.dart';
 
 class NewMVCTest extends StatefulWidget {
   const NewMVCTest({super.key, required this.duration});
@@ -60,7 +59,7 @@ class NewMVCTestState extends State<NewMVCTest> {
               value: _useLastDuration,
               contentPadding: Styles.tilePadding,
               title: const Text('Use previous duration.'),
-              onChanged: (bool value) => setState(() {
+              onChanged: (value) => setState(() {
                 _useLastDuration = value;
                 _initFields();
               }),
@@ -68,8 +67,7 @@ class NewMVCTestState extends State<NewMVCTest> {
             TimePickerTile(
               time: _duration,
               desc: 'MVC test duration',
-              onSelected: (int duration) =>
-                  setState(() => _duration = duration),
+              onSelected: (duration) => setState(() => _duration = duration),
             ),
           ],
         ),
@@ -87,7 +85,7 @@ extension on NewMVCTestState {
 
   void _onSubmit() {
     if (_duration > 0) {
-      AppState.of(context).settings((Settings settings) {
+      AppState.of(context).settings((settings) {
         settings.prescription =
             settings.prescription.copyWith(mvcDuration: _duration);
       });

@@ -6,7 +6,6 @@ import 'package:tendon_loader/common/widgets/custom_widget.dart';
 import 'package:tendon_loader/common/widgets/image_widget.dart';
 import 'package:tendon_loader/screens/bluetooth/models/bluetooth_handler.dart';
 import 'package:tendon_loader/screens/settings/models/app_state.dart';
-import 'package:tendon_loader/screens/settings/models/settings.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -72,7 +71,7 @@ class _SettingsScreenState extends State<SettingsScreen> with Progressor {
             title: const Text('Use dark mode'),
             subtitle: const Text('Use dark interface (restart required)'),
             value: model.isDarkMode(),
-            onChanged: (bool value) => model.settings((Settings settings) {
+            onChanged: (value) => model.settings((settings) {
               setState(() => settings.darkMode = value);
             }),
           ),
@@ -81,7 +80,7 @@ class _SettingsScreenState extends State<SettingsScreen> with Progressor {
             title: const Text('Automatic data upload'),
             subtitle: const Text('Automatically upload data on completion'),
             value: model.isAutoUpload(),
-            onChanged: (bool value) => model.settings((Settings settings) {
+            onChanged: (value) => model.settings((settings) {
               setState(() => settings.autoUpload = value);
             }),
           ),
@@ -90,7 +89,7 @@ class _SettingsScreenState extends State<SettingsScreen> with Progressor {
             title: const Text('Use custom prescriptions'),
             subtitle: const Text('Allows you to edit your prescriptions'),
             value: model.isCustomPrescriptions(),
-            onChanged: (bool value) => model.settings((Settings settings) {
+            onChanged: (value) => model.settings((settings) {
               setState(() => settings.customPrescriptions = value);
             }),
           ),
@@ -128,8 +127,8 @@ class _SettingsScreenState extends State<SettingsScreen> with Progressor {
               child: TextField(
                 style: Styles.titleStyle,
                 controller: _scaleCtrl,
-                onChanged: (String value) => model.settings(
-                    (Settings settings) => setState(() =>
+                onChanged: (value) => model.settings((settings) => setState(
+                    () =>
                         settings.graphScale = double.tryParse(value) ?? 30.0)),
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
@@ -162,7 +161,7 @@ class _SettingsScreenState extends State<SettingsScreen> with Progressor {
               Divider(thickness: 2),
               Text(
                 'Tendon Loader is designed to measure and help cure '
-                'Achille\'s (uh-KILL-eez) Tendon Problems.',
+                "Achille's (uh-KILL-eez) Tendon Problems.",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
               Padding(

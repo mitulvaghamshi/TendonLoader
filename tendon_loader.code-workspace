@@ -153,6 +153,7 @@
       {
         "id": "backupPath",
         "type": "promptString",
+        "default": "$HOME/Developer/github/Developer/femu-bak",
         "description": "Enter firebase emulator backup location?",
       },
     ],

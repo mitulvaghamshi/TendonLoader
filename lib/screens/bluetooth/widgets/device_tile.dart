@@ -18,7 +18,7 @@ class DeviceTile extends StatelessWidget with Progressor {
   Widget build(BuildContext context) {
     return StreamBuilder<BluetoothDeviceState>(
       stream: device.state,
-      builder: (_, AsyncSnapshot<BluetoothDeviceState> snapshot) {
+      builder: (_, snapshot) {
         if (snapshot.data == BluetoothDeviceState.connected) {
           return ConnectedTile(device: device);
         }

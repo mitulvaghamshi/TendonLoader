@@ -4,7 +4,7 @@ import 'package:tendon_loader/common/router/router.dart';
 import 'package:tendon_loader/screens/settings/models/app_state.dart';
 import 'package:tendon_loader/screens/web/utils/popup_action.dart';
 import 'package:tendon_loader/screens/web/widgets/dismissable_tile.dart';
-import 'package:tendon_loader/screens/web/widgets/search_bar.dart';
+import 'package:tendon_loader/screens/web/widgets/search_field.dart';
 
 class ExportList extends StatefulWidget {
   const ExportList({super.key, required this.title, required this.searchList});
@@ -42,9 +42,10 @@ class _ExportListState extends State<ExportList> {
             top: false,
             minimum: const EdgeInsets.all(8),
             sliver: SliverList(
-              delegate: SliverChildBuilderDelegate((_, int index) {
+              delegate: SliverChildBuilderDelegate((_, index) {
                 if (index == 0) {
-                  return SearchBar(onSearch: _search, controller: _searchCtrl);
+                  return SearchField(
+                      onSearch: _search, controller: _searchCtrl);
                 } else if (index < searchList.length) {
                   final Export export = searchList.elementAt(index);
                   return DismissableTile(
@@ -59,7 +60,7 @@ class _ExportListState extends State<ExportList> {
                       onPressed: () =>
                           _handler(PopupAction.itemSessionInfo, export),
                     ),
-                    handler: (PopupAction action) => _handler(action, export),
+                    handler: (action) => _handler(action, export),
                   );
                 }
                 return null;
@@ -77,7 +78,7 @@ extension on _ExportListState {
     final String query = _searchCtrl.text.toLowerCase();
     Iterable<Export> filterList = widget.searchList;
     if (query.isNotEmpty) {
-      filterList = widget.searchList.where((Export e) {
+      filterList = widget.searchList.where((e) {
         return e.fileName.toLowerCase().contains(query);
       });
     }
@@ -87,7 +88,7 @@ extension on _ExportListState {
   Future<void> _handler(PopupAction action, Export export) async {
     switch (action) {
       case PopupAction.itemTap:
-        AppState.of(context).setSelectedExport(export);
+        AppState.of(context).selectedExport = export;
         const ExportViewRoute().go(context);
         break;
       case PopupAction.itemDelete:
@@ -97,7 +98,7 @@ extension on _ExportListState {
         await export.download();
         break;
       case PopupAction.itemSessionInfo:
-        AppState.of(context).setSelectedExport(export);
+        AppState.of(context).selectedExport = export;
         const SessionInfoRoute().go(context);
         break;
       default:

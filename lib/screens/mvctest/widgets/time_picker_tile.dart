@@ -36,17 +36,17 @@ class TimePickerTile extends StatelessWidget {
             _NumberPicker(
               count: 60,
               label: 'Min',
-              onUpdate: (int val) => min = val,
+              onUpdate: (val) => min = val,
             ),
             _NumberPicker(
               count: 60,
               label: 'Sec',
-              onUpdate: (int val) => sec = val,
+              onUpdate: (val) => sec = val,
             ),
           ],
         ),
       ],
-      onExpansionChanged: (bool isExpanded) {
+      onExpansionChanged: (isExpanded) {
         if (!isExpanded) {
           final int seconds = Duration(minutes: min, seconds: sec).inSeconds;
           if (seconds > 0) onSelected(seconds);
@@ -80,7 +80,7 @@ class _NumberPicker extends StatelessWidget {
           useMagnifier: true,
           onSelectedItemChanged: onUpdate,
           physics: const FixedExtentScrollPhysics(),
-          children: List<Widget>.generate(count + 1, (int index) {
+          children: List<Widget>.generate(count + 1, (index) {
             return Container(
               width: 35,
               alignment: Alignment.centerLeft,

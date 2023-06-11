@@ -20,13 +20,13 @@ class Patient {
     final DocumentReference<Prescription> prescriptionRef =
         reference.withConverter<Prescription>(
             fromFirestore: Prescription.fromJson,
-            toFirestore: (Prescription value, _) => value.toMap());
+            toFirestore: (value, _) => value.toMap());
 
     final CollectionReference<Export> exportRef = reference
         .collection(DataKeys.exportsCollection)
         .withConverter<Export>(
             fromFirestore: Export.fromJson,
-            toFirestore: (Export value, _) => value.toMap());
+            toFirestore: (value, _) => value.toMap());
 
     return Patient(
       reference: reference,
@@ -46,8 +46,8 @@ extension ExPatient on Patient {
 
   Future<void> download() async {
     final QuerySnapshot<Export> query = await exportRef!.get();
-    final Iterable<ArchiveFile> iterable = query.docs.map<ArchiveFile>(
-        (QueryDocumentSnapshot<Export> e) => e.data().toExcelSheet());
+    final Iterable<ArchiveFile> iterable =
+        query.docs.map<ArchiveFile>((e) => e.data().toExcelSheet());
     final Archive archive = Archive();
     iterable.forEach(archive.addFile);
     await saveExcel(name: '$id.zip', bytes: ZipEncoder().encode(archive));
@@ -55,7 +55,7 @@ extension ExPatient on Patient {
 
   Future<void> delete() async {
     final QuerySnapshot<Export> query = await exportRef!.get();
-    query.docs.map((QueryDocumentSnapshot<Export> e) => e.reference.delete());
+    query.docs.map((e) => e.reference.delete());
     await reference!.delete();
   }
 

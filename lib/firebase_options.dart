@@ -64,7 +64,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '382210630513',
     projectId: 'tendonloaderdev',
     storageBucket: 'tendonloaderdev.appspot.com',
-    iosClientId: '382210630513-n8vmifa9kerulcjq8hk2u4uc8lmtdg17.apps.googleusercontent.com',
+    iosClientId:
+        '382210630513-n8vmifa9kerulcjq8hk2u4uc8lmtdg17.apps.googleusercontent.com',
     iosBundleId: 'me.mitul.tendonLoader',
   );
 }

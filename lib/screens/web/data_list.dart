@@ -17,10 +17,10 @@ class DataList extends StatelessWidget {
     return CustomScrollView(
       semanticChildCount: list.length,
       slivers: <Widget>[
-        CupertinoSliverNavigationBar(
+        const CupertinoSliverNavigationBar(
           heroTag: 'data-list-nav',
           automaticallyImplyLeading: false,
-          largeTitle: Row(children: const <Widget>[
+          largeTitle: Row(children: <Widget>[
             Expanded(child: Text('NO.', textAlign: TextAlign.center)),
             Expanded(child: Text('LOAD', textAlign: TextAlign.center)),
             Expanded(child: Text('TIME', textAlign: TextAlign.center)),
@@ -30,7 +30,7 @@ class DataList extends StatelessWidget {
           top: false,
           minimum: const EdgeInsets.all(8),
           sliver: SliverList(
-            delegate: SliverChildBuilderDelegate((_, int index) {
+            delegate: SliverChildBuilderDelegate((_, index) {
               if (index < list.length) {
                 return Row(children: <Widget>[
                   _buildItem('${index + 1}'),

@@ -5,9 +5,9 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Row(mainAxisSize: MainAxisSize.min, children: const <Widget>[
+    return const Padding(
+      padding: EdgeInsets.all(16),
+      child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         CircularProgressIndicator.adaptive(),
         SizedBox(width: 5),
         Text('Please wait...'),

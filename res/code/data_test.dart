@@ -36,7 +36,7 @@ void main() {
     } else if (data[0] == RES_CMD_RESPONSE) {
       if (command == CMD_GET_APP_VERSION) {
         debugPrint(
-            'FW version: ${String.fromCharCodes(data.getRange(2, data.length))}');
+            'FW v${String.fromCharCodes(data.getRange(2, data.length))}');
       } else if (command == CMD_GET_BATTERY_VOLTAGE) {
         final Uint8List value =
             Uint8List.fromList(data.getRange(2, data.length).toList());

@@ -56,7 +56,7 @@ class _Header extends StatelessWidget {
     return StreamBuilder<ChartData>(
       initialData: ChartData(),
       stream: GraphHandler.stream,
-      builder: (_, AsyncSnapshot<ChartData> snapshot) {
+      builder: (_, snapshot) {
         handler.graphData.insert(0, snapshot.data!);
         handler.graphCtrl?.updateDataSource(updatedDataIndex: 0);
         return Ink(
@@ -105,11 +105,10 @@ class _BarGraph extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            xValueMapper: (ChartData? data, _) => 1,
-            yValueMapper: (ChartData? data, _) => data!.load,
+            xValueMapper: (data, _) => 1,
+            yValueMapper: (data, _) => data!.load,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            onRendererCreated: (ChartSeriesController ctrl) =>
-                handler.graphCtrl = ctrl,
+            onRendererCreated: (ctrl) => handler.graphCtrl = ctrl,
           ),
           if (handler is! LiveDataHandler)
             LineSeries<ChartData, int>(
@@ -117,10 +116,9 @@ class _BarGraph extends StatelessWidget {
               color: const Color(0xffff534d),
               animationDuration: 0,
               dataSource: handler.lineData!,
-              yValueMapper: (ChartData data, _) => data.load,
-              xValueMapper: (ChartData data, _) => data.time.toInt(),
-              onRendererCreated: (ChartSeriesController ctrl) =>
-                  handler.lineCtrl = ctrl,
+              yValueMapper: (data, _) => data.load,
+              xValueMapper: (data, _) => data.time.toInt(),
+              onRendererCreated: (ctrl) => handler.lineCtrl = ctrl,
             ),
         ],
       ),

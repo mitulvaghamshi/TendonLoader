@@ -20,7 +20,7 @@ class ImageWidget extends StatelessWidget {
       return Image.asset(
         name!,
         fit: BoxFit.contain,
-        frameBuilder: (_, Widget child, int? frame, ___) => AnimatedOpacity(
+        frameBuilder: (_, child, frame, ___) => AnimatedOpacity(
           duration: const Duration(seconds: 1),
           opacity: frame == null ? 0 : 1,
           child: child,

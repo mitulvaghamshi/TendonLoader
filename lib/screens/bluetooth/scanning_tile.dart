@@ -16,7 +16,7 @@ class ScanningTile extends StatelessWidget {
     return StreamBuilder<bool>(
       initialData: false,
       stream: FlutterBlue.instance.isScanning,
-      builder: (_, AsyncSnapshot<bool> snapshot) {
+      builder: (_, snapshot) {
         // If Scanning in progress... Show Loading...
         if (snapshot.data!) return const LoadingWidget();
         // else, Move to Scanner list which shows devices from scan result.

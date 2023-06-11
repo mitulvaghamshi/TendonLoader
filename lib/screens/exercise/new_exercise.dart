@@ -5,7 +5,6 @@ import 'package:tendon_loader/common/models/prescription.dart';
 import 'package:tendon_loader/common/widgets/custom_widget.dart';
 import 'package:tendon_loader/screens/mvctest/widgets/time_picker_tile.dart';
 import 'package:tendon_loader/screens/settings/models/app_state.dart';
-import 'package:tendon_loader/screens/settings/models/settings.dart';
 
 class NewExercise extends StatefulWidget {
   const NewExercise({
@@ -89,7 +88,7 @@ class NewExerciseState extends State<NewExercise> {
                     value: _useLastPrescription,
                     contentPadding: Styles.tilePadding,
                     title: const Text('Use previous prescriptions'),
-                    onChanged: (bool value) {
+                    onChanged: (value) {
                       _usePrevious(value);
                       setState(() => _useLastPrescription = value);
                     },
@@ -128,26 +127,25 @@ class NewExerciseState extends State<NewExercise> {
                 TimePickerTile(
                   time: _holdTime,
                   desc: 'Rep hold time',
-                  onSelected: (int duration) =>
+                  onSelected: (duration) =>
                       setState(() => _holdTime = duration),
                 ),
                 TimePickerTile(
                   time: _restTime,
                   desc: 'Rep rest time',
-                  onSelected: (int duration) =>
+                  onSelected: (duration) =>
                       setState(() => _restTime = duration),
                 ),
                 TimePickerTile(
                   time: _setRestTime,
                   desc: 'Set rest time (default: 90 sec)',
-                  onSelected: (int duration) =>
+                  onSelected: (duration) =>
                       setState(() => _setRestTime = duration),
                 ),
                 TimePickerTile(
                   time: _mvcDuration,
                   desc: 'MVC test duration (optional)',
-                  onSelected: (int value) =>
-                      setState(() => _mvcDuration = value),
+                  onSelected: (value) => setState(() => _mvcDuration = value),
                 ),
                 const SizedBox(height: 20),
                 CustomWidget.two(
@@ -202,7 +200,7 @@ extension on NewExerciseState {
           mvcDuration: _mvcDuration,
         );
       if (_holdTime > 0 && _restTime > 0 && _setRestTime > 0) {
-        AppState.of(context).settings((Settings settings) {
+        AppState.of(context).settings((settings) {
           settings.prescription = pre;
         });
         widget.onSubmit(pre);
@@ -248,7 +246,7 @@ class _InputWidget extends StatelessWidget {
       inputFormatters: <TextInputFormatter>[
         if (format != null) FilteringTextInputFormatter.allow(RegExp(format!)),
       ],
-      validator: (String? value) =>
+      validator: (value) =>
           value == null || value.isEmpty ? '$label is required' : null,
       decoration: InputDecoration(
         labelText: label,

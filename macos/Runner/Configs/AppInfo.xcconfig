@@ -1,7 +1,3 @@
-#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
-#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
-#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"
-
 // Application-level settings for the Runner target.
 //
 // This may be replaced with something auto-generated from metadata (e.g., pubspec.yaml) in the
@@ -15,4 +11,4 @@ PRODUCT_NAME = Tendon Loader
 PRODUCT_BUNDLE_IDENTIFIER = me.mitul.tendonLoader
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 me.mitul. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 Tendon Loader, All rights reserved.

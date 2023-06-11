@@ -13,8 +13,9 @@ import 'package:tendon_loader/screens/settings/models/settings.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
-  Hive.registerAdapter(SettingsAdapter());
-  Hive.registerAdapter(PrescriptionAdapter());
+  Hive
+    ..registerAdapter(SettingsAdapter())
+    ..registerAdapter(PrescriptionAdapter());
 
   final AppState state = AppState();
   await state.initWith('mitul@xmeow.wow');
@@ -95,7 +96,7 @@ class PromptScreenState extends State<PromptScreen> {
                         vertical: 20,
                         horizontal: 16,
                       ),
-                      child: PainSelector(onSelect: (double value) {
+                      child: PainSelector(onSelect: (value) {
                         setState(() => painScore = value);
                       }),
                     ),

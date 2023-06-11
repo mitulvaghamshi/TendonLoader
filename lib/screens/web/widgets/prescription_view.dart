@@ -33,7 +33,7 @@ class PrescriptionView extends StatelessWidget {
       child: DataTable(
         rows: rows,
         columns: columns,
-        dataRowHeight: 40,
+        dataRowMinHeight: 40,
         headingRowHeight: 40,
         dividerThickness: 2,
         headingTextStyle: Styles.titleStyle,

@@ -20,7 +20,7 @@ class ExerciseHistory extends StatelessWidget {
           SliverSafeArea(
             minimum: const EdgeInsets.all(8),
             sliver: SliverList(
-              delegate: SliverChildBuilderDelegate((_, int index) {
+              delegate: SliverChildBuilderDelegate((_, index) {
                 if (index < exerciseList.length) {
                   final Export export = exerciseList.elementAt(index);
                   return ExpansionTile(

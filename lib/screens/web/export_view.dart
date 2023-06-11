@@ -19,13 +19,13 @@ class _ExportViewState extends State<ExportView> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (_, BoxConstraints constraints) {
+      builder: (_, constraints) {
         if (constraints.biggest.width > 600) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               middle: Text(export.fileName),
             ),
-            child: Row(children: const <Widget>[
+            child: const Row(children: <Widget>[
               SizedBox(width: 300, child: DataList()),
               VerticalDivider(width: 2, thickness: 2),
               Expanded(child: DataGraph()),
