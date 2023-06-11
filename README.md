@@ -2,6 +2,11 @@
 
 [![MIT License][license-badge]][license-link]
 
+> ## Hey! This project has been concluded on Aug 31, 2021.
+>
+> Any commits afterwards just code maintainence, including dependencies upgrade,
+> framework upgrade, or cleanup, no new feature or support. Thank you.
+
 ## Introduction
 
 - **Tendon Loader** is designed to measure and help cure **Achille's
@@ -24,8 +29,8 @@
 ## The Project
 
 - This project contains three platforms ([Android][flutter-android],
-[iOS][flutter-ios] and [Web][flutter-web]) built using [Flutter][flutter-dev]
-with [Firebase][firebase-console].
+  [iOS][flutter-ios] and [Web][flutter-web]) built using [Flutter][flutter-dev]
+  with [Firebase][firebase-console].
 
 ## Firebase:
 
@@ -59,13 +64,13 @@ with [Firebase][firebase-console].
 
 ## 3. Hosting
 
-- ~~The web-app is [hosted][web-hosting] URLs registered for the live channel are:
-  https://tendon-loader.web.app and https://tendon-loader.firebaseapp.com~~
+- ~~The web-app is [hosted][web-hosting] URLs registered for the live channel
+  are: https://tendon-loader.web.app and https://tendon-loader.firebaseapp.com~~
 
 ## Setup
 
-- This Guide assumes you have installed **Flutter SDK**, **Android Studio**, **Xcode
-  (macOS)**, and **Google Chrome**
+- This Guide assumes you have installed **Flutter SDK**, **Android Studio**,
+  **Xcode (macOS)**, and **Google Chrome**
 - **Android build** requires keystore information files to successfully build
   the app (even debug mode): (`android/keystore.properties`) and
   (`android/tendonloaderkey.jks`).
