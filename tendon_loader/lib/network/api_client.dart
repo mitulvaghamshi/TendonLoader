@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 @immutable
 mixin ApiClient {
-  static const _host = 'localhost:5082';
+  static const _host = '192.168.0.113:5082';
   static const _headers = {'Accept': 'application/json'};
 
   static Future<(dynamic, bool)> get(final String path) async {

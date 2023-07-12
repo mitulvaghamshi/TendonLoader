@@ -29,7 +29,8 @@ final class HomeScreenState extends State<HomeScreen> with Progressor {
         child: WillPopScope(
           onWillPop: () async => disconnect().then((_) => true),
           child: Column(children: [
-            const AppLogo.padded(),
+            const Hero(tag: 'hero-app-logo', child: AppLogo.sized()),
+            const SizedBox(height: 30),
             RawButton.extended(
               color: Colors.orange,
               onTap: () => _navigateTo(LiveData.name),
@@ -48,12 +49,15 @@ final class HomeScreenState extends State<HomeScreen> with Progressor {
               child: const Text(ExerciseMode.name, style: Styles.boldWhite),
             ),
             const SizedBox(height: 8),
-            RawButton.extended(
-              color: Colors.green,
-              onTap: () => const SettingScreenRoute().push(context),
-              child: const Text(
-                'Manage Progressor and Settings',
-                style: Styles.boldWhite,
+            Hero(
+              tag: 'hero-settings-button',
+              child: RawButton.extended(
+                color: Colors.green,
+                onTap: () => const SettingScreenRoute().push(context),
+                child: const Text(
+                  'Manage Progressor and Settings',
+                  style: Styles.boldWhite,
+                ),
               ),
             ),
           ]),

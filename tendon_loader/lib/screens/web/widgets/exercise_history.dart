@@ -19,7 +19,7 @@ class ExerciseHistory extends StatelessWidget {
       ),
       child: CustomScrollView(
         semanticChildCount: 0,
-        slivers: <Widget>[
+        slivers: [
           SliverSafeArea(
             minimum: const EdgeInsets.all(8),
             sliver: SliverList(
@@ -29,7 +29,7 @@ class ExerciseHistory extends StatelessWidget {
                   return ExpansionTile(
                     title: Text(export.datetime),
                     expandedAlignment: Alignment.centerRight,
-                    children: <Widget>[
+                    children: [
                       PrescriptionView.prescription(const Prescription.empty()),
                     ],
                   );

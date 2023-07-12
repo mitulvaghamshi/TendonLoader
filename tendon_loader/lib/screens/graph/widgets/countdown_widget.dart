@@ -40,7 +40,7 @@ class CountdownWidgetState extends State<CountdownWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(alignment: Alignment.center, children: <Widget>[
+    return Stack(alignment: Alignment.center, children: [
       AspectRatio(
         aspectRatio: 1,
         child: CustomPaint(painter: _CirclePainter(_controller)),

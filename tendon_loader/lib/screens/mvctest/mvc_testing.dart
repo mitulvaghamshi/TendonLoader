@@ -20,7 +20,7 @@ class MVCTesting extends StatelessWidget {
       },
       handler: handler,
       title: MVCTesting.name,
-      builder: () => Column(children: <Widget>[
+      builder: () => Column(children: [
         Text(handler.maxForceValue, style: Styles.headerText),
         Text(
           handler.timeDiffValue,

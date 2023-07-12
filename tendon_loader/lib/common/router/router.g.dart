@@ -83,6 +83,8 @@ extension $TendonLoaderRouteExtension on TendonLoaderRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $SettingScreenRouteExtension on SettingScreenRoute {
@@ -99,6 +101,8 @@ extension $SettingScreenRouteExtension on SettingScreenRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $HomeScreenRouteExtension on HomeScreenRoute {
@@ -115,6 +119,8 @@ extension $HomeScreenRouteExtension on HomeScreenRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $LiveDataRouteExtension on LiveDataRoute {
@@ -130,6 +136,8 @@ extension $LiveDataRouteExtension on LiveDataRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $NewMVCTestRouteExtension on NewMVCTestRoute {
@@ -146,6 +154,8 @@ extension $NewMVCTestRouteExtension on NewMVCTestRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $MVCTestingRouteExtension on MVCTestingRoute {
@@ -162,6 +172,8 @@ extension $MVCTestingRouteExtension on MVCTestingRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $NewExerciseRouteExtension on NewExerciseRoute {
@@ -178,6 +190,8 @@ extension $NewExerciseRouteExtension on NewExerciseRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $ExerciseModeRouteExtension on ExerciseModeRoute {
@@ -194,6 +208,8 @@ extension $ExerciseModeRouteExtension on ExerciseModeRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $PromptScreenRouteExtension on PromptScreenRoute {
@@ -210,6 +226,8 @@ extension $PromptScreenRouteExtension on PromptScreenRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $HomePageRouteExtension on HomePageRoute {
@@ -225,6 +243,8 @@ extension $HomePageRouteExtension on HomePageRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $ExportListRouteExtension on ExportListRoute {
@@ -241,6 +261,8 @@ extension $ExportListRouteExtension on ExportListRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $ExportViewRouteExtension on ExportViewRoute {
@@ -257,6 +279,8 @@ extension $ExportViewRouteExtension on ExportViewRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $SessionInfoRouteExtension on SessionInfoRoute {
@@ -273,6 +297,8 @@ extension $SessionInfoRouteExtension on SessionInfoRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $ExerciseHistoryRouteExtension on ExerciseHistoryRoute {
@@ -289,4 +315,6 @@ extension $ExerciseHistoryRouteExtension on ExerciseHistoryRoute {
 
   void pushReplacement(BuildContext context) =>
       context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }

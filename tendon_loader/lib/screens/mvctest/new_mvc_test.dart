@@ -30,7 +30,7 @@ class NewMVCTestState extends State<NewMVCTest> {
       appBar: AppBar(
         elevation: 0,
         title: const Text('New MVC Test'),
-        actions: <Widget>[
+        actions: [
           RawButton.icon(
             left: const Text('OK', style: Styles.titleStyle),
             right: const Icon(Icons.arrow_forward),
@@ -42,7 +42,7 @@ class NewMVCTestState extends State<NewMVCTest> {
         ignoring: !AppScope.of(context).api.settings.editablePrescription,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+          children: [
             const ListTile(
               leading: Icon(Icons.timer),
               title: Text(

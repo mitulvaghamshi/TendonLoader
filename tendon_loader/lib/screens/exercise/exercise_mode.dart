@@ -52,14 +52,14 @@ class ExerciseModeState extends State<ExerciseMode>
       },
       handler: widget.handler,
       title: ExerciseMode.name,
-      builder: () => Column(children: <Widget>[
+      builder: () => Column(children: [
         Text(widget.handler.timeCounter, style: widget.handler.timeStyle),
         const Divider(),
-        const Row(children: <Widget>[
+        const Row(children: [
           Expanded(child: Text('Rep:', style: Styles.headerLabel)),
           Expanded(child: Text('Set:', style: Styles.headerLabel)),
         ]),
-        Row(children: <Widget>[
+        Row(children: [
           Expanded(
             child: Text(
               widget.handler.repCounter,

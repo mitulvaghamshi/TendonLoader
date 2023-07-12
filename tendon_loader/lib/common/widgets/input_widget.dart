@@ -23,7 +23,7 @@ class InputWidget extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType ?? TextInputType.number,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      inputFormatters: <TextInputFormatter>[
+      inputFormatters: [
         if (format != null) FilteringTextInputFormatter.allow(RegExp(format!)),
       ],
       validator: (value) =>

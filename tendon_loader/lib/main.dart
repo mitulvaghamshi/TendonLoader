@@ -7,5 +7,5 @@ void main() {
   final api = Api.empty();
   final state = AppState(api: api);
 
-  runApp(TendonLoaderApp(state: state));
+  runApp(MainApp(state: state));
 }

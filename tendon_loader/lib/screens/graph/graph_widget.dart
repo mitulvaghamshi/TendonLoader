@@ -33,7 +33,7 @@ class GraphWidget extends StatelessWidget {
             if (key.isEmpty) return true;
             return onExit(key);
           },
-          child: Column(children: <Widget>[
+          child: Column(children: [
             _Header(handler: handler, builder: builder),
             const SizedBox(height: 16),
             _BarGraph(handler: handler),
@@ -61,7 +61,7 @@ class _Header extends StatelessWidget {
         handler.graphCtrl?.updateDataSource(updatedDataIndex: 0);
         return Ink(
           color: handler.feedColor,
-          child: Row(children: <Widget>[Expanded(child: builder())]),
+          child: Row(children: [Expanded(child: builder())]),
         );
       },
     );
@@ -137,7 +137,7 @@ class _ButtonBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
+        children: [
           RawButton.icon(
             left: const Icon(Icons.play_arrow, color: Color(0xff3ddc85)),
             right: const Text('Start'),

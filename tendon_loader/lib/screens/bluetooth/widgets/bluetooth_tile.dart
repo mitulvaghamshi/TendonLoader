@@ -1,4 +1,4 @@
-import 'package:app_settings/app_settings.dart' as ast;
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/common/constants.dart';
@@ -25,17 +25,19 @@ class BluetoothTile extends StatelessWidget {
           return const LocationTile();
         }
         // A visual content to inform user about Bluetooth requirements.
-        return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        return Column(mainAxisSize: MainAxisSize.min, children: [
           const ImageWidget(path: Images.enableBluetooth),
           const Text(
             Strings.enableBluetooth,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
           RawButton.icon(
             left: const Icon(Icons.bluetooth),
             right: const Text('Open Settings'),
-            onTap: ast.AppSettings.openBluetoothSettings,
+            onTap: () => AppSettings.openAppSettings(
+              type: AppSettingsType.bluetooth,
+            ),
           ),
         ]);
       },

@@ -148,7 +148,7 @@ Future<bool?> startCountdown({
     builder: (context) => Dialog(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
+        children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Text(title, style: Styles.numberPickerText),

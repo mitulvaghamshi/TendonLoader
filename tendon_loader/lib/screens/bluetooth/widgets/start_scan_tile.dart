@@ -15,7 +15,7 @@ class StartScanTile extends StatelessWidget with Progressor {
   Widget build(BuildContext context) {
     // A visual content to guid user to power on the "Progressor" device.
     // and start scanning after...
-    return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+    return Column(mainAxisSize: MainAxisSize.min, children: [
       const ImageWidget(path: Images.enableDevice),
       const Text(
         Strings.enableDevice,

@@ -26,7 +26,7 @@ class ConnectedTile extends StatelessWidget with Progressor {
       future: initializeWith(device),
       builder: (_, snapshot) {
         if (!snapshot.hasData || !snapshot.data!) return const LoadingWidget();
-        return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        return Column(mainAxisSize: MainAxisSize.min, children: [
           ListTile(
             onLongPress: disconnect,
             contentPadding: const EdgeInsets.all(5),
