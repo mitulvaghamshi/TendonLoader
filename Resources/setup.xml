@@ -1,0 +1,56 @@
+<key>NSBluetoothPeripheralUsageDescription</key>
+<string>This app uses bluetooth to communicate with your Progressor.</string>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Scanning for Bluetooth devices can be used to locate you. That's why we ask you to permit Location services. We're only using this permission to scan for your Progressor. We'll never collect your physical location.</string>
+<key>UIBackgroundModes</key>
+<array>
+    <string>bluetooth-central</string>
+    <string>fetch</string>
+</array>
+
+android:networkSecurityConfig="@xml/network_security_config"
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+signingConfigs {
+    release {
+        keyAlias keystoreProperties['keyAlias']
+        keyPassword keystoreProperties['keyPassword']
+        storeFile file(keystoreProperties['storeFile'])
+        storePassword keystoreProperties['storePassword']
+    }
+}
+buildTypes {
+    release {
+        signingConfig signingConfigs.release
+        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        shrinkResources true
+        minifyEnabled true
+    }
+}
+splits {
+    abi {
+        enable true
+        reset()
+        include "arm64-v8a"
+        universalApk true
+    }
+    density {
+        enable true
+        exclude "ldpi", "xxhdpi", "xxxhdpi"
+        compatibleScreens 'small', 'normal', 'large', 'xlarge'
+    }
+}
+dependencies {
+    implementation "androidx.multidex:multidex:+"
+    implementation "com.google.firebase:firebase-bom:+"
+}

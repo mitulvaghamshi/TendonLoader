@@ -1,0 +1,171 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "dart",
+        "name": "run",
+        "request": "launch",
+      },
+      {
+        "type": "dart",
+        "name": "web",
+        "request": "launch",
+        "deviceId": "Chrome",
+      },
+      {
+        "type": "dart",
+        "name": "android",
+        "request": "launch",
+        "deviceId": "sdk gphone64",
+      },
+      {
+        "type": "dart",
+        "name": "iphone",
+        "request": "launch",
+        "deviceId": "iphone",
+      },
+      {
+        "type": "dart",
+        "name": "macos",
+        "request": "launch",
+        "deviceId": "macos",
+      }
+    ],
+    "compounds": [
+      {
+        "name": "start all",
+        "configurations": [
+          "web",
+          "android",
+          "iphone",
+          "macos"
+        ],
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "type": "shell",
+        "group": "none",
+        "label": "Project: run --web --no-sec",
+        "command": "flutter run -d chrome --web-browser-flag --disable-web-security",
+      },
+      {
+        "type": "shell",
+        "group": "none",
+        "label": "Project: clean",
+        "command": "flutter clean",
+      },
+      {
+        "type": "shell",
+        "group": "none",
+        "label": "Project: pub get",
+        "command": "flutter pub get",
+      },
+      {
+        "type": "shell",
+        "group": "none",
+        "label": "Project: ios pods",
+        "command": "pod install",
+        "options": {
+          "cwd": "${workspaceFolder}/ios",
+        },
+        "dependsOn": [
+          "Project: pub get",
+        ],
+      },
+      {
+        "type": "shell",
+        "group": "none",
+        "label": "Project: macos pods",
+        "command": "pod install",
+        "options": {
+          "cwd": "${workspaceFolder}/macos",
+        },
+        "dependsOn": [
+          "Project: pub get",
+        ]
+      },
+      {
+        "type": "shell",
+        "group": "none",
+        "label": "project: rebuild",
+        "dependsOrder": "sequence",
+        "dependsOn": [
+          "Project: clean",
+          "Project: pub get",
+          "Project: ios pods",
+          "Project: macos pods",
+        ],
+      },
+      {
+        "type": "shell",
+        "group": "build",
+        "label": "Release: web",
+        "command": "flutter build web",
+      },
+      {
+        "type": "shell",
+        "group": "build",
+        "label": "Release: apk",
+        "command": "flutter",
+        "args": [
+          "build",
+          "apk",
+          "--obfuscate",
+          "--no-track-widget-creation",
+          "--split-debug-info=build/app/outputs/bundle/release/map/",
+        ],
+      },
+      {
+        "type": "shell",
+        "group": "build",
+        "command": "flutter",
+        "label": "Release: appbundle",
+        "args": [
+          "build",
+          "appbundle",
+          "--obfuscate",
+          "--no-track-widget-creation",
+          "--split-debug-info=build/app/outputs/bundle/release/map/",
+        ],
+      },
+      {
+        // Run build runner (overwrite)
+        "type": "shell",
+        "group": "build",
+        "label": "Build Runner: Build -overwrite",
+        "command": "dart run build_runner build --delete-conflicting-outputs",
+        "problemMatcher": [
+          "$dart-build_runner",
+        ],
+      },
+      {
+        // Firebase emulators (with backup)
+        "type": "shell",
+        "label": "Firebase emulators: start",
+        "command": "firebase emulators:start",
+        "args": [
+          "--import=${input:backupPath}",
+          "--export-on-exit=${input:backupPath}",
+        ]
+      },
+    ],
+    "inputs": [
+      {
+        "id": "backupPath",
+        "type": "promptString",
+        "default": "${workspaceFolder}/res/data/femu/",
+        "description": "Enter firebase emulator backup location?",
+      },
+    ],
+  },
+}

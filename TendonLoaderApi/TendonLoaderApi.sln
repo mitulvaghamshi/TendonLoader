@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TendonLoaderApi", "TendonLoaderApi.csproj", "{339FEFB2-2538-4217-9E4D-75534989E06E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{339FEFB2-2538-4217-9E4D-75534989E06E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{339FEFB2-2538-4217-9E4D-75534989E06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{339FEFB2-2538-4217-9E4D-75534989E06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{339FEFB2-2538-4217-9E4D-75534989E06E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5EACC113-E3D1-47BA-AA8D-207DAF7005F5}
+	EndGlobalSection
+EndGlobal

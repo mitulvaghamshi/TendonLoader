@@ -1,0 +1,48 @@
+PODS:
+  - connectivity_plus (0.0.1):
+    - FlutterMacOS
+    - ReachabilitySwift
+  - flutter_blue (0.0.1):
+    - flutter_blue/Protos (= 0.0.1)
+    - FlutterMacOS
+  - flutter_blue/Protos (0.0.1):
+    - FlutterMacOS
+    - Protobuf (~> 3.11.4)
+  - FlutterMacOS (1.0.0)
+  - location (0.0.1):
+    - FlutterMacOS
+  - Protobuf (3.11.4)
+  - ReachabilitySwift (5.0.0)
+
+DEPENDENCIES:
+  - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos`)
+  - flutter_blue (from `Flutter/ephemeral/.symlinks/plugins/flutter_blue/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - location (from `Flutter/ephemeral/.symlinks/plugins/location/macos`)
+
+SPEC REPOS:
+  trunk:
+    - Protobuf
+    - ReachabilitySwift
+
+EXTERNAL SOURCES:
+  connectivity_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos
+  flutter_blue:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_blue/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  location:
+    :path: Flutter/ephemeral/.symlinks/plugins/location/macos
+
+SPEC CHECKSUMS:
+  connectivity_plus: 18d3c32514c886e046de60e9c13895109866c747
+  flutter_blue: 2756506bb10a51e075832da287b48bf5377bdc28
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  location: 7cdb0665bd6577d382b0a343acdadbcb7f964775
+  Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+
+PODFILE CHECKSUM: d475140f27c622064d90d5cfd4728ee6a37649a5
+
+COCOAPODS: 1.12.1
