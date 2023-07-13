@@ -38,9 +38,9 @@ public partial class Prescription
     [Column("target_load")]
     public double TargetLoad { get; set; }
 
-    [InverseProperty("Prescription")]
-    public virtual Exercise Exercise { get; set; } = null!;
+    //[InverseProperty("Prescription")]
+    //public virtual Exercise? Exercise { get; set; }
 
-    [InverseProperty("Prescription")]
-    public virtual Settings Settings { get; set; } = null!;
+    //[InverseProperty("Prescription")]
+    //public virtual Settings? Settings { get; set; }
 }

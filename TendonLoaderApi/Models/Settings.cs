@@ -33,11 +33,11 @@ public class Settings
     [Column("graph_scale")]
     public double GraphScale { get; set; }
 
-    [ForeignKey(nameof(UserId))]
-    [InverseProperty("Settings")]
-    public virtual User User { get; set; } = null!;
+    //[ForeignKey(nameof(UserId))]
+    //[InverseProperty("Settings")]
+    //public virtual User User { get; set; } = null!;
 
-    [ForeignKey(nameof(PrescriptionId))]
-    [InverseProperty("Settings")]
-    public virtual Prescription Prescription { get; set; } = null!;
+    //[ForeignKey(nameof(PrescriptionId))]
+    //[InverseProperty("Settings")]
+    //public virtual Prescription? Prescription { get; set; }
 }

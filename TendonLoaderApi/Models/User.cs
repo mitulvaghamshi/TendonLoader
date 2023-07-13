@@ -19,9 +19,9 @@ public partial class User
     [Column("password")]
     public string Password { get; set; } = default!;
 
-    [InverseProperty("User")]
-    public virtual Settings Settings { get; set; } = null!;
+    //[InverseProperty("User")]
+    //public virtual Settings? Settings { get; set; }
 
-    [InverseProperty("User")]
-    public virtual ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
+    //[InverseProperty("User")]
+    //public virtual ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
 }
