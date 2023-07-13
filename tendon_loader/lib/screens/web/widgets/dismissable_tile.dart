@@ -77,7 +77,7 @@ extension on DismissableTile {
   MaterialBanner _makeBanner(VoidCallback action) {
     return MaterialBanner(
       content: const Text('Item will be deleted soon!'),
-      actions: <Widget>[
+      actions: [
         TextButton(onPressed: action, child: const Text('Undo')),
       ],
     );

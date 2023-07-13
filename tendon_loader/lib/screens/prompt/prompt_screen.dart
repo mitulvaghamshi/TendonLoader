@@ -37,9 +37,9 @@ class PromptScreenState extends State<PromptScreen> {
             onWillPop: () async => Future<bool>.value(true),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
+              children: [
                 const _CardWidget(
-                  children: <Widget>[
+                  children: [
                     Text(
                       'Exercise session completed,\nGreat work!',
                       textAlign: TextAlign.center,
@@ -55,7 +55,7 @@ class PromptScreenState extends State<PromptScreen> {
                   ],
                 ),
                 _CardWidget(
-                  children: <Widget>[
+                  children: [
                     const Text(
                       '1. Pain score',
                       style: Styles.numberPickerText,
@@ -78,7 +78,7 @@ class PromptScreenState extends State<PromptScreen> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
+                      children: [
                         _buildPainText(
                           '0\n\nNo\npain',
                           const Color(0xff00e676),
@@ -96,7 +96,7 @@ class PromptScreenState extends State<PromptScreen> {
                   ],
                 ),
                 _CardWidget(
-                  children: <Widget>[
+                  children: [
                     const Text(
                       '2. Pain tolerance',
                       style: Styles.numberPickerText,
@@ -109,7 +109,7 @@ class PromptScreenState extends State<PromptScreen> {
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
+                      children: [
                         RawButton.icon(
                           color: painTolerance == Tolerance.yes
                               ? Colors.blueGrey
@@ -144,7 +144,7 @@ class PromptScreenState extends State<PromptScreen> {
                   ],
                 ),
                 if (!_autoUpload)
-                  _CardWidget(children: <Widget>[
+                  _CardWidget(children: [
                     const Text(
                       '3. Submit data?',
                       style: Styles.numberPickerText,
@@ -186,7 +186,7 @@ class PromptScreenState extends State<PromptScreen> {
                     ),
                   ]),
                 const Divider(thickness: 2),
-                _CardWidget(children: <Widget>[
+                _CardWidget(children: [
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     child: ((_autoUpload ||

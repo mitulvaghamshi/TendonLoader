@@ -28,11 +28,11 @@ class TimePickerTile extends StatelessWidget {
       ),
       subtitle: Text(desc),
       tilePadding: Styles.tilePadding,
-      children: <Widget>[
+      children: [
         const Text('Select time and tap on item again to save'),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
+          children: [
             _NumberPicker(
               count: 60,
               label: 'Min',
@@ -72,7 +72,7 @@ class _NumberPicker extends StatelessWidget {
     return SizedBox(
       width: 160,
       height: 150,
-      child: Stack(alignment: Alignment.centerRight, children: <Widget>[
+      child: Stack(alignment: Alignment.centerRight, children: [
         Text(label, style: Styles.numberPickerText),
         ListWheelScrollView(
           itemExtent: 30,
@@ -80,7 +80,7 @@ class _NumberPicker extends StatelessWidget {
           useMagnifier: true,
           onSelectedItemChanged: onUpdate,
           physics: const FixedExtentScrollPhysics(),
-          children: List<Widget>.generate(count + 1, (index) {
+          children: List.generate(count + 1, (index) {
             return Container(
               width: 35,
               alignment: Alignment.centerLeft,

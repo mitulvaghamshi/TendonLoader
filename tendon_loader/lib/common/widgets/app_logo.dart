@@ -5,7 +5,9 @@ import 'package:flutter_svg/svg.dart';
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key});
 
-  const factory AppLogo.padded() = _AppLogoPadded;
+  const factory AppLogo.sized({
+    final double? dimention,
+  }) = _AppLogoPadded;
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +45,18 @@ m212 35-2 8c-3 13-8 19-19 22-9 2-9 2-10 5 0 2 1 3 7 5 14 3 19 8 22 24 2 7 8 10
 
 @immutable
 final class _AppLogoPadded extends AppLogo {
-  const _AppLogoPadded();
+  const _AppLogoPadded({this.dimention});
+
+  final double? dimention;
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30),
-      child: AppLogo(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 30),
+      child: SizedBox.square(
+        dimension: dimention ?? 300,
+        child: const AppLogo(),
+      ),
     );
   }
 }

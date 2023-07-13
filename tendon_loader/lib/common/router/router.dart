@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tendon_loader/common/widgets/app_logo.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
 import 'package:tendon_loader/network/prescription.dart';
 import 'package:tendon_loader/screens/app/homescreen.dart';
 import 'package:tendon_loader/screens/exercise/exercise_mode.dart';
@@ -15,9 +13,10 @@ import 'package:tendon_loader/screens/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/screens/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/screens/prompt/prompt_screen.dart';
 import 'package:tendon_loader/screens/settings/settings_screen.dart';
-import 'package:tendon_loader/screens/signin/signin.dart';
-import 'package:tendon_loader/screens/web/export_list.dart';
-import 'package:tendon_loader/screens/web/export_view.dart';
+import 'package:tendon_loader/screens/signin/signin_widget.dart';
+import 'package:tendon_loader/screens/signin/welcome_widget.dart';
+import 'package:tendon_loader/screens/web/exercise_list.dart';
+import 'package:tendon_loader/screens/web/exercise_view.dart';
 import 'package:tendon_loader/screens/web/homepage.dart';
 import 'package:tendon_loader/screens/web/widgets/exercise_history.dart';
 import 'package:tendon_loader/screens/web/widgets/session_info.dart';
@@ -35,7 +34,6 @@ part 'router.g.dart';
     TypedGoRoute<NewExerciseRoute>(path: 'newexercise'),
     TypedGoRoute<ExerciseModeRoute>(path: 'exercisemode'),
     TypedGoRoute<PromptScreenRoute>(path: 'promptscreen'),
-    //
     TypedGoRoute<HomePageRoute>(path: 'homepage'),
     TypedGoRoute<ExportListRoute>(path: 'exercises'),
     TypedGoRoute<ExportViewRoute>(path: 'exerciseview'),
@@ -44,47 +42,23 @@ part 'router.g.dart';
   ],
 )
 @immutable
-class TendonLoaderRoute extends GoRouteData {
+final class TendonLoaderRoute extends GoRouteData {
   const TendonLoaderRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    const boldStyle = TextStyle(
-      color: Colors.white,
-      fontWeight: FontWeight.bold,
-    );
     return Scaffold(
+      appBar: AppBar(title: const Text('Welcome')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: SignIn(
-          builder: (context, user) => Column(children: [
-            const AppLogo.padded(),
-            RawButton.extended(
-              color: Colors.orange,
-              child: const Text('Access as a Patient', style: boldStyle),
-              onTap: () => const HomeScreenRoute().go(context),
-            ),
-            const SizedBox(height: 8),
-            RawButton.extended(
-              color: Colors.orange,
-              child: const Text('Clinician - Manage Users', style: boldStyle),
-              onTap: () => const HomePageRoute().go(context),
-            ),
-            const SizedBox(height: 8),
-            RawButton.extended(
-              color: Colors.green,
-              child: const Text('View all settings', style: boldStyle),
-              onTap: () => const SettingScreenRoute().push(context),
-            ),
-          ]),
-        ),
+        child: SignInWidget(builder: () => const WelcomeWidget()),
       ),
     );
   }
 }
 
 @immutable
-class SettingScreenRoute extends GoRouteData {
+final class SettingScreenRoute extends GoRouteData {
   const SettingScreenRoute();
 
   @override
@@ -93,7 +67,7 @@ class SettingScreenRoute extends GoRouteData {
 }
 
 @immutable
-class HomeScreenRoute extends GoRouteData {
+final class HomeScreenRoute extends GoRouteData {
   const HomeScreenRoute();
 
   @override
@@ -101,7 +75,7 @@ class HomeScreenRoute extends GoRouteData {
 }
 
 @immutable
-class NewMVCTestRoute extends GoRouteData {
+final class NewMVCTestRoute extends GoRouteData {
   const NewMVCTestRoute();
 
   @override
@@ -109,7 +83,7 @@ class NewMVCTestRoute extends GoRouteData {
 }
 
 @immutable
-class NewExerciseRoute extends GoRouteData {
+final class NewExerciseRoute extends GoRouteData {
   const NewExerciseRoute();
 
   @override
@@ -118,17 +92,16 @@ class NewExerciseRoute extends GoRouteData {
 }
 
 @immutable
-class PromptScreenRoute extends GoRouteData {
+final class PromptScreenRoute extends GoRouteData {
   const PromptScreenRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const PromptScreen();
-  }
+  Widget build(BuildContext context, GoRouterState state) =>
+      const PromptScreen();
 }
 
 @immutable
-class HomePageRoute extends GoRouteData {
+final class HomePageRoute extends GoRouteData {
   const HomePageRoute();
 
   @override
@@ -136,7 +109,7 @@ class HomePageRoute extends GoRouteData {
 }
 
 @immutable
-class ExerciseHistoryRoute extends GoRouteData {
+final class ExerciseHistoryRoute extends GoRouteData {
   const ExerciseHistoryRoute();
 
   @override
@@ -145,23 +118,25 @@ class ExerciseHistoryRoute extends GoRouteData {
 }
 
 @immutable
-class ExportListRoute extends GoRouteData {
+final class ExportListRoute extends GoRouteData {
   const ExportListRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const ExportList();
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ExerciseList();
 }
 
 @immutable
-class ExportViewRoute extends GoRouteData {
+final class ExportViewRoute extends GoRouteData {
   const ExportViewRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const ExportView();
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ExerciseView();
 }
 
 @immutable
-class SessionInfoRoute extends GoRouteData {
+final class SessionInfoRoute extends GoRouteData {
   const SessionInfoRoute();
 
   @override
@@ -170,44 +145,41 @@ class SessionInfoRoute extends GoRouteData {
 }
 
 @immutable
-class LiveDataRoute extends GoRouteData {
+final class LiveDataRoute extends GoRouteData {
   const LiveDataRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return LiveData(
-      handler: LiveDataHandler(onCountdown: context.countdown),
-    );
+    final handler = LiveDataHandler(onCountdown: context.countdown);
+    return LiveData(handler: handler);
   }
 }
 
 @immutable
-class MVCTestingRoute extends GoRouteData {
+final class MVCTestingRoute extends GoRouteData {
   const MVCTestingRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return MVCTesting(
-      handler: MVCHandler(
-        mvcDuration: 0,
-        onCountdown: context.countdown,
-      ),
+    final handler = MVCHandler(
+      mvcDuration: 0,
+      onCountdown: context.countdown,
     );
+    return MVCTesting(handler: handler);
   }
 }
 
 @immutable
-class ExerciseModeRoute extends GoRouteData {
+final class ExerciseModeRoute extends GoRouteData {
   const ExerciseModeRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return ExerciseMode(
-      handler: ExerciseHandler(
-        prescription: const Prescription.empty(),
-        onCountdown: context.countdown,
-      ),
+    final handler = ExerciseHandler(
+      prescription: const Prescription.empty(),
+      onCountdown: context.countdown,
     );
+    return ExerciseMode(handler: handler);
   }
 }
 

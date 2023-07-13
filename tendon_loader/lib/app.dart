@@ -6,8 +6,8 @@ import 'package:tendon_loader/network/app_state.dart';
 import 'package:tendon_loader/network/settings.dart';
 
 @immutable
-final class TendonLoaderApp extends StatelessWidget {
-  const TendonLoaderApp({super.key, required this.state});
+final class MainApp extends StatelessWidget {
+  const MainApp({super.key, required this.state});
 
   final AppState state;
 
@@ -20,16 +20,14 @@ final class TendonLoaderApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: state.api,
-      builder: (context, child) {
-        return MaterialApp.router(
-          title: 'Tendon Loader',
-          routerConfig: _router,
-          theme: _lightTheme,
-          darkTheme: _darkTheme,
-          themeMode: state.api.settings.themeMode,
-          builder: (_, child) => AppScope(data: state, child: child!),
-        );
-      },
+      builder: (context, child) => MaterialApp.router(
+        title: 'Tendon Loader',
+        routerConfig: _router,
+        theme: _lightTheme,
+        darkTheme: _darkTheme,
+        themeMode: state.api.settings.themeMode,
+        builder: (_, child) => AppScope(data: state, child: child!),
+      ),
     );
   }
 }

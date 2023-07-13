@@ -23,7 +23,7 @@ class DeviceTile extends StatelessWidget with Progressor {
           return ConnectedTile(device: device);
         }
         if (isLast) {
-          return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          return Column(mainAxisSize: MainAxisSize.min, children: [
             DisconnectedTile(device: device),
             RawButton.icon(
               left: const Icon(Icons.search),

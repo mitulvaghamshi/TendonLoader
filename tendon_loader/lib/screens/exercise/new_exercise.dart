@@ -55,7 +55,7 @@ class NewExerciseState extends State<NewExercise> {
       appBar: AppBar(
         elevation: 0,
         title: const Text('New Exercise'),
-        actions: <Widget>[
+        actions: [
           RawButton.icon(
             left: const Text('OK', style: Styles.titleStyle),
             right: const Icon(Icons.arrow_forward),
@@ -69,7 +69,7 @@ class NewExerciseState extends State<NewExercise> {
           child: Form(
             key: _formKey,
             child: Column(
-              children: <Widget>[
+              children: [
                 ListTile(
                   leading: const Icon(Icons.timer),
                   title: Text(
@@ -104,7 +104,7 @@ class NewExerciseState extends State<NewExercise> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(children: <Widget>[
+                  child: Row(children: [
                     Expanded(
                       child: InputWidget(
                         label: 'Sets (#)',

@@ -7,7 +7,7 @@ class NoResultWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.all(16),
-      child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
         Icon(Icons.hourglass_empty),
         SizedBox(width: 5),
         Text('Nothing to show here...'),

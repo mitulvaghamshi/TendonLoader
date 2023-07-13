@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
     return CupertinoPageScaffold(
       child: CustomScrollView(
         semanticChildCount: searchList.length,
-        slivers: <Widget>[
+        slivers: [
           const CupertinoSliverNavigationBar(
             heroTag: 'homepage-nav',
             padding: EdgeInsetsDirectional.zero,

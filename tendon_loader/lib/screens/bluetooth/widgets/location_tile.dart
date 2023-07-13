@@ -1,4 +1,4 @@
-import 'package:app_settings/app_settings.dart' as ast;
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart' as loc;
 import 'package:tendon_loader/common/constants.dart';
@@ -25,7 +25,7 @@ class LocationTile extends StatelessWidget {
         // check if "The Progressor" is powered on...
         if (snapshot.hasData && snapshot.data!) return const StartScanTile();
         // A visual content to inform user about location services and privacy.
-        return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        return Column(mainAxisSize: MainAxisSize.min, children: [
           const ImageWidget(path: Images.enableLocation),
           const Text(
             Strings.locationLine1,
@@ -40,7 +40,9 @@ class LocationTile extends StatelessWidget {
           RawButton.icon(
             left: const Icon(Icons.location_on_rounded),
             right: const Text('Open Settings'),
-            onTap: ast.AppSettings.openLocationSettings,
+            onTap: () => AppSettings.openAppSettings(
+              type: AppSettingsType.location,
+            ),
           ),
         ]);
       },
