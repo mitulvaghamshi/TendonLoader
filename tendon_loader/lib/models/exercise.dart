@@ -46,22 +46,35 @@ final class Exercise {
 }
 
 extension ExExercise on Exercise {
-  bool match(final String term) => datetime.toLowerCase().contains(term);
+  bool get isMVC => mvcValue != null && prescriptionId == null;
+  String get type => isMVC ? 'MVC Test' : 'Exercise';
+  String get status => completed ? 'Complete' : 'Incomplete';
 
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'id': id,
-      'userId': userId,
-      'painScore': painScore,
-      'datetime': datetime,
-      'tolerable': tolerable,
-      'completed': completed ? 1 : 0,
-      'progressorId': progressorId,
-      'prescriptionId': prescriptionId,
-      'mvcValue': mvcValue,
-      'data': data.map((e) => e.toPair()).join('|'),
-    };
-  }
+  List<(String, String)> get tableRows => [
+        ('User ID', userId.toString()),
+        ('Created on', datetime),
+        ('Session type', type),
+        ('Data status', status),
+        ('Device', progressorId),
+        ('Pain score', '$painScore / 10'),
+        ('Pain tolerable?', tolerable),
+        if (isMVC) ('Max force', '${mvcValue!.toStringAsFixed(2)} Kg'),
+      ];
+
+  Map<String, dynamic> get json => {
+        'id': id,
+        'userId': userId,
+        'painScore': painScore,
+        'datetime': datetime,
+        'tolerable': tolerable,
+        'completed': completed ? 1 : 0,
+        'progressorId': progressorId,
+        'prescriptionId': prescriptionId,
+        'mvcValue': mvcValue,
+        'data': data.map((e) => e.pair).join('|'),
+      };
+
+  bool match(final String term) => datetime.toLowerCase().contains(term);
 
   Exercise copyWith({
     final int? id,

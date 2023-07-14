@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app/prompt/pain_selector.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/router/router.dart';
 
 @immutable

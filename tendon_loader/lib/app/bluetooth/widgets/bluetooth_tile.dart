@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/app/bluetooth/widgets/location_tile.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/image_widget.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/image_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 /// This class, when loaded, prompts user to (Enable / Turn on / Power on)
 /// the Bluetooth, on this device.

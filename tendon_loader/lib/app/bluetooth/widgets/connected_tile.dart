@@ -4,8 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/app/bluetooth/models/bluetooth_handler.dart';
 import 'package:tendon_loader/app/graph/graph_handler.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/loading_widget.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 
 /// After successful connection to the "Progressor", the app will present user
@@ -22,10 +21,11 @@ class ConnectedTile extends StatelessWidget with Progressor {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
+    return FutureBuilder(
+      initialData: false,
       future: initializeWith(device),
-      builder: (_, snapshot) {
-        if (!snapshot.hasData || !snapshot.data!) return const LoadingWidget();
+      builder: (context, snapshot) {
+        if (!snapshot.requireData) return const RawButton.loading();
         return Column(mainAxisSize: MainAxisSize.min, children: [
           ListTile(
             onLongPress: disconnect,

@@ -73,12 +73,12 @@ mixin Progressor {
     }
   }
 
-  Future<bool> initializeWith(BluetoothDevice device) async {
+  Future<void> get _delayedStart async =>
+      Future<void>.delayed(const Duration(milliseconds: 800), startProgresssor);
+
+  Future<bool> initializeWith(final BluetoothDevice device) async {
     if (_device != null && _dataChar != null && _controlChar != null) {
-      return Future<void>.delayed(
-        const Duration(milliseconds: 800),
-        startProgresssor,
-      ).then((_) => true);
+      return _delayedStart.then((_) => true);
     } else if (_completer == null) {
       _completer = Completer<bool>();
       for (final BluetoothService s in await device.discoverServices()) {
@@ -95,10 +95,7 @@ mixin Progressor {
         if (Platform.isAndroid) await device.requestMtu(120);
         _dataChar!.value.listen(GraphHandler.onData);
         _device = device;
-        await Future<void>.delayed(
-          const Duration(milliseconds: 800),
-          startProgresssor,
-        ).then((_) => _completer!.complete(true));
+        _delayedStart.then((_) => _completer!.complete(true));
       }
     }
     return _completer!.future;

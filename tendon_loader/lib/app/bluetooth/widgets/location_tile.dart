@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart' as loc;
 import 'package:tendon_loader/app/bluetooth/widgets/start_scan_tile.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/image_widget.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/image_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 /// This class, when loaded, prompts user to (Enable / Turn on / Allow access)
 /// to the Location Services (GPS), on this device.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/app/bluetooth/scanner_list.dart';
-import 'package:tendon_loader/common/widgets/loading_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 /// This class is constantly listening to Scanning status using
 /// [FlutterBlue.instance.isScanning] stream until this widget
@@ -16,9 +16,9 @@ class ScanningTile extends StatelessWidget {
     return StreamBuilder<bool>(
       initialData: false,
       stream: FlutterBlue.instance.isScanning,
-      builder: (_, snapshot) {
+      builder: (context, snapshot) {
         // If Scanning in progress... Show Loading...
-        if (snapshot.data!) return const LoadingWidget();
+        if (snapshot.data!) return const RawButton.loading();
         // else, Move to Scanner list which shows devices from scan result.
         return const ScannerList();
       },

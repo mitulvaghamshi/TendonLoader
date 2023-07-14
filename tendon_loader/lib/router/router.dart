@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tendon_loader/app.dart';
 import 'package:tendon_loader/app/exercise/exercise_handler.dart';
 import 'package:tendon_loader/app/exercise/exercise_mode.dart';
 import 'package:tendon_loader/app/exercise/new_exercise.dart';
@@ -12,18 +11,17 @@ import 'package:tendon_loader/app/mvctest/mvc_handler.dart';
 import 'package:tendon_loader/app/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/app/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/app/prompt/prompt_screen.dart';
-import 'package:tendon_loader/app_user/signin_widget.dart';
-import 'package:tendon_loader/app_user/user.dart';
+import 'package:tendon_loader/clinicial/exercise_data_list.dart';
+import 'package:tendon_loader/clinicial/exercise_detail.dart';
 import 'package:tendon_loader/clinicial/exercise_list.dart';
-import 'package:tendon_loader/clinicial/homepage.dart';
-import 'package:tendon_loader/common/widgets/future_handler.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/clinicial/user_list.dart';
 import 'package:tendon_loader/models/prescription.dart';
-import 'package:tendon_loader/screens/web/exercise_view.dart';
-import 'package:tendon_loader/screens/web/widgets/exercise_history.dart';
-import 'package:tendon_loader/screens/web/widgets/session_info.dart';
 import 'package:tendon_loader/settings/settings_screen.dart';
+import 'package:tendon_loader/signin/welcome_widget.dart';
+import 'package:tendon_loader/signin/signin_widget.dart';
 import 'package:tendon_loader/states/app_scope.dart';
+import 'package:tendon_loader/widgets/future_handler.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 part 'router.g.dart';
 
@@ -37,11 +35,10 @@ part 'router.g.dart';
   TypedGoRoute<ExerciseModeRoute>(path: 'exercisemode'),
   TypedGoRoute<PromptScreenRoute>(path: 'promptscreen'),
   //
-  TypedGoRoute<HomePageRoute>(path: 'homepage'),
+  TypedGoRoute<UserListRoute>(path: 'userlist'),
   TypedGoRoute<ExerciseListRoute>(path: 'exerciselist'),
-  TypedGoRoute<ExportViewRoute>(path: 'exerciseview'),
-  TypedGoRoute<SessionInfoRoute>(path: 'sessioninfo'),
-  TypedGoRoute<ExerciseHistoryRoute>(path: 'exercisehistory'),
+  TypedGoRoute<ExerciseDetaildRoute>(path: 'exercisedetail'),
+  TypedGoRoute<ExerciseDataListRoute>(path: 'exercisedatalist'),
 ])
 @immutable
 final class TendonLoaderRoute extends GoRouteData {
@@ -53,7 +50,7 @@ final class TendonLoaderRoute extends GoRouteData {
       appBar: AppBar(title: const Text('Welcome')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: SignInWidget(builder: () => const TendonLoaderApp()),
+        child: SignInWidget(builder: () => const WelcomeWidget()),
       ),
     );
   }
@@ -103,26 +100,17 @@ final class PromptScreenRoute extends GoRouteData {
 }
 
 @immutable
-final class HomePageRoute extends GoRouteData {
-  const HomePageRoute();
+final class UserListRoute extends GoRouteData {
+  const UserListRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    late final service = AppScope.of(context).service;
+    final service = AppScope.of(context).service;
     return FutureHandler(
-      future: service.getUserList(),
-      builder: (items) => HomePage(items: service.userList),
+      future: service.getUserList().then((_) => true),
+      builder: (_) => UserList(items: service.userList),
     );
   }
-}
-
-@immutable
-final class ExerciseHistoryRoute extends GoRouteData {
-  const ExerciseHistoryRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const ExerciseHistory();
 }
 
 @immutable
@@ -131,34 +119,67 @@ final class ExerciseListRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    late final service = AppScope.of(context).service;
-    final user = state.extra as User?;
-    if (user == null || user.id == null) {
-      return const RawButton(child: Text('Invalid access.'));
+    final service = AppScope.of(context).service;
+    if (state.extra
+        case {
+          'userId': final int userId,
+          'title': final String title,
+        }) {
+      return FutureHandler(
+        future: service.getExerciseList(userId: userId),
+        builder: (items) => ExerciseList(title: title, items: items),
+      );
     }
-    return FutureHandler(
-      future: service.getExerciseList(userId: user.id!),
-      builder: (items) => ExerciseList(title: user.name, items: items),
-    );
+    return const RawButton(child: Text('Invalid access.'));
   }
 }
 
 @immutable
-final class ExportViewRoute extends GoRouteData {
-  const ExportViewRoute();
+final class ExerciseDetaildRoute extends GoRouteData {
+  const ExerciseDetaildRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const ExerciseView();
+  Widget build(BuildContext context, GoRouterState state) {
+    final service = AppScope.of(context).service;
+    if (state.extra
+        case {
+          'userId': final int userId,
+          'exerciseId': final int exerciseId,
+        }) {
+      return FutureHandler(
+        future: service.getExerciseAndPrescription(
+          userId: userId,
+          exerciseId: exerciseId,
+        ),
+        builder: (value) => ExerciseDetail(data: value),
+      );
+    }
+    return const RawButton(child: Text('Invalid access.'));
+  }
 }
 
 @immutable
-final class SessionInfoRoute extends GoRouteData {
-  const SessionInfoRoute();
+final class ExerciseDataListRoute extends GoRouteData {
+  const ExerciseDataListRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const SessionInfo();
+  Widget build(BuildContext context, GoRouterState state) {
+    final service = AppScope.of(context).service;
+    if (state.extra
+        case {
+          'userId': final int userId,
+          'exerciseId': final int exerciseId,
+        }) {
+      return FutureHandler(
+        future: service.getExerciseDataList(
+          userId: userId,
+          exerciseId: exerciseId,
+        ),
+        builder: (items) => ExerciseDataList(items: items),
+      );
+    }
+    return const RawButton(child: Text('Invalid access.'));
+  }
 }
 
 @immutable

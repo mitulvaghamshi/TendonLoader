@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tendon_loader/app/bluetooth/models/bluetooth_handler.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/app_logo.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/image_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/settings/settings.dart';
 import 'package:tendon_loader/settings/settings_service.dart';
 import 'package:tendon_loader/states/app_scope.dart';
@@ -210,9 +210,9 @@ extension on SettingsScreenState {
       applicationVersion: 'v1.0.0',
       applicationName: 'Tendon Loader',
       applicationLegalese: 'Copyright © 2023, Mitul Vaghamshi.',
-      applicationIcon: const SizedBox.square(
+      applicationIcon: const AppLogo.square(
+        padding: EdgeInsets.all(0),
         dimension: 50,
-        child: AppLogo(),
       ),
       children: [
         const Divider(thickness: 2),

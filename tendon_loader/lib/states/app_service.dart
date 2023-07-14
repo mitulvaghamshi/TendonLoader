@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:tendon_loader/app_user/user.dart';
+import 'package:tendon_loader/signin/user.dart';
+import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/network/api_client.dart';
@@ -24,7 +25,8 @@ final class AppService extends ChangeNotifier {
   String message = '';
   bool modified = false;
 
-  final Map<int, Iterable<Exercise>> _cache = {};
+  final Map<int, Iterable<Exercise>> _cacheExerciseListForUser = {};
+  final Map<int, Prescription> _cachePrescriptionForExercise = {};
 
   Future<void> authenticate({
     required final String username,
@@ -42,49 +44,74 @@ final class AppService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getPrescription({
-    required final int prescriptionId,
-    required final Category category,
-  }) async {
-    final (json, hasError) = await ApiClient.get(
-      'api/prescription/$category/$prescriptionId',
-    );
-    if (hasError) {
-      message = 'Unable to load Prescription.';
-    } else {
-      prescription = Prescription.fromJson(json);
-    }
-    notifyListeners();
-  }
-
-  Future<bool> getUserList() async {
-    if (userList.isNotEmpty) return true;
+  Future<void> getUserList() async {
+    if (userList.isNotEmpty) return;
     final (json, hasError) = await ApiClient.get('user');
-    if (hasError) return false;
+    if (hasError) return;
     userList = List.from(json).map(User.fromJson);
     notifyListeners();
-    return true;
   }
 
   Future<Iterable<Exercise>> getExerciseList({
     required final int userId,
   }) async {
-    if (_cache.containsKey(userId)) return _cache[userId]!;
+    if (_cacheExerciseListForUser.containsKey(userId)) {
+      return _cacheExerciseListForUser[userId]!;
+    }
     final (json, hasError) = await ApiClient.get('exercise/user/$userId');
     if (hasError) return [];
-    return _cache.putIfAbsent(userId, () {
+    return _cacheExerciseListForUser.putIfAbsent(userId, () {
       return List.from(json).map(Exercise.fromJson);
     });
   }
 
-  Future<void> getExerciseBy({required final int exerciseId}) async {
-    final (json, hasError) = await ApiClient.get('exercise/$exerciseId');
-    if (hasError) {
-      message = 'Unable to load Exercise.';
-    } else {
-      excercise = Exercise.fromJson(json);
+  Future<Iterable<ChartData>> getExerciseDataList({
+    required final int userId,
+    required final int exerciseId,
+  }) async {
+    if (_cacheExerciseListForUser.containsKey(userId)) {
+      return _cacheExerciseListForUser[userId]!
+          .firstWhere((e) => e.id == exerciseId)
+          .data;
     }
-    notifyListeners();
+    final (json, hasError) = await ApiClient.get('exercise/$exerciseId');
+    if (hasError) return [];
+    return Exercise.fromJson(json).data;
+  }
+
+  Future<(Exercise?, Prescription?)> getExerciseAndPrescription({
+    required final int userId,
+    required final int exerciseId,
+  }) async {
+    late final Exercise exercise;
+    if (_cacheExerciseListForUser.containsKey(userId)) {
+      exercise = _cacheExerciseListForUser[userId]!
+          .firstWhere((e) => e.id == exerciseId);
+    } else {
+      final (json, hasError) = await ApiClient.get('exercise/$exerciseId');
+      if (hasError) return (null, null);
+      exercise = Exercise.fromJson(json);
+    }
+    if (excercise.isMVC) return (exercise, null);
+    final prescriptionId = exercise.prescriptionId;
+    if (prescriptionId == null) return (exercise, null);
+    final prescription = await getPrescriptionFor(
+        exerciseId: exerciseId, prescriptionId: prescriptionId);
+    return (exercise, prescription);
+  }
+
+  Future<Prescription?> getPrescriptionFor({
+    required final int exerciseId,
+    required final int prescriptionId,
+  }) async {
+    if (_cachePrescriptionForExercise.containsKey(exerciseId)) {
+      return _cachePrescriptionForExercise[exerciseId]!;
+    }
+    final (json, hasError) =
+        await ApiClient.get('prescription/$prescriptionId');
+    if (hasError) return null;
+    return _cachePrescriptionForExercise.putIfAbsent(
+        exerciseId, () => Prescription.fromJson(json));
   }
 
   void get<T>(final T Function(T state) get) {

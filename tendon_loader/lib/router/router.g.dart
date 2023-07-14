@@ -47,24 +47,20 @@ RouteBase get $tendonLoaderRoute => GoRouteData.$route(
           factory: $PromptScreenRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: 'homepage',
-          factory: $HomePageRouteExtension._fromState,
+          path: 'userlist',
+          factory: $UserListRouteExtension._fromState,
         ),
         GoRouteData.$route(
           path: 'exerciselist',
           factory: $ExerciseListRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: 'exerciseview',
-          factory: $ExportViewRouteExtension._fromState,
+          path: 'exercisedetail',
+          factory: $ExerciseDetaildRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: 'sessioninfo',
-          factory: $SessionInfoRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'exercisehistory',
-          factory: $ExerciseHistoryRouteExtension._fromState,
+          path: 'exercisedatalist',
+          factory: $ExerciseDataListRouteExtension._fromState,
         ),
       ],
     );
@@ -230,11 +226,11 @@ extension $PromptScreenRouteExtension on PromptScreenRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $HomePageRouteExtension on HomePageRoute {
-  static HomePageRoute _fromState(GoRouterState state) => const HomePageRoute();
+extension $UserListRouteExtension on UserListRoute {
+  static UserListRoute _fromState(GoRouterState state) => const UserListRoute();
 
   String get location => GoRouteData.$location(
-        '/homepage',
+        '/userlist',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -265,12 +261,12 @@ extension $ExerciseListRouteExtension on ExerciseListRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $ExportViewRouteExtension on ExportViewRoute {
-  static ExportViewRoute _fromState(GoRouterState state) =>
-      const ExportViewRoute();
+extension $ExerciseDetaildRouteExtension on ExerciseDetaildRoute {
+  static ExerciseDetaildRoute _fromState(GoRouterState state) =>
+      const ExerciseDetaildRoute();
 
   String get location => GoRouteData.$location(
-        '/exerciseview',
+        '/exercisedetail',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -283,30 +279,12 @@ extension $ExportViewRouteExtension on ExportViewRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $SessionInfoRouteExtension on SessionInfoRoute {
-  static SessionInfoRoute _fromState(GoRouterState state) =>
-      const SessionInfoRoute();
+extension $ExerciseDataListRouteExtension on ExerciseDataListRoute {
+  static ExerciseDataListRoute _fromState(GoRouterState state) =>
+      const ExerciseDataListRoute();
 
   String get location => GoRouteData.$location(
-        '/sessioninfo',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $ExerciseHistoryRouteExtension on ExerciseHistoryRoute {
-  static ExerciseHistoryRoute _fromState(GoRouterState state) =>
-      const ExerciseHistoryRoute();
-
-  String get location => GoRouteData.$location(
-        '/exercisehistory',
+        '/exercisedatalist',
       );
 
   void go(BuildContext context) => context.go(location);

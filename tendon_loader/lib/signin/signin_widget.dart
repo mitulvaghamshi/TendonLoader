@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/app_logo.dart';
-import 'package:tendon_loader/common/widgets/input_widget.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
 import 'package:tendon_loader/states/app_scope.dart';
+import 'package:tendon_loader/widgets/image_widget.dart';
+import 'package:tendon_loader/widgets/input_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 @immutable
 final class SignInWidget extends StatefulWidget {
@@ -55,13 +55,13 @@ final class SignInWidgetState extends State<SignInWidget> {
     if (!_loading && user != null) return widget.builder();
     return Form(
       child: Column(children: [
-        const Hero(tag: 'hero-app-logo', child: AppLogo.sized()),
-        InputWidget(
+        const Hero(tag: 'hero-app-logo', child: AppLogo.square()),
+        InputWidget.validated(
           label: 'Enter username',
           controller: _usernameCtrl,
           keyboardType: TextInputType.emailAddress,
         ),
-        InputWidget(
+        InputWidget.validated(
           label: 'Enter password',
           controller: _passwordCtrl,
           keyboardType: TextInputType.visiblePassword,

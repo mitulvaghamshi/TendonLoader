@@ -2,12 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 @immutable
+final class ImageWidget extends StatelessWidget {
+  const ImageWidget({super.key, required this.path});
+
+  final String path;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      path,
+      fit: BoxFit.contain,
+      frameBuilder: (_, child, frame, ___) => AnimatedOpacity(
+        duration: const Duration(seconds: 2),
+        opacity: frame == null ? 0 : 1,
+        child: child,
+      ),
+    );
+  }
+}
+
+@immutable
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key});
 
-  const factory AppLogo.sized({
-    final double? dimention,
-  }) = _AppLogoPadded;
+  const factory AppLogo.square({
+    final EdgeInsetsGeometry? padding,
+    final double? dimension,
+  }) = _AppLogoSquare;
 
   @override
   Widget build(BuildContext context) {
@@ -44,17 +65,18 @@ m212 35-2 8c-3 13-8 19-19 22-9 2-9 2-10 5 0 2 1 3 7 5 14 3 19 8 22 24 2 7 8 10
 }
 
 @immutable
-final class _AppLogoPadded extends AppLogo {
-  const _AppLogoPadded({this.dimention});
+final class _AppLogoSquare extends AppLogo {
+  const _AppLogoSquare({this.padding, this.dimension});
 
-  final double? dimention;
+  final EdgeInsetsGeometry? padding;
+  final double? dimension;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30),
+      padding: padding ?? const EdgeInsets.symmetric(vertical: 30),
       child: SizedBox.square(
-        dimension: dimention ?? 300,
+        dimension: dimension ?? 300,
         child: const AppLogo(),
       ),
     );

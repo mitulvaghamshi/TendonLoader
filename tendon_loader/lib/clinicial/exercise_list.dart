@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tendon_loader/widgets/input_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/models/exercise.dart';
-import 'package:tendon_loader/screens/web/widgets/search_field.dart';
+import 'package:tendon_loader/router/router.dart';
 
 @immutable
 final class ExerciseList extends StatefulWidget {
-  const ExerciseList({super.key, required this.title, required this.items});
+  const ExerciseList({
+    super.key,
+    required this.title,
+    required this.items,
+  });
 
   final String title;
   final Iterable<Exercise> items;
@@ -39,19 +45,32 @@ final class _ExerciseListState extends State<ExerciseList> {
         itemCount: searchList.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return SearchField(
+            return InputWidget.search(
               label: 'Search by date...',
               controller: _searchCtrl,
-              onSearch: _search,
+              onComplete: _search,
             );
           } else if (index <= searchList.length) {
             final exercise = searchList.elementAt(index - 1);
+            final routeData = {
+              'userId': exercise.userId,
+              'exerciseId': exercise.id,
+            };
             return RawButton.tile(
-              onTap: () {},
+              onTap: () => context.push(
+                const ExerciseDetaildRoute().location,
+                extra: routeData,
+              ),
               leadingToTitleSpace: 16,
               axisAlignment: MainAxisAlignment.start,
               leading: CircleAvatar(child: Text(index.toString())),
-              trailing: const Icon(Icons.chevron_right),
+              trailing: IconButton(
+                onPressed: () => context.push(
+                  const ExerciseDataListRoute().location,
+                  extra: routeData,
+                ),
+                icon: const Icon(Icons.numbers),
+              ),
               child: Text(exercise.datetime),
             );
           }

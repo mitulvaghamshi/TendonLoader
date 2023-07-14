@@ -23,7 +23,9 @@ final class RawButton extends StatelessWidget {
     final Widget? leading,
     final Widget? child,
     final Widget? trailing,
-  }) = RawTile;
+  }) = _RawListTile;
+
+  const factory RawButton.loading() = _RawLoading;
 
   final Color? color;
   final double? radius;
@@ -33,22 +35,27 @@ final class RawButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(radius ?? 4),
-      child: RawMaterialButton(
-        constraints: const BoxConstraints(minHeight: 30, minWidth: 30),
-        padding: padding ?? const EdgeInsets.all(16),
-        onPressed: onTap,
-        fillColor: color,
-        child: child,
-      ),
+    Widget widget = RawMaterialButton(
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      padding: padding ?? const EdgeInsets.all(16),
+      onPressed: onTap,
+      fillColor: color,
+      child: child,
     );
+
+    if (radius != null) {
+      widget = ClipRRect(
+        borderRadius: BorderRadius.circular(radius!),
+        child: widget,
+      );
+    }
+    return widget;
   }
 }
 
 @immutable
-final class RawTile extends RawButton {
-  const RawTile({
+final class _RawListTile extends RawButton {
+  const _RawListTile({
     super.key,
     super.onTap,
     super.color,
@@ -87,6 +94,21 @@ final class RawTile extends RawButton {
           if (trailing != null) ...[const Spacer(), trailing!],
         ],
       ),
+    );
+  }
+}
+
+@immutable
+final class _RawLoading extends RawButton {
+  const _RawLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return const RawButton.tile(
+      leadingToTitleSpace: 16,
+      axisAlignment: MainAxisAlignment.start,
+      leading: CircularProgressIndicator.adaptive(),
+      child: Text('Please wait...'),
     );
   }
 }

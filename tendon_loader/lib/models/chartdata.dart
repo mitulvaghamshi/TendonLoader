@@ -11,20 +11,14 @@ final class ChartData {
 }
 
 extension ExChartData on ChartData {
-  String toPair() => '$time:$load';
+  String get pair => '$time:$load';
 
-  ChartData copyWith({
-    final double? time,
-    final double? load,
-  }) {
-    return ChartData(
-      time: time ?? this.time,
-      load: load ?? this.load,
-    );
+  ChartData copyWith({final double? time, final double? load}) {
+    return ChartData(time: time ?? this.time, load: load ?? this.load);
   }
 
   static ChartData _parseJson(final String data) {
-    final List<String> items = data.split(':');
+    final items = data.split(':');
     return ChartData(
       time: double.parse(items[0]),
       load: double.parse(items[1]),

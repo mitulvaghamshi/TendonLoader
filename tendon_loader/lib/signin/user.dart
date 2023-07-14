@@ -26,15 +26,13 @@ extension ExUser on User {
       .first
       .replaceFirst(RegExp(r'\w'), username[0].toUpperCase());
 
-  bool match(final String term) => username.toLowerCase().contains(term);
+  Map<String, dynamic> get json => {
+        'id': id,
+        'username': username,
+        'password': password,
+      };
 
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'id': id,
-      'username': username,
-      'password': password,
-    };
-  }
+  bool match(final String term) => username.toLowerCase().contains(term);
 
   User copyWith({
     final int? id,

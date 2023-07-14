@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app/mvctest/time_picker_tile.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/router/router.dart';
 
 class NewMVCTest extends StatefulWidget {

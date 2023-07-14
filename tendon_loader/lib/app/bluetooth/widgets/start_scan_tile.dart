@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app/bluetooth/models/bluetooth_handler.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/image_widget.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/image_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 /// This class, when loaded, prompts user to (Turn on / Power on)
 /// the "Progressor" device, they are trying to connect to.

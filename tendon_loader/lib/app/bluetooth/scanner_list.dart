@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/app/bluetooth/device_list.dart';
 import 'package:tendon_loader/app/bluetooth/widgets/bluetooth_tile.dart';
-import 'package:tendon_loader/common/widgets/loading_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 /// This class queries data from last Scan using
 /// [FlutterBlue.instance.scanResults] stream, it will retrieve
@@ -12,19 +12,13 @@ import 'package:tendon_loader/common/widgets/loading_widget.dart';
 class ScannerList extends StatelessWidget {
   const ScannerList({super.key});
 
-  Stream<Iterable<BluetoothDevice>> _getScanResult() {
-    return FlutterBlue.instance.scanResults.asyncMap((results) {
-      return results.map((result) => result.device);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Iterable<BluetoothDevice>>(
-      stream: _getScanResult(),
-      builder: (_, snapshot) {
+      stream: _getScanResults,
+      builder: (context, snapshot) {
         // Show Loading... while data is fetching...
-        if (!snapshot.hasData) return const LoadingWidget();
+        if (!snapshot.hasData) return const RawButton.loading();
         // If Scan result is empty, check if Bluetooth is enabled...
         if (snapshot.data!.isEmpty) return const BluetoothTile();
         // otherwise, Move to Device list, which shows all the scanned devices.
@@ -32,4 +26,10 @@ class ScannerList extends StatelessWidget {
       },
     );
   }
+}
+
+extension on ScannerList {
+  Stream<Iterable<BluetoothDevice>> get _getScanResults =>
+      FlutterBlue.instance.scanResults
+          .asyncMap((results) => results.map((result) => result.device));
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/app/bluetooth/device_list.dart';
 import 'package:tendon_loader/app/bluetooth/scanning_tile.dart';
-import 'package:tendon_loader/common/widgets/loading_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 /// The app uses [FlutterBlue.instance.connectedDevices] stream to look for
 /// already connected Bluetooth devices. The connection is with the
@@ -20,9 +20,9 @@ class ConnectedList extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<List<BluetoothDevice>>(
       future: FlutterBlue.instance.connectedDevices,
-      builder: (_, snapshot) {
+      builder: (context, snapshot) {
         // Initial Step... Loading...
-        if (!snapshot.hasData) return const LoadingWidget();
+        if (!snapshot.hasData) return const RawButton.loading();
         // Could not find any connected device, Goto Device Scanner...
         if (snapshot.data!.isEmpty) return const ScanningTile();
         // else, Show the list of connected devices...

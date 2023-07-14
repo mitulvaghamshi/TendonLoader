@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/app_logo.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
 import 'package:tendon_loader/router/router.dart';
+import 'package:tendon_loader/widgets/image_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 @immutable
-final class TendonLoaderApp extends StatelessWidget {
-  const TendonLoaderApp({super.key});
+final class WelcomeWidget extends StatelessWidget {
+  const WelcomeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Hero(tag: 'hero-app-logo', child: AppLogo.sized()),
+      const Hero(tag: 'hero-app-logo', child: AppLogo.square()),
       const SizedBox(height: 30),
       RawButton.tile(
         color: Colors.orange,
@@ -22,7 +22,7 @@ final class TendonLoaderApp extends StatelessWidget {
       RawButton.tile(
         color: Colors.orange,
         child: const Text('Clinician - Manage Users', style: Styles.boldWhite),
-        onTap: () => const HomePageRoute().go(context),
+        onTap: () => const UserListRoute().go(context),
       ),
       const SizedBox(height: 8),
       Hero(

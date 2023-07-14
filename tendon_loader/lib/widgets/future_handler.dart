@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 @immutable
 final class FutureHandler<T> extends StatelessWidget {
@@ -12,7 +12,7 @@ final class FutureHandler<T> extends StatelessWidget {
   });
 
   final Future<T> future;
-  final Widget Function(T items) builder;
+  final Widget Function(T value) builder;
 
   @override
   Widget build(BuildContext context) {

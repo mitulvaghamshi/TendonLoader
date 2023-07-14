@@ -7,8 +7,8 @@ import 'package:tendon_loader/app/exercise/exercise_mode.dart';
 import 'package:tendon_loader/app/livedata/live_data.dart';
 import 'package:tendon_loader/app/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/app_logo.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/image_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/router/router.dart';
 
 @immutable
@@ -33,7 +33,7 @@ final class HomeScreenState extends State<HomeScreen> with Progressor {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(children: [
-          const Hero(tag: 'hero-app-logo', child: AppLogo.sized()),
+          const Hero(tag: 'hero-app-logo', child: AppLogo.square()),
           const SizedBox(height: 30),
           RawButton.tile(
             color: Colors.orange,

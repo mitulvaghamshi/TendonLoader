@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app/mvctest/time_picker_tile.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/common/widgets/input_widget.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/input_widget.dart';
 import 'package:tendon_loader/models/prescription.dart';
 
 class NewExercise extends StatefulWidget {
@@ -92,7 +92,7 @@ class NewExerciseState extends State<NewExercise> {
                   ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: InputWidget(
+                  child: InputWidget.validated(
                     label: 'Target Load (Kg)',
                     controller: _ctrlTargetLoad,
                     format: r'^\d{1,2}(\.\d{0,2})?',
@@ -105,7 +105,7 @@ class NewExerciseState extends State<NewExercise> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(children: [
                     Expanded(
-                      child: InputWidget(
+                      child: InputWidget.validated(
                         label: 'Sets (#)',
                         format: r'^\d{1,2}',
                         controller: _ctrlSets,
@@ -113,7 +113,7 @@ class NewExerciseState extends State<NewExercise> {
                     ),
                     const VerticalDivider(width: 16),
                     Expanded(
-                      child: InputWidget(
+                      child: InputWidget.validated(
                         label: 'Reps (#)',
                         format: r'^\d{1,2}',
                         controller: _ctrlReps,

@@ -3,7 +3,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/app/bluetooth/models/bluetooth_handler.dart';
 import 'package:tendon_loader/app/bluetooth/widgets/connected_tile.dart';
 import 'package:tendon_loader/app/bluetooth/widgets/disconnected_tile.dart';
-import 'package:tendon_loader/common/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 /// A single "Progressor" device (Connected or Disconnected).
 /// This widget will allows to restart the "Scanning..." process,
