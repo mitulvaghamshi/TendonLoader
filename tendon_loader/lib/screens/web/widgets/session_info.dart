@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tendon_loader/network/app_scope.dart';
+import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/screens/web/widgets/prescription_view.dart';
 
 @immutable
@@ -8,7 +8,8 @@ class SessionInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final export = AppScope.of(context).api.excercise;
+    const export = Exercise.empty();
+    // AppScope.of(context).userState.excercise;
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
         middle: Text('export.title'),

@@ -139,10 +139,20 @@
         ],
       },
       {
+        // Run build runner
+        "type": "shell",
+        "group": "build",
+        "label": "Build Runner: build",
+        "command": "dart run build_runner build",
+        "problemMatcher": [
+          "$dart-build_runner",
+        ],
+      },
+      {
         // Run build runner (overwrite)
         "type": "shell",
         "group": "build",
-        "label": "Build Runner: Build -overwrite",
+        "label": "Build Runner: Build --delete",
         "command": "dart run build_runner build --delete-conflicting-outputs",
         "problemMatcher": [
           "$dart-build_runner",

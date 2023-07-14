@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tendon_loader/common/constants.dart';
 
-class InputWidget extends StatelessWidget {
+@immutable
+final class InputWidget extends StatelessWidget {
   const InputWidget({
     super.key,
     this.label,

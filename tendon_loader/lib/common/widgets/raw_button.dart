@@ -1,53 +1,35 @@
 import 'package:flutter/material.dart';
 
-class RawButton extends StatelessWidget {
+@immutable
+final class RawButton extends StatelessWidget {
   const RawButton({
     super.key,
     this.onTap,
-    this.radius,
     this.color,
-    required this.child,
+    this.radius,
+    this.padding,
+    this.child,
   });
 
-  factory RawButton.icon({
+  const factory RawButton.tile({
+    final Key? key,
     final VoidCallback? onTap,
     final Color? color,
     final double? radius,
-    required Widget left,
-    required Widget right,
-  }) {
-    return RawButton(
-      onTap: onTap,
-      color: color,
-      radius: radius,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [left, const SizedBox(width: 5), right],
-      ),
-    );
-  }
+    final double? leadingToTitleSpace,
+    final EdgeInsetsGeometry? padding,
+    final MainAxisAlignment? axisAlignment,
+    final MainAxisSize? axisSize,
+    final Widget? leading,
+    final Widget? child,
+    final Widget? trailing,
+  }) = RawTile;
 
-  factory RawButton.extended({
-    final VoidCallback? onTap,
-    final Color? color,
-    final double? radius,
-    required final Widget child,
-  }) {
-    return RawButton(
-      onTap: onTap,
-      color: color,
-      radius: radius,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [child],
-      ),
-    );
-  }
-
-  final VoidCallback? onTap;
-  final double? radius;
   final Color? color;
-  final Widget child;
+  final double? radius;
+  final VoidCallback? onTap;
+  final EdgeInsetsGeometry? padding;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +37,55 @@ class RawButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(radius ?? 4),
       child: RawMaterialButton(
         constraints: const BoxConstraints(minHeight: 30, minWidth: 30),
-        padding: const EdgeInsets.all(16),
+        padding: padding ?? const EdgeInsets.all(16),
         onPressed: onTap,
         fillColor: color,
         child: child,
+      ),
+    );
+  }
+}
+
+@immutable
+final class RawTile extends RawButton {
+  const RawTile({
+    super.key,
+    super.onTap,
+    super.color,
+    super.radius,
+    this.leadingToTitleSpace = 5,
+    super.padding,
+    this.axisAlignment,
+    this.axisSize,
+    this.leading,
+    this.trailing,
+    super.child,
+  });
+
+  final double? leadingToTitleSpace;
+  final MainAxisAlignment? axisAlignment;
+  final MainAxisSize? axisSize;
+  final Widget? leading;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return RawButton(
+      onTap: onTap,
+      color: color,
+      radius: radius,
+      padding: padding,
+      child: Row(
+        mainAxisSize: axisSize ?? MainAxisSize.max,
+        mainAxisAlignment: axisAlignment ?? MainAxisAlignment.center,
+        children: [
+          if (leading != null) ...[
+            leading!,
+            SizedBox(width: leadingToTitleSpace)
+          ],
+          if (child != null) child!,
+          if (trailing != null) ...[const Spacer(), trailing!],
+        ],
       ),
     );
   }

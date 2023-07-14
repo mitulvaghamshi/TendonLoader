@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/common/widgets/no_result_widget.dart';
-import 'package:tendon_loader/network/app_scope.dart';
-import 'package:tendon_loader/network/chartdata.dart';
-import 'package:tendon_loader/network/prescription.dart';
+import 'package:tendon_loader/models/chartdata.dart';
+import 'package:tendon_loader/models/exercise.dart';
+import 'package:tendon_loader/models/prescription.dart';
 
 @immutable
 class DataGraph extends StatelessWidget {
@@ -11,7 +11,8 @@ class DataGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final export = AppScope.of(context).api.excercise;
+    const export = Exercise.empty();
+    //  AppScope.of(context).userState.excercise;
     final load = export.mvcValue != null
         ? export.mvcValue!
         : const Prescription.empty().targetLoad;

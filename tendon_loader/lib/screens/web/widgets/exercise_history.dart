@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/network/exercise.dart';
-import 'package:tendon_loader/network/prescription.dart';
+import 'package:tendon_loader/models/exercise.dart';
+import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/screens/web/widgets/prescription_view.dart';
 
 class ExerciseHistory extends StatelessWidget {

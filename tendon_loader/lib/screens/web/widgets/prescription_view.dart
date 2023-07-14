@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/network/exercise.dart';
-import 'package:tendon_loader/network/prescription.dart';
+import 'package:tendon_loader/models/exercise.dart';
+import 'package:tendon_loader/models/prescription.dart';
 
 class PrescriptionView extends StatelessWidget {
   const PrescriptionView({

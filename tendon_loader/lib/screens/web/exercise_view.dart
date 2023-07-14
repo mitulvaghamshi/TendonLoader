@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/network/app_scope.dart';
+import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/screens/web/data_graph.dart';
-import 'package:tendon_loader/screens/web/data_list.dart';
+import 'package:tendon_loader/screens/web/exercise_data_list.dart';
 
 class ExerciseView extends StatefulWidget {
   const ExerciseView({super.key});
@@ -12,7 +12,8 @@ class ExerciseView extends StatefulWidget {
 }
 
 class _ExerciseViewState extends State<ExerciseView> {
-  late final export = AppScope.of(context).api.excercise;
+  late final export = const Exercise.empty();
+  // AppScope.of(context).userState.excercise;
   bool _showList = true;
 
   @override
@@ -25,7 +26,7 @@ class _ExerciseViewState extends State<ExerciseView> {
               middle: Text('export.fileName'),
             ),
             child: Row(children: [
-              SizedBox(width: 300, child: DataList()),
+              SizedBox(width: 300, child: ExerciseDataList()),
               VerticalDivider(width: 2, thickness: 2),
               Expanded(child: DataGraph()),
             ]),
@@ -41,7 +42,7 @@ class _ExerciseViewState extends State<ExerciseView> {
           ),
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 500),
-            child: _showList ? const DataList() : const DataGraph(),
+            child: _showList ? const ExerciseDataList() : const DataGraph(),
           ),
         );
       },
