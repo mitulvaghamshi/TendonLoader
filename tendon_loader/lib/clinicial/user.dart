@@ -32,8 +32,6 @@ extension ExUser on User {
         'password': password,
       };
 
-  bool match(final String term) => username.toLowerCase().contains(term);
-
   User copyWith({
     final int? id,
     final String? username,

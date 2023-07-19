@@ -5,7 +5,7 @@ import 'package:tendon_loader/settings/settings.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/states/app_state.dart';
 
-void main() => runApp(MainApp(state: AppState.empty()));
+void main() => runApp(MainApp(state: AppState()));
 
 @immutable
 final class MainApp extends StatelessWidget {
@@ -21,13 +21,13 @@ final class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: state.service,
+      animation: state,
       builder: (context, child) => MaterialApp.router(
         title: 'Tendon Loader',
         routerConfig: _router,
         theme: _lightTheme,
         darkTheme: _darkTheme,
-        themeMode: state.service.settings.themeMode,
+        themeMode: state.settings.themeMode,
         builder: (_, child) => AppScope(data: state, child: child!),
       ),
     );

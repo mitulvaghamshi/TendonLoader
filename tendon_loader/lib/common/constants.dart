@@ -4,14 +4,14 @@ class Styles {
   static const EdgeInsets tilePadding =
       EdgeInsets.symmetric(horizontal: 16, vertical: 5);
 
-  static const TextStyle numberPickerText =
-      TextStyle(fontSize: 22, fontWeight: FontWeight.w500);
+  static const TextStyle numPickerText =
+      TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold);
 
   static const TextStyle titleStyle =
-      TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
+      TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
   static const TextStyle headerLabel =
-      TextStyle(color: Color(0xff000000), fontWeight: FontWeight.w500);
+      TextStyle(color: Color(0xff000000), fontWeight: FontWeight.bold);
 
   static const TextStyle headerText = TextStyle(
       color: Color(0xff000000), fontWeight: FontWeight.bold, fontSize: 40);

@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/app/bluetooth/models/bluetooth_handler.dart';
 import 'package:tendon_loader/app/graph/graph_handler.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/models/chartdata.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 /// After successful connection to the "Progressor", the app will present user
 /// with "Taring" (essentially zero-ing or reseting) the "Progressor"

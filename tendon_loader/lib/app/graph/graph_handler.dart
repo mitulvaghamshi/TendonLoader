@@ -8,9 +8,9 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app/bluetooth/models/bluetooth_handler.dart';
 import 'package:tendon_loader/app/graph/countdown_widget.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/widgets/raw_button.dart';
+import 'package:tendon_loader/exercise/exercise.dart';
 import 'package:tendon_loader/models/chartdata.dart';
-import 'package:tendon_loader/models/exercise.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 bool isPause = false;
 
@@ -151,7 +151,7 @@ Future<bool?> startCountdown({
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Text(title, style: Styles.numberPickerText),
+            child: Text(title, style: Styles.numPickerText),
           ),
           CountdownWidget(duration: duration),
           RawButton.tile(

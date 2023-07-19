@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/common/constants.dart';
 
 @immutable
 final class RawButton extends StatelessWidget {
@@ -27,6 +29,8 @@ final class RawButton extends StatelessWidget {
 
   const factory RawButton.loading() = _RawLoading;
 
+  const factory RawButton.error({bool scaffold, String message}) = _RawError;
+
   final Color? color;
   final double? radius;
   final VoidCallback? onTap;
@@ -35,21 +39,16 @@ final class RawButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget widget = RawMaterialButton(
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      padding: padding ?? const EdgeInsets.all(16),
-      onPressed: onTap,
-      fillColor: color,
-      child: child,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius ?? 4),
+      child: RawMaterialButton(
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        padding: padding ?? const EdgeInsets.all(16),
+        onPressed: onTap,
+        fillColor: color,
+        child: child,
+      ),
     );
-
-    if (radius != null) {
-      widget = ClipRRect(
-        borderRadius: BorderRadius.circular(radius!),
-        child: widget,
-      );
-    }
-    return widget;
   }
 }
 
@@ -105,10 +104,38 @@ final class _RawLoading extends RawButton {
   @override
   Widget build(BuildContext context) {
     return const RawButton.tile(
+      radius: 0,
+      color: Colors.green,
       leadingToTitleSpace: 16,
-      axisAlignment: MainAxisAlignment.start,
-      leading: CircularProgressIndicator.adaptive(),
-      child: Text('Please wait...'),
+      leading: CupertinoActivityIndicator(),
+      child: Text('Please wait...', style: Styles.boldWhite),
     );
+  }
+}
+
+@immutable
+final class _RawError extends RawButton {
+  const _RawError({this.scaffold = true, this.message});
+
+  final bool scaffold;
+  final String? message;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget widget = RawButton.tile(
+      radius: 0,
+      color: Colors.red,
+      child: Text(
+        message ?? 'Opss!! Something went wrong',
+        style: Styles.boldWhite,
+      ),
+    );
+    if (scaffold) {
+      widget = Scaffold(
+        appBar: AppBar(title: const Text('Tendon Loader')),
+        body: Center(child: widget),
+      );
+    }
+    return widget;
   }
 }

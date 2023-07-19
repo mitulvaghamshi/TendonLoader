@@ -3,8 +3,9 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 
 @immutable
-final class DataGraph extends StatelessWidget {
-  const DataGraph({super.key, required this.tagetLoad, required this.items});
+final class ExerciseDataGraph extends StatelessWidget {
+  const ExerciseDataGraph(
+      {super.key, required this.tagetLoad, required this.items});
 
   final double tagetLoad;
   final Iterable<ChartData> items;

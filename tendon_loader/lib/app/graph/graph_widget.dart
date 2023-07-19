@@ -3,8 +3,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app/exercise/exercise_handler.dart';
 import 'package:tendon_loader/app/graph/graph_handler.dart';
 import 'package:tendon_loader/app/livedata/livedata_handler.dart';
-import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/models/chartdata.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 @immutable
 class GraphWidget extends StatelessWidget {

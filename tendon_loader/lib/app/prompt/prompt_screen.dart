@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/app/prompt/pain_selector.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/router/router.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 @immutable
 final class PromptScreen extends StatefulWidget {
@@ -56,7 +56,7 @@ class PromptScreenState extends State<PromptScreen> {
                   children: [
                     const Text(
                       '1. Pain score',
-                      style: Styles.numberPickerText,
+                      style: Styles.numPickerText,
                     ),
                     const Divider(thickness: 2),
                     const Text(
@@ -97,7 +97,7 @@ class PromptScreenState extends State<PromptScreen> {
                   children: [
                     const Text(
                       '2. Pain tolerance',
-                      style: Styles.numberPickerText,
+                      style: Styles.numPickerText,
                     ),
                     const Divider(thickness: 2),
                     const Text(
@@ -145,7 +145,7 @@ class PromptScreenState extends State<PromptScreen> {
                   _CardWidget(children: [
                     const Text(
                       '3. Submit data?',
-                      style: Styles.numberPickerText,
+                      style: Styles.numPickerText,
                     ),
                     const Divider(thickness: 2),
                     const Text(

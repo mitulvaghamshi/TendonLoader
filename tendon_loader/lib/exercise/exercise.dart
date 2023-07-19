@@ -2,7 +2,7 @@ import 'package:archive/archive_io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 import 'package:tendon_loader/models/chartdata.dart';
-import 'package:tendon_loader/models/prescription.dart';
+import 'package:tendon_loader/prescription/prescription.dart';
 
 @immutable
 final class Exercise {
@@ -73,8 +73,6 @@ extension ExExercise on Exercise {
         'mvcValue': mvcValue,
         'data': data.map((e) => e.pair).join('|'),
       };
-
-  bool match(final String term) => datetime.toLowerCase().contains(term);
 
   Exercise copyWith({
     final int? id,

@@ -35,17 +35,15 @@ final class Settings {
 extension ExSettings on Settings {
   ThemeMode get themeMode => darkMode ? ThemeMode.dark : ThemeMode.light;
 
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'id': id,
-      'userId': userId,
-      'prescriptionId': prescriptionId,
-      'darkMode': darkMode,
-      'autoUpload': autoUpload,
-      'editablePrescriprion': editablePrescription,
-      'graphScale': graphScale,
-    };
-  }
+  Map<String, dynamic> get json => {
+        'id': id,
+        'userId': userId,
+        'prescriptionId': prescriptionId,
+        'darkMode': darkMode,
+        'autoUpload': autoUpload,
+        'editablePrescriprion': editablePrescription,
+        'graphScale': graphScale,
+      };
 
   Settings copyWith({
     final int? id,
