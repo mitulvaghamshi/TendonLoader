@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/app/mvctest/time_picker_tile.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/router/router.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 class NewMVCTest extends StatefulWidget {
   const NewMVCTest({super.key});
@@ -63,11 +62,11 @@ class NewMVCTestState extends State<NewMVCTest> {
                 _initFields();
               }),
             ),
-            TimePickerTile(
-              time: _duration,
-              desc: 'MVC test duration',
-              onSelected: (duration) => setState(() => _duration = duration),
-            ),
+            // TimePickerTile(
+            //   time: _duration,
+            //   label: 'MVC test duration',
+            //   onChange: (duration) => setState(() => _duration = duration),
+            // ),
           ],
         ),
       ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/app/exercise/exercise_handler.dart';
 import 'package:tendon_loader/app/exercise/exercise_mode.dart';
-import 'package:tendon_loader/app/exercise/new_exercise.dart';
 import 'package:tendon_loader/app/graph/graph_handler.dart';
 import 'package:tendon_loader/app/homescreen.dart';
 import 'package:tendon_loader/app/livedata/live_data.dart';
@@ -11,14 +10,16 @@ import 'package:tendon_loader/app/mvctest/mvc_handler.dart';
 import 'package:tendon_loader/app/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/app/mvctest/new_mvc_test.dart';
 import 'package:tendon_loader/app/prompt/prompt_screen.dart';
-import 'package:tendon_loader/clinicial/exercise_data_list.dart';
-import 'package:tendon_loader/clinicial/exercise_detail.dart';
-import 'package:tendon_loader/clinicial/exercise_list.dart';
 import 'package:tendon_loader/clinicial/user_list.dart';
-import 'package:tendon_loader/models/prescription.dart';
+import 'package:tendon_loader/exercise/exercise_data_list.dart';
+import 'package:tendon_loader/exercise/exercise_detail.dart';
+import 'package:tendon_loader/exercise/exercise_list.dart';
+import 'package:tendon_loader/prescription/prescription.dart';
+import 'package:tendon_loader/prescription/prescription_screen.dart';
+import 'package:tendon_loader/prescription/prescription_service.dart';
 import 'package:tendon_loader/settings/settings_screen.dart';
-import 'package:tendon_loader/signin/welcome_widget.dart';
 import 'package:tendon_loader/signin/signin_widget.dart';
+import 'package:tendon_loader/signin/welcome_widget.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/widgets/future_handler.dart';
 import 'package:tendon_loader/widgets/raw_button.dart';
@@ -86,8 +87,14 @@ final class NewExerciseRoute extends GoRouteData {
   const NewExerciseRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const NewExercise();
+  Widget build(BuildContext context, GoRouterState state) {
+    final id = AppScope.of(context).settings.prescriptionId;
+    if (id == null) return const RawButton.error();
+    return FutureHandler(
+      future: PrescriptionService.get(id: id),
+      builder: (value) => PrescriptionScreen(prescription: value),
+    );
+  }
 }
 
 @immutable
@@ -104,13 +111,7 @@ final class UserListRoute extends GoRouteData {
   const UserListRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    final service = AppScope.of(context).service;
-    return FutureHandler(
-      future: service.getUserList().then((_) => true),
-      builder: (_) => UserList(items: service.userList),
-    );
-  }
+  Widget build(BuildContext context, GoRouterState state) => const UserList();
 }
 
 @immutable
@@ -119,18 +120,11 @@ final class ExerciseListRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    final service = AppScope.of(context).service;
     if (state.extra
-        case {
-          'userId': final int userId,
-          'title': final String title,
-        }) {
-      return FutureHandler(
-        future: service.getExerciseList(userId: userId),
-        builder: (items) => ExerciseList(title: title, items: items),
-      );
+        case {'userId': final int userId, 'title': final String title}) {
+      return ExerciseList(userId: userId, title: title);
     }
-    return const RawButton(child: Text('Invalid access.'));
+    return const RawButton.error();
   }
 }
 
@@ -140,21 +134,11 @@ final class ExerciseDetaildRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    final service = AppScope.of(context).service;
     if (state.extra
-        case {
-          'userId': final int userId,
-          'exerciseId': final int exerciseId,
-        }) {
-      return FutureHandler(
-        future: service.getExerciseAndPrescription(
-          userId: userId,
-          exerciseId: exerciseId,
-        ),
-        builder: (value) => ExerciseDetail(data: value),
-      );
+        case {'userId': final int userId, 'exerciseId': final int exerciseId}) {
+      return ExerciseDetail(userId: userId, exerciseId: exerciseId);
     }
-    return const RawButton(child: Text('Invalid access.'));
+    return const RawButton.error();
   }
 }
 
@@ -164,21 +148,11 @@ final class ExerciseDataListRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    final service = AppScope.of(context).service;
     if (state.extra
-        case {
-          'userId': final int userId,
-          'exerciseId': final int exerciseId,
-        }) {
-      return FutureHandler(
-        future: service.getExerciseDataList(
-          userId: userId,
-          exerciseId: exerciseId,
-        ),
-        builder: (items) => ExerciseDataList(items: items),
-      );
+        case {'userId': final int userId, 'exerciseId': final int exerciseId}) {
+      return ExerciseDataList(userId: userId, exerciseId: exerciseId);
     }
-    return const RawButton(child: Text('Invalid access.'));
+    return const RawButton.error();
   }
 }
 
@@ -188,7 +162,7 @@ final class LiveDataRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    final handler = LiveDataHandler(onCountdown: context.countdown);
+    final handler = LiveDataHandler(onCountdown: context._countdown);
     return LiveData(handler: handler);
   }
 }
@@ -201,7 +175,7 @@ final class MVCTestingRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) {
     final handler = MVCHandler(
       mvcDuration: 0,
-      onCountdown: context.countdown,
+      onCountdown: context._countdown,
     );
     return MVCTesting(handler: handler);
   }
@@ -215,13 +189,13 @@ final class ExerciseModeRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) {
     final handler = ExerciseHandler(
       prescription: const Prescription.empty(),
-      onCountdown: context.countdown,
+      onCountdown: context._countdown,
     );
     return ExerciseMode(handler: handler);
   }
 }
 
 extension on BuildContext {
-  Future<bool?> countdown(String title, Duration duration) async =>
+  Future<bool?> _countdown(final String title, final Duration duration) async =>
       startCountdown(context: this, title: title, duration: duration);
 }

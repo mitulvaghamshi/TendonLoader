@@ -16,7 +16,7 @@ mixin ApiClient {
 
   /// @param `path` - Network resource path.
   /// @return `Record<Json, HasError)` - Whether request succeed with data.
-  static Future<(dynamic, bool)> get(final String path) async {
+  static Future<(dynamic, bool)> get<T>(final String path) async {
     if (!await isConnected()) return ('No Internet Connection.', true);
     try {
       final response = await http.get(
@@ -47,7 +47,6 @@ mixin ApiClient {
         headers: _headers,
         body: jsonEncode(data),
       );
-
       // TODO(me): Return error info, probably as Error model.
       return switch (response.statusCode) {
         201 => ('[HTTP POST]:Content created', false),

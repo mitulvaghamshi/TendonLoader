@@ -7,9 +7,9 @@ import 'package:tendon_loader/app/exercise/exercise_mode.dart';
 import 'package:tendon_loader/app/livedata/live_data.dart';
 import 'package:tendon_loader/app/mvctest/mvc_testing.dart';
 import 'package:tendon_loader/common/constants.dart';
+import 'package:tendon_loader/router/router.dart';
 import 'package:tendon_loader/widgets/image_widget.dart';
 import 'package:tendon_loader/widgets/raw_button.dart';
-import 'package:tendon_loader/router/router.dart';
 
 @immutable
 final class HomeScreen extends StatefulWidget {
@@ -76,9 +76,9 @@ extension on HomeScreenState {
       const SettingScreenRoute().push(context);
     }
     (switch (route) {
-      LiveData.name => const LiveDataRoute().go,
-      MVCTesting.name => const NewMVCTestRoute().go,
-      ExerciseMode.name => const NewExerciseRoute().go,
+      LiveData.name => const LiveDataRoute().push,
+      MVCTesting.name => const NewMVCTestRoute().push,
+      ExerciseMode.name => const NewExerciseRoute().push,
       _ => throw UnimplementedError('Invalid route name: [$route]'),
     })(context);
   }

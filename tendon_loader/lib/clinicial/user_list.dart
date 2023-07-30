@@ -1,85 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tendon_loader/signin/user.dart';
+import 'package:tendon_loader/clinicial/user.dart';
+import 'package:tendon_loader/clinicial/user_service.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/widgets/input_widget.dart';
-import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/router/router.dart';
+import 'package:tendon_loader/widgets/future_handler.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
+import 'package:tendon_loader/widgets/search_list_builder.dart';
 
 @immutable
-final class UserList extends StatefulWidget {
-  const UserList({super.key, required this.items});
-
-  final Iterable<User> items;
-
-  @override
-  State<UserList> createState() => _UserListState();
-}
-
-final class _UserListState extends State<UserList> {
-  final _searchCtrl = TextEditingController();
-  late Iterable<User> searchList = widget.items;
-
-  void _search() {
-    final term = _searchCtrl.text.toLowerCase();
-    final list =
-        term.isEmpty ? widget.items : widget.items.where((e) => e.match(term));
-    setState(() => searchList = list);
-  }
-
-  @override
-  void dispose() {
-    _searchCtrl.dispose();
-    super.dispose();
-  }
+final class UserList extends StatelessWidget {
+  const UserList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: [
-      SliverAppBar.large(title: const Text('Enrolled Users')),
-      SliverList.builder(
-        itemCount: searchList.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return InputWidget.search(
-              label: 'Search by name...',
-              controller: _searchCtrl,
-              onComplete: _search,
-            );
-          }
-          final user = searchList.elementAt(index - 1);
-          return RawButton.tile(
-            leadingToTitleSpace: 16,
-            axisAlignment: MainAxisAlignment.start,
-            leading: CircleAvatar(radius: 24, child: Text(index.toString())),
-            trailing: IconButton(
-              onPressed: () {
-                // TODO(me): Implement view to manage these options:
-                // itemDelete,
-                // itemDownload,
-                // Allow web access
-                // Exercise History
-                // Edit Prescriptions
-              },
-              icon: const Icon(Icons.settings),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(user.name, style: Styles.titleStyle),
-                Text(
-                  user.username,
-                  style: const TextStyle(color: Colors.grey),
-                ),
-              ],
-            ),
-            onTap: () => context.push(
-              const ExerciseListRoute().location,
-              extra: {'userId': user.id, 'title': user.name},
-            ),
-          );
-        },
+    return FutureHandler(
+      future: UserService.getAll(),
+      builder: (items) => SearchListBuilder(
+        title: 'Enrolled Users',
+        searchLabel: 'Search by name...',
+        items: items,
+        searchField: (item) => item.username,
+        builder: (item, index) => RawButton.tile(
+          leadingToTitleSpace: 16,
+          axisAlignment: MainAxisAlignment.start,
+          leading: CircleAvatar(radius: 24, child: Text(index.toString())),
+          trailing: IconButton(
+            onPressed: () {
+              // TODO(me): itemDelete, itemDownload, Allow web access,
+              // Exercise History, Edit Prescriptions
+            },
+            icon: const Icon(Icons.settings),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(item.name, style: Styles.titleStyle),
+              Text(
+                item.username,
+                style: const TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+          onTap: () => context.push(
+            const ExerciseListRoute().location,
+            extra: {'userId': item.id, 'title': item.name},
+          ),
+        ),
       ),
-    ]);
+    );
+  }
+}
+
+// TODO(me): implement...
+@immutable
+final class ManageUserinfo extends StatefulWidget {
+  const ManageUserinfo({super.key, required this.user});
+
+  final User user;
+
+  @override
+  State<ManageUserinfo> createState() => _ManageUserinfoState();
+}
+
+final class _ManageUserinfoState extends State<ManageUserinfo> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }

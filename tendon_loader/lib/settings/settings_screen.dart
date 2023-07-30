@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tendon_loader/app/bluetooth/models/bluetooth_handler.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/widgets/image_widget.dart';
-import 'package:tendon_loader/widgets/raw_button.dart';
 import 'package:tendon_loader/settings/settings.dart';
 import 'package:tendon_loader/settings/settings_service.dart';
 import 'package:tendon_loader/states/app_scope.dart';
+import 'package:tendon_loader/widgets/image_widget.dart';
+import 'package:tendon_loader/widgets/raw_button.dart';
 
 @immutable
 final class SettingsScreen extends StatefulWidget {
@@ -17,7 +17,7 @@ final class SettingsScreen extends StatefulWidget {
 }
 
 final class SettingsScreenState extends State<SettingsScreen> with Progressor {
-  late final service = AppScope.of(context).service;
+  late final service = AppScope.of(context);
   late final _scaleCtrl = TextEditingController()
     ..text = service.settings.graphScale.toString();
 
@@ -45,6 +45,7 @@ final class SettingsScreenState extends State<SettingsScreen> with Progressor {
               onTap: () {},
               color: Colors.green,
               leading: const Icon(Icons.person, color: Colors.white),
+              trailing: const Icon(Icons.edit, color: Colors.white),
               child: Text(
                 service.user!.username,
                 overflow: TextOverflow.ellipsis,

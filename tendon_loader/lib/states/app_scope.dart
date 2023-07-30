@@ -16,5 +16,5 @@ final class AppScope extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) =>
-      oldWidget is AppScope && (data.service != oldWidget.data.service);
+      oldWidget is AppScope && (data != oldWidget.data);
 }
