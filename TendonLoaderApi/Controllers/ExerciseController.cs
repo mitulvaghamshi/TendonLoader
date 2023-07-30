@@ -6,7 +6,7 @@ using TendonLoaderApi.Models;
 
 namespace TendonLoaderApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class ExerciseController : ControllerBase
 {

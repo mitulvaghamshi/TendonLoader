@@ -5,7 +5,7 @@ using TendonLoaderApi.Models;
 
 namespace TendonLoaderApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class SettingsController : ControllerBase
 {
@@ -13,14 +13,23 @@ public class SettingsController : ControllerBase
 
     public SettingsController(TendonLoaderContext context) => _context = context;
 
-    // GET: api/Settings
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Settings>>> GetSettings()
-    {
-        if (_context.Settings == null) return NotFound();
+    //// GET: api/Settings
+    //[HttpGet]
+    //public async Task<ActionResult<IEnumerable<Settings>>> GetSettings()
+    //{
+    //    if (_context.Settings == null) return NotFound();
+    //    return await _context.Settings.AsNoTracking().ToListAsync();
+    //}
 
-        return await _context.Settings.AsNoTracking().ToListAsync();
-    }
+    //// GET: api/Settings/5
+    //[HttpGet("{id}")]
+    //public async Task<ActionResult<Settings>> GetSettings(int id)
+    //{
+    //    if (_context.Settings == null) return NotFound();
+    //    var settings = await _context.Settings.FindAsync(id);
+    //    if (settings == null) return NotFound();
+    //    return settings;
+    //}
 
     // GET: api/Settings/5
     [HttpGet("{id}")]
@@ -28,26 +37,14 @@ public class SettingsController : ControllerBase
     {
         if (_context.Settings == null) return NotFound();
 
-        var settings = await _context.Settings.FindAsync(id);
+        var settings = await _context.Settings.AsNoTracking()
+            .FirstOrDefaultAsync(s => s.UserId == id);
 
         if (settings == null) return NotFound();
 
         return settings;
     }
 
-    // GET: api/Settings/User/5
-    [HttpGet("User/{id}")]
-    public async Task<ActionResult<Settings>> GetUserSettings(int id)
-    {
-        if (_context.Settings == null) return NotFound();
-
-        var settings = await _context.Settings
-            .AsNoTracking().FirstOrDefaultAsync(s => s.UserId == id);
-
-        if (settings == null) return NotFound();
-
-        return settings;
-    }
     // PUT: api/Settings/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
@@ -82,7 +79,7 @@ public class SettingsController : ControllerBase
         _context.Settings.Add(settings);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetSettings", new { id = settings.Id }, settings);
+        return CreatedAtAction("GetSettings", new { id = settings.UserId }, settings);
     }
 
     // DELETE: api/Settings/5

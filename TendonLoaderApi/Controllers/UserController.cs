@@ -7,16 +7,13 @@ using TendonLoaderApi.Models;
 
 namespace TendonLoaderApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class UserController : ControllerBase
 {
     private readonly TendonLoaderContext _context;
 
-    public UserController(TendonLoaderContext context)
-    {
-        _context = context;
-    }
+    public UserController(TendonLoaderContext context) => _context = context;
 
     // GET: api/User
     [HttpGet]
@@ -31,7 +28,8 @@ public class UserController : ControllerBase
     [HttpGet("Auth/{credentials}")]
     public async Task<ActionResult<User>> GetUser(string credentials)
     {
-        if (_context.Users == null || string.IsNullOrEmpty(credentials)) return NotFound();
+        if (_context.Users == null || string.IsNullOrEmpty(credentials)) 
+            return NotFound();
 
         string username, password;
 
@@ -40,14 +38,14 @@ public class UserController : ControllerBase
             var bytes = Convert.FromBase64String(credentials);
             var values = Encoding.UTF8.GetString(bytes).Split(":");
 
-            if (values.IsNullOrEmpty() || values.Length != 2) return NotFound();
+            if (values.IsNullOrEmpty() || values.Length != 2) 
+                return NotFound();
 
             username = values[0].ReplaceLineEndings(string.Empty);
             password = values[1].ReplaceLineEndings(string.Empty);
         }
         catch (FormatException)
         {
-            Console.WriteLine("Base64: Invalid data.");
             return NotFound();
         }
 
@@ -100,7 +98,7 @@ public class UserController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<User>> PostUser(User user)
     {
-      if (_context.Users == null)
+        if (_context.Users == null)
             return Problem("Entity set 'TendonLoaderContext.Users' is null.");
 
         _context.Users.Add(user);

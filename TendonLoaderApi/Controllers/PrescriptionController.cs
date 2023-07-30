@@ -5,7 +5,7 @@ using TendonLoaderApi.Models;
 
 namespace TendonLoaderApi.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class PrescriptionController : ControllerBase
 {
@@ -35,31 +35,26 @@ public class PrescriptionController : ControllerBase
         return prescription;
     }
 
-    // GET: api/Prescription/Exercise/5
-    [HttpGet("Exercise/{id}")]
-    public async Task<ActionResult<Prescription>> GetExercisePrescription(int id)
-    {
-        if (_context.Prescriptions == null) return NotFound();
+    //// GET: api/Prescription/Exercise/5
+    //[HttpGet("Exercise/{id}")]
+    //public async Task<ActionResult<Prescription>> GetExercisePrescription(int id)
+    //{
+    //    if (_context.Prescriptions == null) return NotFound();
+    //    var prescription = await _context.Prescriptions.FirstOrDefaultAsync(p => p.Id == id);
+    //    if (prescription == null) return NotFound();
+    //    return prescription;
+    //}
 
-        var prescription = await _context.Prescriptions.FirstOrDefaultAsync(p => p.Exercise.Id == id);
+    //// GET: api/Prescription/Settings/5
+    //[HttpGet("Settings/{id}")]
+    //public async Task<ActionResult<Prescription>> GetSettingsPrescription(int id)
+    //{
+    //    if (_context.Prescriptions == null) return NotFound();
+    //    var prescription = await _context.Prescriptions.FirstOrDefaultAsync(p => p.Id == id);
+    //    if (prescription == null) return NotFound();
+    //    return prescription;
+    //}
 
-        if (prescription == null) return NotFound();
-
-        return prescription;
-    }
-
-    // GET: api/Prescription/Settings/5
-    [HttpGet("Settings/{id}")]
-    public async Task<ActionResult<Prescription>> GetSettingsPrescription(int id)
-    {
-        if (_context.Prescriptions == null) return NotFound();
-
-        var prescription = await _context.Prescriptions.FirstOrDefaultAsync(p => p.Settings.Id == id);
-
-        if (prescription == null) return NotFound();
-
-        return prescription;
-    }
     // PUT: api/Prescription/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
