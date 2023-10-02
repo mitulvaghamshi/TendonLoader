@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using TendonLoaderApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);

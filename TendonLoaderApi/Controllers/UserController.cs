@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TendonLoaderApi.Data;
 using TendonLoaderApi.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System;
 
 namespace TendonLoaderApi.Controllers;
 
@@ -28,7 +32,7 @@ public class UserController : ControllerBase
     [HttpGet("Auth/{credentials}")]
     public async Task<ActionResult<User>> GetUser(string credentials)
     {
-        if (_context.Users == null || string.IsNullOrEmpty(credentials)) 
+        if (_context.Users == null || string.IsNullOrEmpty(credentials))
             return NotFound();
 
         string username, password;
@@ -38,7 +42,7 @@ public class UserController : ControllerBase
             var bytes = Convert.FromBase64String(credentials);
             var values = Encoding.UTF8.GetString(bytes).Split(":");
 
-            if (values.IsNullOrEmpty() || values.Length != 2) 
+            if (values.IsNullOrEmpty() || values.Length != 2)
                 return NotFound();
 
             username = values[0].ReplaceLineEndings(string.Empty);
