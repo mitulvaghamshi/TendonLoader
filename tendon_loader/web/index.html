@@ -1,45 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 
 <head>
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description"
-    content="This project designed Achilles (uh-KILL-eez) tendon rupture is an injury that affects the back of your lower leg.">
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Tendon Loader">
-  <link rel="apple-touch-icon" href="icons/icon-192.svg">
-  <!-- Favicon -->
+  <meta name="description" content="Tendon Loader is designed to measure and help cure Achille's (uh-KILL-eez) Tendon Problems.">
+
   <link rel="icon" type="image/x-icon" href="icons/favicon.ico" />
+
   <title>Tendon Loader</title>
-  <link rel="manifest" href="manifest.json">
-  <!-- Static background -->
+
   <style>
+    :root {
+      color-scheme: light dark;
+    }
+
     body {
-      background-image: url('icons/logo-512.svg');
-      background-size: 100vw 100vh;
-      background-color: black;
+      inset: 0;
+      margin: 0;
+      padding: 0;
+      position: fixed;
+      overflow: hidden;
+    }
+
+    #loading {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #loading img {
+      animation: 1s ease-in-out 0s 10 alternate breathe;
+    }
+
+    @keyframes breathe {
+      from {
+        transform: scale(1)
+      }
+
+      to {
+        transform: scale(0.90)
+      }
     }
   </style>
-  <script>
-    var serviceWorkerVersion = null;
-  </script>
-  <script src="flutter.js" defer></script>
 </head>
 
 <body>
-  <script>
-    window.addEventListener('load', ev => {
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: { serviceWorkerVersion: serviceWorkerVersion, }
-      }).then(engine => engine.initializeEngine())
-        .then(runner => runner.runApp());
-    });
-  </script>
+  <noscript>
+    <p>Your browser does not support JavaScript, or disabled.</p>
+  </noscript>
+
+  <div id="loading">
+    <img alt="Please wait..." src="icons/logo-512.svg" />
+  </div>
+
+  <script src="flutter_bootstrap.js" async></script>
 </body>
 
 </html>

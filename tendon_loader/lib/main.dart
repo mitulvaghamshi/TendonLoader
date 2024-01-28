@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tendon_loader/models/settings.dart';
 import 'package:tendon_loader/router/router.dart';
-import 'package:tendon_loader/settings/settings.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/states/app_state.dart';
 
-void main() => runApp(MainApp(state: AppState()));
+void main() => runApp(App(state: AppState()));
 
 @immutable
-final class MainApp extends StatelessWidget {
-  const MainApp({super.key, required this.state});
+class App extends StatelessWidget {
+  const App({super.key, required this.state});
 
   final AppState state;
 
-  static final GoRouter _router = GoRouter(
-    initialLocation: '/',
-    routes: $appRoutes,
-  );
+  static final _router = GoRouter(routes: $appRoutes, initialLocation: '/');
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: state,
-      builder: (context, child) => MaterialApp.router(
+      builder: (_, child) => MaterialApp.router(
         title: 'Tendon Loader',
         routerConfig: _router,
         theme: _lightTheme,

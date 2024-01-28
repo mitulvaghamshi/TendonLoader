@@ -19,24 +19,16 @@ RouteBase get $tendonLoaderRoute => GoRouteData.$route(
           factory: $SettingScreenRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: 'homescreen',
-          factory: $HomeScreenRouteExtension._fromState,
+          path: 'prescriptions',
+          factory: $PrescriptionRouteExtension._fromState,
         ),
         GoRouteData.$route(
           path: 'livedata',
           factory: $LiveDataRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: 'newmvctest',
-          factory: $NewMVCTestRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
           path: 'mvctesting',
           factory: $MVCTestingRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'newexercise',
-          factory: $NewExerciseRouteExtension._fromState,
         ),
         GoRouteData.$route(
           path: 'exercisemode',
@@ -101,12 +93,12 @@ extension $SettingScreenRouteExtension on SettingScreenRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $HomeScreenRouteExtension on HomeScreenRoute {
-  static HomeScreenRoute _fromState(GoRouterState state) =>
-      const HomeScreenRoute();
+extension $PrescriptionRouteExtension on PrescriptionRoute {
+  static PrescriptionRoute _fromState(GoRouterState state) =>
+      const PrescriptionRoute();
 
   String get location => GoRouteData.$location(
-        '/homescreen',
+        '/prescriptions',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -136,48 +128,12 @@ extension $LiveDataRouteExtension on LiveDataRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $NewMVCTestRouteExtension on NewMVCTestRoute {
-  static NewMVCTestRoute _fromState(GoRouterState state) =>
-      const NewMVCTestRoute();
-
-  String get location => GoRouteData.$location(
-        '/newmvctest',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
 extension $MVCTestingRouteExtension on MVCTestingRoute {
   static MVCTestingRoute _fromState(GoRouterState state) =>
       const MVCTestingRoute();
 
   String get location => GoRouteData.$location(
         '/mvctesting',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $NewExerciseRouteExtension on NewExerciseRoute {
-  static NewExerciseRoute _fromState(GoRouterState state) =>
-      const NewExerciseRoute();
-
-  String get location => GoRouteData.$location(
-        '/newexercise',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -244,11 +200,17 @@ extension $UserListRouteExtension on UserListRoute {
 }
 
 extension $ExerciseListRouteExtension on ExerciseListRoute {
-  static ExerciseListRoute _fromState(GoRouterState state) =>
-      const ExerciseListRoute();
+  static ExerciseListRoute _fromState(GoRouterState state) => ExerciseListRoute(
+        userId: int.parse(state.uri.queryParameters['user-id']!),
+        title: state.uri.queryParameters['title']!,
+      );
 
   String get location => GoRouteData.$location(
         '/exerciselist',
+        queryParams: {
+          'user-id': userId.toString(),
+          'title': title,
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -263,10 +225,17 @@ extension $ExerciseListRouteExtension on ExerciseListRoute {
 
 extension $ExerciseDetaildRouteExtension on ExerciseDetaildRoute {
   static ExerciseDetaildRoute _fromState(GoRouterState state) =>
-      const ExerciseDetaildRoute();
+      ExerciseDetaildRoute(
+        userId: int.parse(state.uri.queryParameters['user-id']!),
+        exerciseId: int.parse(state.uri.queryParameters['exercise-id']!),
+      );
 
   String get location => GoRouteData.$location(
         '/exercisedetail',
+        queryParams: {
+          'user-id': userId.toString(),
+          'exercise-id': exerciseId.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -281,10 +250,17 @@ extension $ExerciseDetaildRouteExtension on ExerciseDetaildRoute {
 
 extension $ExerciseDataListRouteExtension on ExerciseDataListRoute {
   static ExerciseDataListRoute _fromState(GoRouterState state) =>
-      const ExerciseDataListRoute();
+      ExerciseDataListRoute(
+        userId: int.parse(state.uri.queryParameters['user-id']!),
+        exerciseId: int.parse(state.uri.queryParameters['exercise-id']!),
+      );
 
   String get location => GoRouteData.$location(
         '/exercisedatalist',
+        queryParams: {
+          'user-id': userId.toString(),
+          'exercise-id': exerciseId.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);

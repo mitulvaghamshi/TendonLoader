@@ -1,45 +1,50 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-import 'package:tendon_loader/clinicial/user.dart';
-import 'package:tendon_loader/network/api_client.dart';
-import 'package:tendon_loader/prescription/prescription.dart';
-import 'package:tendon_loader/settings/settings.dart';
-import 'package:tendon_loader/settings/settings_service.dart';
+import 'package:tendon_loader/models/prescription.dart';
+import 'package:tendon_loader/models/settings.dart';
+import 'package:tendon_loader/models/user.dart';
+import 'package:tendon_loader/services/prescription_service.dart';
+import 'package:tendon_loader/services/settings_service.dart';
+import 'package:tendon_loader/services/user_service.dart';
 
-final class AppState extends ChangeNotifier {
+class AppState extends ChangeNotifier {
   AppState()
-      : settings = const Settings.empty(),
+      : user = const User.empty(),
+        settings = const Settings.empty(),
         prescription = const Prescription.empty();
 
-  User? user;
+  User user;
   Settings settings;
   Prescription prescription;
+
   bool modified = false;
 
   Future<void> authenticate({
     required final String username,
     required final String password,
   }) async {
-    if (username.isEmpty || password.isEmpty) return;
-    final cred = base64Encode(utf8.encode('$username:$password'));
-    final (json, hasError) = await ApiClient.get('user/auth/$cred');
-    if (hasError) {
-      throw 'Unable to login, check your credentials.';
-    } else {
-      user = User.fromJson(json);
-      settings = await SettingsService.get(userId: user!.id!);
-    }
+    final uSnapshot = await UserService.instance
+        .authenticate(username: username, password: password);
+    if (uSnapshot.hasData) user = uSnapshot.requireData;
+
+    final sSnapshot =
+        await SettingsService.instance.getSettingsByUserId(user.id);
+    if (uSnapshot.hasData) settings = sSnapshot.requireData;
+
+    final pSnapshot = await PrescriptionService.instance
+        .getPrescriptionById(settings.prescriptionId);
+    if (pSnapshot.hasData) prescription = pSnapshot.requireData;
+
     notifyListeners();
   }
 
-  void get<T>(final T Function(T state) get) {
-    modified = true;
+  void update<T>(final T Function(T state) callback) {
     if (T == Settings) {
-      settings = get(settings as T) as Settings;
+      settings = callback(settings as T) as Settings;
     } else if (T == Prescription) {
-      prescription = get(prescription as T) as Prescription;
+      prescription = callback(prescription as T) as Prescription;
     }
+    modified = true;
+
     notifyListeners();
   }
 }
