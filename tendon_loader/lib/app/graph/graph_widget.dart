@@ -26,11 +26,12 @@ class GraphWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: SafeArea(
-        child: WillPopScope(
-          onWillPop: () async {
+        child: PopScope(
+          onPopInvoked: (value) async {
             final String key = await handler.exit();
-            if (key.isEmpty) return true;
-            return onExit(key);
+            // TODO(mitul): Fix this
+            if (key.isEmpty) Future.value(true);
+            onExit(key);
           },
           child: Column(children: [
             _Header(handler: handler, builder: builder),
@@ -78,19 +79,19 @@ class _BarGraph extends StatelessWidget {
       child: SfCartesianChart(
         plotAreaBorderWidth: 0,
         primaryXAxis: handler.lineData != null
-            ? NumericAxis(minimum: 0, isVisible: false)
-            : CategoryAxis(minimum: 0, maximum: 0, isVisible: false),
-        primaryYAxis: NumericAxis(
+            ? const NumericAxis(minimum: 0, isVisible: false)
+            : const CategoryAxis(minimum: 0, maximum: 0, isVisible: false),
+        primaryYAxis: const NumericAxis(
           labelFormat: '{value} kg',
-          axisLine: const AxisLine(width: 0),
+          axisLine: AxisLine(width: 0),
           // maximum: AppScope.of(context).settingsState.settings.graphScale,
-          majorTickLines: const MajorTickLines(size: 0),
-          labelStyle: const TextStyle(
+          majorTickLines: MajorTickLines(size: 0),
+          labelStyle: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
-        series: <ChartSeries<ChartData?, int>>[
+        series: <CartesianSeries<ChartData?, int>>[
           ColumnSeries<ChartData?, int>(
             width: 0.9,
             animationDuration: 0,
@@ -116,7 +117,7 @@ class _BarGraph extends StatelessWidget {
               width: 5,
               color: const Color(0xffff534d),
               animationDuration: 0,
-              dataSource: handler.lineData!,
+              dataSource: handler.lineData,
               yValueMapper: (data, _) => data.load,
               xValueMapper: (data, _) => data.time.toInt(),
               onRendererCreated: (ctrl) => handler.lineCtrl = ctrl,

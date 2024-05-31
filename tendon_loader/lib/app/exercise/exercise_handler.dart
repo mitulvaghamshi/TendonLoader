@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tendon_loader/app/graph/graph_handler.dart';
 import 'package:tendon_loader/models/chartdata.dart';
-import 'package:tendon_loader/prescription/prescription.dart';
+import 'package:tendon_loader/models/prescription.dart';
 
 class ExerciseHandler extends GraphHandler {
   ExerciseHandler({required this.prescription, required super.onCountdown})

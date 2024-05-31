@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tendon_loader/clinicial/user.dart';
-import 'package:tendon_loader/clinicial/user_service.dart';
+import 'package:tendon_loader/models/user.dart';
+import 'package:tendon_loader/api/services/user_service.dart';
 import 'package:tendon_loader/common/constants.dart';
 import 'package:tendon_loader/router/router.dart';
 import 'package:tendon_loader/widgets/future_handler.dart';
@@ -22,7 +22,7 @@ final class UserList extends StatelessWidget {
         items: items,
         searchField: (item) => item.username,
         builder: (item, index) => RawButton.tile(
-          leadingToTitleSpace: 16,
+          leadingToChildSpace: 16,
           axisAlignment: MainAxisAlignment.start,
           leading: CircleAvatar(radius: 24, child: Text(index.toString())),
           trailing: IconButton(

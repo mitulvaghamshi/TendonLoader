@@ -18,7 +18,7 @@ final class RawButton extends StatelessWidget {
     final VoidCallback? onTap,
     final Color? color,
     final double? radius,
-    final double? leadingToTitleSpace,
+    final double? leadingToChildSpace,
     final EdgeInsetsGeometry? padding,
     final MainAxisAlignment? axisAlignment,
     final MainAxisSize? axisSize,
@@ -59,7 +59,7 @@ final class _RawListTile extends RawButton {
     super.onTap,
     super.color,
     super.radius,
-    this.leadingToTitleSpace = 5,
+    this.leadingToChildSpace = 5,
     super.padding,
     this.axisAlignment,
     this.axisSize,
@@ -68,7 +68,7 @@ final class _RawListTile extends RawButton {
     super.child,
   });
 
-  final double? leadingToTitleSpace;
+  final double? leadingToChildSpace;
   final MainAxisAlignment? axisAlignment;
   final MainAxisSize? axisSize;
   final Widget? leading;
@@ -87,7 +87,7 @@ final class _RawListTile extends RawButton {
         children: [
           if (leading != null) ...[
             leading!,
-            SizedBox(width: leadingToTitleSpace)
+            SizedBox(width: leadingToChildSpace)
           ],
           if (child != null) child!,
           if (trailing != null) ...[const Spacer(), trailing!],
@@ -106,7 +106,7 @@ final class _RawLoading extends RawButton {
     return const RawButton.tile(
       radius: 0,
       color: Colors.green,
-      leadingToTitleSpace: 16,
+      leadingToChildSpace: 16,
       leading: CupertinoActivityIndicator(),
       child: Text('Please wait...', style: Styles.boldWhite),
     );

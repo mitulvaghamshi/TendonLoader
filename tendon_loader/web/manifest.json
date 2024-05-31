@@ -5,9 +5,9 @@
   "display": "standalone",
   "background_color": "#0175C2",
   "theme_color": "#0175C2",
-  "description": "A new Flutter project.",
+  "description": "Tendon Loader is designed to measure and help cure Achille's (uh-KILL-eez) Tendon Problems.",
   "orientation": "portrait-primary",
-  "prefer_related_applications": true,
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "icons/icon-192.svg",

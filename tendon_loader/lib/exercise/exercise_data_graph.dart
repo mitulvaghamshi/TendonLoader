@@ -15,13 +15,12 @@ final class ExerciseDataGraph extends StatelessWidget {
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
       tooltipBehavior: TooltipBehavior(enable: true, header: 'Load/Time'),
-      primaryXAxis: NumericAxis(
+      primaryXAxis: const NumericAxis(
         interval: 1,
         labelFormat: '{value} sec',
-        enableAutoIntervalOnZooming: true,
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
-      primaryYAxis: NumericAxis(
+      primaryYAxis: const NumericAxis(
         interval: 1,
         labelFormat: '{value} kg',
         // enableAutoIntervalOnZooming: true,
@@ -34,7 +33,6 @@ final class ExerciseDataGraph extends StatelessWidget {
       ),
       series: [
         LineSeries<ChartData, double>(
-          width: 2,
           animationDuration: 7000,
           color: Colors.green,
           xValueMapper: (data, _) => data.time,
@@ -42,7 +40,6 @@ final class ExerciseDataGraph extends StatelessWidget {
           dataSource: items.toList(),
         ),
         LineSeries<ChartData, double>(
-          width: 2,
           animationDuration: 0,
           color: Colors.orange,
           xValueMapper: (data, _) => data.time,

@@ -8,7 +8,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/app/bluetooth/models/bluetooth_handler.dart';
 import 'package:tendon_loader/app/graph/countdown_widget.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/exercise/exercise.dart';
+import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/widgets/raw_button.dart';
 

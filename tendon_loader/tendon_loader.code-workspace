@@ -4,54 +4,17 @@
       "path": "."
     }
   ],
-  "launch": {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "type": "dart",
-        "name": "run",
-        "request": "launch",
-      },
-      {
-        "type": "dart",
-        "name": "web",
-        "request": "launch",
-        "deviceId": "Chrome",
-      },
-      {
-        "type": "dart",
-        "name": "android",
-        "request": "launch",
-        "deviceId": "sdk gphone64",
-      },
-      {
-        "type": "dart",
-        "name": "iphone",
-        "request": "launch",
-        "deviceId": "iphone",
-      },
-      {
-        "type": "dart",
-        "name": "macos",
-        "request": "launch",
-        "deviceId": "macos",
-      }
-    ],
-    "compounds": [
-      {
-        "name": "start all",
-        "configurations": [
-          "web",
-          "android",
-          "iphone",
-          "macos"
-        ],
-      }
-    ]
+  "settings": {
+    "editor.foldingImportsByDefault": true
   },
   "tasks": {
     "version": "2.0.0",
     "tasks": [
+      {
+        "type": "shell",
+        "label": "Run app:macOS",
+        "command": "flutter run -d macos --dart-define-from-file=.env",
+      },
       {
         "type": "shell",
         "group": "none",
@@ -143,20 +106,14 @@
         "type": "shell",
         "group": "build",
         "label": "Build Runner: build",
-        "command": "dart run build_runner build",
-        "problemMatcher": [
-          "$dart-build_runner",
-        ],
+        "command": "dart run build_runner build"
       },
       {
         // Run build runner (overwrite)
         "type": "shell",
         "group": "build",
         "label": "Build Runner: Build --delete",
-        "command": "dart run build_runner build --delete-conflicting-outputs",
-        "problemMatcher": [
-          "$dart-build_runner",
-        ],
+        "command": "dart run build_runner build --delete-conflicting-outputs"
       },
       {
         // Firebase emulators (with backup)

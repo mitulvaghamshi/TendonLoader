@@ -2,7 +2,7 @@ import 'package:archive/archive_io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 import 'package:tendon_loader/models/chartdata.dart';
-import 'package:tendon_loader/prescription/prescription.dart';
+import 'package:tendon_loader/models/prescription.dart';
 
 @immutable
 final class Exercise {

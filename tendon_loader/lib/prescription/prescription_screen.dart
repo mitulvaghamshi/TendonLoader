@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/common/constants.dart';
-import 'package:tendon_loader/prescription/prescription.dart';
+import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/prescription/time_picker_tile.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/widgets/input_field.dart';
@@ -100,7 +100,7 @@ final class _PrescriptionScreenState extends State<PrescriptionScreen> {
           ),
           const Divider(height: 0),
           RawButton.tile(
-            leadingToTitleSpace: 16,
+            leadingToChildSpace: 16,
             leading: editable
                 ? RawButton(
                     onTap: () => setState(() => _reset()),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tendon_loader/exercise/exercise_service.dart';
+import 'package:tendon_loader/api/services/exercise_service.dart';
 import 'package:tendon_loader/router/router.dart';
 import 'package:tendon_loader/widgets/future_handler.dart';
 import 'package:tendon_loader/widgets/raw_button.dart';
@@ -29,7 +29,7 @@ final class ExerciseList extends StatelessWidget {
         builder: (item, index) {
           final extra = {'userId': item.userId, 'exerciseId': item.id};
           return RawButton.tile(
-            leadingToTitleSpace: 16,
+            leadingToChildSpace: 16,
             axisAlignment: MainAxisAlignment.start,
             leading: CircleAvatar(child: Text(index.toString())),
             trailing: IconButton(

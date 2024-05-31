@@ -54,6 +54,7 @@ final class _TimePickerTileState extends State<TimePickerTile> {
         const SizedBox(height: 8),
         RawButton.tile(
           color: Colors.indigo,
+          leadingToChildSpace: 8,
           axisAlignment: MainAxisAlignment.spaceEvenly,
           leading: _NumberPicker(
             value: _minutes,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/exercise/exercise_service.dart';
+import 'package:tendon_loader/api/services/exercise_service.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/widgets/future_handler.dart';
 import 'package:tendon_loader/widgets/raw_button.dart';
@@ -20,7 +20,7 @@ final class ExerciseDataList extends StatelessWidget {
     return FutureHandler(
       future: _future,
       builder: (items) => CustomScrollView(slivers: [
-        SliverAppBar.large(title: const Text('Exercise Data')),
+        const SliverAppBar.large(title: Text('Exercise Data')),
         SliverList.builder(
           itemCount: items.length + 1,
           itemBuilder: (context, index) {

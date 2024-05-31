@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:tendon_loader/app/graph/graph_handler.dart';
-import 'package:tendon_loader/exercise/exercise.dart';
+import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 
 class MVCHandler extends GraphHandler {

@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-import 'package:tendon_loader/clinicial/user.dart';
-import 'package:tendon_loader/network/api_client.dart';
-import 'package:tendon_loader/prescription/prescription.dart';
-import 'package:tendon_loader/settings/settings.dart';
-import 'package:tendon_loader/settings/settings_service.dart';
+import 'package:tendon_loader/api/services/settings_service.dart';
+import 'package:tendon_loader/models/prescription.dart';
+import 'package:tendon_loader/models/settings.dart';
+import 'package:tendon_loader/models/user.dart';
 
 final class AppState extends ChangeNotifier {
   AppState()
@@ -17,19 +14,9 @@ final class AppState extends ChangeNotifier {
   Prescription prescription;
   bool modified = false;
 
-  Future<void> authenticate({
-    required final String username,
-    required final String password,
-  }) async {
-    if (username.isEmpty || password.isEmpty) return;
-    final cred = base64Encode(utf8.encode('$username:$password'));
-    final (json, hasError) = await ApiClient.get('user/auth/$cred');
-    if (hasError) {
-      throw 'Unable to login, check your credentials.';
-    } else {
-      user = User.fromJson(json);
-      settings = await SettingsService.get(userId: user!.id!);
-    }
+  Future<void> setUser(final User? newUser) async {
+    user = newUser;
+    settings = await SettingsService.get(userId: user!.id!);
     notifyListeners();
   }
 

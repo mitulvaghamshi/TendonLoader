@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tendon_loader/api/services/prescription_service.dart';
 import 'package:tendon_loader/app/exercise/exercise_handler.dart';
 import 'package:tendon_loader/app/exercise/exercise_mode.dart';
 import 'package:tendon_loader/app/graph/graph_handler.dart';
@@ -14,9 +15,8 @@ import 'package:tendon_loader/clinicial/user_list.dart';
 import 'package:tendon_loader/exercise/exercise_data_list.dart';
 import 'package:tendon_loader/exercise/exercise_detail.dart';
 import 'package:tendon_loader/exercise/exercise_list.dart';
-import 'package:tendon_loader/prescription/prescription.dart';
+import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/prescription/prescription_screen.dart';
-import 'package:tendon_loader/prescription/prescription_service.dart';
 import 'package:tendon_loader/settings/settings_screen.dart';
 import 'package:tendon_loader/signin/signin_widget.dart';
 import 'package:tendon_loader/signin/welcome_widget.dart';
@@ -51,7 +51,7 @@ final class TendonLoaderRoute extends GoRouteData {
       appBar: AppBar(title: const Text('Welcome')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: SignInWidget(builder: () => const WelcomeWidget()),
+        child: SignInWidget(builder: (_) => const WelcomeWidget()),
       ),
     );
   }
