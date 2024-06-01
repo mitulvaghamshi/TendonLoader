@@ -1,37 +1,41 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/api/services/prescription_service.dart';
-import 'package:tendon_loader/app/exercise/exercise_handler.dart';
-import 'package:tendon_loader/app/exercise/exercise_mode.dart';
-import 'package:tendon_loader/app/graph/graph_handler.dart';
-import 'package:tendon_loader/app/homescreen.dart';
-import 'package:tendon_loader/app/livedata/live_data.dart';
-import 'package:tendon_loader/app/livedata/livedata_handler.dart';
-import 'package:tendon_loader/app/mvctest/mvc_handler.dart';
-import 'package:tendon_loader/app/mvctest/mvc_testing.dart';
-import 'package:tendon_loader/app/mvctest/new_mvc_test.dart';
-import 'package:tendon_loader/app/prompt/prompt_screen.dart';
-import 'package:tendon_loader/clinicial/user_list.dart';
-import 'package:tendon_loader/exercise/exercise_data_list.dart';
-import 'package:tendon_loader/exercise/exercise_detail.dart';
-import 'package:tendon_loader/exercise/exercise_list.dart';
+import 'package:tendon_loader/handlers/bluetooth_handler.dart';
+import 'package:tendon_loader/handlers/exercise_handler.dart';
+import 'package:tendon_loader/handlers/graph_handler.dart';
+import 'package:tendon_loader/handlers/livedata_handler.dart';
+import 'package:tendon_loader/handlers/mvc_handler.dart';
 import 'package:tendon_loader/models/prescription.dart';
-import 'package:tendon_loader/prescription/prescription_screen.dart';
-import 'package:tendon_loader/settings/settings_screen.dart';
-import 'package:tendon_loader/signin/signin_widget.dart';
-import 'package:tendon_loader/signin/welcome_widget.dart';
-import 'package:tendon_loader/states/app_scope.dart';
-import 'package:tendon_loader/widgets/future_handler.dart';
-import 'package:tendon_loader/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/dataview/exercise_data_list.dart';
+import 'package:tendon_loader/ui/dataview/exercise_detail.dart';
+import 'package:tendon_loader/ui/dataview/exercise_list.dart';
+import 'package:tendon_loader/ui/dataview/user_list.dart';
+import 'package:tendon_loader/ui/homescreen.dart';
+import 'package:tendon_loader/ui/screens/exercise_mode.dart';
+import 'package:tendon_loader/ui/screens/live_data.dart';
+import 'package:tendon_loader/ui/screens/mvc_testing.dart';
+import 'package:tendon_loader/ui/screens/new_mvc_test.dart';
+import 'package:tendon_loader/ui/screens/prescription_screen.dart';
+import 'package:tendon_loader/ui/screens/prompt_screen.dart';
+import 'package:tendon_loader/ui/screens/settings_screen.dart';
+import 'package:tendon_loader/ui/screens/signin_screen.dart';
+import 'package:tendon_loader/ui/widgets/future_handler.dart';
+import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/utils/states/app_scope.dart';
 
 part 'router.g.dart';
 
 @TypedGoRoute<TendonLoaderRoute>(path: '/', routes: [
   TypedGoRoute<SettingScreenRoute>(path: 'settings'),
-  TypedGoRoute<HomeScreenRoute>(path: 'homescreen'),
+  //
   TypedGoRoute<LiveDataRoute>(path: 'livedata'),
+  //
   TypedGoRoute<NewMVCTestRoute>(path: 'newmvctest'),
   TypedGoRoute<MVCTestingRoute>(path: 'mvctesting'),
+  //
   TypedGoRoute<NewExerciseRoute>(path: 'newexercise'),
   TypedGoRoute<ExerciseModeRoute>(path: 'exercisemode'),
   TypedGoRoute<PromptScreenRoute>(path: 'promptscreen'),
@@ -42,16 +46,22 @@ part 'router.g.dart';
   TypedGoRoute<ExerciseDataListRoute>(path: 'exercisedatalist'),
 ])
 @immutable
-final class TendonLoaderRoute extends GoRouteData {
+final class TendonLoaderRoute extends GoRouteData with Progressor {
   const TendonLoaderRoute();
+
+  @override
+  FutureOr<bool> onExit(BuildContext context, GoRouterState state) {
+    disconnect();
+    return super.onExit(context, state);
+  }
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Welcome')),
+      appBar: AppBar(title: const Text('Tendon Loader')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: SignInWidget(builder: (_) => const WelcomeWidget()),
+        child: SignInScreen(builder: (_) => const HomeScreen()),
       ),
     );
   }
@@ -64,14 +74,6 @@ final class SettingScreenRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const SettingsScreen();
-}
-
-@immutable
-final class HomeScreenRoute extends GoRouteData {
-  const HomeScreenRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) => const HomeScreen();
 }
 
 @immutable

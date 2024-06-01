@@ -19,10 +19,6 @@ RouteBase get $tendonLoaderRoute => GoRouteData.$route(
           factory: $SettingScreenRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: 'homescreen',
-          factory: $HomeScreenRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
           path: 'livedata',
           factory: $LiveDataRouteExtension._fromState,
         ),
@@ -89,24 +85,6 @@ extension $SettingScreenRouteExtension on SettingScreenRoute {
 
   String get location => GoRouteData.$location(
         '/settings',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $HomeScreenRouteExtension on HomeScreenRoute {
-  static HomeScreenRoute _fromState(GoRouterState state) =>
-      const HomeScreenRoute();
-
-  String get location => GoRouteData.$location(
-        '/homescreen',
       );
 
   void go(BuildContext context) => context.go(location);

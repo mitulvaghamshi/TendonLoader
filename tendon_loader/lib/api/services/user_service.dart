@@ -39,7 +39,7 @@ mixin UserService {
     // TODO(mitul): Change base64 encoding...
     final cred = base64Encode(utf8.encode('$username:$password'));
     final result = await ApiClient.get('user/auth/$cred');
-    if (result.hasData) return User.fromJson(json);
+    if (result.hasData) return User.fromJson(result.data!.content);
     debugPrint(result.error!.message);
     throw 'Unable to login.';
   }

@@ -57,7 +57,7 @@ extension ExUser on User {
         password: password,
       );
     }
-    throw const FormatException('Invalid JSON');
+    throw const FormatException('[User]: Invalid JSON');
   }
 
   Future<void> download() async {

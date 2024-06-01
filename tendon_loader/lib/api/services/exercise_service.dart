@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/api/api_client.dart';
+import 'package:tendon_loader/models/exercise.dart';
 
 @immutable
 mixin ExerciseService {

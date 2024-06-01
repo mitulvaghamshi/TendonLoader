@@ -1,8 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 final class NetworkStatus extends ChangeNotifier {
-  factory NetworkStatus() => _instace ??= NetworkStatus._();
+  factory NetworkStatus() => _instance ??= NetworkStatus._();
 
   NetworkStatus._() {
     Connectivity()
@@ -10,10 +10,9 @@ final class NetworkStatus extends ChangeNotifier {
         .listen((value) => _result = value.first);
   }
 
-  static NetworkStatus? _instace;
+  static NetworkStatus? _instance;
 
-  static ConnectivityResult _result = ConnectivityResult.none;
+  ConnectivityResult _result = ConnectivityResult.none;
 
-  static bool get isConnected =>
-      NetworkStatus._result != ConnectivityResult.none;
+  static bool get isConnected => _instance?._result != ConnectivityResult.none;
 }
