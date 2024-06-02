@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/api/services/exercise_service.dart';
-import 'package:tendon_loader/api/services/prescription_service.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/models/prescription.dart';
+import 'package:tendon_loader/services/exercise_service.dart';
+import 'package:tendon_loader/services/prescription_service.dart';
 import 'package:tendon_loader/ui/dataview/exercise_data_graph.dart';
 import 'package:tendon_loader/ui/widgets/future_handler.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
@@ -14,10 +14,14 @@ final class ExerciseDetail extends StatelessWidget {
     super.key,
     required this.userId,
     required this.exerciseId,
+    required this.exerciseService,
+    required this.prescriptionService,
   });
 
   final int userId;
   final int exerciseId;
+  final ExerciseService exerciseService;
+  final PrescriptionService prescriptionService;
 
   @override
   Widget build(BuildContext context) {
@@ -58,16 +62,17 @@ extension on ExerciseDetail {
   Future<(double, Iterable<ChartData>, Iterable<(String, String)>)>
       get _future async {
     final exercise =
-        await ExerciseService.get(userId: userId, exerciseId: exerciseId);
-    final prescriptionId = exercise?.prescriptionId;
+        await exerciseService.getBy(userId: userId, exerciseId: exerciseId);
+    if (exercise == null) throw '[ExerciseDerail]: Exercise is null.';
+    final prescriptionId = exercise.prescriptionId;
     final prescription = prescriptionId == null
         ? null
-        : await PrescriptionService.get(id: prescriptionId);
+        : await prescriptionService.getBy(id: prescriptionId);
     return (
-      prescription?.targetLoad ?? exercise?.mvcValue ?? 0,
-      exercise?.data ?? [],
+      prescription?.targetLoad ?? exercise.mvcValue ?? 0,
+      exercise.data,
       [
-        if (exercise != null) ...exercise.tableRows,
+        ...exercise.tableRows,
         if (prescription != null) ...prescription.tableRows,
       ],
     );

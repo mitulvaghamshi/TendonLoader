@@ -3,14 +3,10 @@ import 'package:tendon_loader/ui/widgets/raw_button.dart';
 
 @immutable
 final class FutureHandler<T> extends StatelessWidget {
-  const FutureHandler({
-    super.key,
-    required this.future,
-    required this.builder,
-  });
+  const FutureHandler({super.key, required this.future, required this.builder});
 
   final Future<T> future;
-  final Widget Function(T value) builder;
+  final Function(T data) builder;
 
   @override
   Widget build(BuildContext context) {

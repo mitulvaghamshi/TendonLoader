@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/models/prescription.dart';
-import 'package:tendon_loader/utils/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/input_field.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/utils/constants.dart';
+import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
 final class PrescriptionScreen extends StatefulWidget {

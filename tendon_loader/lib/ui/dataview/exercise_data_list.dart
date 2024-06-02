@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/api/services/exercise_service.dart';
 import 'package:tendon_loader/models/chartdata.dart';
+import 'package:tendon_loader/services/exercise_service.dart';
 import 'package:tendon_loader/ui/widgets/future_handler.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 
@@ -10,10 +10,12 @@ final class ExerciseDataList extends StatelessWidget {
     super.key,
     required this.userId,
     required this.exerciseId,
+    required this.service,
   });
 
   final int userId;
   final int exerciseId;
+  final ExerciseService service;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +72,7 @@ final class _ListItem extends StatelessWidget {
 
 extension on ExerciseDataList {
   Future<Iterable<ChartData>> get _future async {
-    final exercise = await ExerciseService.get(
+    final exercise = await service.getBy(
       userId: userId,
       exerciseId: exerciseId,
     );

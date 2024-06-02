@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tendon_loader/api/services/settings_service.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/models/settings.dart';
+import 'package:tendon_loader/services/settings_service.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/utils/constants.dart';
@@ -10,22 +10,24 @@ import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
 final class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  const SettingsScreen({super.key, required this.service});
+
+  final SettingsService service;
 
   @override
   State<SettingsScreen> createState() => SettingsScreenState();
 }
 
 final class SettingsScreenState extends State<SettingsScreen> with Progressor {
-  late final service = AppScope.of(context);
+  late final state = AppScope.of(context);
   late final _scaleCtrl = TextEditingController()
-    ..text = service.settings.graphScale.toString();
+    ..text = state.settings.graphScale.toString();
 
   @override
   void dispose() {
-    if (service.modified) {
-      service.modified = false;
-      SettingsService.update(service.settings);
+    if (state.modified) {
+      state.modified = false;
+      widget.service.update(state.settings);
     }
     _scaleCtrl.dispose();
     super.dispose();
@@ -39,7 +41,7 @@ final class SettingsScreenState extends State<SettingsScreen> with Progressor {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: AnimatedBuilder(
-          animation: service,
+          animation: state,
           builder: (context, child) => Column(children: [
             Hero(
               tag: 'hero-settings-button',
@@ -49,7 +51,7 @@ final class SettingsScreenState extends State<SettingsScreen> with Progressor {
                 leading: const Icon(Icons.person, color: Colors.white),
                 trailing: const Icon(Icons.edit, color: Colors.white),
                 child: Text(
-                  service.user!.username,
+                  state.user!.username,
                   overflow: TextOverflow.ellipsis,
                   style: Styles.boldWhite,
                   maxLines: 1,
@@ -61,8 +63,8 @@ final class SettingsScreenState extends State<SettingsScreen> with Progressor {
               contentPadding: Styles.tilePadding,
               title: const Text('Use dark mode'),
               subtitle: const Text('Use dark interface.'),
-              value: service.settings.darkMode,
-              onChanged: (value) => service.get<Settings>((settings) {
+              value: state.settings.darkMode,
+              onChanged: (value) => state.get<Settings>((settings) {
                 return settings.copyWith(darkMode: value);
               }),
             ),
@@ -70,8 +72,8 @@ final class SettingsScreenState extends State<SettingsScreen> with Progressor {
               contentPadding: Styles.tilePadding,
               title: const Text('Automatic data upload'),
               subtitle: const Text('Exercises submitted automatically.'),
-              value: service.settings.autoUpload,
-              onChanged: (value) => service.get<Settings>((settings) {
+              value: state.settings.autoUpload,
+              onChanged: (value) => state.get<Settings>((settings) {
                 return settings.copyWith(autoUpload: value);
               }),
             ),
@@ -79,8 +81,8 @@ final class SettingsScreenState extends State<SettingsScreen> with Progressor {
               contentPadding: Styles.tilePadding,
               title: const Text('Use custom prescriptions'),
               subtitle: const Text('Create your own prescriptions.'),
-              value: service.settings.editablePrescription,
-              onChanged: (value) => service.get<Settings>((settings) {
+              value: state.settings.editablePrescription,
+              onChanged: (value) => state.get<Settings>((settings) {
                 return settings.copyWith(editablePrescription: value);
               }),
             ),
@@ -109,7 +111,7 @@ final class SettingsScreenState extends State<SettingsScreen> with Progressor {
                       RegExp(r'^\d{1,2}(\.\d{0,2})?'),
                     ),
                   ],
-                  onChanged: (value) => service.get<Settings>((settings) {
+                  onChanged: (value) => state.get<Settings>((settings) {
                     final gscale = double.tryParse(value) ?? 30.0;
                     return settings.copyWith(graphScale: gscale);
                   }),

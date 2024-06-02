@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:tendon_loader/api/services/settings_service.dart';
 import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/models/settings.dart';
 import 'package:tendon_loader/models/user.dart';
+import 'package:tendon_loader/services/settings_service.dart';
+import 'package:tendon_loader/services/user_service.dart';
 
 final class AppState extends ChangeNotifier {
-  AppState()
+  AppState({required this.userService, required this.settingsService})
       : settings = const Settings.empty(),
         prescription = const Prescription.empty();
 
@@ -14,9 +15,18 @@ final class AppState extends ChangeNotifier {
   Prescription prescription;
   bool modified = false;
 
-  Future<void> setUser(final User? newUser) async {
-    user = newUser;
-    settings = await SettingsService.get(userId: user!.id!);
+  final UserService userService;
+  final SettingsService settingsService;
+
+  Future<void> authenticate({
+    required final String username,
+    required final String password,
+  }) async {
+    user = await userService.authenticate(
+      username: username,
+      password: password,
+    );
+    settings = await settingsService.getBy(userId: user!.id!);
     notifyListeners();
   }
 

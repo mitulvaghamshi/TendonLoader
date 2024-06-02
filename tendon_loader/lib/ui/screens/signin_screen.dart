@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/api/services/user_service.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';
 import 'package:tendon_loader/ui/widgets/input_field.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
@@ -26,11 +25,11 @@ final class SignInScreenState extends State<SignInScreen> {
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
     if (kDebugMode) {
       _usernameCtrl.text = 'user@email.com';
       _passwordCtrl.text = '123456';
     }
-    super.didChangeDependencies();
   }
 
   @override
@@ -42,12 +41,10 @@ final class SignInScreenState extends State<SignInScreen> {
 
   Future<void> _authenticate() async {
     setState(() => _loading = true);
-    final user = await UserService.authenticate(
+    await state.authenticate(
       username: _usernameCtrl.text,
       password: _passwordCtrl.text,
     );
-    if (mounted) state.setUser(user);
-    await Future.delayed(const Duration(seconds: 1));
     setState(() => _loading = false);
   }
 

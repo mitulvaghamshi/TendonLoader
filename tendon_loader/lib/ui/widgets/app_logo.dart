@@ -41,7 +41,11 @@ final class _AppLogoSquare extends AppLogo {
             horizontal: 30,
             vertical: 16,
           ),
-      child: CircleAvatar(maxRadius: radius ?? 150, child: const AppLogo()),
+      child: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        maxRadius: radius ?? 150,
+        child: const AppLogo(),
+      ),
     );
   }
 }

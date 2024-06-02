@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tendon_loader/api/services/user_service.dart';
 import 'package:tendon_loader/models/user.dart';
 import 'package:tendon_loader/router/router.dart';
+import 'package:tendon_loader/services/user_service.dart';
 import 'package:tendon_loader/ui/widgets/future_handler.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/ui/widgets/search_list_builder.dart';
@@ -10,12 +10,14 @@ import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
 final class UserList extends StatelessWidget {
-  const UserList({super.key});
+  const UserList({super.key, required this.service});
+
+  final UserService service;
 
   @override
   Widget build(BuildContext context) {
     return FutureHandler(
-      future: UserService.getAll(),
+      future: service.getAll(),
       builder: (items) => SearchListBuilder(
         title: 'Enrolled Users',
         searchLabel: 'Search by name...',
@@ -27,8 +29,12 @@ final class UserList extends StatelessWidget {
           leading: CircleAvatar(radius: 24, child: Text(index.toString())),
           trailing: IconButton(
             onPressed: () {
-              // TODO(me): itemDelete, itemDownload, Allow web access,
-              // Exercise History, Edit Prescriptions
+              // TODO(me): Add context menu with options:
+              // 1. itemDelete,
+              // 2. itemDownload,
+              // 3. Allow web access,
+              // 4. Exercise History,
+              // 5. Edit Prescriptions
             },
             icon: const Icon(Icons.settings),
           ),

@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/models/settings.dart';
 import 'package:tendon_loader/router/router.dart';
+import 'package:tendon_loader/services/settings_service.dart';
+import 'package:tendon_loader/services/user_service.dart';
 import 'package:tendon_loader/utils/states/app_scope.dart';
 import 'package:tendon_loader/utils/states/app_state.dart';
 
-void main() => runApp(MainApp(state: AppState()));
+void main() {
+  final state = AppState(
+    userService: UserService(),
+    settingsService: SettingsService(),
+  );
+
+  runApp(MainApp(state: state));
+}
 
 @immutable
 final class MainApp extends StatelessWidget {

@@ -2,13 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tendon_loader/api/services/prescription_service.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/handlers/exercise_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/livedata_handler.dart';
 import 'package:tendon_loader/handlers/mvc_handler.dart';
 import 'package:tendon_loader/models/prescription.dart';
+import 'package:tendon_loader/services/api/network.dart';
+import 'package:tendon_loader/services/exercise_service.dart';
+import 'package:tendon_loader/services/prescription_service.dart';
+import 'package:tendon_loader/services/settings_service.dart';
+import 'package:tendon_loader/services/user_service.dart';
 import 'package:tendon_loader/ui/dataview/exercise_data_list.dart';
 import 'package:tendon_loader/ui/dataview/exercise_detail.dart';
 import 'package:tendon_loader/ui/dataview/exercise_list.dart';
@@ -52,6 +56,7 @@ final class TendonLoaderRoute extends GoRouteData with Progressor {
   @override
   FutureOr<bool> onExit(BuildContext context, GoRouterState state) {
     disconnect();
+    Network.dispose();
     return super.onExit(context, state);
   }
 
@@ -73,7 +78,7 @@ final class SettingScreenRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) =>
-      const SettingsScreen();
+      SettingsScreen(service: SettingsService());
 }
 
 @immutable
@@ -93,7 +98,7 @@ final class NewExerciseRoute extends GoRouteData {
     final id = AppScope.of(context).settings.prescriptionId;
     if (id == null) return const RawButton.error();
     return FutureHandler(
-      future: PrescriptionService.get(id: id),
+      future: PrescriptionService().getBy(id: id),
       builder: (value) => PrescriptionScreen(prescription: value),
     );
   }
@@ -113,7 +118,9 @@ final class UserListRoute extends GoRouteData {
   const UserListRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const UserList();
+  Widget build(BuildContext context, GoRouterState state) {
+    return UserList(service: UserService());
+  }
 }
 
 @immutable
@@ -124,7 +131,11 @@ final class ExerciseListRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) {
     if (state.extra
         case {'userId': final int userId, 'title': final String title}) {
-      return ExerciseList(userId: userId, title: title);
+      return ExerciseList(
+        userId: userId,
+        title: title,
+        service: ExerciseService(),
+      );
     }
     return const RawButton.error();
   }
@@ -137,8 +148,16 @@ final class ExerciseDetaildRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     if (state.extra
-        case {'userId': final int userId, 'exerciseId': final int exerciseId}) {
-      return ExerciseDetail(userId: userId, exerciseId: exerciseId);
+        case {
+          'userId': final int userId,
+          'exerciseId': final int exerciseId,
+        }) {
+      return ExerciseDetail(
+        userId: userId,
+        exerciseId: exerciseId,
+        exerciseService: ExerciseService(),
+        prescriptionService: PrescriptionService(),
+      );
     }
     return const RawButton.error();
   }
@@ -151,8 +170,15 @@ final class ExerciseDataListRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     if (state.extra
-        case {'userId': final int userId, 'exerciseId': final int exerciseId}) {
-      return ExerciseDataList(userId: userId, exerciseId: exerciseId);
+        case {
+          'userId': final int userId,
+          'exerciseId': final int exerciseId,
+        }) {
+      return ExerciseDataList(
+        userId: userId,
+        exerciseId: exerciseId,
+        service: ExerciseService(),
+      );
     }
     return const RawButton.error();
   }
