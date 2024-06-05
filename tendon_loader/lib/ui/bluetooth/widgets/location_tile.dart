@@ -13,7 +13,7 @@ import 'package:tendon_loader/utils/constants.dart';
 /// where user have to manually torn on the service.
 /// Alternatively, user can user "Control Center" to do the same.
 @immutable
-final class LocationTile extends StatelessWidget {
+class LocationTile extends StatelessWidget {
   const LocationTile({super.key});
 
   @override

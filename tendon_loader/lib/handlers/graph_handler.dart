@@ -2,19 +2,16 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/models/exercise.dart';
-import 'package:tendon_loader/ui/widgets/countdown_widget.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 bool isPause = false;
 
-abstract class GraphHandler with Progressor {
+abstract class GraphHandler {
   GraphHandler({this.lineData, required this.onCountdown}) {
     isRunning = isComplete = hasData = false;
     stream.listen(update);
@@ -44,8 +41,8 @@ abstract class GraphHandler with Progressor {
   static final BehaviorSubject<ChartData> _controller =
       BehaviorSubject<ChartData>.seeded(const ChartData());
 
-  static Stream<ChartData> get stream => GraphHandler._controller.stream;
-  static Sink<ChartData> get sink => GraphHandler._controller.sink;
+  static Sink<ChartData> get sink => _controller.sink;
+  static Stream<ChartData> get stream => _controller.stream;
 
   static double _lastMillis = 0;
 
@@ -54,20 +51,21 @@ abstract class GraphHandler with Progressor {
     _controller.sink.add(const ChartData());
   }
 
-  static void disposeGraphData() {
+  @mustCallSuper
+  void dispose() {
     if (!_controller.isClosed) _controller.close();
   }
 
-  static void onData(List<int> data) {
-    if (!isPause && data.isNotEmpty && data[0] == Responses.weightMeasurement) {
-      for (int x = 2; x < data.length; x += 8) {
-        final double weight = data.getRange(x, x + 4).toList().toWeight;
-        final double time = data.getRange(x + 4, x + 8).toList().toTime;
+  static void onData(List<int> list) {
+    if (!isPause && list.isNotEmpty && list[0] == Responses.weightMeasurement) {
+      for (int x = 2; x < list.length; x += 8) {
+        final double weight = list.getRange(x, x + 4).toList().toWeight;
+        final double time = list.getRange(x + 4, x + 8).toList().toTime;
         if (time > _lastMillis) {
           _lastMillis = time;
-          final ChartData element = ChartData(load: weight, time: time);
-          exportData.add(element);
-          sink.add(element);
+          final data = ChartData(load: weight, time: time);
+          exportData.add(data);
+          sink.add(data);
         }
       }
     }
@@ -87,7 +85,7 @@ abstract class GraphHandler with Progressor {
       exportData
         ..clear()
         ..add(const ChartData());
-      await startProgresssor();
+      await Progressor.instance.startProgresssor();
     }
   }
 
@@ -96,7 +94,7 @@ abstract class GraphHandler with Progressor {
   void update(ChartData data);
 
   @mustCallSuper
-  Future<void> stop() async => stopProgressor();
+  Future<void> stop() async => Progressor.instance.stopProgressor();
 
   @mustCallSuper
   Future<String> exit() async {
@@ -106,7 +104,7 @@ abstract class GraphHandler with Progressor {
         userId: 0,
         datetime: datetime.toString(),
         completed: isComplete,
-        progressorId: progressorName,
+        progressorId: Progressor.instance.deviceName,
         data: exportData,
       );
       // await AppScope.of(context).addToBox(export!);
@@ -135,32 +133,4 @@ extension on List<int> {
 
   double get toWeight => double.parse(
       _bytes.getFloat32(0, Endian.little).abs().toStringAsFixed(2));
-}
-
-Future<bool?> startCountdown({
-  required BuildContext context,
-  required String title,
-  required Duration duration,
-}) {
-  return showDialog<bool>(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) => Dialog(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Text(title, style: Styles.numPickerText),
-          ),
-          CountdownWidget(duration: duration),
-          RawButton.tile(
-            leading: const Text('Cancel'),
-            onTap: context.pop,
-            child: const Icon(Icons.clear, color: Color(0xffff534d)),
-          ),
-        ],
-      ),
-    ),
-  );
 }

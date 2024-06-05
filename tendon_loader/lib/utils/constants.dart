@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final class Styles {
+class Styles {
   static const EdgeInsets tilePadding =
       EdgeInsets.symmetric(horizontal: 16, vertical: 5);
 
@@ -20,7 +20,7 @@ final class Styles {
       TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
 }
 
-final class DataKeys {
+class DataKeys {
   // Collections
   static const String rootCollection = 'TendonLoader';
   static const String exportsCollection = 'exports';
@@ -53,7 +53,7 @@ final class DataKeys {
   static const String keyChartY = 'load';
 }
 
-final class SettingsKeys {
+class SettingsKeys {
   // User temp data and app settings keys
   static const String darkMode = 'darkMode';
   static const String autoUpload = 'autoUpload';
@@ -62,7 +62,7 @@ final class SettingsKeys {
   static const String lastPrescription = 'lastPrescription';
 }
 
-final class Images {
+class Images {
   // Asset image resources
   static const String appLogo = 'assets/app_logo.svg';
   static const String enableDevice = 'assets/enable_device.webp';
@@ -70,7 +70,7 @@ final class Images {
   static const String enableBluetooth = 'assets/enable_bluetooth.webp';
 }
 
-final class Responses {
+class Responses {
   // Progressor response code (first 4 byte = first list element)
   static const int commandResponse = 0;
   static const int weightMeasurement = 1;
@@ -79,7 +79,7 @@ final class Responses {
   static const int lowPowerWarning = 4;
 }
 
-final class Commands {
+class Commands {
   // Progressor instruction codes
   // device can return a one time or streamed response
   static const int tareScale = 100;
@@ -96,7 +96,7 @@ final class Commands {
   static const int getBatteryVoltage = 111; // one time
 }
 
-final class DeviceUUID {
+class DeviceUUID {
   // Service UUID, a main service provides the base connection with receiver
   static const String service = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57';
 
@@ -108,7 +108,7 @@ final class DeviceUUID {
   static const String data = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57';
 }
 
-final class Strings {
+class Strings {
   // Ask user to power on the Progressor.
   static const String enableDevice =
       '\nActivate your device by pressing the button, '

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/models/settings.dart';
 import 'package:tendon_loader/router/router.dart';
+import 'package:tendon_loader/services/exercise_service.dart';
+import 'package:tendon_loader/services/prescription_service.dart';
 import 'package:tendon_loader/services/settings_service.dart';
 import 'package:tendon_loader/services/user_service.dart';
 import 'package:tendon_loader/utils/states/app_scope.dart';
@@ -11,21 +13,21 @@ void main() {
   final state = AppState(
     userService: UserService(),
     settingsService: SettingsService(),
+    exerciseService: ExerciseService(),
+    prescriptionService: PrescriptionService(),
   );
 
   runApp(MainApp(state: state));
 }
 
 @immutable
-final class MainApp extends StatelessWidget {
+class MainApp extends StatelessWidget {
   const MainApp({super.key, required this.state});
 
   final AppState state;
 
-  static final GoRouter _router = GoRouter(
-    initialLocation: '/',
-    routes: $appRoutes,
-  );
+  static final GoRouter _router =
+      GoRouter(initialLocation: '/', routes: $appRoutes);
 
   @override
   Widget build(BuildContext context) {

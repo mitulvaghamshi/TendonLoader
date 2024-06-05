@@ -15,7 +15,7 @@ import 'package:tendon_loader/utils/constants.dart';
 /// "Progressor" (either by squeezing or pulling), to sat down at "0 Kg.",
 /// keep holding, and click the "Tare Progressor" button.
 @immutable
-final class ConnectedTile extends StatelessWidget with Progressor {
+class ConnectedTile extends StatelessWidget {
   const ConnectedTile({super.key, required this.device});
 
   final BluetoothDevice device;
@@ -24,18 +24,18 @@ final class ConnectedTile extends StatelessWidget with Progressor {
   Widget build(BuildContext context) {
     return FutureBuilder(
       initialData: false,
-      future: initializeWith(device),
+      future: Progressor.instance.init(device: device),
       builder: (context, snapshot) {
         if (!snapshot.requireData) return const RawButton.loading();
         return Column(mainAxisSize: MainAxisSize.min, children: [
           ListTile(
-            onLongPress: disconnect,
+            onLongPress: Progressor.instance.disconnect,
             contentPadding: const EdgeInsets.all(5),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
             title: Text(
-              progressorName,
+              Progressor.instance.deviceName,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             subtitle: const Text(
@@ -67,7 +67,10 @@ final class ConnectedTile extends StatelessWidget with Progressor {
           RawButton.tile(
             leading: const Icon(Icons.adjust),
             child: const Text('Tare Progressor'),
-            onTap: () async => tare().then((_) => context.pop()),
+            onTap: () async {
+              await Progressor.instance.tare();
+              if (context.mounted) context.pop();
+            },
           ),
         ]);
       },

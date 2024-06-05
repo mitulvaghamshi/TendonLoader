@@ -1,42 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/models/settings.dart';
 import 'package:tendon_loader/services/api/api_client.dart';
+import 'package:tendon_loader/services/api/snapshot.dart';
 
 @immutable
-final class SettingsService extends ApiClient {
-  Future<Settings> getBy({required final int userId}) async {
+class SettingsService extends ApiClient {
+  Future<Snapshot<Settings>> getBy({required final int userId}) async {
     final snapshot = await get('settings/$userId');
-    if (snapshot.hasError) {
-      debugPrint(snapshot.error.toString());
-      throw 'Unable to load Settings.';
+    if (snapshot.hasData) {
+      return Snapshot.withData(Settings.fromJson(snapshot.requireData));
     }
-    return Settings.fromJson(snapshot.requireData);
+    return Snapshot.withError(snapshot.error.toString());
   }
 
-  Future<void> create(final Settings settings) async {
+  Future<Snapshot> create(final Settings settings) async {
     final snapshot = await post<String>('settings', settings.json);
-    if (snapshot.hasError) {
-      debugPrint(snapshot.error.toString());
-      throw 'Unable to create Settings or already exists.';
+    if (snapshot.hasData) {
+      return Snapshot.withData(snapshot.requireData);
     }
-    debugPrint(snapshot.requireData);
+    return Snapshot.withError(snapshot.error.toString());
   }
 
-  Future<void> update(final Settings settings) async {
+  Future<Snapshot> update(final Settings settings) async {
     final snapshot = await put('settings/${settings.id}', settings.json);
-    if (snapshot.hasError) {
-      debugPrint(snapshot.error.toString());
-      throw 'Unable to update Settings.';
+    if (snapshot.hasData) {
+      return Snapshot.withData(snapshot.requireData);
     }
-    debugPrint(snapshot.requireData);
+    return Snapshot.withError(snapshot.error.toString());
   }
 
-  Future<void> deleteBy({required final int id}) async {
+  Future<Snapshot> deleteBy({required final int id}) async {
     final snapshot = await delete('settings/$id');
-    if (snapshot.hasError) {
-      debugPrint(snapshot.error.toString());
-      throw 'Unable to delete Settings.';
+    if (snapshot.hasData) {
+      return Snapshot.withData(snapshot.requireData);
     }
-    debugPrint(snapshot.requireData);
+    return Snapshot.withError(snapshot.error.toString());
   }
 }

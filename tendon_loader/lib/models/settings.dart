@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 @immutable
-final class Settings {
+class Settings {
   const Settings._({
     required this.id,
     required this.darkMode,

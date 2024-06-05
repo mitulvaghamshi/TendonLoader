@@ -3,7 +3,7 @@ import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/services/api/api_client.dart';
 
 @immutable
-final class PrescriptionService extends ApiClient {
+class PrescriptionService extends ApiClient {
   static final Map<int, Prescription> _cache = {};
 
   Future<Prescription> getBy({required final int id}) async {

@@ -4,16 +4,16 @@ import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-final class NewMVCTest extends StatefulWidget {
+class NewMVCTest extends StatefulWidget {
   const NewMVCTest({super.key});
 
   // final int duration;
 
   @override
-  NewMVCTestState createState() => NewMVCTestState();
+  State<NewMVCTest> createState() => _NewMVCTestState();
 }
 
-final class NewMVCTestState extends State<NewMVCTest> {
+class _NewMVCTestState extends State<NewMVCTest> {
   bool _useLastDuration = false;
   late int _duration;
 
@@ -75,7 +75,7 @@ final class NewMVCTestState extends State<NewMVCTest> {
   }
 }
 
-extension on NewMVCTestState {
+extension on _NewMVCTestState {
   void _initFields() {
     // _duration = _useLastDuration
     //     ? AppScope.of(context).userState.prescription.mvcDuration

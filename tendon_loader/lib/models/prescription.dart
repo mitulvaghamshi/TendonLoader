@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 @immutable
-final class Prescription {
+class Prescription {
   const Prescription._({
     required this.id,
     required this.sets,

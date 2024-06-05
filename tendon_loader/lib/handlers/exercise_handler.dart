@@ -4,7 +4,7 @@ import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/models/prescription.dart';
 
-final class ExerciseHandler extends GraphHandler {
+class ExerciseHandler extends GraphHandler {
   ExerciseHandler({required this.prescription, required super.onCountdown})
       : super(lineData: <ChartData>[
           ChartData(load: prescription.targetLoad),

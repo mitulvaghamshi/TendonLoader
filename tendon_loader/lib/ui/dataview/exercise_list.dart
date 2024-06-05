@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/router/router.dart';
-import 'package:tendon_loader/services/exercise_service.dart';
-import 'package:tendon_loader/ui/widgets/future_handler.dart';
+import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/ui/widgets/search_list_builder.dart';
+import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
-final class ExerciseList extends StatelessWidget {
-  const ExerciseList({
-    super.key,
-    required this.userId,
-    required this.title,
-    required this.service,
-  });
+class ExerciseList extends StatelessWidget {
+  const ExerciseList({super.key, required this.userId, required this.title});
 
   final int userId;
   final String title;
-  final ExerciseService service;
 
   @override
   Widget build(BuildContext context) {
-    return FutureHandler(
+    final service = AppScope.of(context).exerciseService;
+    return FutureWrapper(
       future: service.getAll(userId: userId),
       builder: (items) => SearchListBuilder(
         title: title,

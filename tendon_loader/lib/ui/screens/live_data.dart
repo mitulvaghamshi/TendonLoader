@@ -4,7 +4,7 @@ import 'package:tendon_loader/ui/widgets/graph_widget.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-final class LiveData extends StatelessWidget {
+class LiveData extends StatelessWidget {
   const LiveData({super.key, required this.handler});
 
   final LiveDataHandler handler;

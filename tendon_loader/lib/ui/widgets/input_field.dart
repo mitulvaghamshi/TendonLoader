@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-final class InputField extends StatelessWidget {
+class InputField extends StatelessWidget {
   const InputField({
     super.key,
     this.padding,
@@ -67,7 +67,7 @@ final class InputField extends StatelessWidget {
 }
 
 @immutable
-final class _SearchField extends InputField {
+class _SearchField extends InputField {
   const _SearchField({
     super.key,
     required super.label,
@@ -87,7 +87,7 @@ final class _SearchField extends InputField {
 }
 
 @immutable
-final class _FormField extends InputField {
+class _FormField extends InputField {
   const _FormField({
     super.key,
     this.format,

@@ -15,6 +15,10 @@ RouteBase get $tendonLoaderRoute => GoRouteData.$route(
       factory: $TendonLoaderRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
+          path: 'invalid:message',
+          factory: $InvalidRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
           path: 'settings',
           factory: $SettingScreenRouteExtension._fromState,
         ),
@@ -67,6 +71,25 @@ extension $TendonLoaderRouteExtension on TendonLoaderRoute {
 
   String get location => GoRouteData.$location(
         '/',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $InvalidRouteExtension on InvalidRoute {
+  static InvalidRoute _fromState(GoRouterState state) => InvalidRoute(
+        message: state.pathParameters['message']!,
+      );
+
+  String get location => GoRouteData.$location(
+        'invalid${Uri.encodeComponent(message)}',
       );
 
   void go(BuildContext context) => context.go(location);

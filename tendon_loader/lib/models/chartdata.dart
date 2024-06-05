@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 @immutable
-final class ChartData {
+class ChartData {
   const ChartData({this.time = 0, this.load = 0});
 
   factory ChartData.fromPair(final data) => ExChartData._parseJson(data);

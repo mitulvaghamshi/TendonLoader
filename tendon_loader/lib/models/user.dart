@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 @immutable
-final class User {
+class User {
   const User._({
     required this.id,
     required this.username,

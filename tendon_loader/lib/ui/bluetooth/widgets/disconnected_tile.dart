@@ -5,7 +5,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 /// This device is the only "Tindeq Progressor" bluetooth device.
 /// "Click" the device name to establish the connection, and start working.
 @immutable
-final class DisconnectedTile extends StatelessWidget {
+class DisconnectedTile extends StatelessWidget {
   const DisconnectedTile({super.key, required this.device});
 
   final BluetoothDevice device;

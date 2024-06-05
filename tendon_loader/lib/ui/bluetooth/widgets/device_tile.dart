@@ -9,7 +9,7 @@ import 'package:tendon_loader/ui/widgets/raw_button.dart';
 /// This widget will allows to restart the "Scanning..." process,
 /// if no devices found during first scan.
 @immutable
-final class DeviceTile extends StatelessWidget with Progressor {
+class DeviceTile extends StatelessWidget {
   const DeviceTile({super.key, required this.device, this.isLast = false});
 
   final BluetoothDevice device;
@@ -19,21 +19,19 @@ final class DeviceTile extends StatelessWidget with Progressor {
   Widget build(BuildContext context) {
     return StreamBuilder<BluetoothDeviceState>(
       stream: device.state,
-      builder: (_, snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.data == BluetoothDeviceState.connected) {
           return ConnectedTile(device: device);
         }
-        if (isLast) {
-          return Column(mainAxisSize: MainAxisSize.min, children: [
-            DisconnectedTile(device: device),
-            RawButton.tile(
-              leading: const Icon(Icons.search),
-              onTap: startScan,
-              child: const Text('Scan'),
-            ),
-          ]);
-        }
-        return DisconnectedTile(device: device);
+        if (!isLast) return DisconnectedTile(device: device);
+        return Column(mainAxisSize: MainAxisSize.min, children: [
+          DisconnectedTile(device: device),
+          RawButton.tile(
+            onTap: Progressor.instance.startScan,
+            leading: const Icon(Icons.search),
+            child: const Text('Scan'),
+          ),
+        ]);
       },
     );
   }

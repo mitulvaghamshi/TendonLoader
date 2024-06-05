@@ -5,36 +5,40 @@ import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/services/exercise_service.dart';
 import 'package:tendon_loader/services/prescription_service.dart';
 import 'package:tendon_loader/ui/dataview/exercise_data_graph.dart';
-import 'package:tendon_loader/ui/widgets/future_handler.dart';
+import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
-final class ExerciseDetail extends StatelessWidget {
+class ExerciseDetail extends StatelessWidget {
   const ExerciseDetail({
     super.key,
     required this.userId,
     required this.exerciseId,
-    required this.exerciseService,
-    required this.prescriptionService,
   });
 
   final int userId;
   final int exerciseId;
-  final ExerciseService exerciseService;
-  final PrescriptionService prescriptionService;
 
   @override
   Widget build(BuildContext context) {
-    return FutureHandler(
-      future: _future,
+    final exerciseService = AppScope.of(context).exerciseService;
+    final prescriptionService = AppScope.of(context).prescriptionService;
+    return FutureWrapper(
+      future: _future(exerciseService, prescriptionService),
       builder: (value) => CustomScrollView(slivers: [
         const SliverAppBar.large(title: Text('Exercise Details')),
         SliverToBoxAdapter(
-          child: ExerciseDataGraph(tagetLoad: value.$1, items: value.$2),
+          child: ExerciseDataGraph(
+            tagetLoad: value.targetLoad,
+            items: value.chartData,
+          ),
         ),
         SliverList.builder(
-          itemCount: value.$3.length,
-          itemBuilder: (_, index) => _ListItem(row: value.$3.elementAt(index)),
+          itemCount: value.infoTable.length,
+          itemBuilder: (context, index) => _ListItem(
+            row: value.infoTable.elementAt(index),
+          ),
         ),
       ]),
     );
@@ -42,7 +46,7 @@ final class ExerciseDetail extends StatelessWidget {
 }
 
 @immutable
-final class _ListItem extends StatelessWidget {
+class _ListItem extends StatelessWidget {
   const _ListItem({required this.row});
 
   final (String, String) row;
@@ -59,22 +63,32 @@ final class _ListItem extends StatelessWidget {
 }
 
 extension on ExerciseDetail {
-  Future<(double, Iterable<ChartData>, Iterable<(String, String)>)>
-      get _future async {
+  Future<_DataSet> _future(
+    final ExerciseService exerciseService,
+    final PrescriptionService prescriptionService,
+  ) async {
     final exercise =
         await exerciseService.getBy(userId: userId, exerciseId: exerciseId);
-    if (exercise == null) throw '[ExerciseDerail]: Exercise is null.';
+    if (exercise == null) throw '[ExerciseDetail]: Exercise is null.';
+
     final prescriptionId = exercise.prescriptionId;
     final prescription = prescriptionId == null
         ? null
         : await prescriptionService.getBy(id: prescriptionId);
+
     return (
-      prescription?.targetLoad ?? exercise.mvcValue ?? 0,
-      exercise.data,
-      [
+      targetLoad: prescription?.targetLoad ?? exercise.mvcValue ?? 0,
+      chartData: exercise.data,
+      infoTable: [
         ...exercise.tableRows,
         if (prescription != null) ...prescription.tableRows,
       ],
     );
   }
 }
+
+typedef _DataSet = ({
+  double targetLoad,
+  Iterable<ChartData> chartData,
+  Iterable<(String, String)> infoTable,
+});

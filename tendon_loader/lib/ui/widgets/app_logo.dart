@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-final class AppLogo extends StatelessWidget {
+class AppLogo extends StatelessWidget {
   const AppLogo({super.key});
 
   const factory AppLogo.square({
@@ -27,7 +27,7 @@ final class AppLogo extends StatelessWidget {
 }
 
 @immutable
-final class _AppLogoSquare extends AppLogo {
+class _AppLogoSquare extends AppLogo {
   const _AppLogoSquare({this.padding, this.radius});
 
   final EdgeInsetsGeometry? padding;

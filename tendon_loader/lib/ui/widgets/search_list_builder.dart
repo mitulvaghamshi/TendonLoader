@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/ui/widgets/input_field.dart';
 
 @immutable
-final class SearchListBuilder<T> extends StatefulWidget {
+class SearchListBuilder<T> extends StatefulWidget {
   const SearchListBuilder({
     super.key,
     required this.title,
@@ -22,7 +22,7 @@ final class SearchListBuilder<T> extends StatefulWidget {
   State<SearchListBuilder<T>> createState() => _SearchListBuilderState<T>();
 }
 
-final class _SearchListBuilderState<T> extends State<SearchListBuilder<T>> {
+class _SearchListBuilderState<T> extends State<SearchListBuilder<T>> {
   final _searchCtrl = TextEditingController();
   late Iterable<T> searchList = widget.items;
 

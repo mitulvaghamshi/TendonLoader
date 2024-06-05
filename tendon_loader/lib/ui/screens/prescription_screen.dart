@@ -7,7 +7,7 @@ import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
-final class PrescriptionScreen extends StatefulWidget {
+class PrescriptionScreen extends StatefulWidget {
   const PrescriptionScreen({super.key, required this.prescription});
 
   final Prescription prescription;
@@ -16,7 +16,7 @@ final class PrescriptionScreen extends StatefulWidget {
   State<PrescriptionScreen> createState() => _PrescriptionScreenState();
 }
 
-final class _PrescriptionScreenState extends State<PrescriptionScreen> {
+class _PrescriptionScreenState extends State<PrescriptionScreen> {
   late final pre = widget.prescription;
   late final state = AppScope.of(context);
   late final editable = state.settings.editablePrescription;
@@ -135,11 +135,13 @@ extension on _PrescriptionScreenState {
   }
 
   void _onSubmit() {
-    print('_holdTime = $_holdTime');
-    print('_restTime = $_restTime');
-    print('_setRestTime = $_setRestTime');
-    print('_mvcDuration = $_mvcDuration');
-    print('_loadCtrl = ${_loadCtrl.text}');
+    debugPrint('''
+      _holdTime     = $_holdTime
+      _restTime     = $_restTime
+      _setRestTime  = $_setRestTime
+      _mvcDuration  = $_mvcDuration
+      _loadCtrl     = ${_loadCtrl.text}
+    ''');
 
     final targetLoad = double.tryParse(_loadCtrl.text) ?? 0;
     final sets = int.tryParse(_setsCtrl.text) ?? 0;
@@ -184,7 +186,7 @@ extension on _PrescriptionScreenState {
 }
 
 @immutable
-final class _TimePickerTile extends StatefulWidget {
+class _TimePickerTile extends StatefulWidget {
   const _TimePickerTile({
     super.key,
     required this.time,
@@ -200,7 +202,7 @@ final class _TimePickerTile extends StatefulWidget {
   State<_TimePickerTile> createState() => _TimePickerTileState();
 }
 
-final class _TimePickerTileState extends State<_TimePickerTile> {
+class _TimePickerTileState extends State<_TimePickerTile> {
   late final _duration = Duration(seconds: widget.time);
   late int _minutes = _duration.inMinutes;
   late int _seconds = _duration.inSeconds % 60;
@@ -252,7 +254,7 @@ final class _TimePickerTileState extends State<_TimePickerTile> {
 }
 
 @immutable
-final class _NumberPicker extends StatelessWidget {
+class _NumberPicker extends StatelessWidget {
   const _NumberPicker({required this.value, required this.onChange});
 
   final int value;

@@ -9,16 +9,16 @@ import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
-final class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key, required this.service});
 
   final SettingsService service;
 
   @override
-  State<SettingsScreen> createState() => SettingsScreenState();
+  State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-final class SettingsScreenState extends State<SettingsScreen> with Progressor {
+class _SettingsScreenState extends State<SettingsScreen> {
   late final state = AppScope.of(context);
   late final _scaleCtrl = TextEditingController()
     ..text = state.settings.graphScale.toString();
@@ -51,7 +51,7 @@ final class SettingsScreenState extends State<SettingsScreen> with Progressor {
                 leading: const Icon(Icons.person, color: Colors.white),
                 trailing: const Icon(Icons.edit, color: Colors.white),
                 child: Text(
-                  state.user!.username,
+                  state.user.username,
                   overflow: TextOverflow.ellipsis,
                   style: Styles.boldWhite,
                   maxLines: 1,
@@ -87,12 +87,12 @@ final class SettingsScreenState extends State<SettingsScreen> with Progressor {
               }),
             ),
             ListTile(
+              onTap: _uploadData,
               enabled: length > 0,
               contentPadding: Styles.tilePadding,
               title: const Text('Locally stored data'),
               subtitle: const Text('Submit panding data to the server.'),
               trailing: Text(length.toString(), style: Styles.titleStyle),
-              onTap: _uploadData,
             ),
             ListTile(
               contentPadding: Styles.tilePadding,
@@ -123,7 +123,7 @@ final class SettingsScreenState extends State<SettingsScreen> with Progressor {
               onTap: _manageProgressor,
               color: Colors.indigo,
               child: Text(
-                progressor == null
+                Progressor.instance.progressor == null
                     ? 'Connect to Progressor'
                     : 'Manage Progressor Connection',
                 style: Styles.boldWhite,
@@ -148,10 +148,11 @@ final class SettingsScreenState extends State<SettingsScreen> with Progressor {
   }
 }
 
-extension on SettingsScreenState {
+extension on _SettingsScreenState {
   Future<void> _manageProgressor() async {
-    if (progressor == null) {
-      return; // TODO(me): ignored during development
+    if (Progressor.instance.progressor == null) {
+      return;
+      // TODO(me): ignored during development
       // await showDialog<void>(
       //   context: context,
       //   builder: (_) => const ConnectedList(),
@@ -161,7 +162,7 @@ extension on SettingsScreenState {
       await showDialog<void>(
         context: context,
         builder: (_) => AlertDialog(
-          title: Text(progressorName),
+          title: Text(Progressor.instance.deviceName),
           icon: const Icon(Icons.bluetooth),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -169,19 +170,13 @@ extension on SettingsScreenState {
               RawButton.tile(
                 onTap: _manageProgressor,
                 color: Colors.orange,
-                child: const Text(
-                  'Disconnect',
-                  style: Styles.boldWhite,
-                ),
+                child: const Text('Disconnect', style: Styles.boldWhite),
               ),
               const SizedBox(height: 8),
               RawButton.tile(
                 onTap: _manageProgressor,
                 color: Colors.green,
-                child: const Text(
-                  'Disconnect and Sleep',
-                  style: Styles.boldWhite,
-                ),
+                child: const Text('Sleep', style: Styles.boldWhite),
               ),
             ],
           ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 @immutable
-final class CountdownWidget extends StatefulWidget {
+class CountdownWidget extends StatefulWidget {
   const CountdownWidget({super.key, required this.duration});
 
   final Duration duration;
@@ -13,7 +13,7 @@ final class CountdownWidget extends StatefulWidget {
   CountdownWidgetState createState() => CountdownWidgetState();
 }
 
-final class CountdownWidgetState extends State<CountdownWidget>
+class CountdownWidgetState extends State<CountdownWidget>
     with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
       vsync: this, duration: widget.duration + const Duration(seconds: 1));
@@ -68,7 +68,7 @@ extension on CountdownWidgetState {
 }
 
 @immutable
-final class _CirclePainter extends CustomPainter {
+class _CirclePainter extends CustomPainter {
   const _CirclePainter(this.controller) : super(repaint: controller);
 
   final Animation<double> controller;

@@ -5,7 +5,7 @@ import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/models/prescription.dart';
 
 @immutable
-final class Exercise {
+class Exercise {
   const Exercise._({
     required this.id,
     required this.userId,

@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/services/api/network_status.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';
 import 'package:tendon_loader/ui/widgets/input_field.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
@@ -8,20 +8,28 @@ import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
-final class SignInScreen extends StatefulWidget {
+class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key, required this.builder});
 
   final WidgetBuilder builder;
 
   @override
-  State<SignInScreen> createState() => SignInScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-final class SignInScreenState extends State<SignInScreen> {
-  late final state = AppScope.of(context);
+class _SignInScreenState extends State<SignInScreen> {
   final _usernameCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
-  bool _loading = false;
+
+  late final state = AppScope.of(context);
+
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    NetworkStatus(); // Initialize singleton
+  }
 
   @override
   void didChangeDependencies() {
@@ -40,17 +48,17 @@ final class SignInScreenState extends State<SignInScreen> {
   }
 
   Future<void> _authenticate() async {
-    setState(() => _loading = true);
+    setState(() => _isLoading = true);
     await state.authenticate(
       username: _usernameCtrl.text,
       password: _passwordCtrl.text,
     );
-    setState(() => _loading = false);
+    setState(() => _isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_loading && state.user != null) return widget.builder(context);
+    if (!_isLoading && state.user.id != null) return widget.builder(context);
     return Form(
       child: Column(children: [
         const Hero(tag: 'hero-app-logo', child: AppLogo.square()),
@@ -67,18 +75,14 @@ final class SignInScreenState extends State<SignInScreen> {
         const SizedBox(height: 16),
         AnimatedCrossFade(
           crossFadeState:
-              _loading ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+              _isLoading ? CrossFadeState.showSecond : CrossFadeState.showFirst,
           duration: const Duration(milliseconds: 500),
           firstChild: RawButton.tile(
             onTap: _authenticate,
             color: Colors.orange,
             child: const Text('Login', style: Styles.boldWhite),
           ),
-          secondChild: const RawButton.tile(
-            color: Colors.indigo,
-            leading: CupertinoActivityIndicator(),
-            child: Text('Please wait...', style: Styles.boldWhite),
-          ),
+          secondChild: const RawButton.loading(),
         ),
       ]),
     );

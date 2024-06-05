@@ -6,7 +6,7 @@ import 'package:tendon_loader/ui/widgets/graph_widget.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-final class ExerciseMode extends StatefulWidget {
+class ExerciseMode extends StatefulWidget {
   const ExerciseMode({super.key, required this.handler});
 
   final ExerciseHandler handler;
@@ -17,7 +17,7 @@ final class ExerciseMode extends StatefulWidget {
   ExerciseModeState createState() => ExerciseModeState();
 }
 
-final class ExerciseModeState extends State<ExerciseMode>
+class ExerciseModeState extends State<ExerciseMode>
     with WidgetsBindingObserver {
   @override
   void initState() {

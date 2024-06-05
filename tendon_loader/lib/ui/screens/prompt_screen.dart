@@ -4,14 +4,14 @@ import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-final class PromptScreen extends StatefulWidget {
+class PromptScreen extends StatefulWidget {
   const PromptScreen({super.key});
 
   @override
-  PromptScreenState createState() => PromptScreenState();
+  State<PromptScreen> createState() => _PromptScreenState();
 }
 
-final class PromptScreenState extends State<PromptScreen> {
+class _PromptScreenState extends State<PromptScreen> {
   late final _autoUpload = false;
   // AppScope.of(context).settingsState.settings.autoUpload;
 
@@ -203,7 +203,7 @@ final class PromptScreenState extends State<PromptScreen> {
   }
 }
 
-extension on PromptScreenState {
+extension on _PromptScreenState {
   Widget _buildPainText(String text, Color color) {
     return SizedBox(
       width: 80,
@@ -280,7 +280,7 @@ class _CardWidget extends StatelessWidget {
 }
 
 @immutable
-final class PainSelector extends StatefulWidget {
+class PainSelector extends StatefulWidget {
   const PainSelector({super.key, required this.onSelect});
 
   final ValueChanged<double> onSelect;
@@ -289,7 +289,7 @@ final class PainSelector extends StatefulWidget {
   State<PainSelector> createState() => _PainSelectorState();
 }
 
-final class _PainSelectorState extends State<PainSelector> {
+class _PainSelectorState extends State<PainSelector> {
   double painScore = 0;
 
   @override
@@ -316,7 +316,7 @@ final class _PainSelectorState extends State<PainSelector> {
 }
 
 @immutable
-final class _CustomShape extends SliderComponentShape {
+class _CustomShape extends SliderComponentShape {
   const _CustomShape();
 
   @override

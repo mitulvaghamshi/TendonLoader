@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-final class RawButton extends StatelessWidget {
+class RawButton extends StatelessWidget {
   const RawButton({
     super.key,
     this.onTap,
@@ -27,9 +26,9 @@ final class RawButton extends StatelessWidget {
     final Widget? trailing,
   }) = _RawListTile;
 
-  const factory RawButton.loading() = _RawLoading;
-
   const factory RawButton.error({bool scaffold, String message}) = _RawError;
+
+  const factory RawButton.loading() = _RawLoading;
 
   final Color? color;
   final double? radius;
@@ -53,7 +52,7 @@ final class RawButton extends StatelessWidget {
 }
 
 @immutable
-final class _RawListTile extends RawButton {
+class _RawListTile extends RawButton {
   const _RawListTile({
     super.key,
     super.onTap,
@@ -98,7 +97,32 @@ final class _RawListTile extends RawButton {
 }
 
 @immutable
-final class _RawLoading extends RawButton {
+class _RawError extends RawButton {
+  const _RawError({this.scaffold = true, this.message});
+
+  final bool scaffold;
+  final String? message;
+
+  @override
+  Widget build(BuildContext context) {
+    final widget = RawButton.tile(
+      radius: 0,
+      color: Colors.red,
+      child: Text(
+        message ?? 'Opps! Something went wrong',
+        style: Styles.boldWhite,
+      ),
+    );
+    if (!scaffold) return widget;
+    return Scaffold(
+      appBar: AppBar(title: const Text('Tendon Loader')),
+      body: Center(child: widget),
+    );
+  }
+}
+
+@immutable
+class _RawLoading extends RawButton {
   const _RawLoading();
 
   @override
@@ -107,35 +131,10 @@ final class _RawLoading extends RawButton {
       radius: 0,
       color: Colors.green,
       leadingToChildSpace: 16,
-      leading: CupertinoActivityIndicator(),
+      leading: CircularProgressIndicator.adaptive(
+        backgroundColor: Colors.white,
+      ),
       child: Text('Please wait...', style: Styles.boldWhite),
     );
-  }
-}
-
-@immutable
-final class _RawError extends RawButton {
-  const _RawError({this.scaffold = true, this.message});
-
-  final bool scaffold;
-  final String? message;
-
-  @override
-  Widget build(BuildContext context) {
-    Widget widget = RawButton.tile(
-      radius: 0,
-      color: Colors.red,
-      child: Text(
-        message ?? 'Opss!! Something went wrong',
-        style: Styles.boldWhite,
-      ),
-    );
-    if (scaffold) {
-      widget = Scaffold(
-        appBar: AppBar(title: const Text('Tendon Loader')),
-        body: Center(child: widget),
-      );
-    }
-    return widget;
   }
 }

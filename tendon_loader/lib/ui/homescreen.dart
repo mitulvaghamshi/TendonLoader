@@ -12,7 +12,7 @@ import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/simulator.dart';
 
 @immutable
-final class HomeScreen extends StatelessWidget with Progressor {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
@@ -57,14 +57,14 @@ final class HomeScreen extends StatelessWidget with Progressor {
 
 extension on HomeScreen {
   Future<void> _navigateTo(BuildContext context, String route) async {
-    if (!Simulator.enabled && progressor == null) {
+    if (!Simulator.enabled && Progressor.instance.progressor == null) {
       const SettingScreenRoute().push(context);
     }
     (switch (route) {
       LiveData.name => const LiveDataRoute().push,
       MVCTesting.name => const NewMVCTestRoute().push,
       ExerciseMode.name => const NewExerciseRoute().push,
-      _ => throw UnimplementedError('Invalid route name: [$route]'),
+      _ => const InvalidRoute(message: 'Invalid entry').push,
     })(context);
   }
 }

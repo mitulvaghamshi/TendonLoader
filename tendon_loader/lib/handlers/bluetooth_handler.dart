@@ -1,82 +1,86 @@
-import 'dart:async';
-import 'dart:io';
+import 'dart:async' show Completer, Future;
+import 'dart:io' show Platform;
 
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/simulator.dart';
 
-mixin Progressor {
-  static bool _isRunning = false;
-  static Completer<bool>? _completer;
-  static BluetoothDevice? _device;
-  static BluetoothCharacteristic? _dataChar;
-  static BluetoothCharacteristic? _controlChar;
+class Progressor {
+  factory Progressor() => _instance ??= Progressor._();
+
+  Progressor._();
+
+  call({required final BluetoothDevice device}) {
+    return init(device: device);
+  }
+
+  static Progressor? _instance;
+  static Progressor get instance => Progressor();
+
+  bool _isRunning = false;
+  Completer<bool>? _completer;
+
+  BluetoothDevice? _device;
+  BluetoothCharacteristic? _dataChar;
+  BluetoothCharacteristic? _controlChar;
 
   BluetoothDevice? get progressor => _device;
 
-  String get progressorName => _device == null
-      ? 'Not connected!'
+  String get deviceName => _device == null
+      ? 'Unknown'
       : _device!.name.isEmpty
           ? _device!.id.id
           : _device!.name;
 
   Future<void> startScan() async =>
-      FlutterBlue.instance.startScan(timeout: const Duration(seconds: 2));
+      FlutterBlue.instance.startScan(timeout: const Duration(seconds: 5));
 
   Future<void> tare() async {
-    if (_isRunning) {
-      _isRunning = false;
-      await Future.wait(<Future<void>>[
-        _controlChar!.write(<int>[Commands.tareScale]),
-        Future<void>.delayed(const Duration(milliseconds: 500)),
-        _controlChar!.write(<int>[Commands.startWeightMeas]),
-        Future<void>.delayed(const Duration(milliseconds: 500)),
-        _controlChar!.write(<int>[Commands.stopWeightMeas]),
-      ]);
-    }
+    if (!_isRunning) return;
+    _isRunning = false;
+    await _controlChar!.write(<int>[Commands.tareScale]);
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _controlChar!.write(<int>[Commands.startWeightMeas]);
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _controlChar!.write(<int>[Commands.stopWeightMeas]);
   }
 
   Future<void> startProgresssor() async {
-    if (!_isRunning) {
-      _isRunning = true;
-      // Simulator
-      if (Simulator.enabled) {
-        Simulator.startSimulator();
-      } else {
-        await _controlChar!.write(<int>[Commands.startWeightMeas]);
-      }
+    if (_isRunning) return;
+    _isRunning = true;
+    if (Simulator.enabled) {
+      Simulator.startSimulator();
+      return;
     }
+    await _controlChar!.write(<int>[Commands.startWeightMeas]);
   }
 
   Future<void> stopProgressor() async {
-    if (_isRunning) {
-      _isRunning = false;
-      if (Simulator.enabled) {
-        Simulator.stopSimulator();
-      } else {
-        await _controlChar!.write(<int>[Commands.stopWeightMeas]);
-      }
+    if (!_isRunning) return;
+    _isRunning = false;
+    if (Simulator.enabled) {
+      Simulator.stopSimulator();
+      return;
     }
+    await _controlChar!.write(<int>[Commands.stopWeightMeas]);
   }
 
   Future<void> disconnect({bool sleep = false}) async {
-    if (_device != null) {
-      if (sleep) {
-        await _controlChar!.write(<int>[Commands.enterSleep]);
-      } else {
-        await _device!.disconnect();
-      }
-      _isRunning = false;
-      _device = _dataChar = _controlChar = _completer = null;
-      GraphHandler.disposeGraphData();
+    if (_device == null) return;
+    if (sleep) {
+      await _controlChar!.write(<int>[Commands.enterSleep]);
+    } else {
+      await _device!.disconnect();
     }
+    _isRunning = false;
+    _device = _dataChar = _controlChar = _completer = null;
   }
 
   Future<void> get _delayedStart async =>
       Future<void>.delayed(const Duration(milliseconds: 800), startProgresssor);
 
-  Future<bool> initializeWith(final BluetoothDevice device) async {
+  Future<bool> init({required final BluetoothDevice device}) async {
     if (_device != null && _dataChar != null && _controlChar != null) {
       return _delayedStart.then((_) => true);
     } else if (_completer == null) {

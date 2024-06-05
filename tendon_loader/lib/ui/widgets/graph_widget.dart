@@ -7,7 +7,7 @@ import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 
 @immutable
-final class GraphWidget extends StatelessWidget {
+class GraphWidget extends StatelessWidget {
   const GraphWidget({
     super.key,
     required this.title,
@@ -46,7 +46,7 @@ final class GraphWidget extends StatelessWidget {
 }
 
 @immutable
-final class _Header extends StatelessWidget {
+class _Header extends StatelessWidget {
   const _Header({required this.handler, required this.builder});
 
   final GraphHandler handler;
@@ -70,7 +70,7 @@ final class _Header extends StatelessWidget {
 }
 
 @immutable
-final class _BarGraph extends StatelessWidget {
+class _BarGraph extends StatelessWidget {
   const _BarGraph({required this.handler});
 
   final GraphHandler handler;
@@ -131,7 +131,7 @@ final class _BarGraph extends StatelessWidget {
 }
 
 @immutable
-final class _ButtonBar extends StatelessWidget {
+class _ButtonBar extends StatelessWidget {
   const _ButtonBar({required this.handler});
 
   final GraphHandler handler;

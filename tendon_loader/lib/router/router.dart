@@ -4,15 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/handlers/exercise_handler.dart';
-import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/livedata_handler.dart';
 import 'package:tendon_loader/handlers/mvc_handler.dart';
 import 'package:tendon_loader/models/prescription.dart';
-import 'package:tendon_loader/services/api/network.dart';
-import 'package:tendon_loader/services/exercise_service.dart';
+import 'package:tendon_loader/services/api/network_status.dart';
 import 'package:tendon_loader/services/prescription_service.dart';
 import 'package:tendon_loader/services/settings_service.dart';
-import 'package:tendon_loader/services/user_service.dart';
 import 'package:tendon_loader/ui/dataview/exercise_data_list.dart';
 import 'package:tendon_loader/ui/dataview/exercise_detail.dart';
 import 'package:tendon_loader/ui/dataview/exercise_list.dart';
@@ -26,13 +23,17 @@ import 'package:tendon_loader/ui/screens/prescription_screen.dart';
 import 'package:tendon_loader/ui/screens/prompt_screen.dart';
 import 'package:tendon_loader/ui/screens/settings_screen.dart';
 import 'package:tendon_loader/ui/screens/signin_screen.dart';
-import 'package:tendon_loader/ui/widgets/future_handler.dart';
+import 'package:tendon_loader/ui/widgets/countdown_widget.dart';
+import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/states/app_scope.dart';
 
 part 'router.g.dart';
 
 @TypedGoRoute<TendonLoaderRoute>(path: '/', routes: [
+  TypedGoRoute<InvalidRoute>(path: 'invalid:message'),
+  //
   TypedGoRoute<SettingScreenRoute>(path: 'settings'),
   //
   TypedGoRoute<LiveDataRoute>(path: 'livedata'),
@@ -50,14 +51,14 @@ part 'router.g.dart';
   TypedGoRoute<ExerciseDataListRoute>(path: 'exercisedatalist'),
 ])
 @immutable
-final class TendonLoaderRoute extends GoRouteData with Progressor {
+class TendonLoaderRoute extends GoRouteData {
   const TendonLoaderRoute();
 
   @override
-  FutureOr<bool> onExit(BuildContext context, GoRouterState state) {
-    disconnect();
-    Network.dispose();
-    return super.onExit(context, state);
+  FutureOr<bool> onExit(BuildContext context, GoRouterState state) async {
+    NetworkStatus.instance.dispose();
+    await Progressor.instance.disconnect();
+    return true;
   }
 
   @override
@@ -73,7 +74,18 @@ final class TendonLoaderRoute extends GoRouteData with Progressor {
 }
 
 @immutable
-final class SettingScreenRoute extends GoRouteData {
+class InvalidRoute extends GoRouteData {
+  const InvalidRoute({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      RawButton.error(message: message);
+}
+
+@immutable
+class SettingScreenRoute extends GoRouteData {
   const SettingScreenRoute();
 
   @override
@@ -82,7 +94,7 @@ final class SettingScreenRoute extends GoRouteData {
 }
 
 @immutable
-final class NewMVCTestRoute extends GoRouteData {
+class NewMVCTestRoute extends GoRouteData {
   const NewMVCTestRoute();
 
   @override
@@ -90,14 +102,14 @@ final class NewMVCTestRoute extends GoRouteData {
 }
 
 @immutable
-final class NewExerciseRoute extends GoRouteData {
+class NewExerciseRoute extends GoRouteData {
   const NewExerciseRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
     final id = AppScope.of(context).settings.prescriptionId;
     if (id == null) return const RawButton.error();
-    return FutureHandler(
+    return FutureWrapper(
       future: PrescriptionService().getBy(id: id),
       builder: (value) => PrescriptionScreen(prescription: value),
     );
@@ -105,7 +117,7 @@ final class NewExerciseRoute extends GoRouteData {
 }
 
 @immutable
-final class PromptScreenRoute extends GoRouteData {
+class PromptScreenRoute extends GoRouteData {
   const PromptScreenRoute();
 
   @override
@@ -114,78 +126,47 @@ final class PromptScreenRoute extends GoRouteData {
 }
 
 @immutable
-final class UserListRoute extends GoRouteData {
+class UserListRoute extends GoRouteData {
   const UserListRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return UserList(service: UserService());
-  }
+  Widget build(BuildContext context, GoRouterState state) => const UserList();
 }
 
 @immutable
-final class ExerciseListRoute extends GoRouteData {
+class ExerciseListRoute extends GoRouteData {
   const ExerciseListRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
     if (state.extra
         case {'userId': final int userId, 'title': final String title}) {
-      return ExerciseList(
-        userId: userId,
-        title: title,
-        service: ExerciseService(),
-      );
+      return ExerciseList(userId: userId, title: title);
     }
     return const RawButton.error();
   }
 }
 
 @immutable
-final class ExerciseDetaildRoute extends GoRouteData {
+class ExerciseDetaildRoute extends GoRouteData {
   const ExerciseDetaildRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    if (state.extra
-        case {
-          'userId': final int userId,
-          'exerciseId': final int exerciseId,
-        }) {
-      return ExerciseDetail(
-        userId: userId,
-        exerciseId: exerciseId,
-        exerciseService: ExerciseService(),
-        prescriptionService: PrescriptionService(),
-      );
-    }
-    return const RawButton.error();
-  }
+  Widget build(BuildContext context, GoRouterState state) =>
+      _ExerciseBuilder(state: state, builder: ExerciseDetail.new);
 }
 
 @immutable
-final class ExerciseDataListRoute extends GoRouteData {
+class ExerciseDataListRoute extends GoRouteData {
   const ExerciseDataListRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    if (state.extra
-        case {
-          'userId': final int userId,
-          'exerciseId': final int exerciseId,
-        }) {
-      return ExerciseDataList(
-        userId: userId,
-        exerciseId: exerciseId,
-        service: ExerciseService(),
-      );
-    }
-    return const RawButton.error();
-  }
+  Widget build(BuildContext context, GoRouterState state) =>
+      _ExerciseBuilder(state: state, builder: ExerciseDataList.new);
 }
 
 @immutable
-final class LiveDataRoute extends GoRouteData {
+class LiveDataRoute extends GoRouteData {
   const LiveDataRoute();
 
   @override
@@ -196,7 +177,7 @@ final class LiveDataRoute extends GoRouteData {
 }
 
 @immutable
-final class MVCTestingRoute extends GoRouteData {
+class MVCTestingRoute extends GoRouteData {
   const MVCTestingRoute();
 
   @override
@@ -210,7 +191,7 @@ final class MVCTestingRoute extends GoRouteData {
 }
 
 @immutable
-final class ExerciseModeRoute extends GoRouteData {
+class ExerciseModeRoute extends GoRouteData {
   const ExerciseModeRoute();
 
   @override
@@ -223,7 +204,49 @@ final class ExerciseModeRoute extends GoRouteData {
   }
 }
 
+@immutable
+class _ExerciseBuilder extends StatelessWidget {
+  const _ExerciseBuilder({required this.state, required this.builder});
+
+  final GoRouterState state;
+  final Widget Function({
+    Key? key,
+    required int userId,
+    required int exerciseId,
+  }) builder;
+
+  @override
+  Widget build(BuildContext context) {
+    if (state.extra
+        case {'userId': final int userId, 'exerciseId': final int exerciseId}) {
+      return builder(userId: userId, exerciseId: exerciseId);
+    }
+    return const RawButton.error();
+  }
+}
+
 extension on BuildContext {
-  Future<bool?> _countdown(final String title, final Duration duration) async =>
-      startCountdown(context: this, title: title, duration: duration);
+  Future<bool?> _countdown(final String title, final Duration duration) async {
+    return showDialog<bool>(
+      context: this,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Text(title, style: Styles.numPickerText),
+            ),
+            CountdownWidget(duration: duration),
+            RawButton.tile(
+              onTap: context.pop,
+              leading: const Text('Cancel'),
+              child: const Icon(Icons.clear, color: Color(0xffff534d)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

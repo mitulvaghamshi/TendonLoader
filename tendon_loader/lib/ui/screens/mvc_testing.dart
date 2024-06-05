@@ -5,7 +5,7 @@ import 'package:tendon_loader/ui/widgets/graph_widget.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-final class MVCTesting extends StatelessWidget {
+class MVCTesting extends StatelessWidget {
   const MVCTesting({super.key, required this.handler});
 
   final MVCHandler handler;

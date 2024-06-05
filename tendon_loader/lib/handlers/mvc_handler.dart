@@ -3,7 +3,7 @@ import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/models/exercise.dart';
 
-final class MVCHandler extends GraphHandler {
+class MVCHandler extends GraphHandler {
   MVCHandler({required this.mvcDuration, required super.onCountdown})
       : timeDiff = mvcDuration.toDouble(),
         super(lineData: <ChartData>[

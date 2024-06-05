@@ -3,12 +3,12 @@ import 'dart:convert' show jsonDecode, jsonEncode;
 import 'dart:io' show HttpException;
 
 import 'package:http/http.dart' as http;
-import 'package:tendon_loader/services/api/network.dart';
+import 'package:tendon_loader/services/api/network_status.dart';
 import 'package:tendon_loader/services/api/snapshot.dart';
 
 abstract class ApiClient {
-  final _host = const String.fromEnvironment('API_HOST');
-  final _headers = {
+  static const _host = String.fromEnvironment('API_HOST');
+  static const _headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
   };
@@ -18,7 +18,7 @@ abstract class ApiClient {
 
   Future<Snapshot> get<T>(final String path) async {
     await Future<void>.delayed(const Duration(seconds: 1));
-    if (!Network.isConnected) return _networkError;
+    if (!NetworkStatus.instance.isConnected) return _networkError;
     try {
       final response = await http.get(Uri.http(_host, path), headers: _headers);
       if (response.statusCode == 200) {
@@ -34,7 +34,7 @@ abstract class ApiClient {
     final String path,
     final Map<String, dynamic> data,
   ) async {
-    if (!Network.isConnected) return _networkError;
+    if (!NetworkStatus.instance.isConnected) return _networkError;
     try {
       final response = await http.post(Uri.http(_host, path),
           headers: _headers, body: jsonEncode(data));
@@ -51,7 +51,7 @@ abstract class ApiClient {
     final String path,
     final Map<String, dynamic> data,
   ) async {
-    if (!Network.isConnected) return _networkError;
+    if (!NetworkStatus.instance.isConnected) return _networkError;
     try {
       final response = await http.put(Uri.http(_host, path),
           headers: _headers, body: jsonEncode(data));
@@ -66,7 +66,7 @@ abstract class ApiClient {
 
   // TODO(mitul): Fix this...
   Future<Snapshot> delete<T>(final String path) async {
-    if (!Network.isConnected) return _networkError;
+    if (!NetworkStatus.instance.isConnected) return _networkError;
     try {
       final response =
           await http.delete(Uri.http(_host, path), headers: _headers);

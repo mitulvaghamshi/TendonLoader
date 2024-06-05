@@ -3,7 +3,7 @@ import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/services/api/api_client.dart';
 
 @immutable
-final class ExerciseService extends ApiClient {
+class ExerciseService extends ApiClient {
   static final Map<int, Map<int, Exercise>> _cache = {};
 
   Future<Iterable<Exercise>> getAll({
