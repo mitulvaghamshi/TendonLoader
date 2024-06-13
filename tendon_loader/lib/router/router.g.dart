@@ -15,7 +15,7 @@ RouteBase get $tendonLoaderRoute => GoRouteData.$route(
       factory: $TendonLoaderRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
-          path: 'invalid:message',
+          path: 'invalid',
           factory: $InvalidRouteExtension._fromState,
         ),
         GoRouteData.$route(
@@ -85,11 +85,14 @@ extension $TendonLoaderRouteExtension on TendonLoaderRoute {
 
 extension $InvalidRouteExtension on InvalidRoute {
   static InvalidRoute _fromState(GoRouterState state) => InvalidRoute(
-        message: state.pathParameters['message']!,
+        message: state.uri.queryParameters['message']!,
       );
 
   String get location => GoRouteData.$location(
-        'invalid${Uri.encodeComponent(message)}',
+        '/invalid',
+        queryParams: {
+          'message': message,
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -245,11 +248,17 @@ extension $UserListRouteExtension on UserListRoute {
 }
 
 extension $ExerciseListRouteExtension on ExerciseListRoute {
-  static ExerciseListRoute _fromState(GoRouterState state) =>
-      const ExerciseListRoute();
+  static ExerciseListRoute _fromState(GoRouterState state) => ExerciseListRoute(
+        userId: int.parse(state.uri.queryParameters['user-id']!),
+        title: state.uri.queryParameters['title']!,
+      );
 
   String get location => GoRouteData.$location(
         '/exerciselist',
+        queryParams: {
+          'user-id': userId.toString(),
+          'title': title,
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -264,10 +273,17 @@ extension $ExerciseListRouteExtension on ExerciseListRoute {
 
 extension $ExerciseDetaildRouteExtension on ExerciseDetaildRoute {
   static ExerciseDetaildRoute _fromState(GoRouterState state) =>
-      const ExerciseDetaildRoute();
+      ExerciseDetaildRoute(
+        userId: int.parse(state.uri.queryParameters['user-id']!),
+        exerciseId: int.parse(state.uri.queryParameters['exercise-id']!),
+      );
 
   String get location => GoRouteData.$location(
         '/exercisedetail',
+        queryParams: {
+          'user-id': userId.toString(),
+          'exercise-id': exerciseId.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -282,10 +298,17 @@ extension $ExerciseDetaildRouteExtension on ExerciseDetaildRoute {
 
 extension $ExerciseDataListRouteExtension on ExerciseDataListRoute {
   static ExerciseDataListRoute _fromState(GoRouterState state) =>
-      const ExerciseDataListRoute();
+      ExerciseDataListRoute(
+        userId: int.parse(state.uri.queryParameters['user-id']!),
+        exerciseId: int.parse(state.uri.queryParameters['exercise-id']!),
+      );
 
   String get location => GoRouteData.$location(
         '/exercisedatalist',
+        queryParams: {
+          'user-id': userId.toString(),
+          'exercise-id': exerciseId.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);

@@ -3,7 +3,6 @@ import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/services/exercise_service.dart';
 import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
-import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
 class ExerciseDataList extends StatelessWidget {
@@ -18,18 +17,17 @@ class ExerciseDataList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final service = AppScope.of(context).exerciseService;
     return FutureWrapper(
-      future: _future(service),
+      future: _future,
       builder: (items) => CustomScrollView(slivers: [
         const SliverAppBar.large(title: Text('Exercise Data')),
+        const SliverToBoxAdapter(
+          child: _ListItem(index: 'No', time: 'Load', load: 'Time'),
+        ),
         SliverList.builder(
-          itemCount: items.length + 1,
+          itemCount: items.length,
           itemBuilder: (context, index) {
-            if (index == 0) {
-              return const _ListItem(index: 'No', time: 'Load', load: 'Time');
-            }
-            final data = items.elementAt(index - 1);
+            final data = items.elementAt(index);
             return _ListItem(
               index: '${index + 1}',
               time: data.time.toStringAsFixed(2),
@@ -67,9 +65,10 @@ class _ListItem extends StatelessWidget {
 }
 
 extension on ExerciseDataList {
-  Future<Iterable<ChartData>> _future(final ExerciseService service) async {
-    final exercise =
-        await service.getBy(userId: userId, exerciseId: exerciseId);
-    return exercise?.data ?? const Iterable.empty();
+  Future<Iterable<ChartData>> get _future async {
+    final eSnapshot = await ExerciseService.instance
+        .getExerciseBy(userId: userId, exerciseId: exerciseId);
+    if (eSnapshot.hasData) return eSnapshot.requireData.data;
+    return const Iterable.empty();
   }
 }

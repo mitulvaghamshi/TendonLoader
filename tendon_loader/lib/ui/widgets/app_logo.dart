@@ -4,12 +4,10 @@ import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
 class AppLogo extends StatelessWidget {
-  const AppLogo({super.key});
+  const AppLogo({super.key, this.radius, this.padding});
 
-  const factory AppLogo.square({
-    final EdgeInsetsGeometry? padding,
-    final double? radius,
-  }) = _AppLogoSquare;
+  final double? radius;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -19,33 +17,21 @@ class AppLogo extends StatelessWidget {
         .value
         .toRadixString(16)
         .substring(2);
-    final circle =
-        '<circle cx="200" cy="200" r="197" fill="none" stroke="#$color" stroke-width="7"/>';
+
+    // final circle =
+    //     '<circle cx="200" cy="200" r="197" fill="none" stroke="#$color" stroke-width="7"/>';
+
     final logo = '<path fill="#$color" d="${Strings.appLogoSvgData}"/></svg>';
-    return SvgPicture.string('${Strings.appLogoSvgNs}$circle$logo');
-  }
-}
 
-@immutable
-class _AppLogoSquare extends AppLogo {
-  const _AppLogoSquare({this.padding, this.radius});
+    // $circle
+    Widget widget = SvgPicture.string('${Strings.appLogoSvgNs}$logo');
 
-  final EdgeInsetsGeometry? padding;
-  final double? radius;
+    if (radius != null) {
+      widget = CircleAvatar(maxRadius: radius, child: widget);
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: padding ??
-          const EdgeInsets.symmetric(
-            horizontal: 30,
-            vertical: 16,
-          ),
-      child: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        maxRadius: radius ?? 150,
-        child: const AppLogo(),
-      ),
-    );
+    if (padding != null) return Padding(padding: padding!, child: widget);
+
+    return widget;
   }
 }

@@ -58,7 +58,7 @@ extension ExExercise on Exercise {
         ('Device', progressorId),
         ('Pain score', '$painScore / 10'),
         ('Pain tolerable?', tolerable),
-        if (isMVC) ('Max force', '${mvcValue!.toStringAsFixed(2)} Kg'),
+        if (isMVC) ('Max force', '${mvcValue!.toStringAsFixed(2)} kg'),
       ];
 
   Map<String, dynamic> get json => {

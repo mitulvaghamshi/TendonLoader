@@ -10,16 +10,18 @@ class CountdownWidget extends StatefulWidget {
   final Duration duration;
 
   @override
-  CountdownWidgetState createState() => CountdownWidgetState();
+  State<CountdownWidget> createState() => _CountdownWidgetState();
 }
 
-class CountdownWidgetState extends State<CountdownWidget>
+class _CountdownWidgetState extends State<CountdownWidget>
     with TickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-      vsync: this, duration: widget.duration + const Duration(seconds: 1));
+  late final _controller = AnimationController(
+    vsync: this,
+    duration: widget.duration + const Duration(seconds: 1),
+  );
 
   void _onFinish(_) {
-    if (mounted) GoRouter.of(context).pop(true);
+    if (mounted) context.pop(true);
   }
 
   @override
@@ -48,22 +50,11 @@ class CountdownWidgetState extends State<CountdownWidget>
       AnimatedBuilder(
         animation: _controller,
         builder: (_, child) => Text(
-          _getRemainingTime(),
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: MediaQuery.of(context).size.shortestSide / 3,
-          ),
+          _remainingTime,
+          style: const TextStyle(fontSize: 100, fontWeight: FontWeight.bold),
         ),
       ),
     ]);
-  }
-}
-
-extension on CountdownWidgetState {
-  String _getRemainingTime() {
-    final int millis =
-        (_controller.duration! * _controller.value).inMilliseconds;
-    return millis < 500 ? 'GO!' : (millis / 1000).truncate().toString();
   }
 }
 
@@ -94,5 +85,12 @@ class _CirclePainter extends CustomPainter {
         false,
         paint..color = const Color(0xffffffff),
       );
+  }
+}
+
+extension on _CountdownWidgetState {
+  String get _remainingTime {
+    final millis = (_controller.duration! * _controller.value).inMilliseconds;
+    return millis < 1000 ? 'GO!' : (millis / 1000).truncate().toString();
   }
 }

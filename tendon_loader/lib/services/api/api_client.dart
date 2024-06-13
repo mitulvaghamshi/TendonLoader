@@ -7,14 +7,14 @@ import 'package:tendon_loader/services/api/network_status.dart';
 import 'package:tendon_loader/services/api/snapshot.dart';
 
 abstract class ApiClient {
-  static const _host = String.fromEnvironment('API_HOST');
+  const ApiClient();
+
   static const _headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
   };
-
-  final _networkError =
-      const Snapshot.withError('[ApiClient]: No Internet Connection');
+  static const _host = String.fromEnvironment('API_HOST');
+  static const _networkError = Snapshot.withError('No Internet Connection');
 
   Future<Snapshot> get<T>(final String path) async {
     await Future<void>.delayed(const Duration(seconds: 1));

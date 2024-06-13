@@ -32,7 +32,7 @@ class _NewMVCTestState extends State<NewMVCTest> {
         title: const Text('New MVC Test'),
         actions: [
           RawButton.tile(
-            leading: const Text('OK', style: Styles.titleStyle),
+            leading: const Text('OK', style: Styles.bold18),
             onTap: _onSubmit,
             child: const Icon(Icons.arrow_forward),
           ),

@@ -20,7 +20,7 @@ class RawButton extends StatelessWidget {
     final double? leadingToChildSpace,
     final EdgeInsetsGeometry? padding,
     final MainAxisAlignment? axisAlignment,
-    final MainAxisSize? axisSize,
+    final MainAxisSize? size,
     final Widget? leading,
     final Widget? child,
     final Widget? trailing,
@@ -61,7 +61,7 @@ class _RawListTile extends RawButton {
     this.leadingToChildSpace = 5,
     super.padding,
     this.axisAlignment,
-    this.axisSize,
+    this.size,
     this.leading,
     this.trailing,
     super.child,
@@ -69,7 +69,7 @@ class _RawListTile extends RawButton {
 
   final double? leadingToChildSpace;
   final MainAxisAlignment? axisAlignment;
-  final MainAxisSize? axisSize;
+  final MainAxisSize? size;
   final Widget? leading;
   final Widget? trailing;
 
@@ -81,7 +81,7 @@ class _RawListTile extends RawButton {
       radius: radius,
       padding: padding,
       child: Row(
-        mainAxisSize: axisSize ?? MainAxisSize.max,
+        mainAxisSize: size ?? MainAxisSize.max,
         mainAxisAlignment: axisAlignment ?? MainAxisAlignment.center,
         children: [
           if (leading != null) ...[
@@ -110,7 +110,7 @@ class _RawError extends RawButton {
       color: Colors.red,
       child: Text(
         message ?? 'Opps! Something went wrong',
-        style: Styles.boldWhite,
+        style: Styles.whiteBold,
       ),
     );
     if (!scaffold) return widget;
@@ -134,7 +134,7 @@ class _RawLoading extends RawButton {
       leading: CircularProgressIndicator.adaptive(
         backgroundColor: Colors.white,
       ),
-      child: Text('Please wait...', style: Styles.boldWhite),
+      child: Text('Please wait...', style: Styles.whiteBold),
     );
   }
 }

@@ -1,25 +1,41 @@
 import 'package:flutter/material.dart';
 
+@immutable
 class Styles {
-  static const EdgeInsets tilePadding =
-      EdgeInsets.symmetric(horizontal: 16, vertical: 5);
+  static const EdgeInsets tilePadding = EdgeInsets.symmetric(
+    horizontal: 16,
+    vertical: 5,
+  );
 
-  static const TextStyle numPickerText =
-      TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold);
+  static const bold18 = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  );
 
-  static const TextStyle titleStyle =
-      TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
+  static const whiteBold = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+  );
 
-  static const TextStyle headerLabel =
-      TextStyle(color: Color(0xff000000), fontWeight: FontWeight.bold);
+  static const blackBold = TextStyle(
+    color: Color(0xff000000),
+    fontWeight: FontWeight.bold,
+  );
 
-  static const TextStyle headerText = TextStyle(
-      color: Color(0xff000000), fontWeight: FontWeight.bold, fontSize: 40);
+  static const whiteBold22 = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+    fontSize: 22,
+  );
 
-  static const boldWhite =
-      TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
+  static const blackBold40 = TextStyle(
+    color: Color(0xff000000),
+    fontWeight: FontWeight.bold,
+    fontSize: 40,
+  );
 }
 
+@immutable
 class DataKeys {
   // Collections
   static const String rootCollection = 'TendonLoader';
@@ -53,6 +69,7 @@ class DataKeys {
   static const String keyChartY = 'load';
 }
 
+@immutable
 class SettingsKeys {
   // User temp data and app settings keys
   static const String darkMode = 'darkMode';
@@ -62,6 +79,7 @@ class SettingsKeys {
   static const String lastPrescription = 'lastPrescription';
 }
 
+@immutable
 class Images {
   // Asset image resources
   static const String appLogo = 'assets/app_logo.svg';
@@ -70,6 +88,7 @@ class Images {
   static const String enableBluetooth = 'assets/enable_bluetooth.webp';
 }
 
+@immutable
 class Responses {
   // Progressor response code (first 4 byte = first list element)
   static const int commandResponse = 0;
@@ -79,6 +98,7 @@ class Responses {
   static const int lowPowerWarning = 4;
 }
 
+@immutable
 class Commands {
   // Progressor instruction codes
   // device can return a one time or streamed response
@@ -96,6 +116,7 @@ class Commands {
   static const int getBatteryVoltage = 111; // one time
 }
 
+@immutable
 class DeviceUUID {
   // Service UUID, a main service provides the base connection with receiver
   static const String service = '7e4e1701-1ea6-40c9-9dcc-13d34ffead57';
@@ -108,6 +129,7 @@ class DeviceUUID {
   static const String data = '7e4e1702-1ea6-40c9-9dcc-13d34ffead57';
 }
 
+@immutable
 class Strings {
   // Ask user to power on the Progressor.
   static const String enableDevice =

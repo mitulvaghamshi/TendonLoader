@@ -5,6 +5,14 @@ import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/livedata_handler.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/utils/states/app_scope.dart';
+
+// onPopInvoked: (value) async {
+//   final String key = await handler.exit();
+//   // `TODO`(mitul): Fix this
+//   if (key.isEmpty) Future.value(true);
+//   onExit(key);
+// }
 
 @immutable
 class GraphWidget extends StatelessWidget {
@@ -13,65 +21,89 @@ class GraphWidget extends StatelessWidget {
     required this.title,
     required this.handler,
     required this.builder,
-    required this.onExit,
   });
 
   final String title;
   final GraphHandler handler;
-  final Widget Function() builder;
-  final bool Function(String key) onExit;
+  final WidgetBuilder builder;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: SafeArea(
-        child: PopScope(
-          onPopInvoked: (value) async {
-            final String key = await handler.exit();
-            // TODO(mitul): Fix this
-            if (key.isEmpty) Future.value(true);
-            onExit(key);
-          },
-          child: Column(children: [
-            _Header(handler: handler, builder: builder),
-            const SizedBox(height: 16),
-            _BarGraph(handler: handler),
-            _ButtonBar(handler: handler),
-          ]),
-        ),
-      ),
+      persistentFooterButtons: [GraphControls(handler: handler)],
+      body: Column(children: [
+        GraphHeader(handler: handler, builder: builder),
+        TheBarGraph(handler: handler),
+      ]),
     );
   }
 }
 
 @immutable
-class _Header extends StatelessWidget {
-  const _Header({required this.handler, required this.builder});
+class GraphHeader extends StatelessWidget {
+  const GraphHeader({super.key, required this.handler, required this.builder});
 
   final GraphHandler handler;
-  final Widget Function() builder;
+  final WidgetBuilder builder;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ChartData>(
+    return StreamBuilder(
       initialData: const ChartData(),
       stream: GraphHandler.stream,
       builder: (_, snapshot) {
         handler.graphData.insert(0, snapshot.data!);
         handler.graphCtrl?.updateDataSource(updatedDataIndex: 0);
-        return Ink(
+        return RawButton.tile(
+          padding: EdgeInsets.zero,
           color: handler.feedColor,
-          child: Row(children: [Expanded(child: builder())]),
+          child: builder(context),
         );
+        // return Ink(
+        //   color: handler.feedColor,
+        //   child: Row(children: [Expanded(child: builder(context))]),
+        // );
       },
     );
   }
 }
 
 @immutable
-class _BarGraph extends StatelessWidget {
-  const _BarGraph({required this.handler});
+class GraphControls extends StatelessWidget {
+  const GraphControls({super.key, required this.handler});
+
+  final GraphHandler handler;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        RawButton.tile(
+          onTap: handler.start,
+          leading: const Icon(Icons.play_arrow, color: Color(0xff3ddc85)),
+          child: const Text('Start'),
+        ),
+        if (handler is ExerciseHandler)
+          RawButton.tile(
+            onTap: handler.pause,
+            leading: const Icon(Icons.pause, color: Color(0xFFDCC73D)),
+            child: const Text('Pause'),
+          ),
+        RawButton.tile(
+          onTap: handler.stop,
+          leading: const Icon(Icons.stop, color: Color(0xffff534d)),
+          child: const Text('Stop'),
+        ),
+      ],
+    );
+  }
+}
+
+@immutable
+class TheBarGraph extends StatelessWidget {
+  const TheBarGraph({super.key, required this.handler});
 
   final GraphHandler handler;
 
@@ -79,26 +111,24 @@ class _BarGraph extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: SfCartesianChart(
-        plotAreaBorderWidth: 0,
         primaryXAxis: handler.lineData != null
             ? const NumericAxis(minimum: 0, isVisible: false)
             : const CategoryAxis(minimum: 0, maximum: 0, isVisible: false),
-        primaryYAxis: const NumericAxis(
+        primaryYAxis: NumericAxis(
+          interval: 2,
           labelFormat: '{value} kg',
-          axisLine: AxisLine(width: 0),
-          // maximum: AppScope.of(context).settingsState.settings.graphScale,
-          majorTickLines: MajorTickLines(size: 0),
-          labelStyle: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          maximum: AppScope.of(context).settings.graphScale,
         ),
-        series: <CartesianSeries<ChartData?, int>>[
-          ColumnSeries<ChartData?, int>(
+        series: <CartesianSeries<ChartData, int>>[
+          ColumnSeries<ChartData, int>(
             width: 0.9,
             animationDuration: 0,
             dataSource: handler.graphData,
             color: const Color(0xff000000),
+            xValueMapper: (data, _) => 1,
+            yValueMapper: (data, _) => data.load,
+            onRendererCreated: (ctrl) => handler.graphCtrl = ctrl,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             dataLabelSettings: const DataLabelSettings(
               isVisible: true,
               showZeroValue: false,
@@ -109,10 +139,6 @@ class _BarGraph extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            xValueMapper: (data, _) => 1,
-            yValueMapper: (data, _) => data!.load,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            onRendererCreated: (ctrl) => handler.graphCtrl = ctrl,
           ),
           if (handler is! LiveDataHandler)
             LineSeries<ChartData, int>(
@@ -124,41 +150,6 @@ class _BarGraph extends StatelessWidget {
               xValueMapper: (data, _) => data.time.toInt(),
               onRendererCreated: (ctrl) => handler.lineCtrl = ctrl,
             ),
-        ],
-      ),
-    );
-  }
-}
-
-@immutable
-class _ButtonBar extends StatelessWidget {
-  const _ButtonBar({required this.handler});
-
-  final GraphHandler handler;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          RawButton.tile(
-            leading: const Icon(Icons.play_arrow, color: Color(0xff3ddc85)),
-            onTap: handler.start,
-            child: const Text('Start'),
-          ),
-          if (handler is ExerciseHandler)
-            RawButton.tile(
-              leading: const Icon(Icons.pause, color: Color(0xFFDCC73D)),
-              onTap: handler.pause,
-              child: const Text('Pause'),
-            ),
-          RawButton.tile(
-            leading: const Icon(Icons.stop, color: Color(0xffff534d)),
-            onTap: handler.stop,
-            child: const Text('Stop'),
-          ),
         ],
       ),
     );

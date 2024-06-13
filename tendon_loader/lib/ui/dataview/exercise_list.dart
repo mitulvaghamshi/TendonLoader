@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/router/router.dart';
+import 'package:tendon_loader/services/exercise_service.dart';
 import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
-import 'package:tendon_loader/ui/widgets/search_list_builder.dart';
-import 'package:tendon_loader/utils/states/app_scope.dart';
+import 'package:tendon_loader/ui/widgets/search_list.dart';
 
 @immutable
 class ExerciseList extends StatelessWidget {
@@ -15,34 +14,30 @@ class ExerciseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final service = AppScope.of(context).exerciseService;
     return FutureWrapper(
-      future: service.getAll(userId: userId),
-      builder: (items) => SearchListBuilder(
+      future: ExerciseService.instance.getAllExercisesByUserId(userId),
+      builder: (items) => SearchList(
         title: title,
         searchLabel: 'Search by date...',
-        items: items,
-        searchField: (item) => item.datetime,
-        builder: (item, index) {
-          final extra = {'userId': item.userId, 'exerciseId': item.id};
-          return RawButton.tile(
-            leadingToChildSpace: 16,
-            axisAlignment: MainAxisAlignment.start,
-            leading: CircleAvatar(child: Text(index.toString())),
-            trailing: IconButton(
-              onPressed: () => context.push(
-                const ExerciseDataListRoute().location,
-                extra: extra,
-              ),
-              icon: const Icon(Icons.format_list_numbered_sharp),
-            ),
-            onTap: () => context.push(
-              const ExerciseDetaildRoute().location,
-              extra: extra,
-            ),
-            child: Text(item.datetime),
-          );
-        },
+        items: items.requireData,
+        searchTerm: (item) => item.datetime,
+        builder: (item, index) => RawButton.tile(
+          leadingToChildSpace: 16,
+          axisAlignment: MainAxisAlignment.start,
+          leading: CircleAvatar(child: Text(index.toString())),
+          trailing: IconButton(
+            onPressed: () => ExerciseDataListRoute(
+              userId: item.userId,
+              exerciseId: item.id,
+            ).push(context),
+            icon: const Icon(Icons.format_list_numbered_sharp),
+          ),
+          onTap: () => ExerciseDetaildRoute(
+            userId: item.userId,
+            exerciseId: item.id,
+          ).push(context),
+          child: Text(item.datetime),
+        ),
       ),
     );
   }

@@ -1,51 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/services/api/api_client.dart';
+import 'package:tendon_loader/services/api/snapshot.dart';
 
 @immutable
 class PrescriptionService extends ApiClient {
+  factory PrescriptionService() => const PrescriptionService._();
+
+  const PrescriptionService._();
+
+  static final PrescriptionService _instance = PrescriptionService();
+  static PrescriptionService get instance => _instance;
+
   static final Map<int, Prescription> _cache = {};
 
-  Future<Prescription> getBy({required final int id}) async {
-    if (_cache.containsKey(id)) return _cache[id]!;
-    final result = await get('prescription/$id');
-    if (result.hasError) {
-      debugPrint(result.error.toString());
-      throw 'Requested resource not found.';
+  Future<Snapshot<Prescription>> getPrescriptionById(final int? id) async {
+    if (id == null) return const Snapshot.withError('Prescription Id is null');
+    if (_cache.containsKey(id)) return Snapshot.withData(_cache[id]!);
+    final snapshot = await get('prescription/$id');
+    if (snapshot.hasData) {
+      final prescription = Prescription.fromJson(snapshot.requireData);
+      _cache.putIfAbsent(id, () => prescription);
+      return Snapshot.withData(prescription);
     }
-    return _cache.putIfAbsent(
-        id, () => Prescription.fromJson(result.requireData));
+    return Snapshot.withError(snapshot.error.toString());
   }
 
-  Future<void> create(final Prescription prescription) async {
-    final result = await post('prescription', prescription.json);
-    if (result.hasError) {
-      debugPrint(result.error.toString());
-      throw 'Unable to create Prescription or already exists.';
-    }
-    debugPrint(result.requireData);
+  Future<Snapshot> createPrescription(final Prescription prescription) async {
+    final snapshot = await post('prescription', prescription.json);
+    if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
+    return Snapshot.withError(snapshot.error.toString());
   }
 
-  Future<void> update(final Prescription prescription) async {
+  Future<Snapshot> updatePrescription(final Prescription prescription) async {
     if (_cache.containsKey(prescription.id)) {
       _cache.update(prescription.id!, (_) => prescription);
     }
-    final result =
+    final snapshot =
         await put('prescription/${prescription.id}', prescription.json);
-    if (result.hasError) {
-      debugPrint(result.error.toString());
-      throw 'Unable to update Prescription.';
-    }
-    debugPrint(result.requireData);
+    if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
+    return Snapshot.withError(snapshot.error.toString());
   }
 
-  Future<void> deleteBy({required final int id}) async {
+  Future<Snapshot> deletePrescriptionById(final int id) async {
     if (_cache.containsKey(id)) _cache.remove(id);
-    final result = await delete('prescription/$id');
-    if (result.hasError) {
-      debugPrint(result.error.toString());
-      throw 'Unable to delete Prescription.';
-    }
-    debugPrint(result.requireData);
+    final snapshot = await delete('prescription/$id');
+    if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
+    return Snapshot.withError(snapshot.error.toString());
   }
 }

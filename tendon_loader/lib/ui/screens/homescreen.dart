@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/router/router.dart';
-import 'package:tendon_loader/ui/screens/exercise_mode.dart';
-import 'package:tendon_loader/ui/screens/live_data.dart';
-import 'package:tendon_loader/ui/screens/mvc_testing.dart';
+import 'package:tendon_loader/ui/screens/settings_screen.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/utils/constants.dart';
@@ -18,37 +16,37 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Hero(tag: 'hero-app-logo', child: AppLogo.square()),
+      const AppLogo(radius: 150, padding: EdgeInsets.all(15)),
       RawButton.tile(
         color: Colors.orange,
-        onTap: () => _navigateTo(context, LiveData.name),
-        child: const Text(LiveData.name, style: Styles.boldWhite),
+        onTap: () => _navigateTo(context, LiveDataRoute.name),
+        child: const Text(LiveDataRoute.name, style: Styles.whiteBold),
       ),
       const SizedBox(height: 8),
       RawButton.tile(
         color: Colors.orange,
-        onTap: () => _navigateTo(context, MVCTesting.name),
-        child: const Text(MVCTesting.name, style: Styles.boldWhite),
+        onTap: () => _navigateTo(context, MVCTestingRoute.name),
+        child: const Text(MVCTestingRoute.name, style: Styles.whiteBold),
       ),
       const SizedBox(height: 8),
       RawButton.tile(
         color: Colors.orange,
-        onTap: () => _navigateTo(context, ExerciseMode.name),
-        child: const Text(ExerciseMode.name, style: Styles.boldWhite),
+        onTap: () => _navigateTo(context, ExerciseModeRoute.name),
+        child: const Text(ExerciseModeRoute.name, style: Styles.whiteBold),
       ),
       const SizedBox(height: 8),
       RawButton.tile(
         color: Colors.indigo,
-        child: const Text('Explore Session', style: Styles.boldWhite),
+        child: const Text('Explore Session', style: Styles.whiteBold),
         onTap: () => const UserListRoute().go(context),
       ),
       const SizedBox(height: 8),
       Hero(
-        tag: 'hero-settings-button',
+        tag: SettingsScreen.tag,
         child: RawButton.tile(
           color: Colors.green,
           onTap: () => const SettingScreenRoute().push(context),
-          child: const Text('App Settings', style: Styles.boldWhite),
+          child: const Text('App Settings', style: Styles.whiteBold),
         ),
       ),
     ]);
@@ -61,9 +59,9 @@ extension on HomeScreen {
       const SettingScreenRoute().push(context);
     }
     (switch (route) {
-      LiveData.name => const LiveDataRoute().push,
-      MVCTesting.name => const NewMVCTestRoute().push,
-      ExerciseMode.name => const NewExerciseRoute().push,
+      LiveDataRoute.name => const LiveDataRoute().push,
+      MVCTestingRoute.name => const NewMVCTestRoute().push,
+      ExerciseModeRoute.name => const NewExerciseRoute().push,
       _ => const InvalidRoute(message: 'Invalid entry').push,
     })(context);
   }

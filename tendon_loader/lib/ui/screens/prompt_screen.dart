@@ -53,7 +53,7 @@ class _PromptScreenState extends State<PromptScreen> {
                 children: [
                   const Text(
                     '1. Pain score',
-                    style: Styles.numPickerText,
+                    style: Styles.whiteBold22,
                   ),
                   const Divider(thickness: 2),
                   const Text(
@@ -94,7 +94,7 @@ class _PromptScreenState extends State<PromptScreen> {
                 children: [
                   const Text(
                     '2. Pain tolerance',
-                    style: Styles.numPickerText,
+                    style: Styles.whiteBold22,
                   ),
                   const Divider(thickness: 2),
                   const Text(
@@ -142,7 +142,7 @@ class _PromptScreenState extends State<PromptScreen> {
                 _CardWidget(children: [
                   const Text(
                     '3. Submit data?',
-                    style: Styles.numPickerText,
+                    style: Styles.whiteBold22,
                   ),
                   const Divider(thickness: 2),
                   const Text(
@@ -300,7 +300,7 @@ class _PainSelectorState extends State<PainSelector> {
         thumbShape: _CustomShape(),
         trackShape: RoundedRectSliderTrackShape(),
         showValueIndicator: ShowValueIndicator.never,
-        valueIndicatorTextStyle: Styles.titleStyle,
+        valueIndicatorTextStyle: Styles.bold18,
       ),
       child: Slider(
         max: 10,

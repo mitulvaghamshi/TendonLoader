@@ -7,7 +7,6 @@ import 'package:tendon_loader/services/prescription_service.dart';
 import 'package:tendon_loader/ui/dataview/exercise_data_graph.dart';
 import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
-import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
 class ExerciseDetail extends StatelessWidget {
@@ -22,10 +21,8 @@ class ExerciseDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final exerciseService = AppScope.of(context).exerciseService;
-    final prescriptionService = AppScope.of(context).prescriptionService;
     return FutureWrapper(
-      future: _future(exerciseService, prescriptionService),
+      future: _future,
       builder: (value) => CustomScrollView(slivers: [
         const SliverAppBar.large(title: Text('Exercise Details')),
         SliverToBoxAdapter(
@@ -36,7 +33,7 @@ class ExerciseDetail extends StatelessWidget {
         ),
         SliverList.builder(
           itemCount: value.infoTable.length,
-          itemBuilder: (context, index) => _ListItem(
+          itemBuilder: (_, index) => _ListItem(
             row: value.infoTable.elementAt(index),
           ),
         ),
@@ -63,26 +60,36 @@ class _ListItem extends StatelessWidget {
 }
 
 extension on ExerciseDetail {
-  Future<_DataSet> _future(
-    final ExerciseService exerciseService,
-    final PrescriptionService prescriptionService,
-  ) async {
-    final exercise =
-        await exerciseService.getBy(userId: userId, exerciseId: exerciseId);
-    if (exercise == null) throw '[ExerciseDetail]: Exercise is null.';
+  Future<_DataSet> get _future async {
+    final eSnapshot = await ExerciseService.instance
+        .getExerciseBy(userId: userId, exerciseId: exerciseId);
 
-    final prescriptionId = exercise.prescriptionId;
-    final prescription = prescriptionId == null
-        ? null
-        : await prescriptionService.getBy(id: prescriptionId);
+    if (eSnapshot.hasError) {
+      return (
+        targetLoad: 0.0,
+        chartData: const Iterable<ChartData>.empty(),
+        infoTable: const Iterable<(String, String)>.empty(),
+      );
+    }
 
+    final exercise = eSnapshot.requireData;
+
+    final pSnapshot = await PrescriptionService.instance
+        .getPrescriptionById(exercise.prescriptionId);
+
+    if (pSnapshot.hasError) {
+      return (
+        targetLoad: exercise.mvcValue ?? 0.0,
+        chartData: exercise.data,
+        infoTable: exercise.tableRows,
+      );
+    }
+
+    final prescription = pSnapshot.requireData;
     return (
-      targetLoad: prescription?.targetLoad ?? exercise.mvcValue ?? 0,
+      targetLoad: prescription.targetLoad,
       chartData: exercise.data,
-      infoTable: [
-        ...exercise.tableRows,
-        if (prescription != null) ...prescription.tableRows,
-      ],
+      infoTable: [...exercise.tableRows, ...prescription.tableRows],
     );
   }
 }

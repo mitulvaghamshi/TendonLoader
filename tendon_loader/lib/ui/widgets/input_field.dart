@@ -44,7 +44,7 @@ class InputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget widget = TextFormField(
-      style: Styles.titleStyle,
+      style: Styles.bold18,
       validator: validator,
       controller: controller,
       keyboardType: keyboardType,

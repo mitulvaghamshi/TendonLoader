@@ -108,14 +108,14 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                 ? RawButton(
                     onTap: () => setState(() => _reset()),
                     color: Colors.indigo,
-                    child: const Text('Reset', style: Styles.boldWhite),
+                    child: const Text('Reset', style: Styles.whiteBold),
                   )
                 : null,
             child: Expanded(
               child: RawButton(
                 onTap: _onSubmit,
                 color: Colors.green,
-                child: const Text('Save and exit', style: Styles.boldWhite),
+                child: const Text('Save and exit', style: Styles.whiteBold),
               ),
             ),
           ),
@@ -226,13 +226,13 @@ class _TimePickerTileState extends State<_TimePickerTile> {
       tilePadding: Styles.tilePadding,
       childrenPadding: Styles.tilePadding,
       subtitle: Text(widget.label),
-      title: Text(_timeString, style: Styles.titleStyle),
+      title: Text(_timeString, style: Styles.bold18),
       children: [
         const RawButton.tile(
           color: Colors.green,
           axisAlignment: MainAxisAlignment.spaceEvenly,
-          leading: Text('Minutes', style: Styles.boldWhite),
-          child: Text('Seconds', style: Styles.boldWhite),
+          leading: Text('Minutes', style: Styles.whiteBold),
+          child: Text('Seconds', style: Styles.whiteBold),
         ),
         const SizedBox(height: 8),
         RawButton.tile(
@@ -274,7 +274,7 @@ class _NumberPicker extends StatelessWidget {
         controller: FixedExtentScrollController(initialItem: value),
         physics: const FixedExtentScrollPhysics(),
         children: List.generate(61, (index) {
-          return Text('$index'.padLeft(1), style: Styles.numPickerText);
+          return Text('$index'.padLeft(1), style: Styles.whiteBold22);
         }),
       ),
     );

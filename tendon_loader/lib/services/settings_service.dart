@@ -5,35 +5,39 @@ import 'package:tendon_loader/services/api/snapshot.dart';
 
 @immutable
 class SettingsService extends ApiClient {
-  Future<Snapshot<Settings>> getBy({required final int userId}) async {
+  factory SettingsService() => const SettingsService._();
+
+  const SettingsService._();
+
+  static final SettingsService _instance = SettingsService();
+  static SettingsService get instance => _instance;
+
+  Future<Snapshot<Settings>> getSettingsByUserId({
+    required final int userId,
+  }) async {
     final snapshot = await get('settings/$userId');
     if (snapshot.hasData) {
-      return Snapshot.withData(Settings.fromJson(snapshot.requireData));
+      final settings = Settings.fromJson(snapshot.requireData);
+      return Snapshot.withData(settings);
     }
     return Snapshot.withError(snapshot.error.toString());
   }
 
-  Future<Snapshot> create(final Settings settings) async {
+  Future<Snapshot> createSettings(final Settings settings) async {
     final snapshot = await post<String>('settings', settings.json);
-    if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
-    }
+    if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
     return Snapshot.withError(snapshot.error.toString());
   }
 
-  Future<Snapshot> update(final Settings settings) async {
+  Future<Snapshot> updateSettings(final Settings settings) async {
     final snapshot = await put('settings/${settings.id}', settings.json);
-    if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
-    }
+    if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
     return Snapshot.withError(snapshot.error.toString());
   }
 
-  Future<Snapshot> deleteBy({required final int id}) async {
+  Future<Snapshot> deleteSettingsById({required final int id}) async {
     final snapshot = await delete('settings/$id');
-    if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
-    }
+    if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
     return Snapshot.withError(snapshot.error.toString());
   }
 }

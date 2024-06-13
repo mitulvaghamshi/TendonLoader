@@ -61,7 +61,7 @@ class _SignInScreenState extends State<SignInScreen> {
     if (!_isLoading && state.user.id != null) return widget.builder(context);
     return Form(
       child: Column(children: [
-        const Hero(tag: 'hero-app-logo', child: AppLogo.square()),
+        const AppLogo(radius: 150, padding: EdgeInsets.all(15)),
         InputField.form(
           label: 'Enter username',
           controller: _usernameCtrl,
@@ -80,7 +80,7 @@ class _SignInScreenState extends State<SignInScreen> {
           firstChild: RawButton.tile(
             onTap: _authenticate,
             color: Colors.orange,
-            child: const Text('Login', style: Styles.boldWhite),
+            child: const Text('Login', style: Styles.whiteBold),
           ),
           secondChild: const RawButton.loading(),
         ),
