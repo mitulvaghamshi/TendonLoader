@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/models/prescription.dart';
-import 'package:tendon_loader/services/api/api_client.dart';
-import 'package:tendon_loader/services/api/snapshot.dart';
+import 'package:tendon_loader/api/api_client.dart';
+import 'package:tendon_loader/api/snapshot.dart';
 
 @immutable
 class PrescriptionService extends ApiClient {

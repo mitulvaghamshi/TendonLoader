@@ -1,32 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/models/user.dart';
 import 'package:tendon_loader/router/router.dart';
-import 'package:tendon_loader/services/user_service.dart';
-import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/ui/widgets/search_list.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
 class UserList extends StatelessWidget {
-  const UserList({super.key});
+  const UserList({super.key, required this.items});
+
+  final Iterable<User> items;
 
   @override
   Widget build(BuildContext context) {
-    return FutureWrapper(
-      future: UserService.instance.getAllUsers(),
-      builder: (snapshot) {
-        if (snapshot.hasData) {
-          return SearchList(
-            title: 'Enrolled Users',
-            searchLabel: 'Search by name...',
-            items: snapshot.requireData,
-            searchTerm: (item) => item.username,
-            builder: (user, index) => _UserItem(user: user, index: index),
-          );
-        }
-        return RawButton.error(message: snapshot.error.toString());
-      },
+    return SearchList(
+      items: items,
+      title: 'Enrolled Users',
+      searchLabel: 'Search by name...',
+      searchTerm: (item) => item.username,
+      builder: (user, index) => _UserItem(user: user, index: index),
     );
   }
 }
@@ -45,7 +37,7 @@ class _UserItem extends StatelessWidget {
         userId: user.id!,
         title: user.name,
       ).push(context),
-      leadingToChildSpace: 16,
+      spacing: 16,
       axisAlignment: MainAxisAlignment.start,
       leading: CircleAvatar(radius: 24, child: Text(index.toString())),
       trailing: IconButton(

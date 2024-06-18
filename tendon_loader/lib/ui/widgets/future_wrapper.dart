@@ -10,21 +10,13 @@ class FutureWrapper<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<T>(
-        future: future,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const RawButton.loading();
-          } else if (snapshot.hasError) {
-            return RawButton.error(
-              scaffold: false,
-              message: snapshot.error.toString(),
-            );
-          }
-          return builder(snapshot.requireData);
-        },
-      ),
+    return FutureBuilder<T>(
+      future: future,
+      builder: (_, snapshot) => snapshot.hasData
+          ? builder(snapshot.requireData)
+          : snapshot.hasError
+              ? RawButton.error(message: snapshot.error.toString())
+              : const RawButton.loading(),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/api/api_client.dart';
+import 'package:tendon_loader/api/snapshot.dart';
 import 'package:tendon_loader/models/settings.dart';
-import 'package:tendon_loader/services/api/api_client.dart';
-import 'package:tendon_loader/services/api/snapshot.dart';
 
 @immutable
 class SettingsService extends ApiClient {
@@ -12,10 +12,9 @@ class SettingsService extends ApiClient {
   static final SettingsService _instance = SettingsService();
   static SettingsService get instance => _instance;
 
-  Future<Snapshot<Settings>> getSettingsByUserId({
-    required final int userId,
-  }) async {
-    final snapshot = await get('settings/$userId');
+  Future<Snapshot<Settings>> getSettingsByUserId(final int? id) async {
+    if (id == null) return const Snapshot.withError('User Id is null');
+    final snapshot = await get('settings/$id');
     if (snapshot.hasData) {
       final settings = Settings.fromJson(snapshot.requireData);
       return Snapshot.withData(settings);

@@ -15,28 +15,20 @@ RouteBase get $tendonLoaderRoute => GoRouteData.$route(
       factory: $TendonLoaderRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
-          path: 'invalid',
-          factory: $InvalidRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
           path: 'settings',
           factory: $SettingScreenRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'prescriptions',
+          factory: $PrescriptionRouteExtension._fromState,
         ),
         GoRouteData.$route(
           path: 'livedata',
           factory: $LiveDataRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: 'newmvctest',
-          factory: $NewMVCTestRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
           path: 'mvctesting',
           factory: $MVCTestingRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'newexercise',
-          factory: $NewExerciseRouteExtension._fromState,
         ),
         GoRouteData.$route(
           path: 'exercisemode',
@@ -83,16 +75,12 @@ extension $TendonLoaderRouteExtension on TendonLoaderRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $InvalidRouteExtension on InvalidRoute {
-  static InvalidRoute _fromState(GoRouterState state) => InvalidRoute(
-        message: state.uri.queryParameters['message']!,
-      );
+extension $SettingScreenRouteExtension on SettingScreenRoute {
+  static SettingScreenRoute _fromState(GoRouterState state) =>
+      const SettingScreenRoute();
 
   String get location => GoRouteData.$location(
-        '/invalid',
-        queryParams: {
-          'message': message,
-        },
+        '/settings',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -105,12 +93,12 @@ extension $InvalidRouteExtension on InvalidRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $SettingScreenRouteExtension on SettingScreenRoute {
-  static SettingScreenRoute _fromState(GoRouterState state) =>
-      const SettingScreenRoute();
+extension $PrescriptionRouteExtension on PrescriptionRoute {
+  static PrescriptionRoute _fromState(GoRouterState state) =>
+      const PrescriptionRoute();
 
   String get location => GoRouteData.$location(
-        '/settings',
+        '/prescriptions',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -140,48 +128,12 @@ extension $LiveDataRouteExtension on LiveDataRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $NewMVCTestRouteExtension on NewMVCTestRoute {
-  static NewMVCTestRoute _fromState(GoRouterState state) =>
-      const NewMVCTestRoute();
-
-  String get location => GoRouteData.$location(
-        '/newmvctest',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
 extension $MVCTestingRouteExtension on MVCTestingRoute {
   static MVCTestingRoute _fromState(GoRouterState state) =>
       const MVCTestingRoute();
 
   String get location => GoRouteData.$location(
         '/mvctesting',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $NewExerciseRouteExtension on NewExerciseRoute {
-  static NewExerciseRoute _fromState(GoRouterState state) =>
-      const NewExerciseRoute();
-
-  String get location => GoRouteData.$location(
-        '/newexercise',
       );
 
   void go(BuildContext context) => context.go(location);

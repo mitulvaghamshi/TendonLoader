@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/models/settings.dart';
 import 'package:tendon_loader/router/router.dart';
-import 'package:tendon_loader/utils/states/app_scope.dart';
-import 'package:tendon_loader/utils/states/app_state.dart';
+import 'package:tendon_loader/states/app_scope.dart';
+import 'package:tendon_loader/states/app_state.dart';
 
 void main() => runApp(App(state: AppState()));
 

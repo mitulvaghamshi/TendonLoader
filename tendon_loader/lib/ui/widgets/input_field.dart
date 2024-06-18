@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tendon_loader/utils/constants.dart';
+import 'package:tendon_loader/utils/constants.dart' show Styles;
 
 @immutable
 class InputField extends StatelessWidget {

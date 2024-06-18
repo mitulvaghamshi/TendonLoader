@@ -11,9 +11,7 @@ class Progressor {
 
   Progressor._();
 
-  call({required final BluetoothDevice device}) {
-    return init(device: device);
-  }
+  call({required final BluetoothDevice device}) => init(device: device);
 
   static Progressor? _instance;
   static Progressor get instance => Progressor();

@@ -3,17 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/models/settings.dart';
+import 'package:tendon_loader/router/router.dart';
+import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/bluetooth/connected_list.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
-
-  static const tag = 'hero-tag-settings';
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -35,51 +34,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
     const length = 0;
     return AnimatedBuilder(
       animation: state,
-      child: Hero(
-        tag: SettingsScreen.tag,
-        child: RawButton.tile(
-          onTap: () {},
-          color: Colors.green,
-          leading: const Icon(Icons.person, color: Colors.white),
-          trailing: const Icon(Icons.edit, color: Colors.white),
-          child: Text(
-            state.user.username,
-            overflow: TextOverflow.ellipsis,
-            style: Styles.whiteBold,
-            maxLines: 1,
-          ),
+      child: RawButton.tile(
+        onTap: () {},
+        color: Colors.green,
+        leading: const Icon(Icons.person, color: Colors.white),
+        trailing: const Icon(Icons.edit, color: Colors.white),
+        child: Text(
+          state.user.username,
+          overflow: TextOverflow.ellipsis,
+          style: Styles.whiteBold,
+          maxLines: 1,
         ),
       ),
       builder: (context, child) => Column(children: [
         child!,
         const SizedBox(height: 8),
-        SwitchListTile(
-          contentPadding: Styles.tilePadding,
-          title: const Text('Use dark mode'),
-          subtitle: const Text('Use dark interface.'),
-          value: state.settings.darkMode,
-          onChanged: (value) => state.get<Settings>((settings) {
-            return settings.copyWith(darkMode: value);
-          }),
-        ),
-        SwitchListTile(
-          contentPadding: Styles.tilePadding,
-          title: const Text('Automatic data upload'),
-          subtitle: const Text('Exercises submitted automatically.'),
-          value: state.settings.autoUpload,
-          onChanged: (value) => state.get<Settings>((settings) {
-            return settings.copyWith(autoUpload: value);
-          }),
-        ),
-        SwitchListTile(
-          contentPadding: Styles.tilePadding,
-          title: const Text('Use custom prescriptions'),
-          subtitle: const Text('Create your own prescriptions.'),
-          value: state.settings.editablePrescription,
-          onChanged: (value) => state.get<Settings>((settings) {
-            return settings.copyWith(editablePrescription: value);
-          }),
-        ),
         ListTile(
           onTap: _uploadData,
           enabled: length > 0,
@@ -105,32 +74,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   RegExp(r'^\d{1,2}(\.\d{0,2})?'),
                 ),
               ],
-              onChanged: (value) => state.get<Settings>((settings) {
+              onChanged: (value) => state.update<Settings>((settings) {
                 final gscale = double.tryParse(value) ?? 30.0;
                 return settings.copyWith(graphScale: gscale);
               }),
             ),
           ),
         ),
+        SwitchListTile(
+          contentPadding: Styles.tilePadding,
+          title: const Text('Use dark mode'),
+          subtitle: const Text('Use dark interface.'),
+          value: state.settings.darkMode,
+          onChanged: (value) => state.update<Settings>((settings) {
+            return settings.copyWith(darkMode: value);
+          }),
+        ),
+        SwitchListTile(
+          contentPadding: Styles.tilePadding,
+          title: const Text('Automatic data upload'),
+          subtitle: const Text('Exercises submitted automatically.'),
+          value: state.settings.autoUpload,
+          onChanged: (value) => state.update<Settings>((settings) {
+            return settings.copyWith(autoUpload: value);
+          }),
+        ),
         const SizedBox(height: 8),
-        if (Progressor.instance.progressor == null)
-          RawButton.tile(
-            onTap: _connectProgressor,
-            color: Colors.indigo,
-            child: const Text(
-              'Connect Progressor',
-              style: Styles.whiteBold,
-            ),
-          )
-        else
-          RawButton.tile(
-            onTap: _manageProgressor,
-            color: Colors.indigo,
-            child: const Text(
-              'Manage Progressor',
-              style: Styles.whiteBold,
-            ),
+        RawButton.tile(
+          onTap: () => const PrescriptionRoute().push(context),
+          color: Colors.green,
+          child: const Text('Prescriptions', style: Styles.whiteBold),
+        ),
+        const SizedBox(height: 8),
+        RawButton.tile(
+          onTap: Progressor.instance.progressor == null
+              ? _connectProgressor
+              : _manageProgressor,
+          color: Colors.indigo,
+          child: Text(
+            Progressor.instance.progressor == null
+                ? 'Connect Progressor'
+                : 'Manage Progressor',
+            style: Styles.whiteBold,
           ),
+        ),
         const SizedBox(height: 8),
         RawButton.tile(
           onTap: _aboutDialog,

@@ -1,42 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/models/chartdata.dart';
-import 'package:tendon_loader/services/exercise_service.dart';
-import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 
 @immutable
 class ExerciseDataList extends StatelessWidget {
-  const ExerciseDataList({
-    super.key,
-    required this.userId,
-    required this.exerciseId,
-  });
+  const ExerciseDataList({super.key, required this.items});
 
-  final int userId;
-  final int exerciseId;
+  final Iterable<ChartData> items;
 
   @override
   Widget build(BuildContext context) {
-    return FutureWrapper(
-      future: _future,
-      builder: (items) => CustomScrollView(slivers: [
-        const SliverAppBar.large(title: Text('Exercise Data')),
-        const SliverToBoxAdapter(
-          child: _ListItem(index: 'No', time: 'Load', load: 'Time'),
-        ),
-        SliverList.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            final data = items.elementAt(index);
-            return _ListItem(
-              index: '${index + 1}',
-              time: data.time.toStringAsFixed(2),
-              load: data.load.toStringAsFixed(2),
-            );
-          },
-        ),
-      ]),
-    );
+    return CustomScrollView(slivers: [
+      const SliverAppBar.medium(title: Text('Exercise Data')),
+      const SliverToBoxAdapter(
+        child: _ListItem(index: 'No', time: 'Load', load: 'Time'),
+      ),
+      SliverList.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final data = items.elementAt(index);
+          return _ListItem(
+            index: '${index + 1}',
+            time: data.time.toStringAsFixed(2),
+            load: data.load.toStringAsFixed(2),
+          );
+        },
+      ),
+    ]);
   }
 }
 
@@ -61,14 +51,5 @@ class _ListItem extends StatelessWidget {
         Expanded(child: Text(load, textAlign: TextAlign.center)),
       ]),
     );
-  }
-}
-
-extension on ExerciseDataList {
-  Future<Iterable<ChartData>> get _future async {
-    final eSnapshot = await ExerciseService.instance
-        .getExerciseBy(userId: userId, exerciseId: exerciseId);
-    if (eSnapshot.hasData) return eSnapshot.requireData.data;
-    return const Iterable.empty();
   }
 }

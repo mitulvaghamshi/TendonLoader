@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/models/exercise.dart';
-import 'package:tendon_loader/services/api/api_client.dart';
-import 'package:tendon_loader/services/api/snapshot.dart';
+import 'package:tendon_loader/api/api_client.dart';
+import 'package:tendon_loader/api/snapshot.dart';
 
 @immutable
 class ExerciseService extends ApiClient {

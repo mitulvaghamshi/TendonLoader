@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/models/user.dart';
-import 'package:tendon_loader/services/api/api_client.dart';
-import 'package:tendon_loader/services/api/snapshot.dart';
+import 'package:tendon_loader/api/api_client.dart';
+import 'package:tendon_loader/api/snapshot.dart';
 
 @immutable
 class UserService extends ApiClient {

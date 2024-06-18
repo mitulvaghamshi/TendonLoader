@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/models/prescription.dart';
+import 'package:tendon_loader/models/settings.dart';
+import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/input_field.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/widgets/time_picker_tile.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
 class PrescriptionScreen extends StatefulWidget {
@@ -17,9 +19,8 @@ class PrescriptionScreen extends StatefulWidget {
 }
 
 class _PrescriptionScreenState extends State<PrescriptionScreen> {
-  late final pre = widget.prescription;
   late final state = AppScope.of(context);
-  late final editable = state.settings.editablePrescription;
+  late final pre = widget.prescription;
 
   late final _loadCtrl = TextEditingController()
     ..text = pre.targetLoad.toString();
@@ -41,12 +42,37 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Prescription')),
-      body: SingleChildScrollView(
-        child: Column(children: [
+    return SingleChildScrollView(
+      child: AnimatedBuilder(
+        animation: state,
+        child: RawButton.tile(
+          spacing: 16,
+          leading: RawButton(
+            onTap: () => setState(_reset),
+            color: Colors.indigo,
+            child: const Text('Reset', style: Styles.whiteBold),
+          ),
+          child: Expanded(
+            child: RawButton(
+              onTap: _onSubmit,
+              color: Colors.green,
+              child: const Text('Save and exit', style: Styles.whiteBold),
+            ),
+          ),
+        ),
+        builder: (_, child) => Column(children: [
+          SwitchListTile(
+            contentPadding: Styles.tilePadding,
+            title: const Text('Use custom prescriptions'),
+            subtitle: const Text('Create your own prescriptions.'),
+            value: state.settings.editablePrescription,
+            onChanged: (value) => state.update<Settings>((settings) {
+              return settings.copyWith(editablePrescription: value);
+            }),
+          ),
+          const Divider(),
           IgnorePointer(
-            ignoring: !editable,
+            ignoring: !state.settings.editablePrescription,
             child: Column(children: [
               InputField.form(
                 controller: _loadCtrl,
@@ -75,49 +101,29 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                   ),
                 ),
               ]),
-              _TimePickerTile(
-                key: const ValueKey('key_holdTime'),
+              TimePickerTile(
                 time: _holdTime,
                 label: 'Rep hold time',
-                onChange: (time) => setState(() => _holdTime = time),
+                onPick: (time) => setState(() => _holdTime = time),
               ),
-              _TimePickerTile(
-                key: const ValueKey('key_restTime'),
+              TimePickerTile(
                 time: _restTime,
                 label: 'Rep rest time',
-                onChange: (time) => setState(() => _restTime = time),
+                onPick: (time) => setState(() => _restTime = time),
               ),
-              _TimePickerTile(
-                key: const ValueKey('key_setRestTime'),
+              TimePickerTile(
                 time: _setRestTime,
                 label: 'Set rest time (default: 90 sec)',
-                onChange: (time) => setState(() => _setRestTime = time),
+                onPick: (time) => setState(() => _setRestTime = time),
               ),
-              _TimePickerTile(
-                key: const ValueKey('key_mvcDuration'),
+              TimePickerTile(
                 time: _mvcDuration,
                 label: 'MVC test duration (optional)',
-                onChange: (time) => setState(() => _mvcDuration = time),
+                onPick: (time) => setState(() => _mvcDuration = time),
               ),
+              const Divider(),
+              child!,
             ]),
-          ),
-          const Divider(height: 0),
-          RawButton.tile(
-            leadingToChildSpace: 16,
-            leading: editable
-                ? RawButton(
-                    onTap: () => setState(() => _reset()),
-                    color: Colors.indigo,
-                    child: const Text('Reset', style: Styles.whiteBold),
-                  )
-                : null,
-            child: Expanded(
-              child: RawButton(
-                onTap: _onSubmit,
-                color: Colors.green,
-                child: const Text('Save and exit', style: Styles.whiteBold),
-              ),
-            ),
           ),
         ]),
       ),
@@ -135,41 +141,25 @@ extension on _PrescriptionScreenState {
   }
 
   void _onSubmit() {
-    debugPrint('''
-      _holdTime     = $_holdTime
-      _restTime     = $_restTime
-      _setRestTime  = $_setRestTime
-      _mvcDuration  = $_mvcDuration
-      _loadCtrl     = ${_loadCtrl.text}
-    ''');
-
     final targetLoad = double.tryParse(_loadCtrl.text) ?? 0;
     final sets = int.tryParse(_setsCtrl.text) ?? 0;
     final reps = int.tryParse(_repsCtrl.text) ?? 0;
 
     late final String error;
     if (targetLoad <= 0) {
-      error = 'Please enter Target load.';
+      error = 'Please enter Target Load';
     } else if (sets <= 0) {
-      error = 'Please enter number of Sets.';
+      error = 'Please enter number of Sets';
     } else if (reps <= 0) {
-      error = 'Please enter number of Reps.';
+      error = 'Please enter number of Reps';
     } else if (_holdTime <= 0) {
-      error = 'Please select Rep hold time.';
+      error = 'Please select Rep hold time';
     } else if (_restTime <= 0) {
-      error = 'Please select Rep rest time.';
+      error = 'Please select Rep rest time';
     } else if (_setRestTime <= 0) {
-      error = 'Please select Set rest time.';
+      error = 'Please select Set rest time';
     } else {
-      error = '';
-    }
-
-    if (error.isNotEmpty) {
-      final content = RawButton.error(scaffold: false, message: error);
-      final snackBar = SnackBar(padding: EdgeInsets.zero, content: content);
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else {
-      AppScope.of(context).get<Prescription>((item) {
+      AppScope.of(context).update<Prescription>((item) {
         return item.copyWith(
           targetLoad: targetLoad,
           sets: sets,
@@ -180,103 +170,12 @@ extension on _PrescriptionScreenState {
           mvcDuration: _mvcDuration,
         );
       });
-      context.pop();
+      return context.pop();
     }
-  }
-}
-
-@immutable
-class _TimePickerTile extends StatefulWidget {
-  const _TimePickerTile({
-    super.key,
-    required this.time,
-    required this.label,
-    required this.onChange,
-  });
-
-  final int time;
-  final String label;
-  final ValueChanged<int> onChange;
-
-  @override
-  State<_TimePickerTile> createState() => _TimePickerTileState();
-}
-
-class _TimePickerTileState extends State<_TimePickerTile> {
-  late final _duration = Duration(seconds: widget.time);
-  late int _minutes = _duration.inMinutes;
-  late int _seconds = _duration.inSeconds % 60;
-
-  String get _timeString {
-    final duration = Duration(minutes: _minutes, seconds: _seconds);
-    return '${duration.inMinutes} min : ${duration.inSeconds % 60} sec';
-  }
-
-  void _submit(bool expanded) {
-    if (!expanded) {
-      final duration = Duration(minutes: _minutes, seconds: _seconds);
-      widget.onChange(duration.inSeconds);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ExpansionTile(
-      onExpansionChanged: _submit,
-      tilePadding: Styles.tilePadding,
-      childrenPadding: Styles.tilePadding,
-      subtitle: Text(widget.label),
-      title: Text(_timeString, style: Styles.bold18),
-      children: [
-        const RawButton.tile(
-          color: Colors.green,
-          axisAlignment: MainAxisAlignment.spaceEvenly,
-          leading: Text('Minutes', style: Styles.whiteBold),
-          child: Text('Seconds', style: Styles.whiteBold),
-        ),
-        const SizedBox(height: 8),
-        RawButton.tile(
-          color: Colors.indigo,
-          leadingToChildSpace: 8,
-          axisAlignment: MainAxisAlignment.spaceEvenly,
-          leading: _NumberPicker(
-            value: _minutes,
-            onChange: (value) => setState(() => _minutes = value),
-          ),
-          child: _NumberPicker(
-            value: _seconds,
-            onChange: (value) => setState(() => _seconds = value),
-          ),
-        ),
-      ],
+    final snackBar = SnackBar(
+      padding: EdgeInsets.zero,
+      content: RawButton.error(message: error),
     );
-  }
-}
-
-@immutable
-class _NumberPicker extends StatelessWidget {
-  const _NumberPicker({required this.value, required this.onChange});
-
-  final int value;
-  final ValueChanged<int> onChange;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 80,
-      height: 130,
-      child: ListWheelScrollView(
-        squeeze: 0.5,
-        itemExtent: 30,
-        magnification: 2.5,
-        useMagnifier: true,
-        onSelectedItemChanged: onChange,
-        controller: FixedExtentScrollController(initialItem: value),
-        physics: const FixedExtentScrollPhysics(),
-        children: List.generate(61, (index) {
-          return Text('$index'.padLeft(1), style: Styles.whiteBold22);
-        }),
-      ),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

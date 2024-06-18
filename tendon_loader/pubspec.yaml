@@ -20,8 +20,8 @@ dependencies:
   intl: ^0.19.0
   location: ^6.0.2
   rxdart: ^0.26.0 # find alternative
-  syncfusion_flutter_charts: ^25.2.5
-  syncfusion_flutter_xlsio: ^25.2.5
+  syncfusion_flutter_charts: ^26.1.35
+  syncfusion_flutter_xlsio: ^26.1.35
 
 dev_dependencies:
   build_runner: ^2.3.3

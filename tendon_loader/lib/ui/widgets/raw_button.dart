@@ -5,48 +5,49 @@ import 'package:tendon_loader/utils/constants.dart';
 class RawButton extends StatelessWidget {
   const RawButton({
     super.key,
-    this.onTap,
     this.color,
-    this.radius,
-    this.padding,
     this.child,
+    this.onTap,
+    this.radius,
+    this.padding = const EdgeInsets.all(16),
   });
 
   const factory RawButton.tile({
     final Key? key,
-    final VoidCallback? onTap,
+    final Widget? child,
     final Color? color,
     final double? radius,
-    final double? leadingToChildSpace,
-    final EdgeInsetsGeometry? padding,
-    final MainAxisAlignment? axisAlignment,
-    final MainAxisSize? size,
+    final VoidCallback? onTap,
+    final EdgeInsetsGeometry padding,
     final Widget? leading,
-    final Widget? child,
     final Widget? trailing,
+    final double spacing,
+    final MainAxisSize axisSize,
+    final MainAxisAlignment axisAlignment,
   }) = _RawListTile;
 
-  const factory RawButton.error({bool scaffold, String message}) = _RawError;
+  const factory RawButton.loading({final bool scaffold}) = _RawLoading;
 
-  const factory RawButton.loading() = _RawLoading;
+  const factory RawButton.error({final String message}) = _RawError;
 
+  final Widget? child;
   final Color? color;
   final double? radius;
   final VoidCallback? onTap;
-  final EdgeInsetsGeometry? padding;
-  final Widget? child;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
+    final button = RawMaterialButton(
+      onPressed: onTap,
+      padding: padding,
+      fillColor: color,
+      child: child,
+    );
+    if (radius == null) return button;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(radius ?? 4),
-      child: RawMaterialButton(
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        padding: padding ?? const EdgeInsets.all(16),
-        onPressed: onTap,
-        fillColor: color,
-        child: child,
-      ),
+      borderRadius: BorderRadius.circular(radius!),
+      child: button,
     );
   }
 }
@@ -58,39 +59,63 @@ class _RawListTile extends RawButton {
     super.onTap,
     super.color,
     super.radius,
-    this.leadingToChildSpace = 5,
     super.padding,
-    this.axisAlignment,
-    this.size,
+    super.child,
     this.leading,
     this.trailing,
-    super.child,
+    this.spacing = 5,
+    this.axisSize = MainAxisSize.max,
+    this.axisAlignment = MainAxisAlignment.center,
   });
 
-  final double? leadingToChildSpace;
-  final MainAxisAlignment? axisAlignment;
-  final MainAxisSize? size;
   final Widget? leading;
   final Widget? trailing;
+  final double? spacing;
+  final MainAxisSize axisSize;
+  final MainAxisAlignment axisAlignment;
 
   @override
   Widget build(BuildContext context) {
+    final items = [
+      if (leading != null) ...[leading!, SizedBox(width: spacing)],
+      if (child != null) child!,
+      if (trailing != null) ...[const Spacer(), trailing!],
+    ];
     return RawButton(
       onTap: onTap,
       color: color,
       radius: radius,
       padding: padding,
       child: Row(
-        mainAxisSize: size ?? MainAxisSize.max,
-        mainAxisAlignment: axisAlignment ?? MainAxisAlignment.center,
-        children: [
-          if (leading != null) ...[
-            leading!,
-            SizedBox(width: leadingToChildSpace)
-          ],
-          if (child != null) child!,
-          if (trailing != null) ...[const Spacer(), trailing!],
-        ],
+        mainAxisAlignment: axisAlignment,
+        mainAxisSize: axisSize,
+        children: items,
+      ),
+    );
+  }
+}
+
+@immutable
+class _RawLoading extends RawButton {
+  const _RawLoading({this.scaffold = false});
+
+  final bool scaffold;
+
+  @override
+  Widget build(BuildContext context) {
+    const widget = RawButton.tile(
+      spacing: 16,
+      color: Colors.green,
+      leading: CircularProgressIndicator.adaptive(
+        backgroundColor: Colors.white,
+      ),
+      child: Text('Please wait...', style: Styles.whiteBold),
+    );
+    if (!scaffold) return widget;
+    return const Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Center(child: widget),
       ),
     );
   }
@@ -98,43 +123,15 @@ class _RawListTile extends RawButton {
 
 @immutable
 class _RawError extends RawButton {
-  const _RawError({this.scaffold = true, this.message});
+  const _RawError({this.message = 'Something went wrong'});
 
-  final bool scaffold;
-  final String? message;
+  final String message;
 
   @override
   Widget build(BuildContext context) {
-    final widget = RawButton.tile(
-      radius: 0,
+    return RawButton.tile(
       color: Colors.red,
-      child: Text(
-        message ?? 'Opps! Something went wrong',
-        style: Styles.whiteBold,
-      ),
-    );
-    if (!scaffold) return widget;
-    return Scaffold(
-      appBar: AppBar(title: const Text('Tendon Loader')),
-      body: Center(child: widget),
-    );
-  }
-}
-
-@immutable
-class _RawLoading extends RawButton {
-  const _RawLoading();
-
-  @override
-  Widget build(BuildContext context) {
-    return const RawButton.tile(
-      radius: 0,
-      color: Colors.green,
-      leadingToChildSpace: 16,
-      leading: CircularProgressIndicator.adaptive(
-        backgroundColor: Colors.white,
-      ),
-      child: Text('Please wait...', style: Styles.whiteBold),
+      child: Text(message, style: Styles.whiteBold),
     );
   }
 }

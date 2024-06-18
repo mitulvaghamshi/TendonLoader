@@ -3,8 +3,8 @@ import 'dart:convert' show jsonDecode, jsonEncode;
 import 'dart:io' show HttpException;
 
 import 'package:http/http.dart' as http;
-import 'package:tendon_loader/services/api/network_status.dart';
-import 'package:tendon_loader/services/api/snapshot.dart';
+import 'package:tendon_loader/api/network_status.dart';
+import 'package:tendon_loader/api/snapshot.dart';
 
 abstract class ApiClient {
   const ApiClient();

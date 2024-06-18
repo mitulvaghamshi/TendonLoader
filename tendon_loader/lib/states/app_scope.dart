@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/utils/states/app_state.dart';
+import 'package:tendon_loader/states/app_state.dart';
 
 @immutable
 class AppScope extends InheritedWidget {
@@ -10,7 +10,7 @@ class AppScope extends InheritedWidget {
   static AppState of(BuildContext context) {
     final AppScope? scope =
         context.dependOnInheritedWidgetOfExactType<AppScope>();
-    if (scope == null) throw 'No AppState in scope!';
+    if (scope == null) throw 'No app state in scope!';
     return scope.data;
   }
 

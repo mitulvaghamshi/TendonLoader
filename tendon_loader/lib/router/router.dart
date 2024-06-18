@@ -1,22 +1,26 @@
-import 'dart:async';
+import 'dart:async' show Future, FutureOr;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tendon_loader/api/network_status.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/handlers/exercise_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/livedata_handler.dart';
 import 'package:tendon_loader/handlers/mvc_handler.dart';
+import 'package:tendon_loader/models/chartdata.dart';
+import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/models/prescription.dart';
-import 'package:tendon_loader/services/api/network_status.dart';
+import 'package:tendon_loader/services/exercise_service.dart';
 import 'package:tendon_loader/services/prescription_service.dart';
 import 'package:tendon_loader/services/settings_service.dart';
+import 'package:tendon_loader/services/user_service.dart';
+import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/dataview/exercise_data_list.dart';
 import 'package:tendon_loader/ui/dataview/exercise_detail.dart';
 import 'package:tendon_loader/ui/dataview/exercise_list.dart';
 import 'package:tendon_loader/ui/dataview/user_list.dart';
 import 'package:tendon_loader/ui/screens/homescreen.dart';
-import 'package:tendon_loader/ui/screens/new_mvc_test.dart';
 import 'package:tendon_loader/ui/screens/prescription_screen.dart';
 import 'package:tendon_loader/ui/screens/prompt_screen.dart';
 import 'package:tendon_loader/ui/screens/settings_screen.dart';
@@ -27,22 +31,19 @@ import 'package:tendon_loader/ui/widgets/graph_widget.dart';
 import 'package:tendon_loader/ui/widgets/life_cycle_aware.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/utils/states/app_scope.dart';
 
 part 'router.g.dart';
 
 @TypedGoRoute<TendonLoaderRoute>(path: TendonLoaderRoute.path, routes: [
-  TypedGoRoute<InvalidRoute>(path: InvalidRoute.path),
-  //
   TypedGoRoute<SettingScreenRoute>(path: SettingScreenRoute.path),
+  TypedGoRoute<PrescriptionRoute>(path: PrescriptionRoute.path),
   //
   TypedGoRoute<LiveDataRoute>(path: LiveDataRoute.path),
   //
-  TypedGoRoute<NewMVCTestRoute>(path: NewMVCTestRoute.path),
   TypedGoRoute<MVCTestingRoute>(path: MVCTestingRoute.path),
   //
-  TypedGoRoute<NewExerciseRoute>(path: NewExerciseRoute.path),
   TypedGoRoute<ExerciseModeRoute>(path: ExerciseModeRoute.path),
+  //
   TypedGoRoute<PromptScreenRoute>(path: PromptScreenRoute.path),
   //
   TypedGoRoute<UserListRoute>(path: UserListRoute.path),
@@ -76,22 +77,10 @@ class TendonLoaderRoute extends GoRouteData {
 }
 
 @immutable
-class InvalidRoute extends GoRouteData {
-  const InvalidRoute({required this.message});
-
-  final String message;
-
-  static const path = 'invalid';
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      RawButton.error(message: message);
-}
-
-@immutable
 class SettingScreenRoute extends GoRouteData {
   const SettingScreenRoute();
 
+  static const name = 'Settings';
   static const path = 'settings';
 
   @override
@@ -112,6 +101,22 @@ class SettingScreenRoute extends GoRouteData {
         padding: EdgeInsets.all(16),
         child: SettingsScreen(),
       ),
+    );
+  }
+}
+
+@immutable
+class PrescriptionRoute extends GoRouteData {
+  const PrescriptionRoute();
+
+  static const path = 'prescriptions';
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    final prescription = AppScope.of(context).prescription;
+    return Scaffold(
+      appBar: AppBar(title: const Text('Prescriptions')),
+      body: PrescriptionScreen(prescription: prescription),
     );
   }
 }
@@ -139,16 +144,6 @@ class LiveDataRoute extends GoRouteData {
 }
 
 @immutable
-class NewMVCTestRoute extends GoRouteData {
-  const NewMVCTestRoute();
-
-  static const path = 'newmvctest';
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) => const NewMVCTest();
-}
-
-@immutable
 class MVCTestingRoute extends GoRouteData {
   const MVCTestingRoute();
 
@@ -157,7 +152,10 @@ class MVCTestingRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    final handler = MVCHandler(mvcDuration: 0, onCountdown: context._countdown);
+    final handler = MVCHandler(
+      mvcDuration: AppScope.of(context).prescription.mvcDuration,
+      onCountdown: context._countdown,
+    );
     return GraphWidget(
       title: name,
       handler: handler,
@@ -168,23 +166,6 @@ class MVCTestingRoute extends GoRouteData {
           style: Styles.blackBold40.copyWith(color: const Color(0xffff534d)),
         ),
       ]),
-    );
-  }
-}
-
-@immutable
-class NewExerciseRoute extends GoRouteData {
-  const NewExerciseRoute();
-
-  static const path = 'newexercise';
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    final id = AppScope.of(context).settings.prescriptionId;
-    if (id == null) return const RawButton.error();
-    return FutureWrapper(
-      future: PrescriptionService.instance.getPrescriptionById(id),
-      builder: (value) => PrescriptionScreen(prescription: value.requireData),
     );
   }
 }
@@ -203,10 +184,10 @@ class ExerciseModeRoute extends GoRouteData {
       onCountdown: context._countdown,
     );
     return LifeCycleAware(
-      onPause: () {
+      onPause: () async {
         handler.pause();
-        // Stop progressor after 1 minute on inactivity
-        Future<void>.delayed(const Duration(minutes: 1), () {
+        await Future<void>.delayed(const Duration(minutes: 1), () {
+          // Stop progressor after 1 minute on inactivity
           if (isPause) handler.stop();
         });
       },
@@ -263,7 +244,15 @@ class UserListRoute extends GoRouteData {
   static const path = 'userlist';
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const UserList();
+  Widget build(BuildContext context, GoRouterState state) {
+    return FutureWrapper(
+      future: UserService.instance.getAllUsers(),
+      builder: (snapshot) {
+        if (snapshot.hasData) return UserList(items: snapshot.requireData);
+        return RawButton.error(message: snapshot.error.toString());
+      },
+    );
+  }
 }
 
 @immutable
@@ -276,8 +265,15 @@ class ExerciseListRoute extends GoRouteData {
   static const path = 'exerciselist';
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      ExerciseList(userId: userId, title: title);
+  Widget build(BuildContext context, GoRouterState state) {
+    return FutureWrapper(
+      future: ExerciseService.instance.getAllExercisesByUserId(userId),
+      builder: (snapshot) => ExerciseList(
+        title: title,
+        items: snapshot.requireData,
+      ),
+    );
+  }
 }
 
 @immutable
@@ -290,8 +286,45 @@ class ExerciseDetaildRoute extends GoRouteData {
   static const path = 'exercisedetail';
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      ExerciseDetail(userId: userId, exerciseId: exerciseId);
+  Widget build(BuildContext context, GoRouterState state) {
+    return FutureWrapper(
+      future: _future,
+      builder: (data) => ExerciseDetail(payload: data),
+    );
+  }
+
+  Future<ExercisePayload> get _future async {
+    final eSnapshot = await ExerciseService.instance
+        .getExerciseBy(userId: userId, exerciseId: exerciseId);
+
+    if (eSnapshot.hasError) {
+      return (
+        targetLoad: 0.0,
+        chartData: const Iterable<ChartData>.empty(),
+        infoTable: const Iterable<(String, String)>.empty(),
+      );
+    }
+
+    final exercise = eSnapshot.requireData;
+
+    final pSnapshot = await PrescriptionService.instance
+        .getPrescriptionById(exercise.prescriptionId);
+
+    if (pSnapshot.hasError) {
+      return (
+        targetLoad: exercise.mvcValue ?? 0.0,
+        chartData: exercise.data,
+        infoTable: exercise.tableRows,
+      );
+    }
+
+    final prescription = pSnapshot.requireData;
+    return (
+      targetLoad: prescription.targetLoad,
+      chartData: exercise.data,
+      infoTable: [...exercise.tableRows, ...prescription.tableRows],
+    );
+  }
 }
 
 @immutable
@@ -304,8 +337,19 @@ class ExerciseDataListRoute extends GoRouteData {
   static const path = 'exercisedatalist';
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      ExerciseDataList(userId: userId, exerciseId: exerciseId);
+  Widget build(BuildContext context, GoRouterState state) {
+    return FutureWrapper(
+      future: _future,
+      builder: (items) => ExerciseDataList(items: items),
+    );
+  }
+
+  Future<Iterable<ChartData>> get _future async {
+    final eSnapshot = await ExerciseService.instance
+        .getExerciseBy(userId: userId, exerciseId: exerciseId);
+    if (eSnapshot.hasData) return eSnapshot.requireData.data;
+    return const Iterable.empty();
+  }
 }
 
 extension on BuildContext {

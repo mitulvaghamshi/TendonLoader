@@ -17,21 +17,19 @@ class AppLogo extends StatelessWidget {
         .value
         .toRadixString(16)
         .substring(2);
-
-    // final circle =
-    //     '<circle cx="200" cy="200" r="197" fill="none" stroke="#$color" stroke-width="7"/>';
-
+    final circle =
+        '<circle cx="200" cy="200" r="197" fill="none" stroke="#$color" stroke-width="7"/>';
     final logo = '<path fill="#$color" d="${Strings.appLogoSvgData}"/></svg>';
 
-    // $circle
-    Widget widget = SvgPicture.string('${Strings.appLogoSvgNs}$logo');
-
+    Widget widget = SvgPicture.string('${Strings.appLogoSvgNs}$circle$logo');
     if (radius != null) {
-      widget = CircleAvatar(maxRadius: radius, child: widget);
+      widget = CircleAvatar(
+        backgroundColor: Colors.transparent,
+        maxRadius: radius,
+        child: widget,
+      );
     }
-
-    if (padding != null) return Padding(padding: padding!, child: widget);
-
-    return widget;
+    if (padding == null) return widget;
+    return Padding(padding: padding!, child: widget);
   }
 }

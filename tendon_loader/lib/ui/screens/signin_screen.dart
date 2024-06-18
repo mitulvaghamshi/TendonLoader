@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/services/api/network_status.dart';
+import 'package:tendon_loader/api/network_status.dart';
+import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';
 import 'package:tendon_loader/ui/widgets/input_field.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/utils/constants.dart';
-import 'package:tendon_loader/utils/states/app_scope.dart';
 
 @immutable
 class SignInScreen extends StatefulWidget {
@@ -61,7 +61,7 @@ class _SignInScreenState extends State<SignInScreen> {
     if (!_isLoading && state.user.id != null) return widget.builder(context);
     return Form(
       child: Column(children: [
-        const AppLogo(radius: 150, padding: EdgeInsets.all(15)),
+        const AppLogo(radius: 150, padding: EdgeInsets.all(16)),
         InputField.form(
           label: 'Enter username',
           controller: _usernameCtrl,
@@ -79,7 +79,7 @@ class _SignInScreenState extends State<SignInScreen> {
           duration: const Duration(milliseconds: 500),
           firstChild: RawButton.tile(
             onTap: _authenticate,
-            color: Colors.orange,
+            color: Colors.indigo,
             child: const Text('Login', style: Styles.whiteBold),
           ),
           secondChild: const RawButton.loading(),
