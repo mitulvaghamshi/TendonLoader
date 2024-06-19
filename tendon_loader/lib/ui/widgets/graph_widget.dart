@@ -4,8 +4,8 @@ import 'package:tendon_loader/handlers/exercise_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/livedata_handler.dart';
 import 'package:tendon_loader/models/chartdata.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/states/app_scope.dart';
+import 'package:tendon_loader/ui/widgets/raw_button.dart';
 
 // onPopInvoked: (value) async {
 //   final String key = await handler.exit();
@@ -20,12 +20,12 @@ class GraphWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.handler,
-    required this.builder,
+    required this.headerBuilder,
   });
 
   final String title;
   final GraphHandler handler;
-  final WidgetBuilder builder;
+  final WidgetBuilder headerBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class GraphWidget extends StatelessWidget {
       appBar: AppBar(title: Text(title)),
       persistentFooterButtons: [_GraphControls(handler: handler)],
       body: Column(children: [
-        _GraphHeader(handler: handler, builder: builder),
+        _GraphHeader(handler: handler, builder: headerBuilder),
         Expanded(child: _TheBarGraph(handler: handler)),
       ]),
     );
@@ -55,11 +55,7 @@ class _GraphHeader extends StatelessWidget {
       builder: (_, snapshot) {
         handler.graphData.insert(0, snapshot.data!);
         handler.graphCtrl?.updateDataSource(updatedDataIndex: 0);
-        return RawButton.tile(
-          padding: EdgeInsets.zero,
-          color: handler.feedColor,
-          child: builder(context),
-        );
+        return builder(context);
       },
     );
   }

@@ -2,15 +2,14 @@ import 'package:flutter/cupertino.dart';
 
 @immutable
 class Snapshot<T> {
-  const Snapshot._(this.data, this.error)
-      : assert(data == null || error == null, 'Cannot have data with error');
+  const Snapshot._(this.data, this.error);
 
   const Snapshot.nothing() : this._(null, null);
   const Snapshot.withData(T data) : this._(data, null);
-  const Snapshot.withError(Object error) : this._(null, error);
+  const Snapshot.withError(String? error) : this._(null, error);
 
   final T? data;
-  final Object? error;
+  final String? error;
 
   bool get hasData => data != null;
   bool get hasError => error != null;

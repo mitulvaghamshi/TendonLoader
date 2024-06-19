@@ -16,7 +16,7 @@ class FutureWrapper<T> extends StatelessWidget {
           ? builder(snapshot.requireData)
           : snapshot.hasError
               ? RawButton.error(message: snapshot.error.toString())
-              : const RawButton.loading(),
+              : const RawButton.loading(centered: true),
     );
   }
 }

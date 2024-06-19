@@ -8,7 +8,7 @@ class RawButton extends StatelessWidget {
     this.color,
     this.child,
     this.onTap,
-    this.radius,
+    this.radius = 8,
     this.padding = const EdgeInsets.all(16),
   });
 
@@ -16,7 +16,7 @@ class RawButton extends StatelessWidget {
     final Key? key,
     final Widget? child,
     final Color? color,
-    final double? radius,
+    final double radius,
     final VoidCallback? onTap,
     final EdgeInsetsGeometry padding,
     final Widget? leading,
@@ -26,13 +26,16 @@ class RawButton extends StatelessWidget {
     final MainAxisAlignment axisAlignment,
   }) = _RawListTile;
 
-  const factory RawButton.loading({final bool scaffold}) = _RawLoading;
+  const factory RawButton.loading({final bool centered}) = _RawLoading;
 
-  const factory RawButton.error({final String message}) = _RawError;
+  const factory RawButton.error({
+    final Color? color,
+    final String message,
+  }) = _RawError;
 
   final Widget? child;
   final Color? color;
-  final double? radius;
+  final double radius;
   final VoidCallback? onTap;
   final EdgeInsetsGeometry padding;
 
@@ -44,9 +47,9 @@ class RawButton extends StatelessWidget {
       fillColor: color,
       child: child,
     );
-    if (radius == null) return button;
+    if (radius == 0) return button;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(radius!),
+      borderRadius: BorderRadius.circular(radius),
       child: button,
     );
   }
@@ -97,9 +100,9 @@ class _RawListTile extends RawButton {
 
 @immutable
 class _RawLoading extends RawButton {
-  const _RawLoading({this.scaffold = false});
+  const _RawLoading({this.centered = false});
 
-  final bool scaffold;
+  final bool centered;
 
   @override
   Widget build(BuildContext context) {
@@ -111,27 +114,34 @@ class _RawLoading extends RawButton {
       ),
       child: Text('Please wait...', style: Styles.whiteBold),
     );
-    if (!scaffold) return widget;
-    return const Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Center(child: widget),
-      ),
+    if (!centered) return widget;
+    return const Padding(
+      padding: EdgeInsets.all(16),
+      child: Center(child: widget),
     );
   }
 }
 
 @immutable
 class _RawError extends RawButton {
-  const _RawError({this.message = 'Something went wrong'});
+  const _RawError({
+    super.color = Colors.red,
+    this.message = 'Something went wrong',
+  });
 
   final String message;
 
   @override
   Widget build(BuildContext context) {
     return RawButton.tile(
-      color: Colors.red,
-      child: Text(message, style: Styles.whiteBold),
+      color: color,
+      padding: const EdgeInsets.all(8),
+      leading: const Icon(Icons.info, color: Colors.white),
+      trailing: IconButton(
+        onPressed: ScaffoldMessenger.of(context).clearSnackBars,
+        icon: const Icon(Icons.close, color: Colors.white),
+      ),
+      child: Text(message, style: const TextStyle(color: Colors.white)),
     );
   }
 }

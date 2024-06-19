@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
 class ExerciseDataList extends StatelessWidget {
@@ -11,20 +12,18 @@ class ExerciseDataList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(slivers: [
-      const SliverAppBar.medium(title: Text('Exercise Data')),
-      const SliverToBoxAdapter(
-        child: _ListItem(index: 'No', time: 'Load', load: 'Time'),
+      const SliverAppBar(title: Text('Exercise Data')),
+      const SliverPersistentHeader(
+        pinned: true,
+        floating: true,
+        delegate: _HeaderDelegate(),
       ),
       SliverList.builder(
         itemCount: items.length,
-        itemBuilder: (context, index) {
-          final data = items.elementAt(index);
-          return _ListItem(
-            index: '${index + 1}',
-            time: data.time.toStringAsFixed(2),
-            load: data.load.toStringAsFixed(2),
-          );
-        },
+        itemBuilder: (context, index) => _ListItem(
+          index: index,
+          data: items.elementAt(index),
+        ),
       ),
     ]);
   }
@@ -32,24 +31,49 @@ class ExerciseDataList extends StatelessWidget {
 
 @immutable
 class _ListItem extends StatelessWidget {
-  const _ListItem({
-    required this.index,
-    required this.time,
-    required this.load,
-  });
+  const _ListItem({required this.index, required this.data});
 
-  final String index;
-  final String time;
-  final String load;
+  final int index;
+  final ChartData data;
 
   @override
   Widget build(BuildContext context) {
     return RawButton(
-      child: Row(children: [
-        Expanded(child: Text(index, textAlign: TextAlign.center)),
-        Expanded(child: Text(time, textAlign: TextAlign.center)),
-        Expanded(child: Text(load, textAlign: TextAlign.center)),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Text('${index + 1}'),
+        Text(data.time.toStringAsFixed(2)),
+        Text(data.load.toStringAsFixed(2)),
       ]),
     );
   }
+}
+
+class _HeaderDelegate extends SliverPersistentHeaderDelegate {
+  const _HeaderDelegate();
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return const RawButton(
+      color: Colors.blueGrey,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Text('No.', style: Styles.whiteBold),
+        Text('Time', style: Styles.whiteBold),
+        Text('Load', style: Styles.whiteBold),
+      ]),
+    );
+  }
+
+  @override
+  double get maxExtent => 60;
+
+  @override
+  double get minExtent => 60;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      false;
 }

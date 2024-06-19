@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/models/user.dart';
 import 'package:tendon_loader/api/api_client.dart';
 import 'package:tendon_loader/api/snapshot.dart';
+import 'package:tendon_loader/models/user.dart';
 
 @immutable
 class UserService extends ApiClient {
@@ -25,7 +25,7 @@ class UserService extends ApiClient {
       _cache.addAll({for (final item in list) item.id!: item});
       return Snapshot.withData(list);
     }
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 
   Future<Snapshot<User>> getUserById({required final int userId}) async {
@@ -36,7 +36,7 @@ class UserService extends ApiClient {
       _cache.update(userId, (_) => user, ifAbsent: () => user);
       return Snapshot.withData(user);
     }
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 
   Future<Snapshot<User>> authenticate({
@@ -52,6 +52,6 @@ class UserService extends ApiClient {
     if (snapshot.hasData) {
       return Snapshot.withData(User.fromJson(snapshot.requireData));
     }
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 }

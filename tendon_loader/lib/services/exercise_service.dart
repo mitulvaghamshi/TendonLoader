@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/api/api_client.dart';
 import 'package:tendon_loader/api/snapshot.dart';
+import 'package:tendon_loader/models/exercise.dart';
 
 @immutable
 class ExerciseService extends ApiClient {
@@ -25,7 +25,7 @@ class ExerciseService extends ApiClient {
       _cache.putIfAbsent(id, () => map).values;
       return Snapshot.withData(list);
     }
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 
   Future<Snapshot<Exercise>> getExerciseBy({
@@ -47,14 +47,14 @@ class ExerciseService extends ApiClient {
       }, ifAbsent: () => {exerciseId: exercise});
       return Snapshot.withData(exercise);
     }
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 
   Future<Snapshot> createExercise(final Exercise exercise) async {
     _cache.putIfAbsent(exercise.userId, () => {exercise.id: exercise});
     final snapshot = await post('exercise', exercise.json);
     if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 
   Future<Snapshot> updateExercise(final Exercise exercise) async {
@@ -64,13 +64,13 @@ class ExerciseService extends ApiClient {
     }, ifAbsent: () => {exercise.id: exercise});
     final snapshot = await put('exercise/${exercise.id}', exercise.json);
     if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 
   Future<Snapshot> deleteExerciseById(final int id) async {
     if (_cache.containsKey(id)) _cache.remove(id);
     final snapshot = await delete('exercise/$id');
     if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 }

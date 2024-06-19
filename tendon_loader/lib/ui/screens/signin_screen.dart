@@ -61,7 +61,7 @@ class _SignInScreenState extends State<SignInScreen> {
     if (!_isLoading && state.user.id != null) return widget.builder(context);
     return Form(
       child: Column(children: [
-        const AppLogo(radius: 150, padding: EdgeInsets.all(16)),
+        const AppLogo(radius: 140, padding: EdgeInsets.all(16)),
         InputField.form(
           label: 'Enter username',
           controller: _usernameCtrl,
@@ -74,16 +74,22 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         const SizedBox(height: 16),
         AnimatedCrossFade(
-          crossFadeState:
-              _isLoading ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          crossFadeState: _isLoading //
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
           duration: const Duration(milliseconds: 500),
-          firstChild: RawButton.tile(
+          firstChild: const RawButton.loading(),
+          secondChild: RawButton.tile(
             onTap: _authenticate,
             color: Colors.indigo,
             child: const Text('Login', style: Styles.whiteBold),
           ),
-          secondChild: const RawButton.loading(),
         ),
+        const SizedBox(height: 16),
+        TextButton(
+          onPressed: () {},
+          child: const Text("Don't have an account?"),
+        )
       ]),
     );
   }

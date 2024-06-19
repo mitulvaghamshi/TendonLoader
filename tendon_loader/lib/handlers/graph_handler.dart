@@ -73,8 +73,8 @@ abstract class GraphHandler {
 
   @mustCallSuper
   Future<void> start() async {
-    final bool? result = await onCountdown(
-      'Session Start in...',
+    final result = await onCountdown(
+      'Session starts in...',
       const Duration(seconds: 5),
     );
     if (result ?? false) {
@@ -121,8 +121,7 @@ abstract class GraphHandler {
 }
 
 extension ExGraphHandler on GraphHandler {
-  Color get feedColor =>
-      isHit ? const Color(0xff3ddc85) : const Color(0xffffffff);
+  Color get feedColor => isHit ? const Color(0xff3ddc85) : Colors.transparent;
 }
 
 extension on List<int> {

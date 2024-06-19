@@ -17,21 +17,15 @@ class Styles {
     fontWeight: FontWeight.bold,
   );
 
-  static const blackBold = TextStyle(
-    color: Color(0xff000000),
-    fontWeight: FontWeight.bold,
-  );
-
   static const whiteBold22 = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.bold,
     fontSize: 22,
   );
 
-  static const blackBold40 = TextStyle(
-    color: Color(0xff000000),
+  static const blackBold26 = TextStyle(
     fontWeight: FontWeight.bold,
-    fontSize: 40,
+    fontSize: 26,
   );
 }
 

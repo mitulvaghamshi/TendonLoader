@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/models/prescription.dart';
+import 'package:tendon_loader/utils/constants.dart';
 
 class ExerciseHandler extends GraphHandler {
   ExerciseHandler({required this.prescription, required super.onCountdown})
@@ -186,12 +187,10 @@ extension on ExerciseHandler {
 }
 
 extension ExExerciseHandler on ExerciseHandler {
-  String get repCounter => '$_repCount of ${prescription.reps}';
-  String get setCounter => '$_setCount of ${prescription.sets}';
-  String get timeCounter => '${_isPushing ? 'Push' : 'Rest'}: $_lapTime Sec';
+  String get repCounter => '$_repCount / ${prescription.reps}';
+  String get setCounter => '$_setCount / ${prescription.sets}';
+  String get timeCounter => '${_isPushing ? 'Push' : 'Rest'}: $_lapTime sec';
   TextStyle get timeStyle => _isPushing
-      ? const TextStyle(
-          fontSize: 40, color: Color(0xff000000), fontWeight: FontWeight.bold)
-      : const TextStyle(
-          fontSize: 40, color: Color(0xffff534d), fontWeight: FontWeight.bold);
+      ? Styles.blackBold26
+      : Styles.blackBold26.copyWith(color: Colors.red);
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/models/prescription.dart';
-import 'package:tendon_loader/models/settings.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/input_field.dart';
 import 'package:tendon_loader/ui/widgets/raw_button.dart';
@@ -22,10 +21,9 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
   late final state = AppScope.of(context);
   late final pre = widget.prescription;
 
-  late final _loadCtrl = TextEditingController()
-    ..text = pre.targetLoad.toString();
-  late final _setsCtrl = TextEditingController()..text = pre.sets.toString();
-  late final _repsCtrl = TextEditingController()..text = pre.reps.toString();
+  late final _loadCtrl = TextEditingController()..text = '${pre.targetLoad}';
+  late final _setsCtrl = TextEditingController()..text = '${pre.sets}';
+  late final _repsCtrl = TextEditingController()..text = '${pre.reps}';
 
   late int _holdTime = pre.holdTime;
   late int _restTime = pre.restTime;
@@ -42,92 +40,76 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: AnimatedBuilder(
-        animation: state,
-        child: RawButton.tile(
-          spacing: 16,
-          leading: RawButton(
-            onTap: () => setState(_reset),
-            color: Colors.indigo,
-            child: const Text('Reset', style: Styles.whiteBold),
-          ),
-          child: Expanded(
-            child: RawButton(
-              onTap: _onSubmit,
-              color: Colors.green,
-              child: const Text('Save and exit', style: Styles.whiteBold),
+    return Column(children: [
+      IgnorePointer(
+        ignoring: !state.settings.editablePrescription,
+        child: Column(children: [
+          InputField.form(
+            controller: _loadCtrl,
+            label: 'Target Load (Kg)',
+            format: r'^\d{1,2}(\.\d{0,2})?',
+            padding: Styles.tilePadding,
+            keyboardType: const TextInputType.numberWithOptions(
+              decimal: true,
             ),
           ),
-        ),
-        builder: (_, child) => Column(children: [
-          SwitchListTile(
-            contentPadding: Styles.tilePadding,
-            title: const Text('Use custom prescriptions'),
-            subtitle: const Text('Create your own prescriptions.'),
-            value: state.settings.editablePrescription,
-            onChanged: (value) => state.update<Settings>((settings) {
-              return settings.copyWith(editablePrescription: value);
-            }),
+          Row(children: [
+            Expanded(
+              child: InputField.form(
+                controller: _setsCtrl,
+                label: 'Sets (#)',
+                format: r'^\d{1,2}',
+                padding: Styles.tilePadding,
+              ),
+            ),
+            Expanded(
+              child: InputField.form(
+                controller: _repsCtrl,
+                label: 'Reps (#)',
+                format: r'^\d{1,2}',
+                padding: Styles.tilePadding,
+              ),
+            ),
+          ]),
+          TimePickerTile(
+            time: _holdTime,
+            label: 'Rep hold time',
+            onPick: (time) => setState(() => _holdTime = time),
+          ),
+          TimePickerTile(
+            time: _restTime,
+            label: 'Rep rest time',
+            onPick: (time) => setState(() => _restTime = time),
+          ),
+          TimePickerTile(
+            time: _setRestTime,
+            label: 'Set rest time (default: 90 sec)',
+            onPick: (time) => setState(() => _setRestTime = time),
+          ),
+          TimePickerTile(
+            time: _mvcDuration,
+            label: 'MVC test duration (optional)',
+            onPick: (time) => setState(() => _mvcDuration = time),
           ),
           const Divider(),
-          IgnorePointer(
-            ignoring: !state.settings.editablePrescription,
-            child: Column(children: [
-              InputField.form(
-                controller: _loadCtrl,
-                label: 'Target Load (Kg)',
-                format: r'^\d{1,2}(\.\d{0,2})?',
-                padding: Styles.tilePadding,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
+          RawButton.tile(
+            spacing: 16,
+            leading: RawButton(
+              onTap: () => setState(_reset),
+              color: Colors.indigo,
+              child: const Text('Reset', style: Styles.whiteBold),
+            ),
+            child: Expanded(
+              child: RawButton(
+                onTap: _onSubmit,
+                color: Colors.green,
+                child: const Text('Save and exit', style: Styles.whiteBold),
               ),
-              Row(children: [
-                Expanded(
-                  child: InputField.form(
-                    controller: _setsCtrl,
-                    label: 'Sets (#)',
-                    format: r'^\d{1,2}',
-                    padding: Styles.tilePadding,
-                  ),
-                ),
-                Expanded(
-                  child: InputField.form(
-                    controller: _repsCtrl,
-                    label: 'Reps (#)',
-                    format: r'^\d{1,2}',
-                    padding: Styles.tilePadding,
-                  ),
-                ),
-              ]),
-              TimePickerTile(
-                time: _holdTime,
-                label: 'Rep hold time',
-                onPick: (time) => setState(() => _holdTime = time),
-              ),
-              TimePickerTile(
-                time: _restTime,
-                label: 'Rep rest time',
-                onPick: (time) => setState(() => _restTime = time),
-              ),
-              TimePickerTile(
-                time: _setRestTime,
-                label: 'Set rest time (default: 90 sec)',
-                onPick: (time) => setState(() => _setRestTime = time),
-              ),
-              TimePickerTile(
-                time: _mvcDuration,
-                label: 'MVC test duration (optional)',
-                onPick: (time) => setState(() => _mvcDuration = time),
-              ),
-              const Divider(),
-              child!,
-            ]),
+            ),
           ),
         ]),
       ),
-    );
+    ]);
   }
 }
 
@@ -159,7 +141,7 @@ extension on _PrescriptionScreenState {
     } else if (_setRestTime <= 0) {
       error = 'Please select Set rest time';
     } else {
-      AppScope.of(context).update<Prescription>((item) {
+      state.update<Prescription>((item) {
         return item.copyWith(
           targetLoad: targetLoad,
           sets: sets,

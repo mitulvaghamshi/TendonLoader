@@ -25,6 +25,7 @@ import 'package:tendon_loader/ui/screens/prescription_screen.dart';
 import 'package:tendon_loader/ui/screens/prompt_screen.dart';
 import 'package:tendon_loader/ui/screens/settings_screen.dart';
 import 'package:tendon_loader/ui/screens/signin_screen.dart';
+import 'package:tendon_loader/ui/widgets/app_frame.dart';
 import 'package:tendon_loader/ui/widgets/countdown_widget.dart';
 import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
 import 'package:tendon_loader/ui/widgets/graph_widget.dart';
@@ -70,7 +71,9 @@ class TendonLoaderRoute extends GoRouteData {
       appBar: AppBar(title: const Text('Tendon Loader')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: SignInScreen(builder: (_) => const HomeScreen()),
+        child: AppFrame(
+          child: SignInScreen(builder: (_) => const HomeScreen()),
+        ),
       ),
     );
   }
@@ -99,7 +102,7 @@ class SettingScreenRoute extends GoRouteData {
       appBar: AppBar(title: const Text('Settings')),
       body: const SingleChildScrollView(
         padding: EdgeInsets.all(16),
-        child: SettingsScreen(),
+        child: AppFrame(child: SettingsScreen()),
       ),
     );
   }
@@ -116,7 +119,10 @@ class PrescriptionRoute extends GoRouteData {
     final prescription = AppScope.of(context).prescription;
     return Scaffold(
       appBar: AppBar(title: const Text('Prescriptions')),
-      body: PrescriptionScreen(prescription: prescription),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: AppFrame(child: PrescriptionScreen(prescription: prescription)),
+      ),
     );
   }
 }
@@ -134,10 +140,10 @@ class LiveDataRoute extends GoRouteData {
     return GraphWidget(
       title: name,
       handler: handler,
-      builder: (_) => Text(
+      headerBuilder: (_) => Text(
         handler.timeElapsed,
         textAlign: TextAlign.center,
-        style: Styles.blackBold40,
+        style: Styles.blackBold26,
       ),
     );
   }
@@ -159,11 +165,11 @@ class MVCTestingRoute extends GoRouteData {
     return GraphWidget(
       title: name,
       handler: handler,
-      builder: (_) => Column(children: [
-        Text(handler.maxForceValue, style: Styles.blackBold40),
+      headerBuilder: (_) => Column(children: [
+        Text(handler.maxForceValue, style: Styles.blackBold26),
         Text(
           handler.timeDiffValue,
-          style: Styles.blackBold40.copyWith(color: const Color(0xffff534d)),
+          style: Styles.blackBold26.copyWith(color: const Color(0xffff534d)),
         ),
       ]),
     );
@@ -180,7 +186,7 @@ class ExerciseModeRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     final handler = ExerciseHandler(
-      prescription: const Prescription.empty(),
+      prescription: AppScope.of(context).prescription,
       onCountdown: context._countdown,
     );
     return LifeCycleAware(
@@ -197,30 +203,33 @@ class ExerciseModeRoute extends GoRouteData {
       builder: (_) => GraphWidget(
         title: name,
         handler: handler,
-        builder: (_) => Column(children: [
-          Text(handler.timeCounter, style: handler.timeStyle),
-          const Divider(),
-          const Row(children: [
-            Expanded(child: Text('Rep:', style: Styles.blackBold)),
-            Expanded(child: Text('Set:', style: Styles.blackBold)),
-          ]),
-          Row(children: [
-            Expanded(
-              child: Text(
-                handler.repCounter,
-                textAlign: TextAlign.center,
-                style: Styles.blackBold40,
+        headerBuilder: (_) => SizedBox(
+          width: 300,
+          child: Column(children: [
+            Text(handler.timeCounter, style: handler.timeStyle),
+            Divider(color: handler.feedColor, thickness: 10),
+            const Row(children: [
+              Expanded(child: Text('Rep:')),
+              Expanded(child: Text('Set:')),
+            ]),
+            Row(children: [
+              Expanded(
+                child: Text(
+                  handler.repCounter,
+                  textAlign: TextAlign.center,
+                  style: Styles.blackBold26,
+                ),
               ),
-            ),
-            Expanded(
-              child: Text(
-                handler.setCounter,
-                textAlign: TextAlign.center,
-                style: Styles.blackBold40,
+              Expanded(
+                child: Text(
+                  handler.setCounter,
+                  textAlign: TextAlign.center,
+                  style: Styles.blackBold26,
+                ),
               ),
-            ),
+            ]),
           ]),
-        ]),
+        ),
       ),
     );
   }
@@ -245,12 +254,14 @@ class UserListRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return FutureWrapper(
-      future: UserService.instance.getAllUsers(),
-      builder: (snapshot) {
-        if (snapshot.hasData) return UserList(items: snapshot.requireData);
-        return RawButton.error(message: snapshot.error.toString());
-      },
+    return Scaffold(
+      body: FutureWrapper(
+        future: UserService.instance.getAllUsers(),
+        builder: (snapshot) {
+          if (snapshot.hasData) return UserList(items: snapshot.requireData);
+          return RawButton.error(message: snapshot.error.toString());
+        },
+      ),
     );
   }
 }
@@ -266,11 +277,13 @@ class ExerciseListRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return FutureWrapper(
-      future: ExerciseService.instance.getAllExercisesByUserId(userId),
-      builder: (snapshot) => ExerciseList(
-        title: title,
-        items: snapshot.requireData,
+    return Scaffold(
+      body: FutureWrapper(
+        future: ExerciseService.instance.getAllExercisesByUserId(userId),
+        builder: (snapshot) => ExerciseList(
+          title: title,
+          items: snapshot.requireData,
+        ),
       ),
     );
   }
@@ -287,9 +300,11 @@ class ExerciseDetaildRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return FutureWrapper(
-      future: _future,
-      builder: (data) => ExerciseDetail(payload: data),
+    return Scaffold(
+      body: FutureWrapper(
+        future: _future,
+        builder: (data) => ExerciseDetail(payload: data),
+      ),
     );
   }
 
@@ -338,9 +353,11 @@ class ExerciseDataListRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return FutureWrapper(
-      future: _future,
-      builder: (items) => ExerciseDataList(items: items),
+    return Scaffold(
+      body: FutureWrapper(
+        future: _future,
+        builder: (items) => ExerciseDataList(items: items),
+      ),
     );
   }
 

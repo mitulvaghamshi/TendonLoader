@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/api/api_client.dart';
 import 'package:tendon_loader/api/snapshot.dart';
+import 'package:tendon_loader/models/prescription.dart';
 
 @immutable
 class PrescriptionService extends ApiClient {
@@ -23,13 +23,13 @@ class PrescriptionService extends ApiClient {
       _cache.putIfAbsent(id, () => prescription);
       return Snapshot.withData(prescription);
     }
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 
   Future<Snapshot> createPrescription(final Prescription prescription) async {
     final snapshot = await post('prescription', prescription.json);
     if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 
   Future<Snapshot> updatePrescription(final Prescription prescription) async {
@@ -39,13 +39,13 @@ class PrescriptionService extends ApiClient {
     final snapshot =
         await put('prescription/${prescription.id}', prescription.json);
     if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 
   Future<Snapshot> deletePrescriptionById(final int id) async {
     if (_cache.containsKey(id)) _cache.remove(id);
     final snapshot = await delete('prescription/$id');
     if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
-    return Snapshot.withError(snapshot.error.toString());
+    return Snapshot.withError(snapshot.error);
   }
 }

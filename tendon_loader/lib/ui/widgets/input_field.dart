@@ -43,7 +43,7 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget widget = TextFormField(
+    final widget = TextFormField(
       style: Styles.bold18,
       validator: validator,
       controller: controller,
@@ -59,10 +59,8 @@ class InputField extends StatelessWidget {
         ),
       ),
     );
-    if (padding != null) {
-      widget = Padding(padding: padding!, child: widget);
-    }
-    return widget;
+    if (padding == null) return widget;
+    return Padding(padding: padding!, child: widget);
   }
 }
 
@@ -90,9 +88,9 @@ class _SearchField extends InputField {
 class _FormField extends InputField {
   const _FormField({
     super.key,
-    this.format,
     super.padding,
     super.keyboardType,
+    this.format,
     required super.label,
     required super.controller,
   });
@@ -105,9 +103,9 @@ class _FormField extends InputField {
       key: key,
       label: label,
       padding: padding,
+      controller: controller,
       validateMode: AutovalidateMode.onUserInteraction,
       keyboardType: keyboardType ?? TextInputType.number,
-      controller: controller,
       validator: (value) =>
           value == null || value.isEmpty ? '$label is required' : null,
       formatters: [

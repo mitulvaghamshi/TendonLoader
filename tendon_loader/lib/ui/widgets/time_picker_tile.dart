@@ -82,6 +82,8 @@ class _NumberPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const textStyle = TextStyle(
+        color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22);
     return SizedBox.fromSize(
       size: pickerSize,
       child: ListWheelScrollView(
@@ -93,7 +95,7 @@ class _NumberPicker extends StatelessWidget {
         physics: const FixedExtentScrollPhysics(),
         controller: FixedExtentScrollController(initialItem: initialValue),
         children: List.generate(maxValue + 1, (value) {
-          return Text('$value'.padLeft(1), style: Styles.whiteBold22);
+          return Text('$value'.padLeft(1), style: textStyle);
         }),
       ),
     );

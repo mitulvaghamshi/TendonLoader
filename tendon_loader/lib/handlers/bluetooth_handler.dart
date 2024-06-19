@@ -64,6 +64,8 @@ class Progressor {
     await _controlChar!.write(<int>[Commands.stopWeightMeas]);
   }
 
+  Future<void> sleep() async => disconnect(sleep: true);
+
   Future<void> disconnect({bool sleep = false}) async {
     if (_device == null) return;
     if (sleep) {
