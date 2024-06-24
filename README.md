@@ -200,59 +200,28 @@ dependencies {
 }
 ```
 
-## Flutter run key commands.
+[Bluetooth Connection](./Resources/Connection.pdf)
 
-- **r** - Hot **reload**. 🔥🔥🔥
-- **R** - Hot **restart**. ♻️♻️♻️
-- **c** - **Clear** the screen.
-- **v** - Open Flutter **DevTools**.
-- **h** - Repeat this **help** message.
-- **g** - Run source **code generators**.
-- **d** - Detach (terminate `flutter run` but leave application running).
-- **q** - Quit (terminate the application on the device).
-- **w** - Dump **widget hierarchy** to the console. (`debugDumpApp`)
-- **t** - Dump **rendering tree** to the console. (`debugDumpRenderTree`)
-- **L** - Dump **layer tree** to the console. (`debugDumpLayerTree`)
-- **S** - Dump **accessibility tree** in **traversal** order.
-  (`debugDumpSemantics`)
-- **U** - Dump **accessibility tree** in **inverse hit test** order.
-- **j** - Dump frame **raster stats** for the current frame. (Unsupported for
-  web)
-- **M** - Write **SkSL shaders** to a unique file in the project directory.
-- **p** - Toggle the display of **construction lines**.
-  (`debugPaintSizeEnabled`)
-- **i** - Toggle **widget inspector**.
-  (`WidgetsApp.showWidgetInspectorOverride`)
-- **P** - Toggle **performance overlay**. (`WidgetsApp.showPerformanceOverlay`)
-- **a** - Toggle **timeline events** for all widget build methods.
-  (`debugProfileWidgetBuilds`)
-- **I** - Toggle **oversized image** inversion. (`debugInvertOversizedImages`)
-- **b** - Toggle platform **brightness** (dark and light mode).
-  (`debugBrightnessOverride`)
-- **o** - Simulate different **operating systems**. (`defaultTargetPlatform`)
+## Screenshots (2021-06-25)
 
-[Checkout Bluetooth Connection Flow](./Resources/Connection.pdf)
-
-## Screenshots
-
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-13-30-438_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-15-14-551_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-15-27-760_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-15-39-736_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-15-49-058_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-17-06-520_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-17-43-191_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-18-06-269_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-18-13-910_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-18-25-853_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-18-51-639_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-19-02-872_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-19-32-174_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-19-56-481_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-20-09-295_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-20-52-519_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-21-12-197_ca.ubc.tendon_loader.webp)
-![](./Resources/images/v0.0.6/Screenshot_2021-06-25-23-21-21-526_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-13-30-438_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-15-14-551_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-15-27-760_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-15-39-736_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-15-49-058_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-17-06-520_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-17-43-191_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-18-06-269_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-18-13-910_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-18-25-853_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-18-51-639_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-19-02-872_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-19-32-174_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-19-56-481_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-20-09-295_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-20-52-519_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-21-12-197_ca.ubc.tendon_loader.webp)
+![](./Resources/imgs/v0.0.6/Screenshot_2021-06-25-23-21-21-526_ca.ubc.tendon_loader.webp)
 
 [license-badge]: https://img.shields.io/github/license/mitulvaghamshi/tendon_loader?logo=%20&style=for-the-badge
 [license-link]: https://github.com/mitulvaghamshi/tendon_loader/blob/main/LICENSE
