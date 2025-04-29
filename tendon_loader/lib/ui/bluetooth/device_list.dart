@@ -13,7 +13,7 @@ import 'package:tendon_loader/ui/bluetooth/widgets/start_scan_tile.dart';
 /// perform actual tasks of "Exercise" and "MVC Test".
 class DeviceList extends StatelessWidget {
   DeviceList({super.key, required Iterable<BluetoothDevice> devices})
-      : _devices = _filterList(devices);
+    : _devices = _filterList(devices);
 
   final Iterable<BluetoothDevice> _devices;
 

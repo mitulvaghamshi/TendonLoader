@@ -3,7 +3,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/ui/bluetooth/widgets/connected_tile.dart';
 import 'package:tendon_loader/ui/bluetooth/widgets/disconnected_tile.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 
 /// A single "Progressor" device (Connected or Disconnected).
 /// This widget will allows to restart the "Scanning..." process,
@@ -24,14 +24,17 @@ class DeviceTile extends StatelessWidget {
           return ConnectedTile(device: device);
         }
         if (!isLast) return DisconnectedTile(device: device);
-        return Column(mainAxisSize: MainAxisSize.min, children: [
-          DisconnectedTile(device: device),
-          RawButton.tile(
-            onTap: Progressor.instance.startScan,
-            leading: const Icon(Icons.search),
-            child: const Text('Scan'),
-          ),
-        ]);
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DisconnectedTile(device: device),
+            ButtonFactory.tile(
+              onTap: Progressor.instance.startScan,
+              leading: const Icon(Icons.search),
+              child: const Text('Scan'),
+            ),
+          ],
+        );
       },
     );
   }

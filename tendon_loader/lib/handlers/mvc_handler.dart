@@ -5,11 +5,8 @@ import 'package:tendon_loader/models/exercise.dart';
 
 class MVCHandler extends GraphHandler {
   MVCHandler({required this.mvcDuration, required super.onCountdown})
-      : timeDiff = mvcDuration.toDouble(),
-        super(lineData: <ChartData>[
-          const ChartData(),
-          const ChartData(time: 2),
-        ]);
+    : timeDiff = mvcDuration.toDouble(),
+      super(lineData: <ChartData>[const ChartData(), const ChartData(time: 2)]);
 
   final int mvcDuration;
 

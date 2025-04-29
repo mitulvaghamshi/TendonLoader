@@ -22,10 +22,7 @@ class ExerciseDataGraph extends StatelessWidget {
         labelFormat: '{value} sec',
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
-      primaryYAxis: const NumericAxis(
-        interval: 1,
-        labelFormat: '{value} kg',
-      ),
+      primaryYAxis: const NumericAxis(interval: 1, labelFormat: '{value} kg'),
       series: <LineSeries<ChartData, double>>[
         LineSeries<ChartData, double>(
           color: Colors.green,

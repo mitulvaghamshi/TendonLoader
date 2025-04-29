@@ -19,18 +19,20 @@ class UserService extends ApiClient {
 
   Future<Snapshot<Iterable<User>>> getAllUsers() async {
     if (_cache.isNotEmpty) return Snapshot.withData(_cache.values);
-    final snapshot = await get('user');
+    final snapshot = await get('users');
     if (snapshot.hasData) {
-      final list = List.from(snapshot.requireData).map(User.fromJson);
-      _cache.addAll({for (final item in list) item.id!: item});
+      final list = List<Map<String, dynamic>>.from(
+        snapshot.requireData,
+      ).map<User>(User.fromJson);
+      _cache.addAll({for (var item in list) item.id!: item});
       return Snapshot.withData(list);
     }
     return Snapshot.withError(snapshot.error);
   }
 
-  Future<Snapshot<User>> getUserById({required final int userId}) async {
+  Future<Snapshot<User>> getUserById({required int userId}) async {
     if (_cache.containsKey(userId)) return Snapshot.withData(_cache[userId]!);
-    final snapshot = await get('user/$userId');
+    final snapshot = await get('users/$userId');
     if (snapshot.hasData) {
       final user = User.fromJson(snapshot.requireData);
       _cache.update(userId, (_) => user, ifAbsent: () => user);
@@ -39,18 +41,16 @@ class UserService extends ApiClient {
     return Snapshot.withError(snapshot.error);
   }
 
-  Future<Snapshot<User>> authenticate({
-    required final String username,
-    required final String password,
-  }) async {
-    if (username.isEmpty || password.isEmpty) {
-      return const Snapshot.withError('Username or Password not provided');
+  Future<Snapshot<User>> authenticate(User user) async {
+    if (user.username.isEmpty || user.password.isEmpty) {
+      return const Snapshot.withError('Opps!');
     }
-    // TODO(mitul): Change base64 encoding
-    final cred = base64Encode(utf8.encode('$username:$password'));
-    final snapshot = await get('user/auth/$cred');
-    if (snapshot.hasData) {
-      return Snapshot.withData(User.fromJson(snapshot.requireData));
+    final cred = base64.encode(
+      utf8.encode('${user.username}:${user.password}'),
+    );
+    final snapshot = await post('users/auth', {'credential': cred});
+    if (snapshot.data case {'id': int id, 'token': int token}) {
+      return Snapshot.withData(user.copyWith(id: id, token: token));
     }
     return Snapshot.withError(snapshot.error);
   }

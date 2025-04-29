@@ -13,15 +13,16 @@ class Settings {
   });
 
   const Settings.empty()
-      : id = null,
-        darkMode = false,
-        autoUpload = false,
-        editablePrescription = true,
-        graphScale = 30.0,
-        userId = null,
-        prescriptionId = null;
+    : id = null,
+      darkMode = false,
+      autoUpload = false,
+      editablePrescription = true,
+      graphScale = 30.0,
+      userId = null,
+      prescriptionId = null;
 
-  factory Settings.fromJson(final map) => ExSettings._parseJson(map);
+  factory Settings.fromJson(Map<String, dynamic> map) =>
+      ExSettings._parseJson(map);
 
   final int? id;
   final int? userId;
@@ -36,23 +37,23 @@ extension ExSettings on Settings {
   ThemeMode get themeMode => darkMode ? ThemeMode.dark : ThemeMode.light;
 
   Map<String, dynamic> get json => {
-        'id': id,
-        'userId': userId,
-        'prescriptionId': prescriptionId,
-        'darkMode': darkMode,
-        'autoUpload': autoUpload,
-        'editablePrescriprion': editablePrescription,
-        'graphScale': graphScale,
-      };
+    'id': id,
+    'user_id': userId,
+    'prescription_id': prescriptionId,
+    'dark_mode': darkMode,
+    'auto_upload': autoUpload,
+    'editable_prescription': editablePrescription,
+    'graph_scale': graphScale,
+  };
 
   Settings copyWith({
-    final int? id,
-    final int? userId,
-    final int? prescriptionId,
-    final bool? darkMode,
-    final bool? autoUpload,
-    final bool? editablePrescription,
-    final double? graphScale,
+    int? id,
+    int? userId,
+    int? prescriptionId,
+    bool? darkMode,
+    bool? autoUpload,
+    bool? editablePrescription,
+    double? graphScale,
   }) {
     return Settings._(
       id: id ?? this.id,
@@ -65,27 +66,26 @@ extension ExSettings on Settings {
     );
   }
 
-  static Settings _parseJson(final map) {
-    if (map
-        case {
-          'id': final int id,
-          'userId': final int userId,
-          'prescriptionId': final int? prescriptionId,
-          'darkMode': final bool darkMode,
-          'autoUpload': final bool autoUpload,
-          'editablePrescriprion': final bool editablePrescription,
-          'graphScale': final num graphScale,
-        }) {
+  static Settings _parseJson(Map<String, dynamic> map) {
+    if (map case {
+      'id': int id,
+      'user_id': int? userId,
+      'prescription_id': int? prescriptionId,
+      'dark_mode': int darkMode,
+      'auto_upload': int autoUpload,
+      'editable_prescription': int editablePrescription,
+      'graph_scale': num graphScale,
+    }) {
       return Settings._(
         id: id,
         userId: userId,
         prescriptionId: prescriptionId,
-        darkMode: darkMode,
-        autoUpload: autoUpload,
-        editablePrescription: editablePrescription,
+        darkMode: darkMode == 1,
+        autoUpload: autoUpload == 1,
+        editablePrescription: editablePrescription == 1,
         graphScale: graphScale.toDouble(),
       );
     }
-    throw const FormatException('Invalid JSON');
+    throw const FormatException('[Settings]: Invalid JSON');
   }
 }

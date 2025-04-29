@@ -106,10 +106,11 @@ class _FormField extends InputField {
       controller: controller,
       validateMode: AutovalidateMode.onUserInteraction,
       keyboardType: keyboardType ?? TextInputType.number,
-      validator: (value) =>
-          value == null || value.isEmpty ? '$label is required' : null,
+      validator: (value) {
+        return value == null || value.isEmpty ? '$label is required' : null;
+      },
       formatters: [
-        if (format != null) FilteringTextInputFormatter.allow(RegExp(format!))
+        if (format != null) FilteringTextInputFormatter.allow(RegExp(format!)),
       ],
     );
   }

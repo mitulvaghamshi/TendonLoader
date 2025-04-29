@@ -42,19 +42,27 @@ class _CountdownWidgetState extends State<CountdownWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(alignment: Alignment.center, children: [
-      AspectRatio(
-        aspectRatio: 1,
-        child: CustomPaint(painter: _CirclePainter(_controller)),
-      ),
-      AnimatedBuilder(
-        animation: _controller,
-        builder: (_, child) => Text(
-          _remainingTime,
-          style: const TextStyle(fontSize: 100, fontWeight: FontWeight.bold),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: CustomPaint(painter: _CirclePainter(_controller)),
         ),
-      ),
-    ]);
+        AnimatedBuilder(
+          animation: _controller,
+          builder: (_, child) {
+            return Text(
+              _remainingTime,
+              style: const TextStyle(
+                fontSize: 100,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
+        ),
+      ],
+    );
   }
 }
 
@@ -69,10 +77,11 @@ class _CirclePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..strokeWidth = size.width * 0.07
-      ..style = PaintingStyle.stroke
-      ..color = const Color(0xff3ddc85);
+    final Paint paint =
+        Paint()
+          ..strokeWidth = size.width * 0.07
+          ..style = PaintingStyle.stroke
+          ..color = const Color(0xff3ddc85);
     final Offset center = size.center(Offset.zero);
     final double radius = size.width / 2.5;
 

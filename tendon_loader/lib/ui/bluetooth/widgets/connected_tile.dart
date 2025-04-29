@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/models/chartdata.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 /// After successful connection to the "Progressor", the app will present user
@@ -26,53 +26,60 @@ class ConnectedTile extends StatelessWidget {
       initialData: false,
       future: Progressor.instance.init(device: device),
       builder: (context, snapshot) {
-        if (!snapshot.requireData) return const RawButton.loading();
-        return Column(mainAxisSize: MainAxisSize.min, children: [
-          ListTile(
-            onLongPress: Progressor.instance.disconnect,
-            contentPadding: const EdgeInsets.all(5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: Text(
-              Progressor.instance.deviceName,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: const Text(
-              'Long press to disconnect',
-              style: TextStyle(fontSize: 12, color: Color(0xffff534d)),
-            ),
-            leading: const RawButton(
-              color: Color(0xff3ddc85),
-              child: Icon(Icons.bluetooth_connected, color: Color(0xffffffff)),
-            ),
-          ),
-          StreamBuilder<ChartData>(
-            initialData: const ChartData(),
-            stream: GraphHandler.stream,
-            builder: (_, snapshot) => Text(
-              '${snapshot.data!.load.toStringAsFixed(1)} Kg.',
-              style: const TextStyle(
-                fontSize: 40,
+        if (!snapshot.requireData) return const ButtonFactory.loading();
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              onLongPress: Progressor.instance.disconnect,
+              contentPadding: const EdgeInsets.all(5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: Text(
+                Progressor.instance.deviceName,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: const Text(
+                'Long press to disconnect',
+                style: TextStyle(fontSize: 12, color: Color(0xffff534d)),
+              ),
+              leading: const ButtonFactory(
                 color: Color(0xff3ddc85),
-                fontWeight: FontWeight.bold,
+                child: Icon(
+                  Icons.bluetooth_connected,
+                  color: Color(0xffffffff),
+                ),
               ),
             ),
-          ),
-          const Text(
-            Strings.tareProgressor,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-          ),
-          RawButton.tile(
-            leading: const Icon(Icons.adjust),
-            child: const Text('Tare Progressor'),
-            onTap: () async {
-              await Progressor.instance.tare();
-              if (context.mounted) context.pop();
-            },
-          ),
-        ]);
+            StreamBuilder<ChartData>(
+              initialData: const ChartData(),
+              stream: GraphHandler.stream,
+              builder:
+                  (_, snapshot) => Text(
+                    '${snapshot.data!.load.toStringAsFixed(1)} Kg.',
+                    style: const TextStyle(
+                      fontSize: 40,
+                      color: Color(0xff3ddc85),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+            ),
+            const Text(
+              Strings.tareProgressor,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+            ButtonFactory.tile(
+              leading: const Icon(Icons.adjust),
+              child: const Text('Tare Progressor'),
+              onTap: () async {
+                await Progressor.instance.tare();
+                if (context.mounted) context.pop();
+              },
+            ),
+          ],
+        );
       },
     );
   }

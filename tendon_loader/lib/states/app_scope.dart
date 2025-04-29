@@ -8,13 +8,11 @@ class AppScope extends InheritedWidget {
   final AppState data;
 
   static AppState of(BuildContext context) {
-    final AppScope? scope =
-        context.dependOnInheritedWidgetOfExactType<AppScope>();
-    if (scope == null) throw 'No app state in scope!';
-    return scope.data;
+    final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
+    return ArgumentError.checkNotNull(scope, 'State not initialized').data;
   }
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) =>
-      oldWidget is AppScope && (data != oldWidget.data);
+      oldWidget is AppScope && data != oldWidget.data;
 }

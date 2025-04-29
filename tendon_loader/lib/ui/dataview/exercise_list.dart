@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/router/router.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 import 'package:tendon_loader/ui/widgets/search_list.dart';
 
 @immutable
@@ -18,23 +18,26 @@ class ExerciseList extends StatelessWidget {
       title: title,
       searchLabel: 'Search by date...',
       searchTerm: (item) => item.datetime,
-      builder: (item, index) => RawButton.tile(
-        spacing: 16,
-        axisAlignment: MainAxisAlignment.start,
-        leading: CircleAvatar(child: Text(index.toString())),
-        trailing: IconButton(
-          onPressed: () => ExerciseDataListRoute(
-            userId: item.userId,
-            exerciseId: item.id,
-          ).push(context),
-          icon: const Icon(Icons.format_list_numbered_sharp),
-        ),
-        onTap: () => ExerciseDetaildRoute(
-          userId: item.userId,
-          exerciseId: item.id,
-        ).push(context),
-        child: Text(item.datetime),
-      ),
+      builder:
+          (item, index) => ButtonFactory.tile(
+            spacing: 16,
+            axisAlignment: MainAxisAlignment.start,
+            leading: CircleAvatar(child: Text(index.toString())),
+            trailing: IconButton(
+              onPressed:
+                  () => ExerciseDataListRoute(
+                    userId: item.userId,
+                    exerciseId: item.id,
+                  ).push(context),
+              icon: const Icon(Icons.format_list_numbered_sharp),
+            ),
+            onTap:
+                () => ExerciseDetaildRoute(
+                  userId: item.userId,
+                  exerciseId: item.id,
+                ).push(context),
+            child: Text(item.datetime),
+          ),
     );
   }
 }

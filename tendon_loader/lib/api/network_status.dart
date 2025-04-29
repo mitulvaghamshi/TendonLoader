@@ -7,10 +7,12 @@ class NetworkStatus {
 
   NetworkStatus._() {
     _subscription = Connectivity().onConnectivityChanged.listen((value) {
-      _connections = value.takeWhile((result) =>
-          result == ConnectivityResult.wifi ||
-          result == ConnectivityResult.mobile ||
-          result == ConnectivityResult.ethernet);
+      _connections = value.takeWhile(
+        (result) =>
+            result == ConnectivityResult.wifi ||
+            result == ConnectivityResult.mobile ||
+            result == ConnectivityResult.ethernet,
+      );
     });
   }
 
@@ -18,6 +20,7 @@ class NetworkStatus {
   static NetworkStatus get instance => _instance;
 
   Iterable<ConnectivityResult> _connections = const Iterable.empty();
+
   bool get isConnected => _connections.isNotEmpty;
 
   late final StreamSubscription _subscription;

@@ -6,18 +6,21 @@ class User {
     required this.id,
     required this.username,
     required this.password,
+    required this.token,
   });
 
-  const User.empty()
-      : id = null,
-        username = '',
-        password = '';
+  const User.empty() : id = null, username = '', password = '', token = null;
 
-  factory User.fromJson(final map) => ExUser._parseJson(map);
+  const User.from({required this.username, required this.password})
+    : id = null,
+      token = null;
+
+  factory User.fromJson(Map<String, dynamic> map) => ExUser._parseJson(map);
 
   final int? id;
-  final String username;
+  final int? token;
   final String password;
+  final String username;
 }
 
 extension ExUser on User {
@@ -27,34 +30,31 @@ extension ExUser on User {
       .replaceFirst(RegExp(r'\w'), username[0].toUpperCase());
 
   Map<String, dynamic> get json => {
-        'id': id,
-        'username': username,
-        'password': password,
-      };
+    'id': id,
+    'username': username,
+    'password': password,
+  };
 
-  User copyWith({
-    final int? id,
-    final String? username,
-    final String? password,
-  }) {
+  User copyWith({int? id, String? username, String? password, int? token}) {
     return User._(
       id: id ?? this.id,
       username: username ?? this.username,
       password: password ?? this.password,
+      token: token ?? this.token,
     );
   }
 
-  static User _parseJson(final map) {
-    if (map
-        case {
-          'id': final int id,
-          'username': final String username,
-          'password': final String password,
-        }) {
+  static User _parseJson(Map<String, dynamic> map) {
+    if (map case {
+      'id': int id,
+      'username': String username,
+      'password': String password,
+    }) {
       return User._(
         id: id,
         username: username,
         password: password,
+        token: null,
       );
     }
     throw const FormatException('[User]: Invalid JSON');

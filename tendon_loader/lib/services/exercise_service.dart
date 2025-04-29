@@ -14,14 +14,14 @@ class ExerciseService extends ApiClient {
 
   static final Map<int, Map<int, Exercise>> _cache = {};
 
-  Future<Snapshot<Iterable<Exercise>>> getAllExercisesByUserId(
-    final int id,
-  ) async {
+  Future<Snapshot<Iterable<Exercise>>> getAllExercisesByUserId(int id) async {
     if (_cache.containsKey(id)) return Snapshot.withData(_cache[id]!.values);
-    final snapshot = await get('exercise/user/$id');
+    final snapshot = await get('exercises/user/$id');
     if (snapshot.hasData) {
-      final list = List.from(snapshot.requireData).map(Exercise.fromJson);
-      final map = {for (final item in list) item.id: item};
+      final list = List<Map<String, dynamic>>.from(
+        snapshot.requireData,
+      ).map<Exercise>(Exercise.fromJson);
+      final map = {for (var item in list) item.id: item};
       _cache.putIfAbsent(id, () => map).values;
       return Snapshot.withData(list);
     }
@@ -29,8 +29,8 @@ class ExerciseService extends ApiClient {
   }
 
   Future<Snapshot<Exercise>> getExerciseBy({
-    required final int userId,
-    required final int exerciseId,
+    required int userId,
+    required int exerciseId,
   }) async {
     if (_cache.containsKey(userId)) {
       final exercises = _cache[userId]!;
@@ -38,7 +38,7 @@ class ExerciseService extends ApiClient {
         return Snapshot.withData(exercises[exerciseId]!);
       }
     }
-    final snapshot = await get('exercise/$exerciseId');
+    final snapshot = await get('exercises/$exerciseId');
     if (snapshot.hasData) {
       final exercise = Exercise.fromJson(snapshot.requireData);
       _cache.update(userId, (map) {
@@ -50,26 +50,26 @@ class ExerciseService extends ApiClient {
     return Snapshot.withError(snapshot.error);
   }
 
-  Future<Snapshot> createExercise(final Exercise exercise) async {
+  Future<Snapshot> createExercise(Exercise exercise) async {
     _cache.putIfAbsent(exercise.userId, () => {exercise.id: exercise});
-    final snapshot = await post('exercise', exercise.json);
+    final snapshot = await post('exercises', exercise.json);
     if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
     return Snapshot.withError(snapshot.error);
   }
 
-  Future<Snapshot> updateExercise(final Exercise exercise) async {
+  Future<Snapshot> updateExercise(Exercise exercise) async {
     _cache.update(exercise.userId, (map) {
       map.update(exercise.id, (_) => exercise, ifAbsent: () => exercise);
       return map;
     }, ifAbsent: () => {exercise.id: exercise});
-    final snapshot = await put('exercise/${exercise.id}', exercise.json);
+    final snapshot = await put('exercises/${exercise.id}', exercise.json);
     if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
     return Snapshot.withError(snapshot.error);
   }
 
-  Future<Snapshot> deleteExerciseById(final int id) async {
+  Future<Snapshot> deleteExerciseById(int id) async {
     if (_cache.containsKey(id)) _cache.remove(id);
-    final snapshot = await delete('exercise/$id');
+    final snapshot = await delete('exercises/$id');
     if (snapshot.hasData) return Snapshot.withData(snapshot.requireData);
     return Snapshot.withError(snapshot.error);
   }

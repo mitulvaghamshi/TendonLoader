@@ -1,8 +1,11 @@
 {
   "folders": [
     {
-      "path": "."
-    }
+      "path": "tendon_loader"
+    },
+    {
+      "path": "server"
+    },
   ],
   "settings": {
     "editor.foldingImportsByDefault": true
@@ -10,6 +13,23 @@
   "tasks": {
     "version": "2.0.0",
     "tasks": [
+      {
+        "type": "shell",
+        "label": "Start Server",
+        "command": "dart",
+        "options": {
+          "cwd": "${workspaceFolder:server}",
+        },
+        "args": [
+          "-DPORT=3001",
+          "-DUSER_SQL_PATH=db/user.sql",
+          "-DSETTINGS_SQL_PATH=db/settings.sql",
+          "-DEXERCISE_SQL_PATH=db/exercise.sql",
+          "-DPRESCRIPTION_SQL_PATH=db/prescription.sql",
+          "-DDB_PATH=db/tendonloader.db",
+          "bin/server.dart",
+        ],
+      },
       {
         "type": "shell",
         "label": "Run app:macOS",
@@ -39,7 +59,7 @@
         "label": "Project: ios pods",
         "command": "pod install",
         "options": {
-          "cwd": "${workspaceFolder}/ios",
+          "cwd": "${workspaceFolder:tendon_loader}/ios",
         },
         "dependsOn": [
           "Project: pub get",
@@ -51,7 +71,7 @@
         "label": "Project: macos pods",
         "command": "pod install",
         "options": {
-          "cwd": "${workspaceFolder}/macos",
+          "cwd": "${workspaceFolder:tendon_loader}/macos",
         },
         "dependsOn": [
           "Project: pub get",
@@ -123,14 +143,14 @@
         "args": [
           "--import=${input:backupPath}",
           "--export-on-exit=${input:backupPath}",
-        ]
+        ],
       },
     ],
     "inputs": [
       {
         "id": "backupPath",
         "type": "promptString",
-        "default": "${workspaceFolder}/res/data/femu/",
+        "default": "${workspaceFolder}/res/data/emu",
         "description": "Enter firebase emulator backup location?",
       },
     ],

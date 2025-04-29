@@ -1,6 +1,7 @@
 PODS:
+  - app_settings (5.1.1):
+    - FlutterMacOS
   - connectivity_plus (0.0.1):
-    - Flutter
     - FlutterMacOS
   - flutter_blue (0.0.1):
     - flutter_blue/Protos (= 0.0.1)
@@ -14,7 +15,8 @@ PODS:
   - Protobuf (3.11.4)
 
 DEPENDENCIES:
-  - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/darwin`)
+  - app_settings (from `Flutter/ephemeral/.symlinks/plugins/app_settings/macos`)
+  - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos`)
   - flutter_blue (from `Flutter/ephemeral/.symlinks/plugins/flutter_blue/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - location (from `Flutter/ephemeral/.symlinks/plugins/location/macos`)
@@ -24,8 +26,10 @@ SPEC REPOS:
     - Protobuf
 
 EXTERNAL SOURCES:
+  app_settings:
+    :path: Flutter/ephemeral/.symlinks/plugins/app_settings/macos
   connectivity_plus:
-    :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus/darwin
+    :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos
   flutter_blue:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_blue/macos
   FlutterMacOS:
@@ -34,7 +38,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/location/macos
 
 SPEC CHECKSUMS:
-  connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
+  app_settings: 140be3a9c0fc1f681e44afe9f549ab037b3aa3a2
+  connectivity_plus: 0a976dfd033b59192912fa3c6c7b54aab5093802
   flutter_blue: 2756506bb10a51e075832da287b48bf5377bdc28
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   location: 7cdb0665bd6577d382b0a343acdadbcb7f964775
@@ -42,4 +47,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: d475140f27c622064d90d5cfd4728ee6a37649a5
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

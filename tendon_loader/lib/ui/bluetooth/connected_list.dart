@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:tendon_loader/ui/bluetooth/device_list.dart';
 import 'package:tendon_loader/ui/bluetooth/scanning_tile.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 
-/// The app uses [FlutterBlue.instance.connectedDevices] stream to look for
+/// The app uses [FlutterBlue.instance].connectedDevices stream to look for
 /// already connected Bluetooth devices. The connection is with the
 /// mobile device itself and not to the specific application, meaning closing
 /// app may keep device to stay connected. So, app is responsible to disconnect
@@ -22,7 +22,7 @@ class ConnectedList extends StatelessWidget {
       future: FlutterBlue.instance.connectedDevices,
       builder: (context, snapshot) {
         // Initial Step... Loading...
-        if (!snapshot.hasData) return const RawButton.loading();
+        if (!snapshot.hasData) return const ButtonFactory.loading();
         // Could not find any connected device, Goto Device Scanner...
         if (snapshot.data!.isEmpty) return const ScanningTile();
         // else, Show the list of connected devices...

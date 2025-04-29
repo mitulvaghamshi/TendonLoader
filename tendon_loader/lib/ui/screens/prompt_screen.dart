@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/router/router.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
@@ -51,10 +51,7 @@ class _PromptScreenState extends State<PromptScreen> {
               ),
               _CardWidget(
                 children: [
-                  const Text(
-                    '1. Pain score',
-                    style: Styles.whiteBold22,
-                  ),
+                  const Text('1. Pain score', style: Styles.whiteBold22),
                   const Divider(thickness: 2),
                   const Text(
                     'Please describe your '
@@ -67,17 +64,16 @@ class _PromptScreenState extends State<PromptScreen> {
                       vertical: 20,
                       horizontal: 16,
                     ),
-                    child: PainSelector(onSelect: (value) {
-                      setState(() => painScore = value);
-                    }),
+                    child: PainSelector(
+                      onSelect: (value) {
+                        setState(() => painScore = value);
+                      },
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildPainText(
-                        '0\n\nNo\npain',
-                        const Color(0xff00e676),
-                      ),
+                      _buildPainText('0\n\nNo\npain', const Color(0xff00e676)),
                       _buildPainText(
                         '5\n\nModerate\npain',
                         const Color(0xff7f9c61),
@@ -92,10 +88,7 @@ class _PromptScreenState extends State<PromptScreen> {
               ),
               _CardWidget(
                 children: [
-                  const Text(
-                    '2. Pain tolerance',
-                    style: Styles.whiteBold22,
-                  ),
+                  const Text('2. Pain tolerance', style: Styles.whiteBold22),
                   const Divider(thickness: 2),
                   const Text(
                     'Was the pain during that '
@@ -105,96 +98,115 @@ class _PromptScreenState extends State<PromptScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      RawButton.tile(
-                        color: painTolerance == Tolerance.yes
-                            ? Colors.blueGrey
-                            : null,
+                      ButtonFactory.tile(
+                        color:
+                            painTolerance == Tolerance.yes
+                                ? Colors.blueGrey
+                                : null,
                         leading: const Icon(Icons.check),
                         child: Text(Tolerance.yes.value),
-                        onTap: () =>
-                            setState(() => painTolerance = Tolerance.yes),
+                        onTap:
+                            () => setState(() => painTolerance = Tolerance.yes),
                       ),
                       const SizedBox(width: 5),
-                      RawButton.tile(
-                        color: painTolerance == Tolerance.no
-                            ? Colors.blueGrey
-                            : null,
+                      ButtonFactory.tile(
+                        color:
+                            painTolerance == Tolerance.no
+                                ? Colors.blueGrey
+                                : null,
                         leading: const Icon(Icons.clear),
                         child: Text(Tolerance.no.value),
-                        onTap: () =>
-                            setState(() => painTolerance = Tolerance.no),
+                        onTap:
+                            () => setState(() => painTolerance = Tolerance.no),
                       ),
                       const SizedBox(width: 5),
-                      RawButton.tile(
-                        color: painTolerance == Tolerance.noPain
-                            ? Colors.blueGrey
-                            : null,
+                      ButtonFactory.tile(
+                        color:
+                            painTolerance == Tolerance.noPain
+                                ? Colors.blueGrey
+                                : null,
                         leading: const Icon(Icons.remove),
                         child: Text(Tolerance.noPain.value),
-                        onTap: () =>
-                            setState(() => painTolerance = Tolerance.noPain),
+                        onTap:
+                            () => setState(
+                              () => painTolerance = Tolerance.noPain,
+                            ),
                       ),
                     ],
                   ),
                 ],
               ),
               if (!_autoUpload)
-                _CardWidget(children: [
-                  const Text(
-                    '3. Submit data?',
-                    style: Styles.whiteBold22,
-                  ),
-                  const Divider(thickness: 2),
-                  const Text(
-                    'Would you like to submit your answers '
-                    'and Exercise/MVC Test data to clinician?',
-                  ),
-                  const SizedBox(height: 16),
-                  ListTile(
-                    tileColor: submitDecision == Submission.now
-                        ? Colors.blueGrey
-                        : null,
-                    leading: const Icon(Icons.cloud_upload,
-                        color: Color(0xff3ddc85)),
-                    title: Text(Submission.now.value),
-                    onTap: () =>
-                        setState(() => submitDecision = Submission.now),
-                  ),
-                  ListTile(
-                    tileColor: submitDecision == Submission.leter
-                        ? Colors.blueGrey
-                        : null,
-                    leading: const Icon(Icons.save, color: Color(0xffe18f3c)),
-                    title: Text(Submission.leter.value),
-                    onTap: () =>
-                        setState(() => submitDecision = Submission.leter),
-                  ),
-                  ListTile(
-                    tileColor: submitDecision == Submission.discard
-                        ? Colors.blueGrey
-                        : null,
-                    leading: const Icon(Icons.clear, color: Color(0xffff534d)),
-                    title: Text(Submission.discard.value),
-                    onTap: () =>
-                        setState(() => submitDecision = Submission.discard),
-                  ),
-                ]),
+                _CardWidget(
+                  children: [
+                    const Text('3. Submit data?', style: Styles.whiteBold22),
+                    const Divider(thickness: 2),
+                    const Text(
+                      'Would you like to submit your answers '
+                      'and Exercise/MVC Test data to clinician?',
+                    ),
+                    const SizedBox(height: 16),
+                    ListTile(
+                      tileColor:
+                          submitDecision == Submission.now
+                              ? Colors.blueGrey
+                              : null,
+                      leading: const Icon(
+                        Icons.cloud_upload,
+                        color: Color(0xff3ddc85),
+                      ),
+                      title: Text(Submission.now.value),
+                      onTap:
+                          () => setState(() => submitDecision = Submission.now),
+                    ),
+                    ListTile(
+                      tileColor:
+                          submitDecision == Submission.leter
+                              ? Colors.blueGrey
+                              : null,
+                      leading: const Icon(Icons.save, color: Color(0xffe18f3c)),
+                      title: Text(Submission.leter.value),
+                      onTap:
+                          () =>
+                              setState(() => submitDecision = Submission.leter),
+                    ),
+                    ListTile(
+                      tileColor:
+                          submitDecision == Submission.discard
+                              ? Colors.blueGrey
+                              : null,
+                      leading: const Icon(
+                        Icons.clear,
+                        color: Color(0xffff534d),
+                      ),
+                      title: Text(Submission.discard.value),
+                      onTap:
+                          () => setState(
+                            () => submitDecision = Submission.discard,
+                          ),
+                    ),
+                  ],
+                ),
               const Divider(thickness: 2),
-              _CardWidget(children: [
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child:
-                      ((_autoUpload || submitDecision == Submission.discard) ||
-                              painScore != null && painTolerance != null)
-                          ? RawButton.tile(
+              _CardWidget(
+                children: [
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child:
+                        ((_autoUpload ||
+                                    submitDecision == Submission.discard) ||
+                                painScore != null && painTolerance != null)
+                            ? ButtonFactory.tile(
                               onTap: _onFinished,
                               leading: const Icon(Icons.check),
                               child: const Text('Finish'),
                             )
-                          : const Text(
-                              'Please answer all three questions to finish.'),
-                ),
-              ]),
+                            : const Text(
+                              'Please answer all three questions to finish.',
+                            ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -323,17 +335,20 @@ class _CustomShape extends SliderComponentShape {
   Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.zero;
 
   @override
-  void paint(PaintingContext context, Offset center,
-      {required Animation<double> activationAnimation,
-      required Animation<double> enableAnimation,
-      required bool isDiscrete,
-      required TextPainter labelPainter,
-      required RenderBox parentBox,
-      required SliderThemeData sliderTheme,
-      required TextDirection textDirection,
-      required double value,
-      required double textScaleFactor,
-      required Size sizeWithOverflow}) {
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
     context.canvas.drawCircle(
       center,
       sliderTheme.trackHeight! * 0.7,
@@ -341,13 +356,18 @@ class _CustomShape extends SliderComponentShape {
     );
     labelPainter.paint(
       context.canvas,
-      Offset(center.dx - (labelPainter.width / 2),
-          center.dy - (labelPainter.height / 2)),
+      Offset(
+        center.dx - (labelPainter.width / 2),
+        center.dy - (labelPainter.height / 2),
+      ),
     );
   }
 }
 
 extension on _PainSelectorState {
   Color? get _trackColor => Color.lerp(
-      const Color(0xff00e676), const Color(0xffff534d), painScore / 10);
+    const Color(0xff00e676),
+    const Color(0xffff534d),
+    painScore / 10,
+  );
 }

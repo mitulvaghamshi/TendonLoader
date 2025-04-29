@@ -7,10 +7,12 @@ import 'package:tendon_loader/utils/constants.dart';
 
 class ExerciseHandler extends GraphHandler {
   ExerciseHandler({required this.prescription, required super.onCountdown})
-      : super(lineData: <ChartData>[
+    : super(
+        lineData: <ChartData>[
           ChartData(load: prescription.targetLoad),
           ChartData(time: 2, load: prescription.targetLoad),
-        ]) {
+        ],
+      ) {
     _clear();
   }
 
@@ -190,7 +192,8 @@ extension ExExerciseHandler on ExerciseHandler {
   String get repCounter => '$_repCount / ${prescription.reps}';
   String get setCounter => '$_setCount / ${prescription.sets}';
   String get timeCounter => '${_isPushing ? 'Push' : 'Rest'}: $_lapTime sec';
-  TextStyle get timeStyle => _isPushing
-      ? Styles.blackBold26
-      : Styles.blackBold26.copyWith(color: Colors.red);
+  TextStyle get timeStyle =>
+      _isPushing
+          ? Styles.blackBold26
+          : Styles.blackBold26.copyWith(color: Colors.red);
 }

@@ -20,18 +20,19 @@ class Exercise {
   });
 
   const Exercise.empty()
-      : id = 0,
-        userId = 0,
-        painScore = 0,
-        datetime = '',
-        tolerable = '',
-        completed = false,
-        progressorId = '',
-        prescriptionId = null,
-        mvcValue = 0,
-        data = const [];
+    : id = 0,
+      userId = 0,
+      painScore = 0,
+      datetime = '',
+      tolerable = '',
+      completed = false,
+      progressorId = '',
+      prescriptionId = null,
+      mvcValue = 0,
+      data = const [];
 
-  factory Exercise.fromJson(final map) => ExExercise._parseJson(map);
+  factory Exercise.fromJson(Map<String, dynamic> map) =>
+      ExExercise._parseJson(map);
 
   final int id;
   final int userId;
@@ -51,40 +52,40 @@ extension ExExercise on Exercise {
   String get status => completed ? 'Complete' : 'Incomplete';
 
   List<(String, String)> get tableRows => [
-        ('User ID', userId.toString()),
-        ('Created on', datetime),
-        ('Session type', type),
-        ('Data status', status),
-        ('Device', progressorId),
-        ('Pain score', '$painScore / 10'),
-        ('Pain tolerable?', tolerable),
-        if (isMVC) ('Max force', '${mvcValue!.toStringAsFixed(2)} kg'),
-      ];
+    ('User ID', userId.toString()),
+    ('Created on', datetime),
+    ('Session type', type),
+    ('Data status', status),
+    ('Device', progressorId),
+    ('Pain score', '$painScore / 10'),
+    ('Pain tolerable?', tolerable),
+    if (isMVC) ('Max force', '${mvcValue!.toStringAsFixed(2)} kg'),
+  ];
 
   Map<String, dynamic> get json => {
-        'id': id,
-        'userId': userId,
-        'painScore': painScore,
-        'datetime': datetime,
-        'tolerable': tolerable,
-        'completed': completed ? 1 : 0,
-        'progressorId': progressorId,
-        'prescriptionId': prescriptionId,
-        'mvcValue': mvcValue,
-        'data': data.map((e) => e.pair).join('|'),
-      };
+    'id': id,
+    'user_id': userId,
+    'prescription_id': progressorId,
+    'pain_score': painScore,
+    'datetime': datetime,
+    'tolerable': tolerable,
+    'completed': completed ? 1 : 0,
+    'progressor_id': prescriptionId,
+    'mvc_value': mvcValue,
+    'data': data.map((e) => e.pair).join('|'),
+  };
 
   Exercise copyWith({
-    final int? id,
-    final int? userId,
-    final double? painScore,
-    final String? datetime,
-    final String? tolerable,
-    final bool? completed,
-    final String? progressorId,
-    final int? prescriptionId,
-    final double? mvcValue,
-    final Iterable<ChartData>? data,
+    int? id,
+    int? userId,
+    double? painScore,
+    String? datetime,
+    String? tolerable,
+    bool? completed,
+    String? progressorId,
+    int? prescriptionId,
+    double? mvcValue,
+    Iterable<ChartData>? data,
   }) {
     return Exercise._(
       id: id ?? this.id,
@@ -100,20 +101,19 @@ extension ExExercise on Exercise {
     );
   }
 
-  static Exercise _parseJson(final map) {
-    if (map
-        case {
-          'id': final int id,
-          'userId': final int userId,
-          'prescriptionId': final int? prescriptionId,
-          'painScore': final num painScore,
-          'datetime': final String datetime,
-          'tolerable': final String tolerable,
-          'completed': final bool completed,
-          'progressorId': final String progressorId,
-          'mvcValue': final double? mvcValue,
-          'data': final String rawData,
-        }) {
+  static Exercise _parseJson(Map<String, dynamic> map) {
+    if (map case {
+      'id': int id,
+      'user_id': int userId,
+      'prescription_id': int? prescriptionId,
+      'pain_score': num painScore,
+      'datetime': String datetime,
+      'tolerable': String tolerable,
+      'completed': bool completed,
+      'progressor_id': String progressorId,
+      'mvc_value': double? mvcValue,
+      'data': String rawData,
+    }) {
       final data = rawData.split('|').map(ChartData.fromPair);
       return Exercise._(
         id: id,
@@ -131,7 +131,7 @@ extension ExExercise on Exercise {
     throw const FormatException('Invalid JSON');
   }
 
-  ArchiveFile _excelSheet([Prescription? prescription]) {
+  ArchiveFile excelSheet([Prescription? prescription]) {
     final Workbook book = Workbook();
     final Worksheet sheet = book.worksheets[0];
     const int c4 = 4, c5 = 5;
@@ -170,15 +170,15 @@ extension ExExercise on Exercise {
         ..getRangeByIndex(14, c5).number = prescription.reps.toDouble();
     }
 
-    for (final (int index, ChartData data) in data.indexed) {
+    for (var (int index, ChartData data) in data.indexed) {
       sheet
         ..getRangeByIndex(index + 1, 1).number = data.time
         ..getRangeByIndex(index + 1, 2).number = data.load;
     }
 
-    final InputStream stream = InputStream(book.saveAsStream());
-    final ArchiveFile file =
-        ArchiveFile.stream('$datetime-$userId.zip', stream.length, stream);
+    final ArchiveFile file = ArchiveFile //
+    .bytes('$datetime-$userId.zip', book.saveAsStream());
+
     book.dispose();
 
     return file;

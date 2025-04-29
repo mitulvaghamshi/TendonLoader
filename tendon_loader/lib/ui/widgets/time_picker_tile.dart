@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
@@ -26,14 +26,14 @@ class TimePickerTile extends StatelessWidget {
       title: Text(_timeString(minutes, seconds), style: Styles.bold18),
       subtitle: Text(label),
       children: [
-        const RawButton.tile(
+        const ButtonFactory.tile(
           color: Colors.green,
           axisAlignment: MainAxisAlignment.spaceEvenly,
           leading: Text('Minutes', style: Styles.whiteBold),
           child: Text('Seconds', style: Styles.whiteBold),
         ),
         const SizedBox(height: 8),
-        RawButton.tile(
+        ButtonFactory.tile(
           color: Colors.indigo,
           axisAlignment: MainAxisAlignment.spaceEvenly,
           leading: _NumberPicker(
@@ -83,7 +83,10 @@ class _NumberPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const textStyle = TextStyle(
-        color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22);
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 22,
+    );
     return SizedBox.fromSize(
       size: pickerSize,
       child: ListWheelScrollView(

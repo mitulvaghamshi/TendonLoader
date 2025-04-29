@@ -19,14 +19,16 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: state,
-      builder: (_, child) => MaterialApp.router(
-        title: 'Tendon Loader',
-        routerConfig: _router,
-        theme: _lightTheme,
-        darkTheme: _darkTheme,
-        themeMode: state.settings.themeMode,
-        builder: (_, child) => AppScope(data: state, child: child!),
-      ),
+      builder: (_, child) {
+        return MaterialApp.router(
+          title: 'Tendon Loader',
+          routerConfig: _router,
+          theme: _lightTheme,
+          darkTheme: _darkTheme,
+          themeMode: state.settings.themeMode,
+          builder: (_, child) => AppScope(data: state, child: child!),
+        );
+      },
     );
   }
 }

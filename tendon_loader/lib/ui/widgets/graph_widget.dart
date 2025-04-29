@@ -5,7 +5,7 @@ import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/livedata_handler.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/states/app_scope.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 
 // onPopInvoked: (value) async {
 //   final String key = await handler.exit();
@@ -32,10 +32,12 @@ class GraphWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       persistentFooterButtons: [_GraphControls(handler: handler)],
-      body: Column(children: [
-        _GraphHeader(handler: handler, builder: headerBuilder),
-        Expanded(child: _TheBarGraph(handler: handler)),
-      ]),
+      body: Column(
+        children: [
+          _GraphHeader(handler: handler, builder: headerBuilder),
+          Expanded(child: _TheBarGraph(handler: handler)),
+        ],
+      ),
     );
   }
 }
@@ -69,24 +71,27 @@ class _GraphControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      RawButton.tile(
-        onTap: handler.start,
-        leading: const Icon(Icons.play_arrow, color: Color(0xff3ddc85)),
-        child: const Text('Start'),
-      ),
-      if (handler is ExerciseHandler)
-        RawButton.tile(
-          onTap: handler.pause,
-          leading: const Icon(Icons.pause, color: Color(0xFFDCC73D)),
-          child: const Text('Pause'),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ButtonFactory.tile(
+          onTap: handler.start,
+          leading: const Icon(Icons.play_arrow, color: Color(0xff3ddc85)),
+          child: const Text('Start'),
         ),
-      RawButton.tile(
-        onTap: handler.stop,
-        leading: const Icon(Icons.stop, color: Color(0xffff534d)),
-        child: const Text('Stop'),
-      ),
-    ]);
+        if (handler is ExerciseHandler)
+          ButtonFactory.tile(
+            onTap: handler.pause,
+            leading: const Icon(Icons.pause, color: Color(0xFFDCC73D)),
+            child: const Text('Pause'),
+          ),
+        ButtonFactory.tile(
+          onTap: handler.stop,
+          leading: const Icon(Icons.stop, color: Color(0xffff534d)),
+          child: const Text('Stop'),
+        ),
+      ],
+    );
   }
 }
 
@@ -100,9 +105,10 @@ class _TheBarGraph extends StatelessWidget {
   Widget build(BuildContext context) {
     return SfCartesianChart(
       margin: const EdgeInsets.all(16),
-      primaryXAxis: handler.lineData != null
-          ? const NumericAxis(minimum: 0, isVisible: false)
-          : const CategoryAxis(minimum: 0, maximum: 0, isVisible: false),
+      primaryXAxis:
+          handler.lineData != null
+              ? const NumericAxis(minimum: 0, isVisible: false)
+              : const CategoryAxis(minimum: 0, maximum: 0, isVisible: false),
       primaryYAxis: NumericAxis(
         interval: 2,
         labelFormat: '{value} kg',

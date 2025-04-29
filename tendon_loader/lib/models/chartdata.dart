@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 class ChartData {
   const ChartData({this.time = 0, this.load = 0});
 
-  factory ChartData.fromPair(final data) => ExChartData._parseJson(data);
+  factory ChartData.fromPair(String data) => ExChartData._parseJson(data);
 
   final double time;
   final double load;
@@ -13,11 +13,11 @@ class ChartData {
 extension ExChartData on ChartData {
   String get pair => '$time:$load';
 
-  ChartData copyWith({final double? time, final double? load}) {
+  ChartData copyWith({double? time, double? load}) {
     return ChartData(time: time ?? this.time, load: load ?? this.load);
   }
 
-  static ChartData _parseJson(final String data) {
+  static ChartData _parseJson(String data) {
     final items = data.split(':');
     return ChartData(
       time: double.parse(items[0]),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/models/user.dart';
 import 'package:tendon_loader/router/router.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 import 'package:tendon_loader/ui/widgets/search_list.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
@@ -32,11 +32,12 @@ class _UserItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RawButton.tile(
-      onTap: () => ExerciseListRoute(
-        userId: user.id!,
-        title: user.name,
-      ).push(context),
+    return ButtonFactory.tile(
+      onTap:
+          () => ExerciseListRoute(
+            userId: user.id!,
+            title: user.name,
+          ).push(context),
       spacing: 16,
       axisAlignment: MainAxisAlignment.start,
       leading: CircleAvatar(radius: 24, child: Text(index.toString())),
@@ -44,10 +45,13 @@ class _UserItem extends StatelessWidget {
         onPressed: _showMenu,
         icon: const Icon(Icons.more_vert),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(user.name, style: Styles.bold18),
-        Text(user.username, style: const TextStyle(color: Colors.grey)),
-      ]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(user.name, style: Styles.bold18),
+          Text(user.username, style: const TextStyle(color: Colors.grey)),
+        ],
+      ),
     );
   }
 }

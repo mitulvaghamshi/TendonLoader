@@ -11,7 +11,7 @@ class Progressor {
 
   Progressor._();
 
-  call({required final BluetoothDevice device}) => init(device: device);
+  call({required BluetoothDevice device}) => init(device: device);
 
   static Progressor? _instance;
   static Progressor get instance => Progressor();
@@ -25,9 +25,10 @@ class Progressor {
 
   BluetoothDevice? get progressor => _device;
 
-  String get deviceName => _device == null
-      ? 'Unknown'
-      : _device!.name.isEmpty
+  String get deviceName =>
+      _device == null
+          ? 'Unknown'
+          : _device!.name.isEmpty
           ? _device!.id.id
           : _device!.name;
 
@@ -47,20 +48,14 @@ class Progressor {
   Future<void> startProgresssor() async {
     if (_isRunning) return;
     _isRunning = true;
-    if (Simulator.enabled) {
-      Simulator.startSimulator();
-      return;
-    }
+    if (Simulator.enabled) return Simulator.startSimulator();
     await _controlChar!.write(<int>[Commands.startWeightMeas]);
   }
 
   Future<void> stopProgressor() async {
     if (!_isRunning) return;
     _isRunning = false;
-    if (Simulator.enabled) {
-      Simulator.stopSimulator();
-      return;
-    }
+    if (Simulator.enabled) return Simulator.stopSimulator();
     await _controlChar!.write(<int>[Commands.stopWeightMeas]);
   }
 
@@ -80,13 +75,13 @@ class Progressor {
   Future<void> get _delayedStart async =>
       Future<void>.delayed(const Duration(milliseconds: 800), startProgresssor);
 
-  Future<bool> init({required final BluetoothDevice device}) async {
+  Future<bool> init({required BluetoothDevice device}) async {
     if (_device != null && _dataChar != null && _controlChar != null) {
       return _delayedStart.then((_) => true);
     } else if (_completer == null) {
       _completer = Completer<bool>();
-      for (final BluetoothService s in await device.discoverServices()) {
-        for (final BluetoothCharacteristic c in s.characteristics) {
+      for (BluetoothService s in await device.discoverServices()) {
+        for (BluetoothCharacteristic c in s.characteristics) {
           if (c.uuid == Guid(DeviceUUID.controller)) {
             _controlChar = c;
           } else if (c.uuid == Guid(DeviceUUID.data)) {

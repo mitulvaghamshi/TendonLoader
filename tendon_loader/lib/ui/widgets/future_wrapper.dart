@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 
 @immutable
 class FutureWrapper<T> extends StatelessWidget {
@@ -12,11 +12,13 @@ class FutureWrapper<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<T>(
       future: future,
-      builder: (_, snapshot) => snapshot.hasData
-          ? builder(snapshot.requireData)
-          : snapshot.hasError
-              ? RawButton.error(message: snapshot.error.toString())
-              : const RawButton.loading(centered: true),
+      builder:
+          (_, snapshot) =>
+              snapshot.hasData
+                  ? builder(snapshot.requireData)
+                  : snapshot.hasError
+                  ? ButtonFactory.error(message: snapshot.error.toString())
+                  : const ButtonFactory.loading(centered: true),
     );
   }
 }

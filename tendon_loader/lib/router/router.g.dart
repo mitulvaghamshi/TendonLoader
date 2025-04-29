@@ -6,64 +6,60 @@ part of 'router.dart';
 // GoRouterGenerator
 // **************************************************************************
 
-List<RouteBase> get $appRoutes => [
-      $tendonLoaderRoute,
-    ];
+List<RouteBase> get $appRoutes => [$tendonLoaderRoute];
 
 RouteBase get $tendonLoaderRoute => GoRouteData.$route(
-      path: '/',
-      factory: $TendonLoaderRouteExtension._fromState,
-      routes: [
-        GoRouteData.$route(
-          path: 'settings',
-          factory: $SettingScreenRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'prescriptions',
-          factory: $PrescriptionRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'livedata',
-          factory: $LiveDataRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'mvctesting',
-          factory: $MVCTestingRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'exercisemode',
-          factory: $ExerciseModeRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'promptscreen',
-          factory: $PromptScreenRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'userlist',
-          factory: $UserListRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'exerciselist',
-          factory: $ExerciseListRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'exercisedetail',
-          factory: $ExerciseDetaildRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
-          path: 'exercisedatalist',
-          factory: $ExerciseDataListRouteExtension._fromState,
-        ),
-      ],
-    );
+  path: '/',
+  factory: $TendonLoaderRouteExtension._fromState,
+  routes: [
+    GoRouteData.$route(
+      path: 'settings',
+      factory: $SettingScreenRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'prescriptions',
+      factory: $PrescriptionRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'livedata',
+      factory: $LiveDataRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'mvctesting',
+      factory: $MVCTestingRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'exercisemode',
+      factory: $ExerciseModeRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'promptscreen',
+      factory: $PromptScreenRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'userlist',
+      factory: $UserListRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'exerciselist',
+      factory: $ExerciseListRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'exercisedetail',
+      factory: $ExerciseDetaildRouteExtension._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'exercisedatalist',
+      factory: $ExerciseDataListRouteExtension._fromState,
+    ),
+  ],
+);
 
 extension $TendonLoaderRouteExtension on TendonLoaderRoute {
   static TendonLoaderRoute _fromState(GoRouterState state) =>
       const TendonLoaderRoute();
 
-  String get location => GoRouteData.$location(
-        '/',
-      );
+  String get location => GoRouteData.$location('/');
 
   void go(BuildContext context) => context.go(location);
 
@@ -79,9 +75,7 @@ extension $SettingScreenRouteExtension on SettingScreenRoute {
   static SettingScreenRoute _fromState(GoRouterState state) =>
       const SettingScreenRoute();
 
-  String get location => GoRouteData.$location(
-        '/settings',
-      );
+  String get location => GoRouteData.$location('/settings');
 
   void go(BuildContext context) => context.go(location);
 
@@ -97,9 +91,7 @@ extension $PrescriptionRouteExtension on PrescriptionRoute {
   static PrescriptionRoute _fromState(GoRouterState state) =>
       const PrescriptionRoute();
 
-  String get location => GoRouteData.$location(
-        '/prescriptions',
-      );
+  String get location => GoRouteData.$location('/prescriptions');
 
   void go(BuildContext context) => context.go(location);
 
@@ -114,9 +106,7 @@ extension $PrescriptionRouteExtension on PrescriptionRoute {
 extension $LiveDataRouteExtension on LiveDataRoute {
   static LiveDataRoute _fromState(GoRouterState state) => const LiveDataRoute();
 
-  String get location => GoRouteData.$location(
-        '/livedata',
-      );
+  String get location => GoRouteData.$location('/livedata');
 
   void go(BuildContext context) => context.go(location);
 
@@ -132,9 +122,7 @@ extension $MVCTestingRouteExtension on MVCTestingRoute {
   static MVCTestingRoute _fromState(GoRouterState state) =>
       const MVCTestingRoute();
 
-  String get location => GoRouteData.$location(
-        '/mvctesting',
-      );
+  String get location => GoRouteData.$location('/mvctesting');
 
   void go(BuildContext context) => context.go(location);
 
@@ -150,9 +138,7 @@ extension $ExerciseModeRouteExtension on ExerciseModeRoute {
   static ExerciseModeRoute _fromState(GoRouterState state) =>
       const ExerciseModeRoute();
 
-  String get location => GoRouteData.$location(
-        '/exercisemode',
-      );
+  String get location => GoRouteData.$location('/exercisemode');
 
   void go(BuildContext context) => context.go(location);
 
@@ -168,9 +154,7 @@ extension $PromptScreenRouteExtension on PromptScreenRoute {
   static PromptScreenRoute _fromState(GoRouterState state) =>
       const PromptScreenRoute();
 
-  String get location => GoRouteData.$location(
-        '/promptscreen',
-      );
+  String get location => GoRouteData.$location('/promptscreen');
 
   void go(BuildContext context) => context.go(location);
 
@@ -185,9 +169,7 @@ extension $PromptScreenRouteExtension on PromptScreenRoute {
 extension $UserListRouteExtension on UserListRoute {
   static UserListRoute _fromState(GoRouterState state) => const UserListRoute();
 
-  String get location => GoRouteData.$location(
-        '/userlist',
-      );
+  String get location => GoRouteData.$location('/userlist');
 
   void go(BuildContext context) => context.go(location);
 
@@ -201,17 +183,14 @@ extension $UserListRouteExtension on UserListRoute {
 
 extension $ExerciseListRouteExtension on ExerciseListRoute {
   static ExerciseListRoute _fromState(GoRouterState state) => ExerciseListRoute(
-        userId: int.parse(state.uri.queryParameters['user-id']!),
-        title: state.uri.queryParameters['title']!,
-      );
+    userId: int.parse(state.uri.queryParameters['user-id']!),
+    title: state.uri.queryParameters['title']!,
+  );
 
   String get location => GoRouteData.$location(
-        '/exerciselist',
-        queryParams: {
-          'user-id': userId.toString(),
-          'title': title,
-        },
-      );
+    '/exerciselist',
+    queryParams: {'user-id': userId.toString(), 'title': title},
+  );
 
   void go(BuildContext context) => context.go(location);
 
@@ -231,12 +210,12 @@ extension $ExerciseDetaildRouteExtension on ExerciseDetaildRoute {
       );
 
   String get location => GoRouteData.$location(
-        '/exercisedetail',
-        queryParams: {
-          'user-id': userId.toString(),
-          'exercise-id': exerciseId.toString(),
-        },
-      );
+    '/exercisedetail',
+    queryParams: {
+      'user-id': userId.toString(),
+      'exercise-id': exerciseId.toString(),
+    },
+  );
 
   void go(BuildContext context) => context.go(location);
 
@@ -256,12 +235,12 @@ extension $ExerciseDataListRouteExtension on ExerciseDataListRoute {
       );
 
   String get location => GoRouteData.$location(
-        '/exercisedatalist',
-        queryParams: {
-          'user-id': userId.toString(),
-          'exercise-id': exerciseId.toString(),
-        },
-      );
+    '/exercisedatalist',
+    queryParams: {
+      'user-id': userId.toString(),
+      'exercise-id': exerciseId.toString(),
+    },
+  );
 
   void go(BuildContext context) => context.go(location);
 

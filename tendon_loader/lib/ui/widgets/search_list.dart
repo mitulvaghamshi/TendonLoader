@@ -32,8 +32,9 @@ class _SearchListState<T> extends State<SearchList<T>> {
       setState(() => _items = widget.items);
       return;
     }
-    final filter = widget.items
-        .where((e) => widget.searchTerm(e).toLowerCase().contains(term));
+    final filter = widget.items.where((e) {
+      return widget.searchTerm(e).toLowerCase().contains(term);
+    });
     setState(() => _items = filter);
   }
 
@@ -45,20 +46,23 @@ class _SearchListState<T> extends State<SearchList<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: [
-      SliverAppBar.medium(title: Text(widget.title)),
-      SliverToBoxAdapter(
-        child: InputField.search(
-          onComplete: _search,
-          controller: _searchCtrl,
-          label: widget.searchLabel,
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar.medium(title: Text(widget.title)),
+        SliverToBoxAdapter(
+          child: InputField.search(
+            onComplete: _search,
+            controller: _searchCtrl,
+            label: widget.searchLabel,
+          ),
         ),
-      ),
-      SliverList.builder(
-        itemCount: _items.length,
-        itemBuilder: (_, index) =>
-            widget.builder(_items.elementAt(index), index),
-      ),
-    ]);
+        SliverList.builder(
+          itemCount: _items.length,
+          itemBuilder: (_, index) {
+            return widget.builder(_items.elementAt(index), index);
+          },
+        ),
+      ],
+    );
   }
 }

@@ -7,10 +7,7 @@ class Styles {
     vertical: 5,
   );
 
-  static const bold18 = TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-  );
+  static const bold18 = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
   static const whiteBold = TextStyle(
     color: Colors.white,

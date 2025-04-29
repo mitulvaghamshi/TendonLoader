@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-class RawButton extends StatelessWidget {
-  const RawButton({
+class ButtonFactory extends StatelessWidget {
+  const ButtonFactory({
     super.key,
     this.color,
     this.child,
@@ -12,26 +12,23 @@ class RawButton extends StatelessWidget {
     this.padding = const EdgeInsets.all(16),
   });
 
-  const factory RawButton.tile({
-    final Key? key,
-    final Widget? child,
-    final Color? color,
-    final double radius,
-    final VoidCallback? onTap,
-    final EdgeInsetsGeometry padding,
-    final Widget? leading,
-    final Widget? trailing,
-    final double spacing,
-    final MainAxisSize axisSize,
-    final MainAxisAlignment axisAlignment,
+  const factory ButtonFactory.tile({
+    Key? key,
+    Widget? child,
+    Color? color,
+    double radius,
+    VoidCallback? onTap,
+    EdgeInsetsGeometry padding,
+    Widget? leading,
+    Widget? trailing,
+    double spacing,
+    MainAxisSize axisSize,
+    MainAxisAlignment axisAlignment,
   }) = _RawListTile;
 
-  const factory RawButton.loading({final bool centered}) = _RawLoading;
+  const factory ButtonFactory.loading({bool centered}) = _RawLoading;
 
-  const factory RawButton.error({
-    final Color? color,
-    final String message,
-  }) = _RawError;
+  const factory ButtonFactory.error({Color? color, String message}) = _RawError;
 
   final Widget? child;
   final Color? color;
@@ -56,7 +53,7 @@ class RawButton extends StatelessWidget {
 }
 
 @immutable
-class _RawListTile extends RawButton {
+class _RawListTile extends ButtonFactory {
   const _RawListTile({
     super.key,
     super.onTap,
@@ -84,7 +81,7 @@ class _RawListTile extends RawButton {
       if (child != null) child!,
       if (trailing != null) ...[const Spacer(), trailing!],
     ];
-    return RawButton(
+    return ButtonFactory(
       onTap: onTap,
       color: color,
       radius: radius,
@@ -99,14 +96,14 @@ class _RawListTile extends RawButton {
 }
 
 @immutable
-class _RawLoading extends RawButton {
+class _RawLoading extends ButtonFactory {
   const _RawLoading({this.centered = false});
 
   final bool centered;
 
   @override
   Widget build(BuildContext context) {
-    const widget = RawButton.tile(
+    const widget = ButtonFactory.tile(
       spacing: 16,
       color: Colors.green,
       leading: CircularProgressIndicator.adaptive(
@@ -123,7 +120,7 @@ class _RawLoading extends RawButton {
 }
 
 @immutable
-class _RawError extends RawButton {
+class _RawError extends ButtonFactory {
   const _RawError({
     super.color = Colors.red,
     this.message = 'Something went wrong',
@@ -133,7 +130,7 @@ class _RawError extends RawButton {
 
   @override
   Widget build(BuildContext context) {
-    return RawButton.tile(
+    return ButtonFactory.tile(
       color: color,
       padding: const EdgeInsets.all(8),
       leading: const Icon(Icons.info, color: Colors.white),

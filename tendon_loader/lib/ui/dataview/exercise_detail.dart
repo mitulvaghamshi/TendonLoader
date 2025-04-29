@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/ui/dataview/exercise_data_graph.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 
-typedef ExercisePayload = ({
-  double targetLoad,
-  Iterable<ChartData> chartData,
-  Iterable<(String, String)> infoTable,
-});
+typedef ExercisePayload =
+    ({
+      double targetLoad,
+      Iterable<ChartData> chartData,
+      Iterable<(String, String)> infoTable,
+    });
 
 @immutable
 class ExerciseDetail extends StatelessWidget {
@@ -17,21 +18,22 @@ class ExerciseDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: [
-      const SliverAppBar.medium(title: Text('Exercise Details')),
-      SliverToBoxAdapter(
-        child: ExerciseDataGraph(
-          tagetLoad: payload.targetLoad,
-          items: payload.chartData,
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar.medium(title: Text('Exercise Details')),
+        SliverToBoxAdapter(
+          child: ExerciseDataGraph(
+            tagetLoad: payload.targetLoad,
+            items: payload.chartData,
+          ),
         ),
-      ),
-      SliverList.builder(
-        itemCount: payload.infoTable.length,
-        itemBuilder: (_, index) => _ListItem(
-          row: payload.infoTable.elementAt(index),
+        SliverList.builder(
+          itemCount: payload.infoTable.length,
+          itemBuilder:
+              (_, index) => _ListItem(row: payload.infoTable.elementAt(index)),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 }
 
@@ -43,11 +45,13 @@ class _ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RawButton(
-      child: Row(children: [
-        Expanded(child: Text(row.$1)),
-        Expanded(child: Text(row.$2)),
-      ]),
+    return ButtonFactory(
+      child: Row(
+        children: [
+          Expanded(child: Text(row.$1)),
+          Expanded(child: Text(row.$2)),
+        ],
+      ),
     );
   }
 }

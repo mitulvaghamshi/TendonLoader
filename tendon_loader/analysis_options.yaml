@@ -1,4 +1,5 @@
 include: package:flutter_lints/flutter.yaml
+
 analyzer:
   errors:
     missing_required_param: error
@@ -49,8 +50,8 @@ linter:
     - parameter_assignments
     - prefer_asserts_in_initializer_lists
     - prefer_asserts_with_message
-    - prefer_final_in_for_each
-    - prefer_final_locals
+    - prefer_const_constructors
+    - prefer_const_declarations
     - prefer_foreach
     - prefer_if_elements_to_conditional_expressions
     - sort_constructors_first
@@ -64,6 +65,7 @@ linter:
     - unnecessary_parenthesis
     - unnecessary_raw_strings
     - unnecessary_statements
+    - unnecessary_overrides
     - use_if_null_to_convert_nulls_to_bools
     - use_is_even_rather_than_modulo
     - use_late_for_private_fields_and_variables

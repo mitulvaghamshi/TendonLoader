@@ -26,32 +26,35 @@ import 'package:tendon_loader/ui/screens/prompt_screen.dart';
 import 'package:tendon_loader/ui/screens/settings_screen.dart';
 import 'package:tendon_loader/ui/screens/signin_screen.dart';
 import 'package:tendon_loader/ui/widgets/app_frame.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 import 'package:tendon_loader/ui/widgets/countdown_widget.dart';
 import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
 import 'package:tendon_loader/ui/widgets/graph_widget.dart';
 import 'package:tendon_loader/ui/widgets/life_cycle_aware.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 part 'router.g.dart';
 
-@TypedGoRoute<TendonLoaderRoute>(path: TendonLoaderRoute.path, routes: [
-  TypedGoRoute<SettingScreenRoute>(path: SettingScreenRoute.path),
-  TypedGoRoute<PrescriptionRoute>(path: PrescriptionRoute.path),
-  //
-  TypedGoRoute<LiveDataRoute>(path: LiveDataRoute.path),
-  //
-  TypedGoRoute<MVCTestingRoute>(path: MVCTestingRoute.path),
-  //
-  TypedGoRoute<ExerciseModeRoute>(path: ExerciseModeRoute.path),
-  //
-  TypedGoRoute<PromptScreenRoute>(path: PromptScreenRoute.path),
-  //
-  TypedGoRoute<UserListRoute>(path: UserListRoute.path),
-  TypedGoRoute<ExerciseListRoute>(path: ExerciseListRoute.path),
-  TypedGoRoute<ExerciseDetaildRoute>(path: ExerciseDetaildRoute.path),
-  TypedGoRoute<ExerciseDataListRoute>(path: ExerciseDataListRoute.path),
-])
+@TypedGoRoute<TendonLoaderRoute>(
+  path: TendonLoaderRoute.path,
+  routes: [
+    TypedGoRoute<SettingScreenRoute>(path: SettingScreenRoute.path),
+    TypedGoRoute<PrescriptionRoute>(path: PrescriptionRoute.path),
+    //
+    TypedGoRoute<LiveDataRoute>(path: LiveDataRoute.path),
+    //
+    TypedGoRoute<MVCTestingRoute>(path: MVCTestingRoute.path),
+    //
+    TypedGoRoute<ExerciseModeRoute>(path: ExerciseModeRoute.path),
+    //
+    TypedGoRoute<PromptScreenRoute>(path: PromptScreenRoute.path),
+    //
+    TypedGoRoute<UserListRoute>(path: UserListRoute.path),
+    TypedGoRoute<ExerciseListRoute>(path: ExerciseListRoute.path),
+    TypedGoRoute<ExerciseDetaildRoute>(path: ExerciseDetaildRoute.path),
+    TypedGoRoute<ExerciseDataListRoute>(path: ExerciseDataListRoute.path),
+  ],
+)
 @immutable
 class TendonLoaderRoute extends GoRouteData {
   const TendonLoaderRoute();
@@ -67,13 +70,13 @@ class TendonLoaderRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
+    NetworkStatus(); // Initialize Singleton.
+
     return Scaffold(
       appBar: AppBar(title: const Text('Tendon Loader')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: AppFrame(
-          child: SignInScreen(builder: (_) => const HomeScreen()),
-        ),
+      body: const SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: AppFrame(child: SignInScreen(child: HomeScreen())),
       ),
     );
   }
@@ -140,11 +143,12 @@ class LiveDataRoute extends GoRouteData {
     return GraphWidget(
       title: name,
       handler: handler,
-      headerBuilder: (_) => Text(
-        handler.timeElapsed,
-        textAlign: TextAlign.center,
-        style: Styles.blackBold26,
-      ),
+      headerBuilder:
+          (_) => Text(
+            handler.timeElapsed,
+            textAlign: TextAlign.center,
+            style: Styles.blackBold26,
+          ),
     );
   }
 }
@@ -165,13 +169,18 @@ class MVCTestingRoute extends GoRouteData {
     return GraphWidget(
       title: name,
       handler: handler,
-      headerBuilder: (_) => Column(children: [
-        Text(handler.maxForceValue, style: Styles.blackBold26),
-        Text(
-          handler.timeDiffValue,
-          style: Styles.blackBold26.copyWith(color: const Color(0xffff534d)),
-        ),
-      ]),
+      headerBuilder:
+          (_) => Column(
+            children: [
+              Text(handler.maxForceValue, style: Styles.blackBold26),
+              Text(
+                handler.timeDiffValue,
+                style: Styles.blackBold26.copyWith(
+                  color: const Color(0xffff534d),
+                ),
+              ),
+            ],
+          ),
     );
   }
 }
@@ -200,37 +209,45 @@ class ExerciseModeRoute extends GoRouteData {
       onResume: () {
         if (handler.isRunning) handler.start();
       },
-      builder: (_) => GraphWidget(
-        title: name,
-        handler: handler,
-        headerBuilder: (_) => SizedBox(
-          width: 300,
-          child: Column(children: [
-            Text(handler.timeCounter, style: handler.timeStyle),
-            Divider(color: handler.feedColor, thickness: 10),
-            const Row(children: [
-              Expanded(child: Text('Rep:')),
-              Expanded(child: Text('Set:')),
-            ]),
-            Row(children: [
-              Expanded(
-                child: Text(
-                  handler.repCounter,
-                  textAlign: TextAlign.center,
-                  style: Styles.blackBold26,
+      builder:
+          (_) => GraphWidget(
+            title: name,
+            handler: handler,
+            headerBuilder:
+                (_) => SizedBox(
+                  width: 300,
+                  child: Column(
+                    children: [
+                      Text(handler.timeCounter, style: handler.timeStyle),
+                      Divider(color: handler.feedColor, thickness: 10),
+                      const Row(
+                        children: [
+                          Expanded(child: Text('Rep:')),
+                          Expanded(child: Text('Set:')),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              handler.repCounter,
+                              textAlign: TextAlign.center,
+                              style: Styles.blackBold26,
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              handler.setCounter,
+                              textAlign: TextAlign.center,
+                              style: Styles.blackBold26,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Text(
-                  handler.setCounter,
-                  textAlign: TextAlign.center,
-                  style: Styles.blackBold26,
-                ),
-              ),
-            ]),
-          ]),
-        ),
-      ),
+          ),
     );
   }
 }
@@ -259,7 +276,7 @@ class UserListRoute extends GoRouteData {
         future: UserService.instance.getAllUsers(),
         builder: (snapshot) {
           if (snapshot.hasData) return UserList(items: snapshot.requireData);
-          return RawButton.error(message: snapshot.error.toString());
+          return ButtonFactory.error(message: snapshot.error.toString());
         },
       ),
     );
@@ -280,10 +297,9 @@ class ExerciseListRoute extends GoRouteData {
     return Scaffold(
       body: FutureWrapper(
         future: ExerciseService.instance.getAllExercisesByUserId(userId),
-        builder: (snapshot) => ExerciseList(
-          title: title,
-          items: snapshot.requireData,
-        ),
+        builder:
+            (snapshot) =>
+                ExerciseList(title: title, items: snapshot.requireData),
       ),
     );
   }
@@ -309,8 +325,10 @@ class ExerciseDetaildRoute extends GoRouteData {
   }
 
   Future<ExercisePayload> get _future async {
-    final eSnapshot = await ExerciseService.instance
-        .getExerciseBy(userId: userId, exerciseId: exerciseId);
+    final eSnapshot = await ExerciseService.instance.getExerciseBy(
+      userId: userId,
+      exerciseId: exerciseId,
+    );
 
     if (eSnapshot.hasError) {
       return (
@@ -322,8 +340,9 @@ class ExerciseDetaildRoute extends GoRouteData {
 
     final exercise = eSnapshot.requireData;
 
-    final pSnapshot = await PrescriptionService.instance
-        .getPrescriptionById(exercise.prescriptionId);
+    final pSnapshot = await PrescriptionService.instance.getPrescriptionById(
+      exercise.prescriptionId,
+    );
 
     if (pSnapshot.hasError) {
       return (
@@ -362,32 +381,39 @@ class ExerciseDataListRoute extends GoRouteData {
   }
 
   Future<Iterable<ChartData>> get _future async {
-    final eSnapshot = await ExerciseService.instance
-        .getExerciseBy(userId: userId, exerciseId: exerciseId);
+    final eSnapshot = await ExerciseService.instance.getExerciseBy(
+      userId: userId,
+      exerciseId: exerciseId,
+    );
     if (eSnapshot.hasData) return eSnapshot.requireData.data;
     return const Iterable.empty();
   }
 }
 
 extension on BuildContext {
-  Future<bool?> _countdown(final String title, final Duration duration) async {
+  Future<bool?> _countdown(String title, Duration duration) async {
     return showDialog<bool>(
       context: this,
       barrierDismissible: false,
-      builder: (context) => Dialog(
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Text(title, style: Styles.bold18),
+      builder: (context) {
+        return Dialog(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Text(title, style: Styles.bold18),
+              ),
+              CountdownWidget(duration: duration),
+              ButtonFactory.tile(
+                onTap: context.pop,
+                leading: const Icon(Icons.clear, color: Color(0xffff534d)),
+                child: const Text('Cancel'),
+              ),
+            ],
           ),
-          CountdownWidget(duration: duration),
-          RawButton.tile(
-            onTap: context.pop,
-            leading: const Icon(Icons.clear, color: Color(0xffff534d)),
-            child: const Text('Cancel'),
-          ),
-        ]),
-      ),
+        );
+      },
     );
   }
 }

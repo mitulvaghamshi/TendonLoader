@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/states/app_scope.dart';
+import 'package:tendon_loader/ui/widgets/button_factory.dart';
 import 'package:tendon_loader/ui/widgets/input_field.dart';
-import 'package:tendon_loader/ui/widgets/raw_button.dart';
 import 'package:tendon_loader/ui/widgets/time_picker_tile.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
@@ -40,76 +40,82 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      IgnorePointer(
-        ignoring: !state.settings.editablePrescription,
-        child: Column(children: [
-          InputField.form(
-            controller: _loadCtrl,
-            label: 'Target Load (Kg)',
-            format: r'^\d{1,2}(\.\d{0,2})?',
-            padding: Styles.tilePadding,
-            keyboardType: const TextInputType.numberWithOptions(
-              decimal: true,
-            ),
-          ),
-          Row(children: [
-            Expanded(
-              child: InputField.form(
-                controller: _setsCtrl,
-                label: 'Sets (#)',
-                format: r'^\d{1,2}',
+    return Column(
+      children: [
+        IgnorePointer(
+          ignoring: !state.settings.editablePrescription,
+          child: Column(
+            children: [
+              InputField.form(
+                controller: _loadCtrl,
+                label: 'Target Load (Kg)',
+                format: r'^\d{1,2}(\.\d{0,2})?',
                 padding: Styles.tilePadding,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
               ),
-            ),
-            Expanded(
-              child: InputField.form(
-                controller: _repsCtrl,
-                label: 'Reps (#)',
-                format: r'^\d{1,2}',
-                padding: Styles.tilePadding,
+              Row(
+                children: [
+                  Expanded(
+                    child: InputField.form(
+                      controller: _setsCtrl,
+                      label: 'Sets (#)',
+                      format: r'^\d{1,2}',
+                      padding: Styles.tilePadding,
+                    ),
+                  ),
+                  Expanded(
+                    child: InputField.form(
+                      controller: _repsCtrl,
+                      label: 'Reps (#)',
+                      format: r'^\d{1,2}',
+                      padding: Styles.tilePadding,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ]),
-          TimePickerTile(
-            time: _holdTime,
-            label: 'Rep hold time',
-            onPick: (time) => setState(() => _holdTime = time),
-          ),
-          TimePickerTile(
-            time: _restTime,
-            label: 'Rep rest time',
-            onPick: (time) => setState(() => _restTime = time),
-          ),
-          TimePickerTile(
-            time: _setRestTime,
-            label: 'Set rest time (default: 90 sec)',
-            onPick: (time) => setState(() => _setRestTime = time),
-          ),
-          TimePickerTile(
-            time: _mvcDuration,
-            label: 'MVC test duration (optional)',
-            onPick: (time) => setState(() => _mvcDuration = time),
-          ),
-          const Divider(),
-          RawButton.tile(
-            spacing: 16,
-            leading: RawButton(
-              onTap: () => setState(_reset),
-              color: Colors.indigo,
-              child: const Text('Reset', style: Styles.whiteBold),
-            ),
-            child: Expanded(
-              child: RawButton(
-                onTap: _onSubmit,
-                color: Colors.green,
-                child: const Text('Save and exit', style: Styles.whiteBold),
+              TimePickerTile(
+                time: _holdTime,
+                label: 'Rep hold time',
+                onPick: (time) => setState(() => _holdTime = time),
               ),
-            ),
+              TimePickerTile(
+                time: _restTime,
+                label: 'Rep rest time',
+                onPick: (time) => setState(() => _restTime = time),
+              ),
+              TimePickerTile(
+                time: _setRestTime,
+                label: 'Set rest time (default: 90 sec)',
+                onPick: (time) => setState(() => _setRestTime = time),
+              ),
+              TimePickerTile(
+                time: _mvcDuration,
+                label: 'MVC test duration (optional)',
+                onPick: (time) => setState(() => _mvcDuration = time),
+              ),
+              const Divider(),
+              ButtonFactory.tile(
+                spacing: 16,
+                leading: ButtonFactory(
+                  onTap: () => setState(_reset),
+                  color: Colors.indigo,
+                  child: const Text('Reset', style: Styles.whiteBold),
+                ),
+                child: Expanded(
+                  child: ButtonFactory(
+                    onTap: _onSubmit,
+                    color: Colors.green,
+                    child: const Text('Save and exit', style: Styles.whiteBold),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ]),
-      ),
-    ]);
+        ),
+      ],
+    );
   }
 }
 
@@ -156,7 +162,7 @@ extension on _PrescriptionScreenState {
     }
     final snackBar = SnackBar(
       padding: EdgeInsets.zero,
-      content: RawButton.error(message: error),
+      content: ButtonFactory.error(message: error),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }

@@ -37,7 +37,7 @@ class _LifeCycleAwareState extends State<LifeCycleAware>
     (switch (state) {
       AppLifecycleState.paused => widget.onPause,
       AppLifecycleState.resumed => widget.onResume,
-      _ => () {}
+      _ => () {},
     })();
   }
 

@@ -99,7 +99,7 @@ abstract class GraphHandler {
   @mustCallSuper
   Future<String> exit() async {
     if (!hasData) return '';
-    if (/* !export!.isInBox */ true) {
+    if ( /* !export!.isInBox */ true) {
       export?.copyWith(
         userId: 0,
         datetime: datetime.toString(),
@@ -128,8 +128,10 @@ extension on List<int> {
   ByteData get _bytes => Uint8List.fromList(this).buffer.asByteData();
 
   double get toTime => double.parse(
-      (_bytes.getUint32(0, Endian.little) / 1000000.0).toStringAsFixed(1));
+    (_bytes.getUint32(0, Endian.little) / 1000000.0).toStringAsFixed(1),
+  );
 
   double get toWeight => double.parse(
-      _bytes.getFloat32(0, Endian.little).abs().toStringAsFixed(2));
+    _bytes.getFloat32(0, Endian.little).abs().toStringAsFixed(2),
+  );
 }
