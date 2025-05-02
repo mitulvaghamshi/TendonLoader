@@ -32,8 +32,8 @@ class DeviceList extends StatelessWidget {
 
 extension on DeviceList {
   Iterable<Widget> _buildDeviceItem() sync* {
-    final Iterator<BluetoothDevice> iterator = _devices.iterator;
-    final bool isNotEmpty = iterator.moveNext();
+    final iterator = _devices.iterator;
+    final isNotEmpty = iterator.moveNext();
     BluetoothDevice device = iterator.current;
     while (iterator.moveNext()) {
       yield DeviceTile(device: device);
@@ -50,7 +50,5 @@ extension on DeviceList {
 /// named in "Progressor_xxxx" pattern, where, "xxxx" is the four digit
 /// unique (serial) number.
 Iterable<BluetoothDevice> _filterList(Iterable<BluetoothDevice> devices) {
-  return devices.where((device) {
-    return device.name.contains('Progressor');
-  });
+  return devices.where((device) => device.name.contains('Progressor'));
 }

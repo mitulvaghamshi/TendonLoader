@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show immutable;
 
 /// An empty defination of [AnchorElement] class from [dart:html] library.
 /// Analyzer warns for using web libraries [dart:html] in flutter app,
@@ -13,14 +13,16 @@ class AnchorElement {
   final String? href;
 
   void click() {
-    // TODO(mitul): implement platform specific code to
+    throw UnimplementedError();
+    // Implement platform specific code to
     // allow download on mobile and desktop devices.
   }
 
   /// @param attr - a download attribute on web links.
   /// @param value - name of the file.
   void setAttribute(String attr, String value) {
-    // TODO(mitul): Create and prepare a File to download
+    throw UnimplementedError();
+    // Create and prepare a File to download
     // on mobile or desktop device. May require platform specific
     // implementation for different devices/OSs.
   }

@@ -16,7 +16,7 @@ class NetworkStatus {
     });
   }
 
-  static final NetworkStatus _instance = NetworkStatus._();
+  static final _instance = NetworkStatus._();
   static NetworkStatus get instance => _instance;
 
   Iterable<ConnectivityResult> _connections = const Iterable.empty();

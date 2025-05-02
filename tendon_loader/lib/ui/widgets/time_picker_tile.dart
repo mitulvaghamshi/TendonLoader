@@ -26,11 +26,11 @@ class TimePickerTile extends StatelessWidget {
       title: Text(_timeString(minutes, seconds), style: Styles.bold18),
       subtitle: Text(label),
       children: [
-        const ButtonFactory.tile(
-          color: Colors.green,
+        ButtonFactory.tile(
+          color: Theme.of(context).primaryColor,
           axisAlignment: MainAxisAlignment.spaceEvenly,
-          leading: Text('Minutes', style: Styles.whiteBold),
-          child: Text('Seconds', style: Styles.whiteBold),
+          leading: const Text('Minutes', style: Styles.whiteBold),
+          child: const Text('Seconds', style: Styles.whiteBold),
         ),
         const SizedBox(height: 8),
         ButtonFactory.tile(

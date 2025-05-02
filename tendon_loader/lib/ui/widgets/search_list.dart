@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/ui/widgets/input_field.dart';
+import 'package:tendon_loader/ui/widgets/input_factory.dart';
 
 @immutable
 class SearchList<T> extends StatefulWidget {
@@ -50,7 +50,7 @@ class _SearchListState<T> extends State<SearchList<T>> {
       slivers: [
         SliverAppBar.medium(title: Text(widget.title)),
         SliverToBoxAdapter(
-          child: InputField.search(
+          child: InputFactory.search(
             onComplete: _search,
             controller: _searchCtrl,
             label: widget.searchLabel,

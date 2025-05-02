@@ -41,7 +41,7 @@ SPEC CHECKSUMS:
   app_settings: 140be3a9c0fc1f681e44afe9f549ab037b3aa3a2
   connectivity_plus: 0a976dfd033b59192912fa3c6c7b54aab5093802
   flutter_blue: 2756506bb10a51e075832da287b48bf5377bdc28
-  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
   location: 7cdb0665bd6577d382b0a343acdadbcb7f964775
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
 

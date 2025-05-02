@@ -1,26 +1,32 @@
 import 'dart:async' show Future;
 import 'dart:convert' show jsonDecode, jsonEncode;
-import 'dart:io';
+import 'dart:io' show ContentType, HttpException, HttpHeaders, HttpStatus;
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:tendon_loader/api/network_status.dart';
 import 'package:tendon_loader/api/snapshot.dart';
 
-abstract class ApiClient {
-  const ApiClient();
-
+@immutable
+mixin ApiClient {
+  static const _host = String.fromEnvironment('API_HOST');
   static final _headers = {
     HttpHeaders.acceptHeader: ContentType.json.value,
     HttpHeaders.contentTypeHeader: ContentType.json.value,
   };
-  static const _host = String.fromEnvironment('API_HOST');
-  static const _noNetwork = Snapshot.withError('No connection.');
+}
 
+extension Utils on ApiClient {
   Future<Snapshot> get<T>(String path) async {
     await Future<void>.delayed(const Duration(seconds: 2));
-    if (!NetworkStatus.instance.isConnected) return _noNetwork;
+    if (!NetworkStatus.instance.isConnected) {
+      return const Snapshot.withError('No connection.');
+    }
     try {
-      final res = await http.get(Uri.http(_host, path), headers: _headers);
+      final res = await http.get(
+        Uri.http(ApiClient._host, path),
+        headers: ApiClient._headers,
+      );
       if (res.statusCode == HttpStatus.ok) {
         return Snapshot.withData(jsonDecode(res.body));
       }
@@ -31,11 +37,13 @@ abstract class ApiClient {
   }
 
   Future<Snapshot> post<T>(String path, Map<String, dynamic> data) async {
-    if (!NetworkStatus.instance.isConnected) return _noNetwork;
+    if (!NetworkStatus.instance.isConnected) {
+      return const Snapshot.withError('No connection.');
+    }
     try {
       final res = await http.post(
-        Uri.http(_host, path),
-        headers: _headers,
+        Uri.http(ApiClient._host, path),
+        headers: ApiClient._headers,
         body: jsonEncode(data),
       );
       if (res.statusCode == HttpStatus.ok) {
@@ -48,11 +56,13 @@ abstract class ApiClient {
   }
 
   Future<Snapshot> put<T>(String path, Map<String, dynamic> data) async {
-    if (!NetworkStatus.instance.isConnected) return _noNetwork;
+    if (!NetworkStatus.instance.isConnected) {
+      return const Snapshot.withError('No connection.');
+    }
     try {
       final res = await http.put(
-        Uri.http(_host, path),
-        headers: _headers,
+        Uri.http(ApiClient._host, path),
+        headers: ApiClient._headers,
         body: jsonEncode(data),
       );
       if (res.statusCode == HttpStatus.noContent) {
@@ -64,11 +74,15 @@ abstract class ApiClient {
     }
   }
 
-  // TODO(mitul): Fix this...
   Future<Snapshot> delete<T>(String path) async {
-    if (!NetworkStatus.instance.isConnected) return _noNetwork;
+    if (!NetworkStatus.instance.isConnected) {
+      return const Snapshot.withError('No connection.');
+    }
     try {
-      final res = await http.delete(Uri.http(_host, path), headers: _headers);
+      final res = await http.delete(
+        Uri.http(ApiClient._host, path),
+        headers: ApiClient._headers,
+      );
       if (res.statusCode == HttpStatus.noContent) {
         return const Snapshot.nothing();
       }

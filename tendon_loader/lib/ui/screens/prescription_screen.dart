@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/button_factory.dart';
-import 'package:tendon_loader/ui/widgets/input_field.dart';
+import 'package:tendon_loader/ui/widgets/input_factory.dart';
 import 'package:tendon_loader/ui/widgets/time_picker_tile.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
@@ -46,7 +46,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
           ignoring: !state.settings.editablePrescription,
           child: Column(
             children: [
-              InputField.form(
+              InputFactory.form(
                 controller: _loadCtrl,
                 label: 'Target Load (Kg)',
                 format: r'^\d{1,2}(\.\d{0,2})?',
@@ -58,7 +58,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: InputField.form(
+                    child: InputFactory.form(
                       controller: _setsCtrl,
                       label: 'Sets (#)',
                       format: r'^\d{1,2}',
@@ -66,7 +66,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                     ),
                   ),
                   Expanded(
-                    child: InputField.form(
+                    child: InputFactory.form(
                       controller: _repsCtrl,
                       label: 'Reps (#)',
                       format: r'^\d{1,2}',
@@ -100,13 +100,13 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                 spacing: 16,
                 leading: ButtonFactory(
                   onTap: () => setState(_reset),
-                  color: Colors.indigo,
+                  color: Theme.of(context).shadowColor,
                   child: const Text('Reset', style: Styles.whiteBold),
                 ),
                 child: Expanded(
                   child: ButtonFactory(
                     onTap: _onSubmit,
-                    color: Colors.green,
+                    color: Theme.of(context).primaryColor,
                     child: const Text('Save and exit', style: Styles.whiteBold),
                   ),
                 ),

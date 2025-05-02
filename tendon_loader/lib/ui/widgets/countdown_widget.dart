@@ -18,7 +18,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
   late final _controller = AnimationController(
     vsync: this,
     duration: widget.duration + const Duration(seconds: 1),
-  );
+  )..addStatusListener(_onFinish);
 
   void _onFinish(_) {
     if (mounted) context.pop(true);
@@ -27,9 +27,9 @@ class _CountdownWidgetState extends State<CountdownWidget>
   @override
   void initState() {
     super.initState();
-    _controller
-      ..reverse(from: _controller.value == 0.0 ? 1.0 : _controller.value)
-      ..addStatusListener(_onFinish);
+    _controller.reverse(
+      from: _controller.value == 0.0 ? 1.0 : _controller.value,
+    );
   }
 
   @override

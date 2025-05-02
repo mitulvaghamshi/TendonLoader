@@ -184,7 +184,6 @@ extension ExExercise on Exercise {
     return file;
   }
 
-  // TODO(me): Save to database...
   Future<bool> upload() async {
     throw UnimplementedError('Upload not implemented.');
     // try {
@@ -195,7 +194,6 @@ extension ExExercise on Exercise {
     // }
   }
 
-  // TODO(me): Download as Excel file...
   Future<void> download() async {
     throw UnimplementedError('Upload not implemented.');
     // await saveExcel(

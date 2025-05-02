@@ -105,8 +105,9 @@ class _PromptScreenState extends State<PromptScreen> {
                                 : null,
                         leading: const Icon(Icons.check),
                         child: Text(Tolerance.yes.value),
-                        onTap:
-                            () => setState(() => painTolerance = Tolerance.yes),
+                        onTap: () {
+                          setState(() => painTolerance = Tolerance.yes);
+                        },
                       ),
                       const SizedBox(width: 5),
                       ButtonFactory.tile(
@@ -116,8 +117,9 @@ class _PromptScreenState extends State<PromptScreen> {
                                 : null,
                         leading: const Icon(Icons.clear),
                         child: Text(Tolerance.no.value),
-                        onTap:
-                            () => setState(() => painTolerance = Tolerance.no),
+                        onTap: () {
+                          setState(() => painTolerance = Tolerance.no);
+                        },
                       ),
                       const SizedBox(width: 5),
                       ButtonFactory.tile(
@@ -127,10 +129,9 @@ class _PromptScreenState extends State<PromptScreen> {
                                 : null,
                         leading: const Icon(Icons.remove),
                         child: Text(Tolerance.noPain.value),
-                        onTap:
-                            () => setState(
-                              () => painTolerance = Tolerance.noPain,
-                            ),
+                        onTap: () {
+                          setState(() => painTolerance = Tolerance.noPain);
+                        },
                       ),
                     ],
                   ),
@@ -156,8 +157,9 @@ class _PromptScreenState extends State<PromptScreen> {
                         color: Color(0xff3ddc85),
                       ),
                       title: Text(Submission.now.value),
-                      onTap:
-                          () => setState(() => submitDecision = Submission.now),
+                      onTap: () {
+                        setState(() => submitDecision = Submission.now);
+                      },
                     ),
                     ListTile(
                       tileColor:
@@ -166,9 +168,9 @@ class _PromptScreenState extends State<PromptScreen> {
                               : null,
                       leading: const Icon(Icons.save, color: Color(0xffe18f3c)),
                       title: Text(Submission.leter.value),
-                      onTap:
-                          () =>
-                              setState(() => submitDecision = Submission.leter),
+                      onTap: () {
+                        setState(() => submitDecision = Submission.leter);
+                      },
                     ),
                     ListTile(
                       tileColor:
@@ -180,10 +182,9 @@ class _PromptScreenState extends State<PromptScreen> {
                         color: Color(0xffff534d),
                       ),
                       title: Text(Submission.discard.value),
-                      onTap:
-                          () => setState(
-                            () => submitDecision = Submission.discard,
-                          ),
+                      onTap: () {
+                        setState(() => submitDecision = Submission.discard);
+                      },
                     ),
                   ],
                 ),
@@ -274,6 +275,7 @@ enum Submission {
   final String value;
 }
 
+@immutable
 class _CardWidget extends StatelessWidget {
   const _CardWidget({required this.children});
 

@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:convert' show base64, utf8;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,35 +7,41 @@ import 'package:tendon_loader/api/snapshot.dart';
 import 'package:tendon_loader/models/user.dart';
 
 @immutable
-class UserService extends ApiClient {
-  factory UserService() => const UserService._();
+class UserService with ApiClient {
+  factory UserService() => instance;
 
   const UserService._();
 
-  static final UserService _instance = UserService();
+  static const _instance = UserService._();
   static UserService get instance => _instance;
 
   static final Map<int, User> _cache = {};
+}
 
+extension Utils on UserService {
   Future<Snapshot<Iterable<User>>> getAllUsers() async {
-    if (_cache.isNotEmpty) return Snapshot.withData(_cache.values);
+    if (UserService._cache.isNotEmpty) {
+      return Snapshot.withData(UserService._cache.values);
+    }
     final snapshot = await get('users');
     if (snapshot.hasData) {
       final list = List<Map<String, dynamic>>.from(
         snapshot.requireData,
       ).map<User>(User.fromJson);
-      _cache.addAll({for (var item in list) item.id!: item});
+      UserService._cache.addAll({for (var item in list) item.id!: item});
       return Snapshot.withData(list);
     }
     return Snapshot.withError(snapshot.error);
   }
 
   Future<Snapshot<User>> getUserById({required int userId}) async {
-    if (_cache.containsKey(userId)) return Snapshot.withData(_cache[userId]!);
+    if (UserService._cache.containsKey(userId)) {
+      return Snapshot.withData(UserService._cache[userId]!);
+    }
     final snapshot = await get('users/$userId');
     if (snapshot.hasData) {
       final user = User.fromJson(snapshot.requireData);
-      _cache.update(userId, (_) => user, ifAbsent: () => user);
+      UserService._cache.update(userId, (_) => user, ifAbsent: () => user);
       return Snapshot.withData(user);
     }
     return Snapshot.withError(snapshot.error);

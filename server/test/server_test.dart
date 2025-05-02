@@ -58,7 +58,7 @@ void main() {
         'animal': 'Jaguar',
         'description': 'Beware, its dangerous.',
         'age': 12,
-        'price': 500000
+        'price': 500000,
       }),
     );
     expect(response.statusCode, 200);
@@ -73,7 +73,7 @@ void main() {
         'animal': 'Elephant',
         'description': 'A giant and heavy creature',
         'age': 250,
-        'price': 250000
+        'price': 250000,
       }),
     );
     expect(response.statusCode, 200);

@@ -38,10 +38,9 @@ class BluetoothTile extends StatelessWidget {
             ButtonFactory.tile(
               leading: const Icon(Icons.bluetooth),
               child: const Text('Open Settings'),
-              onTap:
-                  () => AppSettings.openAppSettings(
-                    type: AppSettingsType.bluetooth,
-                  ),
+              onTap: () {
+                AppSettings.openAppSettings(type: AppSettingsType.bluetooth);
+              },
             ),
           ],
         );

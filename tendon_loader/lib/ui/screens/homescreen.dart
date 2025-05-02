@@ -20,30 +20,35 @@ class HomeScreen extends StatelessWidget {
         const ButtonFactory.tile(
           padding: EdgeInsets.zero,
           axisAlignment: MainAxisAlignment.start,
-          child: Text('Record Sessions'),
+          child: Text('Play & Learn'),
         ),
         ButtonFactory.tile(
           onTap: () => _safePush(context, const LiveDataRoute().push),
-          color: Colors.orange,
+          color: Theme.of(context).primaryColorDark,
           child: const Text(LiveDataRoute.name, style: Styles.whiteBold),
+        ),
+        const ButtonFactory.tile(
+          padding: EdgeInsets.zero,
+          axisAlignment: MainAxisAlignment.start,
+          child: Text('Record Sessions'),
         ),
         const SizedBox(height: 8),
         ButtonFactory.tile(
           onTap: () => _safePush(context, const MVCTestingRoute().push),
-          color: Colors.orange,
+          color: Theme.of(context).primaryColorDark,
           child: const Text(MVCTestingRoute.name, style: Styles.whiteBold),
         ),
         const SizedBox(height: 8),
         ButtonFactory.tile(
           onTap: () => _safePush(context, const ExerciseModeRoute().push),
-          color: Colors.orange,
+          color: Theme.of(context).primaryColorDark,
           child: const Text(ExerciseModeRoute.name, style: Styles.whiteBold),
         ),
         const SizedBox(height: 8),
         ButtonFactory.tile(
           onTap: () => const PrescriptionRoute().push(context),
-          color: Colors.green,
-          child: const Text('Prescriptions', style: Styles.whiteBold),
+          color: Theme.of(context).primaryColor,
+          child: const Text('Customize Prescriptions', style: Styles.whiteBold),
         ),
         const ButtonFactory.tile(
           padding: EdgeInsets.zero,
@@ -52,19 +57,19 @@ class HomeScreen extends StatelessWidget {
         ),
         ButtonFactory.tile(
           onTap: () => const UserListRoute().go(context),
-          color: Colors.indigo,
-          child: const Text('View Session Data', style: Styles.whiteBold),
+          color: Theme.of(context).primaryColor,
+          child: const Text('Manage Data', style: Styles.whiteBold),
         ),
         const SizedBox(height: 8),
         ButtonFactory.tile(
           onTap: () => _manageProgressor(context),
-          color: Colors.green,
-          child: const Text('Progressor Device', style: Styles.whiteBold),
+          color: Theme.of(context).primaryColor,
+          child: const Text('Progressor Connection', style: Styles.whiteBold),
         ),
         const SizedBox(height: 8),
         ButtonFactory.tile(
           onTap: () => const SettingScreenRoute().push(context),
-          color: Colors.blueGrey,
+          color: Theme.of(context).shadowColor,
           child: const Text(SettingScreenRoute.name, style: Styles.whiteBold),
         ),
         const Divider(),
@@ -84,11 +89,15 @@ extension on HomeScreen {
   }
 
   Future<void> _safePush(
-    final BuildContext context,
-    final Future<T?> Function<T>(BuildContext context) push,
+    BuildContext context,
+    Future<T?> Function<T>(BuildContext) push,
   ) async {
-    if (Simulator.enabled) return push(context);
-    if (Progressor.instance.progressor != null) return push(context);
+    if (Simulator.enabled) {
+      return push(context);
+    }
+    if (Progressor.instance.progressor != null) {
+      return push(context);
+    }
     const SettingScreenRoute().push(context);
   }
 
@@ -107,27 +116,28 @@ extension on HomeScreen {
     }
     await showDialog<void>(
       context: context,
-      builder:
-          (_) => AlertDialog(
-            title: Text(Progressor.instance.deviceName),
-            icon: const Icon(Icons.bluetooth),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ButtonFactory.tile(
-                  onTap: Progressor.instance.disconnect,
-                  color: Colors.orange,
-                  child: const Text('Disconnect', style: Styles.whiteBold),
-                ),
-                const SizedBox(height: 8),
-                ButtonFactory.tile(
-                  onTap: Progressor.instance.sleep,
-                  color: Colors.green,
-                  child: const Text('Sleep', style: Styles.whiteBold),
-                ),
-              ],
-            ),
+      builder: (_) {
+        return AlertDialog(
+          title: Text(Progressor.instance.deviceName),
+          icon: const Icon(Icons.bluetooth),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ButtonFactory.tile(
+                onTap: Progressor.instance.disconnect,
+                color: Colors.orange,
+                child: const Text('Disconnect', style: Styles.whiteBold),
+              ),
+              const SizedBox(height: 8),
+              ButtonFactory.tile(
+                onTap: Progressor.instance.sleep,
+                color: Colors.green,
+                child: const Text('Sleep', style: Styles.whiteBold),
+              ),
+            ],
           ),
+        );
+      },
     );
   }
 }

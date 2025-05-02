@@ -6,7 +6,7 @@ import 'package:tendon_loader/models/user.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';
 import 'package:tendon_loader/ui/widgets/button_factory.dart';
-import 'package:tendon_loader/ui/widgets/input_field.dart';
+import 'package:tendon_loader/ui/widgets/input_factory.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
@@ -58,17 +58,19 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_isLoading && state.authUser.token != null) return widget.child;
+    if (!_isLoading && state.authUser.token != null) {
+      return widget.child;
+    }
     return Form(
       child: Column(
         children: [
           const AppLogo(radius: 140, padding: EdgeInsets.all(16)),
-          InputField.form(
+          InputFactory.form(
             label: 'Enter username',
             controller: _usernameCtrl,
             keyboardType: TextInputType.emailAddress,
           ),
-          InputField.form(
+          InputFactory.form(
             label: 'Enter password',
             controller: _passwordCtrl,
             keyboardType: TextInputType.visiblePassword,
@@ -83,7 +85,7 @@ class _SignInScreenState extends State<SignInScreen> {
             firstChild: const ButtonFactory.loading(),
             secondChild: ButtonFactory.tile(
               onTap: _authenticate,
-              color: Colors.indigo,
+              color: Theme.of(context).primaryColor,
               child: const Text('Login', style: Styles.whiteBold),
             ),
           ),

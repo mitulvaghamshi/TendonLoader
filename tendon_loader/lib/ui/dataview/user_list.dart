@@ -33,11 +33,9 @@ class _UserItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ButtonFactory.tile(
-      onTap:
-          () => ExerciseListRoute(
-            userId: user.id!,
-            title: user.name,
-          ).push(context),
+      onTap: () {
+        ExerciseListRoute(userId: user.id!, title: user.name).push(context);
+      },
       spacing: 16,
       axisAlignment: MainAxisAlignment.start,
       leading: CircleAvatar(radius: 24, child: Text(index.toString())),
@@ -57,11 +55,12 @@ class _UserItem extends StatelessWidget {
 }
 
 extension on _UserItem {
-  // TODO(me): Add context menu with options:
   // 1. Delete this user
   // 2. Download user data
   // 3. Allow web access
   // 4. Exercise History
   // 5. Edit Prescriptions
-  void _showMenu() {}
+  void _showMenu() {
+    throw UnimplementedError();
+  }
 }

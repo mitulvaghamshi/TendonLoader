@@ -32,7 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       animation: state,
       child: ButtonFactory.tile(
         onTap: () {},
-        color: Colors.green,
+        color: Theme.of(context).shadowColor,
         leading: const Icon(Icons.person, color: Colors.white),
         trailing: const Icon(Icons.edit, color: Colors.white),
         child: Text(
@@ -42,93 +42,97 @@ class _SettingsScreenState extends State<SettingsScreen> {
           maxLines: 1,
         ),
       ),
-      builder:
-          (context, child) => Column(
-            children: [
-              child!,
-              const SizedBox(height: 8),
-              ListTile(
-                onTap: _uploadData,
-                enabled: length > 0,
-                contentPadding: Styles.tilePadding,
-                title: const Text('Locally stored data'),
-                subtitle: const Text('Upload local files to the server'),
-                trailing: Text(length.toString(), style: Styles.bold18),
-              ),
-              ListTile(
-                contentPadding: Styles.tilePadding,
-                title: const Text('Graph scale (y-axis)'),
-                subtitle: const Text('Adjust visible area of the graph'),
-                trailing: SizedBox(
-                  width: 60,
-                  child: TextField(
-                    style: Styles.bold18,
-                    controller: _scaleCtrl,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d{1,2}(\.\d{0,2})?'),
-                      ),
-                    ],
-                    onChanged:
-                        (value) => state.update<Settings>((settings) {
-                          final gscale = double.tryParse(value) ?? 30.0;
-                          return settings.copyWith(graphScale: gscale);
-                        }),
+      builder: (context, child) {
+        return Column(
+          children: [
+            child!,
+            const SizedBox(height: 8),
+            ListTile(
+              onTap: _uploadData,
+              enabled: length > 0,
+              contentPadding: Styles.tilePadding,
+              title: const Text('Locally stored data'),
+              subtitle: const Text('Upload local files to the server'),
+              trailing: Text(length.toString(), style: Styles.bold18),
+            ),
+            ListTile(
+              contentPadding: Styles.tilePadding,
+              title: const Text('Graph scale (y-axis)'),
+              subtitle: const Text('Adjust visible area of the graph'),
+              trailing: SizedBox(
+                width: 60,
+                child: TextField(
+                  style: Styles.bold18,
+                  controller: _scaleCtrl,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
                   ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'^\d{1,2}(\.\d{0,2})?'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    state.update<Settings>((settings) {
+                      final gscale = double.tryParse(value) ?? 30.0;
+                      return settings.copyWith(graphScale: gscale);
+                    });
+                  },
                 ),
               ),
-              SwitchListTile(
-                contentPadding: Styles.tilePadding,
-                title: const Text('Use dark mode'),
-                subtitle: const Text('Use dark interface'),
-                value: state.settings.darkMode,
-                onChanged:
-                    (value) => state.update<Settings>((settings) {
-                      return settings.copyWith(darkMode: value);
-                    }),
-              ),
-              SwitchListTile(
-                contentPadding: Styles.tilePadding,
-                title: const Text('Automatic data upload'),
-                subtitle: const Text('Session data submitted automatically'),
-                value: state.settings.autoUpload,
-                onChanged:
-                    (value) => state.update<Settings>((settings) {
-                      return settings.copyWith(autoUpload: value);
-                    }),
-              ),
-              SwitchListTile(
-                contentPadding: Styles.tilePadding,
-                title: const Text('Use custom prescriptions'),
-                subtitle: const Text('Create custom prescriptions'),
-                value: state.settings.editablePrescription,
-                onChanged:
-                    (value) => state.update<Settings>((settings) {
-                      return settings.copyWith(editablePrescription: value);
-                    }),
-              ),
-              const Divider(),
-              ButtonFactory.tile(
-                onTap: _aboutDialog,
-                color: Colors.blueGrey,
-                child: const Text('About', style: Styles.whiteBold),
-              ),
-            ],
-          ),
+            ),
+            SwitchListTile(
+              contentPadding: Styles.tilePadding,
+              title: const Text('Use dark mode'),
+              subtitle: const Text('Use dark interface'),
+              value: state.settings.darkMode,
+              onChanged: (value) {
+                state.update<Settings>((settings) {
+                  return settings.copyWith(darkMode: value);
+                });
+              },
+            ),
+            SwitchListTile(
+              contentPadding: Styles.tilePadding,
+              title: const Text('Automatic data upload'),
+              subtitle: const Text('Session data submitted automatically'),
+              value: state.settings.autoUpload,
+              onChanged: (value) {
+                state.update<Settings>((settings) {
+                  return settings.copyWith(autoUpload: value);
+                });
+              },
+            ),
+            SwitchListTile(
+              contentPadding: Styles.tilePadding,
+              title: const Text('Use custom prescriptions'),
+              subtitle: const Text('Create custom prescriptions'),
+              value: state.settings.editablePrescription,
+              onChanged: (value) {
+                state.update<Settings>((settings) {
+                  return settings.copyWith(editablePrescription: value);
+                });
+              },
+            ),
+            const Divider(),
+            ButtonFactory.tile(
+              onTap: _aboutDialog,
+              color: Theme.of(context).dividerColor,
+              child: const Text('About', style: Styles.whiteBold),
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
 extension on _SettingsScreenState {
   Future<void> _uploadData() async {
-    // TODO(mitul): Implement data upload...
     const int count = 0; // await model.uploadExports();
     if (!mounted || count <= 0) return;
     const content = SnackBar(
-      padding: EdgeInsets.all(0),
+      padding: EdgeInsets.zero,
       content: ButtonFactory.error(
         color: Colors.indigo,
         message: 'Uploaded $count exports',

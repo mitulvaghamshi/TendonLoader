@@ -7,17 +7,21 @@ analyzer:
     - "*.g.dart"
     - "res/**"
 
+formatter:
+  trailing_commas: preserve
+  page_width: 80
+
 linter:
   rules:
-    # - avoid_catching_errors
-    # - avoid_annotating_with_dynamic
-    # - avoid_setters_without_getters # not yet tested
-    # - avoid_returning_null # there are plenty of valid reasons to return null
-    # - avoid_returning_this # there are plenty of valid reasons to return this
-    # - use_named_constants # not yet tested
-    # - prefer_mixin # https://github.com/dart-lang/language/issues/32
-    # - avoid_js_rounded_ints # only useful when targeting JS runtime
-    # - avoid_double_and_int_checks # only useful when targeting JS runtime
+    - avoid_catching_errors
+    - avoid_annotating_with_dynamic
+    - avoid_setters_without_getters # not yet tested
+    - avoid_returning_null # there are plenty of valid reasons to return null
+    - avoid_returning_this # there are plenty of valid reasons to return this
+    - use_named_constants # not yet tested
+    - prefer_mixin # https://github.com/dart-lang/language/issues/32
+    - avoid_js_rounded_ints # only useful when targeting JS runtime
+    - avoid_double_and_int_checks # only useful when targeting JS runtime
     - avoid_types_on_closure_parameters
     - always_use_package_imports
     - avoid_bool_literals_in_conditional_expressions

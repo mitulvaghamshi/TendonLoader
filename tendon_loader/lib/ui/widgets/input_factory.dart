@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:tendon_loader/utils/constants.dart' show Styles;
 
 @immutable
-class InputField extends StatelessWidget {
-  const InputField({
+class InputFactory extends StatelessWidget {
+  const InputFactory({
     super.key,
     this.padding,
     this.keyboardType,
@@ -16,14 +16,14 @@ class InputField extends StatelessWidget {
     required this.controller,
   });
 
-  const factory InputField.search({
+  const factory InputFactory.search({
     Key? key,
     required final String label,
     required final VoidCallback? onComplete,
     required final TextEditingController controller,
   }) = _SearchField;
 
-  const factory InputField.form({
+  const factory InputFactory.form({
     final Key? key,
     final String? format,
     final EdgeInsetsGeometry? padding,
@@ -65,7 +65,7 @@ class InputField extends StatelessWidget {
 }
 
 @immutable
-class _SearchField extends InputField {
+class _SearchField extends InputFactory {
   const _SearchField({
     super.key,
     required super.label,
@@ -75,7 +75,7 @@ class _SearchField extends InputField {
 
   @override
   Widget build(BuildContext context) {
-    return InputField(
+    return InputFactory(
       label: label,
       controller: controller,
       onComplete: onComplete,
@@ -85,7 +85,7 @@ class _SearchField extends InputField {
 }
 
 @immutable
-class _FormField extends InputField {
+class _FormField extends InputFactory {
   const _FormField({
     super.key,
     super.padding,
@@ -99,7 +99,7 @@ class _FormField extends InputField {
 
   @override
   Widget build(BuildContext context) {
-    return InputField(
+    return InputFactory(
       key: key,
       label: label,
       padding: padding,

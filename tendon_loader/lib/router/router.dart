@@ -56,7 +56,7 @@ part 'router.g.dart';
   ],
 )
 @immutable
-class TendonLoaderRoute extends GoRouteData {
+class TendonLoaderRoute extends GoRouteData with $TendonLoaderRoute {
   const TendonLoaderRoute();
 
   static const path = '/';
@@ -83,7 +83,7 @@ class TendonLoaderRoute extends GoRouteData {
 }
 
 @immutable
-class SettingScreenRoute extends GoRouteData {
+class SettingScreenRoute extends GoRouteData with $SettingScreenRoute {
   const SettingScreenRoute();
 
   static const name = 'Settings';
@@ -112,7 +112,7 @@ class SettingScreenRoute extends GoRouteData {
 }
 
 @immutable
-class PrescriptionRoute extends GoRouteData {
+class PrescriptionRoute extends GoRouteData with $PrescriptionRoute {
   const PrescriptionRoute();
 
   static const path = 'prescriptions';
@@ -131,7 +131,7 @@ class PrescriptionRoute extends GoRouteData {
 }
 
 @immutable
-class LiveDataRoute extends GoRouteData {
+class LiveDataRoute extends GoRouteData with $LiveDataRoute {
   const LiveDataRoute();
 
   static const name = 'Live Data';
@@ -143,18 +143,19 @@ class LiveDataRoute extends GoRouteData {
     return GraphWidget(
       title: name,
       handler: handler,
-      headerBuilder:
-          (_) => Text(
-            handler.timeElapsed,
-            textAlign: TextAlign.center,
-            style: Styles.blackBold26,
-          ),
+      headerBuilder: (_) {
+        return Text(
+          handler.timeElapsed,
+          textAlign: TextAlign.center,
+          style: Styles.blackBold26,
+        );
+      },
     );
   }
 }
 
 @immutable
-class MVCTestingRoute extends GoRouteData {
+class MVCTestingRoute extends GoRouteData with $MVCTestingRoute {
   const MVCTestingRoute();
 
   static const name = 'MVC Testing';
@@ -169,24 +170,25 @@ class MVCTestingRoute extends GoRouteData {
     return GraphWidget(
       title: name,
       handler: handler,
-      headerBuilder:
-          (_) => Column(
-            children: [
-              Text(handler.maxForceValue, style: Styles.blackBold26),
-              Text(
-                handler.timeDiffValue,
-                style: Styles.blackBold26.copyWith(
-                  color: const Color(0xffff534d),
-                ),
+      headerBuilder: (_) {
+        return Column(
+          children: [
+            Text(handler.maxForceValue, style: Styles.blackBold26),
+            Text(
+              handler.timeDiffValue,
+              style: Styles.blackBold26.copyWith(
+                color: const Color(0xffff534d),
               ),
-            ],
-          ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
 @immutable
-class ExerciseModeRoute extends GoRouteData {
+class ExerciseModeRoute extends GoRouteData with $ExerciseModeRoute {
   const ExerciseModeRoute();
 
   static const name = 'Exercise Mode';
@@ -209,51 +211,53 @@ class ExerciseModeRoute extends GoRouteData {
       onResume: () {
         if (handler.isRunning) handler.start();
       },
-      builder:
-          (_) => GraphWidget(
-            title: name,
-            handler: handler,
-            headerBuilder:
-                (_) => SizedBox(
-                  width: 300,
-                  child: Column(
+      builder: (_) {
+        return GraphWidget(
+          title: name,
+          handler: handler,
+          headerBuilder: (_) {
+            return SizedBox(
+              width: 300,
+              child: Column(
+                children: [
+                  Text(handler.timeCounter, style: handler.timeStyle),
+                  Divider(color: handler.feedColor, thickness: 10),
+                  const Row(
                     children: [
-                      Text(handler.timeCounter, style: handler.timeStyle),
-                      Divider(color: handler.feedColor, thickness: 10),
-                      const Row(
-                        children: [
-                          Expanded(child: Text('Rep:')),
-                          Expanded(child: Text('Set:')),
-                        ],
+                      Expanded(child: Text('Rep:')),
+                      Expanded(child: Text('Set:')),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          handler.repCounter,
+                          textAlign: TextAlign.center,
+                          style: Styles.blackBold26,
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              handler.repCounter,
-                              textAlign: TextAlign.center,
-                              style: Styles.blackBold26,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              handler.setCounter,
-                              textAlign: TextAlign.center,
-                              style: Styles.blackBold26,
-                            ),
-                          ),
-                        ],
+                      Expanded(
+                        child: Text(
+                          handler.setCounter,
+                          textAlign: TextAlign.center,
+                          style: Styles.blackBold26,
+                        ),
                       ),
                     ],
                   ),
-                ),
-          ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
 
 @immutable
-class PromptScreenRoute extends GoRouteData {
+class PromptScreenRoute extends GoRouteData with $PromptScreenRoute {
   const PromptScreenRoute();
 
   static const path = 'promptscreen';
@@ -264,7 +268,7 @@ class PromptScreenRoute extends GoRouteData {
 }
 
 @immutable
-class UserListRoute extends GoRouteData {
+class UserListRoute extends GoRouteData with $UserListRoute {
   const UserListRoute();
 
   static const path = 'userlist';
@@ -284,7 +288,7 @@ class UserListRoute extends GoRouteData {
 }
 
 @immutable
-class ExerciseListRoute extends GoRouteData {
+class ExerciseListRoute extends GoRouteData with $ExerciseListRoute {
   const ExerciseListRoute({required this.userId, required this.title});
 
   final int userId;
@@ -297,16 +301,16 @@ class ExerciseListRoute extends GoRouteData {
     return Scaffold(
       body: FutureWrapper(
         future: ExerciseService.instance.getAllExercisesByUserId(userId),
-        builder:
-            (snapshot) =>
-                ExerciseList(title: title, items: snapshot.requireData),
+        builder: (snapshot) {
+          return ExerciseList(title: title, items: snapshot.requireData);
+        },
       ),
     );
   }
 }
 
 @immutable
-class ExerciseDetaildRoute extends GoRouteData {
+class ExerciseDetaildRoute extends GoRouteData with $ExerciseDetaildRoute {
   const ExerciseDetaildRoute({required this.userId, required this.exerciseId});
 
   final int userId;
@@ -319,7 +323,9 @@ class ExerciseDetaildRoute extends GoRouteData {
     return Scaffold(
       body: FutureWrapper(
         future: _future,
-        builder: (data) => ExerciseDetail(payload: data),
+        builder: (data) {
+          return ExerciseDetail(payload: data);
+        },
       ),
     );
   }
@@ -362,7 +368,7 @@ class ExerciseDetaildRoute extends GoRouteData {
 }
 
 @immutable
-class ExerciseDataListRoute extends GoRouteData {
+class ExerciseDataListRoute extends GoRouteData with $ExerciseDataListRoute {
   const ExerciseDataListRoute({required this.userId, required this.exerciseId});
 
   final int userId;
@@ -375,7 +381,9 @@ class ExerciseDataListRoute extends GoRouteData {
     return Scaffold(
       body: FutureWrapper(
         future: _future,
-        builder: (items) => ExerciseDataList(items: items),
+        builder: (items) {
+          return ExerciseDataList(items: items);
+        },
       ),
     );
   }

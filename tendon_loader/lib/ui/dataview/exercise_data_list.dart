@@ -21,9 +21,9 @@ class ExerciseDataList extends StatelessWidget {
         ),
         SliverList.builder(
           itemCount: items.length,
-          itemBuilder:
-              (context, index) =>
-                  _ListItem(index: index, data: items.elementAt(index)),
+          itemBuilder: (context, index) {
+            return _ListItem(index: index, data: items.elementAt(index));
+          },
         ),
       ],
     );

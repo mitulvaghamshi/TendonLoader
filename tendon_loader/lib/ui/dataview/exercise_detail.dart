@@ -29,8 +29,9 @@ class ExerciseDetail extends StatelessWidget {
         ),
         SliverList.builder(
           itemCount: payload.infoTable.length,
-          itemBuilder:
-              (_, index) => _ListItem(row: payload.infoTable.elementAt(index)),
+          itemBuilder: (_, index) {
+            return _ListItem(row: payload.infoTable.elementAt(index));
+          },
         ),
       ],
     );

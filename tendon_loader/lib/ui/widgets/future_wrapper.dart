@@ -12,13 +12,13 @@ class FutureWrapper<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<T>(
       future: future,
-      builder:
-          (_, snapshot) =>
-              snapshot.hasData
-                  ? builder(snapshot.requireData)
-                  : snapshot.hasError
-                  ? ButtonFactory.error(message: snapshot.error.toString())
-                  : const ButtonFactory.loading(centered: true),
+      builder: (_, snapshot) {
+        return snapshot.hasData
+            ? builder(snapshot.requireData)
+            : snapshot.hasError
+            ? ButtonFactory.error(message: snapshot.error.toString())
+            : const ButtonFactory.loading(centered: true);
+      },
     );
   }
 }

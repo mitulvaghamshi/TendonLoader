@@ -55,15 +55,16 @@ class ConnectedTile extends StatelessWidget {
             StreamBuilder<ChartData>(
               initialData: const ChartData(),
               stream: GraphHandler.stream,
-              builder:
-                  (_, snapshot) => Text(
-                    '${snapshot.data!.load.toStringAsFixed(1)} Kg.',
-                    style: const TextStyle(
-                      fontSize: 40,
-                      color: Color(0xff3ddc85),
-                      fontWeight: FontWeight.bold,
-                    ),
+              builder: (_, snapshot) {
+                return Text(
+                  '${snapshot.data!.load.toStringAsFixed(1)} Kg.',
+                  style: const TextStyle(
+                    fontSize: 40,
+                    color: Color(0xff3ddc85),
+                    fontWeight: FontWeight.bold,
                   ),
+                );
+              },
             ),
             const Text(
               Strings.tareProgressor,

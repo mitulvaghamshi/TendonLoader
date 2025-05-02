@@ -44,10 +44,9 @@ class LocationTile extends StatelessWidget {
             ButtonFactory.tile(
               leading: const Icon(Icons.location_on_rounded),
               child: const Text('Open Settings'),
-              onTap:
-                  () => AppSettings.openAppSettings(
-                    type: AppSettingsType.location,
-                  ),
+              onTap: () {
+                AppSettings.openAppSettings(type: AppSettingsType.location);
+              },
             ),
           ],
         );
