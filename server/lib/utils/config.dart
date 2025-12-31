@@ -29,7 +29,7 @@ extension Utils on Config {
   Future<Iterable<PreparedStatement>> _prepare(String key) async {
     final sqlPath = String.fromEnvironment(key);
     assert(sqlPath.isNotEmpty, '$key is missing');
-    final content = await File.fromUri(Uri.file(sqlPath)).readAsString();
+    final content = await File.fromUri(.file(sqlPath)).readAsString();
     return database.prepareMultiple(content);
   }
 }
@@ -40,7 +40,7 @@ const _settingsSqlPathKey = 'SETTINGS_SQL_PATH';
 const _exersiceSqlPathKey = 'EXERCISE_SQL_PATH';
 const _prescriptionSqlPathKey = 'PRESCRIPTION_SQL_PATH';
 
-final List<PreparedStatement> userStmt = [];
-final List<PreparedStatement> settingsStmt = [];
-final List<PreparedStatement> prescriptionStmt = [];
-final List<PreparedStatement> exerciseStmt = [];
+final userStmt = <PreparedStatement>[];
+final settingsStmt = <PreparedStatement>[];
+final prescriptionStmt = <PreparedStatement>[];
+final exerciseStmt = <PreparedStatement>[];

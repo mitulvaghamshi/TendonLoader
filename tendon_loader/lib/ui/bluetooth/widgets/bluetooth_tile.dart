@@ -17,34 +17,30 @@ class BluetoothTile extends StatelessWidget {
   const BluetoothTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<BluetoothState>(
-      stream: FlutterBlue.instance.state,
-      builder: (_, snapshot) {
-        // If the Bluetooth is "ON", check if Location is enabled...
-        if (snapshot.hasData && snapshot.data == BluetoothState.on) {
-          return const LocationTile();
-        }
-        // A visual content to inform user about Bluetooth requirements.
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const ImageWidget(path: Images.enableBluetooth),
-            const Text(
-              Strings.enableBluetooth,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            ButtonFactory.tile(
-              leading: const Icon(Icons.bluetooth),
-              child: const Text('Open Settings'),
-              onTap: () {
-                AppSettings.openAppSettings(type: AppSettingsType.bluetooth);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) => StreamBuilder(
+    stream: FlutterBlue.instance.state,
+    builder: (_, snapshot) {
+      // If the Bluetooth is "ON", check if Location is enabled...
+      if (snapshot.hasData && snapshot.data == .on) {
+        return const LocationTile();
+      }
+      // A visual content to inform user about Bluetooth requirements.
+      return Column(
+        mainAxisSize: .min,
+        children: [
+          const ImageWidget(path: Images.enableBluetooth),
+          const Text(
+            Strings.enableBluetooth,
+            textAlign: .center,
+            style: TextStyle(fontSize: 14, fontWeight: .bold),
+          ),
+          ButtonFactory.tile(
+            leading: const Icon(Icons.bluetooth),
+            child: const Text('Open Settings'),
+            onTap: () => AppSettings.openAppSettings(type: .bluetooth),
+          ),
+        ],
+      );
+    },
+  );
 }

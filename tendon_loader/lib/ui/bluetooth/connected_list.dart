@@ -13,21 +13,24 @@ import 'package:tendon_loader/ui/widgets/button_factory.dart';
 /// and avaiable to use without searching for a new device.
 /// This is one time process...
 /// No interactive content in this widget.
+@immutable
 class ConnectedList extends StatelessWidget {
   const ConnectedList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<BluetoothDevice>>(
-      future: FlutterBlue.instance.connectedDevices,
-      builder: (context, snapshot) {
-        // Initial Step... Loading...
-        if (!snapshot.hasData) return const ButtonFactory.loading();
-        // Could not find any connected device, Goto Device Scanner...
-        if (snapshot.data!.isEmpty) return const ScanningTile();
-        // else, Show the list of connected devices...
-        return DeviceList(devices: snapshot.data!);
-      },
-    );
-  }
+  Widget build(BuildContext context) => FutureBuilder(
+    future: FlutterBlue.instance.connectedDevices,
+    builder: (context, snapshot) {
+      // Initial Step... Loading...
+      if (!snapshot.hasData) {
+        return const ButtonFactory.loading();
+      }
+      // Could not find any connected device, Goto Device Scanner...
+      if (snapshot.data!.isEmpty) {
+        return const ScanningTile();
+      }
+      // else, Show the list of connected devices...
+      return DeviceList(devices: snapshot.data!);
+    },
+  );
 }

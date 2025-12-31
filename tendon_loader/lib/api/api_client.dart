@@ -7,88 +7,85 @@ import 'package:http/http.dart' as http;
 import 'package:tendon_loader/api/network_status.dart';
 import 'package:tendon_loader/api/snapshot.dart';
 
+typedef R<T> = Snapshot<T>;
+
 @immutable
 mixin ApiClient {
-  static const _host = String.fromEnvironment('API_HOST');
+  static const host = String.fromEnvironment('API_HOST');
   static final _headers = {
     HttpHeaders.acceptHeader: ContentType.json.value,
     HttpHeaders.contentTypeHeader: ContentType.json.value,
   };
 }
 
+extension on ApiClient {
+  Future<R<T>> _ifConnected<T>(AsyncValueGetter<R<T>> request) async {
+    if (kDebugMode) {
+      await Future<void>.delayed(const Duration(seconds: 2));
+    }
+    if (!NetworkStatus.isConnected) {
+      return const .error('No connection');
+    }
+    try {
+      return await request();
+    } on http.ClientException {
+      return const .error('Unable to connect to the server!');
+    } on HttpException catch (e) {
+      return .error(e.message);
+    }
+  }
+}
+
 extension Utils on ApiClient {
-  Future<Snapshot> get<T>(String path) async {
-    await Future<void>.delayed(const Duration(seconds: 2));
-    if (!NetworkStatus.instance.isConnected) {
-      return const Snapshot.withError('No connection.');
+  Future<R<T>> get<T>(String path) async => _ifConnected(() async {
+    final res = await http.get(
+      .http(ApiClient.host, path),
+      headers: ApiClient._headers,
+    );
+    if (res.statusCode == HttpStatus.ok) {
+      return .data(jsonDecode(res.body));
     }
-    try {
-      final res = await http.get(
-        Uri.http(ApiClient._host, path),
-        headers: ApiClient._headers,
-      );
-      if (res.statusCode == HttpStatus.ok) {
-        return Snapshot.withData(jsonDecode(res.body));
-      }
-      return Snapshot.withError(res.reasonPhrase.toString());
-    } on HttpException catch (e) {
-      return Snapshot.withError(e.message);
-    }
-  }
+    return .error(res.reasonPhrase);
+  });
 
-  Future<Snapshot> post<T>(String path, Map<String, dynamic> data) async {
-    if (!NetworkStatus.instance.isConnected) {
-      return const Snapshot.withError('No connection.');
+  Future<R<T>> post<T>(
+    String path, {
+    required Map<String, dynamic> values,
+  }) async => _ifConnected(() async {
+    final res = await http.post(
+      .http(ApiClient.host, path),
+      headers: ApiClient._headers,
+      body: jsonEncode(values),
+    );
+    if (res.statusCode == HttpStatus.ok) {
+      return .data(jsonDecode(res.body));
     }
-    try {
-      final res = await http.post(
-        Uri.http(ApiClient._host, path),
-        headers: ApiClient._headers,
-        body: jsonEncode(data),
-      );
-      if (res.statusCode == HttpStatus.ok) {
-        return Snapshot.withData(jsonDecode(res.body));
-      }
-      return Snapshot.withError(res.reasonPhrase.toString());
-    } on HttpException catch (e) {
-      return Snapshot.withError(e.message);
-    }
-  }
+    return .error(res.reasonPhrase);
+  });
 
-  Future<Snapshot> put<T>(String path, Map<String, dynamic> data) async {
-    if (!NetworkStatus.instance.isConnected) {
-      return const Snapshot.withError('No connection.');
+  Future<R<T>> put<T>(
+    String path, {
+    required Map<String, dynamic> values,
+  }) async => _ifConnected(() async {
+    final res = await http.put(
+      .http(ApiClient.host, path),
+      headers: ApiClient._headers,
+      body: jsonEncode(values),
+    );
+    if (res.statusCode == HttpStatus.noContent) {
+      return const .none();
     }
-    try {
-      final res = await http.put(
-        Uri.http(ApiClient._host, path),
-        headers: ApiClient._headers,
-        body: jsonEncode(data),
-      );
-      if (res.statusCode == HttpStatus.noContent) {
-        return const Snapshot.nothing();
-      }
-      return Snapshot.withError(res.reasonPhrase.toString());
-    } on HttpException catch (e) {
-      return Snapshot.withError(e.message);
-    }
-  }
+    return .error(res.reasonPhrase);
+  });
 
-  Future<Snapshot> delete<T>(String path) async {
-    if (!NetworkStatus.instance.isConnected) {
-      return const Snapshot.withError('No connection.');
+  Future<R<T>> delete<T>(String path) async => _ifConnected(() async {
+    final res = await http.delete(
+      .http(ApiClient.host, path),
+      headers: ApiClient._headers,
+    );
+    if (res.statusCode == HttpStatus.noContent) {
+      return const .none();
     }
-    try {
-      final res = await http.delete(
-        Uri.http(ApiClient._host, path),
-        headers: ApiClient._headers,
-      );
-      if (res.statusCode == HttpStatus.noContent) {
-        return const Snapshot.nothing();
-      }
-      return Snapshot.withError(res.reasonPhrase.toString());
-    } on HttpException catch (e) {
-      return Snapshot.withError(e.message);
-    }
-  }
+    return .error(res.reasonPhrase);
+  });
 }

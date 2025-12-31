@@ -28,18 +28,16 @@ class GraphWidget extends StatelessWidget {
   final WidgetBuilder headerBuilder;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      persistentFooterButtons: [_GraphControls(handler: handler)],
-      body: Column(
-        children: [
-          _GraphHeader(handler: handler, builder: headerBuilder),
-          Expanded(child: _TheBarGraph(handler: handler)),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: Text(title)),
+    persistentFooterButtons: [_GraphControls(handler: handler)],
+    body: Column(
+      children: [
+        _GraphHeader(handler: handler, builder: headerBuilder),
+        Expanded(child: _TheBarGraph(handler: handler)),
+      ],
+    ),
+  );
 }
 
 @immutable
@@ -50,17 +48,15 @@ class _GraphHeader extends StatelessWidget {
   final WidgetBuilder builder;
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      initialData: const ChartData(),
-      stream: GraphHandler.stream,
-      builder: (_, snapshot) {
-        handler.graphData.insert(0, snapshot.data!);
-        handler.graphCtrl?.updateDataSource(updatedDataIndex: 0);
-        return builder(context);
-      },
-    );
-  }
+  Widget build(BuildContext context) => StreamBuilder(
+    initialData: const ChartData(),
+    stream: GraphHandler.stream,
+    builder: (_, snapshot) {
+      handler.graphData.insert(0, snapshot.data!);
+      handler.graphCtrl?.updateDataSource(updatedDataIndex: 0);
+      return builder(context);
+    },
+  );
 }
 
 @immutable
@@ -70,29 +66,27 @@ class _GraphControls extends StatelessWidget {
   final GraphHandler handler;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
+  Widget build(BuildContext context) => Row(
+    mainAxisAlignment: .spaceEvenly,
+    children: [
+      ButtonFactory.tile(
+        onTap: handler.start,
+        leading: const Icon(Icons.play_arrow, color: Color(0xff3ddc85)),
+        child: const Text('Start'),
+      ),
+      if (handler is ExerciseHandler)
         ButtonFactory.tile(
-          onTap: handler.start,
-          leading: const Icon(Icons.play_arrow, color: Color(0xff3ddc85)),
-          child: const Text('Start'),
+          onTap: handler.pause,
+          leading: const Icon(Icons.pause, color: Color(0xFFDCC73D)),
+          child: const Text('Pause'),
         ),
-        if (handler is ExerciseHandler)
-          ButtonFactory.tile(
-            onTap: handler.pause,
-            leading: const Icon(Icons.pause, color: Color(0xFFDCC73D)),
-            child: const Text('Pause'),
-          ),
-        ButtonFactory.tile(
-          onTap: handler.stop,
-          leading: const Icon(Icons.stop, color: Color(0xffff534d)),
-          child: const Text('Stop'),
-        ),
-      ],
-    );
-  }
+      ButtonFactory.tile(
+        onTap: handler.stop,
+        leading: const Icon(Icons.stop, color: Color(0xffff534d)),
+        child: const Text('Stop'),
+      ),
+    ],
+  );
 }
 
 @immutable
@@ -102,50 +96,47 @@ class _TheBarGraph extends StatelessWidget {
   final GraphHandler handler;
 
   @override
-  Widget build(BuildContext context) {
-    return SfCartesianChart(
-      margin: const EdgeInsets.all(16),
-      primaryXAxis:
-          handler.lineData != null
-              ? const NumericAxis(minimum: 0, isVisible: false)
-              : const CategoryAxis(minimum: 0, maximum: 0, isVisible: false),
-      primaryYAxis: NumericAxis(
-        interval: 2,
-        labelFormat: '{value} kg',
-        maximum: AppScope.of(context).settings.graphScale,
-      ),
-      series: <CartesianSeries<ChartData, int>>[
-        ColumnSeries<ChartData, int>(
-          width: 0.9,
-          animationDuration: 0,
-          dataSource: handler.graphData,
-          color: const Color(0xff000000),
-          xValueMapper: (data, _) => 1,
-          yValueMapper: (data, _) => data.load,
-          onRendererCreated: (ctrl) => handler.graphCtrl = ctrl,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          dataLabelSettings: const DataLabelSettings(
-            isVisible: true,
-            showZeroValue: false,
-            labelAlignment: ChartDataLabelAlignment.bottom,
-            textStyle: TextStyle(
-              fontSize: 56,
-              color: Color(0xff3ddc85),
-              fontWeight: FontWeight.bold,
-            ),
+  Widget build(BuildContext context) => SfCartesianChart(
+    margin: const .all(16),
+    primaryXAxis: handler.lineData != null
+        ? const NumericAxis(minimum: 0, isVisible: false)
+        : const CategoryAxis(minimum: 0, maximum: 0, isVisible: false),
+    primaryYAxis: NumericAxis(
+      interval: 2,
+      labelFormat: '{value} kg',
+      maximum: AppScope.of(context).settings.graphScale,
+    ),
+    series: <CartesianSeries<ChartData, int>>[
+      ColumnSeries(
+        width: 0.9,
+        animationDuration: 0,
+        dataSource: handler.graphData,
+        color: const Color(0xff000000),
+        xValueMapper: (data, _) => 1,
+        yValueMapper: (data, _) => data.load,
+        onRendererCreated: (ctrl) => handler.graphCtrl = ctrl,
+        borderRadius: const .vertical(top: .circular(16)),
+        dataLabelSettings: const DataLabelSettings(
+          isVisible: true,
+          showZeroValue: false,
+          labelAlignment: .bottom,
+          textStyle: TextStyle(
+            fontSize: 56,
+            fontWeight: .bold,
+            color: Color(0xff3ddc85),
           ),
         ),
-        if (handler is! LiveDataHandler)
-          LineSeries<ChartData, int>(
-            width: 5,
-            color: const Color(0xffff534d),
-            animationDuration: 0,
-            dataSource: handler.lineData,
-            yValueMapper: (data, _) => data.load,
-            xValueMapper: (data, _) => data.time.toInt(),
-            onRendererCreated: (ctrl) => handler.lineCtrl = ctrl,
-          ),
-      ],
-    );
-  }
+      ),
+      if (handler is! LiveDataHandler)
+        LineSeries(
+          width: 5,
+          color: const Color(0xffff534d),
+          animationDuration: 0,
+          dataSource: handler.lineData,
+          yValueMapper: (data, _) => data.load,
+          xValueMapper: (data, _) => data.time.toInt(),
+          onRendererCreated: (ctrl) => handler.lineCtrl = ctrl,
+        ),
+    ],
+  );
 }

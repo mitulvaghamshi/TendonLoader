@@ -12,15 +12,13 @@ class UserList extends StatelessWidget {
   final Iterable<User> items;
 
   @override
-  Widget build(BuildContext context) {
-    return SearchList(
-      items: items,
-      title: 'Enrolled Users',
-      searchLabel: 'Search by name...',
-      searchTerm: (item) => item.username,
-      builder: (user, index) => _UserItem(user: user, index: index),
-    );
-  }
+  Widget build(BuildContext context) => SearchList(
+    items: items,
+    title: 'Enrolled Users',
+    searchLabel: 'Search by name...',
+    searchTerm: (item) => item.username,
+    builder: (user, index) => _UserItem(user: user, index: index),
+  );
 }
 
 @immutable
@@ -31,27 +29,24 @@ class _UserItem extends StatelessWidget {
   final int index;
 
   @override
-  Widget build(BuildContext context) {
-    return ButtonFactory.tile(
-      onTap: () {
-        ExerciseListRoute(userId: user.id!, title: user.name).push(context);
-      },
-      spacing: 16,
-      axisAlignment: MainAxisAlignment.start,
-      leading: CircleAvatar(radius: 24, child: Text(index.toString())),
-      trailing: IconButton(
-        onPressed: _showMenu,
-        icon: const Icon(Icons.more_vert),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(user.name, style: Styles.bold18),
-          Text(user.username, style: const TextStyle(color: Colors.grey)),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => ButtonFactory.tile(
+    onTap: () =>
+        ExerciseListRoute(userId: user.id!, title: user.name).push(context),
+    spacing: 16,
+    axisAlignment: .start,
+    leading: CircleAvatar(radius: 24, child: Text(index.toString())),
+    trailing: IconButton(
+      onPressed: _showMenu,
+      icon: const Icon(Icons.more_vert),
+    ),
+    child: Column(
+      crossAxisAlignment: .start,
+      children: [
+        Text(user.name, style: Styles.bold18),
+        Text(user.username, style: const TextStyle(color: Colors.grey)),
+      ],
+    ),
+  );
 }
 
 extension on _UserItem {
@@ -60,7 +55,5 @@ extension on _UserItem {
   // 3. Allow web access
   // 4. Exercise History
   // 5. Edit Prescriptions
-  void _showMenu() {
-    throw UnimplementedError();
-  }
+  void _showMenu() => throw UnimplementedError();
 }

@@ -8,12 +8,12 @@ import 'package:tendon_loader/utils/constants.dart';
 class ExerciseHandler extends GraphHandler {
   ExerciseHandler({required this.prescription, required super.onCountdown})
     : super(
-        lineData: <ChartData>[
+        lineData: [
           ChartData(load: prescription.targetLoad),
           ChartData(time: 2, load: prescription.targetLoad),
         ],
       ) {
-    _clear();
+    _reset();
   }
 
   final Prescription prescription;
@@ -46,7 +46,7 @@ class ExerciseHandler extends GraphHandler {
       isRunning = false;
       await super.stop();
       await exit();
-      _clear();
+      _reset();
     }
   }
 
@@ -83,7 +83,7 @@ class ExerciseHandler extends GraphHandler {
       // Current time from (Progressor) device
       // Clamp [1.000000 ... 1.999999] to 1
       // As this method gets called for every sub-second
-      final int time = data.time.truncate();
+      final time = data.time.truncate();
       // Session (app) is not paused by user and,
       // do not run for same sub-second portion
       if (!isPause && time > _minTime) {
@@ -168,18 +168,18 @@ class ExerciseHandler extends GraphHandler {
 }
 
 extension on ExerciseHandler {
-  void _clear() {
+  void _reset() {
     _isPushing = true;
     _minTime = 0;
     _lapTime = prescription.holdTime;
     _setCount = _repCount = _restCount = 1;
     _isSetOver = isHit = false;
-    GraphHandler.clear();
+    GraphHandler.reset();
   }
 
   Future<void> _setComplete() async {
     await Future<void>.microtask(() async {
-      final bool? result = await onCountdown(
+      final result = await onCountdown(
         'Set Over, Rest!!!',
         Duration(seconds: prescription.setRest),
       );
@@ -192,8 +192,7 @@ extension ExExerciseHandler on ExerciseHandler {
   String get repCounter => '$_repCount / ${prescription.reps}';
   String get setCounter => '$_setCount / ${prescription.sets}';
   String get timeCounter => '${_isPushing ? 'Push' : 'Rest'}: $_lapTime sec';
-  TextStyle get timeStyle =>
-      _isPushing
-          ? Styles.blackBold26
-          : Styles.blackBold26.copyWith(color: Colors.red);
+  TextStyle get timeStyle => _isPushing
+      ? Styles.blackBold26
+      : Styles.blackBold26.copyWith(color: Colors.red);
 }

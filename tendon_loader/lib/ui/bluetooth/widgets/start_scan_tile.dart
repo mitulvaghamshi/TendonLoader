@@ -13,24 +13,20 @@ class StartScanTile extends StatelessWidget {
   const StartScanTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // A visual content to guid user to power on the "Progressor" device.
-    // and start scanning after...
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const ImageWidget(path: Images.enableDevice),
-        const Text(
-          Strings.enableDevice,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-        ),
-        ButtonFactory.tile(
-          onTap: Progressor.instance.startScan,
-          leading: const Icon(Icons.search),
-          child: const Text('Scan'),
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => Column(
+    mainAxisSize: .min,
+    children: [
+      const ImageWidget(path: Images.enableDevice),
+      const Text(
+        Strings.enableDevice,
+        textAlign: .center,
+        style: TextStyle(fontSize: 14, fontWeight: .w500),
+      ),
+      ButtonFactory.tile(
+        onTap: Progressor.instance.startScan,
+        leading: const Icon(Icons.search),
+        child: const Text('Scan'),
+      ),
+    ],
+  );
 }

@@ -11,22 +11,20 @@ class DisconnectedTile extends StatelessWidget {
   final BluetoothDevice device;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: device.connect,
-      contentPadding: const EdgeInsets.all(5),
-      leading: FloatingActionButton(
-        onPressed: device.connect,
-        heroTag: 'disconnected-tile-tag',
-        backgroundColor: const Color(0xffff534d),
-        child: const Icon(Icons.bluetooth, color: Color(0xffffffff)),
-      ),
-      title: Text(
-        device.name.isEmpty ? device.id.id : device.name,
-        style: const TextStyle(fontWeight: FontWeight.bold),
-      ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      subtitle: const Text('Click to connect', style: TextStyle(fontSize: 12)),
-    );
-  }
+  Widget build(BuildContext context) => ListTile(
+    onTap: device.connect,
+    contentPadding: const .all(5),
+    leading: FloatingActionButton(
+      onPressed: device.connect,
+      heroTag: 'disconnected-tile-tag',
+      backgroundColor: const Color(0xffff534d),
+      child: const Icon(Icons.bluetooth, color: Color(0xffffffff)),
+    ),
+    title: Text(
+      device.name.isEmpty ? device.id.id : device.name,
+      style: const TextStyle(fontWeight: .bold),
+    ),
+    subtitle: const Text('Click to connect', style: TextStyle(fontSize: 12)),
+    shape: RoundedRectangleBorder(borderRadius: .circular(16)),
+  );
 }

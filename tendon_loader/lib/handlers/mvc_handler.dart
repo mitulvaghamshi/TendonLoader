@@ -6,7 +6,7 @@ import 'package:tendon_loader/models/exercise.dart';
 class MVCHandler extends GraphHandler {
   MVCHandler({required this.mvcDuration, required super.onCountdown})
     : timeDiff = mvcDuration.toDouble(),
-      super(lineData: <ChartData>[const ChartData(), const ChartData(time: 2)]);
+      super(lineData: [const ChartData(), const ChartData(time: 2)]);
 
   final int mvcDuration;
 
@@ -15,7 +15,9 @@ class MVCHandler extends GraphHandler {
 
   @override
   Future<void> start() async {
-    if (!isRunning) await (hasData ? exit : super.start)();
+    if (!isRunning) {
+      await (hasData ? exit : super.start)();
+    }
   }
 
   @override
@@ -24,7 +26,7 @@ class MVCHandler extends GraphHandler {
       isRunning = false;
       await super.stop();
       await exit();
-      _clear();
+      _reset();
     }
   }
 
@@ -45,7 +47,9 @@ class MVCHandler extends GraphHandler {
 
   @override
   Future<String> exit() async {
-    if (!hasData) return '';
+    if (!hasData) {
+      return '';
+    }
     export ??= const Exercise.empty().copyWith(mvcValue: maxForce);
     return super.exit();
   }
@@ -61,17 +65,17 @@ extension ExMVCHandler on MVCHandler {
 
 extension on MVCHandler {
   void _updateLine() {
-    lineData!.insertAll(0, <ChartData>[
+    lineData!.insertAll(0, [
       ChartData(load: maxForce),
       ChartData(time: 2, load: maxForce),
     ]);
-    lineCtrl?.updateDataSource(updatedDataIndexes: <int>[0, 1]);
+    lineCtrl?.updateDataSource(updatedDataIndexes: [0, 1]);
   }
 
-  void _clear() {
+  void _reset() {
     maxForce = 0;
     timeDiff = mvcDuration.toDouble();
     _updateLine();
-    GraphHandler.clear();
+    GraphHandler.reset();
   }
 }

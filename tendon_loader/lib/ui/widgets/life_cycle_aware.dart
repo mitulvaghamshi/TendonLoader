@@ -35,8 +35,8 @@ class _LifeCycleAwareState extends State<LifeCycleAware>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     (switch (state) {
-      AppLifecycleState.paused => widget.onPause,
-      AppLifecycleState.resumed => widget.onResume,
+      .paused => widget.onPause,
+      .resumed => widget.onResume,
       _ => () {},
     })();
   }

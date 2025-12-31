@@ -7,13 +7,13 @@ import 'package:tendon_loader/ui/widgets/anchor_element.dart'
     show AnchorElement;
 
 Future<void> saveExcel({required String name, List<int>? bytes}) async {
-  if (bytes == null || bytes.isEmpty) return;
-  if (kIsWeb) {
-    final String data = 'data:application/zip;base64,${base64.encode(bytes)}';
-    AnchorElement(href: data)
-      ..setAttribute('download', name)
-      ..click();
-  } else {
-    throw 'Downloading not implemented for mobile/desktop devices.';
+  if (bytes == null || bytes.isEmpty) {
+    return;
   }
+  if (!kIsWeb) {
+    throw 'Downloading not supported for mobile/desktop devices';
+  }
+  AnchorElement(href: 'data:application/zip;base64,${base64Encode(bytes)}')
+    ..setAttribute('download', name)
+    ..click();
 }

@@ -11,60 +11,34 @@ class Progressor {
 
   Progressor._();
 
-  Future<bool> call({required BluetoothDevice device}) => init(device: device);
-
   static Progressor? _instance;
+
   static Progressor get instance => Progressor();
 
   bool _isRunning = false;
-  Completer<bool>? _completer;
 
+  Completer<bool>? _completer;
   BluetoothDevice? _device;
+
   BluetoothCharacteristic? _dataChar;
   BluetoothCharacteristic? _controlChar;
+  String get deviceName => _device == null
+      ? 'Unknown'
+      : _device!.name.isEmpty
+      ? _device!.id.id
+      : _device!.name;
 
   BluetoothDevice? get progressor => _device;
 
-  String get deviceName =>
-      _device == null
-          ? 'Unknown'
-          : _device!.name.isEmpty
-          ? _device!.id.id
-          : _device!.name;
+  Future<void> get _delayedStart async =>
+      Future<void>.delayed(const Duration(milliseconds: 800), startProgresssor);
 
-  Future<void> startScan() async =>
-      FlutterBlue.instance.startScan(timeout: const Duration(seconds: 5));
-
-  Future<void> tare() async {
-    if (!_isRunning) return;
-    _isRunning = false;
-    await _controlChar!.write(<int>[Commands.tareScale]);
-    await Future.delayed(const Duration(milliseconds: 500));
-    await _controlChar!.write(<int>[Commands.startWeightMeas]);
-    await Future.delayed(const Duration(milliseconds: 500));
-    await _controlChar!.write(<int>[Commands.stopWeightMeas]);
-  }
-
-  Future<void> startProgresssor() async {
-    if (_isRunning) return;
-    _isRunning = true;
-    if (Simulator.enabled) return Simulator.startSimulator();
-    await _controlChar!.write(<int>[Commands.startWeightMeas]);
-  }
-
-  Future<void> stopProgressor() async {
-    if (!_isRunning) return;
-    _isRunning = false;
-    if (Simulator.enabled) return Simulator.stopSimulator();
-    await _controlChar!.write(<int>[Commands.stopWeightMeas]);
-  }
-
-  Future<void> sleep() async => disconnect(sleep: true);
+  Future<bool> call({required BluetoothDevice device}) => init(device: device);
 
   Future<void> disconnect({bool sleep = false}) async {
     if (_device == null) return;
     if (sleep) {
-      await _controlChar!.write(<int>[Commands.enterSleep]);
+      await _controlChar!.write(<int>[Cmd.enterSleep]);
     } else {
       await _device!.disconnect();
     }
@@ -72,16 +46,13 @@ class Progressor {
     _device = _dataChar = _controlChar = _completer = null;
   }
 
-  Future<void> get _delayedStart async =>
-      Future<void>.delayed(const Duration(milliseconds: 800), startProgresssor);
-
   Future<bool> init({required BluetoothDevice device}) async {
     if (_device != null && _dataChar != null && _controlChar != null) {
       return _delayedStart.then((_) => true);
     } else if (_completer == null) {
       _completer = Completer<bool>();
-      for (BluetoothService s in await device.discoverServices()) {
-        for (BluetoothCharacteristic c in s.characteristics) {
+      for (var s in await device.discoverServices()) {
+        for (var c in s.characteristics) {
           if (c.uuid == Guid(DeviceUUID.controller)) {
             _controlChar = c;
           } else if (c.uuid == Guid(DeviceUUID.data)) {
@@ -98,5 +69,34 @@ class Progressor {
       }
     }
     return _completer!.future;
+  }
+
+  Future<void> sleep() async => disconnect(sleep: true);
+
+  Future<void> startProgresssor() async {
+    if (_isRunning) return;
+    _isRunning = true;
+    if (Simulator.enabled) return Simulator.startSimulator();
+    await _controlChar!.write(<int>[Cmd.startWeightMeas]);
+  }
+
+  Future<void> startScan() async =>
+      FlutterBlue.instance.startScan(timeout: const Duration(seconds: 5));
+
+  Future<void> stopProgressor() async {
+    if (!_isRunning) return;
+    _isRunning = false;
+    if (Simulator.enabled) return Simulator.stopSimulator();
+    await _controlChar!.write(<int>[Cmd.stopWeightMeas]);
+  }
+
+  Future<void> tare() async {
+    if (!_isRunning) return;
+    _isRunning = false;
+    await _controlChar!.write(<int>[Cmd.tareScale]);
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _controlChar!.write(<int>[Cmd.startWeightMeas]);
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _controlChar!.write(<int>[Cmd.stopWeightMeas]);
   }
 }

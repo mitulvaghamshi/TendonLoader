@@ -7,17 +7,13 @@ class ImageWidget extends StatelessWidget {
   final String path;
 
   @override
-  Widget build(BuildContext context) {
-    return Image.asset(
-      path,
-      fit: BoxFit.contain,
-      frameBuilder: (_, child, frame, _) {
-        return AnimatedOpacity(
-          duration: const Duration(seconds: 2),
-          opacity: frame == null ? 0 : 1,
-          child: child,
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) => Image.asset(
+    path,
+    fit: .contain,
+    frameBuilder: (_, child, frame, _) => AnimatedOpacity(
+      duration: const Duration(seconds: 2),
+      opacity: frame == null ? 0 : 1,
+      child: child,
+    ),
+  );
 }

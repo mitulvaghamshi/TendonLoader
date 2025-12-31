@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tendon_loader/api/network_status.dart';
 import 'package:tendon_loader/models/user.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';
@@ -28,6 +29,12 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _isLoading = false;
 
   @override
+  void initState() {
+    NetworkStatus(); // Start network status listener.
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (kDebugMode) {
@@ -50,7 +57,11 @@ class _SignInScreenState extends State<SignInScreen> {
         username: _usernameCtrl.text,
         password: _passwordCtrl.text,
       );
-      await state.authenticate(user);
+      final result = await state.authenticate(user);
+      if (mounted) {
+        final snakbar = SnackBar(content: Text(result));
+        ScaffoldMessenger.of(context).showSnackBar(snakbar);
+      }
     } finally {
       setState(() => _isLoading = false);
     }
@@ -64,23 +75,20 @@ class _SignInScreenState extends State<SignInScreen> {
     return Form(
       child: Column(
         children: [
-          const AppLogo(radius: 140, padding: EdgeInsets.all(16)),
+          const AppLogo(radius: 140, padding: .all(16)),
           InputFactory.form(
             label: 'Enter username',
             controller: _usernameCtrl,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: .emailAddress,
           ),
           InputFactory.form(
             label: 'Enter password',
             controller: _passwordCtrl,
-            keyboardType: TextInputType.visiblePassword,
+            keyboardType: .visiblePassword,
           ),
           const SizedBox(height: 16),
           AnimatedCrossFade(
-            crossFadeState:
-                _isLoading
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
+            crossFadeState: _isLoading ? .showFirst : .showSecond,
             duration: const Duration(milliseconds: 500),
             firstChild: const ButtonFactory.loading(),
             secondChild: ButtonFactory.tile(

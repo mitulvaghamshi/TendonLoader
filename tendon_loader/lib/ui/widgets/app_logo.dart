@@ -19,6 +19,7 @@ class AppLogo extends StatelessWidget {
     final logo = '<path fill="#$color" d="${Strings.appLogoSvgData}"/></svg>';
 
     Widget widget = SvgPicture.string('${Strings.appLogoSvgNs}$circle$logo');
+
     if (radius != null) {
       widget = CircleAvatar(
         backgroundColor: Colors.transparent,
@@ -27,6 +28,7 @@ class AppLogo extends StatelessWidget {
       );
     }
     if (padding == null) return widget;
+
     return Padding(padding: padding!, child: widget);
   }
 }

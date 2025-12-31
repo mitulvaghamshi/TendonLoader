@@ -40,7 +40,7 @@ RouteBase get $tendonLoaderRoute => GoRouteData.$route(
     ),
     GoRouteData.$route(
       path: 'exercisedetail',
-      factory: $ExerciseDetaildRoute._fromState,
+      factory: $ExerciseDetailsRoute._fromState,
     ),
     GoRouteData.$route(
       path: 'exercisedatalist',
@@ -243,14 +243,14 @@ mixin $ExerciseListRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin $ExerciseDetaildRoute on GoRouteData {
-  static ExerciseDetaildRoute _fromState(GoRouterState state) =>
-      ExerciseDetaildRoute(
+mixin $ExerciseDetailsRoute on GoRouteData {
+  static ExerciseDetailsRoute _fromState(GoRouterState state) =>
+      ExerciseDetailsRoute(
         userId: int.parse(state.uri.queryParameters['user-id']!),
         exerciseId: int.parse(state.uri.queryParameters['exercise-id']!),
       );
 
-  ExerciseDetaildRoute get _self => this as ExerciseDetaildRoute;
+  ExerciseDetailsRoute get _self => this as ExerciseDetailsRoute;
 
   @override
   String get location => GoRouteData.$location(

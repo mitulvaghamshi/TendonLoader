@@ -19,9 +19,6 @@ extension ExChartData on ChartData {
 
   static ChartData _parseJson(String data) {
     final items = data.split(':');
-    return ChartData(
-      time: double.parse(items[0]),
-      load: double.parse(items[1]),
-    );
+    return ChartData(time: .parse(items[0]), load: .parse(items[1]));
   }
 }

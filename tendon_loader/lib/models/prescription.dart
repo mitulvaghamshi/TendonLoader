@@ -23,8 +23,8 @@ class Prescription {
       mvcDuration = 0,
       targetLoad = 0;
 
-  factory Prescription.fromJson(Map<String, dynamic> map) =>
-      ExPrescription._parseJson(map);
+  factory Prescription.fromJson(Map<String, dynamic> json) =>
+      ExPrescription._parseJson(json);
 
   final int? id;
   final int sets;
@@ -46,7 +46,7 @@ extension ExPrescription on Prescription {
     ('Set rest time', '$setRest Sec'),
   ];
 
-  Map<String, dynamic> get json => {
+  Map<String, dynamic> get map => {
     'id': id,
     'reps': reps,
     'sets': sets,
@@ -58,7 +58,6 @@ extension ExPrescription on Prescription {
   };
 
   Prescription copyWith({
-    int? id,
     int? sets,
     int? reps,
     int? setRest,
@@ -66,21 +65,19 @@ extension ExPrescription on Prescription {
     int? restTime,
     int? mvcDuration,
     double? targetLoad,
-  }) {
-    return Prescription._(
-      id: id ?? this.id,
-      sets: sets ?? this.sets,
-      reps: reps ?? this.reps,
-      setRest: setRest ?? this.setRest,
-      holdTime: holdTime ?? this.holdTime,
-      restTime: restTime ?? this.restTime,
-      mvcDuration: mvcDuration ?? this.mvcDuration,
-      targetLoad: targetLoad ?? this.targetLoad,
-    );
-  }
+  }) => Prescription._(
+    id: id,
+    sets: sets ?? this.sets,
+    reps: reps ?? this.reps,
+    setRest: setRest ?? this.setRest,
+    holdTime: holdTime ?? this.holdTime,
+    restTime: restTime ?? this.restTime,
+    mvcDuration: mvcDuration ?? this.mvcDuration,
+    targetLoad: targetLoad ?? this.targetLoad,
+  );
 
-  static Prescription _parseJson(Map<String, dynamic> map) {
-    if (map case {
+  static Prescription _parseJson(Map<String, dynamic> json) {
+    if (json case {
       'id': int id,
       'reps': int reps,
       'sets': int sets,
@@ -101,6 +98,6 @@ extension ExPrescription on Prescription {
         targetLoad: targetLoad.toDouble(),
       );
     }
-    throw const FormatException('[Prescription]: Invalid JSON');
+    throw const FormatException('[Prescription]: Invalid JSON data.');
   }
 }

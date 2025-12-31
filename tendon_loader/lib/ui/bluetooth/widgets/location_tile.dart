@@ -17,40 +17,38 @@ class LocationTile extends StatelessWidget {
   const LocationTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      stream: Stream<bool>.periodic(
-        const Duration(milliseconds: 300),
-      ).asyncMap((_) async => loc.Location().serviceEnabled()),
-      builder: (_, snapshot) {
-        // If the location access is allowed,
-        // check if "The Progressor" is powered on...
-        if (snapshot.hasData && snapshot.data!) return const StartScanTile();
-        // A visual content to inform user about location services and privacy.
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const ImageWidget(path: Images.enableLocation),
-            const Text(
-              Strings.locationLine1,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-            const Text(
-              Strings.locationLine2,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
-            ),
-            ButtonFactory.tile(
-              leading: const Icon(Icons.location_on_rounded),
-              child: const Text('Open Settings'),
-              onTap: () {
-                AppSettings.openAppSettings(type: AppSettingsType.location);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) => StreamBuilder(
+    stream: Stream<bool>.periodic(
+      const Duration(milliseconds: 300),
+    ).asyncMap((_) async => loc.Location().serviceEnabled()),
+    builder: (_, snapshot) {
+      // If the location access is allowed,
+      // check if "The Progressor" is powered on...
+      if (snapshot.hasData && snapshot.data!) {
+        return const StartScanTile();
+      }
+      // A visual content to inform user about location services and privacy.
+      return Column(
+        mainAxisSize: .min,
+        children: [
+          const ImageWidget(path: Images.enableLocation),
+          const Text(
+            Strings.locationLine1,
+            textAlign: .center,
+            style: TextStyle(fontSize: 14, fontWeight: .w500),
+          ),
+          const Text(
+            Strings.locationLine2,
+            textAlign: .center,
+            style: TextStyle(fontSize: 14, fontStyle: .italic),
+          ),
+          ButtonFactory.tile(
+            leading: const Icon(Icons.location_on_rounded),
+            child: const Text('Open Settings'),
+            onTap: () => AppSettings.openAppSettings(type: .location),
+          ),
+        ],
+      );
+    },
+  );
 }

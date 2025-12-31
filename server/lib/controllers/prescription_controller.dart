@@ -5,22 +5,20 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 Response queryHandler(Request request) =>
-    Response.ok(jsonEncode(prescription.selectAll));
+    .ok(jsonEncode(prescription.selectAll));
 
 Response selectHandler(Request request) {
-  final id = int.tryParse(request.params['id'].toString());
-  if (id == null) {
-    return Response.badRequest();
+  if (request.params case {'id': String id}) {
+    return .ok(jsonEncode(prescription.selectBy(.parse(id))));
   }
-  return Response.ok(jsonEncode(prescription.selectBy(id)));
+  return .badRequest();
 }
 
 Response searchHandler(Request request) {
-  final term = request.params['term'];
-  if (term == null) {
-    return Response.badRequest();
+  if (request.params case {'term': String term}) {
+    return .ok(jsonEncode(prescription.search(term)));
   }
-  return Response.ok(jsonEncode(prescription.search(term)));
+  return .badRequest();
 }
 
 Future<Response> insertHandler(Request request) async {
@@ -43,46 +41,43 @@ Future<Response> insertHandler(Request request) async {
       mvcDuration: mvcDuration,
       targetLoad: targetLoad.toDouble(),
     );
-    return Response.ok(0);
+    return .ok(0);
   }
-  return Response.badRequest();
+  return .badRequest();
 }
 
 Future<Response> updateHandler(Request request) async {
-  final id = int.tryParse(request.params['id'].toString());
-  if (id == null) {
-    return Response.badRequest();
+  if (request.params case {'id': String id}) {
+    final body = await request.readAsString();
+    if (jsonDecode(body) case {
+      'reps': int reps,
+      'sets': int sets,
+      'set_rest': int setRest,
+      'hold_time': int holdTime,
+      'rest_time': int restTime,
+      'mvc_duration': int mvcDuration,
+      'target_load': num targetLoad,
+    }) {
+      prescription.update(
+        id: .parse(id),
+        sets: sets,
+        reps: reps,
+        setRest: setRest,
+        holdTime: holdTime,
+        restTime: restTime,
+        mvcDuration: mvcDuration,
+        targetLoad: targetLoad.toDouble(),
+      );
+      return .ok(0);
+    }
   }
-  final body = await request.readAsString();
-  if (jsonDecode(body) case {
-    'reps': int reps,
-    'sets': int sets,
-    'set_rest': int setRest,
-    'hold_time': int holdTime,
-    'rest_time': int restTime,
-    'mvc_duration': int mvcDuration,
-    'target_load': num targetLoad,
-  }) {
-    prescription.update(
-      id: id,
-      sets: sets,
-      reps: reps,
-      setRest: setRest,
-      holdTime: holdTime,
-      restTime: restTime,
-      mvcDuration: mvcDuration,
-      targetLoad: targetLoad.toDouble(),
-    );
-    return Response.ok(0);
-  }
-  return Response.badRequest();
+  return .badRequest();
 }
 
 Future<Response> deleteHandler(Request request) async {
-  final id = int.tryParse(request.params['id'].toString());
-  if (id == null) {
-    return Response.badRequest();
+  if (request.params case {'id': String id}) {
+    prescription.delete(.parse(id));
+    return .ok(0);
   }
-  prescription.delete(id);
-  return Response.ok(0);
+  return .badRequest();
 }

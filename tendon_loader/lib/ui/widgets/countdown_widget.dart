@@ -21,7 +21,9 @@ class _CountdownWidgetState extends State<CountdownWidget>
   )..addStatusListener(_onFinish);
 
   void _onFinish(_) {
-    if (mounted) context.pop(true);
+    if (mounted) {
+      context.pop(true);
+    }
   }
 
   @override
@@ -41,29 +43,22 @@ class _CountdownWidgetState extends State<CountdownWidget>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: CustomPaint(painter: _CirclePainter(_controller)),
+  Widget build(BuildContext context) => Stack(
+    alignment: .center,
+    children: [
+      AspectRatio(
+        aspectRatio: 1,
+        child: CustomPaint(painter: _CirclePainter(_controller)),
+      ),
+      AnimatedBuilder(
+        animation: _controller,
+        builder: (_, child) => Text(
+          _remainingTime,
+          style: const TextStyle(fontSize: 100, fontWeight: .bold),
         ),
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (_, child) {
-            return Text(
-              _remainingTime,
-              style: const TextStyle(
-                fontSize: 100,
-                fontWeight: FontWeight.bold,
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
 }
 
 @immutable
@@ -77,13 +72,12 @@ class _CirclePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint =
-        Paint()
-          ..strokeWidth = size.width * 0.07
-          ..style = PaintingStyle.stroke
-          ..color = const Color(0xff3ddc85);
-    final Offset center = size.center(Offset.zero);
-    final double radius = size.width / 2.5;
+    final paint = Paint()
+      ..style = .stroke
+      ..strokeWidth = size.width * .07
+      ..color = const Color(0xff3ddc85);
+    final center = size.center(.zero);
+    final radius = size.width / 2.5;
 
     canvas
       ..drawCircle(center, radius, paint)

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:tendon_loader/api/snapshot.dart';
 import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/models/settings.dart';
 import 'package:tendon_loader/models/user.dart';
@@ -10,9 +11,9 @@ import 'package:tendon_loader/services/user_service.dart';
 
 class AppState extends ChangeNotifier {
   AppState()
-    : authUser = const User.empty(),
-      settings = const Settings.empty(),
-      prescription = const Prescription.empty();
+    : authUser = const .empty(),
+      settings = const .empty(),
+      prescription = const .empty();
 
   User authUser;
   Settings settings;
@@ -20,30 +21,48 @@ class AppState extends ChangeNotifier {
 
   bool modified = false;
 
-  Future<void> authenticate(User user) async {
+  Future<String> authenticate(User user) async {
     final sUser = await UserService.instance.authenticate(user);
-    if (sUser.hasData) authUser = sUser.requireData;
+    if (!sUser.hasData || sUser.hasError) {
+      return '[User/auth]: ${sUser.error}';
+    }
+    authUser = sUser.requireData;
 
     final sSettings = await SettingsService.instance.getSettingsBy(
-      userId: authUser.id,
+      userId: ArgumentError.checkNotNull(authUser.id),
     );
-    if (sUser.hasData) settings = sSettings.requireData;
+    if (!sSettings.hasData || sSettings.hasError) {
+      return '[Settings/auth]: ${sSettings.error}';
+    }
+    settings = sSettings.requireData;
 
-    final prescriptionRes = await PrescriptionService.instance
+    final sPrescription = await PrescriptionService.instance
         .getPrescriptionById(settings.prescriptionId);
-    if (prescriptionRes.hasData) prescription = prescriptionRes.requireData;
+    if (!sPrescription.hasData || sPrescription.hasError) {
+      return '[Prescription/auth]: ${sSettings.error}';
+    }
+    prescription = sPrescription.requireData;
 
     notifyListeners();
+
+    return 'Login Successfull!';
   }
 
-  void update<T>(T Function(T state) callback) {
-    if (T == Settings) {
-      settings = callback(settings as T) as Settings;
-    } else if (T == Prescription) {
-      prescription = callback(prescription as T) as Prescription;
-    }
-    modified = true;
+  void update<T>(T Function(T state) apply) {
+    modified = false;
 
-    notifyListeners();
+    if (T == Settings) {
+      modified = true;
+      settings = apply(settings as T) as Settings;
+    }
+
+    if (T == Prescription) {
+      modified = true;
+      prescription = apply(prescription as T) as Prescription;
+    }
+
+    if (modified) {
+      notifyListeners();
+    }
   }
 }

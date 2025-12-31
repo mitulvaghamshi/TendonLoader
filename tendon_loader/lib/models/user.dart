@@ -15,7 +15,7 @@ class User {
     : id = null,
       token = null;
 
-  factory User.fromJson(Map<String, dynamic> map) => ExUser._parseJson(map);
+  factory User.fromJson(Map<String, dynamic> json) => ExUser._parseJson(json);
 
   final int? id;
   final int? token;
@@ -29,26 +29,26 @@ extension ExUser on User {
       .first
       .replaceFirst(RegExp(r'\w'), username[0].toUpperCase());
 
-  Map<String, dynamic> get json => {
+  Map<String, dynamic> get map => {
     'id': id,
     'username': username,
     'password': password,
   };
 
-  User copyWith({int? id, String? username, String? password, int? token}) {
-    return User._(
-      id: id ?? this.id,
-      username: username ?? this.username,
-      password: password ?? this.password,
-      token: token ?? this.token,
-    );
-  }
+  User copyWith({int? id, String? username, String? password, int? token}) =>
+      User._(
+        id: id ?? this.id,
+        username: username ?? this.username,
+        password: password ?? this.password,
+        token: token ?? this.token,
+      );
 
-  static User _parseJson(Map<String, dynamic> map) {
-    if (map case {
+  static User _parseJson(Map<String, dynamic> json) {
+    if (json case {
       'id': int id,
       'username': String username,
       'password': String password,
+      // 'token': int token,
     }) {
       return User._(
         id: id,
@@ -57,7 +57,7 @@ extension ExUser on User {
         token: null,
       );
     }
-    throw const FormatException('[User]: Invalid JSON');
+    throw const FormatException('[User]: Invalid JSON data.');
   }
 
   Future<void> download() async {

@@ -16,26 +16,26 @@ class DeviceTile extends StatelessWidget {
   final bool isLast;
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<BluetoothDeviceState>(
-      stream: device.state,
-      builder: (context, snapshot) {
-        if (snapshot.data == BluetoothDeviceState.connected) {
-          return ConnectedTile(device: device);
-        }
-        if (!isLast) return DisconnectedTile(device: device);
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            DisconnectedTile(device: device),
-            ButtonFactory.tile(
-              onTap: Progressor.instance.startScan,
-              leading: const Icon(Icons.search),
-              child: const Text('Scan'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) => StreamBuilder(
+    stream: device.state,
+    builder: (context, snapshot) {
+      if (snapshot.data == .connected) {
+        return ConnectedTile(device: device);
+      }
+      if (!isLast) {
+        return DisconnectedTile(device: device);
+      }
+      return Column(
+        mainAxisSize: .min,
+        children: [
+          DisconnectedTile(device: device),
+          ButtonFactory.tile(
+            onTap: Progressor.instance.startScan,
+            leading: const Icon(Icons.search),
+            child: const Text('Scan'),
+          ),
+        ],
+      );
+    },
+  );
 }

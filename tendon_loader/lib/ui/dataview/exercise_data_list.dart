@@ -10,24 +10,21 @@ class ExerciseDataList extends StatelessWidget {
   final Iterable<ChartData> items;
 
   @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        const SliverAppBar(title: Text('Exercise Data')),
-        const SliverPersistentHeader(
-          pinned: true,
-          floating: true,
-          delegate: _HeaderDelegate(),
-        ),
-        SliverList.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return _ListItem(index: index, data: items.elementAt(index));
-          },
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => CustomScrollView(
+    slivers: [
+      const SliverAppBar(title: Text('Exercise Data')),
+      const SliverPersistentHeader(
+        pinned: true,
+        floating: true,
+        delegate: _HeaderDelegate(),
+      ),
+      SliverList.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) =>
+            _ListItem(index: index, data: items.elementAt(index)),
+      ),
+    ],
+  );
 }
 
 @immutable
@@ -38,18 +35,16 @@ class _ListItem extends StatelessWidget {
   final ChartData data;
 
   @override
-  Widget build(BuildContext context) {
-    return ButtonFactory(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text('${index + 1}'),
-          Text(data.time.toStringAsFixed(2)),
-          Text(data.load.toStringAsFixed(2)),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => ButtonFactory(
+    child: Row(
+      mainAxisAlignment: .spaceAround,
+      children: [
+        Text('${index + 1}'),
+        Text(data.time.toStringAsFixed(2)),
+        Text(data.load.toStringAsFixed(2)),
+      ],
+    ),
+  );
 }
 
 class _HeaderDelegate extends SliverPersistentHeaderDelegate {
@@ -60,19 +55,17 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
     BuildContext context,
     double shrinkOffset,
     bool overlapsContent,
-  ) {
-    return const ButtonFactory(
-      color: Colors.blueGrey,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text('No.', style: Styles.whiteBold),
-          Text('Time', style: Styles.whiteBold),
-          Text('Load', style: Styles.whiteBold),
-        ],
-      ),
-    );
-  }
+  ) => const ButtonFactory(
+    color: Colors.blueGrey,
+    child: Row(
+      mainAxisAlignment: .spaceAround,
+      children: [
+        Text('No.', style: Styles.whiteBold),
+        Text('Time', style: Styles.whiteBold),
+        Text('Load', style: Styles.whiteBold),
+      ],
+    ),
+  );
 
   @override
   double get maxExtent => 60;

@@ -39,84 +39,80 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        IgnorePointer(
-          ignoring: !state.settings.editablePrescription,
-          child: Column(
-            children: [
-              InputFactory.form(
-                controller: _loadCtrl,
-                label: 'Target Load (Kg)',
-                format: r'^\d{1,2}(\.\d{0,2})?',
-                padding: Styles.tilePadding,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: InputFactory.form(
-                      controller: _setsCtrl,
-                      label: 'Sets (#)',
-                      format: r'^\d{1,2}',
-                      padding: Styles.tilePadding,
-                    ),
-                  ),
-                  Expanded(
-                    child: InputFactory.form(
-                      controller: _repsCtrl,
-                      label: 'Reps (#)',
-                      format: r'^\d{1,2}',
-                      padding: Styles.tilePadding,
-                    ),
-                  ),
-                ],
-              ),
-              TimePickerTile(
-                time: _holdTime,
-                label: 'Rep hold time',
-                onPick: (time) => setState(() => _holdTime = time),
-              ),
-              TimePickerTile(
-                time: _restTime,
-                label: 'Rep rest time',
-                onPick: (time) => setState(() => _restTime = time),
-              ),
-              TimePickerTile(
-                time: _setRestTime,
-                label: 'Set rest time (default: 90 sec)',
-                onPick: (time) => setState(() => _setRestTime = time),
-              ),
-              TimePickerTile(
-                time: _mvcDuration,
-                label: 'MVC test duration (optional)',
-                onPick: (time) => setState(() => _mvcDuration = time),
-              ),
-              const Divider(),
-              ButtonFactory.tile(
-                spacing: 16,
-                leading: ButtonFactory(
-                  onTap: () => setState(_reset),
-                  color: Theme.of(context).shadowColor,
-                  child: const Text('Reset', style: Styles.whiteBold),
-                ),
-                child: Expanded(
-                  child: ButtonFactory(
-                    onTap: _onSubmit,
-                    color: Theme.of(context).primaryColor,
-                    child: const Text('Save and exit', style: Styles.whiteBold),
+  Widget build(BuildContext context) => Column(
+    children: [
+      IgnorePointer(
+        ignoring: !state.settings.editablePrescription,
+        child: Column(
+          children: [
+            InputFactory.form(
+              controller: _loadCtrl,
+              label: 'Target Load (Kg)',
+              format: r'^\d{1,2}(\.\d{0,2})?',
+              padding: Styles.tilePadding,
+              keyboardType: const .numberWithOptions(decimal: true),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: InputFactory.form(
+                    controller: _setsCtrl,
+                    label: 'Sets (#)',
+                    format: r'^\d{1,2}',
+                    padding: Styles.tilePadding,
                   ),
                 ),
+                Expanded(
+                  child: InputFactory.form(
+                    controller: _repsCtrl,
+                    label: 'Reps (#)',
+                    format: r'^\d{1,2}',
+                    padding: Styles.tilePadding,
+                  ),
+                ),
+              ],
+            ),
+            TimePickerTile(
+              time: _holdTime,
+              label: 'Rep hold time',
+              onPick: (time) => setState(() => _holdTime = time),
+            ),
+            TimePickerTile(
+              time: _restTime,
+              label: 'Rep rest time',
+              onPick: (time) => setState(() => _restTime = time),
+            ),
+            TimePickerTile(
+              time: _setRestTime,
+              label: 'Set rest time (default: 90 sec)',
+              onPick: (time) => setState(() => _setRestTime = time),
+            ),
+            TimePickerTile(
+              time: _mvcDuration,
+              label: 'MVC test duration (optional)',
+              onPick: (time) => setState(() => _mvcDuration = time),
+            ),
+            const Divider(),
+            ButtonFactory.tile(
+              spacing: 16,
+              leading: ButtonFactory(
+                onTap: () => setState(_reset),
+                color: Theme.of(context).shadowColor,
+                child: const Text('Reset', style: Styles.whiteBold),
               ),
-            ],
-          ),
+              child: Expanded(
+                child: ButtonFactory(
+                  onTap: _onSubmit,
+                  color: Theme.of(context).primaryColor,
+                  child: const Text('Save and exit', style: Styles.whiteBold),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
 }
 
 extension on _PrescriptionScreenState {
@@ -161,7 +157,7 @@ extension on _PrescriptionScreenState {
       return context.pop();
     }
     final snackBar = SnackBar(
-      padding: EdgeInsets.zero,
+      padding: .zero,
       content: ButtonFactory.error(message: error),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

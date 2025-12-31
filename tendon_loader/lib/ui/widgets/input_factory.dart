@@ -18,18 +18,18 @@ class InputFactory extends StatelessWidget {
 
   const factory InputFactory.search({
     Key? key,
-    required final String label,
-    required final VoidCallback? onComplete,
-    required final TextEditingController controller,
+    required String label,
+    required VoidCallback? onComplete,
+    required TextEditingController controller,
   }) = _SearchField;
 
   const factory InputFactory.form({
-    final Key? key,
-    final String? format,
-    final EdgeInsetsGeometry? padding,
-    final TextInputType? keyboardType,
-    required final String label,
-    required final TextEditingController controller,
+    Key? key,
+    String? format,
+    EdgeInsetsGeometry? padding,
+    TextInputType? keyboardType,
+    required String label,
+    required TextEditingController controller,
   }) = _FormField;
 
   final EdgeInsetsGeometry? padding;
@@ -59,7 +59,11 @@ class InputFactory extends StatelessWidget {
         ),
       ),
     );
-    if (padding == null) return widget;
+
+    if (padding == null) {
+      return widget;
+    }
+
     return Padding(padding: padding!, child: widget);
   }
 }
@@ -74,14 +78,12 @@ class _SearchField extends InputFactory {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return InputFactory(
-      label: label,
-      controller: controller,
-      onComplete: onComplete,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-    );
-  }
+  Widget build(BuildContext context) => InputFactory(
+    label: label,
+    controller: controller,
+    onComplete: onComplete,
+    padding: const .symmetric(horizontal: 16),
+  );
 }
 
 @immutable
@@ -98,20 +100,17 @@ class _FormField extends InputFactory {
   final String? format;
 
   @override
-  Widget build(BuildContext context) {
-    return InputFactory(
-      key: key,
-      label: label,
-      padding: padding,
-      controller: controller,
-      validateMode: AutovalidateMode.onUserInteraction,
-      keyboardType: keyboardType ?? TextInputType.number,
-      validator: (value) {
-        return value == null || value.isEmpty ? '$label is required' : null;
-      },
-      formatters: [
-        if (format != null) FilteringTextInputFormatter.allow(RegExp(format!)),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => InputFactory(
+    key: key,
+    label: label,
+    padding: padding,
+    controller: controller,
+    validateMode: .onUserInteraction,
+    keyboardType: keyboardType ?? .number,
+    validator: (value) =>
+        value == null || value.isEmpty ? '$label is required' : null,
+    formatters: [
+      if (format != null) FilteringTextInputFormatter.allow(RegExp(format!)),
+    ],
+  );
 }

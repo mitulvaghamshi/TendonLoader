@@ -21,8 +21,8 @@ class Settings {
       userId = null,
       prescriptionId = null;
 
-  factory Settings.fromJson(Map<String, dynamic> map) =>
-      ExSettings._parseJson(map);
+  factory Settings.fromJson(Map<String, dynamic> json) =>
+      ExSettings._parseJson(json);
 
   final int? id;
   final int? userId;
@@ -34,9 +34,9 @@ class Settings {
 }
 
 extension ExSettings on Settings {
-  ThemeMode get themeMode => darkMode ? ThemeMode.dark : ThemeMode.light;
+  ThemeMode get themeMode => darkMode ? .dark : .light;
 
-  Map<String, dynamic> get json => {
+  Map<String, dynamic> get map => {
     'id': id,
     'user_id': userId,
     'prescription_id': prescriptionId,
@@ -47,27 +47,24 @@ extension ExSettings on Settings {
   };
 
   Settings copyWith({
-    int? id,
     int? userId,
     int? prescriptionId,
     bool? darkMode,
     bool? autoUpload,
     bool? editablePrescription,
     double? graphScale,
-  }) {
-    return Settings._(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      prescriptionId: prescriptionId ?? this.prescriptionId,
-      darkMode: darkMode ?? this.darkMode,
-      autoUpload: autoUpload ?? this.autoUpload,
-      editablePrescription: editablePrescription ?? this.editablePrescription,
-      graphScale: graphScale ?? this.graphScale,
-    );
-  }
+  }) => Settings._(
+    id: id,
+    userId: userId ?? this.userId,
+    prescriptionId: prescriptionId ?? this.prescriptionId,
+    darkMode: darkMode ?? this.darkMode,
+    autoUpload: autoUpload ?? this.autoUpload,
+    editablePrescription: editablePrescription ?? this.editablePrescription,
+    graphScale: graphScale ?? this.graphScale,
+  );
 
-  static Settings _parseJson(Map<String, dynamic> map) {
-    if (map case {
+  static Settings _parseJson(Map<String, dynamic> json) {
+    if (json case {
       'id': int id,
       'user_id': int? userId,
       'prescription_id': int? prescriptionId,
@@ -86,6 +83,6 @@ extension ExSettings on Settings {
         graphScale: graphScale.toDouble(),
       );
     }
-    throw const FormatException('[Settings]: Invalid JSON');
+    throw const FormatException('[Settings]: Invalid JSON data.');
   }
 }

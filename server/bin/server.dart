@@ -13,9 +13,9 @@ Future<void> main() async {
       .addMiddleware(logRequests())
       .addHandler(config.handler);
 
-  final ip = InternetAddress('localhost');
+  final host = InternetAddress(InternetAddress.anyIPv4.host);
   const port = int.fromEnvironment('PORT', defaultValue: 8080);
-  final server = await serve(handler, ip, port);
+  final server = await serve(handler, host, port);
 
   print('Server listening on port ${server.port}...');
 }

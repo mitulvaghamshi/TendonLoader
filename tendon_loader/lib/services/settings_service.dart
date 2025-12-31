@@ -14,38 +14,35 @@ class SettingsService with ApiClient {
 }
 
 extension Utils on SettingsService {
-  Future<Snapshot<Settings>> getSettingsBy({int? userId}) async {
-    if (userId == null) {
-      return const Snapshot.withError('User id Opps!');
-    }
+  Future<Snapshot<Settings>> getSettingsBy({required int userId}) async {
     final snapshot = await get('settings/$userId');
-    if (snapshot.data case List<dynamic> items) {
-      return Snapshot.withData(Settings.fromJson(items.single));
+    if (snapshot.requireData case List<dynamic> items) {
+      return .data(.fromJson(items.single));
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 
-  Future<Snapshot> createSettings(Settings settings) async {
-    final snapshot = await post<String>('settings', settings.json);
+  Future<Snapshot<String>> createSettings(Settings settings) async {
+    final snapshot = await post<String>('settings', values: settings.map);
     if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
+      return .data(snapshot.requireData);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 
-  Future<Snapshot> updateSettings(Settings settings) async {
-    final snapshot = await put('settings/${settings.id}', settings.json);
+  Future<Snapshot<Never>> updateSettings(Settings settings) async {
+    final snapshot = await put('settings/${settings.id}', values: settings.map);
     if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
+      return .data(snapshot.requireData);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 
-  Future<Snapshot> deleteSettingsById(int id) async {
+  Future<Snapshot<Never>> deleteSettingsById(int id) async {
     final snapshot = await delete('settings/$id');
     if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
+      return .data(snapshot.requireData);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 }

@@ -31,8 +31,8 @@ class Exercise {
       mvcValue = 0,
       data = const [];
 
-  factory Exercise.fromJson(Map<String, dynamic> map) =>
-      ExExercise._parseJson(map);
+  factory Exercise.fromJson(Map<String, dynamic> json) =>
+      ExExercise._parseJson(json);
 
   final int id;
   final int userId;
@@ -62,7 +62,7 @@ extension ExExercise on Exercise {
     if (isMVC) ('Max force', '${mvcValue!.toStringAsFixed(2)} kg'),
   ];
 
-  Map<String, dynamic> get json => {
+  Map<String, dynamic> get map => {
     'id': id,
     'user_id': userId,
     'prescription_id': progressorId,
@@ -76,7 +76,6 @@ extension ExExercise on Exercise {
   };
 
   Exercise copyWith({
-    int? id,
     int? userId,
     double? painScore,
     String? datetime,
@@ -86,23 +85,21 @@ extension ExExercise on Exercise {
     int? prescriptionId,
     double? mvcValue,
     Iterable<ChartData>? data,
-  }) {
-    return Exercise._(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      painScore: painScore ?? this.painScore,
-      datetime: datetime ?? this.datetime,
-      tolerable: tolerable ?? this.tolerable,
-      completed: completed ?? this.completed,
-      progressorId: progressorId ?? this.progressorId,
-      prescriptionId: prescriptionId ?? this.prescriptionId,
-      mvcValue: mvcValue ?? this.mvcValue,
-      data: data ?? this.data,
-    );
-  }
+  }) => Exercise._(
+    id: id,
+    userId: userId ?? this.userId,
+    painScore: painScore ?? this.painScore,
+    datetime: datetime ?? this.datetime,
+    tolerable: tolerable ?? this.tolerable,
+    completed: completed ?? this.completed,
+    progressorId: progressorId ?? this.progressorId,
+    prescriptionId: prescriptionId ?? this.prescriptionId,
+    mvcValue: mvcValue ?? this.mvcValue,
+    data: data ?? this.data,
+  );
 
-  static Exercise _parseJson(Map<String, dynamic> map) {
-    if (map case {
+  static Exercise _parseJson(Map<String, dynamic> json) {
+    if (json case {
       'id': int id,
       'user_id': int userId,
       'prescription_id': int? prescriptionId,
@@ -128,13 +125,14 @@ extension ExExercise on Exercise {
         data: data,
       );
     }
-    throw const FormatException('Invalid JSON');
+    throw const FormatException('Invalid JSON data.');
   }
 
   ArchiveFile excelSheet([Prescription? prescription]) {
-    final Workbook book = Workbook();
-    final Worksheet sheet = book.worksheets[0];
-    const int c4 = 4, c5 = 5;
+    final book = Workbook();
+    final sheet = book.worksheets[0];
+    const c4 = 4, c5 = 5;
+
     sheet
       ..getRangeByIndex(1, 1).setText('TIME [s]')
       ..getRangeByIndex(1, 2).setText('LOAD [Kg]')
@@ -155,6 +153,7 @@ extension ExExercise on Exercise {
       ..getRangeByIndex(7, c5).text = tolerable
       ..autoFitColumn(c4)
       ..autoFitColumn(c5);
+
     if (mvcValue == null && prescription != null) {
       sheet
         ..getRangeByIndex(9, c4).text = 'Exercise Info'
@@ -170,14 +169,16 @@ extension ExExercise on Exercise {
         ..getRangeByIndex(14, c5).number = prescription.reps.toDouble();
     }
 
-    for (var (int index, ChartData data) in data.indexed) {
+    for (var (index, data) in data.indexed) {
       sheet
         ..getRangeByIndex(index + 1, 1).number = data.time
         ..getRangeByIndex(index + 1, 2).number = data.load;
     }
 
-    final ArchiveFile file = ArchiveFile //
-    .bytes('$datetime-$userId.zip', book.saveAsStream());
+    final file = ArchiveFile.bytes(
+      '$datetime-$userId.zip',
+      book.saveAsStream(),
+    );
 
     book.dispose();
 

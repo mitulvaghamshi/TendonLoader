@@ -9,7 +9,7 @@ class ButtonFactory extends StatelessWidget {
     this.child,
     this.onTap,
     this.radius = 8,
-    this.padding = const EdgeInsets.all(16),
+    this.padding = const .all(16),
   });
 
   const factory ButtonFactory.tile({
@@ -44,11 +44,10 @@ class ButtonFactory extends StatelessWidget {
       fillColor: color,
       child: child,
     );
+
     if (radius == 0) return button;
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(radius),
-      child: button,
-    );
+
+    return ClipRRect(borderRadius: .circular(radius), child: button);
   }
 }
 
@@ -64,8 +63,8 @@ class _RawListTile extends ButtonFactory {
     this.leading,
     this.trailing,
     this.spacing = 5,
-    this.axisSize = MainAxisSize.max,
-    this.axisAlignment = MainAxisAlignment.center,
+    this.axisSize = .max,
+    this.axisAlignment = .center,
   });
 
   final Widget? leading;
@@ -111,9 +110,11 @@ class _RawLoading extends ButtonFactory {
       ),
       child: Text('Please wait...', style: Styles.whiteBold),
     );
+
     if (!centered) return widget;
+
     return const Padding(
-      padding: EdgeInsets.all(16),
+      padding: .all(16),
       child: Center(child: widget),
     );
   }
@@ -129,16 +130,14 @@ class _RawError extends ButtonFactory {
   final String message;
 
   @override
-  Widget build(BuildContext context) {
-    return ButtonFactory.tile(
-      color: color,
-      padding: const EdgeInsets.all(8),
-      leading: const Icon(Icons.info, color: Colors.white),
-      trailing: IconButton(
-        onPressed: ScaffoldMessenger.of(context).clearSnackBars,
-        icon: const Icon(Icons.close, color: Colors.white),
-      ),
-      child: Text(message, style: const TextStyle(color: Colors.white)),
-    );
-  }
+  Widget build(BuildContext context) => ButtonFactory.tile(
+    color: color,
+    padding: const .all(8),
+    leading: const Icon(Icons.info, color: Colors.white),
+    trailing: IconButton(
+      onPressed: ScaffoldMessenger.of(context).clearSnackBars,
+      icon: const Icon(Icons.close, color: Colors.white),
+    ),
+    child: Text(message, style: const TextStyle(color: Colors.white)),
+  );
 }

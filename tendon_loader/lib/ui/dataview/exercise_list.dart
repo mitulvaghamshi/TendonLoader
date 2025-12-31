@@ -12,35 +12,27 @@ class ExerciseList extends StatelessWidget {
   final Iterable<Exercise> items;
 
   @override
-  Widget build(BuildContext context) {
-    return SearchList(
-      items: items,
-      title: title,
-      searchLabel: 'Search by date...',
-      searchTerm: (item) => item.datetime,
-      builder: (item, index) {
-        return ButtonFactory.tile(
-          spacing: 16,
-          axisAlignment: MainAxisAlignment.start,
-          leading: CircleAvatar(child: Text(index.toString())),
-          trailing: IconButton(
-            onPressed: () {
-              ExerciseDataListRoute(
-                userId: item.userId,
-                exerciseId: item.id,
-              ).push(context);
-            },
-            icon: const Icon(Icons.format_list_numbered_sharp),
-          ),
-          onTap: () {
-            ExerciseDetaildRoute(
-              userId: item.userId,
-              exerciseId: item.id,
-            ).push(context);
-          },
-          child: Text(item.datetime),
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) => SearchList(
+    items: items,
+    title: title,
+    searchLabel: 'Search by date...',
+    searchTerm: (item) => item.datetime,
+    builder: (item, index) => ButtonFactory.tile(
+      spacing: 16,
+      axisAlignment: .start,
+      leading: CircleAvatar(child: Text(index.toString())),
+      trailing: IconButton(
+        onPressed: () => ExerciseDataListRoute(
+          userId: item.userId,
+          exerciseId: item.id,
+        ).push(context),
+        icon: const Icon(Icons.format_list_numbered_sharp),
+      ),
+      onTap: () => ExerciseDetailsRoute(
+        userId: item.userId,
+        exerciseId: item.id,
+      ).push(context),
+      child: Text(item.datetime),
+    ),
+  );
 }

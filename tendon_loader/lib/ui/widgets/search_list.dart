@@ -45,24 +45,21 @@ class _SearchListState<T> extends State<SearchList<T>> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar.medium(title: Text(widget.title)),
-        SliverToBoxAdapter(
-          child: InputFactory.search(
-            onComplete: _search,
-            controller: _searchCtrl,
-            label: widget.searchLabel,
-          ),
+  Widget build(BuildContext context) => CustomScrollView(
+    slivers: [
+      SliverAppBar.medium(title: Text(widget.title)),
+      SliverToBoxAdapter(
+        child: InputFactory.search(
+          onComplete: _search,
+          controller: _searchCtrl,
+          label: widget.searchLabel,
         ),
-        SliverList.builder(
-          itemCount: _items.length,
-          itemBuilder: (_, index) {
-            return widget.builder(_items.elementAt(index), index);
-          },
-        ),
-      ],
-    );
-  }
+      ),
+      SliverList.builder(
+        itemCount: _items.length,
+        itemBuilder: (_, index) =>
+            widget.builder(_items.elementAt(index), index),
+      ),
+    ],
+  );
 }

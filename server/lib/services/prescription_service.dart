@@ -2,23 +2,14 @@ import 'package:server/utils/config.dart';
 import 'package:server/utils/stmt_type.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-ResultSet get selectAll {
-  return prescriptionStmt[StmtType.query.index].selectWith(
-    const StatementParameters.empty(),
-  );
-}
+ResultSet get selectAll =>
+    prescriptionStmt[StmtType.query.index].selectWith(const .empty());
 
-ResultSet selectBy(int? id) {
-  return prescriptionStmt[StmtType.select.index].selectWith(
-    StatementParameters.named({':id': id}),
-  );
-}
+ResultSet selectBy(int? id) =>
+    prescriptionStmt[StmtType.select.index].selectWith(.named({':id': id}));
 
-ResultSet search(String? term) {
-  return prescriptionStmt[StmtType.search.index].selectWith(
-    StatementParameters.named({':q': term}),
-  );
-}
+ResultSet search(String? term) =>
+    prescriptionStmt[StmtType.search.index].selectWith(.named({':q': term}));
 
 ResultSet insert({
   required int sets,
@@ -28,19 +19,17 @@ ResultSet insert({
   required int restTime,
   required int mvcDuration,
   required double targetLoad,
-}) {
-  return prescriptionStmt[StmtType.insert.index].selectWith(
-    StatementParameters.named({
-      ':reps': reps,
-      ':sets': sets,
-      ':set_rest': setRest,
-      ':hold_time': holdTime,
-      ':rest_time': restTime,
-      ':mvc_duration': mvcDuration,
-      ':target_load': targetLoad,
-    }),
-  );
-}
+}) => prescriptionStmt[StmtType.insert.index].selectWith(
+  .named({
+    ':reps': reps,
+    ':sets': sets,
+    ':set_rest': setRest,
+    ':hold_time': holdTime,
+    ':rest_time': restTime,
+    ':mvc_duration': mvcDuration,
+    ':target_load': targetLoad,
+  }),
+);
 
 ResultSet update({
   required int? id,
@@ -51,23 +40,18 @@ ResultSet update({
   required int restTime,
   required int mvcDuration,
   required double targetLoad,
-}) {
-  return prescriptionStmt[StmtType.update.index].selectWith(
-    StatementParameters.named({
-      'id': id,
-      'reps': reps,
-      'sets': sets,
-      'set_rest': setRest,
-      'hold_time': holdTime,
-      'rest_time': restTime,
-      'mvc_duration': mvcDuration,
-      'target_load': targetLoad,
-    }),
-  );
-}
+}) => prescriptionStmt[StmtType.update.index].selectWith(
+  .named({
+    'id': id,
+    'reps': reps,
+    'sets': sets,
+    'set_rest': setRest,
+    'hold_time': holdTime,
+    'rest_time': restTime,
+    'mvc_duration': mvcDuration,
+    'target_load': targetLoad,
+  }),
+);
 
-ResultSet delete(int? id) {
-  return prescriptionStmt[StmtType.delete.index].selectWith(
-    StatementParameters.named({':id': id}),
-  );
-}
+ResultSet delete(int? id) =>
+    prescriptionStmt[StmtType.delete.index].selectWith(.named({':id': id}));

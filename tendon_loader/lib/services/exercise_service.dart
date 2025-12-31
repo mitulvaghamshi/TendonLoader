@@ -18,18 +18,17 @@ class ExerciseService with ApiClient {
 extension Utils on ExerciseService {
   Future<Snapshot<Iterable<Exercise>>> getAllExercisesByUserId(int id) async {
     if (ExerciseService._cache.containsKey(id)) {
-      return Snapshot.withData(ExerciseService._cache[id]!.values);
+      return .data(ExerciseService._cache[id]!.values);
     }
     final snapshot = await get('exercises/user/$id');
     if (snapshot.hasData) {
-      final list = List<Map<String, dynamic>>.from(
-        snapshot.requireData,
-      ).map<Exercise>(Exercise.fromJson);
-      final map = {for (var item in list) item.id: item};
-      ExerciseService._cache.putIfAbsent(id, () => map).values;
-      return Snapshot.withData(list);
+      final items = List<Map<String, dynamic>>.from(snapshot.requireData);
+      final exercises = items.map(Exercise.fromJson);
+      final values = {for (var item in exercises) item.id: item};
+      ExerciseService._cache.putIfAbsent(id, () => values);
+      return .data(exercises);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 
   Future<Snapshot<Exercise>> getExerciseBy({
@@ -39,53 +38,56 @@ extension Utils on ExerciseService {
     if (ExerciseService._cache.containsKey(userId)) {
       final exercises = ExerciseService._cache[userId]!;
       if (exercises.containsKey(exerciseId)) {
-        return Snapshot.withData(exercises[exerciseId]!);
+        return .data(exercises[exerciseId]!);
       }
     }
     final snapshot = await get('exercises/$exerciseId');
     if (snapshot.hasData) {
       final exercise = Exercise.fromJson(snapshot.requireData);
-      ExerciseService._cache.update(userId, (map) {
-        map.update(exerciseId, (_) => exercise, ifAbsent: () => exercise);
-        return map;
+      ExerciseService._cache.update(userId, (values) {
+        values.update(exerciseId, (_) => exercise, ifAbsent: () => exercise);
+        return values;
       }, ifAbsent: () => {exerciseId: exercise});
-      return Snapshot.withData(exercise);
+      return .data(exercise);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 
-  Future<Snapshot> createExercise(Exercise exercise) async {
+  Future<Snapshot<String>> createExercise(Exercise exercise) async {
     ExerciseService._cache.putIfAbsent(
       exercise.userId,
       () => {exercise.id: exercise},
     );
-    final snapshot = await post('exercises', exercise.json);
+    final snapshot = await post('exercises', values: exercise.map);
     if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
+      return .data(snapshot.requireData);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 
-  Future<Snapshot> updateExercise(Exercise exercise) async {
-    ExerciseService._cache.update(exercise.userId, (map) {
-      map.update(exercise.id, (_) => exercise, ifAbsent: () => exercise);
-      return map;
+  Future<Snapshot<Never>> updateExercise(Exercise exercise) async {
+    ExerciseService._cache.update(exercise.userId, (values) {
+      values.update(exercise.id, (_) => exercise, ifAbsent: () => exercise);
+      return values;
     }, ifAbsent: () => {exercise.id: exercise});
-    final snapshot = await put('exercises/${exercise.id}', exercise.json);
+    final snapshot = await put(
+      'exercises/${exercise.id}',
+      values: exercise.map,
+    );
     if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
+      return .data(snapshot.requireData);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 
-  Future<Snapshot> deleteExerciseById(int id) async {
+  Future<Snapshot<Never>> deleteExerciseById(int id) async {
     if (ExerciseService._cache.containsKey(id)) {
       ExerciseService._cache.remove(id);
     }
     final snapshot = await delete('exercises/$id');
     if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
+      return .data(snapshot.requireData);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 }

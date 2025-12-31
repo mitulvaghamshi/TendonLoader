@@ -2,21 +2,24 @@ import 'package:flutter/cupertino.dart';
 
 @immutable
 class Snapshot<T> {
-  const Snapshot._(this.data, this.error);
+  const Snapshot.none() : _data = null, _error = null;
+  const Snapshot.data(T data) : _data = data, _error = null;
+  const Snapshot.error(String? error) : _data = null, _error = error;
 
-  const Snapshot.nothing() : this._(null, null);
-  const Snapshot.withData(T data) : this._(data, null);
-  const Snapshot.withError(String? error) : this._(null, error);
+  final T? _data;
+  final String? _error;
+}
 
-  final T? data;
-  final String? error;
+extension Utils<T> on Snapshot<T> {
+  bool get hasData => _data != null;
+  bool get hasError => _error != null;
 
-  bool get hasData => data != null;
-  bool get hasError => error != null;
+  T? get data => _data;
+  String? get error => _error;
 
   T get requireData {
-    if (hasData) return data!;
-    if (hasError) Error.throwWithStackTrace(error!, StackTrace.empty);
+    if (hasData) return _data!;
+    if (hasError) return Error.throwWithStackTrace(_error!, .current);
     throw StateError('Snapshot has neither data nor error');
   }
 }

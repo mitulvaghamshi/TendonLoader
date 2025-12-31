@@ -10,35 +10,32 @@ Future<Response> authHandler(Request request) async {
     final creds = utf8.decode(base64.decode(cred)).split(':');
     final result = user.auth(creds[0], creds[1]);
     if (result.isEmpty || result.first.isEmpty) {
-      return Response.unauthorized('Access denied!\n');
+      return .unauthorized('Access denied!\n');
     }
-    return Response.ok(
+    return .ok(
       jsonEncode({
         'id': result.first.columnAt(0),
         'token': Object.hashAll(result),
       }),
     );
   }
-  return Response.unauthorized(1);
+  return .unauthorized(1);
 }
 
-Response queryHandler(Request request) =>
-    Response.ok(jsonEncode(user.selectAll));
+Response queryHandler(Request request) => .ok(jsonEncode(user.selectAll));
 
 Response selectHandler(Request request) {
-  final id = int.tryParse(request.params['id'].toString());
-  if (id == null) {
-    return Response.badRequest();
+  if (request.params case {'id': String id}) {
+    return .ok(jsonEncode(user.selectBy(.parse(id))));
   }
-  return Response.ok(jsonEncode(user.selectBy(id)));
+  return .badRequest();
 }
 
 Response searchHandler(Request request) {
-  final term = request.params['term'];
-  if (term == null) {
-    return Response.badRequest();
+  if (request.params case {'term': String term}) {
+    return .ok(jsonEncode(user.search(term)));
   }
-  return Response.ok(jsonEncode(user.search(term)));
+  return .badRequest();
 }
 
 Future<Response> insertHandler(Request request) async {
@@ -48,32 +45,29 @@ Future<Response> insertHandler(Request request) async {
     'password': String password,
   }) {
     user.insert(username: username, password: password);
-    return Response.ok(0);
+    return .ok(0);
   }
-  return Response.badRequest();
+  return .badRequest();
 }
 
 Future<Response> updateHandler(Request request) async {
-  final id = int.tryParse(request.params['id'].toString());
-  if (id == null) {
-    return Response.badRequest();
+  if (request.params case {'id': String id}) {
+    final body = await request.readAsString();
+    if (jsonDecode(body) case {
+      'username': String username,
+      'password': String password,
+    }) {
+      user.update(id: .parse(id), username: username, password: password);
+      return .ok(0);
+    }
   }
-  final body = await request.readAsString();
-  if (jsonDecode(body) case {
-    'username': String username,
-    'password': String password,
-  }) {
-    user.update(id: id, username: username, password: password);
-    return Response.ok(0);
-  }
-  return Response.badRequest();
+  return .badRequest();
 }
 
 Future<Response> deleteHandler(Request request) async {
-  final id = int.tryParse(request.params['id'].toString());
-  if (id == null) {
-    return Response.badRequest();
+  if (request.params case {'id': String id}) {
+    user.delete(.parse(id));
+    return .ok(0);
   }
-  user.delete(id);
-  return Response.ok(0);
+  return .badRequest();
 }

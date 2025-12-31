@@ -11,6 +11,7 @@ import 'package:tendon_loader/ui/bluetooth/widgets/start_scan_tile.dart';
 /// already connected device to "Disconnect".
 /// The "Connect" and "Disconnect" are very important steps to successfully
 /// perform actual tasks of "Exercise" and "MVC Test".
+@immutable
 class DeviceList extends StatelessWidget {
   DeviceList({super.key, required Iterable<BluetoothDevice> devices})
     : _devices = _filterList(devices);
@@ -19,13 +20,12 @@ class DeviceList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (_devices.isEmpty) return const StartScanTile();
+    if (_devices.isEmpty) {
+      return const StartScanTile();
+    }
     return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: _buildDeviceItem().toList(),
-      ),
+      padding: const .all(16),
+      child: Column(mainAxisSize: .min, children: _buildDeviceItem().toList()),
     );
   }
 }
@@ -34,11 +34,13 @@ extension on DeviceList {
   Iterable<Widget> _buildDeviceItem() sync* {
     final iterator = _devices.iterator;
     final isNotEmpty = iterator.moveNext();
-    BluetoothDevice device = iterator.current;
+    var device = iterator.current;
+
     while (iterator.moveNext()) {
       yield DeviceTile(device: device);
       device = iterator.current;
     }
+
     if (isNotEmpty) {
       yield DeviceTile(device: device, isLast: true);
     }

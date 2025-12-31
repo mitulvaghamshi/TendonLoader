@@ -4,23 +4,20 @@ import 'package:server/services/settings_service.dart' as settings;
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-Response queryHandler(Request request) =>
-    Response.ok(jsonEncode(settings.selectAll));
+Response queryHandler(Request request) => .ok(jsonEncode(settings.selectAll));
 
 Response selectHandler(Request request) {
-  final id = request.params['id'];
-  if (id == null) {
-    return Response.badRequest();
+  if (request.params case {'id': String? id}) {
+    return .ok(jsonEncode(settings.selectByUser(id)));
   }
-  return Response.ok(jsonEncode(settings.selectByUser(id)));
+  return .badRequest();
 }
 
 Response searchHandler(Request request) {
-  final term = request.params['term'];
-  if (term == null) {
-    return Response.badRequest();
+  if (request.params case {'term': String term}) {
+    return .ok(jsonEncode(settings.search(term)));
   }
-  return Response.ok(jsonEncode(settings.search(term)));
+  return .badRequest();
 }
 
 Future<Response> insertHandler(Request request) async {
@@ -41,44 +38,41 @@ Future<Response> insertHandler(Request request) async {
       editablePrescription: editablePrescription,
       graphScale: graphScale.toDouble(),
     );
-    return Response.ok(0);
+    return .ok(0);
   }
-  return Response.badRequest();
+  return .badRequest();
 }
 
 Future<Response> updateHandler(Request request) async {
-  final id = int.tryParse(request.params['id'].toString());
-  if (id == null) {
-    return Response.badRequest();
+  if (request.params case {'id': String id}) {
+    final body = await request.readAsString();
+    if (jsonDecode(body) case {
+      'user_id': int? userId,
+      'prescription_id': int? prescriptionId,
+      'dark_mode': bool darkMode,
+      'auto_upload': bool autoUpload,
+      'editable_prescription': bool editablePrescription,
+      'graph_scale': num graphScale,
+    }) {
+      settings.update(
+        id: .parse(id),
+        userId: userId,
+        prescriptionId: prescriptionId,
+        darkMode: darkMode,
+        autoUpload: autoUpload,
+        editablePrescription: editablePrescription,
+        graphScale: graphScale.toDouble(),
+      );
+      return .ok(0);
+    }
   }
-  final body = await request.readAsString();
-  if (jsonDecode(body) case {
-    'user_id': int? userId,
-    'prescription_id': int? prescriptionId,
-    'dark_mode': bool darkMode,
-    'auto_upload': bool autoUpload,
-    'editable_prescription': bool editablePrescription,
-    'graph_scale': num graphScale,
-  }) {
-    settings.update(
-      id: id,
-      userId: userId,
-      prescriptionId: prescriptionId,
-      darkMode: darkMode,
-      autoUpload: autoUpload,
-      editablePrescription: editablePrescription,
-      graphScale: graphScale.toDouble(),
-    );
-    return Response.ok(0);
-  }
-  return Response.badRequest();
+  return .badRequest();
 }
 
 Future<Response> deleteHandler(Request request) async {
-  final id = int.tryParse(request.params['id'].toString());
-  if (id == null) {
-    return Response.badRequest();
+  if (request.params case {'id': String id}) {
+    settings.delete(.parse(id));
+    return .ok(0);
   }
-  settings.delete(id);
-  return Response.ok(0);
+  return .badRequest();
 }

@@ -21,67 +21,62 @@ class ConnectedTile extends StatelessWidget {
   final BluetoothDevice device;
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      initialData: false,
-      future: Progressor.instance.init(device: device),
-      builder: (context, snapshot) {
-        if (!snapshot.requireData) return const ButtonFactory.loading();
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              onLongPress: Progressor.instance.disconnect,
-              contentPadding: const EdgeInsets.all(5),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              title: Text(
-                Progressor.instance.deviceName,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: const Text(
-                'Long press to disconnect',
-                style: TextStyle(fontSize: 12, color: Color(0xffff534d)),
-              ),
-              leading: const ButtonFactory(
+  Widget build(BuildContext context) => FutureBuilder(
+    initialData: false,
+    future: Progressor.instance.init(device: device),
+    builder: (context, snapshot) {
+      if (!snapshot.requireData) {
+        return const ButtonFactory.loading();
+      }
+      return Column(
+        mainAxisSize: .min,
+        children: [
+          ListTile(
+            onLongPress: Progressor.instance.disconnect,
+            contentPadding: const .all(5),
+            shape: RoundedRectangleBorder(borderRadius: .circular(16)),
+            title: Text(
+              Progressor.instance.deviceName,
+              style: const TextStyle(fontWeight: .bold),
+            ),
+            subtitle: const Text(
+              'Long press to disconnect',
+              style: TextStyle(fontSize: 12, color: Color(0xffff534d)),
+            ),
+            leading: const ButtonFactory(
+              color: Color(0xff3ddc85),
+              child: Icon(Icons.bluetooth_connected, color: Color(0xffffffff)),
+            ),
+          ),
+          StreamBuilder(
+            initialData: const ChartData(),
+            stream: GraphHandler.stream,
+            builder: (_, snapshot) => Text(
+              '${snapshot.data!.load.toStringAsFixed(1)} Kg.',
+              style: const TextStyle(
+                fontSize: 40,
+                fontWeight: .bold,
                 color: Color(0xff3ddc85),
-                child: Icon(
-                  Icons.bluetooth_connected,
-                  color: Color(0xffffffff),
-                ),
               ),
             ),
-            StreamBuilder<ChartData>(
-              initialData: const ChartData(),
-              stream: GraphHandler.stream,
-              builder: (_, snapshot) {
-                return Text(
-                  '${snapshot.data!.load.toStringAsFixed(1)} Kg.',
-                  style: const TextStyle(
-                    fontSize: 40,
-                    color: Color(0xff3ddc85),
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
-              },
-            ),
-            const Text(
-              Strings.tareProgressor,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-            ButtonFactory.tile(
-              leading: const Icon(Icons.adjust),
-              child: const Text('Tare Progressor'),
-              onTap: () async {
-                await Progressor.instance.tare();
-                if (context.mounted) context.pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+          ),
+          const Text(
+            Strings.tareProgressor,
+            textAlign: .center,
+            style: TextStyle(fontSize: 14, fontWeight: .w500),
+          ),
+          ButtonFactory.tile(
+            leading: const Icon(Icons.adjust),
+            child: const Text('Tare Progressor'),
+            onTap: () async {
+              await Progressor.instance.tare();
+              if (context.mounted) {
+                context.pop();
+              }
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

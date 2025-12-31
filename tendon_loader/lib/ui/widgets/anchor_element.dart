@@ -4,7 +4,8 @@ import 'package:flutter/foundation.dart' show immutable;
 /// Analyzer warns for using web libraries [dart:html] in flutter app,
 /// the [AnchorElement] used in Web app to download generated excel file.
 /// Web build uses class from [dart:html] lib, while mobile builds uses this
-/// empty class.
+/// empty class which does nothing.
+/// Currently, calling these methods leads to exception.
 @immutable
 class AnchorElement {
   const AnchorElement({this.href});
@@ -14,7 +15,7 @@ class AnchorElement {
 
   void click() {
     throw UnimplementedError();
-    // Implement platform specific code to
+    //TODO(mitul): Implement platform specific code to
     // allow download on mobile and desktop devices.
   }
 
@@ -22,7 +23,7 @@ class AnchorElement {
   /// @param value - name of the file.
   void setAttribute(String attr, String value) {
     throw UnimplementedError();
-    // Create and prepare a File to download
+    //TODO(mitul): Create and prepare a File to download
     // on mobile or desktop device. May require platform specific
     // implementation for different devices/OSs.
   }

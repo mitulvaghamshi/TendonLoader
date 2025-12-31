@@ -8,7 +8,9 @@ class LiveDataHandler extends GraphHandler {
 
   @override
   Future<void> start() async {
-    if (!isRunning) await super.start();
+    if (!isRunning) {
+      await super.start();
+    }
   }
 
   @override
@@ -17,13 +19,15 @@ class LiveDataHandler extends GraphHandler {
       isRunning = hasData = false;
       await super.stop();
       _time = 0;
-      GraphHandler.clear();
+      GraphHandler.reset();
     }
   }
 
   @override
   void update(ChartData data) {
-    if (isRunning) _time = data.time;
+    if (isRunning) {
+      _time = data.time;
+    }
   }
 
   @override
@@ -38,8 +42,8 @@ class LiveDataHandler extends GraphHandler {
 
 extension ExLiveDataHandler on LiveDataHandler {
   String get timeElapsed {
-    final int seconds = _time ~/ 60;
-    final String millis = (_time % 60).toStringAsFixed(0).padLeft(2, '0');
+    final seconds = _time ~/ 60;
+    final millis = (_time % 60).toStringAsFixed(0).padLeft(2, '0');
     return '🕒 $seconds:$millis Sec';
   }
 }

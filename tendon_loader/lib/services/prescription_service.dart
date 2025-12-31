@@ -18,50 +18,51 @@ class PrescriptionService with ApiClient {
 extension Utils on PrescriptionService {
   Future<Snapshot<Prescription>> getPrescriptionById(int? id) async {
     if (id == null) {
-      return const Snapshot.withError('Prescription Id is null');
+      return const .error('Please provide prescription id.');
     }
     if (PrescriptionService._cache.containsKey(id)) {
-      return Snapshot.withData(PrescriptionService._cache[id]!);
+      return .data(PrescriptionService._cache[id]!);
     }
     final snapshot = await get('prescription/$id');
     if (snapshot.hasData) {
-      final prescription = Prescription.fromJson(snapshot.requireData);
+      final items = List<Map<String, dynamic>>.from(snapshot.requireData);
+      final prescription = items.map(Prescription.fromJson).single;
       PrescriptionService._cache.putIfAbsent(id, () => prescription);
-      return Snapshot.withData(prescription);
+      return .data(prescription);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 
-  Future<Snapshot> createPrescription(Prescription prescription) async {
-    final snapshot = await post('prescription', prescription.json);
+  Future<Snapshot<Never>> createPrescription(Prescription prescription) async {
+    final snapshot = await post('prescription', values: prescription.map);
     if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
+      return .data(snapshot.requireData);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 
-  Future<Snapshot> updatePrescription(Prescription prescription) async {
+  Future<Snapshot<Never>> updatePrescription(Prescription prescription) async {
     if (PrescriptionService._cache.containsKey(prescription.id)) {
       PrescriptionService._cache.update(prescription.id!, (_) => prescription);
     }
     final snapshot = await put(
       'prescription/${prescription.id}',
-      prescription.json,
+      values: prescription.map,
     );
     if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
+      return .data(snapshot.requireData);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 
-  Future<Snapshot> deletePrescriptionById(int id) async {
+  Future<Snapshot<Never>> deletePrescriptionById(int id) async {
     if (PrescriptionService._cache.containsKey(id)) {
       PrescriptionService._cache.remove(id);
     }
     final snapshot = await delete('prescription/$id');
     if (snapshot.hasData) {
-      return Snapshot.withData(snapshot.requireData);
+      return .data(snapshot.requireData);
     }
-    return Snapshot.withError(snapshot.error);
+    return .error(snapshot.error);
   }
 }

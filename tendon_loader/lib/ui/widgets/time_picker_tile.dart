@@ -28,14 +28,14 @@ class TimePickerTile extends StatelessWidget {
       children: [
         ButtonFactory.tile(
           color: Theme.of(context).primaryColor,
-          axisAlignment: MainAxisAlignment.spaceEvenly,
+          axisAlignment: .spaceEvenly,
           leading: const Text('Minutes', style: Styles.whiteBold),
           child: const Text('Seconds', style: Styles.whiteBold),
         ),
         const SizedBox(height: 8),
         ButtonFactory.tile(
           color: Colors.indigo,
-          axisAlignment: MainAxisAlignment.spaceEvenly,
+          axisAlignment: .spaceEvenly,
           leading: _NumberPicker(
             pickerSize: const Size(80, 130),
             maxValue: 60,
@@ -81,26 +81,26 @@ class _NumberPicker extends StatelessWidget {
   final ValueChanged<int> onChange;
 
   @override
-  Widget build(BuildContext context) {
-    const textStyle = TextStyle(
-      color: Colors.white,
-      fontWeight: FontWeight.bold,
-      fontSize: 22,
-    );
-    return SizedBox.fromSize(
-      size: pickerSize,
-      child: ListWheelScrollView(
-        squeeze: 0.5,
-        itemExtent: 30,
-        magnification: 2.5,
-        useMagnifier: true,
-        onSelectedItemChanged: onChange,
-        physics: const FixedExtentScrollPhysics(),
-        controller: FixedExtentScrollController(initialItem: initialValue),
-        children: List.generate(maxValue + 1, (value) {
-          return Text('$value'.padLeft(1), style: textStyle);
-        }),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SizedBox.fromSize(
+    size: pickerSize,
+    child: ListWheelScrollView(
+      squeeze: 0.5,
+      itemExtent: 30,
+      magnification: 2.5,
+      useMagnifier: true,
+      onSelectedItemChanged: onChange,
+      physics: const FixedExtentScrollPhysics(),
+      controller: FixedExtentScrollController(initialItem: initialValue),
+      children: .generate(maxValue + 1, (value) {
+        return Text(
+          '$value'.padLeft(1),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: .bold,
+            fontSize: 22,
+          ),
+        );
+      }),
+    ),
+  );
 }
