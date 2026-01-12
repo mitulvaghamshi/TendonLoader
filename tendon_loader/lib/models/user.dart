@@ -1,6 +1,23 @@
 import 'package:flutter/foundation.dart';
 
 @immutable
+class UserData {
+  const UserData._({required this.users});
+
+  const UserData.empty() : users = const [];
+
+  factory UserData.fromJson(Object? data) {
+    if (data case {'users': List<dynamic> users}) {
+      final items = List<Map<String, dynamic>>.from(users);
+      return UserData._(users: items.map(User.fromJson));
+    }
+    throw FormatException('[UserData]: Invalid JSON data $data');
+  }
+
+  final Iterable<User> users;
+}
+
+@immutable
 class User {
   const User._({
     required this.id,
@@ -15,7 +32,22 @@ class User {
     : id = null,
       token = null;
 
-  factory User.fromJson(Map<String, dynamic> json) => ExUser._parseJson(json);
+  factory User.fromJson(Object? json) {
+    if (json case {
+      'id': int id,
+      'username': String username,
+      'password': String password,
+      // 'token': int token,
+    }) {
+      return User._(
+        id: id,
+        username: username,
+        password: password,
+        token: null,
+      );
+    }
+    throw const FormatException('[User]: Invalid JSON data.');
+  }
 
   final int? id;
   final int? token;
@@ -23,7 +55,7 @@ class User {
   final String username;
 }
 
-extension ExUser on User {
+extension Utils on User {
   String get name => username
       .split('@')
       .first
@@ -42,24 +74,9 @@ extension ExUser on User {
         password: password ?? this.password,
         token: token ?? this.token,
       );
+}
 
-  static User _parseJson(Map<String, dynamic> json) {
-    if (json case {
-      'id': int id,
-      'username': String username,
-      'password': String password,
-      // 'token': int token,
-    }) {
-      return User._(
-        id: id,
-        username: username,
-        password: password,
-        token: null,
-      );
-    }
-    throw const FormatException('[User]: Invalid JSON data.');
-  }
-
+extension Export on User {
   Future<void> download() async {
     throw UnimplementedError('Download not implemented.');
     // final Export query = exportRef!;

@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:tendon_loader/api/services/prescription_service.dart';
+import 'package:tendon_loader/api/services/settings_service.dart';
+import 'package:tendon_loader/api/services/user_service.dart';
 import 'package:tendon_loader/api/snapshot.dart';
 import 'package:tendon_loader/models/prescription.dart';
 import 'package:tendon_loader/models/settings.dart';
 import 'package:tendon_loader/models/user.dart';
-import 'package:tendon_loader/services/prescription_service.dart';
-import 'package:tendon_loader/services/settings_service.dart';
-import 'package:tendon_loader/services/user_service.dart';
 
 class AppState extends ChangeNotifier {
   AppState()
@@ -20,6 +20,8 @@ class AppState extends ChangeNotifier {
   Prescription prescription;
 
   bool modified = false;
+
+  bool get isAuthenticated => authUser.token != null;
 
   Future<String> authenticate(User user) async {
     final sUser = await UserService.instance.authenticate(user);

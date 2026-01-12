@@ -76,9 +76,9 @@ class _RawListTile extends ButtonFactory {
   @override
   Widget build(BuildContext context) {
     final items = [
-      if (leading != null) ...[leading!, SizedBox(width: spacing)],
-      if (child != null) child!,
-      if (trailing != null) ...[const Spacer(), trailing!],
+      if (leading != null) ...[?leading, SizedBox(width: spacing)],
+      ?child,
+      if (trailing != null) ...[const Spacer(), ?trailing],
     ];
     return ButtonFactory(
       onTap: onTap,

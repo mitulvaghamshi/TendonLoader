@@ -7,7 +7,7 @@ class AppFrame extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => Card(
+  Widget build(BuildContext context) => Card.outlined(
     elevation: 16,
     child: Padding(padding: const .all(16), child: child),
   );

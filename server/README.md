@@ -6,17 +6,10 @@ A server app built using [Shelf](https://pub.dev/packages/shelf).
 
 Run with the [Dart SDK](https://dart.dev/get-dart).
 
-### For in-memory empty database:
+### Start the server:
 
 ```ps
-$ dart -DPORT=3001 -DUSER_SQL_PATH=db/user.sql -DSETTINGS_SQL_PATH=db/settings.sql -DEXERCISE_SQL_PATH=db/exercise.sql -DPRESCRIPTION_SQL_PATH=db/prescription.sql bin/server.dart
-$ Server listening on port 3001...
-```
-
-### For database file:
-
-```ps
-$ dart -DPORT=3001 -DUSER_SQL_PATH=db/user.sql -DSETTINGS_SQL_PATH=db/settings.sql -DEXERCISE_SQL_PATH=db/exercise.sql -DPRESCRIPTION_SQL_PATH=db/prescription.sql -DDB_PATH=db/tendonloader.db bin/server.dart
+$ dart -DPORT=3001 -DDB_PATH=db/tendonloader.db bin/server.dart
 $ Server listening on port 3001...
 ```
 

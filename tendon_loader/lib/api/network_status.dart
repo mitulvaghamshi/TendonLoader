@@ -7,7 +7,9 @@ class NetworkStatus {
 
   NetworkStatus._() {
     _subscription = Connectivity().onConnectivityChanged.listen((value) {
-      _connections = value.takeWhile((r) => r != .none);
+      _connections = value.takeWhile((r) {
+        return r == .wifi || r == .mobile || r == .ethernet;
+      });
     });
   }
 

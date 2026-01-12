@@ -23,8 +23,30 @@ class Prescription {
       mvcDuration = 0,
       targetLoad = 0;
 
-  factory Prescription.fromJson(Map<String, dynamic> json) =>
-      ExPrescription._parseJson(json);
+  factory Prescription.fromJson(Object? json) {
+    if (json case {
+      'id': int id,
+      'reps': int reps,
+      'sets': int sets,
+      'set_rest': int setRest,
+      'hold_time': int holdTime,
+      'rest_time': int restTime,
+      'mvc_duration': int mvcDuration,
+      'target_load': num targetLoad,
+    }) {
+      return Prescription._(
+        id: id,
+        sets: sets,
+        reps: reps,
+        setRest: setRest,
+        holdTime: holdTime,
+        restTime: restTime,
+        mvcDuration: mvcDuration,
+        targetLoad: targetLoad.toDouble(),
+      );
+    }
+    throw const FormatException('[Prescription]: Invalid JSON data.');
+  }
 
   final int? id;
   final int sets;
@@ -36,7 +58,7 @@ class Prescription {
   final double targetLoad;
 }
 
-extension ExPrescription on Prescription {
+extension Utils on Prescription {
   List<(String, String)> get tableRows => [
     ('Target load', '$targetLoad Kg'),
     ('Sets #', '$sets'),
@@ -75,29 +97,4 @@ extension ExPrescription on Prescription {
     mvcDuration: mvcDuration ?? this.mvcDuration,
     targetLoad: targetLoad ?? this.targetLoad,
   );
-
-  static Prescription _parseJson(Map<String, dynamic> json) {
-    if (json case {
-      'id': int id,
-      'reps': int reps,
-      'sets': int sets,
-      'set_rest': int setRest,
-      'hold_time': int holdTime,
-      'rest_time': int restTime,
-      'mvc_duration': int mvcDuration,
-      'target_load': num targetLoad,
-    }) {
-      return Prescription._(
-        id: id,
-        sets: sets,
-        reps: reps,
-        setRest: setRest,
-        holdTime: holdTime,
-        restTime: restTime,
-        mvcDuration: mvcDuration,
-        targetLoad: targetLoad.toDouble(),
-      );
-    }
-    throw const FormatException('[Prescription]: Invalid JSON data.');
-  }
 }

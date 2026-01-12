@@ -5,12 +5,12 @@ import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 void main() {
-  const host = 'http://localhost:8080';
+  const host = 'http://localhost:3001';
   late Process process;
 
   setUp(() async {
     process = await Process.start('dart', [
-      '-DSQL_PATH=db/inventory.sql',
+      '-DDB_PATH=db/tendonloader.db',
       'bin/server.dart',
     ]);
     // Wait for server to start and print to stdout.
@@ -22,7 +22,7 @@ void main() {
   test('Root', () async {
     final response = await http.get(Uri.parse(host));
     expect(response.statusCode, 200);
-    expect(response.body, '<h2>Welcome to Pet Inventory API v1.0</h2>\n');
+    expect(response.body, '<h2>TendonLoader API v1.0</h2>\n');
   });
 
   test('404', () async {
@@ -31,7 +31,7 @@ void main() {
   });
 
   test('Get record at id: 1', () async {
-    final response = await http.get(Uri.parse('$host/pets/1'));
+    final response = await http.get(Uri.parse('$host/users/1'));
     expect(response.statusCode, 200);
     expect(
       response.body,
@@ -41,7 +41,7 @@ void main() {
   });
 
   test('Search record with: "dog"', () async {
-    final response = await http.get(Uri.parse('$host/pets/search/dog'));
+    final response = await http.get(Uri.parse('$host/users/search/dog'));
     expect(response.statusCode, 200);
     expect(
       response.body,
@@ -52,13 +52,11 @@ void main() {
 
   test('Insert a record', () async {
     final response = await http.post(
-      Uri.parse('$host/pets'),
+      Uri.parse('$host/users'),
       headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       body: jsonEncode({
-        'animal': 'Jaguar',
-        'description': 'Beware, its dangerous.',
-        'age': 12,
-        'price': 500000,
+        'username': 'Jaguar',
+        'password': 'Beware, its dangerous.',
       }),
     );
     expect(response.statusCode, 200);
@@ -67,13 +65,11 @@ void main() {
 
   test('Update record at id: 2', () async {
     final response = await http.patch(
-      Uri.parse('$host/pets/2'),
+      Uri.parse('$host/users/2'),
       headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       body: jsonEncode({
-        'animal': 'Elephant',
-        'description': 'A giant and heavy creature',
-        'age': 250,
-        'price': 250000,
+        'username': 'Elephant',
+        'password': 'A giant and heavy creature',
       }),
     );
     expect(response.statusCode, 200);
@@ -81,7 +77,7 @@ void main() {
   });
 
   test('Delete record at id: 1', () async {
-    final response = await http.delete(Uri.parse('$host/pets/1'));
+    final response = await http.delete(Uri.parse('$host/users/1'));
     expect(response.statusCode, 200);
     expect(response.body, 'Deleted successfully');
   });

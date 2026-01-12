@@ -1,3 +1,4 @@
 DerivedData/
 .DS_Store
 
+/server/build

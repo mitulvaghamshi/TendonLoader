@@ -1,57 +1,138 @@
-import 'package:server/utils/config.dart';
-import 'package:server/utils/stmt_type.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-ResultSet get selectAll =>
-    prescriptionStmt[StmtType.query.index].selectWith(const .empty());
+class PrescriptionService {
+  const PrescriptionService(this.db);
 
-ResultSet selectBy(int? id) =>
-    prescriptionStmt[StmtType.select.index].selectWith(.named({':id': id}));
+  final Database db;
 
-ResultSet search(String? term) =>
-    prescriptionStmt[StmtType.search.index].selectWith(.named({':q': term}));
+  ResultSet selectAll() => db.select(_selectAll);
 
-ResultSet insert({
-  required int sets,
-  required int reps,
-  required int setRest,
-  required int holdTime,
-  required int restTime,
-  required int mvcDuration,
-  required double targetLoad,
-}) => prescriptionStmt[StmtType.insert.index].selectWith(
-  .named({
-    ':reps': reps,
-    ':sets': sets,
-    ':set_rest': setRest,
-    ':hold_time': holdTime,
-    ':rest_time': restTime,
-    ':mvc_duration': mvcDuration,
-    ':target_load': targetLoad,
-  }),
+  ResultSet selectBy(int? id) => db.select(_selectById, [id]);
+
+  ResultSet search(String? term) => db.select(_search, [term]);
+
+  ResultSet insert({
+    required int sets,
+    required int reps,
+    required int setRest,
+    required int holdTime,
+    required int restTime,
+    required int mvcDuration,
+    required double targetLoad,
+  }) => db.select(_insert, [
+    reps,
+    sets,
+    setRest,
+    holdTime,
+    restTime,
+    mvcDuration,
+    targetLoad,
+  ]);
+
+  ResultSet update({
+    required int? id,
+    required int sets,
+    required int reps,
+    required int setRest,
+    required int holdTime,
+    required int restTime,
+    required int mvcDuration,
+    required double targetLoad,
+  }) => db.select(_update, [
+    reps,
+    sets,
+    setRest,
+    holdTime,
+    restTime,
+    mvcDuration,
+    targetLoad,
+    id,
+  ]);
+
+  ResultSet delete(int? id) => db.select(_delete, [id]);
+}
+
+// ignore: unused_element
+const _createTable = '''
+CREATE TABLE IF NOT EXISTS "Prescription" (
+    "id"           INTEGER NOT NULL CONSTRAINT "PK_Prescription" PRIMARY KEY AUTOINCREMENT,
+    "reps"         INTEGER NOT NULL,
+    "sets"         INTEGER NOT NULL,
+    "set_rest"     INTEGER NOT NULL,
+    "hold_time"    INTEGER NOT NULL,
+    "rest_time"    INTEGER NOT NULL,
+    "mvc_duration" INTEGER NOT NULL,
+    "target_load"  REAL    NOT NULL
 );
+''';
 
-ResultSet update({
-  required int? id,
-  required int sets,
-  required int reps,
-  required int setRest,
-  required int holdTime,
-  required int restTime,
-  required int mvcDuration,
-  required double targetLoad,
-}) => prescriptionStmt[StmtType.update.index].selectWith(
-  .named({
-    'id': id,
-    'reps': reps,
-    'sets': sets,
-    'set_rest': setRest,
-    'hold_time': holdTime,
-    'rest_time': restTime,
-    'mvc_duration': mvcDuration,
-    'target_load': targetLoad,
-  }),
-);
+const _selectAll = '''
+SELECT
+    "id",
+    "reps",
+    "sets",
+    "set_rest",
+    "hold_time",
+    "rest_time",
+    "mvc_duration",
+    "target_load"
+FROM "Prescription";
+''';
 
-ResultSet delete(int? id) =>
-    prescriptionStmt[StmtType.delete.index].selectWith(.named({':id': id}));
+const _selectById = '''
+SELECT
+    "id",
+    "reps",
+    "sets",
+    "set_rest",
+    "hold_time",
+    "rest_time",
+    "mvc_duration",
+    "target_load"
+FROM "Prescription"
+WHERE "id" = ?;
+''';
+
+const _search = '''
+SELECT
+    "id",
+    "reps",
+    "sets",
+    "set_rest",
+    "hold_time",
+    "rest_time",
+    "mvc_duration",
+    "target_load"
+FROM "Prescription"
+WHERE "id" LIKE "%" || ? || "%";
+''';
+
+const _insert = '''
+INSERT INTO "Prescription" (
+    "reps",
+    "sets",
+    "set_rest",
+    "hold_time",
+    "rest_time",
+    "mvc_duration",
+    "target_load"
+)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+''';
+
+const _update = '''
+UPDATE "Prescription"
+SET    "reps"         = ?,
+       "sets"         = ?,
+       "set_rest"     = ?,
+       "hold_time"    = ?,
+       "rest_time"    = ?,
+       "mvc_duration" = ?,
+       "target_load"  = ?
+WHERE  "id"           = ?;
+''';
+
+const _delete = '''
+DELETE FROM "Prescription"
+WHERE "id" = ?;
+''';

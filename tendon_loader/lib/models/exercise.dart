@@ -5,6 +5,21 @@ import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/models/prescription.dart';
 
 @immutable
+class ExerciseData {
+  const ExerciseData({required this.exercises});
+
+  factory ExerciseData.fromJson(Object? json) {
+    if (json case {'exercises': List<dynamic> items}) {
+      final exercises = List<Map<String, dynamic>>.from(items);
+      return ExerciseData(exercises: exercises.map(Exercise.fromJson));
+    }
+    throw const FormatException('Invalid JSON data.');
+  }
+
+  final Iterable<Exercise> exercises;
+}
+
+@immutable
 class Exercise {
   const Exercise._({
     required this.id,
@@ -31,8 +46,34 @@ class Exercise {
       mvcValue = 0,
       data = const [];
 
-  factory Exercise.fromJson(Map<String, dynamic> json) =>
-      ExExercise._parseJson(json);
+  factory Exercise.fromJson(Object? json) {
+    if (json case {
+      'id': int id,
+      'user_id': int userId,
+      'prescription_id': int? prescriptionId,
+      'pain_score': num painScore,
+      'datetime': String datetime,
+      'tolerable': String tolerable,
+      'completed': bool completed,
+      'progressor_id': String progressorId,
+      'mvc_value': double? mvcValue,
+      'data': String rawData,
+    }) {
+      return Exercise._(
+        id: id,
+        userId: userId,
+        painScore: painScore.toDouble(),
+        datetime: datetime,
+        tolerable: tolerable,
+        completed: completed,
+        progressorId: progressorId,
+        prescriptionId: prescriptionId,
+        mvcValue: mvcValue,
+        data: rawData.split('|').map(ChartData.fromPair),
+      );
+    }
+    throw const FormatException('Invalid JSON data.');
+  }
 
   final int id;
   final int userId;
@@ -46,7 +87,7 @@ class Exercise {
   final Iterable<ChartData> data;
 }
 
-extension ExExercise on Exercise {
+extension Utils on Exercise {
   bool get isMVC => mvcValue != null && prescriptionId == null;
   String get type => isMVC ? 'MVC Test' : 'Exercise';
   String get status => completed ? 'Complete' : 'Incomplete';
@@ -97,37 +138,9 @@ extension ExExercise on Exercise {
     mvcValue: mvcValue ?? this.mvcValue,
     data: data ?? this.data,
   );
+}
 
-  static Exercise _parseJson(Map<String, dynamic> json) {
-    if (json case {
-      'id': int id,
-      'user_id': int userId,
-      'prescription_id': int? prescriptionId,
-      'pain_score': num painScore,
-      'datetime': String datetime,
-      'tolerable': String tolerable,
-      'completed': bool completed,
-      'progressor_id': String progressorId,
-      'mvc_value': double? mvcValue,
-      'data': String rawData,
-    }) {
-      final data = rawData.split('|').map(ChartData.fromPair);
-      return Exercise._(
-        id: id,
-        userId: userId,
-        painScore: painScore.toDouble(),
-        datetime: datetime,
-        tolerable: tolerable,
-        completed: completed,
-        progressorId: progressorId,
-        prescriptionId: prescriptionId,
-        mvcValue: mvcValue,
-        data: data,
-      );
-    }
-    throw const FormatException('Invalid JSON data.');
-  }
-
+extension Export on Exercise {
   ArchiveFile excelSheet([Prescription? prescription]) {
     final book = Workbook();
     final sheet = book.worksheets[0];

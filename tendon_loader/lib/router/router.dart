@@ -3,6 +3,10 @@ import 'dart:async' show Future, FutureOr;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/api/network_status.dart';
+import 'package:tendon_loader/api/services/exercise_service.dart';
+import 'package:tendon_loader/api/services/prescription_service.dart';
+import 'package:tendon_loader/api/services/settings_service.dart';
+import 'package:tendon_loader/api/services/user_service.dart';
 import 'package:tendon_loader/api/snapshot.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/handlers/exercise_handler.dart';
@@ -12,10 +16,7 @@ import 'package:tendon_loader/handlers/mvc_handler.dart';
 import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/models/prescription.dart';
-import 'package:tendon_loader/services/exercise_service.dart';
-import 'package:tendon_loader/services/prescription_service.dart';
-import 'package:tendon_loader/services/settings_service.dart';
-import 'package:tendon_loader/services/user_service.dart';
+import 'package:tendon_loader/models/user.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/dataview/exercise_data_list.dart';
 import 'package:tendon_loader/ui/dataview/exercise_detail.dart';
@@ -262,9 +263,12 @@ class UserListRoute extends GoRouteData with $UserListRoute {
   Widget build(BuildContext context, GoRouterState state) => Scaffold(
     body: FutureWrapper(
       future: UserService.instance.getAllUsers(),
-      builder: (snapshot) => snapshot.hasData
-          ? UserList(items: snapshot.requireData)
-          : ButtonFactory.error(message: snapshot.error.toString()),
+      builder: (snapshot) {
+        if (snapshot.data case Iterable<User> users) {
+          return UserList(items: users);
+        }
+        return const ButtonFactory.error(message: 'Failed to load users');
+      },
     ),
   );
 }
@@ -333,7 +337,7 @@ extension on ExerciseDataListRoute {
     if (eSnapshot.hasData) {
       return eSnapshot.requireData.data;
     }
-    return const .empty();
+    return const Iterable.empty();
   }
 }
 

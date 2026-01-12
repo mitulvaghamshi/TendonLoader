@@ -21,8 +21,28 @@ class Settings {
       userId = null,
       prescriptionId = null;
 
-  factory Settings.fromJson(Map<String, dynamic> json) =>
-      ExSettings._parseJson(json);
+  factory Settings.fromJson(Object? json) {
+    if (json case {
+      'id': int id,
+      'user_id': int? userId,
+      'prescription_id': int? prescriptionId,
+      'dark_mode': int darkMode,
+      'auto_upload': int autoUpload,
+      'editable_prescription': int editablePrescription,
+      'graph_scale': num graphScale,
+    }) {
+      return Settings._(
+        id: id,
+        userId: userId,
+        prescriptionId: prescriptionId,
+        darkMode: darkMode == 1,
+        autoUpload: autoUpload == 1,
+        editablePrescription: editablePrescription == 1,
+        graphScale: graphScale.toDouble(),
+      );
+    }
+    throw const FormatException('[Settings]: Invalid JSON data.');
+  }
 
   final int? id;
   final int? userId;
@@ -33,7 +53,7 @@ class Settings {
   final double graphScale;
 }
 
-extension ExSettings on Settings {
+extension Utils on Settings {
   ThemeMode get themeMode => darkMode ? .dark : .light;
 
   Map<String, dynamic> get map => {
@@ -62,27 +82,4 @@ extension ExSettings on Settings {
     editablePrescription: editablePrescription ?? this.editablePrescription,
     graphScale: graphScale ?? this.graphScale,
   );
-
-  static Settings _parseJson(Map<String, dynamic> json) {
-    if (json case {
-      'id': int id,
-      'user_id': int? userId,
-      'prescription_id': int? prescriptionId,
-      'dark_mode': int darkMode,
-      'auto_upload': int autoUpload,
-      'editable_prescription': int editablePrescription,
-      'graph_scale': num graphScale,
-    }) {
-      return Settings._(
-        id: id,
-        userId: userId,
-        prescriptionId: prescriptionId,
-        darkMode: darkMode == 1,
-        autoUpload: autoUpload == 1,
-        editablePrescription: editablePrescription == 1,
-        graphScale: graphScale.toDouble(),
-      );
-    }
-    throw const FormatException('[Settings]: Invalid JSON data.');
-  }
 }

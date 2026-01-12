@@ -38,27 +38,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
       trailing: const Icon(Icons.edit, color: Colors.white),
       child: Text(
         state.authUser.username,
+        maxLines: 1,
         overflow: .ellipsis,
         style: Styles.whiteBold,
-        maxLines: 1,
       ),
     ),
     builder: (context, child) => Column(
       children: [
         child!,
-        const SizedBox(height: 8),
+        const Divider(),
         ListTile(
           onTap: _uploadData,
           enabled: length > 0,
           contentPadding: Styles.tilePadding,
-          title: const Text('Locally stored data'),
-          subtitle: const Text('Upload local files to the server'),
+          title: const Text('Pending uploads'),
+          subtitle: const Text('Upload local data to the server'),
           trailing: Text(length.toString(), style: Styles.bold18),
         ),
+        const Divider(),
         ListTile(
           contentPadding: Styles.tilePadding,
-          title: const Text('Graph scale (y-axis)'),
-          subtitle: const Text('Adjust visible area of the graph'),
+          title: const Text('Graph size (y-axis)'),
+          subtitle: const Text('Adjust visible graph area'),
           trailing: SizedBox(
             width: 60,
             child: TextField(
@@ -77,27 +78,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
         ),
+        const Divider(),
         SwitchListTile(
           contentPadding: Styles.tilePadding,
-          title: const Text('Use dark mode'),
+          title: const Text('Dark mode'),
           subtitle: const Text('Use dark interface'),
           value: state.settings.darkMode,
           onChanged: (value) => state.update<Settings>((settings) {
             return settings.copyWith(darkMode: value);
           }),
         ),
+        const Divider(),
         SwitchListTile(
           contentPadding: Styles.tilePadding,
-          title: const Text('Automatic data upload'),
-          subtitle: const Text('Session data submitted automatically'),
+          title: const Text('Auto-upload'),
+          subtitle: const Text('Upload data automatically'),
           value: state.settings.autoUpload,
           onChanged: (value) => state.update<Settings>((settings) {
             return settings.copyWith(autoUpload: value);
           }),
         ),
+        const Divider(),
         SwitchListTile(
           contentPadding: Styles.tilePadding,
-          title: const Text('Use custom prescriptions'),
+          title: const Text('Custom prescriptions'),
           subtitle: const Text('Create custom prescriptions'),
           value: state.settings.editablePrescription,
           onChanged: (value) => state.update<Settings>((settings) {
@@ -107,7 +111,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         const Divider(),
         ButtonFactory.tile(
           onTap: _aboutDialog,
-          color: Theme.of(context).dividerColor,
+          color: Theme.of(context).shadowColor,
           child: const Text('About', style: Styles.whiteBold),
         ),
       ],
@@ -118,9 +122,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 extension on _SettingsScreenState {
   Future<void> _uploadData() async {
     const int count = 0; // await model.uploadExports();
-    if (!mounted || count <= 0) {
-      return;
-    }
+    if (!mounted || count <= 0) return;
     const content = SnackBar(
       padding: .zero,
       content: ButtonFactory.error(
@@ -135,19 +137,19 @@ extension on _SettingsScreenState {
     context: context,
     applicationVersion: 'v1.0',
     applicationName: 'Tendon Loader',
-    applicationLegalese: '© 2024, Mitul Vaghamshi',
+    applicationLegalese: '\u00a9 ${DateTime.now().year}, Mitul Vaghamshi.',
+    applicationIcon: const AppLogo(radius: 20, padding: .only(top: 16)),
     children: [
       const Divider(),
-      const AppLogo(radius: 100, padding: .all(16)),
-      const SizedBox(height: 8),
       const Text(
         'Tendon Loader is designed to measure and help cure '
-        "Achille's (uh-KILL-eez) Tendon Problems.",
+        "Achille's (uh-KILL-eez) Tendon Problems.\n\n"
+        'This app is currently in beta and is not intended for medical use.\n\n'
+        'For more information, please visit the '
+        'app website or contact the developer.',
       ),
-      const SizedBox(height: 16),
       const Divider(),
-      const Text('Contact:'),
-      const Text('mitulvaghmashi@gmail.com'),
+      const Text('Email: mitulvaghmashi@gmail.com'),
     ],
   );
 }

@@ -69,13 +69,14 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_isLoading && state.authUser.token != null) {
-      return widget.child;
-    }
+    if (state.isAuthenticated) return widget.child;
     return Form(
       child: Column(
         children: [
-          const AppLogo(radius: 140, padding: .all(16)),
+          AppLogo(
+            radius: MediaQuery.sizeOf(context).width * 0.4,
+            padding: const .all(16),
+          ),
           InputFactory.form(
             label: 'Enter username',
             controller: _usernameCtrl,
@@ -99,7 +100,9 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           const SizedBox(height: 16),
           TextButton(
-            onPressed: () {},
+            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Not implemented yet')),
+            ),
             child: const Text("Don't have an account?"),
           ),
         ],

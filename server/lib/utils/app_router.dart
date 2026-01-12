@@ -1,77 +1,94 @@
-import 'package:server/controllers/exercise_controller.dart' as exercise;
-import 'package:server/controllers/prescription_controller.dart'
-    as prescription;
-import 'package:server/controllers/settings_controller.dart' as settings;
-import 'package:server/controllers/user_controller.dart' as user;
+import 'package:server/controllers/exercise_controller.dart';
+import 'package:server/controllers/prescription_controller.dart';
+import 'package:server/controllers/settings_controller.dart';
+import 'package:server/controllers/user_controller.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-Router get appRouter => Router()
-  // curl http://localhost:3001
-  ..get('/', (_) => Response.ok('<h2>TendonLoader API v1.0</h2>\n'))
-  // curl http://localhost:3001/users
-  ..mount('/users', _userRouter.call)
-  // curl http://localhost:3001/settings
-  ..mount('/settings', _settingsRouter.call)
-  // curl http://localhost:3001/exercises
-  ..mount('/exercises', _exerciseRouter.call)
-  // curl http://localhost:3001/prescription
-  ..mount('/prescription', _prescriptionRouter.call);
+class AppRouter {
+  const AppRouter({
+    required this.userController,
+    required this.settingsController,
+    required this.exerciseController,
+    required this.prescriptionController,
+  });
 
-Router get _userRouter => Router()
-  // curl -X GET http://localhost:3001/users
-  ..get('/', user.queryHandler)
-  // curl -X GET http://localhost:3001/users/1
-  ..get('/<id>', user.selectHandler)
-  // curl -X POST http://localhost:3001/users/auth -H 'Content-Type: application/json' -d '{}'
-  ..post('/auth', user.authHandler)
-  // curl -X GET http://localhost:3001/users/search/<term>
-  ..get('/search/<term>', user.searchHandler)
-  // curl -X POST http://localhost:3001/users -H 'Content-Type: application/json' -d '{}'
-  ..post('/', user.insertHandler)
-  // curl -X PATCH http://localhost:3001/users/1 -H 'Content-Type: application/json' -d '{}'
-  ..patch('/<id>', user.updateHandler)
-  // curl -X DELETE http://localhost:3001/users/1
-  ..delete('/<id>', user.deleteHandler);
+  final UserController userController;
+  final SettingsController settingsController;
+  final ExerciseController exerciseController;
+  final PrescriptionController prescriptionController;
+}
 
-Router get _settingsRouter => Router()
-  // curl -X GET http://localhost:3001/settings
-  ..get('/', settings.queryHandler)
-  // curl -X GET http://localhost:3001/settings/1
-  ..get('/<id>', settings.selectHandler)
-  // curl -X GET http://localhost:3001/settings/search/term
-  ..get('/search/<term>', settings.searchHandler)
-  // curl -X POST http://localhost:3001/settings -H 'Content-Type: application/json' -d '{}'
-  ..post('/', settings.insertHandler)
-  // curl -X PATCH http://localhost:3001/settings/1 -H 'Content-Type: application/json' -d '{}'
-  ..patch('/<id>', settings.updateHandler)
-  // curl -X DELETE http://localhost:3001/settings/1
-  ..delete('/<id>', settings.deleteHandler);
+extension RootRouter on AppRouter {
+  Router get rootRouter => Router()
+    // curl http://localhost:3001
+    ..get('/', (_) => Response.ok('<h2>TendonLoader API v1.0</h2>\n'))
+    // curl http://localhost:3001/users
+    ..mount('/users', _userRouter.call)
+    // curl http://localhost:3001/settings
+    ..mount('/settings', _settingsRouter.call)
+    // curl http://localhost:3001/exercises
+    ..mount('/exercises', _exerciseRouter.call)
+    // curl http://localhost:3001/prescription
+    ..mount('/prescription', _prescriptionRouter.call);
+}
 
-Router get _prescriptionRouter => Router()
-  // curl -X GET http://localhost:3001/prescription
-  ..get('/', prescription.queryHandler)
-  // curl -X GET http://localhost:3001/prescription/1
-  ..get('/<id>', prescription.selectHandler)
-  // curl -X GET http://localhost:3001/prescription/search/term
-  ..get('/search/<term>', prescription.searchHandler)
-  // curl -X POST http://localhost:3001/prescription -H 'Content-Type: application/json' -d '{}'
-  ..post('/', prescription.insertHandler)
-  // curl -X PATCH http://localhost:3001/prescription/1 -H 'Content-Type: application/json' -d '{}'
-  ..patch('/<id>', prescription.updateHandler)
-  // curl -X DELETE http://localhost:3001/prescription/1
-  ..delete('/<id>', prescription.deleteHandler);
+extension on AppRouter {
+  Router get _userRouter => Router()
+    // curl -X GET http://localhost:3001/users
+    ..get('/', userController.queryHandler)
+    // curl -X GET http://localhost:3001/users/1
+    ..get('/<id>', userController.selectHandler)
+    // curl -X POST http://localhost:3001/users/auth -H 'Content-Type: application/json' -d '{}'
+    ..post('/auth', userController.authHandler)
+    // curl -X GET http://localhost:3001/users/search/<term>
+    ..get('/search/<term>', userController.searchHandler)
+    // curl -X POST http://localhost:3001/users -H 'Content-Type: application/json' -d '{}'
+    ..post('/', userController.insertHandler)
+    // curl -X PATCH http://localhost:3001/users/1 -H 'Content-Type: application/json' -d '{}'
+    ..patch('/<id>', userController.updateHandler)
+    // curl -X DELETE http://localhost:3001/users/1
+    ..delete('/<id>', userController.deleteHandler);
 
-Router get _exerciseRouter => Router()
-  // curl -X GET http://localhost:3001/exercises
-  ..get('/', exercise.queryHandler)
-  // curl -X GET http://localhost:3001/exercises/1
-  ..get('/<id>', exercise.selectHandler)
-  // curl -X GET http://localhost:3001/exercises/search/term
-  ..get('/search/<term>', exercise.searchHandler)
-  // curl -X POST http://localhost:3001/exercises -H 'Content-Type: application/json' -d '{}'
-  ..post('/', exercise.insertHandler)
-  // curl -X PATCH http://localhost:3001/exercises/1 -H 'Content-Type: application/json' -d '{}'
-  ..patch('/<id>', exercise.updateHandler)
-  // curl -X DELETE http://localhost:3001/exercises/1
-  ..delete('/<id>', exercise.deleteHandler);
+  Router get _settingsRouter => Router()
+    // curl -X GET http://localhost:3001/settings
+    ..get('/', settingsController.queryHandler)
+    // curl -X GET http://localhost:3001/settings/1
+    ..get('/<id>', settingsController.selectHandler)
+    // curl -X GET http://localhost:3001/settings/search/term
+    ..get('/search/<term>', settingsController.searchHandler)
+    // curl -X POST http://localhost:3001/settings -H 'Content-Type: application/json' -d '{}'
+    ..post('/', settingsController.insertHandler)
+    // curl -X PATCH http://localhost:3001/settings/1 -H 'Content-Type: application/json' -d '{}'
+    ..patch('/<id>', settingsController.updateHandler)
+    // curl -X DELETE http://localhost:3001/settings/1
+    ..delete('/<id>', settingsController.deleteHandler);
+
+  Router get _prescriptionRouter => Router()
+    // curl -X GET http://localhost:3001/prescription
+    ..get('/', prescriptionController.queryHandler)
+    // curl -X GET http://localhost:3001/prescription/1
+    ..get('/<id>', prescriptionController.selectHandler)
+    // curl -X GET http://localhost:3001/prescription/search/term
+    ..get('/search/<term>', prescriptionController.searchHandler)
+    // curl -X POST http://localhost:3001/prescription -H 'Content-Type: application/json' -d '{}'
+    ..post('/', prescriptionController.insertHandler)
+    // curl -X PATCH http://localhost:3001/prescription/1 -H 'Content-Type: application/json' -d '{}'
+    ..patch('/<id>', prescriptionController.updateHandler)
+    // curl -X DELETE http://localhost:3001/prescription/1
+    ..delete('/<id>', prescriptionController.deleteHandler);
+
+  Router get _exerciseRouter => Router()
+    // curl -X GET http://localhost:3001/exercises
+    ..get('/', exerciseController.queryHandler)
+    // curl -X GET http://localhost:3001/exercises/1
+    ..get('/<id>', exerciseController.selectHandler)
+    // curl -X GET http://localhost:3001/exercises/search/term
+    ..get('/search/<term>', exerciseController.searchHandler)
+    // curl -X POST http://localhost:3001/exercises -H 'Content-Type: application/json' -d '{}'
+    ..post('/', exerciseController.insertHandler)
+    // curl -X PATCH http://localhost:3001/exercises/1 -H 'Content-Type: application/json' -d '{}'
+    ..patch('/<id>', exerciseController.updateHandler)
+    // curl -X DELETE http://localhost:3001/exercises/1
+    ..delete('/<id>', exerciseController.deleteHandler);
+}

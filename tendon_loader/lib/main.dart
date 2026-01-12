@@ -42,11 +42,11 @@ class MyApp extends StatelessWidget {
 final _darkTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.dark,
-  colorSchemeSeed: Colors.green,
+  colorSchemeSeed: Colors.blueGrey,
 );
 
 final _lightTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.light,
-  colorSchemeSeed: Colors.blue,
+  colorSchemeSeed: Colors.orange,
 );

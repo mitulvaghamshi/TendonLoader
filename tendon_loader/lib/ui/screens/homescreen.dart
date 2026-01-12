@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
       const SizedBox(height: 8),
       ButtonFactory.tile(
         onTap: () => const PrescriptionRoute().push(context),
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).primaryColorDark,
         child: const Text('Customize Prescriptions', style: Styles.whiteBold),
       ),
       const ButtonFactory.tile(
@@ -56,13 +56,13 @@ class HomeScreen extends StatelessWidget {
       ),
       ButtonFactory.tile(
         onTap: () => const UserListRoute().go(context),
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).primaryColorDark,
         child: const Text('Manage Data', style: Styles.whiteBold),
       ),
       const SizedBox(height: 8),
       ButtonFactory.tile(
         onTap: () => _manageProgressor(context),
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).primaryColorDark,
         child: const Text('Progressor Connection', style: Styles.whiteBold),
       ),
       const SizedBox(height: 8),
@@ -90,12 +90,8 @@ extension on HomeScreen {
     BuildContext context,
     Future<T?> Function<T>(BuildContext context) push,
   ) async {
-    if (Simulator.enabled) {
-      return push(context);
-    }
-    if (Progressor.instance.progressor != null) {
-      return push(context);
-    }
+    if (Simulator.enabled) return push(context);
+    if (Progressor.instance.progressor != null) return push(context);
     const SettingScreenRoute().push(context);
   }
 

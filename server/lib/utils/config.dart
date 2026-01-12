@@ -1,46 +1,29 @@
-import 'dart:io' show File;
-
+import 'package:server/controllers/exercise_controller.dart';
+import 'package:server/controllers/prescription_controller.dart';
+import 'package:server/controllers/settings_controller.dart';
+import 'package:server/controllers/user_controller.dart';
+import 'package:server/services/exercise_service.dart';
+import 'package:server/services/prescription_service.dart';
+import 'package:server/services/settings_service.dart';
+import 'package:server/services/user_service.dart';
 import 'package:server/utils/app_router.dart' as v1;
-import 'package:shelf/shelf.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class Config {
-  const Config({required this.database});
+  const Config._({required this.database, required this.router});
 
-  factory Config.create() {
-    const dbPath = String.fromEnvironment(_dbFilePathKey);
-    assert(dbPath.isNotEmpty, 'dbpath is empty');
-    return Config(database: sqlite3.open(dbPath));
+  factory Config.create(String dbPath) {
+    assert(dbPath.isNotEmpty, 'Database path cannot be empty');
+    final db = sqlite3.open(dbPath);
+    final appRouter = v1.AppRouter(
+      userController: UserController(UserService(db)),
+      settingsController: SettingsController(SettingsService(db)),
+      exerciseController: ExerciseController(ExerciseService(db)),
+      prescriptionController: PrescriptionController(PrescriptionService(db)),
+    );
+    return Config._(database: db, router: appRouter);
   }
 
   final Database database;
+  final v1.AppRouter router;
 }
-
-extension Utils on Config {
-  Future<Response> Function(Request) get handler => v1.appRouter.call;
-
-  Future<void> init() async {
-    userStmt.addAll(await _prepare(_userSqlPathKey));
-    settingsStmt.addAll(await _prepare(_settingsSqlPathKey));
-    exerciseStmt.addAll(await _prepare(_exersiceSqlPathKey));
-    prescriptionStmt.addAll(await _prepare(_prescriptionSqlPathKey));
-  }
-
-  Future<Iterable<PreparedStatement>> _prepare(String key) async {
-    final sqlPath = String.fromEnvironment(key);
-    assert(sqlPath.isNotEmpty, '$key is missing');
-    final content = await File.fromUri(.file(sqlPath)).readAsString();
-    return database.prepareMultiple(content);
-  }
-}
-
-const _dbFilePathKey = 'DB_PATH';
-const _userSqlPathKey = 'USER_SQL_PATH';
-const _settingsSqlPathKey = 'SETTINGS_SQL_PATH';
-const _exersiceSqlPathKey = 'EXERCISE_SQL_PATH';
-const _prescriptionSqlPathKey = 'PRESCRIPTION_SQL_PATH';
-
-final userStmt = <PreparedStatement>[];
-final settingsStmt = <PreparedStatement>[];
-final prescriptionStmt = <PreparedStatement>[];
-final exerciseStmt = <PreparedStatement>[];
