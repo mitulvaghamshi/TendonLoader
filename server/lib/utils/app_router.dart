@@ -2,6 +2,7 @@ import 'package:server/controllers/exercise_controller.dart';
 import 'package:server/controllers/prescription_controller.dart';
 import 'package:server/controllers/settings_controller.dart';
 import 'package:server/controllers/user_controller.dart';
+import 'package:server/utils/middleware.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
@@ -20,22 +21,28 @@ class AppRouter {
 }
 
 extension RootRouter on AppRouter {
-  Router get rootRouter => Router()
-    // curl http://localhost:3001
-    ..get('/', (_) => Response.ok('<h2>TendonLoader API v1.0</h2>\n'))
-    // curl http://localhost:3001/users
-    ..mount('/users', _userRouter.call)
-    // curl http://localhost:3001/settings
-    ..mount('/settings', _settingsRouter.call)
-    // curl http://localhost:3001/exercises
-    ..mount('/exercises', _exerciseRouter.call)
-    // curl http://localhost:3001/prescription
-    ..mount('/prescription', _prescriptionRouter.call);
+  Router get rootRouter {
+    final auth = AuthMiddleware(userController.service);
+    final pipe = const Pipeline().addMiddleware(auth.checkAuthentication);
+    return Router()
+      // Public Routes
+      ..get('/', (_) => Response.ok('<h2>TendonLoader API v1.0</h2>\n'))
+      ..post('/users/auth', userController.authHandler)
+      ..post('/users', userController.insertHandler)
+      // Protected Routes
+      // curl http://localhost:3001/users
+      ..mount('/users', pipe.addHandler(_protectedUserRouter.call))
+      // curl http://localhost:3001/settings
+      ..mount('/settings', pipe.addHandler(_settingsRouter.call))
+      // curl http://localhost:3001/exercises
+      ..mount('/exercises', pipe.addHandler(_exerciseRouter.call))
+      // curl http://localhost:3001/prescription
+      ..mount('/prescription', pipe.addHandler(_prescriptionRouter.call));
+  }
 }
 
 extension on AppRouter {
-  Router get _userRouter => Router()
-    // curl -X GET http://localhost:3001/users
+  Router get _protectedUserRouter => Router()
     ..get('/', userController.queryHandler)
     // curl -X GET http://localhost:3001/users/1
     ..get('/<id>', userController.selectHandler)

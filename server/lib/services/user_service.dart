@@ -1,3 +1,8 @@
+import 'package:server/models/user.dart';
+import 'package:server/sql/table_auth.dart';
+import 'package:server/sql/table_user.dart';
+import 'package:server/utils/config.dart';
+import 'package:server/utils/snapshot.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class UserService {
@@ -5,87 +10,107 @@ class UserService {
 
   final Database db;
 
-  ResultSet auth({required String username, required String password}) =>
-      db.select(_auth, [username, password]);
+  void init() {
+    db.execute(TableUser.sqlCreateTable);
+    db.execute(TableAuth.sqlCreateTable);
+  }
 
-  ResultSet selectAll() => db.select(_selectAll);
+  Snapshot<User> authenticate({required User user}) {
+    try {
+      final result = db.select(TableUser.sqlAuth, [
+        user.username,
+        user.password,
+      ]);
 
-  ResultSet selectBy(int id) => db.select(_selectById, [id]);
+      if (result.isEmpty || result.single.isEmpty) {
+        return const .error('Not Found');
+      }
 
-  ResultSet search(String term) => db.select(_search, [term]);
+      final dbUser = result.single;
+      final token = Config.uuid.v1();
 
-  ResultSet insert({required String username, required String password}) =>
-      db.select(_insert, [username, password]);
+      // Store session in DB
+      db.select(TableAuth.sqlInsert, [
+        dbUser[TableAuth.id],
+        token,
+        DateTime.now().toIso8601String(),
+      ]);
 
-  ResultSet update({
-    required int id,
-    required String username,
-    required String password,
-  }) => db.select(_update, [username, password, id]);
+      return .data(
+        const User.empty().copyWith(
+          id: dbUser[TableUser.id],
+          username: dbUser[TableUser.username],
+          password: dbUser[TableUser.password],
+          role: dbUser[TableUser.role],
+          token: token,
+        ),
+      );
+    } on SqliteException catch (e) {
+      return .error(e.message);
+    }
+  }
 
-  ResultSet delete(int? id) => db.select(_delete, [id]);
+  Snapshot<User> authorize(String token) {
+    try {
+      final result = db.select(
+        '''
+        SELECT u.${TableUser.id}, u.${TableUser.username}, u.${TableUser.password}, u.${TableUser.role}
+        FROM ${TableUser.table} u
+        INNER JOIN ${TableAuth.table} a ON u.${TableUser.id} = a.${TableAuth.userId}
+        WHERE a.${TableAuth.token} = ?
+        ''',
+        [token],
+      );
+
+      if (result.isEmpty) {
+        return const .error('Unauthorized');
+      }
+
+      final dbUser = result.single;
+      return .data(
+        const User.empty().copyWith(
+          id: dbUser[TableUser.id],
+          username: dbUser[TableUser.username],
+          password: dbUser[TableUser.password],
+          role: dbUser[TableUser.role],
+          token: token,
+        ),
+      );
+    } on SqliteException catch (e) {
+      return .error(e.message);
+    }
+  }
+
+  ResultSet selectAll() {
+    return db.select(TableUser.sqlSelectAll);
+  }
+
+  ResultSet selectBy({required int userId}) {
+    return db.select(TableUser.sqlSelectById, [userId]);
+  }
+
+  ResultSet search(String term) {
+    return db.select(TableUser.sqlSearch, [term]);
+  }
+
+  ResultSet insert({required User user}) {
+    return db.select(TableUser.sqlInsert, [
+      user.username,
+      user.password,
+      user.role,
+    ]);
+  }
+
+  ResultSet update({required User user}) {
+    return db.select(TableUser.sqlUpdate, [
+      user.username,
+      user.password,
+      user.role,
+      user.id,
+    ]);
+  }
+
+  ResultSet delete({required int userId}) {
+    return db.select(TableUser.sqlDelete, [userId]);
+  }
 }
-
-// ignore: unused_element
-const _createTable = '''
-CREATE TABLE IF NOT EXISTS "User" (
-    "id"       INTEGER NOT NULL CONSTRAINT "PK_User" PRIMARY KEY AUTOINCREMENT,
-    "username" TEXT    NOT NULL,
-    "password" TEXT    NOT NULL
-);
-''';
-
-const _selectAll = '''
-SELECT
-    "id",
-    "username",
-    "password"
-FROM "User";
-''';
-
-const _selectById = '''
-SELECT
-    "id",
-    "username",
-    "password"
-FROM "User"
-WHERE "id" = ?;
-''';
-
-const _search = '''
-SELECT
-    "id",
-    "username",
-    "password"
-FROM   "User"
-WHERE  "username" LIKE '%' || ? || '%';
-''';
-
-const _insert = '''
-INSERT INTO "User" (
-    "username",
-    "password"
-) VALUES (?, ?);
-''';
-
-const _update = '''
-UPDATE "User"
-SET    "username" = ?,
-       "password" = ?
-WHERE  "id"       = ?;
-''';
-
-const _delete = '''
-DELETE FROM "User"
-WHERE "id" = ?;
-''';
-
-const _auth = '''
-SELECT
-    "id",
-    "username",
-    "password"
-FROM   "User"
-WHERE  "username" = ?
-AND    "password" = ?;
-''';

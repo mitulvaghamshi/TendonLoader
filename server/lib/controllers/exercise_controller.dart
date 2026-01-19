@@ -9,54 +9,70 @@ class ExerciseController {
 
   final ExerciseService service;
 
-  Response queryHandler(Request request) =>
-      .ok(jsonEncode(service.selectAll()));
-
-  Response selectHandler(Request request) {
-    if (request.params case {'id': String id}) {
-      return .ok(jsonEncode(service.selectBy(int.parse(id))));
+  Future<Response> queryHandler(Request request) async {
+    try {
+      return .ok(jsonEncode(service.selectAll()));
+    } on Exception {
+      return .internalServerError(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': 'Internal server error!'},
+        }),
+      );
     }
-    return .badRequest();
   }
 
-  Response searchHandler(Request request) {
-    if (request.params case {'term': String term}) {
-      return .ok(jsonEncode(service.search(term)));
+  Future<Response> selectHandler(Request request) async {
+    try {
+      if (request.params case {'id': String id}) {
+        return .ok(jsonEncode(service.selectBy(int.parse(id))));
+      }
+      return .badRequest(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': 'Missing ID'},
+        }),
+      );
+    } on FormatException catch (e) {
+      return .badRequest(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': e.message},
+        }),
+      );
+    } on Exception {
+      return .internalServerError(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': 'Internal server error!'},
+        }),
+      );
     }
-    return .badRequest();
+  }
+
+  Future<Response> searchHandler(Request request) async {
+    try {
+      if (request.params case {'term': String term}) {
+        return .ok(jsonEncode(service.search(term)));
+      }
+      return .badRequest(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': 'Missing search term'},
+        }),
+      );
+    } on Exception {
+      return .internalServerError(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': 'Internal server error!'},
+        }),
+      );
+    }
   }
 
   Future<Response> insertHandler(Request request) async {
-    final body = await request.readAsString();
-    if (jsonDecode(body) case {
-      'user_id': int userId,
-      'prescription_id': int? prescriptionId,
-      'pain_score': num painScore,
-      'datetime': String datetime,
-      'tolerable': String tolerable,
-      'completed': int completed,
-      'progressor_id': String progressorId,
-      'mvc_value': num? mvcValue,
-      'data': String data,
-    }) {
-      service.insert(
-        userId: userId,
-        painScore: painScore.toDouble(),
-        datetime: datetime,
-        tolerable: tolerable,
-        completed: completed,
-        progressorId: progressorId,
-        prescriptionId: prescriptionId,
-        mvcValue: mvcValue?.toDouble(),
-        data: data,
-      );
-      return .ok(0);
-    }
-    return .badRequest();
-  }
-
-  Future<Response> updateHandler(Request request) async {
-    if (request.params case {'id': String id}) {
+    try {
       final body = await request.readAsString();
       if (jsonDecode(body) case {
         'user_id': int userId,
@@ -69,8 +85,7 @@ class ExerciseController {
         'mvc_value': num? mvcValue,
         'data': String data,
       }) {
-        service.update(
-          id: int.parse(id),
+        service.insert(
           userId: userId,
           painScore: painScore.toDouble(),
           datetime: datetime,
@@ -83,15 +98,114 @@ class ExerciseController {
         );
         return .ok(0);
       }
+      return .badRequest(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': 'Invalid data format'},
+        }),
+      );
+    } on FormatException catch (e) {
+      return .badRequest(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': e.message},
+        }),
+      );
+    } on Exception {
+      return .internalServerError(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': 'Internal server error!'},
+        }),
+      );
     }
-    return .badRequest();
+  }
+
+  Future<Response> updateHandler(Request request) async {
+    try {
+      if (request.params case {'id': String id}) {
+        final body = await request.readAsString();
+        if (jsonDecode(body) case {
+          'user_id': int userId,
+          'prescription_id': int? prescriptionId,
+          'pain_score': num painScore,
+          'datetime': String datetime,
+          'tolerable': String tolerable,
+          'completed': int completed,
+          'progressor_id': String progressorId,
+          'mvc_value': num? mvcValue,
+          'data': String data,
+        }) {
+          service.update(
+            id: int.parse(id),
+            userId: userId,
+            painScore: painScore.toDouble(),
+            datetime: datetime,
+            tolerable: tolerable,
+            completed: completed,
+            progressorId: progressorId,
+            prescriptionId: prescriptionId,
+            mvcValue: mvcValue?.toDouble(),
+            data: data,
+          );
+          return .ok(0);
+        }
+        return .badRequest(
+          body: jsonEncode({
+            'status': 'FAILED',
+            'data': {'error': 'Invalid data format'},
+          }),
+        );
+      }
+      return .badRequest(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': 'Missing ID'},
+        }),
+      );
+    } on FormatException catch (e) {
+      return .badRequest(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': e.message},
+        }),
+      );
+    } on Exception {
+      return .internalServerError(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': 'Internal server error!'},
+        }),
+      );
+    }
   }
 
   Future<Response> deleteHandler(Request request) async {
-    if (request.params case {'id': String id}) {
-      service.delete(int.parse(id));
-      return .ok(0);
+    try {
+      if (request.params case {'id': String id}) {
+        service.delete(int.parse(id));
+        return .ok(0);
+      }
+      return .badRequest(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': 'Missing ID'},
+        }),
+      );
+    } on FormatException catch (e) {
+      return .badRequest(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': e.message},
+        }),
+      );
+    } on Exception {
+      return .internalServerError(
+        body: jsonEncode({
+          'status': 'FAILED',
+          'data': {'error': 'Internal server error!'},
+        }),
+      );
     }
-    return .badRequest();
   }
 }
