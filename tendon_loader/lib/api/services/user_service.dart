@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:server/models/user.dart';
+import 'package:server/utils/snapshot.dart';
 import 'package:tendon_loader/api/api_client.dart';
 import 'package:tendon_loader/api/local_cache.dart';
-import 'package:tendon_loader/api/snapshot.dart';
-import 'package:tendon_loader/models/user.dart';
 
 @immutable
 class UserService {
@@ -46,9 +46,13 @@ class UserService {
     if (user.username.isEmpty || user.password.isEmpty) {
       return const .error('Credentials cannot be empty.');
     }
-    final snapshot = await _client.post('users/auth', body: user.map);
-    if (snapshot.data case {'id': int id, 'token': int token}) {
-      return .data(user.copyWith(id: id, token: token));
+    final snapshot = await _client.post(
+      'users/auth',
+      body: user.map,
+      fromJson: User.fromJson,
+    );
+    if (snapshot.data case User user) {
+      return .data(user);
     }
     return .error(snapshot.error);
   }

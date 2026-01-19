@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:server/models/prescription.dart';
+import 'package:server/utils/snapshot.dart';
 import 'package:tendon_loader/api/api_client.dart';
 import 'package:tendon_loader/api/local_cache.dart';
-import 'package:tendon_loader/api/snapshot.dart';
-import 'package:tendon_loader/models/prescription.dart';
 
 @immutable
 class PrescriptionService {

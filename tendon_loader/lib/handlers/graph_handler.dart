@@ -3,10 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:server/models/chartdata.dart';
+import 'package:server/models/exercise.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
-import 'package:tendon_loader/models/chartdata.dart';
-import 'package:tendon_loader/models/exercise.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 bool isPause = false;

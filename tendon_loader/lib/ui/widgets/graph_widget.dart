@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:server/models/chartdata.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/handlers/exercise_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/livedata_handler.dart';
-import 'package:tendon_loader/models/chartdata.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/button_factory.dart';
 
@@ -52,7 +52,7 @@ class _GraphHeader extends StatelessWidget {
     initialData: const ChartData(),
     stream: GraphHandler.stream,
     builder: (_, snapshot) {
-      handler.graphData.insert(0, snapshot.data!);
+      handler.graphData.insert(0, snapshot.requireData);
       handler.graphCtrl?.updateDataSource(updatedDataIndex: 0);
       return builder(context);
     },

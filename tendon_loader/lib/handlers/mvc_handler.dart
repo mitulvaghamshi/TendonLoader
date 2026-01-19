@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
+import 'package:server/models/chartdata.dart';
+import 'package:server/models/exercise.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
-import 'package:tendon_loader/models/chartdata.dart';
-import 'package:tendon_loader/models/exercise.dart';
 
 class MVCHandler extends GraphHandler {
   MVCHandler({required this.mvcDuration, required super.onCountdown})

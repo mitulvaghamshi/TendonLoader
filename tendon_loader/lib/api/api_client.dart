@@ -4,8 +4,8 @@ import 'dart:io' show ContentType, HttpException, HttpHeaders;
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:server/utils/snapshot.dart';
 import 'package:tendon_loader/api/network_status.dart';
-import 'package:tendon_loader/api/snapshot.dart';
 
 typedef R<T> = Snapshot<T>;
 typedef Fn<T> = T Function(Object? data)?;
@@ -18,18 +18,25 @@ class ApiClient {
 
   static const host = String.fromEnvironment('API_HOST');
   static const _timeout = Duration(seconds: 5);
-  static final _headers = {
-    HttpHeaders.acceptHeader: ContentType.json.value,
-    HttpHeaders.contentTypeHeader: ContentType.json.value,
-  };
+
+  static String? token;
+
+  static Map<String, String> get headers {
+    final headers = {
+      HttpHeaders.acceptHeader: ContentType.json.value,
+      HttpHeaders.contentTypeHeader: ContentType.json.value,
+    };
+    if (token != null) {
+      headers[HttpHeaders.authorizationHeader] = 'Bearer $token';
+    }
+    return headers;
+  }
 }
 
 extension ApiClientExtension on ApiClient {
   Future<R<T>> get<T>(String path, {Fn<T>? fromJson}) => _send(
-    () => _client.get(
-      Uri.http(ApiClient.host, path),
-      headers: ApiClient._headers,
-    ),
+    () =>
+        _client.get(Uri.http(ApiClient.host, path), headers: ApiClient.headers),
     fromJson,
   );
 
@@ -40,7 +47,7 @@ extension ApiClientExtension on ApiClient {
   }) => _send(
     () => _client.post(
       Uri.http(ApiClient.host, path),
-      headers: ApiClient._headers,
+      headers: ApiClient.headers,
       body: jsonEncode(body),
     ),
     fromJson,
@@ -53,7 +60,7 @@ extension ApiClientExtension on ApiClient {
   }) => _send(
     () => _client.put(
       Uri.http(ApiClient.host, path),
-      headers: ApiClient._headers,
+      headers: ApiClient.headers,
       body: jsonEncode(body),
     ),
     fromJson,
@@ -62,7 +69,7 @@ extension ApiClientExtension on ApiClient {
   Future<R<T>> delete<T>(String path, {Fn<T>? fromJson}) => _send(
     () => _client.delete(
       Uri.http(ApiClient.host, path),
-      headers: ApiClient._headers,
+      headers: ApiClient.headers,
     ),
     fromJson,
   );
@@ -79,7 +86,14 @@ extension on ApiClient {
       final data = jsonDecode(res.body);
       return .data(fromJson != null ? fromJson(data) : data);
     }
-    return .error(res.reasonPhrase);
+    if (res.body.isNotEmpty) {
+      try {
+        if (jsonDecode(res.body) case {'data': {'error': String error}}) {
+          return .error(error);
+        }
+      } on FormatException catch (_) {}
+    }
+    return .error(res.reasonPhrase ?? 'Unknown Error');
   });
 
   Future<R<T>> _ifConnected<T>(AsyncValueGetter<R<T>> request) async {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/api/api_client.dart';
-import 'package:tendon_loader/models/settings.dart';
 import 'package:tendon_loader/router/router.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/states/app_state.dart';
@@ -30,10 +29,10 @@ class MyApp extends StatelessWidget {
     animation: state,
     builder: (_, child) => MaterialApp.router(
       title: 'Tendon Loader',
+      routerConfig: _router,
       theme: _lightTheme,
       darkTheme: _darkTheme,
-      themeMode: state.settings.themeMode,
-      routerConfig: _router,
+      themeMode: state.settings.darkMode ? .dark : .light,
       builder: (_, child) => AppScope(data: state, child: child!),
     ),
   );

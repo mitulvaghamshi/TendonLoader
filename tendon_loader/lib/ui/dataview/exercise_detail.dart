@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tendon_loader/models/chartdata.dart';
+import 'package:server/models/chartdata.dart';
 import 'package:tendon_loader/ui/dataview/exercise_data_graph.dart';
 import 'package:tendon_loader/ui/widgets/button_factory.dart';
 

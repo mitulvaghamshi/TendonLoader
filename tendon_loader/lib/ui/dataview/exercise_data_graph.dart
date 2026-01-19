@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:server/models/chartdata.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tendon_loader/models/chartdata.dart';
 
 @immutable
 class ExerciseDataGraph extends StatelessWidget {

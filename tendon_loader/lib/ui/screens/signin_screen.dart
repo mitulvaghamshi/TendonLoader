@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:server/models/user.dart';
 import 'package:tendon_loader/api/network_status.dart';
-import 'package:tendon_loader/models/user.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';
 import 'package:tendon_loader/ui/widgets/button_factory.dart';
@@ -53,7 +53,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Future<void> _authenticate() async {
     setState(() => _isLoading = true);
     try {
-      final user = User.from(
+      final user = const User.empty().copyWith(
         username: _usernameCtrl.text,
         password: _passwordCtrl.text,
       );

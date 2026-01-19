@@ -1,7 +1,7 @@
-import 'package:tendon_loader/models/exercise.dart';
-import 'package:tendon_loader/models/prescription.dart';
-import 'package:tendon_loader/models/settings.dart';
-import 'package:tendon_loader/models/user.dart';
+import 'package:server/models/exercise.dart';
+import 'package:server/models/prescription.dart';
+import 'package:server/models/settings.dart';
+import 'package:server/models/user.dart';
 
 class LocalCache {
   LocalCache._();

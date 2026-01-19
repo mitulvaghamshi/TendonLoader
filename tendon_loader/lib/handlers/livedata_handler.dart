@@ -1,5 +1,5 @@
+import 'package:server/models/chartdata.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
-import 'package:tendon_loader/models/chartdata.dart';
 
 class LiveDataHandler extends GraphHandler {
   LiveDataHandler({required super.onCountdown});

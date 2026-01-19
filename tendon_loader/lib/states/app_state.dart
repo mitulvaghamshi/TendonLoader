@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:server/models/prescription.dart';
+import 'package:server/models/settings.dart';
+import 'package:server/models/user.dart';
+import 'package:server/utils/snapshot.dart';
+import 'package:tendon_loader/api/api_client.dart';
 import 'package:tendon_loader/api/services/prescription_service.dart';
 import 'package:tendon_loader/api/services/settings_service.dart';
 import 'package:tendon_loader/api/services/user_service.dart';
-import 'package:tendon_loader/api/snapshot.dart';
-import 'package:tendon_loader/models/prescription.dart';
-import 'package:tendon_loader/models/settings.dart';
-import 'package:tendon_loader/models/user.dart';
 
 class AppState extends ChangeNotifier {
   AppState()
@@ -29,6 +30,7 @@ class AppState extends ChangeNotifier {
       return '[User/auth]: ${sUser.error}';
     }
     authUser = sUser.requireData;
+    ApiClient.token = authUser.token;
 
     final sSettings = await SettingsService.instance.getSettingsBy(
       userId: ArgumentError.checkNotNull(authUser.id),
