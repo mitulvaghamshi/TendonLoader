@@ -6,7 +6,7 @@ class UserData {
   factory UserData.fromJson(Object? json) {
     if (json case {'users': List<dynamic> users}) {
       final items = List<Map<String, dynamic>>.from(users);
-      return UserData._(users: items.map(User.fromJson));
+      return ._(users: items.map(User.fromJson));
     }
     throw FormatException('[UserData]: Invalid JSON data: $json');
   }
@@ -38,7 +38,7 @@ class User {
       'token': String? token,
       'role': String? role,
     }) {
-      return User._(
+      return ._(
         id: id,
         username: username,
         password: password,
@@ -56,7 +56,7 @@ class User {
       'password': String password,
       'token': String? token,
     }) {
-      return User._(
+      return ._(
         id: id,
         username: username,
         password: password,
@@ -94,13 +94,11 @@ extension Utils on User {
     String? password,
     String? token,
     String? role,
-  }) {
-    return User._(
-      id: id ?? this.id,
-      username: username ?? this.username,
-      password: password ?? this.password,
-      token: token ?? this.token,
-      role: role ?? this.role,
-    );
-  }
+  }) => ._(
+    id: id ?? this.id,
+    username: username ?? this.username,
+    password: password ?? this.password,
+    token: token ?? this.token,
+    role: role ?? this.role,
+  );
 }

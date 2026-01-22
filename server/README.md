@@ -9,7 +9,7 @@ Run with the [Dart SDK](https://dart.dev/get-dart).
 ### Start the server:
 
 ```ps
-$ dart -DPORT=3001 -DDB_PATH=db/tendonloader.db bin/server.dart
+$ PORT=3001 DB_PATH=db/tendonloader.db dart bin/server.dart
 $ Server listening on port 3001...
 ```
 

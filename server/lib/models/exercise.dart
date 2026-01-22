@@ -6,7 +6,7 @@ class ExerciseData {
   factory ExerciseData.fromJson(Object? json) {
     if (json case {'exercises': List<dynamic> items}) {
       final exercises = List<Map<String, dynamic>>.from(items);
-      return ExerciseData(exercises: exercises.map(Exercise.fromJson));
+      return .new(exercises: exercises.map(Exercise.fromJson));
     }
     throw FormatException('[ExerciseData]: Invalid JSON data: $json');
   }
@@ -53,7 +53,7 @@ class Exercise {
       'mvc_value': double? mvcValue,
       'data': String rawData,
     }) {
-      return Exercise._(
+      return ._(
         id: id,
         userId: userId,
         painScore: painScore.toDouble(),
@@ -120,18 +120,16 @@ extension Utils on Exercise {
     int? prescriptionId,
     double? mvcValue,
     Iterable<ChartData>? data,
-  }) {
-    return Exercise._(
-      id: id,
-      userId: userId ?? this.userId,
-      painScore: painScore ?? this.painScore,
-      datetime: datetime ?? this.datetime,
-      tolerable: tolerable ?? this.tolerable,
-      completed: completed ?? this.completed,
-      progressorId: progressorId ?? this.progressorId,
-      prescriptionId: prescriptionId ?? this.prescriptionId,
-      mvcValue: mvcValue ?? this.mvcValue,
-      data: data ?? this.data,
-    );
-  }
+  }) => ._(
+    id: id,
+    userId: userId ?? this.userId,
+    painScore: painScore ?? this.painScore,
+    datetime: datetime ?? this.datetime,
+    tolerable: tolerable ?? this.tolerable,
+    completed: completed ?? this.completed,
+    progressorId: progressorId ?? this.progressorId,
+    prescriptionId: prescriptionId ?? this.prescriptionId,
+    mvcValue: mvcValue ?? this.mvcValue,
+    data: data ?? this.data,
+  );
 }

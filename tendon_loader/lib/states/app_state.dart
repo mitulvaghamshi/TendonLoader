@@ -26,11 +26,10 @@ class AppState extends ChangeNotifier {
 
   Future<String> authenticate(User user) async {
     final sUser = await UserService.instance.authenticate(user);
-    if (!sUser.hasData || sUser.hasError) {
-      return '[User/auth]: ${sUser.error}';
+    if (sUser.data case User user) {
+      authUser = user;
+      ApiClient.token = user.token;
     }
-    authUser = sUser.requireData;
-    ApiClient.token = authUser.token;
 
     final sSettings = await SettingsService.instance.getSettingsBy(
       userId: ArgumentError.checkNotNull(authUser.id),

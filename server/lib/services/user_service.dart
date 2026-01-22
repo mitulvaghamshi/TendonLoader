@@ -66,13 +66,13 @@ class UserService {
         return const .error('Unauthorized');
       }
 
-      final dbUser = result.single;
+      final authUser = result.single;
       return .data(
         const User.empty().copyWith(
-          id: dbUser[TableUser.id],
-          username: dbUser[TableUser.username],
-          password: dbUser[TableUser.password],
-          role: dbUser[TableUser.role],
+          id: authUser[TableUser.id],
+          username: authUser[TableUser.username],
+          password: authUser[TableUser.password],
+          role: authUser[TableUser.role],
           token: token,
         ),
       );

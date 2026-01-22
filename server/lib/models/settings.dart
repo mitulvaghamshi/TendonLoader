@@ -28,7 +28,7 @@ class Settings {
       'editable_prescription': int editablePrescription,
       'graph_scale': num graphScale,
     }) {
-      return Settings._(
+      return ._(
         id: id,
         userId: userId,
         prescriptionId: prescriptionId,
@@ -68,15 +68,13 @@ extension Utils on Settings {
     bool? autoUpload,
     bool? editablePrescription,
     double? graphScale,
-  }) {
-    return Settings._(
-      id: id,
-      userId: userId ?? this.userId,
-      prescriptionId: prescriptionId ?? this.prescriptionId,
-      darkMode: darkMode ?? this.darkMode,
-      autoUpload: autoUpload ?? this.autoUpload,
-      editablePrescription: editablePrescription ?? this.editablePrescription,
-      graphScale: graphScale ?? this.graphScale,
-    );
-  }
+  }) => ._(
+    id: id,
+    userId: userId ?? this.userId,
+    prescriptionId: prescriptionId ?? this.prescriptionId,
+    darkMode: darkMode ?? this.darkMode,
+    autoUpload: autoUpload ?? this.autoUpload,
+    editablePrescription: editablePrescription ?? this.editablePrescription,
+    graphScale: graphScale ?? this.graphScale,
+  );
 }

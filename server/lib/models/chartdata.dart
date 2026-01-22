@@ -3,7 +3,7 @@ class ChartData {
 
   factory ChartData.fromPair(String data) {
     final items = data.split(':');
-    return ChartData(time: .parse(items[0]), load: .parse(items[1]));
+    return .new(time: .parse(items[0]), load: .parse(items[1]));
   }
 
   final double time;
@@ -14,6 +14,6 @@ extension Utils on ChartData {
   String get pair => '$time:$load';
 
   ChartData copyWith({double? time, double? load}) {
-    return ChartData(time: time ?? this.time, load: load ?? this.load);
+    return .new(time: time ?? this.time, load: load ?? this.load);
   }
 }

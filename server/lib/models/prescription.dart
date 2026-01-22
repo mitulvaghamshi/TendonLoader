@@ -31,7 +31,7 @@ class Prescription {
       'mvc_duration': int mvcDuration,
       'target_load': num targetLoad,
     }) {
-      return Prescription._(
+      return ._(
         id: id,
         sets: sets,
         reps: reps,
@@ -84,16 +84,14 @@ extension Utils on Prescription {
     int? restTime,
     int? mvcDuration,
     double? targetLoad,
-  }) {
-    return Prescription._(
-      id: id,
-      sets: sets ?? this.sets,
-      reps: reps ?? this.reps,
-      setRest: setRest ?? this.setRest,
-      holdTime: holdTime ?? this.holdTime,
-      restTime: restTime ?? this.restTime,
-      mvcDuration: mvcDuration ?? this.mvcDuration,
-      targetLoad: targetLoad ?? this.targetLoad,
-    );
-  }
+  }) => ._(
+    id: id,
+    sets: sets ?? this.sets,
+    reps: reps ?? this.reps,
+    setRest: setRest ?? this.setRest,
+    holdTime: holdTime ?? this.holdTime,
+    restTime: restTime ?? this.restTime,
+    mvcDuration: mvcDuration ?? this.mvcDuration,
+    targetLoad: targetLoad ?? this.targetLoad,
+  );
 }

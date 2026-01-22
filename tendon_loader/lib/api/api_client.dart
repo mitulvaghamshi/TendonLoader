@@ -21,58 +21,48 @@ class ApiClient {
 
   static String? token;
 
-  static Map<String, String> get headers {
-    final headers = {
-      HttpHeaders.acceptHeader: ContentType.json.value,
-      HttpHeaders.contentTypeHeader: ContentType.json.value,
-    };
-    if (token != null) {
-      headers[HttpHeaders.authorizationHeader] = 'Bearer $token';
-    }
-    return headers;
-  }
+  static Map<String, String> get headers => {
+    HttpHeaders.acceptHeader: ContentType.json.value,
+    HttpHeaders.contentTypeHeader: ContentType.json.value,
+    if (token != null) HttpHeaders.authorizationHeader: 'Bearer $token',
+  };
 }
 
 extension ApiClientExtension on ApiClient {
-  Future<R<T>> get<T>(String path, {Fn<T>? fromJson}) => _send(
-    () =>
-        _client.get(Uri.http(ApiClient.host, path), headers: ApiClient.headers),
-    fromJson,
-  );
+  Future<R<T>> get<T>(String path, {Fn<T>? fromJson}) => _send(() {
+    return _client.get(.http(ApiClient.host, path), headers: ApiClient.headers);
+  }, fromJson);
 
   Future<R<T>> post<T>(
     String path, {
-    required Map<String, dynamic> body,
+    Map<String, dynamic>? body,
     Fn<T>? fromJson,
-  }) => _send(
-    () => _client.post(
-      Uri.http(ApiClient.host, path),
+  }) => _send(() {
+    return _client.post(
+      .http(ApiClient.host, path),
       headers: ApiClient.headers,
       body: jsonEncode(body),
-    ),
-    fromJson,
-  );
+    );
+  }, fromJson);
 
   Future<R<T>> put<T>(
     String path, {
-    required Map<String, dynamic> body,
+    Map<String, dynamic>? body,
     Fn<T>? fromJson,
-  }) => _send(
-    () => _client.put(
-      Uri.http(ApiClient.host, path),
+  }) => _send(() {
+    return _client.put(
+      .http(ApiClient.host, path),
       headers: ApiClient.headers,
       body: jsonEncode(body),
-    ),
-    fromJson,
-  );
+    );
+  }, fromJson);
 
-  Future<R<T>> delete<T>(String path, {Fn<T>? fromJson}) => _send(
-    () => _client.delete(
-      Uri.http(ApiClient.host, path),
+  Future<R<T>> delete<T>(String path, {Fn<T>? fromJson}) => _send(() {
+    return _client.delete(
+      .http(ApiClient.host, path),
       headers: ApiClient.headers,
-    ),
-    fromJson,
-  );
+    );
+  }, fromJson);
 }
 
 extension on ApiClient {
@@ -84,22 +74,23 @@ extension on ApiClient {
     if (res.statusCode >= 200 && res.statusCode < 300) {
       if (res.body.isEmpty) return const .none();
       final data = jsonDecode(res.body);
-      return .data(fromJson != null ? fromJson(data) : data);
+      return .data(fromJson?.call(data) ?? data);
     }
-    if (res.body.isNotEmpty) {
-      try {
-        if (jsonDecode(res.body) case {'data': {'error': String error}}) {
-          return .error(error);
-        }
-      } on FormatException catch (_) {}
+    if (res.body.isEmpty) {
+      return .error(res.reasonPhrase ?? 'Unknown Error');
     }
-    return .error(res.reasonPhrase ?? 'Unknown Error');
+    try {
+      if (jsonDecode(res.body) case {'data': {'error': String error}}) {
+        return .error(error);
+      }
+    } on FormatException catch (e) {
+      return .error(e.message);
+    }
+    return const .none();
   });
 
   Future<R<T>> _ifConnected<T>(AsyncValueGetter<R<T>> request) async {
-    if (kDebugMode) {
-      await Future.delayed(const Duration(seconds: 2));
-    }
+    if (kDebugMode) await Future.delayed(const Duration(seconds: 1));
     if (!NetworkStatus.isConnected) {
       return const .error('Check your connection!');
     }

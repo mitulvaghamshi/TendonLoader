@@ -58,7 +58,7 @@ class _SignInScreenState extends State<SignInScreen> {
         password: _passwordCtrl.text,
       );
       final result = await state.authenticate(user);
-      if (mounted) {
+      if (mounted && result.isNotEmpty) {
         final snakbar = SnackBar(content: Text(result));
         ScaffoldMessenger.of(context).showSnackBar(snakbar);
       }

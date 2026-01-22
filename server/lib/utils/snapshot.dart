@@ -1,4 +1,4 @@
-class Snapshot<T> {
+interface class Snapshot<T> {
   const Snapshot.none() : _data = null, _error = null;
   const Snapshot.data(T data) : _data = data, _error = null;
   const Snapshot.error(String? error) : _data = null, _error = error;
@@ -17,6 +17,6 @@ extension Utils<T> on Snapshot<T> {
   T get requireData {
     if (hasData) return _data!;
     if (hasError) return Error.throwWithStackTrace(_error!, .current);
-    throw StateError('Snapshot has neither data nor error');
+    throw StateError('Snapshot has no data');
   }
 }

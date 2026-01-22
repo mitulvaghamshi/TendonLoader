@@ -26,18 +26,18 @@ extension RootRouter on AppRouter {
     final pipe = const Pipeline().addMiddleware(auth.checkAuthentication);
     return Router()
       // Public Routes
-      ..get('/', (_) => Response.ok('<h2>TendonLoader API v1.0</h2>\n'))
-      ..post('/users/auth', userController.authHandler)
-      ..post('/users', userController.insertHandler)
+      ..get('/api', (_) => Response.ok('<h2>TendonLoader API v1.0</h2>\n'))
+      ..post('/api/users/auth', userController.authHandler)
+      ..post('/api/users', userController.insertHandler)
       // Protected Routes
       // curl http://localhost:3001/users
-      ..mount('/users', pipe.addHandler(_protectedUserRouter.call))
+      ..mount('/api/users', pipe.addHandler(_protectedUserRouter.call))
       // curl http://localhost:3001/settings
-      ..mount('/settings', pipe.addHandler(_settingsRouter.call))
+      ..mount('/api/settings', pipe.addHandler(_settingsRouter.call))
       // curl http://localhost:3001/exercises
-      ..mount('/exercises', pipe.addHandler(_exerciseRouter.call))
+      ..mount('/api/exercises', pipe.addHandler(_exerciseRouter.call))
       // curl http://localhost:3001/prescription
-      ..mount('/prescription', pipe.addHandler(_prescriptionRouter.call));
+      ..mount('/api/prescription', pipe.addHandler(_prescriptionRouter.call));
   }
 }
 

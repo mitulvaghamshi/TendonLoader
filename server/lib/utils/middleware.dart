@@ -8,34 +8,32 @@ class AuthMiddleware {
 
   final UserService userService;
 
-  Middleware get checkAuthentication => (innerHandler) {
+  Middleware get checkAuthentication => (handler) {
     return (request) async {
       final authHeader = request.headers['Authorization'];
       if (authHeader == null || !authHeader.startsWith('Bearer ')) {
-        return Response.unauthorized('Missing or Invalid Token');
+        return .unauthorized('Missing or Invalid Token\n');
       }
       final token = authHeader.substring(7);
       final result = userService.authorize(token);
-
       if (result.data case User user) {
         final updatedRequest = request.change(context: {'user': user});
-        return innerHandler(updatedRequest);
+        return handler(updatedRequest);
       }
-
-      return Response.unauthorized('Invalid Token');
+      return .unauthorized('Invalid Token\n');
     };
   };
 
-  Middleware checkRole(List<String> allowedRoles) => (innerHandler) {
+  Middleware checkRole(List<String> roles) => (handler) {
     return (request) async {
       final user = request.context['user'] as User?;
       if (user == null) {
-        return Response.unauthorized('User not found in context');
+        return .unauthorized('User not found in context\n');
       }
-      if (allowedRoles.isNotEmpty && !allowedRoles.contains(user.role)) {
-        return Response.forbidden('Insufficient Permissions');
+      if (roles.isNotEmpty && !roles.contains(user.role)) {
+        return .forbidden('Insufficient Permissions\n');
       }
-      return innerHandler(request);
+      return handler(request);
     };
   };
 }

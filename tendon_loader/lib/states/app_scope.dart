@@ -8,7 +8,7 @@ class AppScope extends InheritedWidget {
   final AppState data;
 
   static AppState of(BuildContext context) {
-    final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
+    final scope = context.getInheritedWidgetOfExactType<AppScope>();
     return ArgumentError.checkNotNull(scope, 'State not initialized').data;
   }
 

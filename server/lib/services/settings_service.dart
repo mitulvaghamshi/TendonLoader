@@ -6,13 +6,21 @@ class SettingsService {
 
   final Database db;
 
-  ResultSet selectAll() => db.select(TableSettings.sqlSelectAll);
+  ResultSet selectAll() {
+    return db.select(TableSettings.sqlSelectAll);
+  }
 
-  ResultSet selectBy(int? id) => db.select(TableSettings.sqlSelectById, [id]);
+  ResultSet selectBy(int? id) {
+    return db.select(TableSettings.sqlSelectById, [id]);
+  }
 
-  ResultSet selectByUser(String? id) => search(id);
+  ResultSet selectByUser(String? id) {
+    return search(id);
+  }
 
-  ResultSet search(String? term) => db.select(TableSettings.sqlSearch, [term]);
+  ResultSet search(String? term) {
+    return db.select(TableSettings.sqlSearch, [term]);
+  }
 
   ResultSet insert({
     required int? userId,
@@ -21,14 +29,16 @@ class SettingsService {
     required bool autoUpload,
     required bool editablePrescription,
     required double graphScale,
-  }) => db.select(TableSettings.sqlInsert, [
-    if (autoUpload) 1 else 0,
-    if (darkMode) 1 else 0,
-    if (editablePrescription) 1 else 0,
-    graphScale,
-    prescriptionId,
-    userId,
-  ]);
+  }) {
+    return db.select(TableSettings.sqlInsert, [
+      if (autoUpload) 1 else 0,
+      if (darkMode) 1 else 0,
+      if (editablePrescription) 1 else 0,
+      graphScale,
+      prescriptionId,
+      userId,
+    ]);
+  }
 
   ResultSet update({
     required int? id,
@@ -38,15 +48,19 @@ class SettingsService {
     required bool autoUpload,
     required bool editablePrescription,
     required double graphScale,
-  }) => db.select(TableSettings.sqlUpdate, [
-    if (autoUpload) 1 else 0,
-    if (darkMode) 1 else 0,
-    if (editablePrescription) 1 else 0,
-    graphScale,
-    prescriptionId,
-    userId,
-    id,
-  ]);
+  }) {
+    return db.select(TableSettings.sqlUpdate, [
+      if (autoUpload) 1 else 0,
+      if (darkMode) 1 else 0,
+      if (editablePrescription) 1 else 0,
+      graphScale,
+      prescriptionId,
+      userId,
+      id,
+    ]);
+  }
 
-  ResultSet delete(int? id) => db.select(TableSettings.sqlDelete, [id]);
+  ResultSet delete(int? id) {
+    return db.select(TableSettings.sqlDelete, [id]);
+  }
 }

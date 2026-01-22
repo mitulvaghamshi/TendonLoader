@@ -10,6 +10,7 @@ Future<void> main() async {
     Platform.environment['DB_PATH'],
     'DB_PATH environment variable',
   );
+
   final config = Config.create(dbPath);
 
   final handler = const Pipeline()
