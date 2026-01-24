@@ -1,20 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:server/models/user.dart';
+import 'package:server/utils/local_cache.dart';
 import 'package:server/utils/snapshot.dart';
-import 'package:tendon_loader/api/api_client.dart';
-import 'package:tendon_loader/api/local_cache.dart';
+import 'package:tendon_loader/network/api/api_client.dart';
 
 @immutable
 class UserService {
   factory UserService({ApiClient? client, LocalCache? cache}) =>
       client != null || cache != null
-      ? UserService._(client ?? ApiClient(), cache ?? LocalCache.instance)
+      ? ._(client ?? .new(), cache ?? .instance)
       : instance;
 
   const UserService._(this._client, this._cache);
 
-  static final _instance = UserService._(ApiClient(), LocalCache.instance);
-  static UserService get instance => _instance;
+  static final instance = UserService._(.new(), .instance);
 
   final ApiClient _client;
   final LocalCache _cache;

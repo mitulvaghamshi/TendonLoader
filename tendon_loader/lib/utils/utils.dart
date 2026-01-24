@@ -1,8 +1,17 @@
 import 'package:archive/archive_io.dart';
+import 'package:server/models/chartdata.dart';
 import 'package:server/models/exercise.dart';
 import 'package:server/models/prescription.dart';
 import 'package:server/models/user.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
+
+typedef TableItem = ({String label, String value});
+
+typedef ExerciseRecord = ({
+  double targetLoad,
+  Iterable<ChartData> chartData,
+  Iterable<TableItem> infoTable,
+});
 
 Future<void> downloadUser(User user) async {
   throw UnimplementedError('Download not implemented.');

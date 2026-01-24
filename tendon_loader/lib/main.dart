@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tendon_loader/api/api_client.dart';
+import 'package:tendon_loader/network/api/api_client.dart';
 import 'package:tendon_loader/router/router.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/states/app_state.dart';

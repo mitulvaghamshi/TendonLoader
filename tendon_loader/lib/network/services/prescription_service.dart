@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:server/models/prescription.dart';
+import 'package:server/utils/local_cache.dart';
 import 'package:server/utils/snapshot.dart';
-import 'package:tendon_loader/api/api_client.dart';
-import 'package:tendon_loader/api/local_cache.dart';
+import 'package:tendon_loader/network/api/api_client.dart';
 
 @immutable
 class PrescriptionService {
   factory PrescriptionService({ApiClient? client, LocalCache? cache}) =>
       client != null || cache != null
-      ? PrescriptionService._(
-          client ?? ApiClient(),
-          cache ?? LocalCache.instance,
-        )
+      ? ._(client ?? .new(), cache ?? .instance)
       : instance;
 
   const PrescriptionService._(this._client, this._cache);
 
-  static final _instance = PrescriptionService._(
-    ApiClient(),
-    LocalCache.instance,
-  );
-  static PrescriptionService get instance => _instance;
+  static final instance = PrescriptionService._(.new(), .instance);
 
   final ApiClient _client;
   final LocalCache _cache;

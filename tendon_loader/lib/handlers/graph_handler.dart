@@ -13,7 +13,7 @@ bool isPause = false;
 
 abstract class GraphHandler {
   GraphHandler({this.lineData, required this.onCountdown}) {
-    isRunning = isComplete = hasData = false;
+    isSessionRunning = isComplete = hasData = false;
     stream.listen(update);
     reset();
   }
@@ -28,8 +28,8 @@ abstract class GraphHandler {
   bool isHit = false;
 
   late bool hasData;
-  late bool isRunning;
   late bool isComplete;
+  late bool isSessionRunning;
   late DateTime datetime;
 
   final graphData = <ChartData>[];
@@ -70,13 +70,13 @@ abstract class GraphHandler {
   Future<void> start() async {
     final result = await onCountdown(
       'Session starts in...',
-      const Duration(seconds: 5),
+      const .new(seconds: 5),
     );
     if (result ?? false) {
       datetime = .now();
       hasData = true;
-      isRunning = true;
       isComplete = false;
+      isSessionRunning = true;
       exportData
         ..clear()
         ..add(const ChartData());
@@ -106,7 +106,7 @@ abstract class GraphHandler {
       );
       // await AppScope.of(context).addToBox(export!);
     }
-    if (isRunning) {
+    if (isSessionRunning) {
       await stop();
     }
 

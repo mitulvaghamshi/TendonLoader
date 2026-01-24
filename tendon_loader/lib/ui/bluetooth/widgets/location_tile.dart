@@ -19,7 +19,7 @@ class LocationTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StreamBuilder(
     stream: Stream<bool>.periodic(
-      const Duration(milliseconds: 300),
+      const .new(milliseconds: 300),
     ).asyncMap((_) async => loc.Location().serviceEnabled()),
     builder: (_, snapshot) {
       // If the location access is allowed,

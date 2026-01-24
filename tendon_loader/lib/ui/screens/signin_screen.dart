@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:server/models/user.dart';
-import 'package:tendon_loader/api/network_status.dart';
+import 'package:tendon_loader/network/api/network_status.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';
 import 'package:tendon_loader/ui/widgets/button_factory.dart';
@@ -30,7 +30,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void initState() {
-    NetworkStatus(); // Start network status listener.
+    /// Start [NetworkStatus] listener.
+    NetworkStatus();
     super.initState();
   }
 
@@ -90,7 +91,7 @@ class _SignInScreenState extends State<SignInScreen> {
           const SizedBox(height: 16),
           AnimatedCrossFade(
             crossFadeState: _isLoading ? .showFirst : .showSecond,
-            duration: const Duration(milliseconds: 500),
+            duration: const .new(milliseconds: 500),
             firstChild: const ButtonFactory.loading(),
             secondChild: ButtonFactory.tile(
               onTap: _authenticate,

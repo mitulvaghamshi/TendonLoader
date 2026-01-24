@@ -159,7 +159,7 @@ class _PromptScreenState extends State<PromptScreen> {
               children: [
                 // AnimatedCrossFade(
                 //   crossFadeState: _crossFadeState,
-                //   duration: const Duration(milliseconds: 300),
+                //   duration: const .new(milliseconds: 300),
                 //   firstChild: ButtonFactory.tile(
                 //     onTap: _onFinished,
                 //     leading: const Icon(Icons.check),
@@ -172,7 +172,7 @@ class _PromptScreenState extends State<PromptScreen> {
                 // ),
                 // OR
                 AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
+                  duration: const .new(milliseconds: 300),
                   child: _isValid
                       ? ButtonFactory.tile(
                           onTap: _onFinished,

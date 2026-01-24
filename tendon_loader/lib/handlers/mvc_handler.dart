@@ -15,15 +15,15 @@ class MVCHandler extends GraphHandler {
 
   @override
   Future<void> start() async {
-    if (!isRunning) {
+    if (!isSessionRunning) {
       await (hasData ? exit : super.start)();
     }
   }
 
   @override
   Future<void> stop() async {
-    if (isRunning) {
-      isRunning = false;
+    if (isSessionRunning) {
+      isSessionRunning = false;
       await super.stop();
       await exit();
       _reset();
@@ -32,7 +32,7 @@ class MVCHandler extends GraphHandler {
 
   @override
   void update(ChartData data) {
-    if (isRunning) {
+    if (isSessionRunning) {
       timeDiff = mvcDuration - data.time;
       if (timeDiff == 0) {
         isComplete = true;

@@ -18,6 +18,10 @@ class ExerciseList extends StatelessWidget {
     searchLabel: 'Search by date...',
     searchTerm: (item) => item.datetime,
     builder: (item, index) => ButtonFactory.tile(
+      onTap: () => ExerciseDetailsRoute(
+        userId: item.userId,
+        exerciseId: item.id,
+      ).push(context),
       spacing: 16,
       axisAlignment: .start,
       leading: CircleAvatar(child: Text(index.toString())),
@@ -28,10 +32,6 @@ class ExerciseList extends StatelessWidget {
         ).push(context),
         icon: const Icon(Icons.format_list_numbered_sharp),
       ),
-      onTap: () => ExerciseDetailsRoute(
-        userId: item.userId,
-        exerciseId: item.id,
-      ).push(context),
       child: Text(item.datetime),
     ),
   );

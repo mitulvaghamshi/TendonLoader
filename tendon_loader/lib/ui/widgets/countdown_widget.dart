@@ -17,7 +17,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
     with TickerProviderStateMixin {
   late final _controller = AnimationController(
     vsync: this,
-    duration: widget.duration + const Duration(seconds: 1),
+    duration: widget.duration + const .new(seconds: 1),
   )..addStatusListener(_onFinish);
 
   void _onFinish(_) {

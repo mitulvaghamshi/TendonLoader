@@ -5,7 +5,7 @@ import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
 class ExerciseDataList extends StatelessWidget {
-  const ExerciseDataList({super.key, required this.items});
+  const ExerciseDataList(this.items, {super.key});
 
   final Iterable<ChartData> items;
 
@@ -47,6 +47,7 @@ class _ListItem extends StatelessWidget {
   );
 }
 
+@immutable
 class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   const _HeaderDelegate();
 
@@ -74,6 +75,5 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   double get minExtent => 60;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      false;
+  bool shouldRebuild(_HeaderDelegate oldDelegate) => false;
 }

@@ -7,22 +7,22 @@ import 'package:server/models/exercise.dart';
 import 'package:server/models/prescription.dart';
 import 'package:server/models/user.dart';
 import 'package:server/utils/snapshot.dart';
-import 'package:tendon_loader/api/network_status.dart';
-import 'package:tendon_loader/api/services/exercise_service.dart';
-import 'package:tendon_loader/api/services/prescription_service.dart';
-import 'package:tendon_loader/api/services/settings_service.dart';
-import 'package:tendon_loader/api/services/user_service.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/handlers/exercise_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/handlers/livedata_handler.dart';
 import 'package:tendon_loader/handlers/mvc_handler.dart';
+import 'package:tendon_loader/network/api/network_status.dart';
+import 'package:tendon_loader/network/services/exercise_service.dart';
+import 'package:tendon_loader/network/services/prescription_service.dart';
+import 'package:tendon_loader/network/services/settings_service.dart';
+import 'package:tendon_loader/network/services/user_service.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/dataview/exercise_data_list.dart';
 import 'package:tendon_loader/ui/dataview/exercise_detail.dart';
 import 'package:tendon_loader/ui/dataview/exercise_list.dart';
 import 'package:tendon_loader/ui/dataview/user_list.dart';
-import 'package:tendon_loader/ui/screens/homescreen.dart';
+import 'package:tendon_loader/ui/screens/home_screen.dart';
 import 'package:tendon_loader/ui/screens/prescription_screen.dart';
 import 'package:tendon_loader/ui/screens/prompt_screen.dart';
 import 'package:tendon_loader/ui/screens/settings_screen.dart';
@@ -34,6 +34,7 @@ import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
 import 'package:tendon_loader/ui/widgets/graph_widget.dart';
 import 'package:tendon_loader/ui/widgets/life_cycle_aware.dart';
 import 'package:tendon_loader/utils/constants.dart';
+import 'package:tendon_loader/utils/utils.dart';
 
 part 'router.g.dart';
 
@@ -190,14 +191,14 @@ class ExerciseModeRoute extends GoRouteData with $ExerciseModeRoute {
       onPause: () async {
         handler.pause();
         // Stop progressor after 1 minute on inactivity
-        await Future.delayed(const Duration(minutes: 1), () {
+        await Future.delayed(const .new(minutes: 1), () {
           if (isPause) {
             handler.stop();
           }
         });
       },
       onResume: () {
-        if (handler.isRunning) {
+        if (handler.isSessionRunning) {
           handler.start();
         }
       },
@@ -303,10 +304,7 @@ class ExerciseDetailsRoute extends GoRouteData with $ExerciseDetailsRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) => Scaffold(
-    body: FutureWrapper(
-      future: _future,
-      builder: (snapshot) => ExerciseDetail(payload: snapshot),
-    ),
+    body: FutureWrapper(future: _future, builder: ExerciseDetail.new),
   );
 }
 
@@ -321,10 +319,7 @@ class ExerciseDataListRoute extends GoRouteData with $ExerciseDataListRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) => Scaffold(
-    body: FutureWrapper(
-      future: _future,
-      builder: (snapshot) => ExerciseDataList(items: snapshot),
-    ),
+    body: FutureWrapper(future: _future, builder: ExerciseDataList.new),
   );
 }
 
@@ -342,18 +337,19 @@ extension on ExerciseDataListRoute {
 }
 
 extension on ExerciseDetailsRoute {
-  Future<ExercisePayload> get _future async {
+  Future<ExerciseRecord> get _future async {
     final eSnapshot = await ExerciseService.instance.getExerciseBy(
       userId: userId,
       exerciseId: exerciseId,
     );
 
     if (eSnapshot.hasError) {
-      return (
-        targetLoad: 0.0,
-        chartData: const Iterable<ChartData>.empty(),
-        infoTable: const Iterable<(String, String)>.empty(),
+      final ExerciseRecord record = (
+        targetLoad: 0,
+        chartData: const .empty(),
+        infoTable: const .empty(),
       );
+      return record;
     }
 
     final exercise = eSnapshot.requireData;
@@ -363,19 +359,21 @@ extension on ExerciseDetailsRoute {
     );
 
     if (pSnapshot.hasError) {
-      return (
+      final ExerciseRecord record = (
         targetLoad: exercise.mvcValue ?? 0.0,
         chartData: exercise.data,
         infoTable: exercise.tableRows,
       );
+      return record;
     }
 
     final prescription = pSnapshot.requireData;
-    return (
+    final ExerciseRecord record = (
       targetLoad: prescription.targetLoad,
       chartData: exercise.data,
       infoTable: [...exercise.tableRows, ...prescription.tableRows],
     );
+    return record;
   }
 }
 

@@ -56,13 +56,13 @@ class Prescription {
 }
 
 extension Utils on Prescription {
-  List<(String, String)> get tableRows => [
-    ('Target load', '$targetLoad Kg'),
-    ('Sets #', '$sets'),
-    ('Reps #', '$reps'),
-    ('Hold time', '$holdTime Sec'),
-    ('Rest time', '$restTime Sec'),
-    ('Set rest time', '$setRest Sec'),
+  List<TableItem> get tableRows => [
+    (label: 'Target load', value: '$targetLoad Kg'),
+    (label: 'Sets #', value: '$sets'),
+    (label: 'Reps #', value: '$reps'),
+    (label: 'Hold time', value: '$holdTime Sec'),
+    (label: 'Rest time', value: '$restTime Sec'),
+    (label: 'Set rest time', value: '$setRest Sec'),
   ];
 
   Map<String, dynamic> get map => {
@@ -95,3 +95,5 @@ extension Utils on Prescription {
     targetLoad: targetLoad ?? this.targetLoad,
   );
 }
+
+typedef TableItem = ({String label, String value});

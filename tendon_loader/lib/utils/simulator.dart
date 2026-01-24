@@ -15,7 +15,7 @@ mixin Simulator {
     double fakeLoad = 0;
     double fakeTime = 0;
 
-    _timer ??= .periodic(const Duration(milliseconds: 50), (timer) {
+    _timer ??= .periodic(const .new(milliseconds: 50), (timer) {
       if (isPause) return;
       final data = ChartData(load: fakeLoad.abs(), time: fakeTime);
       // ignore: invalid_use_of_protected_member

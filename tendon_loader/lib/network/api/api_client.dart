@@ -5,7 +5,7 @@ import 'dart:io' show ContentType, HttpException, HttpHeaders;
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:server/utils/snapshot.dart';
-import 'package:tendon_loader/api/network_status.dart';
+import 'package:tendon_loader/network/api/network_status.dart';
 
 typedef R<T> = Snapshot<T>;
 typedef Fn<T> = T Function(Object? data)?;
@@ -67,7 +67,7 @@ extension ApiClientExtension on ApiClient {
 
 extension on ApiClient {
   Future<R<T>> _send<T>(
-    Future<http.Response> Function() request,
+    AsyncValueGetter<http.Response> request,
     Fn<T>? fromJson,
   ) async => _ifConnected(() async {
     final res = await request().timeout(ApiClient._timeout);
@@ -90,11 +90,11 @@ extension on ApiClient {
   });
 
   Future<R<T>> _ifConnected<T>(AsyncValueGetter<R<T>> request) async {
-    if (kDebugMode) await Future.delayed(const Duration(seconds: 1));
+    if (kDebugMode) await Future.delayed(const .new(seconds: 1));
     if (!NetworkStatus.isConnected) {
       return const .error('Check your connection!');
     }
-    var delay = const Duration(milliseconds: 500);
+    Duration delay = const .new(milliseconds: 500);
     for (var i = 0; i < 3; i++) {
       try {
         return await request();

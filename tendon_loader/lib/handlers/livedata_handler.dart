@@ -8,15 +8,15 @@ class LiveDataHandler extends GraphHandler {
 
   @override
   Future<void> start() async {
-    if (!isRunning) {
+    if (!isSessionRunning) {
       await super.start();
     }
   }
 
   @override
   Future<void> stop() async {
-    if (isRunning) {
-      isRunning = hasData = false;
+    if (isSessionRunning) {
+      isSessionRunning = hasData = false;
       await super.stop();
       _time = 0;
       GraphHandler.reset();
@@ -25,7 +25,7 @@ class LiveDataHandler extends GraphHandler {
 
   @override
   void update(ChartData data) {
-    if (isRunning) {
+    if (isSessionRunning) {
       _time = data.time;
     }
   }

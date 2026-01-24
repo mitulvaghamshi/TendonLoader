@@ -5,10 +5,10 @@ import 'package:server/models/prescription.dart';
 import 'package:server/models/settings.dart';
 import 'package:server/models/user.dart';
 import 'package:server/utils/snapshot.dart';
-import 'package:tendon_loader/api/api_client.dart';
-import 'package:tendon_loader/api/services/prescription_service.dart';
-import 'package:tendon_loader/api/services/settings_service.dart';
-import 'package:tendon_loader/api/services/user_service.dart';
+import 'package:tendon_loader/network/api/api_client.dart';
+import 'package:tendon_loader/network/services/prescription_service.dart';
+import 'package:tendon_loader/network/services/settings_service.dart';
+import 'package:tendon_loader/network/services/user_service.dart';
 
 class AppState extends ChangeNotifier {
   AppState()
@@ -25,8 +25,8 @@ class AppState extends ChangeNotifier {
   bool get isAuthenticated => authUser.token != null;
 
   Future<String> authenticate(User user) async {
-    final sUser = await UserService.instance.authenticate(user);
-    if (sUser.data case User user) {
+    final userSnapshot = await UserService.instance.authenticate(user);
+    if (userSnapshot.data case User user) {
       authUser = user;
       ApiClient.token = user.token;
     }

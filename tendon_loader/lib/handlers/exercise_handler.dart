@@ -29,11 +29,11 @@ class ExerciseHandler extends GraphHandler {
 
   @override
   Future<void> start() async {
-    if (isPause && isRunning) {
+    if (isPause && isSessionRunning) {
       isPause = false;
-    } else if (_isSetOver && isRunning) {
+    } else if (_isSetOver && isSessionRunning) {
       _isSetOver = false;
-    } else if (hasData && !isRunning) {
+    } else if (hasData && !isSessionRunning) {
       await exit();
     } else {
       await super.start();
@@ -42,8 +42,8 @@ class ExerciseHandler extends GraphHandler {
 
   @override
   Future<void> stop() async {
-    if (isRunning) {
-      isRunning = false;
+    if (isSessionRunning) {
+      isSessionRunning = false;
       await super.stop();
       await exit();
       _reset();
@@ -77,7 +77,7 @@ class ExerciseHandler extends GraphHandler {
   @override
   void update(ChartData data) {
     // If session is running and Set is not completed
-    if (isRunning && !_isSetOver) {
+    if (isSessionRunning && !_isSetOver) {
       // Does user touches target line?
       isHit = data.load > prescription.targetLoad;
       // Current time from (Progressor) device
@@ -156,7 +156,9 @@ class ExerciseHandler extends GraphHandler {
 
   @override
   void pause() {
-    if (isRunning) isPause = true;
+    if (isSessionRunning) {
+      isPause = true;
+    }
   }
 
   @override
@@ -181,7 +183,7 @@ extension on ExerciseHandler {
     await Future<void>.microtask(() async {
       final result = await onCountdown(
         'Set Over, Rest!!!',
-        Duration(seconds: prescription.setRest),
+        .new(seconds: prescription.setRest),
       );
       await (result ?? false ? start : stop)();
     });

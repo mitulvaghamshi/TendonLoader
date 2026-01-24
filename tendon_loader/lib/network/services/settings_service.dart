@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:server/models/settings.dart';
+import 'package:server/utils/local_cache.dart';
 import 'package:server/utils/snapshot.dart';
-import 'package:tendon_loader/api/api_client.dart';
-import 'package:tendon_loader/api/local_cache.dart';
+import 'package:tendon_loader/network/api/api_client.dart';
 
 @immutable
 class SettingsService {
   factory SettingsService({ApiClient? client, LocalCache? cache}) =>
       client != null || cache != null
-      ? SettingsService._(client ?? ApiClient(), cache ?? LocalCache.instance)
+      ? ._(client ?? .new(), cache ?? .instance)
       : instance;
 
   const SettingsService._(this._client, this._cache);
 
-  static final _instance = SettingsService._(ApiClient(), LocalCache.instance);
-  static SettingsService get instance => _instance;
+  static final instance = SettingsService._(.new(), .instance);
 
   final ApiClient _client;
   final LocalCache _cache;

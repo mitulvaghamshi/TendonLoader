@@ -86,15 +86,16 @@ extension Utils on Exercise {
   String get type => isMVC ? 'MVC Test' : 'Exercise';
   String get status => completed ? 'Complete' : 'Incomplete';
 
-  List<(String, String)> get tableRows => [
-    ('User ID', userId.toString()),
-    ('Created on', datetime),
-    ('Session type', type),
-    ('Data status', status),
-    ('Device', progressorId),
-    ('Pain score', '$painScore / 10'),
-    ('Pain tolerable?', tolerable),
-    if (isMVC) ('Max force', '${mvcValue!.toStringAsFixed(2)} kg'),
+  List<TableItem> get tableRows => [
+    (label: 'User ID', value: userId.toString()),
+    (label: 'Created on', value: datetime),
+    (label: 'Session type', value: type),
+    (label: 'Data status', value: status),
+    (label: 'Device', value: progressorId),
+    (label: 'Pain score', value: '$painScore / 10'),
+    (label: 'Pain tolerable?', value: tolerable),
+    if (isMVC)
+      (label: 'Max force', value: '${mvcValue!.toStringAsFixed(2)} kg'),
   ];
 
   Map<String, dynamic> get map => {
@@ -133,3 +134,5 @@ extension Utils on Exercise {
     data: data ?? this.data,
   );
 }
+
+typedef TableItem = ({String label, String value});

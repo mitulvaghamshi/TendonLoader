@@ -48,8 +48,8 @@ class User {
     }
     // Fallback for missing role in older JSON or other structures if necessary,
     // but the pattern matching above handles the structural check.
-    // If exact match is required for the pattern, we might need to be more flexible.
-    // Let's assume standard structure.
+    // If exact match is required for the pattern,
+    // we might need to be more flexible. Let's assume standard structure.
     if (json case {
       'id': int? id,
       'username': String username,

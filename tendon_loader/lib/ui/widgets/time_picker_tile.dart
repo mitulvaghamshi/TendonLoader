@@ -8,18 +8,18 @@ class TimePickerTile extends StatelessWidget {
     super.key,
     required this.time,
     required this.label,
-    required this.onPick,
+    required this.onSelect,
   });
 
   final int time;
   final String label;
-  final ValueChanged<int> onPick;
+  final ValueChanged<int> onSelect;
 
   @override
   Widget build(BuildContext context) {
-    late final duration = Duration(seconds: time);
-    late int minutes = duration.inMinutes;
-    late int seconds = duration.inSeconds % 60;
+    Duration duration = .new(seconds: time);
+    int minutes = duration.inMinutes;
+    int seconds = duration.inSeconds % 60;
     return ExpansionTile(
       tilePadding: Styles.tilePadding,
       childrenPadding: Styles.tilePadding,
@@ -56,13 +56,13 @@ class TimePickerTile extends StatelessWidget {
 
 extension on TimePickerTile {
   String _timeString(int minutes, int seconds) {
-    final duration = Duration(minutes: minutes, seconds: seconds);
+    Duration duration = .new(minutes: minutes, seconds: seconds);
     return '${duration.inMinutes} min : ${duration.inSeconds % 60} sec';
   }
 
   void _submit(int minutes, int seconds) {
-    final duration = Duration(minutes: minutes, seconds: seconds);
-    onPick(duration.inSeconds);
+    Duration duration = .new(minutes: minutes, seconds: seconds);
+    onSelect(duration.inSeconds);
   }
 }
 

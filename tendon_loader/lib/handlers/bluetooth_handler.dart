@@ -31,7 +31,7 @@ class Progressor {
   BluetoothDevice? get progressor => _device;
 
   Future<void> get _delayedStart async =>
-      Future<void>.delayed(const Duration(milliseconds: 800), startProgresssor);
+      Future<void>.delayed(const .new(milliseconds: 800), startProgresssor);
 
   Future<bool> call({required BluetoothDevice device}) => init(device: device);
 
@@ -81,7 +81,7 @@ class Progressor {
   }
 
   Future<void> startScan() async =>
-      FlutterBlue.instance.startScan(timeout: const Duration(seconds: 5));
+      FlutterBlue.instance.startScan(timeout: const .new(seconds: 5));
 
   Future<void> stopProgressor() async {
     if (!_isRunning) return;
@@ -94,9 +94,9 @@ class Progressor {
     if (!_isRunning) return;
     _isRunning = false;
     await _controlChar!.write(<int>[Cmd.tareScale]);
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const .new(milliseconds: 500));
     await _controlChar!.write(<int>[Cmd.startWeightMeas]);
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const .new(milliseconds: 500));
     await _controlChar!.write(<int>[Cmd.stopWeightMeas]);
   }
 }

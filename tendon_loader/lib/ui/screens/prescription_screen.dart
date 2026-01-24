@@ -21,9 +21,9 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
   late final state = AppScope.of(context);
   late final pre = widget.prescription;
 
-  late final _loadCtrl = TextEditingController()..text = '${pre.targetLoad}';
-  late final _setsCtrl = TextEditingController()..text = '${pre.sets}';
-  late final _repsCtrl = TextEditingController()..text = '${pre.reps}';
+  late final _loadCtrl = TextEditingController(text: '${pre.targetLoad}');
+  late final _setsCtrl = TextEditingController(text: '${pre.sets}');
+  late final _repsCtrl = TextEditingController(text: '${pre.reps}');
 
   late int _holdTime = pre.holdTime;
   late int _restTime = pre.restTime;
@@ -75,22 +75,22 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
             TimePickerTile(
               time: _holdTime,
               label: 'Rep hold time',
-              onPick: (time) => setState(() => _holdTime = time),
+              onSelect: (time) => setState(() => _holdTime = time),
             ),
             TimePickerTile(
               time: _restTime,
               label: 'Rep rest time',
-              onPick: (time) => setState(() => _restTime = time),
+              onSelect: (time) => setState(() => _restTime = time),
             ),
             TimePickerTile(
               time: _setRestTime,
               label: 'Set rest time (default: 90 sec)',
-              onPick: (time) => setState(() => _setRestTime = time),
+              onSelect: (time) => setState(() => _setRestTime = time),
             ),
             TimePickerTile(
               time: _mvcDuration,
               label: 'MVC test duration (optional)',
-              onPick: (time) => setState(() => _mvcDuration = time),
+              onSelect: (time) => setState(() => _mvcDuration = time),
             ),
             const Divider(),
             ButtonFactory.tile(
