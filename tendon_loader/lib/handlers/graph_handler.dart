@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:api_server/api_server.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:server/models/chartdata.dart';
-import 'package:server/models/exercise.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/utils/constants.dart';

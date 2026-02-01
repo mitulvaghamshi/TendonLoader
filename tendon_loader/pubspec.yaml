@@ -4,9 +4,11 @@ publish_to: 'none'
 version: 1.0.0+18
 
 environment:
-  sdk: ^3.10.7
+  sdk: ^3.10.8
 
 dependencies:
+  api_server:
+    path: ../api_server
   app_settings: ^7.0.0
   archive: ^4.0.5
   connectivity_plus: ^7.0.0
@@ -20,8 +22,6 @@ dependencies:
   intl: ^0.20.2
   location: ^8.0.0
   rxdart: ^0.26.0
-  server:
-    path: ../server
   syncfusion_flutter_charts: ^32.1.21
   syncfusion_flutter_xlsio: ^32.1.21
 

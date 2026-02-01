@@ -39,7 +39,7 @@ linter:
     - parameter_assignments
     - prefer_asserts_in_initializer_lists
     - prefer_asserts_with_message
-    # - prefer_const_declarations
+    - prefer_const_declarations
     - sort_constructors_first
     - sort_pub_dependencies
     - sort_unnamed_constructors_first

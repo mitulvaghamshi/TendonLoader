@@ -1,6 +1,6 @@
+import 'package:api_server/api_server.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:server/models/settings.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';
 import 'package:tendon_loader/ui/widgets/button_factory.dart';

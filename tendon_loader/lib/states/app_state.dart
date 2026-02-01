@@ -1,10 +1,7 @@
 import 'dart:async';
 
+import 'package:api_server/api_server.dart';
 import 'package:flutter/foundation.dart';
-import 'package:server/models/prescription.dart';
-import 'package:server/models/settings.dart';
-import 'package:server/models/user.dart';
-import 'package:server/utils/snapshot.dart';
 import 'package:tendon_loader/network/api/api_client.dart';
 import 'package:tendon_loader/network/services/prescription_service.dart';
 import 'package:tendon_loader/network/services/settings_service.dart';

@@ -1,7 +1,7 @@
+import 'package:api_server/api_server.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:go_router/go_router.dart';
-import 'package:server/models/chartdata.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
 import 'package:tendon_loader/ui/widgets/button_factory.dart';

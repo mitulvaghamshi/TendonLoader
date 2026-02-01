@@ -97,5 +97,5 @@ final Map<String, List<String>> files = <String, List<String>>{
     "mitul@gmail.com-2023-05-03 00:30:40.834501.json",
     "mitul@gmail.com-2023-05-03 00:30:42.655610.json",
     "mitul@gmail.com-2023-05-03 00:30:44.298423.json",
-  ]
+  ],
 };

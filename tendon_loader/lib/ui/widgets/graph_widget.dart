@@ -1,5 +1,5 @@
+import 'package:api_server/api_server.dart';
 import 'package:flutter/material.dart';
-import 'package:server/models/chartdata.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tendon_loader/handlers/exercise_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';

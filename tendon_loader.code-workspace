@@ -1,34 +1,29 @@
 {
   "folders": [
     {
-      "path": "tendon_loader"
+      "path": "tendon_loader",
     },
     {
-      "path": "server"
+      "path": "api_server",
     },
   ],
-  "settings": {
-    "editor.foldingImportsByDefault": true
-  },
   "tasks": {
     "version": "2.0.0",
     "tasks": [
       {
         "type": "shell",
-        "label": "Start Server",
+        "label": "Server:start",
         "command": "dart",
-        "options": {
-          "cwd": "${workspaceFolder:server}",
-        },
         "args": [
-          "-DPORT=3001",
-          "-DUSER_SQL_PATH=db/user.sql",
-          "-DSETTINGS_SQL_PATH=db/settings.sql",
-          "-DEXERCISE_SQL_PATH=db/exercise.sql",
-          "-DPRESCRIPTION_SQL_PATH=db/prescription.sql",
-          "-DDB_PATH=db/tendonloader.db",
           "bin/server.dart",
         ],
+        "options": {
+          "env": {
+            "PORT": "${input:port}",
+            "DB_PATH": "${input:dbPath}",
+          },
+          "cwd": "${workspaceFolder:api_server}",
+        },
       },
       {
         "type": "shell",
@@ -37,121 +32,39 @@
       },
       {
         "type": "shell",
-        "group": "none",
-        "label": "Project: run --web --no-sec",
-        "command": "flutter run -d chrome --web-browser-flag --disable-web-security",
-      },
-      {
-        "type": "shell",
-        "group": "none",
-        "label": "Project: clean",
-        "command": "flutter clean",
-      },
-      {
-        "type": "shell",
-        "group": "none",
-        "label": "Project: pub get",
-        "command": "flutter pub get",
-      },
-      {
-        "type": "shell",
-        "group": "none",
-        "label": "Project: ios pods",
+        "label": "Install: pods:iOS",
         "command": "pod install",
         "options": {
           "cwd": "${workspaceFolder:tendon_loader}/ios",
         },
-        "dependsOn": [
-          "Project: pub get",
-        ],
       },
       {
         "type": "shell",
-        "group": "none",
-        "label": "Project: macos pods",
+        "label": "Install: pods:macOS",
         "command": "pod install",
         "options": {
           "cwd": "${workspaceFolder:tendon_loader}/macos",
         },
-        "dependsOn": [
-          "Project: pub get",
-        ]
-      },
-      {
-        "type": "shell",
-        "group": "none",
-        "label": "project: rebuild",
-        "dependsOrder": "sequence",
-        "dependsOn": [
-          "Project: clean",
-          "Project: pub get",
-          "Project: ios pods",
-          "Project: macos pods",
-        ],
       },
       {
         "type": "shell",
         "group": "build",
-        "label": "Release: web",
-        "command": "flutter build web",
-      },
-      {
-        "type": "shell",
-        "group": "build",
-        "label": "Release: apk",
-        "command": "flutter",
-        "args": [
-          "build",
-          "apk",
-          "--obfuscate",
-          "--no-track-widget-creation",
-          "--split-debug-info=build/app/outputs/bundle/release/map/",
-        ],
-      },
-      {
-        "type": "shell",
-        "group": "build",
-        "command": "flutter",
-        "label": "Release: appbundle",
-        "args": [
-          "build",
-          "appbundle",
-          "--obfuscate",
-          "--no-track-widget-creation",
-          "--split-debug-info=build/app/outputs/bundle/release/map/",
-        ],
-      },
-      {
-        // Run build runner
-        "type": "shell",
-        "group": "build",
-        "label": "Build Runner: build",
-        "command": "dart run build_runner build"
-      },
-      {
-        // Run build runner (overwrite)
-        "type": "shell",
-        "group": "build",
-        "label": "Build Runner: Build --delete",
-        "command": "dart run build_runner build --delete-conflicting-outputs"
-      },
-      {
-        // Firebase emulators (with backup)
-        "type": "shell",
-        "label": "Firebase emulators: start",
-        "command": "firebase emulators:start",
-        "args": [
-          "--import=${input:backupPath}",
-          "--export-on-exit=${input:backupPath}",
-        ],
+        "label": "Run: build_runner:build",
+        "command": "dart run build_runner build --delete-conflicting-outputs",
       },
     ],
     "inputs": [
       {
-        "id": "backupPath",
+        "id": "port",
         "type": "promptString",
-        "default": "${workspaceFolder}/res/data/emu",
-        "description": "Enter firebase emulator backup location?",
+        "default": "3001",
+        "description": "Enter port number",
+      },
+      {
+        "id": "dbPath",
+        "type": "promptString",
+        "default": "${workspaceFolder:api_server}/db/db.sqlite",
+        "description": "Select database file",
       },
     ],
   },

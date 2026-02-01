@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:api_server/api_server.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:server/models/user.dart';
 import 'package:tendon_loader/network/api/network_status.dart';
 import 'package:tendon_loader/states/app_scope.dart';
 import 'package:tendon_loader/ui/widgets/app_logo.dart';

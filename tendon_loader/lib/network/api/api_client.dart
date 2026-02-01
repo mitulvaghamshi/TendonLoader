@@ -2,9 +2,9 @@ import 'dart:async' show Future, TimeoutException;
 import 'dart:convert' show jsonDecode, jsonEncode;
 import 'dart:io' show ContentType, HttpException, HttpHeaders;
 
+import 'package:api_server/api_server.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:server/utils/snapshot.dart';
 import 'package:tendon_loader/network/api/network_status.dart';
 
 typedef R<T> = Snapshot<T>;

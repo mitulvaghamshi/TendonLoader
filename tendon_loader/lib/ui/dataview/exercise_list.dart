@@ -1,5 +1,5 @@
+import 'package:api_server/api_server.dart';
 import 'package:flutter/material.dart';
-import 'package:server/models/exercise.dart';
 import 'package:tendon_loader/router/router.dart';
 import 'package:tendon_loader/ui/widgets/button_factory.dart';
 import 'package:tendon_loader/ui/widgets/search_list.dart';

@@ -1,7 +1,5 @@
+import 'package:api_server/api_server.dart';
 import 'package:flutter/foundation.dart';
-import 'package:server/models/user.dart';
-import 'package:server/utils/local_cache.dart';
-import 'package:server/utils/snapshot.dart';
 import 'package:tendon_loader/network/api/api_client.dart';
 
 @immutable

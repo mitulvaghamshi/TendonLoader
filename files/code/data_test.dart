@@ -18,15 +18,21 @@ void main() {
       print('Payload size: ${data[1]}');
       for (int x = 2; x < data.length; x += 8) {
         // Weight
-        final Uint8List value =
-            Uint8List.fromList(data.getRange(x, x + 4).toList());
-        final double weight =
-            value.buffer.asByteData().getFloat32(0, Endian.little);
+        final Uint8List value = Uint8List.fromList(
+          data.getRange(x, x + 4).toList(),
+        );
+        final double weight = value.buffer.asByteData().getFloat32(
+          0,
+          Endian.little,
+        );
         // Time
-        final Uint8List timestamp =
-            Uint8List.fromList(data.getRange(x + 4, x + 4 + 4).toList());
-        final int uSeconds =
-            timestamp.buffer.asByteData().getUint32(0, Endian.little);
+        final Uint8List timestamp = Uint8List.fromList(
+          data.getRange(x + 4, x + 4 + 4).toList(),
+        );
+        final int uSeconds = timestamp.buffer.asByteData().getUint32(
+          0,
+          Endian.little,
+        );
         print('$weight Kg, ${uSeconds / 1000000.0} Sec.');
       }
     } else if (data[0] == RES_LOW_PWR_WARNING) {
@@ -35,14 +41,18 @@ void main() {
       if (command == CMD_GET_APP_VERSION) {
         print('FW v${String.fromCharCodes(data.getRange(2, data.length))}');
       } else if (command == CMD_GET_BATTERY_VOLTAGE) {
-        final Uint8List value =
-            Uint8List.fromList(data.getRange(2, data.length).toList());
-        final int voltage =
-            value.buffer.asByteData().getUint32(0, Endian.little);
+        final Uint8List value = Uint8List.fromList(
+          data.getRange(2, data.length).toList(),
+        );
+        final int voltage = value.buffer.asByteData().getUint32(
+          0,
+          Endian.little,
+        );
         print('Battery voltage: {$voltage} [mV]');
       } else if (command == CMD_GET_ERROR_INFORMATION) {
         print(
-            'Crashlog: ${String.fromCharCodes(data.getRange(2, data.length))}');
+          'Crashlog: ${String.fromCharCodes(data.getRange(2, data.length))}',
+        );
       }
     }
   }
@@ -177,7 +187,7 @@ List<List<int>> dataList = <List<int>>[
     139,
     72,
     3,
-    0
+    0,
   ],
   <int>[
     1,
@@ -301,7 +311,7 @@ List<List<int>> dataList = <List<int>>[
     85,
     21,
     6,
-    0
+    0,
   ],
   <int>[
     1,
@@ -425,7 +435,7 @@ List<List<int>> dataList = <List<int>>[
     37,
     226,
     8,
-    0
+    0,
   ],
   <int>[
     1,
@@ -549,7 +559,7 @@ List<List<int>> dataList = <List<int>>[
     232,
     174,
     11,
-    0
+    0,
   ],
   <int>[
     1,
@@ -673,7 +683,7 @@ List<List<int>> dataList = <List<int>>[
     180,
     123,
     14,
-    0
+    0,
   ],
   <int>[
     1,
@@ -797,7 +807,7 @@ List<List<int>> dataList = <List<int>>[
     138,
     72,
     17,
-    0
+    0,
   ],
   <int>[
     1,
@@ -921,7 +931,7 @@ List<List<int>> dataList = <List<int>>[
     102,
     21,
     20,
-    0
+    0,
   ],
   <int>[
     1,
@@ -1045,7 +1055,7 @@ List<List<int>> dataList = <List<int>>[
     65,
     226,
     22,
-    0
+    0,
   ],
   <int>[
     1,
@@ -1169,7 +1179,7 @@ List<List<int>> dataList = <List<int>>[
     54,
     175,
     25,
-    0
+    0,
   ],
   <int>[
     1,
@@ -1293,7 +1303,7 @@ List<List<int>> dataList = <List<int>>[
     3,
     169,
     28,
-    0
+    0,
   ],
   <int>[
     1,
@@ -1417,7 +1427,7 @@ List<List<int>> dataList = <List<int>>[
     252,
     117,
     31,
-    0
+    0,
   ],
   <int>[
     1,
@@ -1541,7 +1551,7 @@ List<List<int>> dataList = <List<int>>[
     249,
     66,
     34,
-    0
+    0,
   ],
   <int>[
     1,
@@ -1665,7 +1675,7 @@ List<List<int>> dataList = <List<int>>[
     248,
     15,
     37,
-    0
+    0,
   ],
   <int>[
     1,
@@ -1789,7 +1799,7 @@ List<List<int>> dataList = <List<int>>[
     252,
     220,
     39,
-    0
+    0,
   ],
   <int>[
     1,
@@ -1913,7 +1923,7 @@ List<List<int>> dataList = <List<int>>[
     255,
     169,
     42,
-    0
+    0,
   ],
   <int>[
     1,
@@ -2037,7 +2047,7 @@ List<List<int>> dataList = <List<int>>[
     7,
     119,
     45,
-    0
+    0,
   ],
   <int>[
     1,
@@ -2161,7 +2171,7 @@ List<List<int>> dataList = <List<int>>[
     226,
     112,
     48,
-    0
+    0,
   ],
   <int>[
     1,
@@ -2285,7 +2295,7 @@ List<List<int>> dataList = <List<int>>[
     227,
     61,
     51,
-    0
+    0,
   ],
   <int>[
     1,
@@ -2409,7 +2419,7 @@ List<List<int>> dataList = <List<int>>[
     236,
     10,
     54,
-    0
+    0,
   ],
   <int>[
     1,
@@ -2533,7 +2543,7 @@ List<List<int>> dataList = <List<int>>[
     251,
     215,
     56,
-    0
+    0,
   ],
   <int>[
     1,
@@ -2657,7 +2667,7 @@ List<List<int>> dataList = <List<int>>[
     6,
     165,
     59,
-    0
+    0,
   ],
   <int>[
     1,
@@ -2781,7 +2791,7 @@ List<List<int>> dataList = <List<int>>[
     29,
     114,
     62,
-    0
+    0,
   ],
   <int>[
     1,
@@ -2905,7 +2915,7 @@ List<List<int>> dataList = <List<int>>[
     40,
     63,
     65,
-    0
+    0,
   ],
   <int>[
     1,
@@ -3029,7 +3039,7 @@ List<List<int>> dataList = <List<int>>[
     47,
     12,
     68,
-    0
+    0,
   ],
   <int>[
     1,
@@ -3153,7 +3163,7 @@ List<List<int>> dataList = <List<int>>[
     55,
     217,
     70,
-    0
+    0,
   ],
   <int>[
     1,
@@ -3277,7 +3287,7 @@ List<List<int>> dataList = <List<int>>[
     58,
     166,
     73,
-    0
+    0,
   ],
   <int>[
     1,
@@ -3401,7 +3411,7 @@ List<List<int>> dataList = <List<int>>[
     63,
     115,
     76,
-    0
+    0,
   ],
   <int>[
     1,
@@ -3525,7 +3535,7 @@ List<List<int>> dataList = <List<int>>[
     71,
     64,
     79,
-    0
+    0,
   ],
   <int>[
     1,
@@ -3649,7 +3659,7 @@ List<List<int>> dataList = <List<int>>[
     74,
     13,
     82,
-    0
+    0,
   ],
   <int>[
     1,
@@ -3773,7 +3783,7 @@ List<List<int>> dataList = <List<int>>[
     87,
     218,
     84,
-    0
+    0,
   ],
   <int>[
     1,
@@ -3897,7 +3907,7 @@ List<List<int>> dataList = <List<int>>[
     107,
     167,
     87,
-    0
+    0,
   ],
   <int>[
     1,
@@ -4021,7 +4031,7 @@ List<List<int>> dataList = <List<int>>[
     120,
     116,
     90,
-    0
+    0,
   ],
   <int>[
     1,
@@ -4145,7 +4155,7 @@ List<List<int>> dataList = <List<int>>[
     136,
     65,
     93,
-    0
+    0,
   ],
   <int>[
     1,
@@ -4269,7 +4279,7 @@ List<List<int>> dataList = <List<int>>[
     150,
     14,
     96,
-    0
+    0,
   ],
   <int>[
     1,
@@ -4393,7 +4403,7 @@ List<List<int>> dataList = <List<int>>[
     169,
     219,
     98,
-    0
+    0,
   ],
   <int>[
     1,
@@ -4517,7 +4527,7 @@ List<List<int>> dataList = <List<int>>[
     192,
     168,
     101,
-    0
+    0,
   ],
   <int>[
     1,
@@ -4641,7 +4651,7 @@ List<List<int>> dataList = <List<int>>[
     168,
     162,
     104,
-    0
+    0,
   ],
   <int>[
     1,
@@ -4765,7 +4775,7 @@ List<List<int>> dataList = <List<int>>[
     189,
     111,
     107,
-    0
+    0,
   ],
   <int>[
     1,
@@ -4889,7 +4899,7 @@ List<List<int>> dataList = <List<int>>[
     201,
     60,
     110,
-    0
+    0,
   ],
   <int>[
     1,
@@ -5013,7 +5023,7 @@ List<List<int>> dataList = <List<int>>[
     216,
     9,
     113,
-    0
+    0,
   ],
   <int>[
     1,
@@ -5137,7 +5147,7 @@ List<List<int>> dataList = <List<int>>[
     185,
     3,
     116,
-    0
+    0,
   ],
   <int>[
     1,
@@ -5261,7 +5271,7 @@ List<List<int>> dataList = <List<int>>[
     210,
     208,
     118,
-    0
+    0,
   ],
   <int>[
     1,
@@ -5385,7 +5395,7 @@ List<List<int>> dataList = <List<int>>[
     237,
     157,
     121,
-    0
+    0,
   ],
   <int>[
     1,
@@ -5509,7 +5519,7 @@ List<List<int>> dataList = <List<int>>[
     10,
     107,
     124,
-    0
+    0,
   ],
   <int>[
     1,
@@ -5585,7 +5595,7 @@ List<List<int>> dataList = <List<int>>[
     57,
     43,
     126,
-    0
+    0,
   ],
   <int>[
     1,
@@ -5661,6 +5671,6 @@ List<List<int>> dataList = <List<int>>[
     57,
     43,
     126,
-    0
+    0,
   ],
 ];

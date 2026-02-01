@@ -1,12 +1,8 @@
 import 'dart:async' show Future, FutureOr;
 
+import 'package:api_server/api_server.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:server/models/chartdata.dart';
-import 'package:server/models/exercise.dart';
-import 'package:server/models/prescription.dart';
-import 'package:server/models/user.dart';
-import 'package:server/utils/snapshot.dart';
 import 'package:tendon_loader/handlers/bluetooth_handler.dart';
 import 'package:tendon_loader/handlers/exercise_handler.dart';
 import 'package:tendon_loader/handlers/graph_handler.dart';
@@ -344,10 +340,10 @@ extension on ExerciseDetailsRoute {
     );
 
     if (eSnapshot.hasError) {
-      final ExerciseRecord record = (
+      const ExerciseRecord record = (
         targetLoad: 0,
-        chartData: const .empty(),
-        infoTable: const .empty(),
+        chartData: .empty(),
+        infoTable: .empty(),
       );
       return record;
     }
