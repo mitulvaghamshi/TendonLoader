@@ -1,5 +1,5 @@
 import 'package:api_server/api_server.dart';
-import 'package:api_server/src/services/user_service.dart';
+import 'package:api_server/src/service/user_service.dart';
 import 'package:shelf/shelf.dart';
 
 class AuthMiddleware {

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tendon_loader/network/api/api_client.dart';
+import 'package:tendon_loader/api/api_client.dart';
 import 'package:tendon_loader/router/router.dart';
-import 'package:tendon_loader/states/app_scope.dart';
-import 'package:tendon_loader/states/app_state.dart';
+import 'package:tendon_loader/state/app_scope.dart';
+import 'package:tendon_loader/state/app_state.dart';
 
 void main() {
   if (ApiClient.host.isEmpty) {
-    throw AssertionError(
-      'Fix: Create `.env` file and provide host value using '
-      '`API_HOST=<host:port>` environment variable and run your app as: '
-      '`flutter run -d macos --dart-define-from-file=.env`',
-    );
+    throw AssertionError('''
+      Fix:
+      Create `.env` file and provide host value using `API_HOST=<host:port>`
+      environment variable and run your app as:
+        `flutter run -d macos --dart-define-from-file=.env`
+      ''');
   }
+
   runApp(MyApp(state: AppState()));
 }
 
@@ -28,8 +30,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => AnimatedBuilder(
     animation: state,
     builder: (_, child) => MaterialApp.router(
-      title: 'Tendon Loader',
       routerConfig: _router,
+      title: TendonLoaderRoute.name,
       theme: _lightTheme,
       darkTheme: _darkTheme,
       themeMode: state.settings.darkMode ? .dark : .light,

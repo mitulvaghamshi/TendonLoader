@@ -1,0 +1,111 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:tendon_loader/utils/constants.dart' show Styles;
+
+@immutable
+class InputFactory extends StatelessWidget {
+  const InputFactory({
+    super.key,
+    this.padding,
+    this.keyboardType,
+    this.validateMode,
+    this.formatters,
+    this.validator,
+    this.onComplete,
+    required this.label,
+    required this.controller,
+  });
+
+  const factory InputFactory.search({
+    Key? key,
+    required String label,
+    required VoidCallback? onComplete,
+    required TextEditingController controller,
+  }) = _SearchField;
+
+  const factory InputFactory.form({
+    Key? key,
+    String? format,
+    EdgeInsetsGeometry? padding,
+    TextInputType? keyboardType,
+    required String label,
+    required TextEditingController controller,
+  }) = _FormField;
+
+  final EdgeInsetsGeometry? padding;
+  final TextInputType? keyboardType;
+  final AutovalidateMode? validateMode;
+  final List<TextInputFormatter>? formatters;
+  final String? Function(String?)? validator;
+  final VoidCallback? onComplete;
+  final String label;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: padding ?? .zero,
+    child: TextFormField(
+      style: Styles.bold18,
+      validator: validator,
+      controller: controller,
+      keyboardType: keyboardType,
+      inputFormatters: formatters,
+      autovalidateMode: validateMode,
+      onEditingComplete: onComplete,
+      decoration: InputDecoration(
+        labelText: label,
+        suffix: IconButton(
+          onPressed: controller.clear,
+          icon: const Icon(Icons.clear),
+        ),
+      ),
+    ),
+  );
+}
+
+@immutable
+class _SearchField extends InputFactory {
+  const _SearchField({
+    super.key,
+    required super.label,
+    required super.controller,
+    required super.onComplete,
+  });
+
+  @override
+  Widget build(BuildContext context) => InputFactory(
+    label: label,
+    controller: controller,
+    onComplete: onComplete,
+    padding: const .symmetric(horizontal: 16),
+  );
+}
+
+@immutable
+class _FormField extends InputFactory {
+  const _FormField({
+    super.key,
+    super.padding,
+    super.keyboardType,
+    this.format,
+    required super.label,
+    required super.controller,
+  });
+
+  final String? format;
+
+  @override
+  Widget build(BuildContext context) => InputFactory(
+    key: key,
+    label: label,
+    padding: padding,
+    controller: controller,
+    validateMode: .onUserInteraction,
+    keyboardType: keyboardType ?? .number,
+    validator: (value) =>
+        value == null || value.isEmpty ? '$label is required' : null,
+    formatters: [
+      if (format != null) FilteringTextInputFormatter.allow(RegExp(format!)),
+    ],
+  );
+}

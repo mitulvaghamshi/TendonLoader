@@ -1,4 +1,4 @@
-import 'package:api_server/src/services/settings_service.dart';
+import 'package:api_server/src/service/settings_service.dart';
 
 mixin TableSettings on SettingsService {
   static const table = 'Settings';
@@ -77,8 +77,7 @@ INSERT INTO "$table" (
     "$graphScale",
     "$prescriptionId",
     "$userId"
-)
-VALUES (?, ?, ?, ?, ?, ?);
+) VALUES (?, ?, ?, ?, ?, ?);
 ''';
 
   static const sqlUpdate =
@@ -95,7 +94,8 @@ WHERE  "$id"                   = ?;
 
   static const sqlDelete =
       '''
-DELETE FROM "$table"
+DELETE
+FROM  "$table"
 WHERE "$id" = ?;
 ''';
 }

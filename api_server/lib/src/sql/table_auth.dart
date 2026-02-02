@@ -30,7 +30,8 @@ INSERT INTO "$table" (
 
   static const sqlDelete =
       '''
-DELETE FROM "$table"
+DELETE
+FROM  "$table"
 WHERE "$token" = ?;
 ''';
 

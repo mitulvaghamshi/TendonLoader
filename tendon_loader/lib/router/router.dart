@@ -3,32 +3,33 @@ import 'dart:async' show Future, FutureOr;
 import 'package:api_server/api_server.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tendon_loader/handlers/bluetooth_handler.dart';
-import 'package:tendon_loader/handlers/exercise_handler.dart';
-import 'package:tendon_loader/handlers/graph_handler.dart';
-import 'package:tendon_loader/handlers/livedata_handler.dart';
-import 'package:tendon_loader/handlers/mvc_handler.dart';
-import 'package:tendon_loader/network/api/network_status.dart';
-import 'package:tendon_loader/network/services/exercise_service.dart';
-import 'package:tendon_loader/network/services/prescription_service.dart';
-import 'package:tendon_loader/network/services/settings_service.dart';
-import 'package:tendon_loader/network/services/user_service.dart';
-import 'package:tendon_loader/states/app_scope.dart';
-import 'package:tendon_loader/ui/dataview/exercise_data_list.dart';
-import 'package:tendon_loader/ui/dataview/exercise_detail.dart';
-import 'package:tendon_loader/ui/dataview/exercise_list.dart';
-import 'package:tendon_loader/ui/dataview/user_list.dart';
-import 'package:tendon_loader/ui/screens/home_screen.dart';
-import 'package:tendon_loader/ui/screens/prescription_screen.dart';
-import 'package:tendon_loader/ui/screens/prompt_screen.dart';
-import 'package:tendon_loader/ui/screens/settings_screen.dart';
-import 'package:tendon_loader/ui/screens/signin_screen.dart';
-import 'package:tendon_loader/ui/widgets/app_frame.dart';
-import 'package:tendon_loader/ui/widgets/button_factory.dart';
-import 'package:tendon_loader/ui/widgets/countdown_widget.dart';
-import 'package:tendon_loader/ui/widgets/future_wrapper.dart';
-import 'package:tendon_loader/ui/widgets/graph_widget.dart';
-import 'package:tendon_loader/ui/widgets/life_cycle_aware.dart';
+import 'package:tendon_loader/api/network_status.dart';
+import 'package:tendon_loader/handler/bluetooth_handler.dart';
+import 'package:tendon_loader/handler/exercise_handler.dart';
+import 'package:tendon_loader/handler/graph_handler.dart';
+import 'package:tendon_loader/handler/livedata_handler.dart';
+import 'package:tendon_loader/handler/mvc_handler.dart';
+import 'package:tendon_loader/pages/dataview/exercise_data_list.dart';
+import 'package:tendon_loader/pages/dataview/exercise_detail.dart';
+import 'package:tendon_loader/pages/dataview/exercise_list.dart';
+import 'package:tendon_loader/pages/dataview/user_list.dart';
+import 'package:tendon_loader/pages/screens/home_screen.dart';
+import 'package:tendon_loader/pages/screens/prescription_screen.dart';
+import 'package:tendon_loader/pages/screens/prompt_screen.dart';
+import 'package:tendon_loader/pages/screens/settings_screen.dart';
+import 'package:tendon_loader/pages/screens/signin_screen.dart';
+import 'package:tendon_loader/pages/widgets/app_frame.dart';
+import 'package:tendon_loader/pages/widgets/button_factory.dart';
+import 'package:tendon_loader/pages/widgets/countdown_widget.dart';
+import 'package:tendon_loader/pages/widgets/future_wrapper.dart';
+import 'package:tendon_loader/pages/widgets/graph_widget.dart';
+import 'package:tendon_loader/pages/widgets/life_cycle_aware.dart';
+import 'package:tendon_loader/service/exercise_service.dart';
+import 'package:tendon_loader/service/prescription_service.dart';
+import 'package:tendon_loader/service/settings_service.dart';
+import 'package:tendon_loader/service/user_service.dart';
+import 'package:tendon_loader/state/app_scope.dart';
+import 'package:tendon_loader/state/app_state.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/utils.dart';
 
@@ -53,12 +54,14 @@ part 'router.g.dart';
 class TendonLoaderRoute extends GoRouteData with $TendonLoaderRoute {
   const TendonLoaderRoute();
 
+  static const name = 'Tendon Loader';
   static const path = '/';
 
   @override
   FutureOr<bool> onExit(BuildContext context, GoRouterState state) async {
     NetworkStatus.instance.dispose();
     Progressor.instance.disconnect();
+
     return super.onExit(context, state);
   }
 
@@ -81,7 +84,7 @@ class SettingScreenRoute extends GoRouteData with $SettingScreenRoute {
 
   @override
   FutureOr<bool> onExit(BuildContext context, GoRouterState state) async {
-    final appState = AppScope.of(context);
+    final appState = context.read<AppState>();
     if (appState.modified) {
       appState.modified = false;
       SettingsService.instance.updateSettings(appState.settings);
@@ -112,7 +115,7 @@ class PrescriptionRoute extends GoRouteData with $PrescriptionRoute {
       padding: const .all(16),
       child: AppFrame(
         child: PrescriptionScreen(
-          prescription: AppScope.of(context).prescription,
+          prescription: context.read<AppState>().prescription,
         ),
       ),
     ),
@@ -151,7 +154,7 @@ class MVCTestingRoute extends GoRouteData with $MVCTestingRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     final handler = MVCHandler(
-      mvcDuration: AppScope.of(context).prescription.mvcDuration,
+      mvcDuration: context.read<AppState>().prescription.mvcDuration,
       onCountdown: context._countdown,
     );
     return GraphWidget(
@@ -180,7 +183,7 @@ class ExerciseModeRoute extends GoRouteData with $ExerciseModeRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     final handler = ExerciseHandler(
-      prescription: AppScope.of(context).prescription,
+      prescription: context.read<AppState>().prescription,
       onCountdown: context._countdown,
     );
     return LifeCycleAware(

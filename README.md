@@ -167,28 +167,33 @@ dependencies {
 }
 ```
 
-[Bluetooth Connection](files/Connection.pdf)
+[Bluetooth Connection](resources/Connection.pdf)
 
-## Screenshots (2021-06-25)
+## Screenshots
 
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-13-30-438_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-15-14-551_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-15-27-760_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-15-39-736_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-15-49-058_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-17-06-520_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-17-43-191_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-18-06-269_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-18-13-910_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-18-25-853_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-18-51-639_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-19-02-872_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-19-32-174_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-19-56-481_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-20-09-295_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-20-52-519_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-21-12-197_ca.ubc.tendon_loader.webp)
-![](files/imgs/v0.0.6/Screenshot_2021-06-25-23-21-21-526_ca.ubc.tendon_loader.webp)
+<details>
+<summary>From (2021-06-25)</summary>
+
+![](resources/release/imgs/Screenshot_2021-06-25-23-13-30-438_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-15-14-551_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-15-27-760_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-15-39-736_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-15-49-058_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-17-06-520_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-17-43-191_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-18-06-269_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-18-13-910_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-18-25-853_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-18-51-639_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-19-02-872_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-19-32-174_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-19-56-481_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-20-09-295_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-20-52-519_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-21-12-197_ca.ubc.tendon_loader.webp)
+![](resources/release/imgs/Screenshot_2021-06-25-23-21-21-526_ca.ubc.tendon_loader.webp)
+
+</details>
 
 [license-badge]: https://img.shields.io/github/license/mitulvaghamshi/tendon_loader?logo=%20&style=for-the-badge
 [license-link]: https://github.com/mitulvaghamshi/tendon_loader/blob/main/LICENSE

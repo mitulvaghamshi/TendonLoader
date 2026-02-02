@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:api_server/src/controllers/exercise_controller.dart';
-import 'package:api_server/src/controllers/prescription_controller.dart';
-import 'package:api_server/src/controllers/settings_controller.dart';
-import 'package:api_server/src/controllers/user_controller.dart';
+import 'package:api_server/src/controller/exercise_controller.dart';
+import 'package:api_server/src/controller/prescription_controller.dart';
+import 'package:api_server/src/controller/settings_controller.dart';
+import 'package:api_server/src/controller/user_controller.dart';
 import 'package:api_server/src/router/app_route.dart';
 import 'package:api_server/src/router/middleware.dart';
 import 'package:api_server/src/router/swagger_ui.dart';
-import 'package:api_server/src/services/exercise_service.dart';
-import 'package:api_server/src/services/prescription_service.dart';
-import 'package:api_server/src/services/settings_service.dart';
-import 'package:api_server/src/services/user_service.dart';
+import 'package:api_server/src/service/exercise_service.dart';
+import 'package:api_server/src/service/prescription_service.dart';
+import 'package:api_server/src/service/settings_service.dart';
+import 'package:api_server/src/service/user_service.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:sqlite3/sqlite3.dart';

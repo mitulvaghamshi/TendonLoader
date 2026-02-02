@@ -1,4 +1,4 @@
-import 'package:api_server/src/services/user_service.dart';
+import 'package:api_server/src/service/user_service.dart';
 
 mixin TableUser on UserService {
   static const table = 'User';
@@ -73,19 +73,20 @@ WHERE  "$id"       = ?;
 
   static const sqlDelete =
       '''
-DELETE FROM "$table"
+DELETE
+FROM  "$table"
 WHERE "$id" = ?;
 ''';
 
   static const sqlAuth =
       '''
 SELECT
-       "$id",
-       "$username",
-       "$password",
-       "$role"
-FROM   "$table"
-WHERE  "$username" = ?
-AND    "$password" = ?;
+      "$id",
+      "$username",
+      "$password",
+      "$role"
+FROM  "$table"
+WHERE "$username" = ?
+AND   "$password" = ?;
 ''';
 }

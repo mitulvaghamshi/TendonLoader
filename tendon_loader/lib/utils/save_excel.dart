@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:tendon_loader/ui/widgets/anchor_element.dart'
+import 'package:tendon_loader/pages/widgets/anchor_element.dart'
     if (dart.library.html) 'dart:html'
     show AnchorElement;
 

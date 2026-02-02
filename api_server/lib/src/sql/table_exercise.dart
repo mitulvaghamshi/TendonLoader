@@ -1,4 +1,4 @@
-import 'package:api_server/src/services/exercise_service.dart';
+import 'package:api_server/src/service/exercise_service.dart';
 
 mixin TableExercise on ExerciseService {
   static const table = 'Exercise';
@@ -98,8 +98,7 @@ INSERT INTO "$table" (
     "$progressorId",
     "$tolerable",
     "$userId"
-)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 ''';
 
   static const sqlUpdate =

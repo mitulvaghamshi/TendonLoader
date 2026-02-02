@@ -1,4 +1,4 @@
-import 'package:api_server/src/services/prescription_service.dart';
+import 'package:api_server/src/service/prescription_service.dart';
 
 mixin TablePrescription on PrescriptionService {
   static const table = 'Prescription';
@@ -83,8 +83,7 @@ INSERT INTO "$table" (
     "$restTime",
     "$mvcDuration",
     "$targetLoad"
-)
-VALUES (?, ?, ?, ?, ?, ?, ?);
+) VALUES (?, ?, ?, ?, ?, ?, ?);
 ''';
 
   static const sqlUpdate =

@@ -1,12 +1,28 @@
 {
   "folders": [
     {
-      "path": "tendon_loader",
-    },
-    {
-      "path": "api_server",
-    },
+      "path": ".",
+    }
   ],
+  "settings": {
+    "editor.foldingImportsByDefault": true,
+    "dart.flutterCreateOrganization": "me.mitul",
+    "dart.flutterSdkPath": "/Users/mitulvaghamshi/flutter/bin",
+    "dart.flutterCreatePlatforms": [
+      "macos"
+    ],
+    "[dart]": {
+      "editor.defaultFormatter": "Dart-Code.dart-code"
+    },
+  },
+  "extensions": {
+    "recommendations": [
+      "Dart-Code.flutter",
+      "Dart-Code.dart-code",
+      "GitHub.github-vscode-theme",
+      "vscode-icons-team.vscode-icons",
+    ],
+  },
   "tasks": {
     "version": "2.0.0",
     "tasks": [
@@ -22,7 +38,7 @@
             "PORT": "${input:port}",
             "DB_PATH": "${input:dbPath}",
           },
-          "cwd": "${workspaceFolder:api_server}",
+          "cwd": "${workspaceFolder}/api_server",
         },
       },
       {
@@ -35,7 +51,7 @@
         "label": "Install: pods:iOS",
         "command": "pod install",
         "options": {
-          "cwd": "${workspaceFolder:tendon_loader}/ios",
+          "cwd": "${workspaceFolder}/tendon_loader/ios",
         },
       },
       {
@@ -43,14 +59,17 @@
         "label": "Install: pods:macOS",
         "command": "pod install",
         "options": {
-          "cwd": "${workspaceFolder:tendon_loader}/macos",
+          "cwd": "${workspaceFolder}/tendon_loader/macos",
         },
       },
       {
         "type": "shell",
         "group": "build",
         "label": "Run: build_runner:build",
-        "command": "dart run build_runner build --delete-conflicting-outputs",
+        "options": {
+          "cwd": "${workspaceFolder}/tendon_loader"
+        },
+        "command": "dart run build_runner build clean",
       },
     ],
     "inputs": [
@@ -63,7 +82,7 @@
       {
         "id": "dbPath",
         "type": "promptString",
-        "default": "${workspaceFolder:api_server}/db/db.sqlite",
+        "default": "${workspaceFolder}/api_server/db/db.sqlite",
         "description": "Select database file",
       },
     ],

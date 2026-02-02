@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:api_server/api_server.dart';
 import 'package:flutter/foundation.dart';
-import 'package:tendon_loader/handlers/graph_handler.dart';
+import 'package:tendon_loader/handler/graph_handler.dart';
 
 @immutable
 mixin Simulator {
