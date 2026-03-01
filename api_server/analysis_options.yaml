@@ -2,4 +2,4 @@ include: package:extra_lints/dart.yaml
 
 analyzer:
   exclude:
-    - "db/**"
+    - db/**

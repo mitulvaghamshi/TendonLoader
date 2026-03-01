@@ -14,6 +14,7 @@ void main() {
       ['bin/server.dart'],
       environment: {'DB_PATH': 'db/tendonloader.db'},
     );
+
     // Wait for server to start and print to stdout.
     await process.stdout.first;
   });
@@ -22,18 +23,18 @@ void main() {
 
   test('Root', () async {
     final res = await http.get(.parse(host));
-    expect(res.statusCode, 200);
+    expect(res.statusCode, HttpStatus.ok);
     expect(res.body, '<h2>TendonLoader API v1.0</h2>\n');
   });
 
   test('404', () async {
     final res = await http.get(.parse('$host/foobar'));
-    expect(res.statusCode, 404);
+    expect(res.statusCode, HttpStatus.notFound);
   });
 
   test('Get record at id: 1', () async {
     final res = await http.get(.parse('$host/users/1'));
-    expect(res.statusCode, 200);
+    expect(res.statusCode, HttpStatus.ok);
     expect(
       res.body,
       '[{"id":1,"animal":"Dog","description":'
@@ -43,7 +44,7 @@ void main() {
 
   test('Search record with: "dog"', () async {
     final res = await http.get(.parse('$host/users/search/dog'));
-    expect(res.statusCode, 200);
+    expect(res.statusCode, HttpStatus.ok);
     expect(
       res.body,
       '[{"id":1,"animal":"Dog","description":'
@@ -60,7 +61,7 @@ void main() {
         'password': 'Beware, its dangerous.',
       }),
     );
-    expect(res.statusCode, 200);
+    expect(res.statusCode, HttpStatus.ok);
     expect(res.body, 'Inserted successfully');
   });
 
@@ -73,13 +74,13 @@ void main() {
         'password': 'A giant and heavy creature',
       }),
     );
-    expect(res.statusCode, 200);
+    expect(res.statusCode, HttpStatus.ok);
     expect(res.body, 'Updated successfully');
   });
 
   test('Delete record at id: 1', () async {
     final res = await http.delete(.parse('$host/users/1'));
-    expect(res.statusCode, 200);
+    expect(res.statusCode, HttpStatus.ok);
     expect(res.body, 'Deleted successfully');
   });
 }

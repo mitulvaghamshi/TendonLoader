@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tendon_loader/api/api_client.dart';
@@ -7,20 +9,16 @@ import 'package:tendon_loader/state/app_state.dart';
 
 void main() {
   if (ApiClient.host.isEmpty) {
-    throw AssertionError('''
-      Fix:
-      Create `.env` file and provide host value using `API_HOST=<host:port>`
-      environment variable and run your app as:
-        `flutter run -d macos --dart-define-from-file=.env`
-      ''');
+    debugPrint('Please supply ".env" file with: `API_HOST=host:port`');
+    exit(1);
   }
 
-  runApp(MyApp(state: AppState()));
+  runApp(MainApp(state: AppState()));
 }
 
 @immutable
-class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.state});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key, required this.state});
 
   final AppState state;
 

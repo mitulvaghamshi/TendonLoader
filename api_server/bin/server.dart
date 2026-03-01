@@ -1,17 +1,40 @@
 import 'dart:io';
 
-import 'package:api_server/src/router/app_router.dart';
+import 'package:api_server/router/app_router.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as io;
+import 'package:shelf_static/shelf_static.dart' as ss;
 
 Future<void> main() async {
   final router = AppRouter.configure();
 
-  final handler = const Pipeline()
-      .addMiddleware(logRequests())
-      .addHandler(router.rootRouter.call);
+  final apiHandler = router.apiHandler.call;
 
-  final host = InternetAddress(InternetAddress.anyIPv4.host);
+  final fileHandler = ss.createStaticHandler(
+    'web',
+    defaultDocument: 'index.html',
+  );
+
+  final logPipeline = const Pipeline().addMiddleware(logRequests());
+
+  final handler = logPipeline.addHandler((request) async {
+    final segments = request.url.pathSegments;
+    if (segments.isEmpty) {
+      return fileHandler(request);
+    }
+    if (segments.first == 'api' || segments.first == 'docs') {
+      return apiHandler(request);
+    }
+    if (await File('web/${request.url.toFilePath()}').exists()) {
+      return fileHandler(request);
+    }
+    return .notFound(
+      '<h1>404 Not Found!</h1>\n',
+      headers: {HttpHeaders.contentTypeHeader: ContentType.html.value},
+    );
+  });
+
+  final host = Platform.environment['HOST'] ?? '127.0.0.1';
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
 
   final server = await io.serve(handler.call, host, port);

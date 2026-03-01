@@ -18,7 +18,10 @@ class UserService {
 
   Future<Snapshot<Iterable<User>>> getAllUsers() async {
     if (_cache.users.isNotEmpty) return .data(_cache.users.values);
-    final snapshot = await _client.get('users', fromJson: UserData.fromJson);
+    final snapshot = await _client.get(
+      'api/users',
+      fromJson: UserData.fromJson,
+    );
     if (snapshot.data case UserData userData) {
       _cache.users.addAll({for (var item in userData.users) item.id!: item});
       return .data(userData.users);
@@ -29,7 +32,7 @@ class UserService {
   Future<Snapshot<User>> getUserById(int userId) async {
     if (_cache.users.containsKey(userId)) return .data(_cache.users[userId]!);
     final snapshot = await _client.get(
-      'users/$userId',
+      'api/users/$userId',
       fromJson: User.fromJson,
     );
     if (snapshot.data case User user) {
@@ -44,7 +47,7 @@ class UserService {
       return const .error('Credentials cannot be empty.');
     }
     final snapshot = await _client.post(
-      'users/auth',
+      'api/users/auth',
       body: user.map,
       fromJson: User.fromJson,
     );

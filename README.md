@@ -17,7 +17,7 @@
 - It mainly occurs in people playing recreational sports, but it can happen to anyone.
 - **The Achilles tendon** is a strong fibrous cord that connects the muscles in the back of your calf to your heel bone.
 
-![Achille's Tendon Problems](files/tendon-problems.webp)
+![Achille's Tendon Problems](assets/tendon-problems.webp)
 
 ## The Project (Instructions maybe out of sync)
 
@@ -93,7 +93,7 @@ signingConfigs {
 - Run following command to generate sources in project root
 
 ```
-flutter pub run build_runner build --delete-conflicting-outputs
+dart run build_runner build clean
 ```
 
 ## Apple M1+ (Fix)
@@ -167,44 +167,42 @@ dependencies {
 }
 ```
 
-[Bluetooth Connection](resources/Connection.pdf)
+[Bluetooth Connection](assets/Connection.pdf)
 
 ## Screenshots
 
 <details>
 <summary>From (2021-06-25)</summary>
 
-![](resources/release/imgs/Screenshot_2021-06-25-23-13-30-438_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-15-14-551_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-15-27-760_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-15-39-736_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-15-49-058_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-17-06-520_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-17-43-191_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-18-06-269_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-18-13-910_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-18-25-853_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-18-51-639_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-19-02-872_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-19-32-174_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-19-56-481_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-20-09-295_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-20-52-519_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-21-12-197_ca.ubc.tendon_loader.webp)
-![](resources/release/imgs/Screenshot_2021-06-25-23-21-21-526_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-13-30-438_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-15-14-551_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-15-27-760_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-15-39-736_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-15-49-058_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-17-06-520_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-17-43-191_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-18-06-269_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-18-13-910_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-18-25-853_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-18-51-639_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-19-02-872_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-19-32-174_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-19-56-481_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-20-09-295_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-20-52-519_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-21-12-197_ca.ubc.tendon_loader.webp)
+![](assets/release/imgs/Screenshot_2021-06-25-23-21-21-526_ca.ubc.tendon_loader.webp)
 
 </details>
 
-[license-badge]: https://img.shields.io/github/license/mitulvaghamshi/tendon_loader?logo=%20&style=for-the-badge
-[license-link]: https://github.com/mitulvaghamshi/tendon_loader/blob/main/LICENSE
-[flutter-android]: https://flutter.dev/docs/get-started/flutter-for/android-devs
-[flutter-ios]: https://flutter.dev/docs/get-started/flutter-for/ios-devs
-[flutter-web]: https://flutter.dev/docs/get-started/flutter-for/web-devs
-[flutter-dev]: https://flutter.dev
 [firebase-console]: https://console.firebase.google.com/project/tendon-loader/overview
 [firebase-emulator]: https://firebase.google.com/docs/emulator-suite
+[flutter-android]: https://flutter.dev/docs/get-started/flutter-for/android-devs
+[flutter-dev]: https://flutter.dev
+[flutter-ios]: https://flutter.dev/docs/get-started/flutter-for/ios-devs
+[flutter-web]: https://flutter.dev/docs/get-started/flutter-for/web-devs
+[flutterfire-cli]: https://firebase.flutter.dev/docs/cli
+[license-badge]: https://img.shields.io/github/license/mitulvaghamshi/tendon_loader?logo=%20&style=for-the-badge
+[license-link]: https://github.com/mitulvaghamshi/tendon_loader/blob/main/LICENSE
 [tindeq-progressor]: https://tindeq.com
 [web-hosting]: https://console.firebase.google.com/project/tendon-loader/hosting/sites
-[android-config]: https://console.firebase.google.com/project/tendon-loader/settings/general/android:ca.ubc.tendon_loader
-[flutterfire-cli]: https://firebase.flutter.dev/docs/cli
-[tendon-repture]: https://www.mayoclinic.org/diseases-conditions/achilles-tendon-rupture/symptoms-causes/syc-20353234

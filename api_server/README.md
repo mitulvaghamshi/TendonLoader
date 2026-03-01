@@ -8,14 +8,15 @@ Run with the [Dart SDK](https://dart.dev/get-dart).
 
 ### Start the server:
 
-```ps
-$ PORT=3001 DB_PATH=db/tendonloader.db dart bin/server.dart
+```sh
+# CWD: api_server
+$ HOST=$(hostname) PORT=3001 DB_PATH=assets/tendonloader.db dart bin/server.dart
 $ Server listening on port 3001...
 ```
 
 ### Test from a second terminal:
 
-```ps
+```sh
 # GET: Root
 $ curl -X GET http://localhost:3001
 

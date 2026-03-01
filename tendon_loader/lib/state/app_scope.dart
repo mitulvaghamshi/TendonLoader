@@ -19,7 +19,7 @@ class AppScope extends InheritedWidget {
 
 extension StateReader on BuildContext {
   T read<T>() {
-    if (T is AppState) {
+    if (T == AppState) {
       return AppScope.of(this) as T;
     } else {
       throw UnimplementedError('Type: $T is not implemented!');

@@ -21,7 +21,7 @@ class ExerciseService {
       return .data(_cache.exercises[id]!.values);
     }
     final snapshot = await _client.get(
-      'exercises/user/$id',
+      'api/exercises/user/$id',
       fromJson: ExerciseData.fromJson,
     );
     if (snapshot.data case ExerciseData exerciseData) {
@@ -44,7 +44,7 @@ class ExerciseService {
       }
     }
     final snapshot = await _client.get(
-      'exercises/$exerciseId',
+      'api/exercises/$exerciseId',
       fromJson: Exercise.fromJson,
     );
     if (snapshot.data case Exercise exercise) {
@@ -62,7 +62,7 @@ class ExerciseService {
       v.update(e.id, (_) => e, ifAbsent: () => e);
       return v;
     }, ifAbsent: () => {e.id: e});
-    final snapshot = await _client.post('exercises', body: e.map);
+    final snapshot = await _client.post('api/exercises', body: e.map);
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);
@@ -73,7 +73,7 @@ class ExerciseService {
       v.update(e.id, (_) => e, ifAbsent: () => e);
       return v;
     }, ifAbsent: () => {e.id: e});
-    final snapshot = await _client.put('exercises/${e.id}', body: e.map);
+    final snapshot = await _client.put('api/exercises/${e.id}', body: e.map);
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);
@@ -87,7 +87,7 @@ class ExerciseService {
       v.remove(exerciseId);
       return v;
     });
-    final snapshot = await _client.delete('exercises/$exerciseId');
+    final snapshot = await _client.delete('api/exercises/$exerciseId');
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);

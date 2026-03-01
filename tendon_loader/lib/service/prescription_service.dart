@@ -21,7 +21,7 @@ class PrescriptionService {
     if (_cache.prescriptions.containsKey(id)) {
       return .data(_cache.prescriptions[id]!);
     }
-    final snapshot = await _client.get('prescription/$id');
+    final snapshot = await _client.get('api/prescription/$id');
     if (snapshot.data case List<dynamic> items) {
       final prescription = Prescription.fromJson(items.single);
       _cache.prescriptions.putIfAbsent(id, () => prescription);
@@ -31,7 +31,7 @@ class PrescriptionService {
   }
 
   Future<Snapshot<Never>> createPrescription(Prescription p) async {
-    final snapshot = await _client.post('prescription', body: p.map);
+    final snapshot = await _client.post('api/prescription', body: p.map);
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);
@@ -41,7 +41,7 @@ class PrescriptionService {
     if (_cache.prescriptions.containsKey(p.id)) {
       _cache.prescriptions.update(p.id!, (_) => p);
     }
-    final snapshot = await _client.put('prescription/${p.id}', body: p.map);
+    final snapshot = await _client.put('api/prescription/${p.id}', body: p.map);
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);
@@ -49,7 +49,7 @@ class PrescriptionService {
 
   Future<Snapshot<Never>> deletePrescriptionById(int id) async {
     if (_cache.prescriptions.containsKey(id)) _cache.prescriptions.remove(id);
-    final snapshot = await _client.delete('prescription/$id');
+    final snapshot = await _client.delete('api/prescription/$id');
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);

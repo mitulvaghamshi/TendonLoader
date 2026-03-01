@@ -1,7 +1,10 @@
 {
   "folders": [
     {
-      "path": ".",
+      "path": "api_server",
+    },
+    {
+      "path": "tendon_loader",
     }
   ],
   "settings": {
@@ -29,16 +32,13 @@
       {
         "type": "shell",
         "label": "Server:start",
-        "command": "dart",
-        "args": [
-          "bin/server.dart",
-        ],
+        "command": "dart bin/server.dart",
         "options": {
+          "cwd": "${workspaceFolder}/api_server",
           "env": {
             "PORT": "${input:port}",
             "DB_PATH": "${input:dbPath}",
           },
-          "cwd": "${workspaceFolder}/api_server",
         },
       },
       {
@@ -65,11 +65,11 @@
       {
         "type": "shell",
         "group": "build",
-        "label": "Run: build_runner:build",
+        "label": "Run: build_runner:build clean",
+        "command": "dart run build_runner build clean",
         "options": {
           "cwd": "${workspaceFolder}/tendon_loader"
         },
-        "command": "dart run build_runner build clean",
       },
     ],
     "inputs": [
