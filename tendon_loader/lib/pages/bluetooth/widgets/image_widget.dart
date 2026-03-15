@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 @immutable
 class ImageWidget extends StatelessWidget {
-  const ImageWidget({super.key, required this.path});
+  const ImageWidget({required this.path, super.key});
 
   final String path;
 

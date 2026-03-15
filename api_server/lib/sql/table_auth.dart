@@ -6,7 +6,6 @@ mixin TableAuth {
   static const token = 'token';
   static const lastActive = 'last_active';
 
-  // ignore: unused_element
   static const sqlCreateTable =
       '''
 CREATE TABLE IF NOT EXISTS "$table" (

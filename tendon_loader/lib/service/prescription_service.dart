@@ -17,12 +17,14 @@ class PrescriptionService {
   final LocalCache _cache;
 
   Future<Snapshot<Prescription>> getPrescriptionById(int? id) async {
-    if (id == null) return const .error('Please provide prescription id.');
+    if (id == null) {
+      return const .error('Please provide prescription id.');
+    }
     if (_cache.prescriptions.containsKey(id)) {
       return .data(_cache.prescriptions[id]!);
     }
-    final snapshot = await _client.get('api/prescription/$id');
-    if (snapshot.data case List<dynamic> items) {
+    final snapshot = await _client.get<Prescription>('api/prescription/$id');
+    if (snapshot.data case final List<dynamic> items) {
       final prescription = Prescription.fromJson(items.single);
       _cache.prescriptions.putIfAbsent(id, () => prescription);
       return .data(prescription);
@@ -31,7 +33,7 @@ class PrescriptionService {
   }
 
   Future<Snapshot<Never>> createPrescription(Prescription p) async {
-    final snapshot = await _client.post('api/prescription', body: p.map);
+    final snapshot = await _client.post<Never>('api/prescription', body: p.map);
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);
@@ -41,15 +43,20 @@ class PrescriptionService {
     if (_cache.prescriptions.containsKey(p.id)) {
       _cache.prescriptions.update(p.id!, (_) => p);
     }
-    final snapshot = await _client.put('api/prescription/${p.id}', body: p.map);
+    final snapshot = await _client.put<Never>(
+      'api/prescription/${p.id}',
+      body: p.map,
+    );
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);
   }
 
   Future<Snapshot<Never>> deletePrescriptionById(int id) async {
-    if (_cache.prescriptions.containsKey(id)) _cache.prescriptions.remove(id);
-    final snapshot = await _client.delete('api/prescription/$id');
+    if (_cache.prescriptions.containsKey(id)) {
+      _cache.prescriptions.remove(id);
+    }
+    final snapshot = await _client.delete<Never>('api/prescription/$id');
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);

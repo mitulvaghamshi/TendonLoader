@@ -1,4 +1,4 @@
-import 'dart:async' show Future, FutureOr;
+import 'dart:async' show Future, FutureOr, unawaited;
 
 import 'package:api_server/api_server.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +60,7 @@ class TendonLoaderRoute extends GoRouteData with $TendonLoaderRoute {
   @override
   FutureOr<bool> onExit(BuildContext context, GoRouterState state) async {
     NetworkStatus.instance.dispose();
-    Progressor.instance.disconnect();
+    unawaited(Progressor.instance.disconnect());
 
     return super.onExit(context, state);
   }
@@ -87,7 +87,7 @@ class SettingScreenRoute extends GoRouteData with $SettingScreenRoute {
     final appState = context.read<AppState>();
     if (appState.modified) {
       appState.modified = false;
-      SettingsService.instance.updateSettings(appState.settings);
+      unawaited(SettingsService.instance.updateSettings(appState.settings));
     }
     return super.onExit(context, state);
   }
@@ -190,15 +190,15 @@ class ExerciseModeRoute extends GoRouteData with $ExerciseModeRoute {
       onPause: () async {
         handler.pause();
         // Stop progressor after 1 minute on inactivity
-        await Future.delayed(const .new(minutes: 1), () {
+        await Future.delayed(const .new(minutes: 1), () async {
           if (isPause) {
-            handler.stop();
+            await handler.stop();
           }
         });
       },
-      onResume: () {
+      onResume: () async {
         if (handler.isSessionRunning) {
-          handler.start();
+          await handler.start();
         }
       },
       builder: (_) => GraphWidget(
@@ -264,7 +264,7 @@ class UserListRoute extends GoRouteData with $UserListRoute {
     body: FutureWrapper(
       future: UserService.instance.getAllUsers(),
       builder: (snapshot) {
-        if (snapshot.data case Iterable<User> users) {
+        if (snapshot.data case final Iterable<User> users) {
           return UserList(items: users);
         }
         return const ButtonFactory.error(message: 'Failed to load users');

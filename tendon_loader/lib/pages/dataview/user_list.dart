@@ -7,7 +7,7 @@ import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
 class UserList extends StatelessWidget {
-  const UserList({super.key, required this.items});
+  const UserList({required this.items, super.key});
 
   final Iterable<User> items;
 
@@ -30,8 +30,10 @@ class _UserItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ButtonFactory.tile(
-    onTap: () =>
-        ExerciseListRoute(userId: user.id!, title: user.name).push(context),
+    onTap: () => ExerciseListRoute(
+      userId: user.id!,
+      title: user.name,
+    ).push<void>(context),
     spacing: 16,
     axisAlignment: .start,
     leading: CircleAvatar(radius: 24, child: Text(index.toString())),

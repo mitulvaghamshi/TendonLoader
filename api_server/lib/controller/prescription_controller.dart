@@ -27,7 +27,7 @@ class PrescriptionController {
 
   Future<Response> selectHandler(Request request) async {
     try {
-      if (request.params case {'id': String id}) {
+      if (request.params case {'id': final String id}) {
         return .ok(jsonEncode(service.selectBy(int.parse(id))));
       }
       return .badRequest(
@@ -55,7 +55,7 @@ class PrescriptionController {
 
   Future<Response> searchHandler(Request request) async {
     try {
-      if (request.params case {'term': String term}) {
+      if (request.params case {'term': final String term}) {
         return .ok(jsonEncode(service.search(term)));
       }
       return .badRequest(
@@ -78,13 +78,13 @@ class PrescriptionController {
     try {
       final body = await request.readAsString();
       if (jsonDecode(body) case {
-        'reps': int reps,
-        'sets': int sets,
-        'set_rest': int setRest,
-        'hold_time': int holdTime,
-        'rest_time': int restTime,
-        'mvc_duration': int mvcDuration,
-        'target_load': num targetLoad,
+        'reps': final int reps,
+        'sets': final int sets,
+        'set_rest': final int setRest,
+        'hold_time': final int holdTime,
+        'rest_time': final int restTime,
+        'mvc_duration': final int mvcDuration,
+        'target_load': final num targetLoad,
       }) {
         service.insert(
           sets: sets,
@@ -122,16 +122,16 @@ class PrescriptionController {
 
   Future<Response> updateHandler(Request request) async {
     try {
-      if (request.params case {'id': String id}) {
+      if (request.params case {'id': final String id}) {
         final body = await request.readAsString();
         if (jsonDecode(body) case {
-          'reps': int reps,
-          'sets': int sets,
-          'set_rest': int setRest,
-          'hold_time': int holdTime,
-          'rest_time': int restTime,
-          'mvc_duration': int mvcDuration,
-          'target_load': num targetLoad,
+          'reps': final int reps,
+          'sets': final int sets,
+          'set_rest': final int setRest,
+          'hold_time': final int holdTime,
+          'rest_time': final int restTime,
+          'mvc_duration': final int mvcDuration,
+          'target_load': final num targetLoad,
         }) {
           service.update(
             id: int.parse(id),
@@ -177,7 +177,7 @@ class PrescriptionController {
 
   Future<Response> deleteHandler(Request request) async {
     try {
-      if (request.params case {'id': String id}) {
+      if (request.params case {'id': final String id}) {
         service.delete(int.parse(id));
         return .ok(0);
       }

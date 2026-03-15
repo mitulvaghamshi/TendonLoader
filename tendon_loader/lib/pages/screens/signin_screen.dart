@@ -13,7 +13,7 @@ import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key, required this.child});
+  const SignInScreen({required this.child, super.key});
 
   final Widget child;
 
@@ -71,7 +71,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (state.isAuthenticated) return widget.child;
+    if (state.isAuthenticated) {
+      return widget.child;
+    }
     return Form(
       child: Column(
         children: [

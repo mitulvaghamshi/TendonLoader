@@ -24,14 +24,14 @@ class Prescription {
 
   factory Prescription.fromJson(Object? json) {
     if (json case {
-      PrescriptionTable.kId: int id,
-      PrescriptionTable.kReps: int reps,
-      PrescriptionTable.kSets: int sets,
-      PrescriptionTable.kSetRest: int setRest,
-      PrescriptionTable.kHoldTime: int holdTime,
-      PrescriptionTable.kRestTime: int restTime,
-      PrescriptionTable.kMvcDuration: int mvcDuration,
-      PrescriptionTable.kTargetLoad: num targetLoad,
+      PrescriptionTable.kId: final int id,
+      PrescriptionTable.kReps: final int reps,
+      PrescriptionTable.kSets: final int sets,
+      PrescriptionTable.kSetRest: final int setRest,
+      PrescriptionTable.kHoldTime: final int holdTime,
+      PrescriptionTable.kRestTime: final int restTime,
+      PrescriptionTable.kMvcDuration: final int mvcDuration,
+      PrescriptionTable.kTargetLoad: final num targetLoad,
     }) {
       return ._(
         id: id,

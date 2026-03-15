@@ -20,8 +20,8 @@ class SettingsService {
     if (_cache.settings.containsKey(userId)) {
       return .data(_cache.settings[userId]!);
     }
-    final snapshot = await _client.get('api/settings/$userId');
-    if (snapshot.data case List<dynamic> items) {
+    final snapshot = await _client.get<Settings>('api/settings/$userId');
+    if (snapshot.data case final List<dynamic> items) {
       final settings = Settings.fromJson(items.single);
       _cache.settings.update(userId, (_) => settings, ifAbsent: () => settings);
       return .data(settings);
@@ -33,7 +33,7 @@ class SettingsService {
     if (s.userId != null) {
       _cache.settings.update(s.userId!, (_) => s, ifAbsent: () => s);
     }
-    final snapshot = await _client.post('api/settings', body: s.map);
+    final snapshot = await _client.post<String>('api/settings', body: s.map);
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);
@@ -43,7 +43,10 @@ class SettingsService {
     if (s.userId != null && _cache.settings.containsKey(s.userId)) {
       _cache.settings.update(s.userId!, (_) => s);
     }
-    final snapshot = await _client.put('api/settings/${s.id}', body: s.map);
+    final snapshot = await _client.put<Never>(
+      'api/settings/${s.id}',
+      body: s.map,
+    );
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);
@@ -54,7 +57,7 @@ class SettingsService {
     required int settingsId,
   }) async {
     _cache.settings.remove(userId);
-    final snapshot = await _client.delete('api/settings/$settingsId');
+    final snapshot = await _client.delete<Never>('api/settings/$settingsId');
     return snapshot.hasData
         ? .data(snapshot.requireData)
         : .error(snapshot.error);

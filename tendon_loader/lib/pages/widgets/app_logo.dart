@@ -27,7 +27,9 @@ class AppLogo extends StatelessWidget {
         child: widget,
       );
     }
-    if (padding == null) return widget;
+    if (padding == null) {
+      return widget;
+    }
 
     return Padding(padding: padding!, child: widget);
   }

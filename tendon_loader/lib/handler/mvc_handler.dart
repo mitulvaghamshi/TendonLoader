@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:api_server/api_server.dart';
 import 'package:flutter/services.dart';
 import 'package:tendon_loader/handler/graph_handler.dart';
@@ -35,11 +37,11 @@ class MVCHandler extends GraphHandler {
       timeDiff = mvcDuration - data.time;
       if (timeDiff == 0) {
         isComplete = true;
-        stop();
+        unawaited(stop());
       } else if (data.load > maxForce) {
         maxForce = data.load;
         _updateLine();
-        HapticFeedback.vibrate();
+        unawaited(HapticFeedback.vibrate());
       }
     }
   }

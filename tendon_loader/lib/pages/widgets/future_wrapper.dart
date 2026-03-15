@@ -3,10 +3,10 @@ import 'package:tendon_loader/pages/widgets/button_factory.dart';
 
 @immutable
 class FutureWrapper<T> extends StatelessWidget {
-  const FutureWrapper({super.key, required this.future, required this.builder});
+  const FutureWrapper({required this.future, required this.builder, super.key});
 
   final Future<T> future;
-  final Widget Function(T) builder;
+  final Widget Function(T value) builder;
 
   @override
   Widget build(BuildContext context) => FutureBuilder<T>(

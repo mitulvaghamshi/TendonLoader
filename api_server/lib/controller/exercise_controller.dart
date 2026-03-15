@@ -27,7 +27,7 @@ class ExerciseController {
 
   Future<Response> selectHandler(Request request) async {
     try {
-      if (request.params case {'id': String id}) {
+      if (request.params case {'id': final String id}) {
         return .ok(jsonEncode(service.selectBy(int.parse(id))));
       }
       return .badRequest(
@@ -55,7 +55,7 @@ class ExerciseController {
 
   Future<Response> searchHandler(Request request) async {
     try {
-      if (request.params case {'term': String term}) {
+      if (request.params case {'term': final String term}) {
         return .ok(jsonEncode(service.search(term)));
       }
       return .badRequest(
@@ -78,15 +78,15 @@ class ExerciseController {
     try {
       final body = await request.readAsString();
       if (jsonDecode(body) case {
-        'user_id': int userId,
-        'prescription_id': int? prescriptionId,
-        'pain_score': num painScore,
-        'datetime': String datetime,
-        'tolerable': String tolerable,
-        'completed': int completed,
-        'progressor_id': String progressorId,
-        'mvc_value': num? mvcValue,
-        'data': String data,
+        'user_id': final int userId,
+        'prescription_id': final int? prescriptionId,
+        'pain_score': final num painScore,
+        'datetime': final String datetime,
+        'tolerable': final String tolerable,
+        'completed': final int completed,
+        'progressor_id': final String progressorId,
+        'mvc_value': final num? mvcValue,
+        'data': final String data,
       }) {
         service.insert(
           userId: userId,
@@ -126,18 +126,18 @@ class ExerciseController {
 
   Future<Response> updateHandler(Request request) async {
     try {
-      if (request.params case {'id': String id}) {
+      if (request.params case {'id': final String id}) {
         final body = await request.readAsString();
         if (jsonDecode(body) case {
-          'user_id': int userId,
-          'prescription_id': int? prescriptionId,
-          'pain_score': num painScore,
-          'datetime': String datetime,
-          'tolerable': String tolerable,
-          'completed': int completed,
-          'progressor_id': String progressorId,
-          'mvc_value': num? mvcValue,
-          'data': String data,
+          'user_id': final int userId,
+          'prescription_id': final int? prescriptionId,
+          'pain_score': final num painScore,
+          'datetime': final String datetime,
+          'tolerable': final String tolerable,
+          'completed': final int completed,
+          'progressor_id': final String progressorId,
+          'mvc_value': final num? mvcValue,
+          'data': final String data,
         }) {
           service.update(
             id: int.parse(id),
@@ -185,7 +185,7 @@ class ExerciseController {
 
   Future<Response> deleteHandler(Request request) async {
     try {
-      if (request.params case {'id': String id}) {
+      if (request.params case {'id': final String id}) {
         service.delete(int.parse(id));
         return .ok(0);
       }

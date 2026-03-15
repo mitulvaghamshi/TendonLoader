@@ -72,15 +72,17 @@ extension on ApiClient {
   ) async => _ifConnected(() async {
     final res = await request().timeout(ApiClient._timeout);
     if (res.statusCode >= 200 && res.statusCode < 300) {
-      if (res.body.isEmpty) return const .none();
+      if (res.body.isEmpty) {
+        return const .none();
+      }
       final data = jsonDecode(res.body);
-      return .data(fromJson?.call(data) ?? data);
+      return .data(fromJson?.call(data) ?? data as T);
     }
     if (res.body.isEmpty) {
       return .error(res.reasonPhrase ?? 'Unknown Error');
     }
     try {
-      if (jsonDecode(res.body) case {'data': {'error': String error}}) {
+      if (jsonDecode(res.body) case {'data': {'error': final String error}}) {
         return .error(error);
       }
     } on FormatException catch (e) {
@@ -90,7 +92,9 @@ extension on ApiClient {
   });
 
   Future<R<T>> _ifConnected<T>(AsyncValueGetter<R<T>> request) async {
-    if (kDebugMode) await Future.delayed(const .new(seconds: 1));
+    if (kDebugMode) {
+      await Future<void>.delayed(const .new(seconds: 1));
+    }
     if (!NetworkStatus.isConnected) {
       return const .error('Check your connection!');
     }
@@ -99,13 +103,19 @@ extension on ApiClient {
       try {
         return await request();
       } on http.ClientException {
-        if (i == 2) return const .error('Unable to connect to the server!');
+        if (i == 2) {
+          return const .error('Unable to connect to the server!');
+        }
       } on HttpException catch (e) {
-        if (i == 2) return .error(e.message);
+        if (i == 2) {
+          return .error(e.message);
+        }
       } on TimeoutException {
-        if (i == 2) return const .error('Request Timed out!');
+        if (i == 2) {
+          return const .error('Request Timed out!');
+        }
       }
-      await Future.delayed(delay);
+      await Future<void>.delayed(delay);
       delay *= 2;
     }
     return const .error('Something went wrong, try again!');

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:api_server/api_server.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -119,7 +121,7 @@ class ExerciseHandler extends GraphHandler {
                 // if user left session unfinished
                 isComplete = true;
                 // Stop the session and complete remaining steps
-                stop();
+                unawaited(stop());
               } else {
                 // Preparing the next Set
                 // Reset rep and rest counters
@@ -134,7 +136,7 @@ class ExerciseHandler extends GraphHandler {
                 // for Rest time do nothing...
                 _lapTime = prescription.holdTime;
                 // Show a countdown timer before every Set starts.
-                _setComplete();
+                unawaited(_setComplete());
               }
             }
           } else {
@@ -147,7 +149,7 @@ class ExerciseHandler extends GraphHandler {
             _lapTime = prescription.holdTime;
           }
           // Create vibration feedback on Rep, and Rest completion.
-          HapticFeedback.heavyImpact();
+          unawaited(HapticFeedback.heavyImpact());
         }
       }
     }
@@ -162,7 +164,9 @@ class ExerciseHandler extends GraphHandler {
 
   @override
   Future<String> exit() async {
-    if (!hasData) return '';
+    if (!hasData) {
+      return '';
+    }
     // export ??= Export(prescription: prescription);
     return super.exit();
   }

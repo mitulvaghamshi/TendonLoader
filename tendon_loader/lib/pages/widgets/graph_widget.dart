@@ -18,10 +18,10 @@ import 'package:tendon_loader/state/app_state.dart';
 @immutable
 class GraphWidget extends StatelessWidget {
   const GraphWidget({
-    super.key,
     required this.title,
     required this.handler,
     required this.headerBuilder,
+    super.key,
   });
 
   final String title;

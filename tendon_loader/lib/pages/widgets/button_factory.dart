@@ -45,7 +45,9 @@ class ButtonFactory extends StatelessWidget {
       child: child,
     );
 
-    if (radius == 0) return button;
+    if (radius == 0) {
+      return button;
+    }
 
     return ClipRRect(borderRadius: .circular(radius), child: button);
   }
@@ -111,7 +113,9 @@ class _RawLoading extends ButtonFactory {
       child: Text('Please wait...', style: Styles.whiteBold),
     );
 
-    if (!centered) return widget;
+    if (!centered) {
+      return widget;
+    }
 
     return const Padding(
       padding: .all(16),

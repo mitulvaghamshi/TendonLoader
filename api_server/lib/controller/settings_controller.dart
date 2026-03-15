@@ -27,7 +27,7 @@ class SettingsController {
 
   Future<Response> selectHandler(Request request) async {
     try {
-      if (request.params case {'id': String? id}) {
+      if (request.params case {'id': final String? id}) {
         return .ok(jsonEncode(service.selectByUser(id)));
       }
       return .badRequest(
@@ -55,7 +55,7 @@ class SettingsController {
 
   Future<Response> searchHandler(Request request) async {
     try {
-      if (request.params case {'term': String term}) {
+      if (request.params case {'term': final String term}) {
         return .ok(jsonEncode(service.search(term)));
       }
       return .badRequest(
@@ -78,12 +78,12 @@ class SettingsController {
     try {
       final body = await request.readAsString();
       if (jsonDecode(body) case {
-        'user_id': int? userId,
-        'prescription_id': int? prescriptionId,
-        'dark_mode': bool darkMode,
-        'auto_upload': bool autoUpload,
-        'editable_prescription': bool editablePrescription,
-        'graph_scale': num graphScale,
+        'user_id': final int? userId,
+        'prescription_id': final int? prescriptionId,
+        'dark_mode': final bool darkMode,
+        'auto_upload': final bool autoUpload,
+        'editable_prescription': final bool editablePrescription,
+        'graph_scale': final num graphScale,
       }) {
         service.insert(
           userId: userId,
@@ -120,15 +120,15 @@ class SettingsController {
 
   Future<Response> updateHandler(Request request) async {
     try {
-      if (request.params case {'id': String id}) {
+      if (request.params case {'id': final String id}) {
         final body = await request.readAsString();
         if (jsonDecode(body) case {
-          'user_id': int? userId,
-          'prescription_id': int? prescriptionId,
-          'dark_mode': bool darkMode,
-          'auto_upload': bool autoUpload,
-          'editable_prescription': bool editablePrescription,
-          'graph_scale': num graphScale,
+          'user_id': final int? userId,
+          'prescription_id': final int? prescriptionId,
+          'dark_mode': final bool darkMode,
+          'auto_upload': final bool autoUpload,
+          'editable_prescription': final bool editablePrescription,
+          'graph_scale': final num graphScale,
         }) {
           service.update(
             id: int.parse(id),
@@ -173,7 +173,7 @@ class SettingsController {
 
   Future<Response> deleteHandler(Request request) async {
     try {
-      if (request.params case {'id': String id}) {
+      if (request.params case {'id': final String id}) {
         service.delete(int.parse(id));
         return .ok(0);
       }

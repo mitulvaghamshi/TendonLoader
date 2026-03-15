@@ -16,7 +16,7 @@ import 'package:tendon_loader/utils/constants.dart';
 /// keep holding, and click the "Tare Progressor" button.
 @immutable
 class ConnectedTile extends StatelessWidget {
-  const ConnectedTile({super.key, required this.device});
+  const ConnectedTile({required this.device, super.key});
 
   final BluetoothDevice device;
 

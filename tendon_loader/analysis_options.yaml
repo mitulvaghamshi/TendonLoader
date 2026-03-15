@@ -1,4 +1,6 @@
-include: package:extra_lints/flutter.yaml
+include:
+  - package:flutter_lints/flutter.yaml
+  - ../../mitulvaghamshi/analysis_strict_mode.yaml
 
 analyzer:
   exclude:

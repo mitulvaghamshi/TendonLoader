@@ -18,7 +18,7 @@ void main() {
 
 @immutable
 class MainApp extends StatelessWidget {
-  const MainApp({super.key, required this.state});
+  const MainApp({required this.state, super.key});
 
   final AppState state;
 

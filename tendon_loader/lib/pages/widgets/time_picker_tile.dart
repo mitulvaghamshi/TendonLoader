@@ -5,10 +5,7 @@ import 'package:tendon_loader/utils/constants.dart';
 @immutable
 class TimePickerTile extends StatelessWidget {
   const TimePickerTile({
-    super.key,
-    required this.time,
-    required this.label,
-    required this.onSelect,
+    required this.time, required this.label, required this.onSelect, super.key,
   });
 
   final int time;
@@ -17,7 +14,7 @@ class TimePickerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Duration duration = .new(seconds: time);
+    final Duration duration = .new(seconds: time);
     int minutes = duration.inMinutes;
     int seconds = duration.inSeconds % 60;
 
@@ -57,12 +54,12 @@ class TimePickerTile extends StatelessWidget {
 
 extension on TimePickerTile {
   String _timeString(int minutes, int seconds) {
-    Duration duration = .new(minutes: minutes, seconds: seconds);
+    final Duration duration = .new(minutes: minutes, seconds: seconds);
     return '${duration.inMinutes} min : ${duration.inSeconds % 60} sec';
   }
 
   void _submit(int minutes, int seconds) {
-    Duration duration = .new(minutes: minutes, seconds: seconds);
+    final Duration duration = .new(minutes: minutes, seconds: seconds);
     onSelect(duration.inSeconds);
   }
 }

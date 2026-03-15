@@ -10,7 +10,7 @@ import 'package:tendon_loader/pages/widgets/button_factory.dart';
 /// if no devices found during first scan.
 @immutable
 class DeviceTile extends StatelessWidget {
-  const DeviceTile({super.key, required this.device, this.isLast = false});
+  const DeviceTile({required this.device, super.key, this.isLast = false});
 
   final BluetoothDevice device;
   final bool isLast;

@@ -123,7 +123,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 extension on _SettingsScreenState {
   Future<void> _uploadData() async {
     const int count = 0; // await model.uploadExports();
-    if (!mounted || count <= 0) return;
+    if (!mounted || count <= 0) {
+      return;
+    }
     const content = SnackBar(
       padding: .zero,
       content: ButtonFactory.error(

@@ -11,7 +11,7 @@ import 'package:tendon_loader/utils/constants.dart';
 bool isPause = false;
 
 abstract class GraphHandler {
-  GraphHandler({this.lineData, required this.onCountdown}) {
+  GraphHandler({required this.onCountdown, this.lineData}) {
     isSessionRunning = isComplete = hasData = false;
     stream.listen(update);
     reset();
@@ -95,6 +95,7 @@ abstract class GraphHandler {
     if (!hasData) {
       return '';
     }
+
     if ( /* !export!.isInBox */ true) {
       export?.copyWith(
         userId: 0,
@@ -105,6 +106,7 @@ abstract class GraphHandler {
       );
       // await context.read<AppState>().addToBox(export!);
     }
+
     if (isSessionRunning) {
       await stop();
     }
@@ -121,7 +123,7 @@ abstract class GraphHandler {
   @mustCallSuper
   void dispose() {
     if (!_controller.isClosed) {
-      _controller.close();
+      unawaited(_controller.close());
     }
   }
 }

@@ -23,30 +23,30 @@ class UserService {
         user.username,
         user.password,
       ]);
-
-      if (result.isEmpty || result.single.isEmpty) {
-        return const .error('Not Found');
+      if (result.single case {
+        UserTable.kId: final int? kId,
+        UserTable.kUsername: final String? kUsername,
+        UserTable.kPassword: final String? kPassword,
+        UserTable.kRole: final String? kRole,
+      }) {
+        final token = _uuid.v1();
+        // Store session in DB
+        db.select(TableAuth.sqlInsert, [
+          kId,
+          token,
+          DateTime.now().toIso8601String(),
+        ]);
+        return .data(
+          const User.empty().copyWith(
+            id: kId,
+            username: kUsername,
+            password: kPassword,
+            role: kRole,
+            token: token,
+          ),
+        );
       }
-
-      final dbUser = result.single;
-      final token = _uuid.v1();
-
-      // Store session in DB
-      db.select(TableAuth.sqlInsert, [
-        dbUser[TableAuth.id],
-        token,
-        DateTime.now().toIso8601String(),
-      ]);
-
-      return .data(
-        const User.empty().copyWith(
-          id: dbUser[UserTable.kId],
-          username: dbUser[UserTable.kUsername],
-          password: dbUser[UserTable.kPassword],
-          role: dbUser[UserTable.kRole],
-          token: token,
-        ),
-      );
+      return const .error('Not Found');
     } on SqliteException catch (e) {
       return .error(e.message);
     }
@@ -56,28 +56,35 @@ class UserService {
     try {
       final result = db.select(
         '''
-        SELECT u.${UserTable.kId}, u.${UserTable.kUsername}, u.${UserTable.kPassword}, u.${UserTable.kRole}
+        SELECT
+          u.${UserTable.kId},
+          u.${UserTable.kUsername},
+          u.${UserTable.kPassword},
+          u.${UserTable.kRole}
         FROM ${UserTable.kTable} u
-        INNER JOIN ${TableAuth.table} a ON u.${UserTable.kId} = a.${TableAuth.userId}
-        WHERE a.${TableAuth.token} = ?
+        INNER JOIN ${TableAuth.table} a
+        ON u.${UserTable.kId} = a.${TableAuth.userId}
+        WHERE a.${TableAuth.token} = (?);
         ''',
         [token],
       );
-
-      if (result.isEmpty) {
-        return const .error('Unauthorized');
+      if (result.single case {
+        UserTable.kId: final int? kId,
+        UserTable.kUsername: final String? kUsername,
+        UserTable.kPassword: final String? kPassword,
+        UserTable.kRole: final String? kRole,
+      }) {
+        return .data(
+          const User.empty().copyWith(
+            id: kId,
+            username: kUsername,
+            password: kPassword,
+            role: kRole,
+            token: token,
+          ),
+        );
       }
-
-      final authUser = result.single;
-      return .data(
-        const User.empty().copyWith(
-          id: authUser[UserTable.kId],
-          username: authUser[UserTable.kUsername],
-          password: authUser[UserTable.kPassword],
-          role: authUser[UserTable.kRole],
-          token: token,
-        ),
-      );
+      return const .error('Unauthorized');
     } on SqliteException catch (e) {
       return .error(e.message);
     }

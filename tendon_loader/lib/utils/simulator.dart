@@ -16,9 +16,11 @@ mixin Simulator {
     double fakeTime = 0;
 
     _timer ??= .periodic(const .new(milliseconds: 50), (timer) {
-      if (isPause) return;
+      if (isPause) {
+        return;
+      }
       final data = ChartData(load: fakeLoad.abs(), time: fakeTime);
-      // ignore: invalid_use_of_protected_member
+      // ignore: invalid_use_of_protected_member DEBUG MODE
       GraphHandler.exportData.add(data);
       GraphHandler.sink.add(data);
       if (timer.tick % 20 == 0) {

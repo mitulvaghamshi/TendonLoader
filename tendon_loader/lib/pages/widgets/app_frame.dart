@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 @immutable
 class AppFrame extends StatelessWidget {
-  const AppFrame({super.key, required this.child});
+  const AppFrame({required this.child, super.key});
 
   final Widget child;
 

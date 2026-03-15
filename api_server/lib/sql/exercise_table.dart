@@ -79,7 +79,6 @@ mixin ExerciseTable {
     },
   };
 
-  // ignore: unused_element
   static const sqlCreateTable =
       '''
 CREATE TABLE IF NOT EXISTS "$kTable" (

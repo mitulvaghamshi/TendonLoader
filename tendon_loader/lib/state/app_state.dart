@@ -23,7 +23,7 @@ class AppState extends ChangeNotifier {
 
   Future<String> authenticate(User user) async {
     final userSnapshot = await UserService.instance.authenticate(user);
-    if (userSnapshot.data case User user) {
+    if (userSnapshot.data case final User user) {
       authUser = user;
       ApiClient.token = user.token;
     }

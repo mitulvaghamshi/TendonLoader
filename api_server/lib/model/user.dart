@@ -6,7 +6,7 @@ class UserData {
   const UserData.empty() : users = const [];
 
   factory UserData.fromJson(Object? json) {
-    if (json case {'users': List<dynamic> items}) {
+    if (json case {'users': final List<dynamic> items}) {
       return ._(users: items.map(User.fromJson));
     }
 
@@ -34,11 +34,11 @@ class User {
 
   factory User.fromJson(Object? json) {
     if (json case {
-      UserTable.kId: int? id,
-      UserTable.kUsername: String username,
-      UserTable.kPassword: String password,
-      UserTable.kToken: String? token,
-      UserTable.kRole: String? role,
+      UserTable.kId: final int? id,
+      UserTable.kUsername: final String username,
+      UserTable.kPassword: final String password,
+      UserTable.kToken: final String? token,
+      UserTable.kRole: final String? role,
     }) {
       return ._(
         id: id,
@@ -53,10 +53,10 @@ class User {
     // If exact match is required for the pattern,
     // we might need to be more flexible. Let's assume standard structure.
     if (json case {
-      UserTable.kId: int? id,
-      UserTable.kUsername: String username,
-      UserTable.kPassword: String password,
-      UserTable.kToken: String? token,
+      UserTable.kId: final int? id,
+      UserTable.kUsername: final String username,
+      UserTable.kPassword: final String password,
+      UserTable.kToken: final String? token,
     }) {
       return ._(
         id: id,

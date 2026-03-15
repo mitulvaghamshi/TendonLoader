@@ -5,7 +5,7 @@ class ExerciseData {
   const ExerciseData({required this.exercises});
 
   factory ExerciseData.fromJson(Object? json) {
-    if (json case {'exercises': List<dynamic> items}) {
+    if (json case {'exercises': final List<dynamic> items}) {
       return .new(exercises: items.map(Exercise.fromJson));
     }
 
@@ -43,16 +43,16 @@ class Exercise {
 
   factory Exercise.fromJson(Object? json) {
     if (json case {
-      ExerciseTable.kId: int id,
-      ExerciseTable.kUserId: int userId,
-      ExerciseTable.kPrescriptionId: int? prescriptionId,
-      ExerciseTable.kPainScore: num painScore,
-      ExerciseTable.kDatetime: String datetime,
-      ExerciseTable.kTolerable: String tolerable,
-      ExerciseTable.kCompleted: bool completed,
-      ExerciseTable.kProgressorId: String progressorId,
-      ExerciseTable.kMvcValue: double? mvcValue,
-      ExerciseTable.kData: String rawData,
+      ExerciseTable.kId: final int id,
+      ExerciseTable.kUserId: final int userId,
+      ExerciseTable.kPrescriptionId: final int? prescriptionId,
+      ExerciseTable.kPainScore: final num painScore,
+      ExerciseTable.kDatetime: final String datetime,
+      ExerciseTable.kTolerable: final String tolerable,
+      ExerciseTable.kCompleted: final bool completed,
+      ExerciseTable.kProgressorId: final String progressorId,
+      ExerciseTable.kMvcValue: final double? mvcValue,
+      ExerciseTable.kData: final String rawData,
     }) {
       return ._(
         id: id,

@@ -270,7 +270,7 @@ class _CardWidget extends StatelessWidget {
 
 @immutable
 class PainSelector extends StatefulWidget {
-  const PainSelector({super.key, required this.onSelect});
+  const PainSelector({required this.onSelect, super.key});
 
   final ValueChanged<double> onSelect;
 

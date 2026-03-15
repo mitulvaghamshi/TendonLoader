@@ -4,12 +4,12 @@ import 'package:tendon_loader/pages/widgets/input_factory.dart';
 @immutable
 class SearchList<T> extends StatefulWidget {
   const SearchList({
-    super.key,
     required this.title,
     required this.searchLabel,
     required this.items,
     required this.searchTerm,
     required this.builder,
+    super.key,
   });
 
   final String title;

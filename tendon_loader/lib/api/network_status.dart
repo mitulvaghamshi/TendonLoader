@@ -11,16 +11,16 @@ class NetworkStatus {
 
   static final instance = NetworkStatus._();
 
-  late final StreamSubscription _subscription;
+  late final StreamSubscription<List<ConnectivityResult>> _subscription;
 
   Iterable<ConnectivityResult> _connections = const .empty();
 
   static bool get isConnected => instance._connections.isNotEmpty;
 
   void _f(Iterable<ConnectivityResult> results) {
-    _connections = results.where(
-      (r) => r == .wifi || r == .mobile || r == .ethernet,
-    );
+    _connections = results.where((r) {
+      return r == .wifi || r == .mobile || r == .ethernet;
+    });
   }
 
   void dispose() => _subscription.cancel();

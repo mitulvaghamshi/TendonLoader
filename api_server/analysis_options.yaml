@@ -1,5 +1,12 @@
-include: package:extra_lints/dart.yaml
+include:
+  - package:lints/recommended.yaml
+  - ../../mitulvaghamshi/analysis_strict_mode.yaml
 
 analyzer:
   exclude:
-    - db/**
+    - assets/**
+    - web/**
+
+linter:
+  rules:
+    prefer_expression_function_bodies: false

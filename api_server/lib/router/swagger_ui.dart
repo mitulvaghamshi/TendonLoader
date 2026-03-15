@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:shelf/shelf.dart';
 
-/// Using [highlight.js] syntax coloring theme.
+/// Using `highlight.js` syntax coloring theme.
 enum Syntax {
   agate('agate'),
   arta('arta'),

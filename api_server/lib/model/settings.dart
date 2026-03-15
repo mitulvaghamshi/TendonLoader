@@ -22,13 +22,13 @@ class Settings {
 
   factory Settings.fromJson(Object? json) {
     if (json case {
-      SettingsTable.kId: int id,
-      SettingsTable.kUserId: int? userId,
-      SettingsTable.kPrescriptionId: int? prescriptionId,
-      SettingsTable.kDarkMode: int darkMode,
-      SettingsTable.kAutoUpload: int autoUpload,
-      SettingsTable.kEditablePrescription: int editablePrescription,
-      SettingsTable.kGraphScale: num graphScale,
+      SettingsTable.kId: final int id,
+      SettingsTable.kUserId: final int? userId,
+      SettingsTable.kPrescriptionId: final int? prescriptionId,
+      SettingsTable.kDarkMode: final int darkMode,
+      SettingsTable.kAutoUpload: final int autoUpload,
+      SettingsTable.kEditablePrescription: final int editablePrescription,
+      SettingsTable.kGraphScale: final num graphScale,
     }) {
       return ._(
         id: id,

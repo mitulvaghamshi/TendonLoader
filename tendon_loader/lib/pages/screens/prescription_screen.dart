@@ -10,7 +10,7 @@ import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
 class PrescriptionScreen extends StatefulWidget {
-  const PrescriptionScreen({super.key, required this.prescription});
+  const PrescriptionScreen({required this.prescription, super.key});
 
   final Prescription prescription;
 

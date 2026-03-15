@@ -56,7 +56,8 @@ Future<void> downloadExercise(Exercise exercise) async {
 ArchiveFile exportToExcel(Exercise exercise, [Prescription? prescription]) {
   final book = Workbook();
   final sheet = book.worksheets[0];
-  const c4 = 4, c5 = 5;
+  const c4 = 4;
+  const c5 = 5;
 
   sheet
     ..getRangeByIndex(1, 1).setText('TIME [s]')
@@ -94,7 +95,7 @@ ArchiveFile exportToExcel(Exercise exercise, [Prescription? prescription]) {
       ..getRangeByIndex(14, c5).number = prescription.reps.toDouble();
   }
 
-  for (var (index, data) in exercise.data.indexed) {
+  for (final (index, data) in exercise.data.indexed) {
     sheet
       ..getRangeByIndex(index + 1, 1).number = data.time
       ..getRangeByIndex(index + 1, 2).number = data.load;
@@ -112,7 +113,7 @@ ArchiveFile exportToExcel(Exercise exercise, [Prescription? prescription]) {
 
 Future<void> exportToJson(Exercise export) async {
   final map = export.map;
-  final data = map.remove('"${TableKey.exportData}"');
+  final data = map.remove('"${TableKey.exportData}"') as String;
 
   final user = '${export.userId}-${export.datetime}'.replaceAll('@', '');
 

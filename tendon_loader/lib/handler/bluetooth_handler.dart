@@ -52,10 +52,12 @@ extension ProgressorExt on Progressor {
       }
       if (_dataChar != null && _controlChar != null) {
         await _dataChar!.setNotifyValue(true);
-        if (Platform.isAndroid) await device.requestMtu(120);
+        if (Platform.isAndroid) {
+          await device.requestMtu(120);
+        }
         _dataChar!.value.listen(GraphHandler.onData);
         _device = device;
-        _delayedStart().then((_) => _completer!.complete(true));
+        await _delayedStart().then((_) => _completer!.complete(true));
       }
     }
     return _completer!.future;
@@ -65,33 +67,45 @@ extension ProgressorExt on Progressor {
       FlutterBlue.instance.startScan(timeout: const .new(seconds: 5));
 
   Future<void> startListening() async {
-    if (_isListening) return;
+    if (_isListening) {
+      return;
+    }
     _isListening = true;
-    if (Simulator.enabled) return Simulator.startSimulator();
+    if (Simulator.enabled) {
+      return Simulator.startSimulator();
+    }
     await _controlChar!.write([Cmd.startWeightMeas]);
   }
 
   Future<void> stopListening() async {
-    if (!_isListening) return;
+    if (!_isListening) {
+      return;
+    }
     _isListening = false;
-    if (Simulator.enabled) return Simulator.stopSimulator();
+    if (Simulator.enabled) {
+      return Simulator.stopSimulator();
+    }
     await _controlChar!.write([Cmd.stopWeightMeas]);
   }
 
   Future<void> tare() async {
-    if (!_isListening) return;
+    if (!_isListening) {
+      return;
+    }
     _isListening = false;
     await _controlChar!.write([Cmd.tareScale]);
-    await Future.delayed(const .new(milliseconds: 500));
+    await Future<void>.delayed(const .new(milliseconds: 500));
     await _controlChar!.write([Cmd.startWeightMeas]);
-    await Future.delayed(const .new(milliseconds: 500));
+    await Future<void>.delayed(const .new(milliseconds: 500));
     await _controlChar!.write([Cmd.stopWeightMeas]);
   }
 
   Future<void> sleep() async => disconnect(sleep: true);
 
   Future<void> disconnect({bool sleep = false}) async {
-    if (_device == null) return;
+    if (_device == null) {
+      return;
+    }
     if (sleep) {
       await _controlChar!.write([Cmd.enterSleep]);
     } else {

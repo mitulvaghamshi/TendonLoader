@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 @immutable
 class LifeCycleAware extends StatefulWidget {
   const LifeCycleAware({
-    super.key,
     required this.onPause,
     required this.onResume,
     required this.builder,
+    super.key,
   });
 
   final VoidCallback onPause;

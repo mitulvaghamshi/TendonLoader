@@ -50,15 +50,12 @@ class AppRouter {
 extension AppRouterExt on AppRouter {
   Router get apiHandler {
     final router = Router();
-    final auth = AuthMiddleware(userController.service);
-    final authMiddleware = auth.checkAuthentication;
+    final auth = checkAuth(userController.service);
 
     for (var route in _apiRoutes) {
       var handler = route.handler;
       if (!route.public) {
-        handler = const Pipeline()
-            .addMiddleware(authMiddleware)
-            .addHandler(handler);
+        handler = const Pipeline().addMiddleware(auth).addHandler(handler);
       }
       router.add(route.method, route.path, handler);
     }
@@ -130,7 +127,7 @@ extension on AppRouter {
 
       if (!route.public) {
         operation['security'] = [
-          {'BearerAuth': []},
+          {'BearerAuth': <String>[]},
         ];
       }
     }

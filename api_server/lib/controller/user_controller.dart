@@ -18,7 +18,7 @@ class UserController {
       final body = await request.readAsString();
       final user = User.fromJson(jsonDecode(body));
       final result = service.authenticate(user: user);
-      if (result.data case User user) {
+      if (result.data case final User user) {
         return .ok(jsonEncode(user.map));
       }
       return .unauthorized(
@@ -59,7 +59,7 @@ class UserController {
 
   Future<Response> selectHandler(Request request) async {
     try {
-      if (request.params case {'id': String id}) {
+      if (request.params case {'id': final String id}) {
         final result = service.selectBy(userId: .parse(id));
         return .ok(jsonEncode(result));
       }
@@ -88,7 +88,7 @@ class UserController {
 
   Future<Response> searchHandler(Request request) async {
     try {
-      if (request.params case {'term': String term}) {
+      if (request.params case {'term': final String term}) {
         return .ok(jsonEncode(service.search(term)));
       }
       return .badRequest(
@@ -155,7 +155,7 @@ class UserController {
 
   Future<Response> deleteHandler(Request request) async {
     try {
-      if (request.params case {'id': String id}) {
+      if (request.params case {'id': final String id}) {
         service.delete(userId: .parse(id));
         return .ok(jsonEncode(0));
       }

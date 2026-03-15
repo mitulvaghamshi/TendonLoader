@@ -6,7 +6,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 /// "Click" the device name to establish the connection, and start working.
 @immutable
 class DisconnectedTile extends StatelessWidget {
-  const DisconnectedTile({super.key, required this.device});
+  const DisconnectedTile({required this.device, super.key});
 
   final BluetoothDevice device;
 

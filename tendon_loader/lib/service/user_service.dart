@@ -17,12 +17,14 @@ class UserService {
   final LocalCache _cache;
 
   Future<Snapshot<Iterable<User>>> getAllUsers() async {
-    if (_cache.users.isNotEmpty) return .data(_cache.users.values);
+    if (_cache.users.isNotEmpty) {
+      return .data(_cache.users.values);
+    }
     final snapshot = await _client.get(
       'api/users',
       fromJson: UserData.fromJson,
     );
-    if (snapshot.data case UserData userData) {
+    if (snapshot.data case final UserData userData) {
       _cache.users.addAll({for (var item in userData.users) item.id!: item});
       return .data(userData.users);
     }
@@ -30,12 +32,14 @@ class UserService {
   }
 
   Future<Snapshot<User>> getUserById(int userId) async {
-    if (_cache.users.containsKey(userId)) return .data(_cache.users[userId]!);
+    if (_cache.users.containsKey(userId)) {
+      return .data(_cache.users[userId]!);
+    }
     final snapshot = await _client.get(
       'api/users/$userId',
       fromJson: User.fromJson,
     );
-    if (snapshot.data case User user) {
+    if (snapshot.data case final User user) {
       _cache.users.update(userId, (_) => user, ifAbsent: () => user);
       return .data(user);
     }
@@ -51,7 +55,7 @@ class UserService {
       body: user.map,
       fromJson: User.fromJson,
     );
-    if (snapshot.data case User user) {
+    if (snapshot.data case final User user) {
       return .data(user);
     }
     return .error(snapshot.error);

@@ -6,7 +6,7 @@ import 'package:tendon_loader/router/router.dart';
 
 @immutable
 class ExerciseList extends StatelessWidget {
-  const ExerciseList({super.key, required this.title, required this.items});
+  const ExerciseList({required this.title, required this.items, super.key});
 
   final String title;
   final Iterable<Exercise> items;
@@ -21,7 +21,7 @@ class ExerciseList extends StatelessWidget {
       onTap: () => ExerciseDetailsRoute(
         userId: item.userId,
         exerciseId: item.id,
-      ).push(context),
+      ).push<void>(context),
       spacing: 16,
       axisAlignment: .start,
       leading: CircleAvatar(child: Text(index.toString())),
@@ -29,7 +29,7 @@ class ExerciseList extends StatelessWidget {
         onPressed: () => ExerciseDataListRoute(
           userId: item.userId,
           exerciseId: item.id,
-        ).push(context),
+        ).push<void>(context),
         icon: const Icon(Icons.format_list_numbered_sharp),
       ),
       child: Text(item.datetime),

@@ -15,8 +15,12 @@ extension Utils<T> on Snapshot<T> {
   String? get error => _error;
 
   T get requireData {
-    if (hasData) return _data!;
-    if (hasError) return Error.throwWithStackTrace(_error!, .current);
+    if (hasData) {
+      return _data!;
+    }
+    if (hasError) {
+      return Error.throwWithStackTrace(_error!, .current);
+    }
     throw StateError('Snapshot has no data');
   }
 }

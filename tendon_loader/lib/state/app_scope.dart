@@ -3,7 +3,7 @@ import 'package:tendon_loader/state/app_state.dart';
 
 @immutable
 class AppScope extends InheritedWidget {
-  const AppScope({super.key, required this.data, required super.child});
+  const AppScope({required this.data, required super.child, super.key});
 
   final AppState data;
 

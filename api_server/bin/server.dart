@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:api_server/router/app_router.dart';
+import 'package:api_server/router/middleware.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_static/shelf_static.dart' as ss;
@@ -15,7 +16,14 @@ Future<void> main() async {
     defaultDocument: 'index.html',
   );
 
-  final logPipeline = const Pipeline().addMiddleware(logRequests());
+  final corsMiddleware = cors({
+    'origins': ['http://localhost:3001'],
+    'credentials': true,
+  });
+
+  final logPipeline = const Pipeline()
+      .addMiddleware(logRequests())
+      .addMiddleware(corsMiddleware);
 
   final handler = logPipeline.addHandler((request) async {
     final segments = request.url.pathSegments;

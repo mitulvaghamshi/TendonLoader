@@ -5,6 +5,8 @@ import 'package:tendon_loader/utils/constants.dart' show Styles;
 @immutable
 class InputFactory extends StatelessWidget {
   const InputFactory({
+    required this.label,
+    required this.controller,
     super.key,
     this.padding,
     this.keyboardType,
@@ -12,24 +14,22 @@ class InputFactory extends StatelessWidget {
     this.formatters,
     this.validator,
     this.onComplete,
-    required this.label,
-    required this.controller,
   });
 
   const factory InputFactory.search({
-    Key? key,
     required String label,
     required VoidCallback? onComplete,
     required TextEditingController controller,
+    Key? key,
   }) = _SearchField;
 
   const factory InputFactory.form({
+    required String label,
+    required TextEditingController controller,
     Key? key,
     String? format,
     EdgeInsetsGeometry? padding,
     TextInputType? keyboardType,
-    required String label,
-    required TextEditingController controller,
   }) = _FormField;
 
   final EdgeInsetsGeometry? padding;
@@ -66,10 +66,10 @@ class InputFactory extends StatelessWidget {
 @immutable
 class _SearchField extends InputFactory {
   const _SearchField({
-    super.key,
     required super.label,
     required super.controller,
     required super.onComplete,
+    super.key,
   });
 
   @override
@@ -84,12 +84,12 @@ class _SearchField extends InputFactory {
 @immutable
 class _FormField extends InputFactory {
   const _FormField({
+    required super.label,
+    required super.controller,
     super.key,
     super.padding,
     super.keyboardType,
     this.format,
-    required super.label,
-    required super.controller,
   });
 
   final String? format;

@@ -1,4 +1,3 @@
-library;
 
 export 'model/chartdata.dart';
 export 'model/exercise.dart';
