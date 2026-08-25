@@ -7,25 +7,6 @@
       "path": "tendon_loader",
     }
   ],
-  "settings": {
-    "editor.foldingImportsByDefault": true,
-    "dart.flutterCreateOrganization": "me.mitul",
-    "dart.flutterSdkPath": "/Users/mitulvaghamshi/flutter/bin",
-    "dart.flutterCreatePlatforms": [
-      "macos"
-    ],
-    "[dart]": {
-      "editor.defaultFormatter": "Dart-Code.dart-code"
-    },
-  },
-  "extensions": {
-    "recommendations": [
-      "Dart-Code.flutter",
-      "Dart-Code.dart-code",
-      "GitHub.github-vscode-theme",
-      "vscode-icons-team.vscode-icons",
-    ],
-  },
   "tasks": {
     "version": "2.0.0",
     "tasks": [
@@ -34,7 +15,7 @@
         "label": "Server:start",
         "command": "dart bin/server.dart",
         "options": {
-          "cwd": "${workspaceFolder}/api_server",
+          "cwd": "${workspaceFolder:api_server}",
           "env": {
             "PORT": "${input:port}",
             "DB_PATH": "${input:dbPath}",
@@ -51,7 +32,7 @@
         "label": "Install: pods:iOS",
         "command": "pod install",
         "options": {
-          "cwd": "${workspaceFolder}/tendon_loader/ios",
+          "cwd": "${workspaceFolder:tendon_loader}/ios",
         },
       },
       {
@@ -59,7 +40,7 @@
         "label": "Install: pods:macOS",
         "command": "pod install",
         "options": {
-          "cwd": "${workspaceFolder}/tendon_loader/macos",
+          "cwd": "${workspaceFolder:tendon_loader}/macos",
         },
       },
       {
@@ -68,7 +49,7 @@
         "label": "Run: build_runner:build clean",
         "command": "dart run build_runner build clean",
         "options": {
-          "cwd": "${workspaceFolder}/tendon_loader"
+          "cwd": "${workspaceFolder:tendon_loader}"
         },
       },
     ],
@@ -82,7 +63,7 @@
       {
         "id": "dbPath",
         "type": "promptString",
-        "default": "${workspaceFolder}/api_server/db/db.sqlite",
+        "default": "${workspaceFolder:api_server}/assets/tendonloader.db",
         "description": "Select database file",
       },
     ],

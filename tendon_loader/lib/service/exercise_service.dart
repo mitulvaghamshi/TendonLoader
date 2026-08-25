@@ -3,18 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/api/api_client.dart';
 
 @immutable
-class ExerciseService {
-  factory ExerciseService({ApiClient? client, LocalCache? cache}) =>
+class const ExerciseService._(
+  final ApiClient _client,
+  final LocalCache _cache,
+) {
+  factory({ApiClient? client, LocalCache? cache}) =>
       client != null || cache != null
       ? ._(client ?? .new(), cache ?? .instance)
       : instance;
 
-  const ExerciseService._(this._client, this._cache);
-
   static final instance = ExerciseService._(.new(), .instance);
-
-  final ApiClient _client;
-  final LocalCache _cache;
 
   Future<Snapshot<Iterable<Exercise>>> getAllExercisesByUserId(int id) async {
     if (_cache.exercises.containsKey(id)) {

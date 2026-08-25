@@ -18,33 +18,25 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-class AppRouter {
-  const AppRouter({
-    required this.userController,
-    required this.settingsController,
-    required this.exerciseController,
-    required this.prescriptionController,
-  });
-
-  factory AppRouter.configure() {
+class const AppRouter({
+  required final UserController userController,
+  required final SettingsController settingsController,
+  required final ExerciseController exerciseController,
+  required final PrescriptionController prescriptionController,
+}) {
+  factory configure() {
     final dbPath = ArgumentError.checkNotNull(
       Platform.environment['DB_PATH'],
       'DB_PATH',
     );
     final database = sqlite3.open(dbPath);
-
-    return AppRouter(
+    return .new(
       userController: .init(db: database),
       settingsController: .init(db: database),
       exerciseController: .init(db: database),
       prescriptionController: .init(db: database),
     );
   }
-
-  final UserController userController;
-  final SettingsController settingsController;
-  final ExerciseController exerciseController;
-  final PrescriptionController prescriptionController;
 }
 
 extension AppRouterExt on AppRouter {
@@ -63,13 +55,12 @@ extension AppRouterExt on AppRouter {
     final schema = jsonEncode(_buildOpenApiSchema);
     final swaggerUi = SwaggerUI(schema, title: 'TendonLoader API');
     router.mount('/docs', swaggerUi.call);
-    router.get(
-      '/docs/openapi.json',
-      (_) => Response.ok(
+    router.get('/docs/openapi.json', (_) {
+      return Response.ok(
         schema,
         headers: {HttpHeaders.contentTypeHeader: ContentType.json.value},
-      ),
-    );
+      );
+    });
 
     return router;
   }

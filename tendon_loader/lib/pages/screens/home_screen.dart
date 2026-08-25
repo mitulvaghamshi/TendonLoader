@@ -10,9 +10,7 @@ import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/simulator.dart';
 
 @immutable
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
+class const HomeScreen({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     children: [

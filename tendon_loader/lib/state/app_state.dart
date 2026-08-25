@@ -7,15 +7,13 @@ import 'package:tendon_loader/service/prescription_service.dart';
 import 'package:tendon_loader/service/settings_service.dart';
 import 'package:tendon_loader/service/user_service.dart';
 
-class AppState extends ChangeNotifier {
-  AppState()
-    : authUser = const .empty(),
-      settings = const .empty(),
-      prescription = const .empty();
-
-  User authUser;
-  Settings settings;
-  Prescription prescription;
+class AppState._({
+  required var User authUser,
+  required var Settings settings,
+  required var Prescription prescription,
+}) extends ChangeNotifier {
+  factory() =>
+      ._(authUser: .empty(), settings: .empty(), prescription: .empty());
 
   bool modified = false;
 

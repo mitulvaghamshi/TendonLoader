@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/state/app_state.dart';
 
 @immutable
-class AppScope extends InheritedWidget {
-  const AppScope({required this.data, required super.child, super.key});
-
-  final AppState data;
-
+class const AppScope({
+  required final AppState data,
+  required super.child,
+  super.key,
+}) extends InheritedWidget {
   static AppState of(BuildContext context) {
     final scope = context.getInheritedWidgetOfExactType<AppScope>();
     return ArgumentError.checkNotNull(scope, 'State not initialized').data;

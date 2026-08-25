@@ -12,11 +12,8 @@ import 'package:tendon_loader/state/app_state.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({required this.child, super.key});
-
-  final Widget child;
-
+class const SignInScreen({required final Widget child, super.key})
+    extends StatefulWidget {
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
@@ -55,7 +52,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Future<void> _authenticate() async {
     setState(() => _isLoading = true);
     try {
-      final user = const User.empty().copyWith(
+      final user = User.empty().copyWith(
         username: _usernameCtrl.text,
         password: _passwordCtrl.text,
       );

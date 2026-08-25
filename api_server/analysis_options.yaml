@@ -1,11 +1,17 @@
 include:
   - package:lints/recommended.yaml
-  - ../../mitulvaghamshi/analysis_strict_mode.yaml
+  - ../assets/analysis_extra.yaml
 
 analyzer:
   exclude:
-    - assets/**
+    - build/**
+    - android/**
+    - ios/**
     - web/**
+    - windows/**
+    - macos/**
+    - linux/**
+    - assets/**
 
 linter:
   rules:

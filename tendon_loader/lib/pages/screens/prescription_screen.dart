@@ -9,11 +9,10 @@ import 'package:tendon_loader/state/app_state.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-class PrescriptionScreen extends StatefulWidget {
-  const PrescriptionScreen({required this.prescription, super.key});
-
-  final Prescription prescription;
-
+class const PrescriptionScreen({
+  required final Prescription prescription,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<PrescriptionScreen> createState() => _PrescriptionScreenState();
 }

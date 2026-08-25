@@ -1,9 +1,7 @@
 import 'package:api_server/api_server.dart';
 import 'package:tendon_loader/handler/graph_handler.dart';
 
-class LiveDataHandler extends GraphHandler {
-  LiveDataHandler({required super.onCountdown});
-
+class LiveDataHandler({required super.onCountdown}) extends GraphHandler {
   double _time = 0;
 
   @override

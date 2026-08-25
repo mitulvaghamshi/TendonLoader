@@ -10,9 +10,7 @@ import 'package:tendon_loader/pages/widgets/button_factory.dart';
 /// This is a Stream, yet one time process...
 /// No interactive content in this widget.
 @immutable
-class ScannerList extends StatelessWidget {
-  const ScannerList({super.key});
-
+class const ScannerList({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StreamBuilder(
     stream: _getScanResults,

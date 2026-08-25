@@ -6,12 +6,8 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-class UserController {
-  const UserController(this.service);
-
-  factory UserController.init({required Database db}) => .new(.new(db));
-
-  final UserService service;
+class const UserController(final UserService service) {
+  factory init({required Database db}) => .new(.new(db));
 
   Future<Response> authHandler(Request request) async {
     try {

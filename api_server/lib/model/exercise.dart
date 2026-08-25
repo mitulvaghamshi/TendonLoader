@@ -1,47 +1,41 @@
 import 'package:api_server/api_server.dart';
 import 'package:api_server/sql/exercise_table.dart';
 
-class ExerciseData {
-  const ExerciseData({required this.exercises});
-
-  factory ExerciseData.fromJson(Object? json) {
-    if (json case {'exercises': final List<dynamic> items}) {
+class const ExerciseData({required final Iterable<Exercise> exercises}) {
+  factory fromJson(Object? json) {
+    if (json case {'exercises': final Iterable<dynamic> items}) {
       return .new(exercises: items.map(Exercise.fromJson));
     }
-
-    throw FormatException('[$ExerciseData]: Invalid JSON data: $json');
+    throw Exception('[$ExerciseData]: ${StackTrace.current}');
   }
-
-  final Iterable<Exercise> exercises;
 }
 
-class Exercise {
-  const Exercise._({
-    required this.id,
-    required this.userId,
-    required this.painScore,
-    required this.datetime,
-    required this.tolerable,
-    required this.completed,
-    required this.progressorId,
-    required this.prescriptionId,
-    required this.mvcValue,
-    required this.data,
-  });
+class const Exercise._({
+  required final int id,
+  required final int userId,
+  required final double painScore,
+  required final String datetime,
+  required final String tolerable,
+  required final bool completed,
+  required final String progressorId,
+  required final int? prescriptionId,
+  required final double? mvcValue,
+  required final Iterable<ChartData> data,
+}) {
+  factory empty() => const ._(
+    id: 0,
+    userId: 0,
+    painScore: 0,
+    datetime: '',
+    tolerable: '',
+    completed: false,
+    progressorId: '',
+    prescriptionId: null,
+    mvcValue: 0,
+    data: [],
+  );
 
-  const Exercise.empty()
-    : id = 0,
-      userId = 0,
-      painScore = 0,
-      datetime = '',
-      tolerable = '',
-      completed = false,
-      progressorId = '',
-      prescriptionId = null,
-      mvcValue = 0,
-      data = const [];
-
-  factory Exercise.fromJson(Object? json) {
+  factory fromJson(Object? json) {
     if (json case {
       ExerciseTable.kId: final int id,
       ExerciseTable.kUserId: final int userId,
@@ -67,20 +61,8 @@ class Exercise {
         data: rawData.split('|').map(ChartData.fromPair),
       );
     }
-
-    throw FormatException('[$Exercise]: Invalid JSON data: $json');
+    throw Exception('[$Exercise]: ${StackTrace.current}');
   }
-
-  final int id;
-  final int userId;
-  final double painScore;
-  final String datetime;
-  final String tolerable;
-  final bool completed;
-  final String progressorId;
-  final int? prescriptionId;
-  final double? mvcValue;
-  final Iterable<ChartData> data;
 }
 
 extension ExerciseExt on Exercise {
@@ -88,7 +70,7 @@ extension ExerciseExt on Exercise {
   String get type => isMVC ? 'MVC Test' : 'Exercise';
   String get status => completed ? 'Complete' : 'Incomplete';
 
-  List<({String label, String value})> get tableRows => [
+  Iterable<({String label, String value})> get tableRows => [
     (label: 'User ID', value: userId.toString()),
     (label: 'Created on', value: datetime),
     (label: 'Session type', value: type),

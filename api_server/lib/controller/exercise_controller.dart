@@ -5,12 +5,8 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-class ExerciseController {
-  const ExerciseController(this.service);
-
-  factory ExerciseController.init({required Database db}) => .new(.new(db));
-
-  final ExerciseService service;
+class const ExerciseController(final ExerciseService service) {
+  factory init({required Database db}) => .new(.new(db));
 
   Future<Response> queryHandler(Request request) async {
     try {

@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/pages/widgets/button_factory.dart';
 
 @immutable
-class FutureWrapper<T> extends StatelessWidget {
-  const FutureWrapper({required this.future, required this.builder, super.key});
-
-  final Future<T> future;
-  final Widget Function(T value) builder;
-
+class const FutureWrapper<T>({
+  required final Future<T> future,
+  required final Widget Function(T value) builder,
+  super.key,
+}) extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => FutureBuilder<T>(
+  Widget build(BuildContext context) => FutureBuilder(
     future: future,
     builder: (_, snapshot) => snapshot.hasData
         ? builder(snapshot.requireData)

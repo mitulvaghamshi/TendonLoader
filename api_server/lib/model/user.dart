@@ -1,38 +1,34 @@
 import 'package:api_server/sql/user_table.dart';
 
-class UserData {
-  const UserData._({required this.users});
+class const UserData._({required final Iterable<User> users}) {
+  factory empty() => const ._(users: []);
 
-  const UserData.empty() : users = const [];
-
-  factory UserData.fromJson(Object? json) {
+  factory fromJson(Object? json) {
     if (json case {'users': final List<dynamic> items}) {
       return ._(users: items.map(User.fromJson));
     }
-
-    throw FormatException('[$UserData]: Invalid JSON data: $json');
+    throw Exception('[$UserData]: ${StackTrace.current}');
   }
-
-  final Iterable<User> users;
 }
 
-class User {
-  const User._({
-    required this.id,
-    required this.username,
-    required this.password,
-    required this.token,
-    required this.role,
-  });
+class const User._({
+  required final int? id,
+  required final String username,
+  required final String password,
+  required final String? token,
+  required final String role,
+}) {
+  factory empty() {
+    return const ._(
+      id: null,
+      username: '',
+      password: '',
+      token: null,
+      role: 'user',
+    );
+  }
 
-  const User.empty()
-    : id = null,
-      username = '',
-      password = '',
-      token = null,
-      role = 'user';
-
-  factory User.fromJson(Object? json) {
+  factory fromJson(Object? json) {
     if (json case {
       UserTable.kId: final int? id,
       UserTable.kUsername: final String username,
@@ -48,6 +44,7 @@ class User {
         role: role ?? 'user',
       );
     }
+
     // Fallback for missing role in older JSON or other structures if necessary,
     // but the pattern matching above handles the structural check.
     // If exact match is required for the pattern,
@@ -67,14 +64,8 @@ class User {
       );
     }
 
-    throw FormatException('[$User]: Invalid JSON data: $json');
+    throw Exception('[$User]: ${StackTrace.current}');
   }
-
-  final int? id;
-  final String? token;
-  final String role;
-  final String password;
-  final String username;
 }
 
 extension UserExt on User {

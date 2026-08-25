@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class LifeCycleAware extends StatefulWidget {
-  const LifeCycleAware({
-    required this.onPause,
-    required this.onResume,
-    required this.builder,
-    super.key,
-  });
-
-  final VoidCallback onPause;
-  final VoidCallback onResume;
-  final WidgetBuilder builder;
-
+class const LifeCycleAware({
+  required final VoidCallback onPause,
+  required final VoidCallback onResume,
+  required final WidgetBuilder builder,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<LifeCycleAware> createState() => _LifeCycleAwareState();
 }

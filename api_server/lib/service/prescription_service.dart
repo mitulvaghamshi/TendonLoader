@@ -1,11 +1,7 @@
 import 'package:api_server/sql/prescription_table.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-class PrescriptionService {
-  const PrescriptionService(this.db);
-
-  final Database db;
-
+class const PrescriptionService(final Database db) {
   ResultSet selectAll() {
     return db.select(PrescriptionTable.sqlSelectAll);
   }

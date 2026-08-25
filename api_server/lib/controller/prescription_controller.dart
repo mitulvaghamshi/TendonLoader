@@ -5,12 +5,8 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-class PrescriptionController {
-  const PrescriptionController(this.service);
-
-  factory PrescriptionController.init({required Database db}) => .new(.new(db));
-
-  final PrescriptionService service;
+class const PrescriptionController(final PrescriptionService service) {
+  factory init({required Database db}) => .new(.new(db));
 
   Future<Response> queryHandler(Request request) async {
     try {

@@ -17,11 +17,8 @@ void main() {
 }
 
 @immutable
-class MainApp extends StatelessWidget {
-  const MainApp({required this.state, super.key});
-
-  final AppState state;
-
+class const MainApp({required final AppState state, super.key})
+    extends StatelessWidget {
   static final _router = GoRouter(routes: $appRoutes);
 
   @override

@@ -15,11 +15,8 @@ import 'package:tendon_loader/utils/constants.dart';
 /// "Progressor" (either by squeezing or pulling), to sat down at "0 Kg.",
 /// keep holding, and click the "Tare Progressor" button.
 @immutable
-class ConnectedTile extends StatelessWidget {
-  const ConnectedTile({required this.device, super.key});
-
-  final BluetoothDevice device;
-
+class const ConnectedTile({required final BluetoothDevice device, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FutureBuilder(
     initialData: false,

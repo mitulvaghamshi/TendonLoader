@@ -10,40 +10,57 @@ List<RouteBase> get $appRoutes => [$tendonLoaderRoute];
 
 RouteBase get $tendonLoaderRoute => GoRouteData.$route(
   path: '/',
+  hasOverriddenOnExit: true,
   factory: $TendonLoaderRoute._fromState,
   routes: [
     GoRouteData.$route(
       path: 'settings',
+      hasOverriddenOnExit: true,
       factory: $SettingScreenRoute._fromState,
     ),
     GoRouteData.$route(
       path: 'prescriptions',
+      hasOverriddenOnExit: false,
       factory: $PrescriptionRoute._fromState,
     ),
-    GoRouteData.$route(path: 'livedata', factory: $LiveDataRoute._fromState),
+    GoRouteData.$route(
+      path: 'livedata',
+      hasOverriddenOnExit: false,
+      factory: $LiveDataRoute._fromState,
+    ),
     GoRouteData.$route(
       path: 'mvctesting',
+      hasOverriddenOnExit: false,
       factory: $MVCTestingRoute._fromState,
     ),
     GoRouteData.$route(
       path: 'exercisemode',
+      hasOverriddenOnExit: false,
       factory: $ExerciseModeRoute._fromState,
     ),
     GoRouteData.$route(
       path: 'promptscreen',
+      hasOverriddenOnExit: false,
       factory: $PromptScreenRoute._fromState,
     ),
-    GoRouteData.$route(path: 'userlist', factory: $UserListRoute._fromState),
+    GoRouteData.$route(
+      path: 'userlist',
+      hasOverriddenOnExit: false,
+      factory: $UserListRoute._fromState,
+    ),
     GoRouteData.$route(
       path: 'exerciselist',
+      hasOverriddenOnExit: false,
       factory: $ExerciseListRoute._fromState,
     ),
     GoRouteData.$route(
       path: 'exercisedetail',
+      hasOverriddenOnExit: false,
       factory: $ExerciseDetailsRoute._fromState,
     ),
     GoRouteData.$route(
       path: 'exercisedatalist',
+      hasOverriddenOnExit: false,
       factory: $ExerciseDataListRoute._fromState,
     ),
   ],

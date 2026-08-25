@@ -8,9 +8,7 @@ import 'package:tendon_loader/state/app_state.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
-
+class const SettingsScreen({super.key}) extends StatefulWidget {
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
 }

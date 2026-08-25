@@ -9,9 +9,7 @@ import 'package:tendon_loader/utils/constants.dart';
 /// Once, device is powred on, user can use "Scan" button
 /// to start scanning for nearby device.
 @immutable
-class StartScanTile extends StatelessWidget {
-  const StartScanTile({super.key});
-
+class const StartScanTile({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     mainAxisSize: .min,

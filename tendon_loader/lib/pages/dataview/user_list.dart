@@ -6,11 +6,8 @@ import 'package:tendon_loader/router/router.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-class UserList extends StatelessWidget {
-  const UserList({required this.items, super.key});
-
-  final Iterable<User> items;
-
+class const UserList({required final Iterable<User> items, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SearchList(
     items: items,
@@ -22,12 +19,8 @@ class UserList extends StatelessWidget {
 }
 
 @immutable
-class _UserItem extends StatelessWidget {
-  const _UserItem({required this.user, required this.index});
-
-  final User user;
-  final int index;
-
+class const _UserItem({required final User user, required final int index})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ButtonFactory.tile(
     onTap: () => ExerciseListRoute(

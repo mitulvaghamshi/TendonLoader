@@ -7,12 +7,7 @@ import 'package:flutter/foundation.dart' show immutable;
 /// empty class which does nothing.
 /// Currently, calling these methods leads to exception.
 @immutable
-class AnchorElement {
-  const AnchorElement({this.href});
-
-  // Link with excel data embaded, on click triggers download on browsers.
-  final String? href;
-
+class const AnchorElement({final String? href}) {
   void click() {
     throw UnimplementedError();
     //TODO(mitul): Implement platform specific code to

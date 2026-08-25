@@ -1,26 +1,25 @@
 import 'package:api_server/sql/settings_table.dart';
 
-class Settings {
-  const Settings._({
-    required this.id,
-    required this.darkMode,
-    required this.autoUpload,
-    required this.editablePrescription,
-    required this.graphScale,
-    required this.userId,
-    required this.prescriptionId,
-  });
+class const Settings._({
+  required final int? id,
+  required final bool darkMode,
+  required final bool autoUpload,
+  required final bool editablePrescription,
+  required final double graphScale,
+  required final int? userId,
+  required final int? prescriptionId,
+}) {
+  factory empty() => const ._(
+    id: null,
+    darkMode: false,
+    autoUpload: false,
+    editablePrescription: true,
+    graphScale: 30,
+    userId: null,
+    prescriptionId: null,
+  );
 
-  const Settings.empty()
-    : id = null,
-      darkMode = false,
-      autoUpload = false,
-      editablePrescription = true,
-      graphScale = 30.0,
-      userId = null,
-      prescriptionId = null;
-
-  factory Settings.fromJson(Object? json) {
+  factory fromJson(Object? json) {
     if (json case {
       SettingsTable.kId: final int id,
       SettingsTable.kUserId: final int? userId,
@@ -40,17 +39,8 @@ class Settings {
         graphScale: graphScale.toDouble(),
       );
     }
-
-    throw FormatException('[$Settings]: Invalid JSON data: $json');
+    throw Exception('[$Settings]: ${StackTrace.current}');
   }
-
-  final int? id;
-  final int? userId;
-  final int? prescriptionId;
-  final bool darkMode;
-  final bool autoUpload;
-  final bool editablePrescription;
-  final double graphScale;
 }
 
 extension SettingsExt on Settings {

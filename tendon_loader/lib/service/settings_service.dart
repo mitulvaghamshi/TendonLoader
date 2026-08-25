@@ -3,18 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/api/api_client.dart';
 
 @immutable
-class SettingsService {
-  factory SettingsService({ApiClient? client, LocalCache? cache}) =>
+class const SettingsService._(
+  final ApiClient _client,
+  final LocalCache _cache,
+) {
+  factory({ApiClient? client, LocalCache? cache}) =>
       client != null || cache != null
       ? ._(client ?? .new(), cache ?? .instance)
       : instance;
 
-  const SettingsService._(this._client, this._cache);
-
   static final instance = SettingsService._(.new(), .instance);
-
-  final ApiClient _client;
-  final LocalCache _cache;
 
   Future<Snapshot<Settings>> getSettingsBy({required int userId}) async {
     if (_cache.settings.containsKey(userId)) {

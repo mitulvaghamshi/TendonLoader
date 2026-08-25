@@ -1,28 +1,27 @@
 import 'package:api_server/sql/prescription_table.dart';
 
-class Prescription {
-  const Prescription._({
-    required this.id,
-    required this.sets,
-    required this.reps,
-    required this.setRest,
-    required this.holdTime,
-    required this.restTime,
-    required this.mvcDuration,
-    required this.targetLoad,
-  });
+class const Prescription._({
+  required final int? id,
+  required final int sets,
+  required final int reps,
+  required final int setRest,
+  required final int holdTime,
+  required final int restTime,
+  required final int mvcDuration,
+  required final double targetLoad,
+}) {
+  factory empty() => const ._(
+    id: null,
+    sets: 0,
+    reps: 0,
+    setRest: 0,
+    holdTime: 0,
+    restTime: 0,
+    mvcDuration: 0,
+    targetLoad: 0,
+  );
 
-  const Prescription.empty()
-    : id = null,
-      sets = 0,
-      reps = 0,
-      setRest = 0,
-      holdTime = 0,
-      restTime = 0,
-      mvcDuration = 0,
-      targetLoad = 0;
-
-  factory Prescription.fromJson(Object? json) {
+  factory fromJson(Object? json) {
     if (json case {
       PrescriptionTable.kId: final int id,
       PrescriptionTable.kReps: final int reps,
@@ -44,22 +43,12 @@ class Prescription {
         targetLoad: targetLoad.toDouble(),
       );
     }
-
-    throw FormatException('[$Prescription]: Invalid JSON data: $json');
+    throw Exception('[$Prescription]: ${StackTrace.current}');
   }
-
-  final int? id;
-  final int sets;
-  final int reps;
-  final int setRest;
-  final int holdTime;
-  final int restTime;
-  final int mvcDuration;
-  final double targetLoad;
 }
 
 extension PrescriptionExt on Prescription {
-  List<({String label, String value})> get tableRows => [
+  Iterable<({String label, String value})> get tableRows => [
     (label: 'Target load', value: '$targetLoad Kg'),
     (label: 'Sets #', value: '$sets'),
     (label: 'Reps #', value: '$reps'),

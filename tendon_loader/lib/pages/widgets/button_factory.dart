@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-class ButtonFactory extends StatelessWidget {
-  const ButtonFactory({
-    super.key,
-    this.color,
-    this.child,
-    this.onTap,
-    this.radius = 8,
-    this.padding = const .all(16),
-  });
+class const ButtonFactory({
+  super.key,
+  final Color? color,
+  final Widget? child,
+  final VoidCallback? onTap,
+  final double radius = 8,
+  final EdgeInsetsGeometry padding = const .all(16),
+}) extends StatelessWidget {
+  const factory loading({bool centered}) = _RawLoading;
 
-  const factory ButtonFactory.tile({
+  const factory error({Color? color, String message}) = _RawError;
+
+  const factory tile({
     Key? key,
     Widget? child,
     Color? color,
@@ -25,16 +27,6 @@ class ButtonFactory extends StatelessWidget {
     MainAxisSize axisSize,
     MainAxisAlignment axisAlignment,
   }) = _RawListTile;
-
-  const factory ButtonFactory.loading({bool centered}) = _RawLoading;
-
-  const factory ButtonFactory.error({Color? color, String message}) = _RawError;
-
-  final Widget? child;
-  final Color? color;
-  final double radius;
-  final VoidCallback? onTap;
-  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
@@ -54,27 +46,19 @@ class ButtonFactory extends StatelessWidget {
 }
 
 @immutable
-class _RawListTile extends ButtonFactory {
-  const _RawListTile({
-    super.key,
-    super.onTap,
-    super.color,
-    super.radius,
-    super.padding,
-    super.child,
-    this.leading,
-    this.trailing,
-    this.spacing = 5,
-    this.axisSize = .max,
-    this.axisAlignment = .center,
-  });
-
-  final Widget? leading;
-  final Widget? trailing;
-  final double? spacing;
-  final MainAxisSize axisSize;
-  final MainAxisAlignment axisAlignment;
-
+class const _RawListTile({
+  super.key,
+  super.onTap,
+  super.color,
+  super.radius,
+  super.padding,
+  super.child,
+  final Widget? leading,
+  final Widget? trailing,
+  final double? spacing = 5,
+  final MainAxisSize axisSize = .max,
+  final MainAxisAlignment axisAlignment = .center,
+}) extends ButtonFactory {
   @override
   Widget build(BuildContext context) {
     final items = [
@@ -97,11 +81,7 @@ class _RawListTile extends ButtonFactory {
 }
 
 @immutable
-class _RawLoading extends ButtonFactory {
-  const _RawLoading({this.centered = false});
-
-  final bool centered;
-
+class const _RawLoading({final bool centered = false}) extends ButtonFactory {
   @override
   Widget build(BuildContext context) {
     const widget = ButtonFactory.tile(
@@ -125,14 +105,10 @@ class _RawLoading extends ButtonFactory {
 }
 
 @immutable
-class _RawError extends ButtonFactory {
-  const _RawError({
-    super.color = Colors.red,
-    this.message = 'Something went wrong',
-  });
-
-  final String message;
-
+class const _RawError({
+  super.color = Colors.red,
+  final String message = 'Something went wrong',
+}) extends ButtonFactory {
   @override
   Widget build(BuildContext context) => ButtonFactory.tile(
     color: color,

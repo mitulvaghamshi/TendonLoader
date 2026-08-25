@@ -5,11 +5,8 @@ import 'package:tendon_loader/pages/widgets/button_factory.dart';
 import 'package:tendon_loader/utils/utils.dart';
 
 @immutable
-class ExerciseDetail extends StatelessWidget {
-  const ExerciseDetail(this.record, {super.key});
-
-  final ExerciseRecord record;
-
+class const ExerciseDetail(final ExerciseRecord record, {super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => CustomScrollView(
     slivers: [
@@ -30,11 +27,7 @@ class ExerciseDetail extends StatelessWidget {
 }
 
 @immutable
-class _ListItem extends StatelessWidget {
-  const _ListItem({required this.item});
-
-  final TableItem item;
-
+class const _ListItem({required final TableItem item}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ButtonFactory(
     child: Row(
@@ -47,12 +40,10 @@ class _ListItem extends StatelessWidget {
 }
 
 @immutable
-class _DataGraph extends StatelessWidget {
-  const _DataGraph({required this.tagetLoad, required this.items});
-
-  final double tagetLoad;
-  final Iterable<ChartData> items;
-
+class const _DataGraph({
+  required final double tagetLoad,
+  required final Iterable<ChartData> items,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SfCartesianChart(
     tooltipBehavior: TooltipBehavior(enable: true, header: 'Time/Load'),
@@ -63,14 +54,14 @@ class _DataGraph extends StatelessWidget {
     ),
     primaryYAxis: const NumericAxis(interval: 1, labelFormat: '{value} kg'),
     series: <LineSeries<ChartData, double>>[
-      LineSeries(
+      .new(
         color: Colors.green,
         animationDuration: 7000,
         xValueMapper: (data, _) => data.time,
         yValueMapper: (data, _) => data.load,
         dataSource: items.toList(),
       ),
-      LineSeries(
+      .new(
         color: Colors.orange,
         animationDuration: 0,
         xValueMapper: (data, _) => data.time,

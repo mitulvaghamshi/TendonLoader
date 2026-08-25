@@ -3,18 +3,15 @@ import 'package:tendon_loader/pages/widgets/button_factory.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-class TimePickerTile extends StatelessWidget {
-  const TimePickerTile({
-    required this.time, required this.label, required this.onSelect, super.key,
-  });
-
-  final int time;
-  final String label;
-  final ValueChanged<int> onSelect;
-
+class const TimePickerTile({
+  required final int time,
+  required final String label,
+  required final ValueChanged<int> onSelect,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Duration duration = .new(seconds: time);
+    final duration = Duration(seconds: time);
     int minutes = duration.inMinutes;
     int seconds = duration.inSeconds % 60;
 
@@ -54,30 +51,23 @@ class TimePickerTile extends StatelessWidget {
 
 extension on TimePickerTile {
   String _timeString(int minutes, int seconds) {
-    final Duration duration = .new(minutes: minutes, seconds: seconds);
+    final duration = Duration(minutes: minutes, seconds: seconds);
     return '${duration.inMinutes} min : ${duration.inSeconds % 60} sec';
   }
 
   void _submit(int minutes, int seconds) {
-    final Duration duration = .new(minutes: minutes, seconds: seconds);
+    final duration = Duration(minutes: minutes, seconds: seconds);
     onSelect(duration.inSeconds);
   }
 }
 
 @immutable
-class _NumberPicker extends StatelessWidget {
-  const _NumberPicker({
-    required this.pickerSize,
-    required this.maxValue,
-    required this.initialValue,
-    required this.onChange,
-  });
-
-  final Size pickerSize;
-  final int maxValue;
-  final int initialValue;
-  final ValueChanged<int> onChange;
-
+class const _NumberPicker({
+  required final Size pickerSize,
+  required final int maxValue,
+  required final int initialValue,
+  required final ValueChanged<int> onChange,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const textStyle = TextStyle(

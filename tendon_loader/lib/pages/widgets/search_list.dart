@@ -2,22 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/pages/widgets/input_factory.dart';
 
 @immutable
-class SearchList<T> extends StatefulWidget {
-  const SearchList({
-    required this.title,
-    required this.searchLabel,
-    required this.items,
-    required this.searchTerm,
-    required this.builder,
-    super.key,
-  });
-
-  final String title;
-  final String searchLabel;
-  final Iterable<T> items;
-  final String Function(T item) searchTerm;
-  final Widget Function(T item, int index) builder;
-
+class const SearchList<T>({
+  required final String title,
+  required final String searchLabel,
+  required final Iterable<T> items,
+  required final String Function(T item) searchTerm,
+  required final Widget Function(T item, int index) builder,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<SearchList<T>> createState() => _SearchListState<T>();
 }

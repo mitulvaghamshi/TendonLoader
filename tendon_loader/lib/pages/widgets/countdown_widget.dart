@@ -1,15 +1,11 @@
-import 'dart:async';
 import 'dart:math' show pi;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 @immutable
-class CountdownWidget extends StatefulWidget {
-  const CountdownWidget({required this.duration, super.key});
-
-  final Duration duration;
-
+class const CountdownWidget({required final Duration duration, super.key})
+    extends StatefulWidget {
   @override
   State<CountdownWidget> createState() => _CountdownWidgetState();
 }
@@ -19,7 +15,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
   late final _controller = AnimationController(
     vsync: this,
     duration: widget.duration + const .new(seconds: 1),
-  )..addStatusListener(_onFinish);
+  );
 
   void _onFinish(_) {
     if (mounted) {
@@ -30,10 +26,9 @@ class _CountdownWidgetState extends State<CountdownWidget>
   @override
   void initState() {
     super.initState();
-    unawaited(
-      _controller.reverse(
-        from: _controller.value == 0.0 ? 1.0 : _controller.value,
-      ),
+    _controller.addStatusListener(_onFinish);
+    _controller.reverse(
+      from: _controller.value == 0.0 ? 1.0 : _controller.value,
     );
   }
 
@@ -64,10 +59,9 @@ class _CountdownWidgetState extends State<CountdownWidget>
 }
 
 @immutable
-class _CirclePainter extends CustomPainter {
-  const _CirclePainter(this.controller) : super(repaint: controller);
-
-  final Animation<double> controller;
+class const _CirclePainter(final Animation<double> controller)
+    extends CustomPainter {
+  this : super(repaint: controller);
 
   @override
   bool shouldRepaint(_) => false;

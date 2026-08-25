@@ -4,17 +4,13 @@ import 'dart:io';
 import 'package:shelf/shelf.dart';
 
 /// Using `highlight.js` syntax coloring theme.
-enum Syntax {
+enum const Syntax(final String theme) {
   agate('agate'),
   arta('arta'),
   monokai('monokai'),
   nord('nord'),
   obsidian('obsidian'),
   tomorrowNight('tomorrow-night');
-
-  const Syntax(this.theme);
-
-  final String theme;
 }
 
 /// Controls the default expansion setting.
@@ -38,42 +34,32 @@ enum SpecType { yaml, json }
 /// );
 /// await io.serve(swaggerHandler, '0.0.0.0', 3002);
 ///```
-class SwaggerUI {
-  const SwaggerUI(
-    this.schema, {
-    this.title = 'Swagger UI',
-    this.deepLink = false,
-    this.syntax = .agate,
-    this.expansion = .list,
-    this.persistAuth = false,
-    this.specType = .json,
-  });
+class const SwaggerUI(
+  /// Schema (YAML/JSON) content.
+  final String schema, {
 
+  /// Title for browser tab.
+  final String title = 'Swagger UI',
+
+  /// Reference each node in the url (e.g.: /swagger/#/post).
+  final bool deepLink = false,
+
+  /// Highlight.js syntax highliting to use.
+  final Syntax syntax = .agate,
+
+  /// Controls expansion setting for the operations and tags.
+  final Expansion expansion = .list,
+
+  /// Persists authorization between close/refresh.
+  final bool persistAuth = false,
+
+  /// Type Schema (YAML/JSON).
+  final SpecType specType = .json,
+}) {
   FutureOr<Response> call(Request request) => .ok(
     _generateBody,
     headers: {HttpHeaders.contentTypeHeader: ContentType.html.value},
   );
-
-  /// Schema (YAML/JSON) content.
-  final String schema;
-
-  /// Title for browser tab.
-  final String title;
-
-  /// Reference each node in the url (e.g.: /swagger/#/post).
-  final bool deepLink;
-
-  /// Highlight.js syntax highliting to use.
-  final Syntax syntax;
-
-  /// Controls expansion setting for the operations and tags.
-  final Expansion expansion;
-
-  /// Persists authorization between close/refresh.
-  final bool persistAuth;
-
-  /// Type Schema (YAML/JSON).
-  final SpecType specType;
 }
 
 extension SwaggerUiNew on SwaggerUI {

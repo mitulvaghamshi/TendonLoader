@@ -1,11 +1,7 @@
 import 'package:api_server/sql/exercise_table.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-class ExerciseService {
-  const ExerciseService(this.db);
-
-  final Database db;
-
+class const ExerciseService(final Database db) {
   ResultSet selectAll() {
     return db.select(ExerciseTable.sqlSelectAll);
   }

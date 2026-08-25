@@ -4,12 +4,11 @@ import 'package:api_server/api_server.dart';
 import 'package:flutter/services.dart';
 import 'package:tendon_loader/handler/graph_handler.dart';
 
-class MVCHandler extends GraphHandler {
-  MVCHandler({required this.mvcDuration, required super.onCountdown})
+class MVCHandler({required final int mvcDuration, required super.onCountdown})
+    extends GraphHandler {
+  this
     : timeDiff = mvcDuration.toDouble(),
       super(lineData: [const ChartData(), const ChartData(time: 2)]);
-
-  final int mvcDuration;
 
   double maxForce = 0;
   double timeDiff;
@@ -51,7 +50,7 @@ class MVCHandler extends GraphHandler {
     if (!hasData) {
       return '';
     }
-    export ??= const Exercise.empty().copyWith(mvcValue: maxForce);
+    export ??= Exercise.empty().copyWith(mvcValue: maxForce);
     return super.exit();
   }
 

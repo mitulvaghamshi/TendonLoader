@@ -1,4 +1,3 @@
-
 export 'model/chartdata.dart';
 export 'model/exercise.dart';
 export 'model/prescription.dart';

@@ -34,7 +34,7 @@ Middleware checkRole(List<String> roles) => (handler) {
 };
 
 Middleware cors([Map<String, dynamic> options = const {}]) => (handler) {
-  final Map<String, dynamic> defaultOptions = {
+  final defaultOptions = <String, dynamic>{
     'origins': <String>[],
     'credentials': true,
     'methods': ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

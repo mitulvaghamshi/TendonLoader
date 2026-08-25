@@ -1,19 +1,17 @@
 import 'package:shelf/shelf.dart';
 
-class AppRoute {
-  const AppRoute({
-    required this.method,
-    required this.path,
-    required this.handler,
-    required this.responses,
-    this.requestBody,
-    this.description,
-    this.summary,
-    this.public = false,
-    this.tag = 'General',
-  });
-
-  factory AppRoute.get({
+class const AppRoute({
+  required final String method,
+  required final String path, // e.g. /api/users/<id>
+  required final Handler handler,
+  required final Map<String, dynamic> responses,
+  final Map<String, dynamic>? requestBody,
+  final String? description,
+  final String? summary,
+  final bool public = false,
+  final String tag = 'General',
+}) {
+  factory get({
     required String path,
     required Handler handler,
     required String tag,
@@ -21,7 +19,7 @@ class AppRoute {
     bool public = false,
     String? summary,
     String? description,
-  }) => AppRoute(
+  }) => .new(
     method: 'GET',
     path: path,
     handler: handler,
@@ -32,7 +30,7 @@ class AppRoute {
     tag: tag,
   );
 
-  factory AppRoute.post({
+  factory post({
     required String path,
     required Handler handler,
     required String tag,
@@ -41,7 +39,7 @@ class AppRoute {
     bool public = false,
     String? summary,
     String? description,
-  }) => AppRoute(
+  }) => .new(
     method: 'POST',
     path: path,
     handler: handler,
@@ -53,7 +51,7 @@ class AppRoute {
     tag: tag,
   );
 
-  factory AppRoute.put({
+  factory put({
     required String path,
     required Handler handler,
     required String tag,
@@ -62,7 +60,7 @@ class AppRoute {
     bool public = false,
     String? summary,
     String? description,
-  }) => AppRoute(
+  }) => .new(
     method: 'PUT',
     path: path,
     handler: handler,
@@ -74,7 +72,7 @@ class AppRoute {
     tag: tag,
   );
 
-  factory AppRoute.patch({
+  factory patch({
     required String path,
     required Handler handler,
     required String tag,
@@ -83,7 +81,7 @@ class AppRoute {
     bool public = false,
     String? summary,
     String? description,
-  }) => AppRoute(
+  }) => .new(
     method: 'PATCH',
     path: path,
     handler: handler,
@@ -95,7 +93,7 @@ class AppRoute {
     tag: tag,
   );
 
-  factory AppRoute.delete({
+  factory delete({
     required String path,
     required Handler handler,
     required String tag,
@@ -103,7 +101,7 @@ class AppRoute {
     bool public = false,
     String? summary,
     String? description,
-  }) => AppRoute(
+  }) => .new(
     method: 'DELETE',
     path: path,
     handler: handler,
@@ -113,14 +111,4 @@ class AppRoute {
     public: public,
     tag: tag,
   );
-
-  final String method;
-  final String path; // e.g. /api/users/<id>
-  final Handler handler;
-  final bool public;
-  final String tag;
-  final String? summary;
-  final String? description;
-  final Map<String, dynamic> responses;
-  final Map<String, dynamic>? requestBody;
 }

@@ -1,13 +1,8 @@
-class ChartData {
-  const ChartData({this.time = 0, this.load = 0});
-
-  factory ChartData.fromPair(String data) {
+class const ChartData({final double time = 0, final double load = 0}) {
+  factory fromPair(String data) {
     final items = data.split(':');
     return .new(time: .parse(items[0]), load: .parse(items[1]));
   }
-
-  final double time;
-  final double load;
 }
 
 extension ChartDataExt on ChartData {

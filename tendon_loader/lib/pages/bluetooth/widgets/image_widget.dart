@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class ImageWidget extends StatelessWidget {
-  const ImageWidget({required this.path, super.key});
-
-  final String path;
-
+class const ImageWidget({required final String path, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Image.asset(
     path,

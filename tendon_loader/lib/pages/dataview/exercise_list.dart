@@ -5,12 +5,11 @@ import 'package:tendon_loader/pages/widgets/search_list.dart';
 import 'package:tendon_loader/router/router.dart';
 
 @immutable
-class ExerciseList extends StatelessWidget {
-  const ExerciseList({required this.title, required this.items, super.key});
-
-  final String title;
-  final Iterable<Exercise> items;
-
+class const ExerciseList({
+  required final String title,
+  required final Iterable<Exercise> items,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SearchList(
     items: items,

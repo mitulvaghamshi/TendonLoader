@@ -9,20 +9,14 @@ import 'package:tendon_loader/pages/widgets/button_factory.dart';
 /// This is repeating process...
 /// No interactive content in this widget.
 @immutable
-class ScanningTile extends StatelessWidget {
-  const ScanningTile({super.key});
-
+class const ScanningTile({super.key}) extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => StreamBuilder<bool>(
-    initialData: false,
+  Widget build(BuildContext context) => StreamBuilder(
     stream: FlutterBlue.instance.isScanning,
-    builder: (context, snapshot) {
-      // If Scanning in progress... Show Loading...
-      if (snapshot.data!) {
-        return const ButtonFactory.loading();
-      }
-      // else, Move to Scanner list which shows devices from scan result.
-      return const ScannerList();
-    },
+    initialData: false,
+    // If Scanning in progress... Show Loading...
+    // else, Move to Scanner list which shows devices from scan result.
+    builder: (context, snapshot) =>
+        snapshot.data! ? const ButtonFactory.loading() : const ScannerList(),
   );
 }

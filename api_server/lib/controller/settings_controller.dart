@@ -5,12 +5,8 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-class SettingsController {
-  const SettingsController(this.service);
-
-  factory SettingsController.init({required Database db}) => .new(.new(db));
-
-  final SettingsService service;
+class const SettingsController(final SettingsService service) {
+  factory init({required Database db}) => .new(.new(db));
 
   Future<Response> queryHandler(Request request) async {
     try {

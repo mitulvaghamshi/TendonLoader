@@ -11,10 +11,12 @@ typedef R<T> = Snapshot<T>;
 typedef Fn<T> = T Function(Object? data)?;
 
 @immutable
-class ApiClient {
-  ApiClient({http.Client? client}) : _client = client ?? http.Client();
+class ApiClient({http.Client? client}) {
+  this {
+    _client = client ?? http.Client();
+  }
 
-  final http.Client _client;
+  late final http.Client _client;
 
   static const host = String.fromEnvironment('API_HOST');
   static const _timeout = Duration(seconds: 5);

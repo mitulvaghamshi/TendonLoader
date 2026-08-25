@@ -9,12 +9,11 @@ import 'package:tendon_loader/pages/widgets/button_factory.dart';
 /// This widget will allows to restart the "Scanning..." process,
 /// if no devices found during first scan.
 @immutable
-class DeviceTile extends StatelessWidget {
-  const DeviceTile({required this.device, super.key, this.isLast = false});
-
-  final BluetoothDevice device;
-  final bool isLast;
-
+class const DeviceTile({
+  required final BluetoothDevice device,
+  super.key,
+  final bool isLast = false,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StreamBuilder(
     stream: device.state,

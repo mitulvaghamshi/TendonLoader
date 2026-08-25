@@ -1,11 +1,7 @@
 import 'package:api_server/sql/settings_table.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-class SettingsService {
-  const SettingsService(this.db);
-
-  final Database db;
-
+class const SettingsService(final Database db) {
   ResultSet selectAll() {
     return db.select(SettingsTable.sqlSelectAll);
   }

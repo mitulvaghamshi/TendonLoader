@@ -3,18 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:tendon_loader/api/api_client.dart';
 
 @immutable
-class PrescriptionService {
-  factory PrescriptionService({ApiClient? client, LocalCache? cache}) =>
+class const PrescriptionService._(
+  final ApiClient _client,
+  final LocalCache _cache,
+) {
+  factory({ApiClient? client, LocalCache? cache}) =>
       client != null || cache != null
       ? ._(client ?? .new(), cache ?? .instance)
       : instance;
 
-  const PrescriptionService._(this._client, this._cache);
-
   static final instance = PrescriptionService._(.new(), .instance);
-
-  final ApiClient _client;
-  final LocalCache _cache;
 
   Future<Snapshot<Prescription>> getPrescriptionById(int? id) async {
     if (id == null) {

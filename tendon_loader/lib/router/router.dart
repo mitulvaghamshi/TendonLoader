@@ -51,9 +51,7 @@ part 'router.g.dart';
   ],
 )
 @immutable
-class TendonLoaderRoute extends GoRouteData with $TendonLoaderRoute {
-  const TendonLoaderRoute();
-
+class const TendonLoaderRoute() extends GoRouteData with $TendonLoaderRoute {
   static const name = 'Tendon Loader';
   static const path = '/';
 
@@ -61,7 +59,6 @@ class TendonLoaderRoute extends GoRouteData with $TendonLoaderRoute {
   FutureOr<bool> onExit(BuildContext context, GoRouterState state) async {
     NetworkStatus.instance.dispose();
     unawaited(Progressor.instance.disconnect());
-
     return super.onExit(context, state);
   }
 
@@ -76,9 +73,7 @@ class TendonLoaderRoute extends GoRouteData with $TendonLoaderRoute {
 }
 
 @immutable
-class SettingScreenRoute extends GoRouteData with $SettingScreenRoute {
-  const SettingScreenRoute();
-
+class const SettingScreenRoute() extends GoRouteData with $SettingScreenRoute {
   static const name = 'Settings';
   static const path = 'settings';
 
@@ -103,9 +98,7 @@ class SettingScreenRoute extends GoRouteData with $SettingScreenRoute {
 }
 
 @immutable
-class PrescriptionRoute extends GoRouteData with $PrescriptionRoute {
-  const PrescriptionRoute();
-
+class const PrescriptionRoute() extends GoRouteData with $PrescriptionRoute {
   static const path = 'prescriptions';
 
   @override
@@ -123,9 +116,7 @@ class PrescriptionRoute extends GoRouteData with $PrescriptionRoute {
 }
 
 @immutable
-class LiveDataRoute extends GoRouteData with $LiveDataRoute {
-  const LiveDataRoute();
-
+class const LiveDataRoute() extends GoRouteData with $LiveDataRoute {
   static const name = 'Live Data';
   static const path = 'livedata';
 
@@ -145,9 +136,7 @@ class LiveDataRoute extends GoRouteData with $LiveDataRoute {
 }
 
 @immutable
-class MVCTestingRoute extends GoRouteData with $MVCTestingRoute {
-  const MVCTestingRoute();
-
+class const MVCTestingRoute() extends GoRouteData with $MVCTestingRoute {
   static const name = 'MVC Testing';
   static const path = 'mvctesting';
 
@@ -174,9 +163,7 @@ class MVCTestingRoute extends GoRouteData with $MVCTestingRoute {
 }
 
 @immutable
-class ExerciseModeRoute extends GoRouteData with $ExerciseModeRoute {
-  const ExerciseModeRoute();
-
+class const ExerciseModeRoute() extends GoRouteData with $ExerciseModeRoute {
   static const name = 'Exercise Mode';
   static const path = 'exercisemode';
 
@@ -243,9 +230,7 @@ class ExerciseModeRoute extends GoRouteData with $ExerciseModeRoute {
 }
 
 @immutable
-class PromptScreenRoute extends GoRouteData with $PromptScreenRoute {
-  const PromptScreenRoute();
-
+class const PromptScreenRoute() extends GoRouteData with $PromptScreenRoute {
   static const path = 'promptscreen';
 
   @override
@@ -254,9 +239,7 @@ class PromptScreenRoute extends GoRouteData with $PromptScreenRoute {
 }
 
 @immutable
-class UserListRoute extends GoRouteData with $UserListRoute {
-  const UserListRoute();
-
+class const UserListRoute() extends GoRouteData with $UserListRoute {
   static const path = 'userlist';
 
   @override
@@ -274,12 +257,10 @@ class UserListRoute extends GoRouteData with $UserListRoute {
 }
 
 @immutable
-class ExerciseListRoute extends GoRouteData with $ExerciseListRoute {
-  const ExerciseListRoute({required this.userId, required this.title});
-
-  final int userId;
-  final String title;
-
+class const ExerciseListRoute({
+  required final int userId,
+  required final String title,
+}) extends GoRouteData with $ExerciseListRoute {
   static const path = 'exerciselist';
 
   @override
@@ -293,12 +274,10 @@ class ExerciseListRoute extends GoRouteData with $ExerciseListRoute {
 }
 
 @immutable
-class ExerciseDetailsRoute extends GoRouteData with $ExerciseDetailsRoute {
-  const ExerciseDetailsRoute({required this.userId, required this.exerciseId});
-
-  final int userId;
-  final int exerciseId;
-
+class const ExerciseDetailsRoute({
+  required final int userId,
+  required final int exerciseId,
+}) extends GoRouteData with $ExerciseDetailsRoute {
   static const path = 'exercisedetail';
 
   @override
@@ -308,12 +287,10 @@ class ExerciseDetailsRoute extends GoRouteData with $ExerciseDetailsRoute {
 }
 
 @immutable
-class ExerciseDataListRoute extends GoRouteData with $ExerciseDataListRoute {
-  const ExerciseDataListRoute({required this.userId, required this.exerciseId});
-
-  final int userId;
-  final int exerciseId;
-
+class const ExerciseDataListRoute({
+  required final int userId,
+  required final int exerciseId,
+}) extends GoRouteData with $ExerciseDataListRoute {
   static const path = 'exercisedatalist';
 
   @override

@@ -3,18 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:tendon_loader/api/api_client.dart';
 
 @immutable
-class UserService {
-  factory UserService({ApiClient? client, LocalCache? cache}) =>
+class const UserService._(final ApiClient _client, final LocalCache _cache) {
+  factory({ApiClient? client, LocalCache? cache}) =>
       client != null || cache != null
       ? ._(client ?? .new(), cache ?? .instance)
       : instance;
 
-  const UserService._(this._client, this._cache);
-
   static final instance = UserService._(.new(), .instance);
-
-  final ApiClient _client;
-  final LocalCache _cache;
 
   Future<Snapshot<Iterable<User>>> getAllUsers() async {
     if (_cache.users.isNotEmpty) {

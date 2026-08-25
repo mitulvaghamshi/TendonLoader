@@ -12,11 +12,13 @@ import 'package:tendon_loader/pages/bluetooth/widgets/start_scan_tile.dart';
 /// The "Connect" and "Disconnect" are very important steps to successfully
 /// perform actual tasks of "Exercise" and "MVC Test".
 @immutable
-class DeviceList extends StatelessWidget {
-  DeviceList({required Iterable<BluetoothDevice> devices, super.key})
-    : _devices = _filterList(devices);
+class DeviceList({required Iterable<BluetoothDevice> devices, super.key})
+    extends StatelessWidget {
+  this {
+    _devices = _filterList(devices);
+  }
 
-  final Iterable<BluetoothDevice> _devices;
+  late final Iterable<BluetoothDevice> _devices;
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +47,12 @@ extension on DeviceList {
       yield DeviceTile(device: device, isLast: true);
     }
   }
-}
 
-/// Filter out Scanned result to include only device that contains
-/// the name "Progressor", as all the "Tindeq Progressor" devices are
-/// named in "Progressor_xxxx" pattern, where, "xxxx" is the four digit
-/// unique (serial) number.
-Iterable<BluetoothDevice> _filterList(Iterable<BluetoothDevice> devices) {
-  return devices.where((device) => device.name.contains('Progressor'));
+  /// Filter out Scanned result to include only device that contains
+  /// the name "Progressor", as all the "Tindeq Progressor" devices are
+  /// named in "Progressor_xxxx" pattern, where, "xxxx" is the four digit
+  /// unique (serial) number.
+  Iterable<BluetoothDevice> _filterList(Iterable<BluetoothDevice> devices) {
+    return devices.where((device) => device.name.contains('Progressor'));
+  }
 }

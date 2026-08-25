@@ -10,16 +10,15 @@ import 'package:tendon_loader/utils/constants.dart';
 
 bool isPause = false;
 
-abstract class GraphHandler {
-  GraphHandler({required this.onCountdown, this.lineData}) {
+abstract class GraphHandler({
+  required final Future<bool?> Function(String, Duration) onCountdown,
+  final List<ChartData>? lineData,
+}) {
+  this {
     isSessionRunning = isComplete = hasData = false;
     stream.listen(update);
     reset();
   }
-
-  final Future<bool?> Function(String title, Duration duration) onCountdown;
-
-  final List<ChartData>? lineData;
 
   ChartSeriesController<ChartData, int>? lineCtrl;
   ChartSeriesController<ChartData, int>? graphCtrl;

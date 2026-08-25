@@ -6,8 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:tendon_loader/handler/graph_handler.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
-class ExerciseHandler extends GraphHandler {
-  ExerciseHandler({required this.prescription, required super.onCountdown})
+class ExerciseHandler({
+  required final Prescription prescription,
+  required super.onCountdown,
+}) extends GraphHandler {
+  this
     : super(
         lineData: [
           ChartData(load: prescription.targetLoad),
@@ -16,8 +19,6 @@ class ExerciseHandler extends GraphHandler {
       ) {
     _reset();
   }
-
-  final Prescription prescription;
 
   late int _lapTime;
   late int _setCount;

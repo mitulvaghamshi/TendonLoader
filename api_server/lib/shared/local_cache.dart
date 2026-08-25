@@ -1,13 +1,13 @@
 import 'package:api_server/api_server.dart';
 
-class LocalCache {
-  factory LocalCache() => instance;
-
-  const LocalCache._()
+class const LocalCache._() {
+  this
     : users = const {},
       settings = const {},
       exercises = const {},
       prescriptions = const {};
+
+  factory() => instance;
 
   static const instance = LocalCache._();
 

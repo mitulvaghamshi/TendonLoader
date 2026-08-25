@@ -14,9 +14,7 @@ import 'package:tendon_loader/pages/widgets/button_factory.dart';
 /// This is one time process...
 /// No interactive content in this widget.
 @immutable
-class ConnectedList extends StatelessWidget {
-  const ConnectedList({super.key});
-
+class const ConnectedList({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FutureBuilder(
     future: FlutterBlue.instance.connectedDevices,

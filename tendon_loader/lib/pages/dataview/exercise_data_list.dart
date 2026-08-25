@@ -4,11 +4,8 @@ import 'package:tendon_loader/pages/widgets/button_factory.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-class ExerciseDataList extends StatelessWidget {
-  const ExerciseDataList(this.items, {super.key});
-
-  final Iterable<ChartData> items;
-
+class const ExerciseDataList(final Iterable<ChartData> items, {super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => CustomScrollView(
     slivers: [
@@ -28,12 +25,8 @@ class ExerciseDataList extends StatelessWidget {
 }
 
 @immutable
-class _ListItem extends StatelessWidget {
-  const _ListItem({required this.index, required this.data});
-
-  final int index;
-  final ChartData data;
-
+class const _ListItem({required final int index, required final ChartData data})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ButtonFactory(
     child: Row(
@@ -48,9 +41,7 @@ class _ListItem extends StatelessWidget {
 }
 
 @immutable
-class _HeaderDelegate extends SliverPersistentHeaderDelegate {
-  const _HeaderDelegate();
-
+class const _HeaderDelegate() extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
     BuildContext context,

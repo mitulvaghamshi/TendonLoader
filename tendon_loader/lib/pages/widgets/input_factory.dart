@@ -3,27 +3,25 @@ import 'package:flutter/services.dart';
 import 'package:tendon_loader/utils/constants.dart' show Styles;
 
 @immutable
-class InputFactory extends StatelessWidget {
-  const InputFactory({
-    required this.label,
-    required this.controller,
-    super.key,
-    this.padding,
-    this.keyboardType,
-    this.validateMode,
-    this.formatters,
-    this.validator,
-    this.onComplete,
-  });
-
-  const factory InputFactory.search({
+class const InputFactory({
+  required final String label,
+  required final TextEditingController controller,
+  super.key,
+  final EdgeInsetsGeometry? padding,
+  final TextInputType? keyboardType,
+  final AutovalidateMode? validateMode,
+  final List<TextInputFormatter>? formatters,
+  final String? Function(String?)? validator,
+  final VoidCallback? onComplete,
+}) extends StatelessWidget {
+  const factory search({
     required String label,
     required VoidCallback? onComplete,
     required TextEditingController controller,
     Key? key,
   }) = _SearchField;
 
-  const factory InputFactory.form({
+  const factory form({
     required String label,
     required TextEditingController controller,
     Key? key,
@@ -31,15 +29,6 @@ class InputFactory extends StatelessWidget {
     EdgeInsetsGeometry? padding,
     TextInputType? keyboardType,
   }) = _FormField;
-
-  final EdgeInsetsGeometry? padding;
-  final TextInputType? keyboardType;
-  final AutovalidateMode? validateMode;
-  final List<TextInputFormatter>? formatters;
-  final String? Function(String?)? validator;
-  final VoidCallback? onComplete;
-  final String label;
-  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -64,14 +53,12 @@ class InputFactory extends StatelessWidget {
 }
 
 @immutable
-class _SearchField extends InputFactory {
-  const _SearchField({
-    required super.label,
-    required super.controller,
-    required super.onComplete,
-    super.key,
-  });
-
+class const _SearchField({
+  required super.label,
+  required super.controller,
+  required super.onComplete,
+  super.key,
+}) extends InputFactory {
   @override
   Widget build(BuildContext context) => InputFactory(
     label: label,
@@ -82,18 +69,14 @@ class _SearchField extends InputFactory {
 }
 
 @immutable
-class _FormField extends InputFactory {
-  const _FormField({
-    required super.label,
-    required super.controller,
-    super.key,
-    super.padding,
-    super.keyboardType,
-    this.format,
-  });
-
-  final String? format;
-
+class const _FormField({
+  required super.label,
+  required super.controller,
+  super.key,
+  super.padding,
+  super.keyboardType,
+  final String? format,
+}) extends InputFactory {
   @override
   Widget build(BuildContext context) => InputFactory(
     key: key,

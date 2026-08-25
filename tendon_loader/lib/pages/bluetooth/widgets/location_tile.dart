@@ -13,14 +13,11 @@ import 'package:tendon_loader/utils/constants.dart';
 /// where user have to manually torn on the service.
 /// Alternatively, user can user "Control Center" to do the same.
 @immutable
-class LocationTile extends StatelessWidget {
-  const LocationTile({super.key});
-
+class const LocationTile({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StreamBuilder(
-    stream: Stream<bool>.periodic(
-      const .new(milliseconds: 300),
-    ).asyncMap((_) async => loc.Location().serviceEnabled()),
+    stream: Stream<bool>.periodic(const .new(milliseconds: 500))
+        .asyncMap((_) async => loc.Location().serviceEnabled()),
     builder: (_, snapshot) {
       // If the location access is allowed,
       // check if "The Progressor" is powered on...

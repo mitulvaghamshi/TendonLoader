@@ -2,10 +2,10 @@ import 'dart:async' show StreamSubscription;
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-class NetworkStatus {
-  factory NetworkStatus() => instance;
+class NetworkStatus._() {
+  factory() => instance;
 
-  NetworkStatus._() {
+  this {
     _subscription = Connectivity().onConnectivityChanged.listen(_f);
   }
 

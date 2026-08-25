@@ -6,10 +6,8 @@ import 'package:tendon_loader/handler/graph_handler.dart';
 import 'package:tendon_loader/utils/constants.dart';
 import 'package:tendon_loader/utils/simulator.dart';
 
-class Progressor {
-  factory Progressor() => _instance;
-
-  Progressor._();
+class Progressor._() {
+  factory() => _instance;
 
   static final _instance = Progressor._();
   static Progressor get instance => _instance;

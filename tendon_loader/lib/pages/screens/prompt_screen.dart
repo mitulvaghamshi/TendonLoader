@@ -6,9 +6,7 @@ import 'package:tendon_loader/state/app_state.dart';
 import 'package:tendon_loader/utils/constants.dart';
 
 @immutable
-class PromptScreen extends StatefulWidget {
-  const PromptScreen({super.key});
-
+class const PromptScreen({super.key}) extends StatefulWidget {
   @override
   State<PromptScreen> createState() => _PromptScreenState();
 }
@@ -232,32 +230,21 @@ extension on _PromptScreenState {
   }
 }
 
-enum Tolerance {
+enum const Tolerance(final String value) {
   yes('Yes'),
   no('No'),
   noPain('No Pain');
-
-  const Tolerance(this.value);
-
-  final String value;
 }
 
-enum Submission {
+enum const Submission(final String value) {
   now('Okay, submit now'),
   leter('Save, and ask me leter'),
   discard('No, discard this session');
-
-  const Submission(this.value);
-
-  final String value;
 }
 
 @immutable
-class _CardWidget extends StatelessWidget {
-  const _CardWidget({required this.children});
-
-  final List<Widget> children;
-
+class const _CardWidget({required final List<Widget> children})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Card(
     margin: const .all(10),
@@ -269,17 +256,16 @@ class _CardWidget extends StatelessWidget {
 }
 
 @immutable
-class PainSelector extends StatefulWidget {
-  const PainSelector({required this.onSelect, super.key});
-
-  final ValueChanged<double> onSelect;
-
+class const PainSelector({
+  required final ValueChanged<double> onSelect,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<PainSelector> createState() => _PainSelectorState();
 }
 
 class _PainSelectorState extends State<PainSelector> {
-  double painScore = 0;
+  double _painScore = 0;
 
   @override
   Widget build(BuildContext context) => SliderTheme(
@@ -292,20 +278,18 @@ class _PainSelectorState extends State<PainSelector> {
     ),
     child: Slider(
       max: 10,
-      value: painScore,
+      value: _painScore,
       activeColor: _trackColor,
       inactiveColor: _trackColor,
-      label: painScore.toStringAsFixed(1),
+      label: _painScore.toStringAsFixed(1),
       onChangeEnd: widget.onSelect,
-      onChanged: (value) => setState(() => painScore = value),
+      onChanged: (value) => setState(() => _painScore = value),
     ),
   );
 }
 
 @immutable
-class _CustomShape extends SliderComponentShape {
-  const _CustomShape();
-
+class const _CustomShape() extends SliderComponentShape {
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.zero;
 
@@ -343,6 +327,6 @@ extension on _PainSelectorState {
   Color? get _trackColor => Color.lerp(
     const Color(0xff00e676),
     const Color(0xffff534d),
-    painScore / 10,
+    _painScore / 10,
   );
 }

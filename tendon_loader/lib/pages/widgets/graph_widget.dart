@@ -16,18 +16,12 @@ import 'package:tendon_loader/state/app_state.dart';
 // }
 
 @immutable
-class GraphWidget extends StatelessWidget {
-  const GraphWidget({
-    required this.title,
-    required this.handler,
-    required this.headerBuilder,
-    super.key,
-  });
-
-  final String title;
-  final GraphHandler handler;
-  final WidgetBuilder headerBuilder;
-
+class const GraphWidget({
+  required final String title,
+  required final GraphHandler handler,
+  required final WidgetBuilder headerBuilder,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: Text(title)),
@@ -42,12 +36,10 @@ class GraphWidget extends StatelessWidget {
 }
 
 @immutable
-class _GraphHeader extends StatelessWidget {
-  const _GraphHeader({required this.handler, required this.builder});
-
-  final GraphHandler handler;
-  final WidgetBuilder builder;
-
+class const _GraphHeader({
+  required final GraphHandler handler,
+  required final WidgetBuilder builder,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) => StreamBuilder(
     initialData: const ChartData(),
@@ -61,11 +53,8 @@ class _GraphHeader extends StatelessWidget {
 }
 
 @immutable
-class _GraphControls extends StatelessWidget {
-  const _GraphControls({required this.handler});
-
-  final GraphHandler handler;
-
+class const _GraphControls({required final GraphHandler handler})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
     mainAxisAlignment: .spaceEvenly,
@@ -91,11 +80,8 @@ class _GraphControls extends StatelessWidget {
 }
 
 @immutable
-class _TheBarGraph extends StatelessWidget {
-  const _TheBarGraph({required this.handler});
-
-  final GraphHandler handler;
-
+class const _TheBarGraph({required final GraphHandler handler})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SfCartesianChart(
     margin: const .all(16),

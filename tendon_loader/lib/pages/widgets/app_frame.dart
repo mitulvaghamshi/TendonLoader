@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class AppFrame extends StatelessWidget {
-  const AppFrame({required this.child, super.key});
-
-  final Widget child;
-
+class const AppFrame({required final Widget child, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Card.outlined(
     elevation: 16,

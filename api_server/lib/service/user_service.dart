@@ -4,11 +4,7 @@ import 'package:api_server/sql/user_table.dart';
 import 'package:sqlite3/sqlite3.dart';
 import 'package:uuid/uuid.dart';
 
-class UserService {
-  const UserService(this.db);
-
-  final Database db;
-
+class const UserService(final Database db) {
   static const _uuid = Uuid();
 
   void init() {
@@ -37,7 +33,7 @@ class UserService {
           DateTime.now().toIso8601String(),
         ]);
         return .data(
-          const User.empty().copyWith(
+          User.empty().copyWith(
             id: kId,
             username: kUsername,
             password: kPassword,
@@ -75,7 +71,7 @@ class UserService {
         UserTable.kRole: final String? kRole,
       }) {
         return .data(
-          const User.empty().copyWith(
+          User.empty().copyWith(
             id: kId,
             username: kUsername,
             password: kPassword,
