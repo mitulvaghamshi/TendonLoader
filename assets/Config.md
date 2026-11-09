@@ -77,3 +77,35 @@ dependencies {
     implementation "com.google.firebase:firebase-bom:+"
 }
 ```
+
+## Flutter: macOS
+
+```xml
+<window title="APP_NAME" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g" customClass="MainFlutterWindow" customModule="Runner" customModuleProvider="target">
+    <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+    <rect key="contentRect" x="0.0" y="0.0" width="390" height="760"/>
+    <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
+    <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
+        <rect key="frame" x="0.0" y="0.0" width="390" height="760"/>
+        <autoresizingMask key="autoresizingMask"/>
+    </view>
+</window>
+```
+
+## Release.entitlements
+
+```plist
+<key>com.apple.security.app-sandbox</key>
+```
+
+## Debug.entitlements
+
+```plist
+<true/>
+<key>com.apple.security.cs.allow-jit</key>
+<true/>
+<key>com.apple.security.network.client</key>
+<true/>
+<key>com.apple.security.network.server</key>
+<true/>
+```

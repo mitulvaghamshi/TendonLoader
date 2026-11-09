@@ -238,6 +238,7 @@ extension on AppRouter {
 }
 
 extension on AppRouter {
+  // ..get('/api/users/<uid>/settings/<sid>', handler);
   Iterable<AppRoute> get _apiRoutes => [
     // Public Routes
     .get(

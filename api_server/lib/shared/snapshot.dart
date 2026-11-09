@@ -1,3 +1,17 @@
+// extension type const Opt<T>._(({T value})? _) {
+//   const factory Opt(T value) = Val<T>;
+//   const factory Opt.none() = Non<T>;
+// }
+
+// extension type const Val<T>._(({T value}) _) implements Opt<T> {
+//   const Val(T value) : this._((value: value));
+//   T get value => _.value;
+// }
+
+// extension type const Non<T>._(Null _) implements Opt<Never> {
+//   const Non() : this._(null);
+// }
+
 interface class Snapshot<T> {
   const Snapshot.none() : _data = null, _error = null;
   const Snapshot.data(T data) : _data = data, _error = null;
